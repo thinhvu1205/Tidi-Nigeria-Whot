@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
@@ -32,23 +33,17 @@ public class DataSender
     #endregion
 
     #region Friends
-    public static async void GetListFriends(int state = 0, int limit = 100, string cursor = "")
+    public static void GetListFriends(int state = 0, int limit = 100, string cursor = "", Action<IApiFriendList> handleCB = null)
     {
-        IApiFriendList iafl = await NetworkManager.INSTANCE.GetListFriends(state, limit, cursor);
-        if (iafl == null) return;
-        //handle here
+        NetworkManager.INSTANCE.GetListFriends(state, limit, cursor, handleCB);
     }
-    public static async void FindFriendsWithIds(List<string> ids = null, List<string> names = null)
+    public static void FindFriendsWithIds(List<string> ids = null, List<string> names = null, Action<IApiUsers> handleCb = null)
     {
-        List<IApiUser> userIAUs = await NetworkManager.INSTANCE.GetUsersWithIds(ids, names);
-        if (userIAUs == null) return;
-        //handle here
+        NetworkManager.INSTANCE.GetUsersWithIds(ids, names, handleCb);
     }
-    public static async void SentFriendRequestToId(string userId)
+    public static void SendFriendRequestToId(string userId, Action handleCb = null)
     {
-        bool result = await NetworkManager.INSTANCE.AddFriend(userId);
-        if (result == false) return;
-        //handle here
+        NetworkManager.INSTANCE.AddFriend(userId, handleCb);
     }
     #endregion
 }

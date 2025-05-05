@@ -70,41 +70,24 @@ public class NetworkManager : MonoBehaviour
     #endregion
 
     #region Friends
-    public async UniTask<IApiFriendList> GetListFriends(int state, int limit, string cursor)
+    public async void GetListFriends(int state, int limit, string cursor, Action<IApiFriendList> handleCb = null)
     {
         IApiFriendList iafl = await _ClientC.ListFriendsAsync(_SessionIS, state, limit, cursor);
-        if (iafl == null || iafl.Friends.Count() <= 0)
-        {
-            Debug.Log("This client has no friend!");
-            return null;
-        }
-        return iafl;
+        if (iafl == null || iafl.Friends.Count() <= 0) return;
+        handleCb?.Invoke(iafl);
     }
-    public async UniTask<List<IApiUser>> GetUsersWithIds(List<string> userIds = null, List<string> usernames = null)
+    public async void GetUsersWithIds(List<string> userIds = null, List<string> usernames = null, Action<IApiUsers> handleCb = null)
     {
-        if ((userIds == null || userIds.Count <= 0) && (usernames == null || usernames.Count <= 0))
-        {
-            Debug.Log("UserIds or Usernames must be provided!");
-            return null;
-        }
+        if ((userIds == null || userIds.Count <= 0) && (usernames == null || usernames.Count <= 0)) return;
         IApiUsers users = await _ClientC.GetUsersAsync(_SessionIS, userIds, usernames);
-        if (users.Users == null || users.Users.Count() <= 0)
-        {
-            Debug.Log("This client has no friend with those IDs!");
-            return null;
-        }
-        return new List<IApiUser>(users.Users);
+        if (users.Users == null || users.Users.Count() <= 0) return;
+        handleCb?.Invoke(users);
     }
-    public async UniTask<bool> AddFriend(string userId)
+    public async void AddFriend(string userId, Action handleCb = null)
     {
-        if (string.IsNullOrEmpty(userId))
-        {
-            Debug.Log("UserId is null or empty.");
-            return false;
-        }
+        if (string.IsNullOrEmpty(userId)) return;
         await _ClientC.AddFriendsAsync(_SessionIS, new[] { userId });
-        Debug.Log("Friend adding request sent!");
-        return true;
+        handleCb?.Invoke();
     }
     #endregion
     private void _OnConnectCb() { Debug.Log("Socket Connected"); }
