@@ -98,7 +98,7 @@ public class NetworkManager : MonoBehaviour
     private void _OnErrorCb(Exception exception) { Debug.Log("Socket Error: " + exception.ToString()); }
     public async void Connect()
     {
-        _ClientC = new("http", "103.226.250.195", 7354, "defaultkey");
+        _ClientC = new("http", "103.226.250.195", 7353, "defaultkey");
         string storedSessionToken = PlayerPrefs.GetString(SESSION);
         _SessionIS = null;
         if (!string.IsNullOrEmpty(storedSessionToken))
@@ -116,7 +116,7 @@ public class NetworkManager : MonoBehaviour
         }
         if (_SessionIS == null)
         {
-            _SessionIS = await _ClientC.AuthenticateDeviceAsync(deviceId);
+                _SessionIS = await _ClientC.AuthenticateDeviceAsync(deviceId);
             PlayerPrefs.SetString(SESSION, _SessionIS.AuthToken);
         }
         _SocketIS = _ClientC.NewSocket();

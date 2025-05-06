@@ -1,0 +1,6 @@
+public enum ETypeChat {
+  TYPE_CHAT_UNSPECIFIED = 0,
+  TYPE_CHAT_ROOM = 1,
+  TYPE_CHAT_DIRECTMSG = 2,
+  TYPE_CHAT_GROUUP = 3
+}
