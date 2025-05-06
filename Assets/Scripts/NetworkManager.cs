@@ -50,12 +50,15 @@ public class NetworkManager : MonoBehaviour
         if (rpc == null || string.IsNullOrEmpty(rpc.Payload)) return;
         JSONObject obj = JSON.Parse(rpc.Payload).AsObject;
         Debug.Log("--Receive--/ " + apiName + "/ " + rpc.Payload);
-        _PreHandleData(apiName, obj);
-        for (int i = _ListenerGLs.Count - 1; i >= 0; i--)
+        _DataHandlerAs.Add(() =>
         {
-            GameListener gl = _ListenerGLs[i];
-            if (gl.IsReady()) gl.HandleData(apiName, obj);
-        }
+            _PreHandleData(apiName, obj);
+            for (int i = _ListenerGLs.Count - 1; i >= 0; i--)
+            {
+                GameListener gl = _ListenerGLs[i];
+                if (gl.IsReady()) gl.HandleData(apiName, obj);
+            }
+        });
     }
     #endregion
 
@@ -74,20 +77,20 @@ public class NetworkManager : MonoBehaviour
     {
         IApiFriendList iafl = await _ClientC.ListFriendsAsync(_SessionIS, state, limit, cursor);
         if (iafl == null || iafl.Friends.Count() <= 0) return;
-        handleCb?.Invoke(iafl);
+        _DataHandlerAs.Add(() => { handleCb?.Invoke(iafl); });
     }
     public async void GetUsersWithIds(List<string> userIds = null, List<string> usernames = null, Action<IApiUsers> handleCb = null)
     {
         if ((userIds == null || userIds.Count <= 0) && (usernames == null || usernames.Count <= 0)) return;
         IApiUsers users = await _ClientC.GetUsersAsync(_SessionIS, userIds, usernames);
         if (users.Users == null || users.Users.Count() <= 0) return;
-        handleCb?.Invoke(users);
+        _DataHandlerAs.Add(() => { handleCb?.Invoke(users); });
     }
     public async void AddFriend(string userId, Action handleCb = null)
     {
         if (string.IsNullOrEmpty(userId)) return;
         await _ClientC.AddFriendsAsync(_SessionIS, new[] { userId });
-        handleCb?.Invoke();
+        _DataHandlerAs.Add(() => { handleCb?.Invoke(); });
     }
     #endregion
     private void _OnConnectCb() { Debug.Log("Socket Connected"); }
