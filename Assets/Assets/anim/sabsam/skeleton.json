@@ -1,0 +1,225 @@
+{
+"skeleton": {
+	"hash": "ylKlLy390aCIjDgCrLrtjp7jV7U",
+	"spine": "3.8.99",
+	"x": -105.5,
+	"y": -106.5,
+	"width": 211,
+	"height": 213,
+	"images": "./image/",
+	"audio": ""
+},
+"bones": [
+	{ "name": "root" },
+	{
+		"name": "card",
+		"parent": "root",
+		"rotation": -5.19,
+		"x": 5.89,
+		"y": -49.96,
+		"scaleX": 1.1211,
+		"scaleY": 1.0621
+	},
+	{ "name": "10bich", "parent": "card", "length": 64.85, "rotation": 125.77, "x": -29.44, "y": -24.58 },
+	{ "name": "3bich", "parent": "card", "length": 70.36, "rotation": 69.42, "x": 4.33, "y": 73.97 },
+	{ "name": "3co", "parent": "card", "length": 72.88, "rotation": 92.39, "x": -7.58, "y": 72.49 },
+	{ "name": "3tep", "parent": "card", "length": 74.15, "rotation": 103.05, "x": -26.43, "y": 66.22 },
+	{ "name": "abich", "parent": "card", "length": 67.07, "rotation": 62.49, "x": 13.03, "y": -20.77 },
+	{ "name": "jbich", "parent": "card", "length": 66.36, "rotation": 108.1, "x": -17.06, "y": -16.34 },
+	{ "name": "kbich", "parent": "card", "length": 67.5, "rotation": 73.64, "x": 2.84, "y": -11.87 },
+	{ "name": "kco", "parent": "card", "length": 73.53, "rotation": 72.39, "x": -1.52, "y": 33.18 },
+	{ "name": "ktep", "parent": "card", "length": 71.19, "rotation": 62.45, "x": 22.79, "y": 28.18 },
+	{ "name": "qbich", "parent": "card", "length": 66.89, "rotation": 95.13, "x": -5.38, "y": -16.34 },
+	{ "name": "qco", "parent": "card", "length": 73.44, "rotation": 95.58, "x": -33.84, "y": 26.3 },
+	{ "name": "qro2", "parent": "card", "length": 76.45, "rotation": 90.09, "x": -16.34, "y": 31.46 },
+	{ "name": "qtep", "parent": "card", "length": 74.98, "rotation": 114.92, "x": -37.09, "y": 11.28 },
+	{ "name": "txt2", "parent": "root", "x": -0.51, "y": -66.29 }
+],
+"slots": [
+	{ "name": "rec", "bone": "root", "attachment": "recc" },
+	{ "name": "3tep", "bone": "3tep", "attachment": "3tep" },
+	{ "name": "3co", "bone": "3co", "attachment": "3co" },
+	{ "name": "3bich", "bone": "3bich", "attachment": "3bich" },
+	{ "name": "qtep", "bone": "qtep", "attachment": "qro" },
+	{ "name": "qco", "bone": "qco", "attachment": "qtep" },
+	{ "name": "qro2", "bone": "qro2", "attachment": "qbich" },
+	{ "name": "kco", "bone": "kco", "attachment": "kbich" },
+	{ "name": "ktep", "bone": "ktep", "attachment": "kro" },
+	{ "name": "10bich", "bone": "10bich", "attachment": "9co" },
+	{ "name": "jbich", "bone": "jbich", "attachment": "10co" },
+	{ "name": "qbich", "bone": "qbich", "attachment": "jco" },
+	{ "name": "kbich", "bone": "kbich", "attachment": "qco" },
+	{ "name": "abich", "bone": "abich", "attachment": "kco" },
+	{ "name": "bg2", "bone": "root", "attachment": "bg2" },
+	{ "name": "txt2", "bone": "txt2", "attachment": "txt" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"3bich": {
+				"3bich": { "x": 31.68, "y": 3.31, "rotation": -74.92, "width": 53, "height": 60 }
+			},
+			"3co": {
+				"3co": { "x": 33.15, "y": 3.94, "rotation": -88.89, "width": 47, "height": 60 }
+			},
+			"3tep": {
+				"3tep": { "x": 34.85, "y": 4.49, "rotation": -102.06, "width": 62, "height": 66 }
+			},
+			"10bich": {
+				"9co": { "x": 32.42, "y": -2.07, "rotation": -112.67, "width": 66, "height": 69 }
+			},
+			"abich": {
+				"kco": { "x": 31.51, "y": 0.81, "rotation": -62.49, "width": 69, "height": 72 }
+			},
+			"bg2": {
+				"bg2": { "width": 211, "height": 213 }
+			},
+			"jbich": {
+				"10co": { "x": 32.96, "y": 7.04, "rotation": -102.56, "width": 58, "height": 66 }
+			},
+			"kbich": {
+				"qco": { "x": 30.06, "y": 2.05, "rotation": -73.64, "width": 67, "height": 76 }
+			},
+			"kco": {
+				"kbich": { "x": 35.11, "y": 0.96, "rotation": -77.56, "width": 58, "height": 67 }
+			},
+			"ktep": {
+				"kro": { "x": 31.94, "y": 3.58, "rotation": -67.62, "width": 60, "height": 64 }
+			},
+			"qbich": {
+				"jco": { "x": 32.37, "y": 4.7, "rotation": -89.1, "width": 57, "height": 73 }
+			},
+			"qco": {
+				"qtep": { "x": 34.6, "y": 4.07, "rotation": -97.16, "width": 63, "height": 69 }
+			},
+			"qro2": {
+				"qbich": { "x": 35.14, "y": 3.18, "rotation": -87.63, "width": 54, "height": 67 }
+			},
+			"qtep": {
+				"qro": { "x": 38.2, "y": 4.4, "rotation": -112.35, "width": 66, "height": 67 }
+			},
+			"rec": {
+				"recc": { "width": 205, "height": 207 }
+			},
+			"txt2": {
+				"txt": { "x": 0.86, "y": 2.15, "width": 144, "height": 40 }
+			}
+		}
+	}
+],
+"animations": {
+	"animation": {
+		"bones": {
+			"10bich": {
+				"rotate": [
+					{ "angle": 13.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2, "angle": 13.4 }
+				]
+			},
+			"jbich": {
+				"rotate": [
+					{ "angle": 12.11, "curve": 0.371, "c2": 0.62, "c3": 0.71 },
+					{ "time": 0.1667, "angle": 13.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.1667, "curve": 0.243, "c3": 0.689, "c4": 0.75 },
+					{ "time": 2, "angle": 12.11 }
+				]
+			},
+			"qbich": {
+				"rotate": [
+					{ "angle": 9.6, "curve": 0.382, "c2": 0.57, "c3": 0.735 },
+					{ "time": 0.3333, "angle": 13.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.3333, "curve": 0.243, "c3": 0.649, "c4": 0.6 },
+					{ "time": 2, "angle": 9.6 }
+				]
+			},
+			"kbich": {
+				"rotate": [
+					{ "angle": 6.7, "curve": 0.375, "c2": 0.5, "c3": 0.75 },
+					{ "time": 0.5, "angle": 13.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.5, "curve": 0.25, "c3": 0.625, "c4": 0.5 },
+					{ "time": 2, "angle": 6.7 }
+				]
+			},
+			"abich": {
+				"rotate": [
+					{ "angle": 3.8, "curve": 0.351, "c2": 0.4, "c3": 0.757 },
+					{ "time": 0.6667, "angle": 13.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.6667, "curve": 0.265, "c3": 0.618, "c4": 0.43 },
+					{ "time": 2, "angle": 3.8 }
+				]
+			},
+			"qtep": {
+				"rotate": [
+					{ "angle": 11.17, "curve": 0.378, "c2": 0.61, "c3": 0.722 },
+					{ "time": 0.2333, "angle": 13.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.2333, "curve": 0.242, "c3": 0.671, "c4": 0.68 },
+					{ "time": 2, "angle": 11.17 }
+				]
+			},
+			"qco": {
+				"rotate": [
+					{ "angle": 7.29, "curve": 0.378, "c2": 0.52, "c3": 0.748 },
+					{ "time": 0.4667, "angle": 13.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.4667, "curve": 0.248, "c3": 0.628, "c4": 0.52 },
+					{ "time": 2, "angle": 7.29 }
+				]
+			},
+			"qro2": {
+				"rotate": [
+					{ "angle": 3.24, "curve": 0.345, "c2": 0.37, "c3": 0.757 },
+					{ "time": 0.7, "angle": 13.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.7, "curve": 0.269, "c3": 0.618, "c4": 0.42 },
+					{ "time": 2, "angle": 3.24 }
+				]
+			},
+			"kco": {
+				"rotate": [
+					{ "angle": 0.3, "curve": 0.277, "c2": 0.12, "c3": 0.754 },
+					{ "time": 0.9333, "angle": 13.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.9333, "curve": 0.313, "c3": 0.648, "c4": 0.35 },
+					{ "time": 2, "angle": 0.3 }
+				]
+			},
+			"ktep": {
+				"rotate": [
+					{ "angle": 1.29, "curve": 0.371, "c2": 0.62, "c3": 0.71 },
+					{ "time": 0.1667, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.1667, "angle": 13.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2, "angle": 1.29 }
+				]
+			},
+			"3tep": {
+				"rotate": [
+					{ "angle": 10.15, "curve": 0.382, "c2": 0.58, "c3": 0.731 },
+					{ "time": 0.3, "angle": 13.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.3, "curve": 0.243, "c3": 0.655, "c4": 0.63 },
+					{ "time": 2, "angle": 10.15 }
+				]
+			},
+			"3co": {
+				"rotate": [
+					{ "angle": 4.93, "curve": 0.363, "c2": 0.44, "c3": 0.755 },
+					{ "time": 0.6, "angle": 13.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.6, "curve": 0.258, "c3": 0.619, "c4": 0.45 },
+					{ "time": 2, "angle": 4.93 }
+				]
+			},
+			"3bich": {
+				"rotate": [
+					{ "angle": 0.57, "curve": 0.289, "c2": 0.17, "c3": 0.755 },
+					{ "time": 0.9, "angle": 13.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.9, "curve": 0.305, "c3": 0.64, "c4": 0.36 },
+					{ "time": 2, "angle": 0.57 }
+				]
+			},
+			"card": {
+				"translate": [
+					{ "x": 3.01 }
+				]
+			}
+		}
+	}
+}
+}

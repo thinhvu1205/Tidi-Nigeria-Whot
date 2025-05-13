@@ -1,0 +1,41 @@
+
+skeleton.png
+size: 444,284
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Shop
+  rotate: false
+  xy: 283, 16
+  size: 115, 52
+  orig: 115, 52
+  offset: 0, 0
+  index: -1
+bg
+  rotate: false
+  xy: 2, 70
+  size: 440, 80
+  orig: 440, 80
+  offset: 0, 0
+  index: -1
+ef
+  rotate: false
+  xy: 2, 152
+  size: 320, 129
+  orig: 320, 129
+  offset: 0, 0
+  index: -1
+ef2
+  rotate: false
+  xy: 2, 2
+  size: 279, 66
+  orig: 279, 66
+  offset: 0, 0
+  index: -1
+icon
+  rotate: false
+  xy: 324, 152
+  size: 61, 60
+  orig: 61, 60
+  offset: 0, 0
+  index: -1

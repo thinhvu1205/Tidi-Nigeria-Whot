@@ -1,0 +1,250 @@
+{
+"skeleton": {
+	"hash": "v92x5tILvypdeCOElTHppDypS4A",
+	"spine": "3.8.99",
+	"x": -105.5,
+	"y": -21.43,
+	"width": 211,
+	"height": 53.3,
+	"images": "",
+	"audio": ""
+},
+"bones": [
+	{ "name": "root" },
+	{ "name": "efff", "parent": "root", "x": -56.39, "y": 5.22, "scaleX": 0.6662, "scaleY": 0.6662 },
+	{ "name": "efff2", "parent": "root", "x": 55.89, "y": 5.22, "scaleX": -0.67, "scaleY": 0.6662 },
+	{ "name": "taggg", "parent": "root" }
+],
+"slots": [
+	{ "name": "bg", "bone": "taggg", "attachment": "bg" },
+	{ "name": "lose", "bone": "taggg", "attachment": "penalty" },
+	{ "name": "vv4/0_00000", "bone": "efff", "attachment": "vv4/0_00008" },
+	{ "name": "vv4/0_0", "bone": "efff2", "attachment": "vv4/0_00008" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"bg": {
+				"bg": { "width": 211, "height": 39 }
+			},
+			"lose": {
+				"lose": { "width": 80, "height": 29 },
+				"penalty": { "x": -1.37, "width": 123, "height": 26 }
+			},
+			"vv4/0_0": {
+				"vv4/0_00000": { "width": 60, "height": 80 },
+				"vv4/0_00001": { "width": 60, "height": 80 },
+				"vv4/0_00002": { "width": 60, "height": 80 },
+				"vv4/0_00003": { "width": 60, "height": 80 },
+				"vv4/0_00004": { "width": 60, "height": 80 },
+				"vv4/0_00005": { "width": 60, "height": 80 },
+				"vv4/0_00006": { "width": 60, "height": 80 },
+				"vv4/0_00007": { "width": 60, "height": 80 },
+				"vv4/0_00008": { "width": 60, "height": 80 },
+				"vv4/0_00009": { "width": 60, "height": 80 },
+				"vv4/0_00010": { "width": 60, "height": 80 },
+				"vv4/0_00011": { "width": 60, "height": 80 },
+				"vv4/0_00012": { "width": 60, "height": 80 },
+				"vv4/0_00013": { "width": 60, "height": 80 },
+				"vv4/0_00014": { "width": 60, "height": 80 },
+				"vv4/0_00015": { "width": 60, "height": 80 },
+				"vv4/0_00016": { "width": 60, "height": 80 },
+				"vv4/0_00017": { "width": 60, "height": 80 },
+				"vv4/0_00018": { "width": 60, "height": 80 },
+				"vv4/0_00019": { "width": 60, "height": 80 },
+				"vv4/0_00020": { "width": 60, "height": 80 },
+				"vv4/0_00021": { "width": 60, "height": 80 },
+				"vv4/0_00022": { "width": 60, "height": 80 },
+				"vv4/0_00023": { "width": 60, "height": 80 },
+				"vv4/0_00024": { "width": 60, "height": 80 },
+				"vv4/0_00025": { "width": 60, "height": 80 },
+				"vv4/0_00026": { "width": 60, "height": 80 },
+				"vv4/0_00027": { "width": 60, "height": 80 },
+				"vv4/0_00028": { "width": 60, "height": 80 }
+			},
+			"vv4/0_00000": {
+				"vv4/0_00000": { "width": 60, "height": 80 },
+				"vv4/0_00001": { "width": 60, "height": 80 },
+				"vv4/0_00002": { "width": 60, "height": 80 },
+				"vv4/0_00003": { "width": 60, "height": 80 },
+				"vv4/0_00004": { "width": 60, "height": 80 },
+				"vv4/0_00005": { "width": 60, "height": 80 },
+				"vv4/0_00006": { "width": 60, "height": 80 },
+				"vv4/0_00007": { "width": 60, "height": 80 },
+				"vv4/0_00008": { "width": 60, "height": 80 },
+				"vv4/0_00009": { "width": 60, "height": 80 },
+				"vv4/0_00010": { "width": 60, "height": 80 },
+				"vv4/0_00011": { "width": 60, "height": 80 },
+				"vv4/0_00012": { "width": 60, "height": 80 },
+				"vv4/0_00013": { "width": 60, "height": 80 },
+				"vv4/0_00014": { "width": 60, "height": 80 },
+				"vv4/0_00015": { "width": 60, "height": 80 },
+				"vv4/0_00016": { "width": 60, "height": 80 },
+				"vv4/0_00017": { "width": 60, "height": 80 },
+				"vv4/0_00018": { "width": 60, "height": 80 },
+				"vv4/0_00019": { "width": 60, "height": 80 },
+				"vv4/0_00020": { "width": 60, "height": 80 },
+				"vv4/0_00021": { "width": 60, "height": 80 },
+				"vv4/0_00022": { "width": 60, "height": 80 },
+				"vv4/0_00023": { "width": 60, "height": 80 },
+				"vv4/0_00024": { "width": 60, "height": 80 },
+				"vv4/0_00025": { "width": 60, "height": 80 },
+				"vv4/0_00026": { "width": 60, "height": 80 },
+				"vv4/0_00027": { "width": 60, "height": 80 },
+				"vv4/0_00028": { "width": 60, "height": 80 }
+			}
+		}
+	}
+],
+"animations": {
+	"eng": {
+		"slots": {
+			"lose": {
+				"attachment": [
+					{ "name": "lose" }
+				]
+			},
+			"vv4/0_0": {
+				"attachment": [
+					{ "name": null }
+				]
+			},
+			"vv4/0_00000": {
+				"attachment": [
+					{ "name": null }
+				]
+			}
+		}
+	},
+	"eng_chay": {
+		"slots": {
+			"lose": {
+				"attachment": [
+					{ "name": "lose" }
+				]
+			},
+			"vv4/0_0": {
+				"attachment": [
+					{ "name": "vv4/0_00000" },
+					{ "time": 0.0333, "name": "vv4/0_00001" },
+					{ "time": 0.0667, "name": "vv4/0_00002" },
+					{ "time": 0.1, "name": "vv4/0_00003" },
+					{ "time": 0.1333, "name": "vv4/0_00004" },
+					{ "time": 0.1667, "name": "vv4/0_00005" },
+					{ "time": 0.2, "name": "vv4/0_00006" },
+					{ "time": 0.2333, "name": "vv4/0_00007" },
+					{ "time": 0.2667, "name": "vv4/0_00008" },
+					{ "time": 0.3, "name": "vv4/0_00009" },
+					{ "time": 0.3333, "name": "vv4/0_00010" },
+					{ "time": 0.3667, "name": "vv4/0_00011" },
+					{ "time": 0.4, "name": "vv4/0_00012" },
+					{ "time": 0.4333, "name": "vv4/0_00013" },
+					{ "time": 0.4667, "name": "vv4/0_00014" },
+					{ "time": 0.5, "name": "vv4/0_00015" },
+					{ "time": 0.5333, "name": "vv4/0_00016" },
+					{ "time": 0.5667, "name": "vv4/0_00017" },
+					{ "time": 0.6, "name": "vv4/0_00018" },
+					{ "time": 0.6333, "name": "vv4/0_00019" },
+					{ "time": 0.6667, "name": "vv4/0_00020" },
+					{ "time": 0.7, "name": "vv4/0_00021" },
+					{ "time": 0.7333, "name": "vv4/0_00022" },
+					{ "time": 0.7667, "name": "vv4/0_00023" },
+					{ "time": 0.8, "name": "vv4/0_00024" },
+					{ "time": 0.8333, "name": "vv4/0_00025" },
+					{ "time": 0.8667, "name": "vv4/0_00026" },
+					{ "time": 0.9, "name": "vv4/0_00027" },
+					{ "time": 0.9333, "name": "vv4/0_00028" }
+				]
+			},
+			"vv4/0_00000": {
+				"attachment": [
+					{ "name": "vv4/0_00000" },
+					{ "time": 0.0333, "name": "vv4/0_00001" },
+					{ "time": 0.0667, "name": "vv4/0_00002" },
+					{ "time": 0.1, "name": "vv4/0_00003" },
+					{ "time": 0.1333, "name": "vv4/0_00004" },
+					{ "time": 0.1667, "name": "vv4/0_00005" },
+					{ "time": 0.2, "name": "vv4/0_00006" },
+					{ "time": 0.2333, "name": "vv4/0_00007" },
+					{ "time": 0.2667, "name": "vv4/0_00008" },
+					{ "time": 0.3, "name": "vv4/0_00009" },
+					{ "time": 0.3333, "name": "vv4/0_00010" },
+					{ "time": 0.3667, "name": "vv4/0_00011" },
+					{ "time": 0.4, "name": "vv4/0_00012" },
+					{ "time": 0.4333, "name": "vv4/0_00013" },
+					{ "time": 0.4667, "name": "vv4/0_00014" },
+					{ "time": 0.5, "name": "vv4/0_00015" },
+					{ "time": 0.5333, "name": "vv4/0_00016" },
+					{ "time": 0.5667, "name": "vv4/0_00017" },
+					{ "time": 0.6, "name": "vv4/0_00018" },
+					{ "time": 0.6333, "name": "vv4/0_00019" },
+					{ "time": 0.6667, "name": "vv4/0_00020" },
+					{ "time": 0.7, "name": "vv4/0_00021" },
+					{ "time": 0.7333, "name": "vv4/0_00022" },
+					{ "time": 0.7667, "name": "vv4/0_00023" },
+					{ "time": 0.8, "name": "vv4/0_00024" },
+					{ "time": 0.8333, "name": "vv4/0_00025" },
+					{ "time": 0.8667, "name": "vv4/0_00026" },
+					{ "time": 0.9, "name": "vv4/0_00027" },
+					{ "time": 0.9333, "name": "vv4/0_00028" }
+				]
+			}
+		}
+	},
+	"penalty": {
+		"slots": {
+			"lose": {
+				"attachment": [
+					{ "name": "penalty" }
+				]
+			},
+			"vv4/0_0": {
+				"attachment": [
+					{ "name": null }
+				]
+			},
+			"vv4/0_00000": {
+				"attachment": [
+					{ "name": "vv4/0_00000" },
+					{ "time": 0.0333, "name": "vv4/0_00001" },
+					{ "time": 0.0667, "name": "vv4/0_00002" },
+					{ "time": 0.1, "name": "vv4/0_00003" },
+					{ "time": 0.1333, "name": "vv4/0_00004" },
+					{ "time": 0.1667, "name": "vv4/0_00005" },
+					{ "time": 0.2, "name": "vv4/0_00006" },
+					{ "time": 0.2333, "name": "vv4/0_00007" },
+					{ "time": 0.2667, "name": "vv4/0_00008" },
+					{ "time": 0.3, "name": "vv4/0_00009" },
+					{ "time": 0.3333, "name": "vv4/0_00010" },
+					{ "time": 0.3667, "name": "vv4/0_00011" },
+					{ "time": 0.4, "name": "vv4/0_00012" },
+					{ "time": 0.4333, "name": "vv4/0_00013" },
+					{ "time": 0.4667, "name": "vv4/0_00014" },
+					{ "time": 0.5, "name": "vv4/0_00015" },
+					{ "time": 0.5333, "name": "vv4/0_00016" },
+					{ "time": 0.5667, "name": "vv4/0_00017" },
+					{ "time": 0.6, "name": "vv4/0_00018" },
+					{ "time": 0.6333, "name": "vv4/0_00019" },
+					{ "time": 0.6667, "name": "vv4/0_00020" },
+					{ "time": 0.7, "name": "vv4/0_00021" },
+					{ "time": 0.7333, "name": "vv4/0_00022" },
+					{ "time": 0.7667, "name": "vv4/0_00023" },
+					{ "time": 0.8, "name": "vv4/0_00024" },
+					{ "time": 0.8333, "name": "vv4/0_00025" },
+					{ "time": 0.8667, "name": "vv4/0_00026" },
+					{ "time": 0.9, "name": "vv4/0_00027" },
+					{ "time": 0.9333, "name": "vv4/0_00028" }
+				]
+			}
+		},
+		"bones": {
+			"efff": {
+				"translate": [
+					{ "x": -20.91 }
+				]
+			}
+		}
+	}
+}
+}

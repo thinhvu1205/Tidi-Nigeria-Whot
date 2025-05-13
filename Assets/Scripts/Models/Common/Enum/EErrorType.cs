@@ -1,0 +1,4 @@
+enum ErrorType {
+    ERROR_TYPE_UNSPECIFIED = 0,
+    ERROR_TYPE_CHIP_NOT_ENOUGH = 1
+}

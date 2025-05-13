@@ -72,6 +72,13 @@ public class NetworkManager : MonoBehaviour
     public void SendMatchState(long opCode, string data) => _SocketIS.SendMatchStateAsync(_MatchId, opCode, data);
     #endregion
 
+    #region Authen
+    public async void Login(Action<IApiFriendList> handleCb = null)
+    {
+        ISession session = await _ClientC.AuthenticateCustomAsync("f7333d8d-0bce-4a41-a602-3bcb4743e7b1");
+    }
+    #endregion
+
     #region Friends
     public async void GetListFriends(int state, int limit, string cursor, Action<IApiFriendList> handleCb = null)
     {
@@ -167,5 +174,6 @@ public class NetworkManager : MonoBehaviour
             return;
         }
         DontDestroyOnLoad(gameObject);
+        Connect();
     }
 }

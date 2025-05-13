@@ -1,0 +1,90 @@
+
+skeleton.png
+size: 220,1176
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bg
+  rotate: true
+  xy: 2, 492
+  size: 205, 207
+  orig: 205, 207
+  offset: 0, 0
+  index: -1
+bg2
+  rotate: false
+  xy: 2, 699
+  size: 211, 213
+  orig: 211, 213
+  offset: 0, 0
+  index: -1
+body
+  rotate: false
+  xy: 2, 914
+  size: 194, 257
+  orig: 194, 257
+  offset: 0, 0
+  index: -1
+la_sau
+  rotate: 180
+  xy: 91, 4
+  size: 114, 89
+  orig: 114, 97
+  offset: 0, 0
+  index: -1
+longmay
+  rotate: false
+  xy: 2, 30
+  size: 62, 15
+  orig: 62, 15
+  offset: 0, 0
+  index: -1
+lâcy3
+  rotate: false
+  xy: 2, 47
+  size: 34, 42
+  orig: 34, 42
+  offset: 0, 0
+  index: -1
+mai
+  rotate: false
+  xy: 159, 284
+  size: 55, 103
+  orig: 55, 103
+  offset: 0, 0
+  index: -1
+musau
+  rotate: false
+  xy: 2, 91
+  size: 155, 79
+  orig: 155, 79
+  offset: 0, 0
+  index: -1
+mutren
+  rotate: false
+  xy: 2, 172
+  size: 155, 87
+  orig: 155, 87
+  offset: 0, 0
+  index: -1
+text
+  rotate: false
+  xy: 2, 389
+  size: 181, 101
+  orig: 181, 101
+  offset: 0, 0
+  index: -1
+tocsau
+  rotate: true
+  xy: 2, 261
+  size: 126, 164
+  orig: 126, 165
+  offset: 0, 0
+  index: -1
+toctruoc
+  rotate: false
+  xy: 159, 94
+  size: 57, 161
+  orig: 63, 165
+  offset: 0, 1
+  index: -1

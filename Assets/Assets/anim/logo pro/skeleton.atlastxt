@@ -1,0 +1,55 @@
+
+skeleton.png
+size: 1132,248
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+7
+  rotate: false
+  xy: 828, 41
+  size: 123, 164
+  orig: 123, 164
+  offset: 0, 0
+  index: -1
+Naija
+  rotate: true
+  xy: 694, 2
+  size: 203, 132
+  orig: 203, 132
+  offset: 0, 0
+  index: -1
+bg
+  rotate: false
+  xy: 2, 2
+  size: 465, 243
+  orig: 465, 243
+  offset: 0, 0
+  index: -1
+ef
+  rotate: true
+  xy: 469, 2
+  size: 237, 223
+  orig: 237, 223
+  offset: 0, 0
+  index: -1
+ef2
+  rotate: false
+  xy: 1074, 107
+  size: 37, 132
+  orig: 37, 132
+  offset: 0, 0
+  index: -1
+lua2
+  rotate: false
+  xy: 953, 60
+  size: 101, 185
+  orig: 101, 185
+  offset: 0, 0
+  index: -1
+pro
+  rotate: 270
+  xy: 1052, 9
+  size: 96, 75
+  orig: 96, 75
+  offset: 0, 0
+  index: -1

@@ -10,6 +10,7 @@ public class DataSender
 {
     #region ApiNames
     public const string get_world_with_areas = "get_world_with_areas";
+    public const string GET_PROFILE = "get_profile";
     #endregion
 
     #region RPC
@@ -20,6 +21,20 @@ public class DataSender
             ["id"] = idArea
         };
         _ = NetworkManager.INSTANCE.RPCSend(get_world_with_areas, data);
+    }
+
+    public static void Login()
+    {
+        JSONObject data = new();
+
+        NetworkManager.INSTANCE.Login();
+    }
+
+    public static void GetProfile()
+    {
+        JSONObject data = new();
+
+        _ = NetworkManager.INSTANCE.RPCSend(GET_PROFILE, data);
     }
     #endregion
 

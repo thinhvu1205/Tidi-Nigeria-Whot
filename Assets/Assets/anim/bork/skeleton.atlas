@@ -1,0 +1,104 @@
+
+skeleton.png
+size: 240,884
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+1l
+  rotate: false
+  xy: 2, 46
+  size: 127, 87
+  orig: 127, 130
+  offset: 0, 19
+  index: -1
+3light
+  rotate: false
+  xy: 127, 135
+  size: 97, 115
+  orig: 100, 116
+  offset: 1, 0
+  index: -1
+4light
+  rotate: false
+  xy: 2, 252
+  size: 142, 112
+  orig: 143, 143
+  offset: 1, 15
+  index: -1
+9
+  rotate: false
+  xy: 146, 252
+  size: 90, 109
+  orig: 90, 109
+  offset: 0, 0
+  index: -1
+Card
+  rotate: true
+  xy: 131, 2
+  size: 131, 77
+  orig: 131, 78
+  offset: 0, 0
+  index: -1
+bg2
+  rotate: false
+  xy: 2, 668
+  size: 211, 213
+  orig: 211, 213
+  offset: 0, 0
+  index: -1
+bich
+  rotate: false
+  xy: 66, 10
+  size: 30, 34
+  orig: 30, 34
+  offset: 0, 0
+  index: -1
+chip
+  rotate: false
+  xy: 2, 366
+  size: 176, 93
+  orig: 179, 93
+  offset: 3, 0
+  index: -1
+co
+  rotate: false
+  xy: 2, 10
+  size: 33, 34
+  orig: 33, 34
+  offset: 0, 0
+  index: -1
+ewvs
+  rotate: false
+  xy: 180, 363
+  size: 34, 26
+  orig: 34, 26
+  offset: 0, 0
+  index: -1
+k
+  rotate: true
+  xy: 2, 149
+  size: 101, 123
+  orig: 101, 123
+  offset: 0, 0
+  index: -1
+rec
+  rotate: true
+  xy: 2, 461
+  size: 205, 207
+  orig: 205, 207
+  offset: 0, 0
+  index: -1
+ro
+  rotate: false
+  xy: 37, 5
+  size: 27, 39
+  orig: 27, 39
+  offset: 0, 0
+  index: -1
+tep
+  rotate: false
+  xy: 98, 14
+  size: 28, 30
+  orig: 28, 30
+  offset: 0, 0
+  index: -1

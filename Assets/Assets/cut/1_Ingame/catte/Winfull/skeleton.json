@@ -1,0 +1,1207 @@
+{
+"skeleton": {
+	"hash": "mC1Xz39UBAzVQShxYMjyAIGyf7I",
+	"spine": "3.8.99",
+	"x": -435.01,
+	"y": -247.06,
+	"width": 880,
+	"height": 490.49,
+	"images": "./images/",
+	"audio": ""
+},
+"bones": [
+	{ "name": "root" },
+	{ "name": "bone", "parent": "root", "x": 1.41, "y": -10.12 },
+	{ "name": "Layer 2", "parent": "bone", "x": -1.85, "y": 44.44 },
+	{ "name": "winner", "parent": "bone", "x": -1.51, "y": 150.74 },
+	{ "name": "bone2", "parent": "winner", "x": -1.2, "y": -2.97 },
+	{ "name": "thongbao", "parent": "bone", "x": 0.67, "y": -75.37 },
+	{ "name": "bone3", "parent": "thongbao", "x": 2.91, "y": -22.21, "scaleX": 4, "scaleY": 4 },
+	{ "name": "ef", "parent": "Layer 2", "x": -0.17, "y": -8.49 },
+	{ "name": "khung ava", "parent": "Layer 2", "x": -0.05, "y": -18.71 },
+	{ "name": "khung ten", "parent": "bone", "x": 0.76, "y": -33.29 },
+	{ "name": "light", "parent": "Layer 2", "x": -1.23, "y": -11.65, "scaleX": 2, "scaleY": 2 },
+	{ "name": "light2", "parent": "Layer 2", "x": -1.23, "y": -11.65, "scaleX": 2, "scaleY": 2 },
+	{ "name": "light3", "parent": "Layer 2", "x": -1.23, "y": -11.65, "scaleX": 2, "scaleY": 2 },
+	{ "name": "light4", "parent": "Layer 2", "x": -1.23, "y": -11.65, "scaleX": 2, "scaleY": 2 },
+	{ "name": "winner3", "parent": "winner", "length": 25.45, "rotation": -13.28, "x": 13.42, "y": -1.03 },
+	{ "name": "winner2", "parent": "winner3", "length": 27.85, "rotation": -13.91, "x": 28.46, "y": 0.71 },
+	{ "name": "winner6", "parent": "winner", "length": 27.94, "rotation": -170.07, "x": -9.98, "y": -0.34 },
+	{ "name": "winner4", "parent": "winner6", "length": 28.3, "rotation": 10.71, "x": 32.52, "y": 0.25 },
+	{ "name": "winner5", "parent": "winner2", "length": 25.11, "rotation": 3.79, "x": 32.45, "y": 0.82 },
+	{ "name": "winner8", "parent": "winner4", "length": 26.03, "rotation": 8.64, "x": 32.65, "y": -0.17 }
+],
+"slots": [
+	{ "name": "Comp 1/1", "bone": "light", "color": "ffe73dff", "attachment": "Comp 1/9-992", "blend": "additive" },
+	{ "name": "Comp 1/2", "bone": "light2", "color": "ffe73dff", "attachment": "Comp 1/9-992", "blend": "additive" },
+	{ "name": "Comp 1/3", "bone": "light3", "color": "ffe73dff", "attachment": "Comp 1/9-992", "blend": "additive" },
+	{ "name": "Comp 1/4", "bone": "light4", "color": "ffe73dff", "attachment": "Comp 1/9-992", "blend": "additive" },
+	{ "name": "ef", "bone": "ef", "attachment": "ef", "blend": "additive" },
+	{ "name": "winner", "bone": "winner8", "attachment": "winner" },
+	{ "name": "thongbao", "bone": "thongbao", "attachment": "thongbao" },
+	{ "name": "khung ava", "bone": "khung ava", "attachment": "khung ava" },
+	{ "name": "3 Consecutive Pairs", "bone": "thongbao" },
+	{ "name": "Layer 2", "bone": "Layer 2", "attachment": "Layer 2" },
+	{ "name": "Comp 1/Comp 2_00000", "bone": "bone3", "attachment": "Comp 1/Comp 2_00012", "blend": "additive" },
+	{ "name": "khung ten", "bone": "khung ten", "attachment": "khung ten" },
+	{ "name": "winner2", "bone": "winner", "attachment": "winner2" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"3 Consecutive Pairs": {
+				"4 of a kind": { "x": 7.04, "y": -29.21, "width": 290, "height": 39 },
+				"All Under 6": { "x": 7.04, "y": -29.21, "width": 238, "height": 39 },
+				"Same Color": { "x": 7.04, "y": -29.21, "width": 233, "height": 39 }
+			},
+			"Comp 1/1": {
+				"Comp 1/2": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/3": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/4": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/5": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/6": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/7": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/8": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-1": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-2": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-3": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-4": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-5": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-6": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-7": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-8": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-9": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-91": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-92": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-93": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-94": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-95": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-96": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-97": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-98": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-99": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-991": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-992": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 }
+			},
+			"Comp 1/2": {
+				"Comp 1/2": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/3": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/4": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/5": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/6": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/7": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/8": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-1": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-2": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-3": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-4": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-5": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-6": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-7": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-8": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-9": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-91": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-92": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-93": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-94": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-95": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-96": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-97": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-98": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-99": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-991": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-992": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 }
+			},
+			"Comp 1/3": {
+				"Comp 1/2": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/3": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/4": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/5": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/6": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/7": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/8": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-1": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-2": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-3": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-4": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-5": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-6": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-7": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-8": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-9": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-91": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-92": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-93": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-94": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-95": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-96": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-97": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-98": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-99": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-991": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-992": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 }
+			},
+			"Comp 1/4": {
+				"Comp 1/2": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/3": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/4": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/5": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/6": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/7": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/8": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-1": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-2": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-3": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-4": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-5": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-6": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-7": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-8": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-9": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-91": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-92": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-93": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-94": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-95": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-96": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-97": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-98": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-99": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-991": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 },
+				"Comp 1/9-992": { "x": -2.7, "y": 10.38, "width": 150, "height": 200 }
+			},
+			"Comp 1/Comp 2_00000": {
+				"Comp 1/Comp 2_00002": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00003": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00004": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00005": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00007": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00008": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00009": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00010": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00011": { "x": 0.22, "y": 0.49, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00012": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00013": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00014": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00015": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00016": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00017": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00018": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00020": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00021": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00022": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00023": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00024": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00025": { "y": 0.16, "width": 220, "height": 70 },
+				"Comp 1/Comp 2_00026": { "y": 0.16, "width": 220, "height": 70 }
+			},
+			"Layer 2": {
+				"Layer 2": { "x": 1.06, "y": -5.53, "width": 148, "height": 148 }
+			},
+			"ef": {
+				"ef": { "x": 0.46, "y": -0.02, "width": 292, "height": 269 }
+			},
+			"khung ava": {
+				"khung ava": { "x": 1.61, "y": 3.69, "width": 211, "height": 193 }
+			},
+			"khung ten": {
+				"khung ten": { "x": -0.56, "y": -1.8, "width": 284, "height": 42 }
+			},
+			"thongbao": {
+				"thongbao": { "x": 1.54, "y": -22.21, "width": 652, "height": 119 }
+			},
+			"winner": {
+				"winner": {
+					"type": "mesh",
+					"uvs": [ 0.6659, 0.04014, 0.74836, 0.10915, 0.80942, 0.20904, 0.84719, 0.33253, 0.873, 0.35069, 0.90385, 0.27986, 0.94539, 0.27986, 0.9712, 0.35251, 0.97561, 0.45057, 0.92525, 0.65761, 0.95295, 0.72299, 1, 0.72481, 1, 0.77021, 0.95861, 0.87917, 0.9145, 0.9609, 0.873, 1, 0.81887, 1, 0.7918, 0.93002, 0.79872, 0.81016, 0.82138, 0.70301, 0.80061, 0.72662, 0.77669, 0.792, 0.74018, 0.77021, 0.71752, 0.6794, 0.70367, 0.62855, 0.63758, 0.55046, 0.52301, 0.51959, 0.41271, 0.5323, 0.32585, 0.58133, 0.28178, 0.6449, 0.26982, 0.7357, 0.23898, 0.79745, 0.21128, 0.77566, 0.18673, 0.69756, 0.17099, 0.69756, 0.20246, 0.80835, 0.20121, 0.92639, 0.16218, 1, 0.12378, 1, 0.06083, 0.9155, 0, 0.75023, 0, 0.71028, 0.02873, 0.72844, 0.04699, 0.70846, 0.06524, 0.63219, 0.02118, 0.45058, 0.02055, 0.38157, 0.0495, 0.28168, 0.09168, 0.27078, 0.12504, 0.34706, 0.15148, 0.33798, 0.17918, 0.23809, 0.23394, 0.13276, 0.31577, 0.05649, 0.41649, 0, 0.58281, 0 ],
+					"triangles": [ 47, 48, 49, 49, 45, 46, 49, 46, 47, 27, 50, 51, 28, 44, 45, 49, 50, 28, 28, 45, 49, 29, 34, 44, 33, 34, 29, 43, 44, 34, 30, 33, 29, 40, 41, 42, 32, 33, 30, 31, 32, 30, 43, 35, 42, 35, 43, 34, 39, 42, 35, 40, 42, 39, 36, 39, 35, 38, 39, 36, 37, 38, 36, 53, 54, 26, 52, 53, 26, 27, 51, 52, 52, 26, 27, 28, 50, 27, 29, 44, 28, 26, 2, 3, 4, 25, 3, 8, 4, 7, 7, 5, 6, 7, 4, 5, 8, 24, 4, 9, 24, 8, 9, 19, 24, 19, 9, 10, 20, 23, 19, 22, 23, 20, 10, 11, 12, 21, 22, 20, 13, 10, 12, 18, 19, 10, 18, 10, 13, 13, 17, 18, 14, 17, 13, 15, 16, 17, 14, 15, 17, 26, 0, 1, 26, 1, 2, 4, 24, 25, 19, 23, 24, 26, 54, 55, 26, 55, 0, 25, 26, 3 ],
+					"vertices": [ 3, 14, 24.58, 24.01, 0.39235, 15, -9.37, 21.68, 0.60757, 18, -40.35, 23.58, 8.0E-5, 3, 14, 46.11, 22.92, 0.0023, 15, 11.79, 25.8, 0.90859, 18, -18.97, 26.29, 0.08911, 2, 15, 29.39, 25.08, 0.53079, 18, -1.45, 24.4, 0.46921, 2, 15, 42.73, 19.85, 0.09115, 18, 11.52, 18.31, 0.90885, 2, 15, 49.22, 21.41, 0.01004, 18, 18.09, 19.43, 0.98996, 1, 18, 22.75, 28.16, 1, 1, 18, 32.32, 32.31, 1, 1, 18, 40.77, 29.08, 1, 1, 18, 45.18, 21.69, 1, 1, 18, 40.73, 0.14, 1, 1, 18, 49.37, -2.32, 1, 1, 18, 60.27, 2.23, 1, 1, 18, 61.84, -1.4, 1, 1, 18, 56.07, -14.23, 1, 1, 18, 48.74, -25.15, 1, 1, 18, 40.53, -32.41, 1, 1, 18, 28.06, -37.81, 1, 1, 18, 19.41, -34.92, 1, 2, 15, 50.91, -22.67, 0.00129, 18, 16.86, -24.66, 0.99871, 2, 15, 51.7, -11.78, 0.0435, 18, 18.38, -13.84, 0.9565, 2, 15, 48.01, -15.99, 0.18216, 18, 14.41, -17.8, 0.81784, 2, 15, 45.27, -23.79, 0.31893, 18, 11.16, -25.4, 0.68107, 3, 14, 57.33, -33.53, 0.00229, 15, 36.25, -26.29, 0.4396, 18, 1.99, -27.3, 0.55812, 3, 14, 49.97, -27.14, 0.02542, 15, 27.58, -21.87, 0.63719, 18, -6.37, -22.31, 0.33739, 3, 14, 45.57, -23.64, 0.0793, 15, 22.46, -19.52, 0.77167, 18, -11.31, -19.63, 0.14903, 3, 14, 27.87, -20.84, 0.62662, 15, 4.6, -21.06, 0.37198, 3, 35.75, -27.71, 0.0014, 3, 14, -0.74, -24.83, 0.58518, 3, 6.99, -25.03, 0.37369, 17, -39.18, 34.88, 0.04113, 3, 14, -27.43, -32.27, 0.0204, 3, -20.69, -26.13, 0.44454, 17, -12.88, 26.16, 0.53506, 3, 3, -42.5, -30.4, 0.0467, 17, 9.03, 22.47, 0.92361, 19, -19.96, 25.93, 0.02969, 3, 3, -53.55, -35.93, 0.00135, 17, 21.33, 23.75, 0.72538, 19, -7.61, 25.34, 0.27327, 2, 17, 26.92, 30.08, 0.5275, 19, -1.13, 30.77, 0.4725, 2, 17, 36.06, 32.38, 0.41368, 19, 8.25, 31.67, 0.58632, 2, 17, 41.9, 28.16, 0.34422, 19, 13.39, 26.61, 0.65578, 2, 17, 45.27, 19.63, 0.16284, 19, 15.44, 17.67, 0.83716, 2, 17, 48.96, 18.23, 0.04644, 19, 18.89, 15.74, 0.95356, 2, 17, 44.97, 30.04, 6.0E-4, 19, 16.71, 28.01, 0.9994, 1, 19, 22.01, 36.82, 1, 1, 19, 33.69, 37.61, 1, 1, 19, 42.09, 32.9, 1, 1, 19, 52.28, 18.76, 1, 1, 19, 58.57, -1.25, 1, 1, 19, 56.87, -4.28, 1, 1, 19, 51.35, 0.62, 1, 1, 19, 46.5, 1.35, 1, 1, 19, 39.26, -2.2, 1, 1, 19, 41.18, -21.39, 1, 1, 19, 38.39, -26.7, 1, 1, 19, 27.8, -30.73, 1, 1, 19, 18.1, -26.38, 1, 2, 17, 49.01, -14.37, 7.4E-4, 19, 14.04, -16.5, 0.99926, 2, 17, 42.52, -12.77, 0.04848, 19, 7.86, -13.94, 0.95152, 2, 17, 32.95, -18.45, 0.44763, 19, -2.45, -18.12, 0.55237, 2, 17, 16.86, -22.18, 0.92685, 19, -18.92, -19.39, 0.07315, 2, 3, -45.02, 15.26, 0.12358, 17, -4.7, -21.15, 0.87642, 2, 3, -19.74, 20.18, 0.67421, 17, -30.09, -16.84, 0.32579, 3, 14, 3.48, 22.61, 0.81992, 15, -29.51, 15.25, 0.07553, 3, 22, 20.18, 0.10455 ],
+					"hull": 56,
+					"edges": [ 110, 0, 0, 2, 2, 4, 4, 6, 6, 8, 8, 10, 10, 12, 12, 14, 14, 16, 16, 18, 18, 20, 20, 22, 22, 24, 24, 26, 26, 28, 28, 30, 30, 32, 32, 34, 34, 36, 36, 38, 38, 40, 40, 42, 42, 44, 44, 46, 46, 48, 48, 50, 50, 52, 52, 54, 54, 56, 56, 58, 58, 60, 60, 62, 62, 64, 64, 66, 66, 68, 68, 70, 70, 72, 72, 74, 74, 76, 76, 78, 78, 80, 80, 82, 82, 84, 84, 86, 86, 88, 88, 90, 90, 92, 92, 94, 94, 96, 96, 98, 98, 100, 100, 102, 102, 104, 104, 106, 108, 110, 106, 108 ],
+					"width": 249,
+					"height": 86
+				}
+			},
+			"winner2": {
+				"winner2": { "x": -0.64, "y": -5.41, "width": 127, "height": 34 }
+			}
+		}
+	}
+],
+"animations": {
+	"All Under 6": {
+		"slots": {
+			"3 Consecutive Pairs": {
+				"color": [
+					{ "color": "ffffff00", "curve": "stepped" },
+					{ "time": 0.5, "color": "ffffff00" },
+					{ "time": 0.6667, "color": "ffffffff" }
+				],
+				"attachment": [
+					{ "name": "All Under 6" }
+				]
+			},
+			"Comp 1/1": {
+				"attachment": [
+					{ "time": 0.0333, "name": "Comp 1/2" },
+					{ "time": 0.0667, "name": "Comp 1/3" },
+					{ "time": 0.1, "name": "Comp 1/4" },
+					{ "time": 0.1333, "name": "Comp 1/5" },
+					{ "time": 0.1667, "name": "Comp 1/6" },
+					{ "time": 0.2, "name": "Comp 1/7" },
+					{ "time": 0.2333, "name": "Comp 1/8" },
+					{ "time": 0.2667, "name": "Comp 1/9" },
+					{ "time": 0.3, "name": "Comp 1/9-1" },
+					{ "time": 0.3333, "name": "Comp 1/9-2" },
+					{ "time": 0.3667, "name": "Comp 1/9-3" },
+					{ "time": 0.4, "name": "Comp 1/9-4" },
+					{ "time": 0.4333, "name": "Comp 1/9-5" },
+					{ "time": 0.4667, "name": "Comp 1/9-6" },
+					{ "time": 0.5, "name": "Comp 1/9-7" },
+					{ "time": 0.5333, "name": "Comp 1/9-8" },
+					{ "time": 0.5667, "name": "Comp 1/9-9" },
+					{ "time": 0.6, "name": "Comp 1/9-91" },
+					{ "time": 0.6333, "name": "Comp 1/9-92" },
+					{ "time": 0.6667, "name": "Comp 1/9-93" },
+					{ "time": 0.7, "name": "Comp 1/9-94" },
+					{ "time": 0.7333, "name": "Comp 1/9-95" },
+					{ "time": 0.7667, "name": "Comp 1/9-96" },
+					{ "time": 0.8, "name": "Comp 1/9-97" },
+					{ "time": 0.8333, "name": "Comp 1/9-98" },
+					{ "time": 0.8667, "name": "Comp 1/9-99" },
+					{ "time": 0.9, "name": "Comp 1/9-991" },
+					{ "time": 0.9333, "name": null }
+				]
+			},
+			"Comp 1/2": {
+				"attachment": [
+					{ "name": null },
+					{ "time": 0.9667, "name": "Comp 1/2" },
+					{ "time": 1, "name": "Comp 1/3" },
+					{ "time": 1.0333, "name": "Comp 1/4" },
+					{ "time": 1.0667, "name": "Comp 1/5" },
+					{ "time": 1.1, "name": "Comp 1/6" },
+					{ "time": 1.1333, "name": "Comp 1/7" },
+					{ "time": 1.1667, "name": "Comp 1/8" },
+					{ "time": 1.2, "name": "Comp 1/9" },
+					{ "time": 1.2333, "name": "Comp 1/9-1" },
+					{ "time": 1.2667, "name": "Comp 1/9-2" },
+					{ "time": 1.3, "name": "Comp 1/9-3" },
+					{ "time": 1.3333, "name": "Comp 1/9-4" },
+					{ "time": 1.3667, "name": "Comp 1/9-5" },
+					{ "time": 1.4, "name": "Comp 1/9-6" },
+					{ "time": 1.4333, "name": "Comp 1/9-7" },
+					{ "time": 1.4667, "name": "Comp 1/9-8" },
+					{ "time": 1.5, "name": "Comp 1/9-9" },
+					{ "time": 1.5333, "name": "Comp 1/9-91" },
+					{ "time": 1.5667, "name": "Comp 1/9-92" },
+					{ "time": 1.6, "name": "Comp 1/9-93" },
+					{ "time": 1.6333, "name": "Comp 1/9-94" },
+					{ "time": 1.6667, "name": "Comp 1/9-95" },
+					{ "time": 1.7, "name": "Comp 1/9-96" },
+					{ "time": 1.7333, "name": "Comp 1/9-97" },
+					{ "time": 1.7667, "name": "Comp 1/9-98" },
+					{ "time": 1.8, "name": "Comp 1/9-99" },
+					{ "time": 1.8333, "name": "Comp 1/9-991" },
+					{ "time": 1.8667, "name": null }
+				]
+			},
+			"Comp 1/3": {
+				"attachment": [
+					{ "name": null },
+					{ "time": 1.8667, "name": "Comp 1/2" },
+					{ "time": 1.9, "name": "Comp 1/3" },
+					{ "time": 1.9333, "name": "Comp 1/4" },
+					{ "time": 1.9667, "name": "Comp 1/5" },
+					{ "time": 2, "name": "Comp 1/6" },
+					{ "time": 2.0333, "name": "Comp 1/7" },
+					{ "time": 2.0667, "name": "Comp 1/8" },
+					{ "time": 2.1, "name": "Comp 1/9" },
+					{ "time": 2.1333, "name": "Comp 1/9-1" },
+					{ "time": 2.1667, "name": "Comp 1/9-2" },
+					{ "time": 2.2, "name": "Comp 1/9-3" },
+					{ "time": 2.2333, "name": "Comp 1/9-4" },
+					{ "time": 2.2667, "name": "Comp 1/9-5" },
+					{ "time": 2.3, "name": "Comp 1/9-6" },
+					{ "time": 2.3333, "name": "Comp 1/9-7" },
+					{ "time": 2.3667, "name": "Comp 1/9-8" },
+					{ "time": 2.4, "name": "Comp 1/9-9" },
+					{ "time": 2.4333, "name": "Comp 1/9-91" },
+					{ "time": 2.4667, "name": "Comp 1/9-92" },
+					{ "time": 2.5, "name": "Comp 1/9-93" },
+					{ "time": 2.5333, "name": "Comp 1/9-94" },
+					{ "time": 2.5667, "name": "Comp 1/9-95" },
+					{ "time": 2.6, "name": "Comp 1/9-96" },
+					{ "time": 2.6333, "name": "Comp 1/9-97" },
+					{ "time": 2.6667, "name": "Comp 1/9-98" },
+					{ "time": 2.7, "name": "Comp 1/9-99" },
+					{ "time": 2.7333, "name": "Comp 1/9-991" },
+					{ "time": 2.7667, "name": null }
+				]
+			},
+			"Comp 1/4": {
+				"attachment": [
+					{ "name": null },
+					{ "time": 2.8333, "name": "Comp 1/2" },
+					{ "time": 2.8667, "name": "Comp 1/3" },
+					{ "time": 2.9, "name": "Comp 1/4" },
+					{ "time": 2.9333, "name": "Comp 1/5" },
+					{ "time": 2.9667, "name": "Comp 1/6" },
+					{ "time": 3, "name": "Comp 1/7" },
+					{ "time": 3.0333, "name": "Comp 1/8" },
+					{ "time": 3.0667, "name": "Comp 1/9" },
+					{ "time": 3.1, "name": "Comp 1/9-1" },
+					{ "time": 3.1333, "name": "Comp 1/9-2" },
+					{ "time": 3.1667, "name": "Comp 1/9-3" },
+					{ "time": 3.2, "name": "Comp 1/9-4" },
+					{ "time": 3.2333, "name": "Comp 1/9-5" },
+					{ "time": 3.2667, "name": "Comp 1/9-6" },
+					{ "time": 3.3, "name": "Comp 1/9-7" },
+					{ "time": 3.3333, "name": "Comp 1/9-8" },
+					{ "time": 3.3667, "name": "Comp 1/9-9" },
+					{ "time": 3.4, "name": "Comp 1/9-91" },
+					{ "time": 3.4333, "name": "Comp 1/9-92" },
+					{ "time": 3.4667, "name": "Comp 1/9-93" },
+					{ "time": 3.5, "name": "Comp 1/9-94" },
+					{ "time": 3.5333, "name": "Comp 1/9-95" },
+					{ "time": 3.5667, "name": "Comp 1/9-96" },
+					{ "time": 3.6, "name": "Comp 1/9-97" },
+					{ "time": 3.6333, "name": "Comp 1/9-98" },
+					{ "time": 3.6667, "name": "Comp 1/9-99" },
+					{ "time": 3.7, "name": "Comp 1/9-991" },
+					{ "time": 3.7333, "name": null }
+				]
+			},
+			"Comp 1/Comp 2_00000": {
+				"attachment": [
+					{ "name": null },
+					{ "time": 0.9, "name": "Comp 1/Comp 2_00002" },
+					{ "time": 0.9333, "name": "Comp 1/Comp 2_00003" },
+					{ "time": 0.9667, "name": "Comp 1/Comp 2_00004" },
+					{ "time": 1, "name": "Comp 1/Comp 2_00005" },
+					{ "time": 1.0667, "name": "Comp 1/Comp 2_00007" },
+					{ "time": 1.1, "name": "Comp 1/Comp 2_00008" },
+					{ "time": 1.1333, "name": "Comp 1/Comp 2_00009" },
+					{ "time": 1.1667, "name": "Comp 1/Comp 2_00010" },
+					{ "time": 1.2, "name": "Comp 1/Comp 2_00011" },
+					{ "time": 1.2333, "name": "Comp 1/Comp 2_00012" },
+					{ "time": 1.2667, "name": "Comp 1/Comp 2_00013" },
+					{ "time": 1.3, "name": "Comp 1/Comp 2_00014" },
+					{ "time": 1.3333, "name": "Comp 1/Comp 2_00015" },
+					{ "time": 1.3667, "name": "Comp 1/Comp 2_00016" },
+					{ "time": 1.4, "name": "Comp 1/Comp 2_00017" },
+					{ "time": 1.4333, "name": "Comp 1/Comp 2_00018" },
+					{ "time": 1.5, "name": "Comp 1/Comp 2_00020" },
+					{ "time": 1.5333, "name": "Comp 1/Comp 2_00021" },
+					{ "time": 1.5667, "name": "Comp 1/Comp 2_00022" },
+					{ "time": 1.6, "name": "Comp 1/Comp 2_00023" },
+					{ "time": 1.6333, "name": "Comp 1/Comp 2_00024" },
+					{ "time": 1.6667, "name": "Comp 1/Comp 2_00025" },
+					{ "time": 1.7, "name": "Comp 1/Comp 2_00026" },
+					{ "time": 1.8333, "name": null }
+				]
+			},
+			"thongbao": {
+				"color": [
+					{ "color": "ffffff00", "curve": "stepped" },
+					{ "time": 0.5, "color": "ffffff00", "curve": 0.112, "c2": 0.55, "c3": 0.39, "c4": 0.98 },
+					{ "time": 0.6667, "color": "ffffffff" }
+				]
+			}
+		},
+		"bones": {
+			"thongbao": {
+				"translate": [
+					{ "time": 0.5, "curve": "stepped" },
+					{ "time": 0.6667, "curve": "stepped" },
+					{ "time": 0.8333 }
+				],
+				"scale": [
+					{
+						"time": 0.5,
+						"x": 3,
+						"y": 3,
+						"curve": 0.112,
+						"c2": 0.55,
+						"c3": 0.39,
+						"c4": 0.98
+					},
+					{ "time": 0.6667, "x": 0.8, "y": 0.8 },
+					{ "time": 0.8333 }
+				]
+			},
+			"ef": {
+				"rotate": [
+					{},
+					{ "time": 0.5, "angle": -128.38 },
+					{ "time": 1, "angle": 102.25 },
+					{ "time": 1.8333 },
+					{ "time": 2.7, "angle": -128.38 },
+					{ "time": 3.5333, "angle": 102.25 },
+					{ "time": 4.3333 }
+				]
+			},
+			"Layer 2": {
+				"scale": [
+					{ "x": 0, "y": 0, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.3333, "x": 1.2, "y": 1.2, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.5 }
+				]
+			},
+			"winner": {
+				"translate": [
+					{ "y": -3.79, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.5, "curve": "stepped" },
+					{ "time": 0.6667, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.2333, "y": -0.95, "curve": 0.25, "c3": 0.75 },
+					{ "time": 4.3333, "y": -3.79 }
+				],
+				"scale": [
+					{ "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.3333, "x": 0, "y": 0, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.5, "x": 1.2, "y": 1.2, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.6667 }
+				]
+			},
+			"winner3": {
+				"rotate": [
+					{ "curve": "stepped" },
+					{ "time": 0.5, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.3, "angle": 2.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.2667, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.3, "angle": 2.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 4.3333 }
+				]
+			},
+			"winner2": {
+				"rotate": [
+					{ "angle": 0.96, "curve": 0.381, "c2": 0.59, "c3": 0.728 },
+					{ "time": 0.1667, "curve": "stepped" },
+					{ "time": 0.6667, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.5667, "angle": 4.49, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.5333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.5667, "angle": 4.49, "curve": 0.243, "c3": 0.66, "c4": 0.64 },
+					{ "time": 4.3333, "angle": 0.96 }
+				]
+			},
+			"winner5": {
+				"rotate": [
+					{ "angle": 2.86, "curve": 0.369, "c2": 0.47, "c3": 0.753 },
+					{ "time": 0.3333, "curve": "stepped" },
+					{ "time": 0.8333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.8667, "angle": 4.99, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.8333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.8667, "angle": 4.99, "curve": 0.254, "c3": 0.621, "c4": 0.47 },
+					{ "time": 4.3333, "angle": 2.86 }
+				]
+			},
+			"winner6": {
+				"rotate": [
+					{ "curve": "stepped" },
+					{ "time": 0.5, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.3, "angle": -1.26, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.2667, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.3, "angle": -1.26, "curve": 0.25, "c3": 0.75 },
+					{ "time": 4.3333 }
+				]
+			},
+			"winner4": {
+				"rotate": [
+					{ "angle": -0.89, "curve": 0.381, "c2": 0.59, "c3": 0.728 },
+					{ "time": 0.1667, "curve": "stepped" },
+					{ "time": 0.6667, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.5667, "angle": -4.13, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.5333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.5667, "angle": -4.13, "curve": 0.243, "c3": 0.66, "c4": 0.64 },
+					{ "time": 4.3333, "angle": -0.89 }
+				]
+			},
+			"winner8": {
+				"rotate": [
+					{ "angle": -6.3, "curve": 0.369, "c2": 0.47, "c3": 0.753 },
+					{ "time": 0.3333, "curve": "stepped" },
+					{ "time": 0.8333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.8667, "angle": -10.99, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.8333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.8667, "angle": -10.99, "curve": 0.254, "c3": 0.621, "c4": 0.47 },
+					{ "time": 4.3333, "angle": -6.3 }
+				]
+			},
+			"khung ava": {
+				"scale": [
+					{ "time": 0.5, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.6667, "x": 1.13, "y": 1.13, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.8333 }
+				]
+			},
+			"khung ten": {
+				"scale": [
+					{ "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.5667, "x": 0, "y": 0 },
+					{ "time": 0.7333, "x": 1.3, "y": 1.3 },
+					{ "time": 0.9 }
+				]
+			},
+			"bone": {
+				"scale": [
+					{ "curve": "stepped" },
+					{ "time": 3.6667 },
+					{ "time": 3.9333, "x": 1.2, "y": 1.2 },
+					{ "time": 4.1333, "x": 0, "y": 0 }
+				]
+			}
+		}
+	},
+	"Four of a kind": {
+		"slots": {
+			"3 Consecutive Pairs": {
+				"color": [
+					{ "color": "ffffff00", "curve": "stepped" },
+					{ "time": 0.5, "color": "ffffff00" },
+					{ "time": 0.6667, "color": "ffffffff" }
+				],
+				"attachment": [
+					{ "name": "4 of a kind" }
+				]
+			},
+			"Comp 1/1": {
+				"attachment": [
+					{ "time": 0.0333, "name": "Comp 1/2" },
+					{ "time": 0.0667, "name": "Comp 1/3" },
+					{ "time": 0.1, "name": "Comp 1/4" },
+					{ "time": 0.1333, "name": "Comp 1/5" },
+					{ "time": 0.1667, "name": "Comp 1/6" },
+					{ "time": 0.2, "name": "Comp 1/7" },
+					{ "time": 0.2333, "name": "Comp 1/8" },
+					{ "time": 0.2667, "name": "Comp 1/9" },
+					{ "time": 0.3, "name": "Comp 1/9-1" },
+					{ "time": 0.3333, "name": "Comp 1/9-2" },
+					{ "time": 0.3667, "name": "Comp 1/9-3" },
+					{ "time": 0.4, "name": "Comp 1/9-4" },
+					{ "time": 0.4333, "name": "Comp 1/9-5" },
+					{ "time": 0.4667, "name": "Comp 1/9-6" },
+					{ "time": 0.5, "name": "Comp 1/9-7" },
+					{ "time": 0.5333, "name": "Comp 1/9-8" },
+					{ "time": 0.5667, "name": "Comp 1/9-9" },
+					{ "time": 0.6, "name": "Comp 1/9-91" },
+					{ "time": 0.6333, "name": "Comp 1/9-92" },
+					{ "time": 0.6667, "name": "Comp 1/9-93" },
+					{ "time": 0.7, "name": "Comp 1/9-94" },
+					{ "time": 0.7333, "name": "Comp 1/9-95" },
+					{ "time": 0.7667, "name": "Comp 1/9-96" },
+					{ "time": 0.8, "name": "Comp 1/9-97" },
+					{ "time": 0.8333, "name": "Comp 1/9-98" },
+					{ "time": 0.8667, "name": "Comp 1/9-99" },
+					{ "time": 0.9, "name": "Comp 1/9-991" },
+					{ "time": 0.9333, "name": null }
+				]
+			},
+			"Comp 1/2": {
+				"attachment": [
+					{ "name": null },
+					{ "time": 0.9667, "name": "Comp 1/2" },
+					{ "time": 1, "name": "Comp 1/3" },
+					{ "time": 1.0333, "name": "Comp 1/4" },
+					{ "time": 1.0667, "name": "Comp 1/5" },
+					{ "time": 1.1, "name": "Comp 1/6" },
+					{ "time": 1.1333, "name": "Comp 1/7" },
+					{ "time": 1.1667, "name": "Comp 1/8" },
+					{ "time": 1.2, "name": "Comp 1/9" },
+					{ "time": 1.2333, "name": "Comp 1/9-1" },
+					{ "time": 1.2667, "name": "Comp 1/9-2" },
+					{ "time": 1.3, "name": "Comp 1/9-3" },
+					{ "time": 1.3333, "name": "Comp 1/9-4" },
+					{ "time": 1.3667, "name": "Comp 1/9-5" },
+					{ "time": 1.4, "name": "Comp 1/9-6" },
+					{ "time": 1.4333, "name": "Comp 1/9-7" },
+					{ "time": 1.4667, "name": "Comp 1/9-8" },
+					{ "time": 1.5, "name": "Comp 1/9-9" },
+					{ "time": 1.5333, "name": "Comp 1/9-91" },
+					{ "time": 1.5667, "name": "Comp 1/9-92" },
+					{ "time": 1.6, "name": "Comp 1/9-93" },
+					{ "time": 1.6333, "name": "Comp 1/9-94" },
+					{ "time": 1.6667, "name": "Comp 1/9-95" },
+					{ "time": 1.7, "name": "Comp 1/9-96" },
+					{ "time": 1.7333, "name": "Comp 1/9-97" },
+					{ "time": 1.7667, "name": "Comp 1/9-98" },
+					{ "time": 1.8, "name": "Comp 1/9-99" },
+					{ "time": 1.8333, "name": "Comp 1/9-991" },
+					{ "time": 1.8667, "name": null }
+				]
+			},
+			"Comp 1/3": {
+				"attachment": [
+					{ "name": null },
+					{ "time": 1.8667, "name": "Comp 1/2" },
+					{ "time": 1.9, "name": "Comp 1/3" },
+					{ "time": 1.9333, "name": "Comp 1/4" },
+					{ "time": 1.9667, "name": "Comp 1/5" },
+					{ "time": 2, "name": "Comp 1/6" },
+					{ "time": 2.0333, "name": "Comp 1/7" },
+					{ "time": 2.0667, "name": "Comp 1/8" },
+					{ "time": 2.1, "name": "Comp 1/9" },
+					{ "time": 2.1333, "name": "Comp 1/9-1" },
+					{ "time": 2.1667, "name": "Comp 1/9-2" },
+					{ "time": 2.2, "name": "Comp 1/9-3" },
+					{ "time": 2.2333, "name": "Comp 1/9-4" },
+					{ "time": 2.2667, "name": "Comp 1/9-5" },
+					{ "time": 2.3, "name": "Comp 1/9-6" },
+					{ "time": 2.3333, "name": "Comp 1/9-7" },
+					{ "time": 2.3667, "name": "Comp 1/9-8" },
+					{ "time": 2.4, "name": "Comp 1/9-9" },
+					{ "time": 2.4333, "name": "Comp 1/9-91" },
+					{ "time": 2.4667, "name": "Comp 1/9-92" },
+					{ "time": 2.5, "name": "Comp 1/9-93" },
+					{ "time": 2.5333, "name": "Comp 1/9-94" },
+					{ "time": 2.5667, "name": "Comp 1/9-95" },
+					{ "time": 2.6, "name": "Comp 1/9-96" },
+					{ "time": 2.6333, "name": "Comp 1/9-97" },
+					{ "time": 2.6667, "name": "Comp 1/9-98" },
+					{ "time": 2.7, "name": "Comp 1/9-99" },
+					{ "time": 2.7333, "name": "Comp 1/9-991" },
+					{ "time": 2.7667, "name": null }
+				]
+			},
+			"Comp 1/4": {
+				"attachment": [
+					{ "name": null },
+					{ "time": 2.8333, "name": "Comp 1/2" },
+					{ "time": 2.8667, "name": "Comp 1/3" },
+					{ "time": 2.9, "name": "Comp 1/4" },
+					{ "time": 2.9333, "name": "Comp 1/5" },
+					{ "time": 2.9667, "name": "Comp 1/6" },
+					{ "time": 3, "name": "Comp 1/7" },
+					{ "time": 3.0333, "name": "Comp 1/8" },
+					{ "time": 3.0667, "name": "Comp 1/9" },
+					{ "time": 3.1, "name": "Comp 1/9-1" },
+					{ "time": 3.1333, "name": "Comp 1/9-2" },
+					{ "time": 3.1667, "name": "Comp 1/9-3" },
+					{ "time": 3.2, "name": "Comp 1/9-4" },
+					{ "time": 3.2333, "name": "Comp 1/9-5" },
+					{ "time": 3.2667, "name": "Comp 1/9-6" },
+					{ "time": 3.3, "name": "Comp 1/9-7" },
+					{ "time": 3.3333, "name": "Comp 1/9-8" },
+					{ "time": 3.3667, "name": "Comp 1/9-9" },
+					{ "time": 3.4, "name": "Comp 1/9-91" },
+					{ "time": 3.4333, "name": "Comp 1/9-92" },
+					{ "time": 3.4667, "name": "Comp 1/9-93" },
+					{ "time": 3.5, "name": "Comp 1/9-94" },
+					{ "time": 3.5333, "name": "Comp 1/9-95" },
+					{ "time": 3.5667, "name": "Comp 1/9-96" },
+					{ "time": 3.6, "name": "Comp 1/9-97" },
+					{ "time": 3.6333, "name": "Comp 1/9-98" },
+					{ "time": 3.6667, "name": "Comp 1/9-99" },
+					{ "time": 3.7, "name": "Comp 1/9-991" },
+					{ "time": 3.7333, "name": null }
+				]
+			},
+			"Comp 1/Comp 2_00000": {
+				"attachment": [
+					{ "name": null },
+					{ "time": 0.9, "name": "Comp 1/Comp 2_00002" },
+					{ "time": 0.9333, "name": "Comp 1/Comp 2_00003" },
+					{ "time": 0.9667, "name": "Comp 1/Comp 2_00004" },
+					{ "time": 1, "name": "Comp 1/Comp 2_00005" },
+					{ "time": 1.0667, "name": "Comp 1/Comp 2_00007" },
+					{ "time": 1.1, "name": "Comp 1/Comp 2_00008" },
+					{ "time": 1.1333, "name": "Comp 1/Comp 2_00009" },
+					{ "time": 1.1667, "name": "Comp 1/Comp 2_00010" },
+					{ "time": 1.2, "name": "Comp 1/Comp 2_00011" },
+					{ "time": 1.2333, "name": "Comp 1/Comp 2_00012" },
+					{ "time": 1.2667, "name": "Comp 1/Comp 2_00013" },
+					{ "time": 1.3, "name": "Comp 1/Comp 2_00014" },
+					{ "time": 1.3333, "name": "Comp 1/Comp 2_00015" },
+					{ "time": 1.3667, "name": "Comp 1/Comp 2_00016" },
+					{ "time": 1.4, "name": "Comp 1/Comp 2_00017" },
+					{ "time": 1.4333, "name": "Comp 1/Comp 2_00018" },
+					{ "time": 1.5, "name": "Comp 1/Comp 2_00020" },
+					{ "time": 1.5333, "name": "Comp 1/Comp 2_00021" },
+					{ "time": 1.5667, "name": "Comp 1/Comp 2_00022" },
+					{ "time": 1.6, "name": "Comp 1/Comp 2_00023" },
+					{ "time": 1.6333, "name": "Comp 1/Comp 2_00024" },
+					{ "time": 1.6667, "name": "Comp 1/Comp 2_00025" },
+					{ "time": 1.7, "name": "Comp 1/Comp 2_00026" },
+					{ "time": 1.8333, "name": null }
+				]
+			},
+			"thongbao": {
+				"color": [
+					{ "color": "ffffff00", "curve": "stepped" },
+					{ "time": 0.5, "color": "ffffff00", "curve": 0.112, "c2": 0.55, "c3": 0.39, "c4": 0.98 },
+					{ "time": 0.6667, "color": "ffffffff" }
+				]
+			}
+		},
+		"bones": {
+			"thongbao": {
+				"translate": [
+					{ "time": 0.5, "curve": "stepped" },
+					{ "time": 0.6667, "curve": "stepped" },
+					{ "time": 0.8333 }
+				],
+				"scale": [
+					{
+						"time": 0.5,
+						"x": 3,
+						"y": 3,
+						"curve": 0.112,
+						"c2": 0.55,
+						"c3": 0.39,
+						"c4": 0.98
+					},
+					{ "time": 0.6667, "x": 0.8, "y": 0.8 },
+					{ "time": 0.8333 }
+				]
+			},
+			"ef": {
+				"rotate": [
+					{},
+					{ "time": 0.5, "angle": -128.38 },
+					{ "time": 1, "angle": 102.25 },
+					{ "time": 1.8333 },
+					{ "time": 2.7, "angle": -128.38 },
+					{ "time": 3.5333, "angle": 102.25 },
+					{ "time": 4.3333 }
+				]
+			},
+			"Layer 2": {
+				"scale": [
+					{ "x": 0, "y": 0, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.3333, "x": 1.2, "y": 1.2, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.5 }
+				]
+			},
+			"winner": {
+				"translate": [
+					{ "y": -3.79, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.5, "curve": "stepped" },
+					{ "time": 0.6667, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.2333, "y": -0.95, "curve": 0.25, "c3": 0.75 },
+					{ "time": 4.3333, "y": -3.79 }
+				],
+				"scale": [
+					{ "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.3333, "x": 0, "y": 0, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.5, "x": 1.2, "y": 1.2, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.6667 }
+				]
+			},
+			"winner3": {
+				"rotate": [
+					{ "curve": "stepped" },
+					{ "time": 0.5, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.3, "angle": 2.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.2667, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.3, "angle": 2.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 4.3333 }
+				]
+			},
+			"winner2": {
+				"rotate": [
+					{ "angle": 0.96, "curve": 0.381, "c2": 0.59, "c3": 0.728 },
+					{ "time": 0.1667, "curve": "stepped" },
+					{ "time": 0.6667, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.5667, "angle": 4.49, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.5333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.5667, "angle": 4.49, "curve": 0.243, "c3": 0.66, "c4": 0.64 },
+					{ "time": 4.3333, "angle": 0.96 }
+				]
+			},
+			"winner5": {
+				"rotate": [
+					{ "angle": 2.86, "curve": 0.369, "c2": 0.47, "c3": 0.753 },
+					{ "time": 0.3333, "curve": "stepped" },
+					{ "time": 0.8333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.8667, "angle": 4.99, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.8333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.8667, "angle": 4.99, "curve": 0.254, "c3": 0.621, "c4": 0.47 },
+					{ "time": 4.3333, "angle": 2.86 }
+				]
+			},
+			"winner6": {
+				"rotate": [
+					{ "curve": "stepped" },
+					{ "time": 0.5, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.3, "angle": -1.26, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.2667, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.3, "angle": -1.26, "curve": 0.25, "c3": 0.75 },
+					{ "time": 4.3333 }
+				]
+			},
+			"winner4": {
+				"rotate": [
+					{ "angle": -0.89, "curve": 0.381, "c2": 0.59, "c3": 0.728 },
+					{ "time": 0.1667, "curve": "stepped" },
+					{ "time": 0.6667, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.5667, "angle": -4.13, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.5333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.5667, "angle": -4.13, "curve": 0.243, "c3": 0.66, "c4": 0.64 },
+					{ "time": 4.3333, "angle": -0.89 }
+				]
+			},
+			"winner8": {
+				"rotate": [
+					{ "angle": -6.3, "curve": 0.369, "c2": 0.47, "c3": 0.753 },
+					{ "time": 0.3333, "curve": "stepped" },
+					{ "time": 0.8333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.8667, "angle": -10.99, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.8333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.8667, "angle": -10.99, "curve": 0.254, "c3": 0.621, "c4": 0.47 },
+					{ "time": 4.3333, "angle": -6.3 }
+				]
+			},
+			"khung ava": {
+				"scale": [
+					{ "time": 0.5, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.6667, "x": 1.13, "y": 1.13, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.8333 }
+				]
+			},
+			"khung ten": {
+				"scale": [
+					{ "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.5667, "x": 0, "y": 0 },
+					{ "time": 0.7333, "x": 1.3, "y": 1.3 },
+					{ "time": 0.9 }
+				]
+			},
+			"bone": {
+				"scale": [
+					{ "curve": "stepped" },
+					{ "time": 3.6667 },
+					{ "time": 3.9333, "x": 1.2, "y": 1.2 },
+					{ "time": 4.1333, "x": 0, "y": 0 }
+				]
+			}
+		}
+	},
+	"Same Color": {
+		"slots": {
+			"3 Consecutive Pairs": {
+				"color": [
+					{ "color": "ffffff00", "curve": "stepped" },
+					{ "time": 0.5, "color": "ffffff00" },
+					{ "time": 0.6667, "color": "ffffffff" }
+				],
+				"attachment": [
+					{ "name": "Same Color" }
+				]
+			},
+			"Comp 1/1": {
+				"attachment": [
+					{ "time": 0.0333, "name": "Comp 1/2" },
+					{ "time": 0.0667, "name": "Comp 1/3" },
+					{ "time": 0.1, "name": "Comp 1/4" },
+					{ "time": 0.1333, "name": "Comp 1/5" },
+					{ "time": 0.1667, "name": "Comp 1/6" },
+					{ "time": 0.2, "name": "Comp 1/7" },
+					{ "time": 0.2333, "name": "Comp 1/8" },
+					{ "time": 0.2667, "name": "Comp 1/9" },
+					{ "time": 0.3, "name": "Comp 1/9-1" },
+					{ "time": 0.3333, "name": "Comp 1/9-2" },
+					{ "time": 0.3667, "name": "Comp 1/9-3" },
+					{ "time": 0.4, "name": "Comp 1/9-4" },
+					{ "time": 0.4333, "name": "Comp 1/9-5" },
+					{ "time": 0.4667, "name": "Comp 1/9-6" },
+					{ "time": 0.5, "name": "Comp 1/9-7" },
+					{ "time": 0.5333, "name": "Comp 1/9-8" },
+					{ "time": 0.5667, "name": "Comp 1/9-9" },
+					{ "time": 0.6, "name": "Comp 1/9-91" },
+					{ "time": 0.6333, "name": "Comp 1/9-92" },
+					{ "time": 0.6667, "name": "Comp 1/9-93" },
+					{ "time": 0.7, "name": "Comp 1/9-94" },
+					{ "time": 0.7333, "name": "Comp 1/9-95" },
+					{ "time": 0.7667, "name": "Comp 1/9-96" },
+					{ "time": 0.8, "name": "Comp 1/9-97" },
+					{ "time": 0.8333, "name": "Comp 1/9-98" },
+					{ "time": 0.8667, "name": "Comp 1/9-99" },
+					{ "time": 0.9, "name": "Comp 1/9-991" },
+					{ "time": 0.9333, "name": null }
+				]
+			},
+			"Comp 1/2": {
+				"attachment": [
+					{ "name": null },
+					{ "time": 0.9667, "name": "Comp 1/2" },
+					{ "time": 1, "name": "Comp 1/3" },
+					{ "time": 1.0333, "name": "Comp 1/4" },
+					{ "time": 1.0667, "name": "Comp 1/5" },
+					{ "time": 1.1, "name": "Comp 1/6" },
+					{ "time": 1.1333, "name": "Comp 1/7" },
+					{ "time": 1.1667, "name": "Comp 1/8" },
+					{ "time": 1.2, "name": "Comp 1/9" },
+					{ "time": 1.2333, "name": "Comp 1/9-1" },
+					{ "time": 1.2667, "name": "Comp 1/9-2" },
+					{ "time": 1.3, "name": "Comp 1/9-3" },
+					{ "time": 1.3333, "name": "Comp 1/9-4" },
+					{ "time": 1.3667, "name": "Comp 1/9-5" },
+					{ "time": 1.4, "name": "Comp 1/9-6" },
+					{ "time": 1.4333, "name": "Comp 1/9-7" },
+					{ "time": 1.4667, "name": "Comp 1/9-8" },
+					{ "time": 1.5, "name": "Comp 1/9-9" },
+					{ "time": 1.5333, "name": "Comp 1/9-91" },
+					{ "time": 1.5667, "name": "Comp 1/9-92" },
+					{ "time": 1.6, "name": "Comp 1/9-93" },
+					{ "time": 1.6333, "name": "Comp 1/9-94" },
+					{ "time": 1.6667, "name": "Comp 1/9-95" },
+					{ "time": 1.7, "name": "Comp 1/9-96" },
+					{ "time": 1.7333, "name": "Comp 1/9-97" },
+					{ "time": 1.7667, "name": "Comp 1/9-98" },
+					{ "time": 1.8, "name": "Comp 1/9-99" },
+					{ "time": 1.8333, "name": "Comp 1/9-991" },
+					{ "time": 1.8667, "name": null }
+				]
+			},
+			"Comp 1/3": {
+				"attachment": [
+					{ "name": null },
+					{ "time": 1.8667, "name": "Comp 1/2" },
+					{ "time": 1.9, "name": "Comp 1/3" },
+					{ "time": 1.9333, "name": "Comp 1/4" },
+					{ "time": 1.9667, "name": "Comp 1/5" },
+					{ "time": 2, "name": "Comp 1/6" },
+					{ "time": 2.0333, "name": "Comp 1/7" },
+					{ "time": 2.0667, "name": "Comp 1/8" },
+					{ "time": 2.1, "name": "Comp 1/9" },
+					{ "time": 2.1333, "name": "Comp 1/9-1" },
+					{ "time": 2.1667, "name": "Comp 1/9-2" },
+					{ "time": 2.2, "name": "Comp 1/9-3" },
+					{ "time": 2.2333, "name": "Comp 1/9-4" },
+					{ "time": 2.2667, "name": "Comp 1/9-5" },
+					{ "time": 2.3, "name": "Comp 1/9-6" },
+					{ "time": 2.3333, "name": "Comp 1/9-7" },
+					{ "time": 2.3667, "name": "Comp 1/9-8" },
+					{ "time": 2.4, "name": "Comp 1/9-9" },
+					{ "time": 2.4333, "name": "Comp 1/9-91" },
+					{ "time": 2.4667, "name": "Comp 1/9-92" },
+					{ "time": 2.5, "name": "Comp 1/9-93" },
+					{ "time": 2.5333, "name": "Comp 1/9-94" },
+					{ "time": 2.5667, "name": "Comp 1/9-95" },
+					{ "time": 2.6, "name": "Comp 1/9-96" },
+					{ "time": 2.6333, "name": "Comp 1/9-97" },
+					{ "time": 2.6667, "name": "Comp 1/9-98" },
+					{ "time": 2.7, "name": "Comp 1/9-99" },
+					{ "time": 2.7333, "name": "Comp 1/9-991" },
+					{ "time": 2.7667, "name": null }
+				]
+			},
+			"Comp 1/4": {
+				"attachment": [
+					{ "name": null },
+					{ "time": 2.8333, "name": "Comp 1/2" },
+					{ "time": 2.8667, "name": "Comp 1/3" },
+					{ "time": 2.9, "name": "Comp 1/4" },
+					{ "time": 2.9333, "name": "Comp 1/5" },
+					{ "time": 2.9667, "name": "Comp 1/6" },
+					{ "time": 3, "name": "Comp 1/7" },
+					{ "time": 3.0333, "name": "Comp 1/8" },
+					{ "time": 3.0667, "name": "Comp 1/9" },
+					{ "time": 3.1, "name": "Comp 1/9-1" },
+					{ "time": 3.1333, "name": "Comp 1/9-2" },
+					{ "time": 3.1667, "name": "Comp 1/9-3" },
+					{ "time": 3.2, "name": "Comp 1/9-4" },
+					{ "time": 3.2333, "name": "Comp 1/9-5" },
+					{ "time": 3.2667, "name": "Comp 1/9-6" },
+					{ "time": 3.3, "name": "Comp 1/9-7" },
+					{ "time": 3.3333, "name": "Comp 1/9-8" },
+					{ "time": 3.3667, "name": "Comp 1/9-9" },
+					{ "time": 3.4, "name": "Comp 1/9-91" },
+					{ "time": 3.4333, "name": "Comp 1/9-92" },
+					{ "time": 3.4667, "name": "Comp 1/9-93" },
+					{ "time": 3.5, "name": "Comp 1/9-94" },
+					{ "time": 3.5333, "name": "Comp 1/9-95" },
+					{ "time": 3.5667, "name": "Comp 1/9-96" },
+					{ "time": 3.6, "name": "Comp 1/9-97" },
+					{ "time": 3.6333, "name": "Comp 1/9-98" },
+					{ "time": 3.6667, "name": "Comp 1/9-99" },
+					{ "time": 3.7, "name": "Comp 1/9-991" },
+					{ "time": 3.7333, "name": null }
+				]
+			},
+			"Comp 1/Comp 2_00000": {
+				"attachment": [
+					{ "name": null },
+					{ "time": 0.9, "name": "Comp 1/Comp 2_00002" },
+					{ "time": 0.9333, "name": "Comp 1/Comp 2_00003" },
+					{ "time": 0.9667, "name": "Comp 1/Comp 2_00004" },
+					{ "time": 1, "name": "Comp 1/Comp 2_00005" },
+					{ "time": 1.0667, "name": "Comp 1/Comp 2_00007" },
+					{ "time": 1.1, "name": "Comp 1/Comp 2_00008" },
+					{ "time": 1.1333, "name": "Comp 1/Comp 2_00009" },
+					{ "time": 1.1667, "name": "Comp 1/Comp 2_00010" },
+					{ "time": 1.2, "name": "Comp 1/Comp 2_00011" },
+					{ "time": 1.2333, "name": "Comp 1/Comp 2_00012" },
+					{ "time": 1.2667, "name": "Comp 1/Comp 2_00013" },
+					{ "time": 1.3, "name": "Comp 1/Comp 2_00014" },
+					{ "time": 1.3333, "name": "Comp 1/Comp 2_00015" },
+					{ "time": 1.3667, "name": "Comp 1/Comp 2_00016" },
+					{ "time": 1.4, "name": "Comp 1/Comp 2_00017" },
+					{ "time": 1.4333, "name": "Comp 1/Comp 2_00018" },
+					{ "time": 1.5, "name": "Comp 1/Comp 2_00020" },
+					{ "time": 1.5333, "name": "Comp 1/Comp 2_00021" },
+					{ "time": 1.5667, "name": "Comp 1/Comp 2_00022" },
+					{ "time": 1.6, "name": "Comp 1/Comp 2_00023" },
+					{ "time": 1.6333, "name": "Comp 1/Comp 2_00024" },
+					{ "time": 1.6667, "name": "Comp 1/Comp 2_00025" },
+					{ "time": 1.7, "name": "Comp 1/Comp 2_00026" },
+					{ "time": 1.8333, "name": null }
+				]
+			},
+			"thongbao": {
+				"color": [
+					{ "color": "ffffff00", "curve": "stepped" },
+					{ "time": 0.5, "color": "ffffff00", "curve": 0.112, "c2": 0.55, "c3": 0.39, "c4": 0.98 },
+					{ "time": 0.6667, "color": "ffffffff" }
+				]
+			}
+		},
+		"bones": {
+			"thongbao": {
+				"translate": [
+					{ "time": 0.5, "curve": "stepped" },
+					{ "time": 0.6667, "curve": "stepped" },
+					{ "time": 0.8333 }
+				],
+				"scale": [
+					{
+						"time": 0.5,
+						"x": 3,
+						"y": 3,
+						"curve": 0.112,
+						"c2": 0.55,
+						"c3": 0.39,
+						"c4": 0.98
+					},
+					{ "time": 0.6667, "x": 0.8, "y": 0.8 },
+					{ "time": 0.8333 }
+				]
+			},
+			"ef": {
+				"rotate": [
+					{},
+					{ "time": 0.5, "angle": -128.38 },
+					{ "time": 1, "angle": 102.25 },
+					{ "time": 1.8333 },
+					{ "time": 2.7, "angle": -128.38 },
+					{ "time": 3.5333, "angle": 102.25 },
+					{ "time": 4.3333 }
+				]
+			},
+			"Layer 2": {
+				"scale": [
+					{ "x": 0, "y": 0, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.3333, "x": 1.2, "y": 1.2, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.5 }
+				]
+			},
+			"winner": {
+				"translate": [
+					{ "y": -3.79, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.5, "curve": "stepped" },
+					{ "time": 0.6667, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.2333, "y": -0.95, "curve": 0.25, "c3": 0.75 },
+					{ "time": 4.3333, "y": -3.79 }
+				],
+				"scale": [
+					{ "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.3333, "x": 0, "y": 0, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.5, "x": 1.2, "y": 1.2, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.6667 }
+				]
+			},
+			"winner3": {
+				"rotate": [
+					{ "curve": "stepped" },
+					{ "time": 0.5, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.3, "angle": 2.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.2667, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.3, "angle": 2.4, "curve": 0.25, "c3": 0.75 },
+					{ "time": 4.3333 }
+				]
+			},
+			"winner2": {
+				"rotate": [
+					{ "angle": 0.96, "curve": 0.381, "c2": 0.59, "c3": 0.728 },
+					{ "time": 0.1667, "curve": "stepped" },
+					{ "time": 0.6667, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.5667, "angle": 4.49, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.5333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.5667, "angle": 4.49, "curve": 0.243, "c3": 0.66, "c4": 0.64 },
+					{ "time": 4.3333, "angle": 0.96 }
+				]
+			},
+			"winner5": {
+				"rotate": [
+					{ "angle": 2.86, "curve": 0.369, "c2": 0.47, "c3": 0.753 },
+					{ "time": 0.3333, "curve": "stepped" },
+					{ "time": 0.8333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.8667, "angle": 4.99, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.8333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.8667, "angle": 4.99, "curve": 0.254, "c3": 0.621, "c4": 0.47 },
+					{ "time": 4.3333, "angle": 2.86 }
+				]
+			},
+			"winner6": {
+				"rotate": [
+					{ "curve": "stepped" },
+					{ "time": 0.5, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.3, "angle": -1.26, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.2667, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.3, "angle": -1.26, "curve": 0.25, "c3": 0.75 },
+					{ "time": 4.3333 }
+				]
+			},
+			"winner4": {
+				"rotate": [
+					{ "angle": -0.89, "curve": 0.381, "c2": 0.59, "c3": 0.728 },
+					{ "time": 0.1667, "curve": "stepped" },
+					{ "time": 0.6667, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.5667, "angle": -4.13, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.5333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.5667, "angle": -4.13, "curve": 0.243, "c3": 0.66, "c4": 0.64 },
+					{ "time": 4.3333, "angle": -0.89 }
+				]
+			},
+			"winner8": {
+				"rotate": [
+					{ "angle": -6.3, "curve": 0.369, "c2": 0.47, "c3": 0.753 },
+					{ "time": 0.3333, "curve": "stepped" },
+					{ "time": 0.8333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 1.8667, "angle": -10.99, "curve": 0.25, "c3": 0.75 },
+					{ "time": 2.8333, "curve": 0.25, "c3": 0.75 },
+					{ "time": 3.8667, "angle": -10.99, "curve": 0.254, "c3": 0.621, "c4": 0.47 },
+					{ "time": 4.3333, "angle": -6.3 }
+				]
+			},
+			"khung ava": {
+				"scale": [
+					{ "time": 0.5, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.6667, "x": 1.13, "y": 1.13, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.8333 }
+				]
+			},
+			"khung ten": {
+				"scale": [
+					{ "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.5667, "x": 0, "y": 0 },
+					{ "time": 0.7333, "x": 1.3, "y": 1.3 },
+					{ "time": 0.9 }
+				]
+			},
+			"bone": {
+				"scale": [
+					{ "curve": "stepped" },
+					{ "time": 3.6667 },
+					{ "time": 3.9333, "x": 1.2, "y": 1.2 },
+					{ "time": 4.1333, "x": 0, "y": 0 }
+				]
+			}
+		}
+	}
+}
+}
