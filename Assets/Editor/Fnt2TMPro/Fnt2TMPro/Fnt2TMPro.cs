@@ -53,6 +53,10 @@ namespace Fnt2TMPro.EditorUtilities
                 {
                     if (info.ID == unicode)
                     {
+                        if (info.ID == 32)
+                        {
+                            Debug.Log("Found space character");
+                        }
                         charInfo = info;
                         found = true;
                         break;

@@ -1,0 +1,128 @@
+using System.Collections;
+using System.Collections.Generic;
+using Globals;
+using UnityEngine;
+
+public class UIManager : Singleton<UIManager>
+{
+    [SerializeField] private Transform parentPopups, parentGames, parentBanners, parentLobby;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        Application.targetFrameRate = 60;
+        Input.multiTouchEnabled = false;
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        Config.UpdateConfigSettings();   
+    }
+
+    #region Display Popups
+
+    public void OpenShop()
+    {
+        ShopView shopView = Instantiate(LoadPrefabPopup("ExchangeView"), parentLobby).GetComponent<ShopView>();
+        shopView.transform.localScale = Vector3.one;
+    }
+
+    public void OpenLoto()
+    {
+        LotoView lotoView = Instantiate(LoadPrefabPopup("LotoView"), parentLobby).GetComponent<LotoView>();
+        lotoView.transform.localScale = Vector3.one;
+    }
+
+    public void OpenExchange()
+    {
+        ExchangeView exchangeView = Instantiate(LoadPrefabLobby("ExchangeView"), parentLobby).GetComponent<ExchangeView>();
+        exchangeView.transform.localScale = Vector3.one;
+    }
+
+    public void OpenSelectTable()
+    {
+        SelectTableView selectTableView = Instantiate(LoadPrefabLobby("SelectTableView"), parentLobby).GetComponent<SelectTableView>();
+        selectTableView.transform.localScale = Vector3.one;
+    }
+    
+    public void OpenLeaderboard()
+    {
+        LeaderBoardView leaderBoardView = Instantiate(LoadPrefabLobby("LeaderboardView"), parentLobby).GetComponent<LeaderBoardView>();
+        leaderBoardView.transform.localScale = Vector3.one;
+    }
+    public void OpenFreeChips()
+    {
+        FreeChipView freeChipView = Instantiate(LoadPrefabPopup("PopupFreechips"), parentPopups).GetComponent<FreeChipView>();
+        freeChipView.transform.localScale = Vector3.one;
+    }
+    public void OpenMail()
+    {
+        MailView mailView = Instantiate(LoadPrefabPopup("PopupMail"), parentPopups).GetComponent<MailView>();
+        mailView.transform.localScale = Vector3.one;
+    }
+
+    public void OpenJackpot()
+    {
+        JackpotView jackpotView = Instantiate(LoadPrefabPopup("PopupJackpot"), parentPopups).GetComponent<JackpotView>();
+        jackpotView.transform.localScale = Vector3.one;
+    }
+    public void OpenSetting()
+    {
+        SettingsView settingsView = Instantiate(LoadPrefabPopup("PopupSettings"), parentPopups).GetComponent<SettingsView>();
+        settingsView.transform.localScale = Vector3.one;
+    }
+    public void OpenChipOnline()
+    {
+        ChipOnlineView chipOnlineView = Instantiate(LoadPrefabPopup("PopupChipOnline"), parentPopups).GetComponent<ChipOnlineView>();
+        chipOnlineView.transform.localScale = Vector3.one;
+    }
+
+    public void OpenFeedback()
+    {
+        FeedbackView feedbackView = Instantiate(LoadPrefabPopup("PopupFeedback"), parentPopups).GetComponent<FeedbackView>();
+        feedbackView.transform.localScale = Vector3.one;
+    }
+
+    public void OpenChangePassword()
+    {
+        ChangePasswordView changePasswordView = Instantiate(LoadPrefabPopup("PopupChangePassword"), parentPopups).GetComponent<ChangePasswordView>();
+        changePasswordView.transform.localScale = Vector3.one;
+    }
+
+    public void OpenIAP()
+    {
+        IAPView iapView = Instantiate(LoadPrefabPopup("PopupIAP"), parentPopups).GetComponent<IAPView>();
+        iapView.transform.localScale = Vector3.one;
+    }
+
+    public void OpenFriend()
+    {
+
+    }
+    #endregion
+
+    #region Helpers
+    private GameObject LoadPrefab(string path)
+    {
+        return Resources.Load(path) as GameObject;
+    }
+
+    public GameObject LoadPrefabPopup(string name)
+    {
+        return LoadPrefab("Popups/" + name);
+    }
+
+    public GameObject LoadPrefabLobby(string name)
+    {
+        return LoadPrefab("LobbyViews/" + name);
+    }
+
+    public GameObject LoadPrefabGame(string name)
+    {
+        return LoadPrefab("GameViews/" + name);
+    }
+
+    // private SkeletonDataAsset LoadSkeletonData(string path)
+    // {
+    //     return Resources.Load<SkeletonDataAsset>(path);
+    // }
+    #endregion
+}

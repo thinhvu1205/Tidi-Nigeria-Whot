@@ -292,8 +292,8 @@ namespace litefeelcustom
                     case "xadvance": xadvance = int.Parse(values[i]); break;
                 }
             }
-            list.Add(CreateCharInfo(id, x, y, w, h, xo, yo, w-1));
-            rlist.Add(new RawCharacterInfo(id, x, y, w, h, xo, yo, w-1, 0));
+            list.Add(CreateCharInfo(id, x, y, w, h, xo, yo, xadvance));
+            rlist.Add(new RawCharacterInfo(id, x, y, w, h, xo, yo, xadvance, 0));
             return true;
         }
 
