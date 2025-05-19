@@ -95,7 +95,8 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenFriend()
     {
-
+        FriendsView friendsView = Instantiate(LoadPrefabLobby("FriendsView"), parentLobby).GetComponent<FriendsView>();
+        friendsView.transform.localScale = Vector3.one;
     }
     #endregion
 
