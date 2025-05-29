@@ -18,9 +18,9 @@ syntax = "proto3";
 package api;
 
 import "authen_api.proto";
-import "chinese_poker_game_api.proto";
+import "whot_game_api.proto";
 
-option go_package = "github.com/Longpham98/teen-patti-server/common/proto;proto";
+option go_package = "github.com/nakamaFramework/whot-module/api/whot";
 // The complete set of rpc used for communication between clients and server.
 enum RPCCode {
   // No opcode specified. Unused.

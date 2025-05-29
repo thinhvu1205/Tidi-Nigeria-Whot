@@ -9,7 +9,7 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace Whot {
+namespace Api {
 
   /// <summary>Holder for reflection information generated from whot_game_api.proto</summary>
   public static partial class WhotGameApiReflection {
@@ -24,107 +24,107 @@ namespace Whot {
     static WhotGameApiReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChN3aG90X2dhbWVfYXBpLnByb3RvEgR3aG90IkIKBENhcmQSHAoEcmFuaxgB",
-            "IAEoDjIOLndob3QuQ2FyZFJhbmsSHAoEc3VpdBgCIAEoDjIOLndob3QuQ2Fy",
-            "ZFN1aXQiJQoITGlzdENhcmQSGQoFY2FyZHMYASADKAsyCi53aG90LkNhcmQi",
-            "MAoKVXBkYXRlVHVybhIPCgd1c2VyX2lkGAEgASgJEhEKCWNvdW50ZG93bhgC",
-            "IAEoAyIJCgdOZXdHYW1lIqcCCgtVcGRhdGVUYWJsZRIdCgdwbGF5ZXJzGAEg",
-            "AygLMgwud2hvdC5QbGF5ZXISJQoPcGxheWluZ19wbGF5ZXJzGAIgAygLMgwu",
-            "d2hvdC5QbGF5ZXISIgoMam9pbl9wbGF5ZXJzGAMgAygLMgwud2hvdC5QbGF5",
-            "ZXISIwoNbGVhdmVfcGxheWVycxgEIAMoCzIMLndob3QuUGxheWVyEgsKA2Jl",
-            "dBgFIAEoAxILCgN2aXAYBiABKAMSEQoJdGltZV9wbGF5GAcgASgDEhMKC3Jl",
-            "bWFpbl90aW1lGAggASgDEiMKCmdhbWVfc3RhdGUYCSABKA4yDy53aG90Lkdh",
-            "bWVTdGF0ZRIiCgtqcF90cmVhc3VyZRgKIAEoCzINLndob3QuSmFja3BvdCI8",
-            "Cg1QcmVzZW5jZUNhcmRzEhAKCHByZXNlbmNlGAEgASgJEhkKBWNhcmRzGAIg",
-            "AygLMgoud2hvdC5DYXJkIs4BCgpVcGRhdGVEZWFsEioKDXByZXNlbmNlX2Nh",
-            "cmQYASABKAsyEy53aG90LlByZXNlbmNlQ2FyZHMSMwoKY2FyZF9ldmVudBgC",
-            "IAMoCzIfLndob3QuVXBkYXRlRGVhbC5DYXJkRXZlbnRFbnRyeRIcCgh0b3Bf",
-            "Y2FyZBgDIAEoCzIKLndob3QuQ2FyZBpBCg5DYXJkRXZlbnRFbnRyeRILCgNr",
-            "ZXkYASABKAkSHgoFdmFsdWUYAiABKA4yDy53aG90LkNhcmRFdmVudDoCOAEi",
-            "cQoPVXBkYXRlR2FtZVN0YXRlEh4KBXN0YXRlGAEgASgOMg8ud2hvdC5HYW1l",
-            "U3RhdGUSEgoKY291bnRfZG93bhgCIAEoAxIqCg1wcmVzZW5jZUNhcmRzGAMg",
-            "AygLMhMud2hvdC5QcmVzZW5jZUNhcmRzIvIBCg9VcGRhdGVDYXJkU3RhdGUS",
-            "DwoHdXNlcl9pZBgBIAEoCRIeCgVldmVudBgCIAEoDjIPLndob3QuQ2FyZEV2",
-            "ZW50Eh8KC3BsYXllZF9jYXJkGAMgASgLMgoud2hvdC5DYXJkEhwKCHRvcF9j",
-            "YXJkGAQgASgLMgoud2hvdC5DYXJkEh8KC2NhcmRzX2FmdGVyGAUgAygLMgou",
-            "d2hvdC5DYXJkEiAKBmVmZmVjdBgGIAEoDjIQLndob3QuQ2FyZEVmZmVjdBIU",
-            "CgxwaWNrX3BlbmFsdHkYByABKAUSFgoOdGFyZ2V0X3VzZXJfaWQYCCABKAki",
-            "ZwoPV2hvdFNjb3JlUmVzdWx0EhQKDHRvdGFsX3BvaW50cxgBIAEoAxIXCg9y",
-            "ZW1haW5pbmdfY2FyZHMYAiABKAUSEQoJaXNfd2lubmVyGAMgASgIEhIKCndp",
-            "bl9mYWN0b3IYBCABKAEibgoQV2hvdFBsYXllclJlc3VsdBIPCgd1c2VyX2lk",
-            "GAEgASgJEiQKBXNjb3JlGAIgASgLMhUud2hvdC5XaG90U2NvcmVSZXN1bHQS",
-            "IwoPcmVtYWluaW5nX2NhcmRzGAMgAygLMgoud2hvdC5DYXJkIrsBCgxVcGRh",
-            "dGVGaW5pc2gSJwoHcmVzdWx0cxgBIAMoCzIWLndob3QuV2hvdFBsYXllclJl",
-            "c3VsdBIrCgplbmRfcmVhc29uGAIgASgOMhcud2hvdC5XaG90RW5kR2FtZVJl",
-            "YXNvbhIRCgl3aW5uZXJfaWQYAyABKAkSHgoHamFja3BvdBgEIAEoCzINLndo",
-            "b3QuSmFja3BvdBIiCgtqcF90cmVhc3VyZRgFIAEoCzINLndob3QuSmFja3Bv",
-            "dCLeAQoNQmFsYW5jZVVwZGF0ZRIPCgd1c2VyX2lkGAEgASgJEhoKEmFtb3Vu",
-            "dF9jaGlwX2JlZm9yZRgCIAEoAxIbChNhbW91bnRfY2hpcF9jdXJyZW50GAMg",
-            "ASgDEhcKD2Ftb3VudF9jaGlwX2FkZBgEIAEoAxIWCg5hbW91dF9jaGlwX2Jl",
-            "dBgFIAEoAxIWCg5hbW91dF9jaGlwX2ZlZRgGIAEoAxIdChVhbW91dF9jaGlw",
-            "X2FkZF9wcmVmZWUYByABKAMSGwoTdG90YWxfY2hpcF9pbl9tYXRjaBgIIAEo",
-            "AyJVCg1CYWxhbmNlUmVzdWx0EiQKB3VwZGF0ZXMYASADKAsyEy53aG90LkJh",
-            "bGFuY2VVcGRhdGUSHgoHamFja3BvdBgCIAEoCzINLndob3QuSmFja3BvdCKs",
-            "AQoGUGxheWVyEgoKAmlkGAEgASgJEhEKCXVzZXJfbmFtZRgCIAEoCRIOCgZ3",
-            "YWxsZXQYAyABKAkSEgoKaXNfcGxheWluZxgEIAEoCBIdCgVjYXJkcxgFIAEo",
-            "CzIOLndob3QuTGlzdENhcmQSEQoJdmlwX2xldmVsGAYgASgDEhEKCWF2YXRh",
-            "cl9pZBgHIAEoCRILCgNzaWQYCCABKAMSDQoFb3JkZXIYCSABKAUiYgoHSmFj",
-            "a3BvdBIKCgJpZBgBIAEoAxIPCgd1c2VyX2lkGAIgASgJEhEKCWdhbWVfY29k",
-            "ZRgDIAEoCRINCgVjaGlwcxgEIAEoAxIYChBjcmVhdGVfdGltZV91bml4GAUg",
-            "ASgDIk8KEUhpdEphY2twb3RIaXN0b3J5EhEKCXVzZXJfbmFtZRgBIAEoCRIN",
-            "CgVjaGlwcxgCIAEoAxIYChBjcmVhdGVfdGltZV91bml4GAMgASgDKnQKCENh",
-            "cmRTdWl0EhQKEFNVSVRfVU5TUEVDSUZJRUQQABIPCgtTVUlUX0NJUkNMRRAB",
-            "Eg4KClNVSVRfQ1JPU1MQAhINCglTVUlUX1NUQVIQAxIPCgtTVUlUX1NRVUFS",
-            "RRAEEhEKDVNVSVRfVFJJQU5HTEUQBSrCAQoIQ2FyZFJhbmsSFAoQUkFOS19V",
-            "TlNQRUNJRklFRBAAEgoKBlJBTktfMRABEgoKBlJBTktfMhACEgoKBlJBTktf",
-            "MxADEgoKBlJBTktfNBAEEgoKBlJBTktfNRAFEgoKBlJBTktfNxAGEgoKBlJB",
-            "TktfOBAHEgsKB1JBTktfMTAQCBILCgdSQU5LXzExEAkSCwoHUkFOS18xMhAK",
-            "EgsKB1JBTktfMTMQCxILCgdSQU5LXzE0EAwSCwoHUkFOS18yMBAUKt0BCg1P",
-            "cENvZGVSZXF1ZXN0EhYKEk9QQ09ERV9VTlNQRUNJRklFRBAAEhsKF09QQ09E",
-            "RV9SRVFVRVNUX05FV19HQU1FEAESHQoZT1BDT0RFX1JFUVVFU1RfTEVBVkVf",
-            "R0FNRRACEhwKGE9QQ09ERV9SRVFVRVNUX1BMQVlfQ0FSRBADEhwKGE9QQ09E",
-            "RV9SRVFVRVNUX0RSQVdfQ0FSRBAEEhwKGE9QQ09ERV9SRVFVRVNUX0NBTExf",
-            "V0hPVBAFEh4KGk9QQ09ERV9VU0VSX0lOVEVSQUNUX0NBUkRTEAYqoAMKDE9w",
-            "Q29kZVVwZGF0ZRIdChlPUENPREVfVVBEQVRFX1VOU1BFQ0lGSUVEEAASFwoT",
-            "T1BDT0RFX1VQREFURV9UQUJMRRABEhYKEk9QQ09ERV9VUERBVEVfREVBTBAC",
-            "EhgKFE9QQ09ERV9VUERBVEVfRklOSVNIEAMSGgoWT1BDT0RFX1VQREFURV9S",
-            "RUpFQ1RFRBAEEhwKGE9QQ09ERV9VUERBVEVfR0FNRV9TVEFURRAFEh0KGU9Q",
-            "Q09ERV9VUERBVEVfQ0FSRF9QTEFZRUQQBhIdChlPUENPREVfVVBEQVRFX0RS",
-            "QVdfUkVTVUxUEAcSIgoeT1BDT0RFX1VQREFURV9DQUxMX1dIT1RfUkVTVUxU",
-            "EAgSFgoST1BDT0RFX1VQREFURV9UVVJOEAkSHAoYT1BDT0RFX1VQREFURV9D",
-            "QVJEX1NUQVRFEAoSGAoUT1BDT0RFX1VQREFURV9XQUxMRVQQCxIdChlPUENP",
-            "REVfS0lDS19PRkZfVEhFX1RBQkxFEAwSGwoXT1BDT0RFX1VQREFURV9VU0VS",
-            "X0lORk8QDSqgAQoJR2FtZVN0YXRlEhQKEEdhbWVTdGF0ZVVua25vd24QABIR",
-            "Cg1HYW1lU3RhdGVJZGxlEAESFQoRR2FtZVN0YXRlTWF0Y2hpbmcQAhIWChJH",
-            "YW1lU3RhdGVQcmVwYXJpbmcQAxIRCg1HYW1lU3RhdGVQbGF5EAQSEwoPR2Ft",
-            "ZVN0YXRlUmV3YXJkEAUSEwoPR2FtZVN0YXRlRmluaXNoEAYqMwoJQ2FyZEV2",
-            "ZW50EggKBE5PTkUQABIICgRQTEFZEAESCAoERFJBVxACEggKBFBBU1MQAyqO",
-            "AQoKQ2FyZEVmZmVjdBIPCgtFRkZFQ1RfTk9ORRAAEgsKB0hPTERfT04QARIM",
-            "CghQSUNLX1RXTxACEg4KClBJQ0tfVEhSRUUQAxIOCgpTVVNQRU5TSU9OEAQS",
-            "EgoOR0VORVJBTF9NQVJLRVQQBRIICgRXSE9UEAYSFgoSQ0hPSUNFX1NIQVBF",
-            "X0dIT1NUEAcqQQoRV2hvdEVuZEdhbWVSZWFzb24SFQoRUkVBU09OX05PUk1B",
-            "TF9XSU4QABIVChFSRUFTT05fREVDS19FTVBUWRABQjFaL2dpdGh1Yi5jb20v",
-            "bmFrYW1hRnJhbWV3b3JrL3dob3QtbW9kdWxlL2FwaS93aG90YgZwcm90bzM="));
+            "ChN3aG90X2dhbWVfYXBpLnByb3RvEgNhcGkiQAoEQ2FyZBIbCgRyYW5rGAEg",
+            "ASgOMg0uYXBpLkNhcmRSYW5rEhsKBHN1aXQYAiABKA4yDS5hcGkuQ2FyZFN1",
+            "aXQiJAoITGlzdENhcmQSGAoFY2FyZHMYASADKAsyCS5hcGkuQ2FyZCIwCgpV",
+            "cGRhdGVUdXJuEg8KB3VzZXJfaWQYASABKAkSEQoJY291bnRkb3duGAIgASgD",
+            "IgkKB05ld0dhbWUioQIKC1VwZGF0ZVRhYmxlEhwKB3BsYXllcnMYASADKAsy",
+            "Cy5hcGkuUGxheWVyEiQKD3BsYXlpbmdfcGxheWVycxgCIAMoCzILLmFwaS5Q",
+            "bGF5ZXISIQoMam9pbl9wbGF5ZXJzGAMgAygLMgsuYXBpLlBsYXllchIiCg1s",
+            "ZWF2ZV9wbGF5ZXJzGAQgAygLMgsuYXBpLlBsYXllchILCgNiZXQYBSABKAMS",
+            "CwoDdmlwGAYgASgDEhEKCXRpbWVfcGxheRgHIAEoAxITCgtyZW1haW5fdGlt",
+            "ZRgIIAEoAxIiCgpnYW1lX3N0YXRlGAkgASgOMg4uYXBpLkdhbWVTdGF0ZRIh",
+            "CgtqcF90cmVhc3VyZRgKIAEoCzIMLmFwaS5KYWNrcG90IjsKDVByZXNlbmNl",
+            "Q2FyZHMSEAoIcHJlc2VuY2UYASABKAkSGAoFY2FyZHMYAiADKAsyCS5hcGku",
+            "Q2FyZCLKAQoKVXBkYXRlRGVhbBIpCg1wcmVzZW5jZV9jYXJkGAEgASgLMhIu",
+            "YXBpLlByZXNlbmNlQ2FyZHMSMgoKY2FyZF9ldmVudBgCIAMoCzIeLmFwaS5V",
+            "cGRhdGVEZWFsLkNhcmRFdmVudEVudHJ5EhsKCHRvcF9jYXJkGAMgASgLMgku",
+            "YXBpLkNhcmQaQAoOQ2FyZEV2ZW50RW50cnkSCwoDa2V5GAEgASgJEh0KBXZh",
+            "bHVlGAIgASgOMg4uYXBpLkNhcmRFdmVudDoCOAEibwoPVXBkYXRlR2FtZVN0",
+            "YXRlEh0KBXN0YXRlGAEgASgOMg4uYXBpLkdhbWVTdGF0ZRISCgpjb3VudF9k",
+            "b3duGAIgASgDEikKDXByZXNlbmNlQ2FyZHMYAyADKAsyEi5hcGkuUHJlc2Vu",
+            "Y2VDYXJkcyLtAQoPVXBkYXRlQ2FyZFN0YXRlEg8KB3VzZXJfaWQYASABKAkS",
+            "HQoFZXZlbnQYAiABKA4yDi5hcGkuQ2FyZEV2ZW50Eh4KC3BsYXllZF9jYXJk",
+            "GAMgASgLMgkuYXBpLkNhcmQSGwoIdG9wX2NhcmQYBCABKAsyCS5hcGkuQ2Fy",
+            "ZBIeCgtjYXJkc19hZnRlchgFIAMoCzIJLmFwaS5DYXJkEh8KBmVmZmVjdBgG",
+            "IAEoDjIPLmFwaS5DYXJkRWZmZWN0EhQKDHBpY2tfcGVuYWx0eRgHIAEoBRIW",
+            "Cg50YXJnZXRfdXNlcl9pZBgIIAEoCSJnCg9XaG90U2NvcmVSZXN1bHQSFAoM",
+            "dG90YWxfcG9pbnRzGAEgASgDEhcKD3JlbWFpbmluZ19jYXJkcxgCIAEoBRIR",
+            "Cglpc193aW5uZXIYAyABKAgSEgoKd2luX2ZhY3RvchgEIAEoASJsChBXaG90",
+            "UGxheWVyUmVzdWx0Eg8KB3VzZXJfaWQYASABKAkSIwoFc2NvcmUYAiABKAsy",
+            "FC5hcGkuV2hvdFNjb3JlUmVzdWx0EiIKD3JlbWFpbmluZ19jYXJkcxgDIAMo",
+            "CzIJLmFwaS5DYXJkIrcBCgxVcGRhdGVGaW5pc2gSJgoHcmVzdWx0cxgBIAMo",
+            "CzIVLmFwaS5XaG90UGxheWVyUmVzdWx0EioKCmVuZF9yZWFzb24YAiABKA4y",
+            "Fi5hcGkuV2hvdEVuZEdhbWVSZWFzb24SEQoJd2lubmVyX2lkGAMgASgJEh0K",
+            "B2phY2twb3QYBCABKAsyDC5hcGkuSmFja3BvdBIhCgtqcF90cmVhc3VyZRgF",
+            "IAEoCzIMLmFwaS5KYWNrcG90It4BCg1CYWxhbmNlVXBkYXRlEg8KB3VzZXJf",
+            "aWQYASABKAkSGgoSYW1vdW50X2NoaXBfYmVmb3JlGAIgASgDEhsKE2Ftb3Vu",
+            "dF9jaGlwX2N1cnJlbnQYAyABKAMSFwoPYW1vdW50X2NoaXBfYWRkGAQgASgD",
+            "EhYKDmFtb3V0X2NoaXBfYmV0GAUgASgDEhYKDmFtb3V0X2NoaXBfZmVlGAYg",
+            "ASgDEh0KFWFtb3V0X2NoaXBfYWRkX3ByZWZlZRgHIAEoAxIbChN0b3RhbF9j",
+            "aGlwX2luX21hdGNoGAggASgDIlMKDUJhbGFuY2VSZXN1bHQSIwoHdXBkYXRl",
+            "cxgBIAMoCzISLmFwaS5CYWxhbmNlVXBkYXRlEh0KB2phY2twb3QYAiABKAsy",
+            "DC5hcGkuSmFja3BvdCKrAQoGUGxheWVyEgoKAmlkGAEgASgJEhEKCXVzZXJf",
+            "bmFtZRgCIAEoCRIOCgZ3YWxsZXQYAyABKAkSEgoKaXNfcGxheWluZxgEIAEo",
+            "CBIcCgVjYXJkcxgFIAEoCzINLmFwaS5MaXN0Q2FyZBIRCgl2aXBfbGV2ZWwY",
+            "BiABKAMSEQoJYXZhdGFyX2lkGAcgASgJEgsKA3NpZBgIIAEoAxINCgVvcmRl",
+            "chgJIAEoBSJiCgdKYWNrcG90EgoKAmlkGAEgASgDEg8KB3VzZXJfaWQYAiAB",
+            "KAkSEQoJZ2FtZV9jb2RlGAMgASgJEg0KBWNoaXBzGAQgASgDEhgKEGNyZWF0",
+            "ZV90aW1lX3VuaXgYBSABKAMiTwoRSGl0SmFja3BvdEhpc3RvcnkSEQoJdXNl",
+            "cl9uYW1lGAEgASgJEg0KBWNoaXBzGAIgASgDEhgKEGNyZWF0ZV90aW1lX3Vu",
+            "aXgYAyABKAMqdAoIQ2FyZFN1aXQSFAoQU1VJVF9VTlNQRUNJRklFRBAAEg8K",
+            "C1NVSVRfQ0lSQ0xFEAESDgoKU1VJVF9DUk9TUxACEg0KCVNVSVRfU1RBUhAD",
+            "Eg8KC1NVSVRfU1FVQVJFEAQSEQoNU1VJVF9UUklBTkdMRRAFKsIBCghDYXJk",
+            "UmFuaxIUChBSQU5LX1VOU1BFQ0lGSUVEEAASCgoGUkFOS18xEAESCgoGUkFO",
+            "S18yEAISCgoGUkFOS18zEAMSCgoGUkFOS180EAQSCgoGUkFOS181EAUSCgoG",
+            "UkFOS183EAYSCgoGUkFOS184EAcSCwoHUkFOS18xMBAIEgsKB1JBTktfMTEQ",
+            "CRILCgdSQU5LXzEyEAoSCwoHUkFOS18xMxALEgsKB1JBTktfMTQQDBILCgdS",
+            "QU5LXzIwEBQq3QEKDU9wQ29kZVJlcXVlc3QSFgoST1BDT0RFX1VOU1BFQ0lG",
+            "SUVEEAASGwoXT1BDT0RFX1JFUVVFU1RfTkVXX0dBTUUQARIdChlPUENPREVf",
+            "UkVRVUVTVF9MRUFWRV9HQU1FEAISHAoYT1BDT0RFX1JFUVVFU1RfUExBWV9D",
+            "QVJEEAMSHAoYT1BDT0RFX1JFUVVFU1RfRFJBV19DQVJEEAQSHAoYT1BDT0RF",
+            "X1JFUVVFU1RfQ0FMTF9XSE9UEAUSHgoaT1BDT0RFX1VTRVJfSU5URVJBQ1Rf",
+            "Q0FSRFMQBiqgAwoMT3BDb2RlVXBkYXRlEh0KGU9QQ09ERV9VUERBVEVfVU5T",
+            "UEVDSUZJRUQQABIXChNPUENPREVfVVBEQVRFX1RBQkxFEAESFgoST1BDT0RF",
+            "X1VQREFURV9ERUFMEAISGAoUT1BDT0RFX1VQREFURV9GSU5JU0gQAxIaChZP",
+            "UENPREVfVVBEQVRFX1JFSkVDVEVEEAQSHAoYT1BDT0RFX1VQREFURV9HQU1F",
+            "X1NUQVRFEAUSHQoZT1BDT0RFX1VQREFURV9DQVJEX1BMQVlFRBAGEh0KGU9Q",
+            "Q09ERV9VUERBVEVfRFJBV19SRVNVTFQQBxIiCh5PUENPREVfVVBEQVRFX0NB",
+            "TExfV0hPVF9SRVNVTFQQCBIWChJPUENPREVfVVBEQVRFX1RVUk4QCRIcChhP",
+            "UENPREVfVVBEQVRFX0NBUkRfU1RBVEUQChIYChRPUENPREVfVVBEQVRFX1dB",
+            "TExFVBALEh0KGU9QQ09ERV9LSUNLX09GRl9USEVfVEFCTEUQDBIbChdPUENP",
+            "REVfVVBEQVRFX1VTRVJfSU5GTxANKqABCglHYW1lU3RhdGUSFAoQR2FtZVN0",
+            "YXRlVW5rbm93bhAAEhEKDUdhbWVTdGF0ZUlkbGUQARIVChFHYW1lU3RhdGVN",
+            "YXRjaGluZxACEhYKEkdhbWVTdGF0ZVByZXBhcmluZxADEhEKDUdhbWVTdGF0",
+            "ZVBsYXkQBBITCg9HYW1lU3RhdGVSZXdhcmQQBRITCg9HYW1lU3RhdGVGaW5p",
+            "c2gQBiozCglDYXJkRXZlbnQSCAoETk9ORRAAEggKBFBMQVkQARIICgREUkFX",
+            "EAISCAoEUEFTUxADKo4BCgpDYXJkRWZmZWN0Eg8KC0VGRkVDVF9OT05FEAAS",
+            "CwoHSE9MRF9PThABEgwKCFBJQ0tfVFdPEAISDgoKUElDS19USFJFRRADEg4K",
+            "ClNVU1BFTlNJT04QBBISCg5HRU5FUkFMX01BUktFVBAFEggKBFdIT1QQBhIW",
+            "ChJDSE9JQ0VfU0hBUEVfR0hPU1QQBypBChFXaG90RW5kR2FtZVJlYXNvbhIV",
+            "ChFSRUFTT05fTk9STUFMX1dJThAAEhUKEVJFQVNPTl9ERUNLX0VNUFRZEAFC",
+            "MVovZ2l0aHViLmNvbS9uYWthbWFGcmFtZXdvcmsvd2hvdC1tb2R1bGUvYXBp",
+            "L3dob3RiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Whot.CardSuit), typeof(global::Whot.CardRank), typeof(global::Whot.OpCodeRequest), typeof(global::Whot.OpCodeUpdate), typeof(global::Whot.GameState), typeof(global::Whot.CardEvent), typeof(global::Whot.CardEffect), typeof(global::Whot.WhotEndGameReason), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.Card), global::Whot.Card.Parser, new[]{ "Rank", "Suit" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.ListCard), global::Whot.ListCard.Parser, new[]{ "Cards" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.UpdateTurn), global::Whot.UpdateTurn.Parser, new[]{ "UserId", "Countdown" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.NewGame), global::Whot.NewGame.Parser, null, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.UpdateTable), global::Whot.UpdateTable.Parser, new[]{ "Players", "PlayingPlayers", "JoinPlayers", "LeavePlayers", "Bet", "Vip", "TimePlay", "RemainTime", "GameState", "JpTreasure" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.PresenceCards), global::Whot.PresenceCards.Parser, new[]{ "Presence", "Cards" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.UpdateDeal), global::Whot.UpdateDeal.Parser, new[]{ "PresenceCard", "CardEvent", "TopCard" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.UpdateGameState), global::Whot.UpdateGameState.Parser, new[]{ "State", "CountDown", "PresenceCards" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.UpdateCardState), global::Whot.UpdateCardState.Parser, new[]{ "UserId", "Event", "PlayedCard", "TopCard", "CardsAfter", "Effect", "PickPenalty", "TargetUserId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.WhotScoreResult), global::Whot.WhotScoreResult.Parser, new[]{ "TotalPoints", "RemainingCards", "IsWinner", "WinFactor" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.WhotPlayerResult), global::Whot.WhotPlayerResult.Parser, new[]{ "UserId", "Score", "RemainingCards" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.UpdateFinish), global::Whot.UpdateFinish.Parser, new[]{ "Results", "EndReason", "WinnerId", "Jackpot", "JpTreasure" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.BalanceUpdate), global::Whot.BalanceUpdate.Parser, new[]{ "UserId", "AmountChipBefore", "AmountChipCurrent", "AmountChipAdd", "AmoutChipBet", "AmoutChipFee", "AmoutChipAddPrefee", "TotalChipInMatch" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.BalanceResult), global::Whot.BalanceResult.Parser, new[]{ "Updates", "Jackpot" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.Player), global::Whot.Player.Parser, new[]{ "Id", "UserName", "Wallet", "IsPlaying", "Cards", "VipLevel", "AvatarId", "Sid", "Order" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.Jackpot), global::Whot.Jackpot.Parser, new[]{ "Id", "UserId", "GameCode", "Chips", "CreateTimeUnix" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Whot.HitJackpotHistory), global::Whot.HitJackpotHistory.Parser, new[]{ "UserName", "Chips", "CreateTimeUnix" }, null, null, null, null)
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Api.CardSuit), typeof(global::Api.CardRank), typeof(global::Api.OpCodeRequest), typeof(global::Api.OpCodeUpdate), typeof(global::Api.GameState), typeof(global::Api.CardEvent), typeof(global::Api.CardEffect), typeof(global::Api.WhotEndGameReason), }, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.Card), global::Api.Card.Parser, new[]{ "Rank", "Suit" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.ListCard), global::Api.ListCard.Parser, new[]{ "Cards" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateTurn), global::Api.UpdateTurn.Parser, new[]{ "UserId", "Countdown" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.NewGame), global::Api.NewGame.Parser, null, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateTable), global::Api.UpdateTable.Parser, new[]{ "Players", "PlayingPlayers", "JoinPlayers", "LeavePlayers", "Bet", "Vip", "TimePlay", "RemainTime", "GameState", "JpTreasure" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.PresenceCards), global::Api.PresenceCards.Parser, new[]{ "Presence", "Cards" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateDeal), global::Api.UpdateDeal.Parser, new[]{ "PresenceCard", "CardEvent", "TopCard" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateGameState), global::Api.UpdateGameState.Parser, new[]{ "State", "CountDown", "PresenceCards" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateCardState), global::Api.UpdateCardState.Parser, new[]{ "UserId", "Event", "PlayedCard", "TopCard", "CardsAfter", "Effect", "PickPenalty", "TargetUserId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.WhotScoreResult), global::Api.WhotScoreResult.Parser, new[]{ "TotalPoints", "RemainingCards", "IsWinner", "WinFactor" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.WhotPlayerResult), global::Api.WhotPlayerResult.Parser, new[]{ "UserId", "Score", "RemainingCards" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateFinish), global::Api.UpdateFinish.Parser, new[]{ "Results", "EndReason", "WinnerId", "Jackpot", "JpTreasure" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.BalanceUpdate), global::Api.BalanceUpdate.Parser, new[]{ "UserId", "AmountChipBefore", "AmountChipCurrent", "AmountChipAdd", "AmoutChipBet", "AmoutChipFee", "AmoutChipAddPrefee", "TotalChipInMatch" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.BalanceResult), global::Api.BalanceResult.Parser, new[]{ "Updates", "Jackpot" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.Player), global::Api.Player.Parser, new[]{ "Id", "UserName", "Wallet", "IsPlaying", "Cards", "VipLevel", "AvatarId", "Sid", "Order" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.Jackpot), global::Api.Jackpot.Parser, new[]{ "Id", "UserId", "GameCode", "Chips", "CreateTimeUnix" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.HitJackpotHistory), global::Api.HitJackpotHistory.Parser, new[]{ "UserName", "Chips", "CreateTimeUnix" }, null, null, null, null)
           }));
     }
     #endregion
@@ -268,7 +268,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[0]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -297,9 +297,9 @@ namespace Whot {
 
     /// <summary>Field number for the "rank" field.</summary>
     public const int RankFieldNumber = 1;
-    private global::Whot.CardRank rank_ = global::Whot.CardRank.RankUnspecified;
+    private global::Api.CardRank rank_ = global::Api.CardRank.RankUnspecified;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.CardRank Rank {
+    public global::Api.CardRank Rank {
       get { return rank_; }
       set {
         rank_ = value;
@@ -308,9 +308,9 @@ namespace Whot {
 
     /// <summary>Field number for the "suit" field.</summary>
     public const int SuitFieldNumber = 2;
-    private global::Whot.CardSuit suit_ = global::Whot.CardSuit.SuitUnspecified;
+    private global::Api.CardSuit suit_ = global::Api.CardSuit.SuitUnspecified;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.CardSuit Suit {
+    public global::Api.CardSuit Suit {
       get { return suit_; }
       set {
         suit_ = value;
@@ -338,8 +338,8 @@ namespace Whot {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (Rank != global::Whot.CardRank.RankUnspecified) hash ^= Rank.GetHashCode();
-      if (Suit != global::Whot.CardSuit.SuitUnspecified) hash ^= Suit.GetHashCode();
+      if (Rank != global::Api.CardRank.RankUnspecified) hash ^= Rank.GetHashCode();
+      if (Suit != global::Api.CardSuit.SuitUnspecified) hash ^= Suit.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -356,11 +356,11 @@ namespace Whot {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (Rank != global::Whot.CardRank.RankUnspecified) {
+      if (Rank != global::Api.CardRank.RankUnspecified) {
         output.WriteRawTag(8);
         output.WriteEnum((int) Rank);
       }
-      if (Suit != global::Whot.CardSuit.SuitUnspecified) {
+      if (Suit != global::Api.CardSuit.SuitUnspecified) {
         output.WriteRawTag(16);
         output.WriteEnum((int) Suit);
       }
@@ -373,11 +373,11 @@ namespace Whot {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Rank != global::Whot.CardRank.RankUnspecified) {
+      if (Rank != global::Api.CardRank.RankUnspecified) {
         output.WriteRawTag(8);
         output.WriteEnum((int) Rank);
       }
-      if (Suit != global::Whot.CardSuit.SuitUnspecified) {
+      if (Suit != global::Api.CardSuit.SuitUnspecified) {
         output.WriteRawTag(16);
         output.WriteEnum((int) Suit);
       }
@@ -390,10 +390,10 @@ namespace Whot {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (Rank != global::Whot.CardRank.RankUnspecified) {
+      if (Rank != global::Api.CardRank.RankUnspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Rank);
       }
-      if (Suit != global::Whot.CardSuit.SuitUnspecified) {
+      if (Suit != global::Api.CardSuit.SuitUnspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Suit);
       }
       if (_unknownFields != null) {
@@ -407,10 +407,10 @@ namespace Whot {
       if (other == null) {
         return;
       }
-      if (other.Rank != global::Whot.CardRank.RankUnspecified) {
+      if (other.Rank != global::Api.CardRank.RankUnspecified) {
         Rank = other.Rank;
       }
-      if (other.Suit != global::Whot.CardSuit.SuitUnspecified) {
+      if (other.Suit != global::Api.CardSuit.SuitUnspecified) {
         Suit = other.Suit;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -428,11 +428,11 @@ namespace Whot {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            Rank = (global::Whot.CardRank) input.ReadEnum();
+            Rank = (global::Api.CardRank) input.ReadEnum();
             break;
           }
           case 16: {
-            Suit = (global::Whot.CardSuit) input.ReadEnum();
+            Suit = (global::Api.CardSuit) input.ReadEnum();
             break;
           }
         }
@@ -450,11 +450,11 @@ namespace Whot {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            Rank = (global::Whot.CardRank) input.ReadEnum();
+            Rank = (global::Api.CardRank) input.ReadEnum();
             break;
           }
           case 16: {
-            Suit = (global::Whot.CardSuit) input.ReadEnum();
+            Suit = (global::Api.CardSuit) input.ReadEnum();
             break;
           }
         }
@@ -476,7 +476,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[1]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -504,11 +504,11 @@ namespace Whot {
 
     /// <summary>Field number for the "cards" field.</summary>
     public const int CardsFieldNumber = 1;
-    private static readonly pb::FieldCodec<global::Whot.Card> _repeated_cards_codec
-        = pb::FieldCodec.ForMessage(10, global::Whot.Card.Parser);
-    private readonly pbc::RepeatedField<global::Whot.Card> cards_ = new pbc::RepeatedField<global::Whot.Card>();
+    private static readonly pb::FieldCodec<global::Api.Card> _repeated_cards_codec
+        = pb::FieldCodec.ForMessage(10, global::Api.Card.Parser);
+    private readonly pbc::RepeatedField<global::Api.Card> cards_ = new pbc::RepeatedField<global::Api.Card>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Whot.Card> Cards {
+    public pbc::RepeatedField<global::Api.Card> Cards {
       get { return cards_; }
     }
 
@@ -637,7 +637,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[2]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -848,7 +848,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[3]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -984,7 +984,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[4]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1021,41 +1021,41 @@ namespace Whot {
 
     /// <summary>Field number for the "players" field.</summary>
     public const int PlayersFieldNumber = 1;
-    private static readonly pb::FieldCodec<global::Whot.Player> _repeated_players_codec
-        = pb::FieldCodec.ForMessage(10, global::Whot.Player.Parser);
-    private readonly pbc::RepeatedField<global::Whot.Player> players_ = new pbc::RepeatedField<global::Whot.Player>();
+    private static readonly pb::FieldCodec<global::Api.Player> _repeated_players_codec
+        = pb::FieldCodec.ForMessage(10, global::Api.Player.Parser);
+    private readonly pbc::RepeatedField<global::Api.Player> players_ = new pbc::RepeatedField<global::Api.Player>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Whot.Player> Players {
+    public pbc::RepeatedField<global::Api.Player> Players {
       get { return players_; }
     }
 
     /// <summary>Field number for the "playing_players" field.</summary>
     public const int PlayingPlayersFieldNumber = 2;
-    private static readonly pb::FieldCodec<global::Whot.Player> _repeated_playingPlayers_codec
-        = pb::FieldCodec.ForMessage(18, global::Whot.Player.Parser);
-    private readonly pbc::RepeatedField<global::Whot.Player> playingPlayers_ = new pbc::RepeatedField<global::Whot.Player>();
+    private static readonly pb::FieldCodec<global::Api.Player> _repeated_playingPlayers_codec
+        = pb::FieldCodec.ForMessage(18, global::Api.Player.Parser);
+    private readonly pbc::RepeatedField<global::Api.Player> playingPlayers_ = new pbc::RepeatedField<global::Api.Player>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Whot.Player> PlayingPlayers {
+    public pbc::RepeatedField<global::Api.Player> PlayingPlayers {
       get { return playingPlayers_; }
     }
 
     /// <summary>Field number for the "join_players" field.</summary>
     public const int JoinPlayersFieldNumber = 3;
-    private static readonly pb::FieldCodec<global::Whot.Player> _repeated_joinPlayers_codec
-        = pb::FieldCodec.ForMessage(26, global::Whot.Player.Parser);
-    private readonly pbc::RepeatedField<global::Whot.Player> joinPlayers_ = new pbc::RepeatedField<global::Whot.Player>();
+    private static readonly pb::FieldCodec<global::Api.Player> _repeated_joinPlayers_codec
+        = pb::FieldCodec.ForMessage(26, global::Api.Player.Parser);
+    private readonly pbc::RepeatedField<global::Api.Player> joinPlayers_ = new pbc::RepeatedField<global::Api.Player>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Whot.Player> JoinPlayers {
+    public pbc::RepeatedField<global::Api.Player> JoinPlayers {
       get { return joinPlayers_; }
     }
 
     /// <summary>Field number for the "leave_players" field.</summary>
     public const int LeavePlayersFieldNumber = 4;
-    private static readonly pb::FieldCodec<global::Whot.Player> _repeated_leavePlayers_codec
-        = pb::FieldCodec.ForMessage(34, global::Whot.Player.Parser);
-    private readonly pbc::RepeatedField<global::Whot.Player> leavePlayers_ = new pbc::RepeatedField<global::Whot.Player>();
+    private static readonly pb::FieldCodec<global::Api.Player> _repeated_leavePlayers_codec
+        = pb::FieldCodec.ForMessage(34, global::Api.Player.Parser);
+    private readonly pbc::RepeatedField<global::Api.Player> leavePlayers_ = new pbc::RepeatedField<global::Api.Player>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Whot.Player> LeavePlayers {
+    public pbc::RepeatedField<global::Api.Player> LeavePlayers {
       get { return leavePlayers_; }
     }
 
@@ -1117,9 +1117,9 @@ namespace Whot {
 
     /// <summary>Field number for the "game_state" field.</summary>
     public const int GameStateFieldNumber = 9;
-    private global::Whot.GameState gameState_ = global::Whot.GameState.Unknown;
+    private global::Api.GameState gameState_ = global::Api.GameState.Unknown;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.GameState GameState {
+    public global::Api.GameState GameState {
       get { return gameState_; }
       set {
         gameState_ = value;
@@ -1128,9 +1128,9 @@ namespace Whot {
 
     /// <summary>Field number for the "jp_treasure" field.</summary>
     public const int JpTreasureFieldNumber = 10;
-    private global::Whot.Jackpot jpTreasure_;
+    private global::Api.Jackpot jpTreasure_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.Jackpot JpTreasure {
+    public global::Api.Jackpot JpTreasure {
       get { return jpTreasure_; }
       set {
         jpTreasure_ = value;
@@ -1174,7 +1174,7 @@ namespace Whot {
       if (Vip != 0L) hash ^= Vip.GetHashCode();
       if (TimePlay != 0L) hash ^= TimePlay.GetHashCode();
       if (RemainTime != 0L) hash ^= RemainTime.GetHashCode();
-      if (GameState != global::Whot.GameState.Unknown) hash ^= GameState.GetHashCode();
+      if (GameState != global::Api.GameState.Unknown) hash ^= GameState.GetHashCode();
       if (jpTreasure_ != null) hash ^= JpTreasure.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -1212,7 +1212,7 @@ namespace Whot {
         output.WriteRawTag(64);
         output.WriteInt64(RemainTime);
       }
-      if (GameState != global::Whot.GameState.Unknown) {
+      if (GameState != global::Api.GameState.Unknown) {
         output.WriteRawTag(72);
         output.WriteEnum((int) GameState);
       }
@@ -1249,7 +1249,7 @@ namespace Whot {
         output.WriteRawTag(64);
         output.WriteInt64(RemainTime);
       }
-      if (GameState != global::Whot.GameState.Unknown) {
+      if (GameState != global::Api.GameState.Unknown) {
         output.WriteRawTag(72);
         output.WriteEnum((int) GameState);
       }
@@ -1282,7 +1282,7 @@ namespace Whot {
       if (RemainTime != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(RemainTime);
       }
-      if (GameState != global::Whot.GameState.Unknown) {
+      if (GameState != global::Api.GameState.Unknown) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) GameState);
       }
       if (jpTreasure_ != null) {
@@ -1315,12 +1315,12 @@ namespace Whot {
       if (other.RemainTime != 0L) {
         RemainTime = other.RemainTime;
       }
-      if (other.GameState != global::Whot.GameState.Unknown) {
+      if (other.GameState != global::Api.GameState.Unknown) {
         GameState = other.GameState;
       }
       if (other.jpTreasure_ != null) {
         if (jpTreasure_ == null) {
-          JpTreasure = new global::Whot.Jackpot();
+          JpTreasure = new global::Api.Jackpot();
         }
         JpTreasure.MergeFrom(other.JpTreasure);
       }
@@ -1371,12 +1371,12 @@ namespace Whot {
             break;
           }
           case 72: {
-            GameState = (global::Whot.GameState) input.ReadEnum();
+            GameState = (global::Api.GameState) input.ReadEnum();
             break;
           }
           case 82: {
             if (jpTreasure_ == null) {
-              JpTreasure = new global::Whot.Jackpot();
+              JpTreasure = new global::Api.Jackpot();
             }
             input.ReadMessage(JpTreasure);
             break;
@@ -1428,12 +1428,12 @@ namespace Whot {
             break;
           }
           case 72: {
-            GameState = (global::Whot.GameState) input.ReadEnum();
+            GameState = (global::Api.GameState) input.ReadEnum();
             break;
           }
           case 82: {
             if (jpTreasure_ == null) {
-              JpTreasure = new global::Whot.Jackpot();
+              JpTreasure = new global::Api.Jackpot();
             }
             input.ReadMessage(JpTreasure);
             break;
@@ -1457,7 +1457,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[5]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1497,11 +1497,11 @@ namespace Whot {
 
     /// <summary>Field number for the "cards" field.</summary>
     public const int CardsFieldNumber = 2;
-    private static readonly pb::FieldCodec<global::Whot.Card> _repeated_cards_codec
-        = pb::FieldCodec.ForMessage(18, global::Whot.Card.Parser);
-    private readonly pbc::RepeatedField<global::Whot.Card> cards_ = new pbc::RepeatedField<global::Whot.Card>();
+    private static readonly pb::FieldCodec<global::Api.Card> _repeated_cards_codec
+        = pb::FieldCodec.ForMessage(18, global::Api.Card.Parser);
+    private readonly pbc::RepeatedField<global::Api.Card> cards_ = new pbc::RepeatedField<global::Api.Card>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Whot.Card> Cards {
+    public pbc::RepeatedField<global::Api.Card> Cards {
       get { return cards_; }
     }
 
@@ -1657,7 +1657,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[6]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1687,9 +1687,9 @@ namespace Whot {
 
     /// <summary>Field number for the "presence_card" field.</summary>
     public const int PresenceCardFieldNumber = 1;
-    private global::Whot.PresenceCards presenceCard_;
+    private global::Api.PresenceCards presenceCard_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.PresenceCards PresenceCard {
+    public global::Api.PresenceCards PresenceCard {
       get { return presenceCard_; }
       set {
         presenceCard_ = value;
@@ -1698,22 +1698,22 @@ namespace Whot {
 
     /// <summary>Field number for the "card_event" field.</summary>
     public const int CardEventFieldNumber = 2;
-    private static readonly pbc::MapField<string, global::Whot.CardEvent>.Codec _map_cardEvent_codec
-        = new pbc::MapField<string, global::Whot.CardEvent>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForEnum(16, x => (int) x, x => (global::Whot.CardEvent) x, global::Whot.CardEvent.None), 18);
-    private readonly pbc::MapField<string, global::Whot.CardEvent> cardEvent_ = new pbc::MapField<string, global::Whot.CardEvent>();
+    private static readonly pbc::MapField<string, global::Api.CardEvent>.Codec _map_cardEvent_codec
+        = new pbc::MapField<string, global::Api.CardEvent>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForEnum(16, x => (int) x, x => (global::Api.CardEvent) x, global::Api.CardEvent.None), 18);
+    private readonly pbc::MapField<string, global::Api.CardEvent> cardEvent_ = new pbc::MapField<string, global::Api.CardEvent>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::MapField<string, global::Whot.CardEvent> CardEvent {
+    public pbc::MapField<string, global::Api.CardEvent> CardEvent {
       get { return cardEvent_; }
     }
 
     /// <summary>Field number for the "top_card" field.</summary>
     public const int TopCardFieldNumber = 3;
-    private global::Whot.Card topCard_;
+    private global::Api.Card topCard_;
     /// <summary>
     /// card on top of deck
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.Card TopCard {
+    public global::Api.Card TopCard {
       get { return topCard_; }
       set {
         topCard_ = value;
@@ -1817,14 +1817,14 @@ namespace Whot {
       }
       if (other.presenceCard_ != null) {
         if (presenceCard_ == null) {
-          PresenceCard = new global::Whot.PresenceCards();
+          PresenceCard = new global::Api.PresenceCards();
         }
         PresenceCard.MergeFrom(other.PresenceCard);
       }
       cardEvent_.Add(other.cardEvent_);
       if (other.topCard_ != null) {
         if (topCard_ == null) {
-          TopCard = new global::Whot.Card();
+          TopCard = new global::Api.Card();
         }
         TopCard.MergeFrom(other.TopCard);
       }
@@ -1844,7 +1844,7 @@ namespace Whot {
             break;
           case 10: {
             if (presenceCard_ == null) {
-              PresenceCard = new global::Whot.PresenceCards();
+              PresenceCard = new global::Api.PresenceCards();
             }
             input.ReadMessage(PresenceCard);
             break;
@@ -1855,7 +1855,7 @@ namespace Whot {
           }
           case 26: {
             if (topCard_ == null) {
-              TopCard = new global::Whot.Card();
+              TopCard = new global::Api.Card();
             }
             input.ReadMessage(TopCard);
             break;
@@ -1876,7 +1876,7 @@ namespace Whot {
             break;
           case 10: {
             if (presenceCard_ == null) {
-              PresenceCard = new global::Whot.PresenceCards();
+              PresenceCard = new global::Api.PresenceCards();
             }
             input.ReadMessage(PresenceCard);
             break;
@@ -1887,7 +1887,7 @@ namespace Whot {
           }
           case 26: {
             if (topCard_ == null) {
-              TopCard = new global::Whot.Card();
+              TopCard = new global::Api.Card();
             }
             input.ReadMessage(TopCard);
             break;
@@ -1911,7 +1911,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[7]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1941,9 +1941,9 @@ namespace Whot {
 
     /// <summary>Field number for the "state" field.</summary>
     public const int StateFieldNumber = 1;
-    private global::Whot.GameState state_ = global::Whot.GameState.Unknown;
+    private global::Api.GameState state_ = global::Api.GameState.Unknown;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.GameState State {
+    public global::Api.GameState State {
       get { return state_; }
       set {
         state_ = value;
@@ -1963,11 +1963,11 @@ namespace Whot {
 
     /// <summary>Field number for the "presenceCards" field.</summary>
     public const int PresenceCardsFieldNumber = 3;
-    private static readonly pb::FieldCodec<global::Whot.PresenceCards> _repeated_presenceCards_codec
-        = pb::FieldCodec.ForMessage(26, global::Whot.PresenceCards.Parser);
-    private readonly pbc::RepeatedField<global::Whot.PresenceCards> presenceCards_ = new pbc::RepeatedField<global::Whot.PresenceCards>();
+    private static readonly pb::FieldCodec<global::Api.PresenceCards> _repeated_presenceCards_codec
+        = pb::FieldCodec.ForMessage(26, global::Api.PresenceCards.Parser);
+    private readonly pbc::RepeatedField<global::Api.PresenceCards> presenceCards_ = new pbc::RepeatedField<global::Api.PresenceCards>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Whot.PresenceCards> PresenceCards {
+    public pbc::RepeatedField<global::Api.PresenceCards> PresenceCards {
       get { return presenceCards_; }
     }
 
@@ -1993,7 +1993,7 @@ namespace Whot {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (State != global::Whot.GameState.Unknown) hash ^= State.GetHashCode();
+      if (State != global::Api.GameState.Unknown) hash ^= State.GetHashCode();
       if (CountDown != 0L) hash ^= CountDown.GetHashCode();
       hash ^= presenceCards_.GetHashCode();
       if (_unknownFields != null) {
@@ -2012,7 +2012,7 @@ namespace Whot {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (State != global::Whot.GameState.Unknown) {
+      if (State != global::Api.GameState.Unknown) {
         output.WriteRawTag(8);
         output.WriteEnum((int) State);
       }
@@ -2030,7 +2030,7 @@ namespace Whot {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (State != global::Whot.GameState.Unknown) {
+      if (State != global::Api.GameState.Unknown) {
         output.WriteRawTag(8);
         output.WriteEnum((int) State);
       }
@@ -2048,7 +2048,7 @@ namespace Whot {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (State != global::Whot.GameState.Unknown) {
+      if (State != global::Api.GameState.Unknown) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) State);
       }
       if (CountDown != 0L) {
@@ -2066,7 +2066,7 @@ namespace Whot {
       if (other == null) {
         return;
       }
-      if (other.State != global::Whot.GameState.Unknown) {
+      if (other.State != global::Api.GameState.Unknown) {
         State = other.State;
       }
       if (other.CountDown != 0L) {
@@ -2088,7 +2088,7 @@ namespace Whot {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            State = (global::Whot.GameState) input.ReadEnum();
+            State = (global::Api.GameState) input.ReadEnum();
             break;
           }
           case 16: {
@@ -2114,7 +2114,7 @@ namespace Whot {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            State = (global::Whot.GameState) input.ReadEnum();
+            State = (global::Api.GameState) input.ReadEnum();
             break;
           }
           case 16: {
@@ -2144,7 +2144,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[8]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2190,9 +2190,9 @@ namespace Whot {
 
     /// <summary>Field number for the "event" field.</summary>
     public const int EventFieldNumber = 2;
-    private global::Whot.CardEvent event_ = global::Whot.CardEvent.None;
+    private global::Api.CardEvent event_ = global::Api.CardEvent.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.CardEvent Event {
+    public global::Api.CardEvent Event {
       get { return event_; }
       set {
         event_ = value;
@@ -2201,9 +2201,9 @@ namespace Whot {
 
     /// <summary>Field number for the "played_card" field.</summary>
     public const int PlayedCardFieldNumber = 3;
-    private global::Whot.Card playedCard_;
+    private global::Api.Card playedCard_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.Card PlayedCard {
+    public global::Api.Card PlayedCard {
       get { return playedCard_; }
       set {
         playedCard_ = value;
@@ -2212,9 +2212,9 @@ namespace Whot {
 
     /// <summary>Field number for the "top_card" field.</summary>
     public const int TopCardFieldNumber = 4;
-    private global::Whot.Card topCard_;
+    private global::Api.Card topCard_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.Card TopCard {
+    public global::Api.Card TopCard {
       get { return topCard_; }
       set {
         topCard_ = value;
@@ -2223,19 +2223,19 @@ namespace Whot {
 
     /// <summary>Field number for the "cards_after" field.</summary>
     public const int CardsAfterFieldNumber = 5;
-    private static readonly pb::FieldCodec<global::Whot.Card> _repeated_cardsAfter_codec
-        = pb::FieldCodec.ForMessage(42, global::Whot.Card.Parser);
-    private readonly pbc::RepeatedField<global::Whot.Card> cardsAfter_ = new pbc::RepeatedField<global::Whot.Card>();
+    private static readonly pb::FieldCodec<global::Api.Card> _repeated_cardsAfter_codec
+        = pb::FieldCodec.ForMessage(42, global::Api.Card.Parser);
+    private readonly pbc::RepeatedField<global::Api.Card> cardsAfter_ = new pbc::RepeatedField<global::Api.Card>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Whot.Card> CardsAfter {
+    public pbc::RepeatedField<global::Api.Card> CardsAfter {
       get { return cardsAfter_; }
     }
 
     /// <summary>Field number for the "effect" field.</summary>
     public const int EffectFieldNumber = 6;
-    private global::Whot.CardEffect effect_ = global::Whot.CardEffect.EffectNone;
+    private global::Api.CardEffect effect_ = global::Api.CardEffect.EffectNone;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.CardEffect Effect {
+    public global::Api.CardEffect Effect {
       get { return effect_; }
       set {
         effect_ = value;
@@ -2292,11 +2292,11 @@ namespace Whot {
     public override int GetHashCode() {
       int hash = 1;
       if (UserId.Length != 0) hash ^= UserId.GetHashCode();
-      if (Event != global::Whot.CardEvent.None) hash ^= Event.GetHashCode();
+      if (Event != global::Api.CardEvent.None) hash ^= Event.GetHashCode();
       if (playedCard_ != null) hash ^= PlayedCard.GetHashCode();
       if (topCard_ != null) hash ^= TopCard.GetHashCode();
       hash ^= cardsAfter_.GetHashCode();
-      if (Effect != global::Whot.CardEffect.EffectNone) hash ^= Effect.GetHashCode();
+      if (Effect != global::Api.CardEffect.EffectNone) hash ^= Effect.GetHashCode();
       if (PickPenalty != 0) hash ^= PickPenalty.GetHashCode();
       if (TargetUserId.Length != 0) hash ^= TargetUserId.GetHashCode();
       if (_unknownFields != null) {
@@ -2319,7 +2319,7 @@ namespace Whot {
         output.WriteRawTag(10);
         output.WriteString(UserId);
       }
-      if (Event != global::Whot.CardEvent.None) {
+      if (Event != global::Api.CardEvent.None) {
         output.WriteRawTag(16);
         output.WriteEnum((int) Event);
       }
@@ -2332,7 +2332,7 @@ namespace Whot {
         output.WriteMessage(TopCard);
       }
       cardsAfter_.WriteTo(output, _repeated_cardsAfter_codec);
-      if (Effect != global::Whot.CardEffect.EffectNone) {
+      if (Effect != global::Api.CardEffect.EffectNone) {
         output.WriteRawTag(48);
         output.WriteEnum((int) Effect);
       }
@@ -2357,7 +2357,7 @@ namespace Whot {
         output.WriteRawTag(10);
         output.WriteString(UserId);
       }
-      if (Event != global::Whot.CardEvent.None) {
+      if (Event != global::Api.CardEvent.None) {
         output.WriteRawTag(16);
         output.WriteEnum((int) Event);
       }
@@ -2370,7 +2370,7 @@ namespace Whot {
         output.WriteMessage(TopCard);
       }
       cardsAfter_.WriteTo(ref output, _repeated_cardsAfter_codec);
-      if (Effect != global::Whot.CardEffect.EffectNone) {
+      if (Effect != global::Api.CardEffect.EffectNone) {
         output.WriteRawTag(48);
         output.WriteEnum((int) Effect);
       }
@@ -2394,7 +2394,7 @@ namespace Whot {
       if (UserId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
       }
-      if (Event != global::Whot.CardEvent.None) {
+      if (Event != global::Api.CardEvent.None) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Event);
       }
       if (playedCard_ != null) {
@@ -2404,7 +2404,7 @@ namespace Whot {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(TopCard);
       }
       size += cardsAfter_.CalculateSize(_repeated_cardsAfter_codec);
-      if (Effect != global::Whot.CardEffect.EffectNone) {
+      if (Effect != global::Api.CardEffect.EffectNone) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Effect);
       }
       if (PickPenalty != 0) {
@@ -2427,23 +2427,23 @@ namespace Whot {
       if (other.UserId.Length != 0) {
         UserId = other.UserId;
       }
-      if (other.Event != global::Whot.CardEvent.None) {
+      if (other.Event != global::Api.CardEvent.None) {
         Event = other.Event;
       }
       if (other.playedCard_ != null) {
         if (playedCard_ == null) {
-          PlayedCard = new global::Whot.Card();
+          PlayedCard = new global::Api.Card();
         }
         PlayedCard.MergeFrom(other.PlayedCard);
       }
       if (other.topCard_ != null) {
         if (topCard_ == null) {
-          TopCard = new global::Whot.Card();
+          TopCard = new global::Api.Card();
         }
         TopCard.MergeFrom(other.TopCard);
       }
       cardsAfter_.Add(other.cardsAfter_);
-      if (other.Effect != global::Whot.CardEffect.EffectNone) {
+      if (other.Effect != global::Api.CardEffect.EffectNone) {
         Effect = other.Effect;
       }
       if (other.PickPenalty != 0) {
@@ -2471,19 +2471,19 @@ namespace Whot {
             break;
           }
           case 16: {
-            Event = (global::Whot.CardEvent) input.ReadEnum();
+            Event = (global::Api.CardEvent) input.ReadEnum();
             break;
           }
           case 26: {
             if (playedCard_ == null) {
-              PlayedCard = new global::Whot.Card();
+              PlayedCard = new global::Api.Card();
             }
             input.ReadMessage(PlayedCard);
             break;
           }
           case 34: {
             if (topCard_ == null) {
-              TopCard = new global::Whot.Card();
+              TopCard = new global::Api.Card();
             }
             input.ReadMessage(TopCard);
             break;
@@ -2493,7 +2493,7 @@ namespace Whot {
             break;
           }
           case 48: {
-            Effect = (global::Whot.CardEffect) input.ReadEnum();
+            Effect = (global::Api.CardEffect) input.ReadEnum();
             break;
           }
           case 56: {
@@ -2523,19 +2523,19 @@ namespace Whot {
             break;
           }
           case 16: {
-            Event = (global::Whot.CardEvent) input.ReadEnum();
+            Event = (global::Api.CardEvent) input.ReadEnum();
             break;
           }
           case 26: {
             if (playedCard_ == null) {
-              PlayedCard = new global::Whot.Card();
+              PlayedCard = new global::Api.Card();
             }
             input.ReadMessage(PlayedCard);
             break;
           }
           case 34: {
             if (topCard_ == null) {
-              TopCard = new global::Whot.Card();
+              TopCard = new global::Api.Card();
             }
             input.ReadMessage(TopCard);
             break;
@@ -2545,7 +2545,7 @@ namespace Whot {
             break;
           }
           case 48: {
-            Effect = (global::Whot.CardEffect) input.ReadEnum();
+            Effect = (global::Api.CardEffect) input.ReadEnum();
             break;
           }
           case 56: {
@@ -2575,7 +2575,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[9]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2855,7 +2855,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[10]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2896,9 +2896,9 @@ namespace Whot {
 
     /// <summary>Field number for the "score" field.</summary>
     public const int ScoreFieldNumber = 2;
-    private global::Whot.WhotScoreResult score_;
+    private global::Api.WhotScoreResult score_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.WhotScoreResult Score {
+    public global::Api.WhotScoreResult Score {
       get { return score_; }
       set {
         score_ = value;
@@ -2907,11 +2907,11 @@ namespace Whot {
 
     /// <summary>Field number for the "remaining_cards" field.</summary>
     public const int RemainingCardsFieldNumber = 3;
-    private static readonly pb::FieldCodec<global::Whot.Card> _repeated_remainingCards_codec
-        = pb::FieldCodec.ForMessage(26, global::Whot.Card.Parser);
-    private readonly pbc::RepeatedField<global::Whot.Card> remainingCards_ = new pbc::RepeatedField<global::Whot.Card>();
+    private static readonly pb::FieldCodec<global::Api.Card> _repeated_remainingCards_codec
+        = pb::FieldCodec.ForMessage(26, global::Api.Card.Parser);
+    private readonly pbc::RepeatedField<global::Api.Card> remainingCards_ = new pbc::RepeatedField<global::Api.Card>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Whot.Card> RemainingCards {
+    public pbc::RepeatedField<global::Api.Card> RemainingCards {
       get { return remainingCards_; }
     }
 
@@ -3015,7 +3015,7 @@ namespace Whot {
       }
       if (other.score_ != null) {
         if (score_ == null) {
-          Score = new global::Whot.WhotScoreResult();
+          Score = new global::Api.WhotScoreResult();
         }
         Score.MergeFrom(other.Score);
       }
@@ -3040,7 +3040,7 @@ namespace Whot {
           }
           case 18: {
             if (score_ == null) {
-              Score = new global::Whot.WhotScoreResult();
+              Score = new global::Api.WhotScoreResult();
             }
             input.ReadMessage(Score);
             break;
@@ -3069,7 +3069,7 @@ namespace Whot {
           }
           case 18: {
             if (score_ == null) {
-              Score = new global::Whot.WhotScoreResult();
+              Score = new global::Api.WhotScoreResult();
             }
             input.ReadMessage(Score);
             break;
@@ -3097,7 +3097,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[11]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3129,19 +3129,19 @@ namespace Whot {
 
     /// <summary>Field number for the "results" field.</summary>
     public const int ResultsFieldNumber = 1;
-    private static readonly pb::FieldCodec<global::Whot.WhotPlayerResult> _repeated_results_codec
-        = pb::FieldCodec.ForMessage(10, global::Whot.WhotPlayerResult.Parser);
-    private readonly pbc::RepeatedField<global::Whot.WhotPlayerResult> results_ = new pbc::RepeatedField<global::Whot.WhotPlayerResult>();
+    private static readonly pb::FieldCodec<global::Api.WhotPlayerResult> _repeated_results_codec
+        = pb::FieldCodec.ForMessage(10, global::Api.WhotPlayerResult.Parser);
+    private readonly pbc::RepeatedField<global::Api.WhotPlayerResult> results_ = new pbc::RepeatedField<global::Api.WhotPlayerResult>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Whot.WhotPlayerResult> Results {
+    public pbc::RepeatedField<global::Api.WhotPlayerResult> Results {
       get { return results_; }
     }
 
     /// <summary>Field number for the "end_reason" field.</summary>
     public const int EndReasonFieldNumber = 2;
-    private global::Whot.WhotEndGameReason endReason_ = global::Whot.WhotEndGameReason.ReasonNormalWin;
+    private global::Api.WhotEndGameReason endReason_ = global::Api.WhotEndGameReason.ReasonNormalWin;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.WhotEndGameReason EndReason {
+    public global::Api.WhotEndGameReason EndReason {
       get { return endReason_; }
       set {
         endReason_ = value;
@@ -3161,9 +3161,9 @@ namespace Whot {
 
     /// <summary>Field number for the "jackpot" field.</summary>
     public const int JackpotFieldNumber = 4;
-    private global::Whot.Jackpot jackpot_;
+    private global::Api.Jackpot jackpot_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.Jackpot Jackpot {
+    public global::Api.Jackpot Jackpot {
       get { return jackpot_; }
       set {
         jackpot_ = value;
@@ -3172,9 +3172,9 @@ namespace Whot {
 
     /// <summary>Field number for the "jp_treasure" field.</summary>
     public const int JpTreasureFieldNumber = 5;
-    private global::Whot.Jackpot jpTreasure_;
+    private global::Api.Jackpot jpTreasure_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.Jackpot JpTreasure {
+    public global::Api.Jackpot JpTreasure {
       get { return jpTreasure_; }
       set {
         jpTreasure_ = value;
@@ -3206,7 +3206,7 @@ namespace Whot {
     public override int GetHashCode() {
       int hash = 1;
       hash ^= results_.GetHashCode();
-      if (EndReason != global::Whot.WhotEndGameReason.ReasonNormalWin) hash ^= EndReason.GetHashCode();
+      if (EndReason != global::Api.WhotEndGameReason.ReasonNormalWin) hash ^= EndReason.GetHashCode();
       if (WinnerId.Length != 0) hash ^= WinnerId.GetHashCode();
       if (jackpot_ != null) hash ^= Jackpot.GetHashCode();
       if (jpTreasure_ != null) hash ^= JpTreasure.GetHashCode();
@@ -3227,7 +3227,7 @@ namespace Whot {
       output.WriteRawMessage(this);
     #else
       results_.WriteTo(output, _repeated_results_codec);
-      if (EndReason != global::Whot.WhotEndGameReason.ReasonNormalWin) {
+      if (EndReason != global::Api.WhotEndGameReason.ReasonNormalWin) {
         output.WriteRawTag(16);
         output.WriteEnum((int) EndReason);
       }
@@ -3253,7 +3253,7 @@ namespace Whot {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
       results_.WriteTo(ref output, _repeated_results_codec);
-      if (EndReason != global::Whot.WhotEndGameReason.ReasonNormalWin) {
+      if (EndReason != global::Api.WhotEndGameReason.ReasonNormalWin) {
         output.WriteRawTag(16);
         output.WriteEnum((int) EndReason);
       }
@@ -3279,7 +3279,7 @@ namespace Whot {
     public int CalculateSize() {
       int size = 0;
       size += results_.CalculateSize(_repeated_results_codec);
-      if (EndReason != global::Whot.WhotEndGameReason.ReasonNormalWin) {
+      if (EndReason != global::Api.WhotEndGameReason.ReasonNormalWin) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) EndReason);
       }
       if (WinnerId.Length != 0) {
@@ -3303,7 +3303,7 @@ namespace Whot {
         return;
       }
       results_.Add(other.results_);
-      if (other.EndReason != global::Whot.WhotEndGameReason.ReasonNormalWin) {
+      if (other.EndReason != global::Api.WhotEndGameReason.ReasonNormalWin) {
         EndReason = other.EndReason;
       }
       if (other.WinnerId.Length != 0) {
@@ -3311,13 +3311,13 @@ namespace Whot {
       }
       if (other.jackpot_ != null) {
         if (jackpot_ == null) {
-          Jackpot = new global::Whot.Jackpot();
+          Jackpot = new global::Api.Jackpot();
         }
         Jackpot.MergeFrom(other.Jackpot);
       }
       if (other.jpTreasure_ != null) {
         if (jpTreasure_ == null) {
-          JpTreasure = new global::Whot.Jackpot();
+          JpTreasure = new global::Api.Jackpot();
         }
         JpTreasure.MergeFrom(other.JpTreasure);
       }
@@ -3340,7 +3340,7 @@ namespace Whot {
             break;
           }
           case 16: {
-            EndReason = (global::Whot.WhotEndGameReason) input.ReadEnum();
+            EndReason = (global::Api.WhotEndGameReason) input.ReadEnum();
             break;
           }
           case 26: {
@@ -3349,14 +3349,14 @@ namespace Whot {
           }
           case 34: {
             if (jackpot_ == null) {
-              Jackpot = new global::Whot.Jackpot();
+              Jackpot = new global::Api.Jackpot();
             }
             input.ReadMessage(Jackpot);
             break;
           }
           case 42: {
             if (jpTreasure_ == null) {
-              JpTreasure = new global::Whot.Jackpot();
+              JpTreasure = new global::Api.Jackpot();
             }
             input.ReadMessage(JpTreasure);
             break;
@@ -3380,7 +3380,7 @@ namespace Whot {
             break;
           }
           case 16: {
-            EndReason = (global::Whot.WhotEndGameReason) input.ReadEnum();
+            EndReason = (global::Api.WhotEndGameReason) input.ReadEnum();
             break;
           }
           case 26: {
@@ -3389,14 +3389,14 @@ namespace Whot {
           }
           case 34: {
             if (jackpot_ == null) {
-              Jackpot = new global::Whot.Jackpot();
+              Jackpot = new global::Api.Jackpot();
             }
             input.ReadMessage(Jackpot);
             break;
           }
           case 42: {
             if (jpTreasure_ == null) {
-              JpTreasure = new global::Whot.Jackpot();
+              JpTreasure = new global::Api.Jackpot();
             }
             input.ReadMessage(JpTreasure);
             break;
@@ -3420,7 +3420,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[12]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3844,7 +3844,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[13]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[13]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3873,19 +3873,19 @@ namespace Whot {
 
     /// <summary>Field number for the "updates" field.</summary>
     public const int UpdatesFieldNumber = 1;
-    private static readonly pb::FieldCodec<global::Whot.BalanceUpdate> _repeated_updates_codec
-        = pb::FieldCodec.ForMessage(10, global::Whot.BalanceUpdate.Parser);
-    private readonly pbc::RepeatedField<global::Whot.BalanceUpdate> updates_ = new pbc::RepeatedField<global::Whot.BalanceUpdate>();
+    private static readonly pb::FieldCodec<global::Api.BalanceUpdate> _repeated_updates_codec
+        = pb::FieldCodec.ForMessage(10, global::Api.BalanceUpdate.Parser);
+    private readonly pbc::RepeatedField<global::Api.BalanceUpdate> updates_ = new pbc::RepeatedField<global::Api.BalanceUpdate>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Whot.BalanceUpdate> Updates {
+    public pbc::RepeatedField<global::Api.BalanceUpdate> Updates {
       get { return updates_; }
     }
 
     /// <summary>Field number for the "jackpot" field.</summary>
     public const int JackpotFieldNumber = 2;
-    private global::Whot.Jackpot jackpot_;
+    private global::Api.Jackpot jackpot_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.Jackpot Jackpot {
+    public global::Api.Jackpot Jackpot {
       get { return jackpot_; }
       set {
         jackpot_ = value;
@@ -3977,7 +3977,7 @@ namespace Whot {
       updates_.Add(other.updates_);
       if (other.jackpot_ != null) {
         if (jackpot_ == null) {
-          Jackpot = new global::Whot.Jackpot();
+          Jackpot = new global::Api.Jackpot();
         }
         Jackpot.MergeFrom(other.Jackpot);
       }
@@ -4001,7 +4001,7 @@ namespace Whot {
           }
           case 18: {
             if (jackpot_ == null) {
-              Jackpot = new global::Whot.Jackpot();
+              Jackpot = new global::Api.Jackpot();
             }
             input.ReadMessage(Jackpot);
             break;
@@ -4026,7 +4026,7 @@ namespace Whot {
           }
           case 18: {
             if (jackpot_ == null) {
-              Jackpot = new global::Whot.Jackpot();
+              Jackpot = new global::Api.Jackpot();
             }
             input.ReadMessage(Jackpot);
             break;
@@ -4050,7 +4050,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[14]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[14]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4130,9 +4130,9 @@ namespace Whot {
 
     /// <summary>Field number for the "cards" field.</summary>
     public const int CardsFieldNumber = 5;
-    private global::Whot.ListCard cards_;
+    private global::Api.ListCard cards_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Whot.ListCard Cards {
+    public global::Api.ListCard Cards {
       get { return cards_; }
       set {
         cards_ = value;
@@ -4378,7 +4378,7 @@ namespace Whot {
       }
       if (other.cards_ != null) {
         if (cards_ == null) {
-          Cards = new global::Whot.ListCard();
+          Cards = new global::Api.ListCard();
         }
         Cards.MergeFrom(other.Cards);
       }
@@ -4426,7 +4426,7 @@ namespace Whot {
           }
           case 42: {
             if (cards_ == null) {
-              Cards = new global::Whot.ListCard();
+              Cards = new global::Api.ListCard();
             }
             input.ReadMessage(Cards);
             break;
@@ -4479,7 +4479,7 @@ namespace Whot {
           }
           case 42: {
             if (cards_ == null) {
-              Cards = new global::Whot.ListCard();
+              Cards = new global::Api.ListCard();
             }
             input.ReadMessage(Cards);
             break;
@@ -4519,7 +4519,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[15]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[15]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4835,7 +4835,7 @@ namespace Whot {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Whot.WhotGameApiReflection.Descriptor.MessageTypes[16]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[16]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
