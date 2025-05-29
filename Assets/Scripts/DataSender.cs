@@ -11,6 +11,7 @@ public class DataSender
     #region ApiNames
     public const string get_world_with_areas = "get_world_with_areas";
     public const string GET_PROFILE = "get_profile";
+    public const string USER_CHANGE_CREDENTIALS = "user_change_credentials";
     #endregion
 
     #region RPC
@@ -23,18 +24,39 @@ public class DataSender
         _ = NetworkManager.INSTANCE.RPCSend(get_world_with_areas, data);
     }
 
-    public static void Login()
+    #region Login
+    public static async void LoginAsGuest()
     {
-        JSONObject data = new();
-
-        NetworkManager.INSTANCE.Login();
+        await NetworkManager.INSTANCE.LoginAsync();
     }
+
+    public static async void LoginWithAccount(string username, string password)
+    {
+        await NetworkManager.INSTANCE.LoginAsync(username, password);
+    }
+
+    public static async void Logout()
+    {
+        await NetworkManager.INSTANCE.LogoutAsync();
+    }
+    #endregion
 
     public static void GetProfile()
     {
         JSONObject data = new();
 
         _ = NetworkManager.INSTANCE.RPCSend(GET_PROFILE, data);
+    }
+
+    public static void ChangeCredentials(string newUsername, string oldPassword, string newPassword)
+    {
+        JSONObject data = new()
+        {
+            ["OldPassword"] = oldPassword,
+            ["NewPassword"] = newPassword,
+            ["NewUsername"] = newUsername
+        };
+        _ = NetworkManager.INSTANCE.RPCSend(USER_CHANGE_CREDENTIALS, data);
     }
     #endregion
 

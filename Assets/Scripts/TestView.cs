@@ -16,12 +16,5 @@ public class TestView : MonoBehaviour
         
     }
 
-    public void HandleGetProfile()
-    {
-        DataSender.GetProfile();
-    }
-    public void HandleLogin()
-    {
-        DataSender.Login();
-    }
+  
 }

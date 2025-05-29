@@ -36,10 +36,6 @@ namespace Globals
         NONE = -1,
         NORMAL = 0,
         PLAYNOW = 1,
-        FACEBOOK = 2,
-        FACEBOOK_INSTANT = 3,
-        APPLE_ID = 4,
-        REG_ACC = 5
     }
 
     #endregion

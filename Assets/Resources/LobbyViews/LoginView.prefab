@@ -1086,15 +1086,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3127256482003989721}
-  - component: {fileID: 7176458759895590447}
-  - component: {fileID: 2509659072246494558}
+  - component: {fileID: 4848360995596515247}
+  - component: {fileID: 6331801075638385321}
+  - component: {fileID: 7504286155251292187}
   m_Layer: 5
   m_Name: Login Form
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3127256482003989721
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1121,7 +1122,22 @@ RectTransform:
   m_AnchoredPosition: {x: -1.0341997, y: -4.136902}
   m_SizeDelta: {x: 912.0713, y: 617.4299}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &7176458759895590447
+--- !u!114 &4848360995596515247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5541552112617154597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90817f595d2e74dd58d47ad10fd0ed51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPopup: 1
+  effectPopupReverse: 1
+  popupBackground: {fileID: 7504286155251292187}
+--- !u!222 &6331801075638385321
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1129,27 +1145,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5541552112617154597}
   m_CullTransparentMesh: 1
---- !u!114 &2509659072246494558
+--- !u!114 &7504286155251292187
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5541552112617154597}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 93f6c55f40c8e4677973a2b31cc04f56, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1308,7 +1324,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5660233887576640175
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1383,6 +1399,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a85dfb815b6cf4585bcb95931903694c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  effectPopup: 0
+  effectPopupReverse: 0
+  popupBackground: {fileID: 0}
   loginView: {fileID: 6836167582468706033}
   loginForm: {fileID: 5541552112617154597}
   idInputField: {fileID: 6342863103879550118}

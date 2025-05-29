@@ -1,0 +1,34 @@
+
+skeleton.png
+size: 744,340
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+7
+  rotate: false
+  xy: 395, 2
+  size: 241, 110
+  orig: 241, 110
+  offset: 0, 0
+  index: -1
+Naija
+  rotate: false
+  xy: 2, 41
+  size: 391, 132
+  orig: 391, 132
+  offset: 0, 0
+  index: -1
+bg
+  rotate: false
+  xy: 2, 175
+  size: 498, 162
+  orig: 498, 162
+  offset: 0, 0
+  index: -1
+ef
+  rotate: false
+  xy: 502, 114
+  size: 237, 223
+  orig: 237, 223
+  offset: 0, 0
+  index: -1

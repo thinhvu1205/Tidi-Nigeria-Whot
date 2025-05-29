@@ -11,10 +11,11 @@ namespace Globals
         public static string usernameNormal = "";
         public static string passwordNormal = "";
         public static LoginType loginType = LoginType.NORMAL;
+        public static bool isLoginSuccessful = false;
 
         public static string currentServerIp = "";
         public static int currentGameId = 0;
-        public static string deviceId = "";
+        public static string deviceId = SystemInfo.deviceUniqueIdentifier;
         public static string versionGame = Application.version;
         public static string publisher = "diamond_domino_slots_" + versionGame.Replace('.', '_');
         public static string package_name = Application.identifier;
@@ -30,9 +31,13 @@ namespace Globals
         private const string USER_PASS_KEY = "user_pass";
         private const string USER_NAME_NORMAL_KEY = "username_normal";
         private const string USER_PASS_NORMAL_KEY = "userpass_normal";
-        private const string TYPE_LOGIN_KEY = "type_login";
+        public const string TYPE_LOGIN_KEY = "type_login";
         private const string SOUND_KEY = "sound";
         private const string MUSIC_KEY = "music";
+
+        public const string LOGIN_SCENE = "Login";
+        public const string MAIN_SCENE = "MainScene";
+
 
         public static string GetVersionDevice()
         {
@@ -67,15 +72,16 @@ namespace Globals
             passwordNormal = PlayerPrefs.GetString(USER_PASS_NORMAL_KEY, "");
         }
 
-        public static void SetUserData()
+        public static void SaveUserData()
         {
             PlayerPrefs.SetString(USER_NAME_KEY, userName);
             PlayerPrefs.SetString(USER_PASS_KEY, userPass);
-            if (loginType == LoginType.NORMAL)
-            {
-                PlayerPrefs.SetString(USER_NAME_NORMAL_KEY, usernameNormal);
-                PlayerPrefs.SetString(USER_PASS_NORMAL_KEY, passwordNormal);
-            }
+            PlayerPrefs.SetString(TYPE_LOGIN_KEY, loginType.ToString());
+            // if (loginType == LoginType.NORMAL)
+            // {
+            //     PlayerPrefs.SetString(USER_NAME_NORMAL_KEY, usernameNormal);
+            //     PlayerPrefs.SetString(USER_PASS_NORMAL_KEY, passwordNormal);
+            // }
             PlayerPrefs.Save();
         }
         public static void UpdateConfigSettings()
