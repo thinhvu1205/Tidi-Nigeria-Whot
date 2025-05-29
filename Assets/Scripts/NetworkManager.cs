@@ -20,7 +20,7 @@ public class NetworkManager : MonoBehaviour
     private NetworkManager() { }
     private const string SESSION = "session", DEVICE_ID = "deviceId", AUTH_TOKEN_KEY = "authToken", REFRESH_TOKEN_KEY = "refreshToken", LOGIN_TYPE_KEY = "loginType", USER_NAME_KEY = "UserName";
     private List<GameListener> _ListenerGLs = new();
-    private Client _ClientC;
+    private IClient _ClientC;
     private ISession _SessionIS;
     private ISocket _SocketIS;
     private List<Action> _DataHandlerAs = new();
@@ -71,8 +71,9 @@ public class NetworkManager : MonoBehaviour
         try
         {
             Debug.Log("--Send--/ " + apiName + "/ " + protoMessage.ToString());
-            IApiRpc rpc = await _SocketIS.RpcAsync(apiName, protoMessage.ToJson().ToString());
-            // if (rpc == null || string.IsNullOrEmpty(rpc.Payload)) return;
+            IApiRpc rpc = await _SocketIS.RpcAsync(apiName, protoMessage.ToString());
+            Debug.Log("RPC: " + rpc.ToString());
+            if (rpc == null || string.IsNullOrEmpty(rpc.Payload)) return;
             JSONObject obj = JSON.Parse(rpc.Payload).AsObject;
             Debug.Log("--Receive--/ " + apiName + "/ " + rpc.Payload);
             _DataHandlerAs.Add(() =>
@@ -173,6 +174,7 @@ public class NetworkManager : MonoBehaviour
         Debug.Log($"🔐 Logged in! Token: {_SessionIS.AuthToken}, RefreshToken: {_SessionIS.RefreshToken}");
         Debug.Log($"🔐 Session:{_SessionIS}");
         await ConnectSocketAsync();
+        await DataSender.GetProfile();
         SceneManager.LoadScene(Config.MAIN_SCENE);
     }
 
@@ -243,6 +245,7 @@ public class NetworkManager : MonoBehaviour
             await _ClientC.SessionLogoutAsync(_SessionIS.AuthToken, _SessionIS.RefreshToken);
             Debug.Log("✅ Đã logout thành công.");
             Config.loginType = LoginType.NONE;
+            PlayerPrefs.SetInt(Config.TYPE_LOGIN_KEY, (int)Config.loginType);
             PlayerPrefs.DeleteKey(AUTH_TOKEN_KEY);
             PlayerPrefs.DeleteKey(REFRESH_TOKEN_KEY);
             Config.isLoginSuccessful = false;
@@ -289,10 +292,10 @@ public class NetworkManager : MonoBehaviour
     private void _OnConnectCb() { Debug.Log("Socket Connected"); }
     private void _OnCloseCb() { Debug.Log("Socket Closed"); }
     private void _OnErrorCb(Exception exception) { Debug.Log("Socket Error: " + exception.ToString()); }
-    public async void PreConnect()
+    public void PreConnect()
     {
 
-        _ClientC = new("http", "103.226.250.195", 7353, "defaultkey");
+        _ClientC = new Client("http", "103.226.250.195", 7353, "defaultkey");
         // _ClientC = new("http", "172.16.56.51", 7350, "defaultkey");
         string storedSessionToken = PlayerPrefs.GetString(SESSION);
         _SessionIS = null;

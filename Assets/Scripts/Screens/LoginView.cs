@@ -31,7 +31,7 @@ public class LoginView : BaseView
         loginView.SetActive(false);
     }
 
-    public void OnClickButtonPlayGuest()
+    public async void OnClickButtonPlayGuest()
     {
         Config.loginType = LoginType.PLAYNOW;
         PlayerPrefs.SetInt(Config.TYPE_LOGIN_KEY, (int)Config.loginType);
@@ -39,7 +39,7 @@ public class LoginView : BaseView
 
         try
         {
-            DataSender.LoginAsGuest();
+            await DataSender.LoginAsGuest();
         }
         catch (Exception e)
         {
@@ -53,14 +53,14 @@ public class LoginView : BaseView
         loginView.SetActive(true);
     }
 
-    public void OnClickButtonSubmit()
+    public async void OnClickButtonSubmit()
     {
         Config.loginType = LoginType.NORMAL;
         PlayerPrefs.SetInt(Config.TYPE_LOGIN_KEY, (int)Config.loginType);
         PlayerPrefs.Save();
         string id = idInputField.text;
         string password = passwordInputField.text;
-        DataSender.LoginWithAccount(id, password);
+        await DataSender.LoginWithAccount(id, password);
 
     }
     #endregion
@@ -81,7 +81,7 @@ public class LoginView : BaseView
         }
     }
 
-    private void Reconnect()
+    private async void Reconnect()
     {
         LoginType loginType = (LoginType)PlayerPrefs.GetInt(Config.TYPE_LOGIN_KEY, (int)LoginType.NONE);
         Config.loginType = loginType;
@@ -96,7 +96,7 @@ public class LoginView : BaseView
                 case LoginType.NORMAL:
                     string id = Config.userName;
                     string password = Config.userPass;
-                    DataSender.LoginWithAccount(id, password);
+                    await DataSender.LoginWithAccount(id, password);
                     break;
                 default:
                     Debug.LogWarning("Unknown login type, defaulting to guest login.");

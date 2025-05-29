@@ -28,27 +28,27 @@ public class DataSender
     }
 
     #region Login
-    public static async void LoginAsGuest()
+    public static async UniTask LoginAsGuest()
     {
         await NetworkManager.INSTANCE.LoginAsync();
     }
 
-    public static async void LoginWithAccount(string username, string password)
+    public static async UniTask LoginWithAccount(string username, string password)
     {
         await NetworkManager.INSTANCE.LoginAsync(username, password);
     }
 
-    public static async void Logout()
+    public static async UniTask Logout()
     {
         await NetworkManager.INSTANCE.LogoutAsync();
     }
     #endregion
 
-    public static void GetProfile()
+    public static async UniTask GetProfile()
     {
         JSONObject data = new();
 
-        _ = NetworkManager.INSTANCE.RPCSend(GET_PROFILE, data);
+        await NetworkManager.INSTANCE.RPCSend(GET_PROFILE, data);
     }
 
     public static void ChangeCredentials(string newUsername = "", string oldPassword = "", string newPassword = "")

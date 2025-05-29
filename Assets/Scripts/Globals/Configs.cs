@@ -76,7 +76,6 @@ namespace Globals
         {
             PlayerPrefs.SetString(USER_NAME_KEY, userName);
             PlayerPrefs.SetString(USER_PASS_KEY, userPass);
-            PlayerPrefs.SetString(TYPE_LOGIN_KEY, loginType.ToString());
             // if (loginType == LoginType.NORMAL)
             // {
             //     PlayerPrefs.SetString(USER_NAME_NORMAL_KEY, usernameNormal);
