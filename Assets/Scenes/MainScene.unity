@@ -1221,6 +1221,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcb5dfff09436435cb4b81b97adc7c84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  descriptionGameObject: {fileID: 0}
+  avatarImage: {fileID: 0}
+  betText: {fileID: 0}
+  matchingTimeText: {fileID: 0}
+  responsitilityText: {fileID: 0}
 --- !u!1 &1915013740
 GameObject:
   m_ObjectHideFlags: 0
