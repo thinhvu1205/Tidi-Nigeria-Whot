@@ -73,7 +73,6 @@ public class LoginView : BaseView
             Debug.Log("First login");
             PlayerPrefs.SetInt(FIRST_LOGIN_KEY, 1);
             PlayerPrefs.Save();
-            OnClickButtonPlayGuest();
         }
         else
         {
@@ -86,6 +85,7 @@ public class LoginView : BaseView
     {
         LoginType loginType = (LoginType)PlayerPrefs.GetInt(Config.TYPE_LOGIN_KEY, (int)LoginType.NONE);
         Config.loginType = loginType;
+        Debug.Log($"Reconnecting with login type: {Config.loginType}");
         try
         {
             switch (Config.loginType)

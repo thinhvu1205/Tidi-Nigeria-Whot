@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Api;
 using Cysharp.Threading.Tasks;
+using Google.Protobuf;
 using Nakama;
+using Nakama.TinyJson;
 using SimpleJSON;
 using UnityEngine;
 
@@ -48,14 +51,15 @@ public class DataSender
         _ = NetworkManager.INSTANCE.RPCSend(GET_PROFILE, data);
     }
 
-    public static void ChangeCredentials(string newUsername, string oldPassword, string newPassword)
+    public static void ChangeCredentials(string newUsername = "", string oldPassword = "", string newPassword = "")
     {
-        JSONObject data = new()
+        ChangeCredentialsRequest data = new ChangeCredentialsRequest
         {
-            ["OldPassword"] = oldPassword,
-            ["NewPassword"] = newPassword,
-            ["NewUsername"] = newUsername
+            OldPassword = oldPassword,
+            NewPassword = newPassword,
+            NewUsername = newUsername
         };
+        data.OldPassword = string.IsNullOrEmpty(data.OldPassword) ? "" : data.OldPassword;
         _ = NetworkManager.INSTANCE.RPCSend(USER_CHANGE_CREDENTIALS, data);
     }
     #endregion

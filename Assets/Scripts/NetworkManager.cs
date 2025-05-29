@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Api;
 using Cysharp.Threading.Tasks;
 using Globals;
+using Google.Protobuf;
 using Nakama;
+using Nakama.TinyJson;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -63,6 +65,30 @@ public class NetworkManager : MonoBehaviour
                 if (gl.IsReady()) gl.HandleData(apiName, obj);
             }
         });
+    }
+    public async UniTask RPCSend(string apiName, IMessage protoMessage)
+    {
+        try
+        {
+            Debug.Log("--Send--/ " + apiName + "/ " + protoMessage.ToString());
+            IApiRpc rpc = await _SocketIS.RpcAsync(apiName, protoMessage.ToJson().ToString());
+            // if (rpc == null || string.IsNullOrEmpty(rpc.Payload)) return;
+            JSONObject obj = JSON.Parse(rpc.Payload).AsObject;
+            Debug.Log("--Receive--/ " + apiName + "/ " + rpc.Payload);
+            _DataHandlerAs.Add(() =>
+            {
+                _PreHandleData(apiName, obj);
+                for (int i = _ListenerGLs.Count - 1; i >= 0; i--)
+                {
+                    GameListener gl = _ListenerGLs[i];
+                    if (gl.IsReady()) gl.HandleData(apiName, obj);
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"❌ RPC [{apiName}] failed: {e.Message}");
+        }
     }
     #endregion
 
@@ -266,8 +292,8 @@ public class NetworkManager : MonoBehaviour
     public async void PreConnect()
     {
 
-        // _ClientC = new("http", "103.226.250.195", 7353, "defaultkey");
-        _ClientC = new("http", "172.16.56.51", 7350, "defaultkey");
+        _ClientC = new("http", "103.226.250.195", 7353, "defaultkey");
+        // _ClientC = new("http", "172.16.56.51", 7350, "defaultkey");
         string storedSessionToken = PlayerPrefs.GetString(SESSION);
         _SessionIS = null;
         if (!string.IsNullOrEmpty(storedSessionToken))

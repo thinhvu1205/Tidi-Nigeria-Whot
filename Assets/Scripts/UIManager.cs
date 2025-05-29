@@ -87,6 +87,18 @@ public class UIManager : Singleton<UIManager>
         changePasswordView.transform.localScale = Vector3.one;
     }
 
+    public void OpenChangeName()
+    {
+        ChangeNameView changeNameView = Instantiate(LoadPrefabPopup("PopupChangeName"), parentPopups).GetComponent<ChangeNameView>();
+        changeNameView.transform.localScale = Vector3.one;
+    }
+
+    public void OpenProfile()
+    {
+        ProfileView profileView = Instantiate(LoadPrefabPopup("PopupProfile"), parentPopups).GetComponent<ProfileView>();
+        profileView.transform.localScale = Vector3.one;
+    }
+
     public void OpenIAP()
     {
         IAPView iapView = Instantiate(LoadPrefabPopup("PopupIAP"), parentPopups).GetComponent<IAPView>();
@@ -108,17 +120,17 @@ public class UIManager : Singleton<UIManager>
 
     public GameObject LoadPrefabPopup(string name)
     {
-        return LoadPrefab("Popups/" + name);
+        return LoadPrefab("Prefabs/Popups/" + name);
     }
 
     public GameObject LoadPrefabLobby(string name)
     {
-        return LoadPrefab("LobbyViews/" + name);
+        return LoadPrefab("Prefabs/LobbyViews/" + name);
     }
 
     public GameObject LoadPrefabGame(string name)
     {
-        return LoadPrefab("GameViews/" + name);
+        return LoadPrefab("Prefabs/Games/" + name);
     }
 
     // private SkeletonDataAsset LoadSkeletonData(string path)

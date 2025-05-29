@@ -306,7 +306,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7836504184647825108}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2942795770978237210}
+        m_TargetAssemblyTypeName: ChangeNameView, Assembly-CSharp
+        m_MethodName: OnSubmit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2279414419166330705
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,7 +384,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Old password...
+  m_text: User name...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0d2e03eb5e8f744bc83e2e5123fd6713, type: 2}
   m_sharedMaterial: {fileID: -4399956494771798168, guid: 0d2e03eb5e8f744bc83e2e5123fd6713, type: 2}
@@ -558,7 +570,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Change password
+  m_text: Change name
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 278a9d980ebb748d7b54b04567851a84, type: 2}
   m_sharedMaterial: {fileID: -6237254459314091408, guid: 278a9d980ebb748d7b54b04567851a84, type: 2}
@@ -1154,8 +1166,8 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
-  m_InputType: 0
+  m_ContentType: 7
+  m_InputType: 2
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
@@ -1215,8 +1227,9 @@ GameObject:
   - component: {fileID: 5613468040844175224}
   - component: {fileID: 611638543446781441}
   - component: {fileID: 2074381940361877441}
+  - component: {fileID: 2942795770978237210}
   m_Layer: 5
-  m_Name: PopupChangePassword
+  m_Name: PopupChangeName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1281,6 +1294,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2942795770978237210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4402424798258239390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a394ddcf28264c98af49226ac67bf06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPopup: 1
+  effectPopupReverse: 1
+  popupBackground: {fileID: 5012716588223621727}
+  userNameInputField: {fileID: 831928925419167276}
+  passwordInputField: {fileID: 6332297289213025196}
+  reEnterPasswordInputField: {fileID: 5191517418599559173}
 --- !u!1 &4857505931255649946
 GameObject:
   m_ObjectHideFlags: 0
@@ -1294,7 +1325,7 @@ GameObject:
   - component: {fileID: 9059878807257699017}
   - component: {fileID: 831928925419167276}
   m_Layer: 5
-  m_Name: Old Password
+  m_Name: UserName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1976,8 +2007,8 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
-  m_InputType: 0
+  m_ContentType: 7
+  m_InputType: 2
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
@@ -2227,7 +2258,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2040068746300087923}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2942795770978237210}
+        m_TargetAssemblyTypeName: BaseView, Assembly-CSharp
+        m_MethodName: OnClickCloseButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7860957669469777922
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,7 +19,7 @@ public class LobbyView : BaseView
             throw;
         }
     }
-
+    public void OnClickProfile() => UIManager.Instance.OpenProfile();
     public void OnClickLeaderboard() => UIManager.Instance.OpenLeaderboard();
     public void OnClickFreeChips() => UIManager.Instance.OpenFreeChips();
     public void OnClickShop() => UIManager.Instance.OpenShop();
