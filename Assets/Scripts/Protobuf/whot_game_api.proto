@@ -1,0 +1,221 @@
+syntax = "proto3";
+
+package whot;
+
+option go_package = "github.com/nakamaFramework/whot-module/api/whot";
+
+enum CardSuit {
+  SUIT_UNSPECIFIED = 0;
+  SUIT_CIRCLE = 1;
+  SUIT_CROSS = 2;
+  SUIT_STAR = 3;
+  SUIT_SQUARE = 4;
+  SUIT_TRIANGLE = 5;
+}
+
+enum CardRank {
+  RANK_UNSPECIFIED = 0;
+  RANK_1 = 1;
+  RANK_2 = 2;
+  RANK_3 = 3;
+  RANK_4 = 4;
+  RANK_5 = 5;
+  RANK_7 = 6;
+  RANK_8 = 7;
+  RANK_10 = 8;
+  RANK_11 = 9;
+  RANK_12 = 10;
+  RANK_13 = 11;
+  RANK_14 = 12;
+  RANK_20 = 20; 
+}
+
+message Card {
+  CardRank rank = 1;
+  CardSuit suit = 2;
+}
+
+message ListCard {
+  repeated Card cards = 1;
+}
+
+message UpdateTurn {
+  string user_id = 1;
+  int64 countdown = 2;
+}
+
+enum OpCodeRequest {
+
+  OPCODE_UNSPECIFIED = 0;
+
+  // New game round starting.
+  OPCODE_REQUEST_NEW_GAME = 1; 
+  OPCODE_REQUEST_LEAVE_GAME = 2;
+
+  OPCODE_REQUEST_PLAY_CARD = 3;        // client chơi 1 lá
+  OPCODE_REQUEST_DRAW_CARD = 4;        // client yêu cầu rút bài
+  OPCODE_REQUEST_CALL_WHOT = 5;   // nếu client đánh WHOT, call lựa chọn suit
+  OPCODE_USER_INTERACT_CARDS = 6; // client tương tác với cards
+}
+
+
+enum OpCodeUpdate {
+  OPCODE_UPDATE_UNSPECIFIED = 0;
+  OPCODE_UPDATE_TABLE = 1;  // message UpdateTable
+  OPCODE_UPDATE_DEAL = 2;   // message UpdateDeal
+  OPCODE_UPDATE_FINISH = 3; // message UpdateFinish
+  OPCODE_UPDATE_REJECTED = 4;
+  OPCODE_UPDATE_GAME_STATE = 5;
+
+  OPCODE_UPDATE_CARD_PLAYED = 6;       // ai đó đã đánh bài
+  OPCODE_UPDATE_DRAW_RESULT = 7;       // kết quả rút bài (ai đó rút)
+  OPCODE_UPDATE_CALL_WHOT_RESULT = 8;  // kết quả chọn suit sau khi đánh WHOT
+  OPCODE_UPDATE_TURN = 9;       // thông báo tới lượt ai
+
+  OPCODE_UPDATE_CARD_STATE = 10;
+  OPCODE_UPDATE_WALLET = 11;
+  OPCODE_KICK_OFF_THE_TABLE = 12;
+  OPCODE_UPDATE_USER_INFO = 13;
+}
+
+enum GameState {
+  GameStateUnknown = 0;
+  GameStateIdle = 1;
+  GameStateMatching = 2;
+  GameStatePreparing = 3;
+  GameStatePlay = 4;
+  GameStateReward = 5;
+  GameStateFinish = 6;
+}
+
+// Message data sent by client to server representing the cards was organize.
+message NewGame {}
+
+message UpdateTable {
+  repeated Player players = 1;
+  repeated Player playing_players = 2;
+  repeated Player join_players = 3;
+  repeated Player leave_players = 4;
+  int64 bet = 5;         // chip bet info
+  int64 vip = 6;         // min level vip require join room
+  int64 time_play = 7;   // timestamp play game
+  int64 remain_time = 8; // remain time to end game
+  GameState game_state = 9;
+  Jackpot jp_treasure = 10;
+}
+
+message PresenceCards {
+  string presence = 1;
+  repeated Card cards = 2;
+}
+
+// Complete game round with winner announcement.
+message UpdateDeal { 
+  PresenceCards presence_card = 1;
+  map<string,CardEvent> card_event = 2;
+  Card top_card = 3; // card on top of deck
+}
+
+
+message UpdateGameState {
+  GameState state = 1;
+  int64 count_down = 2;
+  repeated PresenceCards presenceCards = 3;
+}
+
+message UpdateCardState {
+  string user_id = 1;
+  CardEvent event = 2;
+  Card played_card = 3;
+  Card top_card = 4;
+  repeated Card cards_after = 5;
+  CardEffect effect = 6;
+  int32 pick_penalty = 7;
+  string target_user_id = 8;
+}
+
+enum CardEvent {
+  NONE = 0;         
+  PLAY = 1;         
+  DRAW = 2;         
+  PASS = 3;           
+}
+
+enum CardEffect {
+  EFFECT_NONE = 0;
+  HOLD_ON = 1;
+  PICK_TWO = 2;
+  PICK_THREE = 3;
+  SUSPENSION = 4;
+  GENERAL_MARKET = 5;
+  WHOT = 6;
+  CHOICE_SHAPE_GHOST = 7;
+}
+
+enum WhotEndGameReason {
+  REASON_NORMAL_WIN = 0;      
+  REASON_DECK_EMPTY = 1;         
+}
+
+message WhotScoreResult {
+  int64 total_points = 1;       
+  int32 remaining_cards = 2;     
+  bool is_winner = 3;            
+  double win_factor = 4;         
+}
+
+message WhotPlayerResult {
+  string user_id = 1;
+  WhotScoreResult score = 2;     
+  repeated Card remaining_cards = 3;
+}
+
+message UpdateFinish {
+  repeated WhotPlayerResult results = 1;
+  WhotEndGameReason end_reason = 2;
+  string winner_id = 3; 
+  Jackpot jackpot = 4;
+  Jackpot jp_treasure = 5;
+}
+
+message BalanceUpdate {
+  string user_id = 1;
+  int64 amount_chip_before = 2;
+  int64 amount_chip_current = 3;
+  int64 amount_chip_add = 4;
+  int64 amout_chip_bet = 5;
+  int64 amout_chip_fee = 6;
+  int64 amout_chip_add_prefee = 7;
+  int64 total_chip_in_match = 8;
+}
+
+message BalanceResult {
+  repeated BalanceUpdate updates = 1;
+  Jackpot jackpot = 2;
+}
+
+message Player {
+  string id = 1;
+  string user_name = 2;
+  string wallet = 3;
+  bool is_playing = 4;
+  ListCard cards = 5;
+  int64 vip_level = 6;
+  string avatar_id = 7;
+  int64 sid = 8;
+  int32 order = 9;
+}
+
+message Jackpot {
+  int64 id = 1;
+  string user_id = 2;
+  string game_code = 3;
+  int64 chips = 4;
+  int64 create_time_unix = 5;
+}
+
+message HitJackpotHistory{
+  string user_name = 1;
+  int64 chips = 2;
+  int64 create_time_unix = 3;
+}
