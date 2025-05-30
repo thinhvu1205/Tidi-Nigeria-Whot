@@ -1,18 +1,36 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ChangePasswordView : BaseView
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private TMP_InputField currentPasswordInputField, newPasswordInputField, reEnterPasswordInputField;
 
-    // Update is called once per frame
-    void Update()
+    public void OnSubmit()
     {
-        
+        string currentPassword = currentPasswordInputField.text;
+        string newPassword = newPasswordInputField.text;
+        string reEnterPassword = reEnterPasswordInputField.text;
+
+        if (string.IsNullOrEmpty(currentPassword) || string.IsNullOrEmpty(newPassword) || string.IsNullOrEmpty(reEnterPassword))
+        {
+            return;
+        }
+
+        if (newPassword != reEnterPassword)
+        {
+            return;
+        }
+
+        try
+        {
+            DataSender.ChangePassword(oldPassword: currentPassword, password: newPassword);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error changing password: {ex.Message}");
+        }
     }
 }

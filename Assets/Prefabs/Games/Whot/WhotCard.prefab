@@ -161,6 +161,7 @@ GameObject:
   - component: {fileID: 3351181392738078285}
   - component: {fileID: 721602168598566132}
   - component: {fileID: 7345952637751247698}
+  - component: {fileID: 2965661311696090271}
   m_Layer: 5
   m_Name: Front
   m_TagString: Untagged
@@ -225,6 +226,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2965661311696090271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8711946184245856514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a6360590103b48b9a60e9d4322ffabd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardImage: {fileID: 7345952637751247698}
+  cardBackImage: {fileID: 1864799958946955104}
 --- !u!1 &9120301256744507343
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,8 +249,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5852745355828655244}
+  - component: {fileID: 4742981569650111606}
   m_Layer: 5
-  m_Name: Card
+  m_Name: WhotCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -263,3 +279,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 112, y: 149}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4742981569650111606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9120301256744507343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a6360590103b48b9a60e9d4322ffabd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardImage: {fileID: 7345952637751247698}
+  cardBackImage: {fileID: 1864799958946955104}

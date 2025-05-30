@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using DG.Tweening;
+using Spine.Unity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -485,6 +486,20 @@ namespace Globals
         public static string Base64Decode(string base64EncodedData)
         {
             return Encoding.UTF8.GetString(Convert.FromBase64String(base64EncodedData));
+        }
+        #endregion
+
+        #region Spine Animation
+        public void PlayAnimation(SkeletonGraphic skeletonGraphic, string animationName, bool loop)
+        {
+            if (skeletonGraphic != null && skeletonGraphic.AnimationState != null)
+            {
+                skeletonGraphic.AnimationState.SetAnimation(0, animationName, loop);
+            }
+            else
+            {
+                Debug.LogWarning("SkeletonGraphic or AnimationState is null!");
+            }
         }
         #endregion
     }

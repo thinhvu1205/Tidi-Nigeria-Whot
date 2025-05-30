@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Api;
+using Cysharp.Threading.Tasks;
 using Globals;
 using TMPro;
 using UnityEngine;
@@ -31,7 +34,11 @@ public class LoginView : BaseView
         loginView.SetActive(false);
     }
 
-    public async void OnClickButtonPlayGuest()
+    public void OnClickButtonPlayGuest()
+    {
+        HandleClickButtonPlayGuest().Forget();
+    }
+    public async UniTask HandleClickButtonPlayGuest()
     {
         Config.loginType = LoginType.PLAYNOW;
         PlayerPrefs.SetInt(Config.TYPE_LOGIN_KEY, (int)Config.loginType);
@@ -40,9 +47,11 @@ public class LoginView : BaseView
         try
         {
             await DataSender.LoginAsGuest();
+            await OpenLobbyView();
         }
         catch (Exception e)
         {
+            Debug.LogError($"Error during guest login: {e.Message}");
             throw;
         }
     }
@@ -60,7 +69,16 @@ public class LoginView : BaseView
         PlayerPrefs.Save();
         string id = idInputField.text;
         string password = passwordInputField.text;
-        await DataSender.LoginWithAccount(id, password);
+
+        try
+        {
+            await DataSender.LoginWithAccount(id, password);
+            await OpenLobbyView();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error during login with ID: {e.Message}");
+        }
 
     }
     #endregion
@@ -91,7 +109,7 @@ public class LoginView : BaseView
             switch (Config.loginType)
             {
                 case LoginType.PLAYNOW:
-                    OnClickButtonPlayGuest();
+                    await HandleClickButtonPlayGuest();
                     break;
                 case LoginType.NORMAL:
                     string id = Config.userName;
@@ -102,10 +120,41 @@ public class LoginView : BaseView
                     Debug.LogWarning("Unknown login type, defaulting to guest login.");
                     break;
             }
+            await OpenLobbyView();
         }
         catch (Exception)
         {
             throw;
         }
+    }
+
+    private async Task OpenLobbyView()
+    {
+        try
+        {
+            if (Config.isLoginSuccessful)
+            {
+                Profile profile = await DataSender.GetProfile();
+                UpdateProfile(profile);
+                SceneManager.LoadScene(Config.MAIN_SCENE);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"err : {e.Message}");
+        }
+    }
+
+    private void UpdateProfile(Profile profile)
+    {
+        User.userMain = new()
+        {
+            userId = profile.UserId,
+            displayName = profile.DisplayName,
+            avatarId = profile.AvatarId,
+            accountChip = profile.AccountChip.ToString(),
+            bankChip = profile.BankChip.ToString(),
+        };
+
     }
 }

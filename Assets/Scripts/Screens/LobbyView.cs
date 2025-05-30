@@ -1,24 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using Globals;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LobbyView : BaseView
 {
-    #region Buttons
-    public void Logout()
-    {
-        try
-        {
-            DataSender.Logout();
-        }
-        catch (System.Exception)
-        {
+    [SerializeField] private TextMeshProUGUI displayNameText, userIdText, accountChip;
 
-            throw;
+    protected override void Awake()
+    {
+        base.Awake();
+        UpdateVisuals();
+    }
+
+    private void UpdateVisuals()
+    {
+        if (User.userMain != null)
+        {
+            displayNameText.text = User.userMain.displayName;
+            userIdText.text = "ID: " + User.userMain.userId;
+            accountChip.text = User.userMain.accountChip;
         }
     }
+    #region Buttons
+
     public void OnClickProfile() => UIManager.Instance.OpenProfile();
     public void OnClickLeaderboard() => UIManager.Instance.OpenLeaderboard();
     public void OnClickFreeChips() => UIManager.Instance.OpenFreeChips();

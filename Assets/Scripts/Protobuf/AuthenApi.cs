@@ -25,46 +25,41 @@ namespace Api {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChBhdXRoZW5fYXBpLnByb3RvEgNhcGkiPwoVQ2hhbmdlUGFzc3dvcmRSZXF1",
-            "ZXN0EhQKDG9sZF9wYXNzd29yZBgBIAEoCRIQCghwYXNzd29yZBgCIAEoCSKe",
-            "AQoYQ2hhbmdlQ3JlZGVudGlhbHNSZXF1ZXN0EhkKDG9sZF9wYXNzd29yZBgB",
-            "IAEoCUgAiAEBEhkKDG5ld191c2VybmFtZRgCIAEoCUgBiAEBEhkKDG5ld19w",
-            "YXNzd29yZBgDIAEoCUgCiAEBQg8KDV9vbGRfcGFzc3dvcmRCDwoNX25ld191",
-            "c2VybmFtZUIPCg1fbmV3X3Bhc3N3b3JkIjYKD1JlZ2lzdGVyUmVxdWVzdBIR",
-            "Cgl1c2VyX25hbWUYASABKAkSEAoIcGFzc3dvcmQYAiABKAkilAUKB1Byb2Zp",
-            "bGUSDwoHdXNlcl9pZBgBIAEoCRIRCgl1c2VyX25hbWUYAiABKAkSFAoMZGlz",
-            "cGxheV9uYW1lGAMgASgJEhIKCmF2YXRhcl91cmwYBCABKAkSDgoGc3RhdHVz",
-            "GAUgASgJEhQKDGFjY291bnRfY2hpcBgGIAEoAxIRCgliYW5rX2NoaXAYByAB",
-            "KAMSEAoIcmVmX2NvZGUYCCABKAkSEAoIbGFuZ190YWcYCSABKAkSEgoKbGlu",
-            "a19ncm91cBgKIAEoCRIXCg9saW5rX2ZhbnBhZ2VfZmIYCyABKAkSEgoKYXBw",
-            "X2NvbmZpZxgMIAEoCRIRCglhdmF0YXJfaWQYDSABKAkSEwoLcmVnaXN0cmFi",
-            "bGUYDiABKAgSEQoJdmlwX2xldmVsGA8gASgDEh0KFWxhc3Rfb25saW5lX3Rp",
-            "bWVfdW5peBgQIAEoAxIYChBjcmVhdGVfdGltZV91bml4GBEgASgDEiIKGnJl",
-            "bWFpbl90aW1lX2lucHV0X3JlZl9jb2RlGBIgASgDEiYKD2xhbmdfYXZhaWxh",
-            "YmxlcxgTIAMoCzINLmFwaS5MYW5nQ29kZRIoCg1wbGF5aW5nX21hdGNoGBQg",
-            "ASgLMhEuYXBpLlBsYXlpbmdNYXRjaBIRCglkZXZpY2VfaWQYFSABKAkSFgoO",
-            "bGFzdF9kZXZpY2VfaWQYFiABKAkSEAoIcmVmX2dhbWUYFyABKAkSEgoKY3Vy",
-            "cmVudF9pcBgYIAEoCRIRCgl2aXBfcG9pbnQYGSABKAMSEQoJaXNfb25saW5l",
-            "GBogASgIEhEKCWlzX2Jhbm5lZBgbIAEoCBIXCg9sYXN0X2xvZ2luX3VuaXgY",
-            "HCABKAMSEAoIdXNlcl9zaWQYHSABKAMiXAoMUGxheWluZ01hdGNoEgwKBGNv",
-            "ZGUYASABKAkSEAoIbWF0Y2hfaWQYAiABKAkSEgoKbGVhdmVfdGltZRgDIAEo",
-            "AxILCgNtY2IYBCABKAMSCwoDYmV0GAUgASgDIi0KC0xpc3RQcm9maWxlEh4K",
-            "CHByb2ZpbGVzGAEgAygLMgwuYXBpLlByb2ZpbGUi0QEKDVNpbXBsZVByb2Zp",
-            "bGUSDwoHdXNlcl9pZBgBIAEoCRIRCgl1c2VyX25hbWUYAiABKAkSFAoMZGlz",
-            "cGxheV9uYW1lGAMgASgJEg4KBnN0YXR1cxgEIAEoCRIUCgxhY2NvdW50X2No",
-            "aXAYBSABKAMSEQoJYXZhdGFyX2lkGAYgASgJEhEKCXZpcF9sZXZlbBgHIAEo",
-            "AxIoCg1wbGF5aW5nX21hdGNoGAggASgLMhEuYXBpLlBsYXlpbmdNYXRjaBIQ",
-            "Cgh1c2VyX3NpZBgJIAEoAyI5ChFMaXN0U2ltcGxlUHJvZmlsZRIkCghwcm9m",
-            "aWxlcxgBIAMoCzISLmFwaS5TaW1wbGVQcm9maWxlIicKFlF1aWNrQ2hhdFVw",
-            "ZGF0ZVJlcXVlc3QSDQoFdGV4dHMYASADKAkiIgoRUXVpY2tDaGF0UmVzcG9u",
-            "c2USDQoFdGV4dHMYASADKAkiRgoITGFuZ0NvZGUSEAoIaXNvX2NvZGUYASAB",
-            "KAkSFAoMZGlzcGxheV9uYW1lGAIgASgJEhIKCnNvdXJjZV91cmwYAyABKAlC",
-            "PFo6Z2l0aHViLmNvbS9Mb25ncGhhbTk4L3RlZW4tcGF0dGktc2VydmVyL2Nv",
-            "bW1vbi9wcm90bztwcm90b2IGcHJvdG8z"));
+            "ZXN0EhQKDG9sZF9wYXNzd29yZBgBIAEoCRIQCghwYXNzd29yZBgCIAEoCSI2",
+            "Cg9SZWdpc3RlclJlcXVlc3QSEQoJdXNlcl9uYW1lGAEgASgJEhAKCHBhc3N3",
+            "b3JkGAIgASgJIpQFCgdQcm9maWxlEg8KB3VzZXJfaWQYASABKAkSEQoJdXNl",
+            "cl9uYW1lGAIgASgJEhQKDGRpc3BsYXlfbmFtZRgDIAEoCRISCgphdmF0YXJf",
+            "dXJsGAQgASgJEg4KBnN0YXR1cxgFIAEoCRIUCgxhY2NvdW50X2NoaXAYBiAB",
+            "KAMSEQoJYmFua19jaGlwGAcgASgDEhAKCHJlZl9jb2RlGAggASgJEhAKCGxh",
+            "bmdfdGFnGAkgASgJEhIKCmxpbmtfZ3JvdXAYCiABKAkSFwoPbGlua19mYW5w",
+            "YWdlX2ZiGAsgASgJEhIKCmFwcF9jb25maWcYDCABKAkSEQoJYXZhdGFyX2lk",
+            "GA0gASgJEhMKC3JlZ2lzdHJhYmxlGA4gASgIEhEKCXZpcF9sZXZlbBgPIAEo",
+            "AxIdChVsYXN0X29ubGluZV90aW1lX3VuaXgYECABKAMSGAoQY3JlYXRlX3Rp",
+            "bWVfdW5peBgRIAEoAxIiChpyZW1haW5fdGltZV9pbnB1dF9yZWZfY29kZRgS",
+            "IAEoAxImCg9sYW5nX2F2YWlsYWJsZXMYEyADKAsyDS5hcGkuTGFuZ0NvZGUS",
+            "KAoNcGxheWluZ19tYXRjaBgUIAEoCzIRLmFwaS5QbGF5aW5nTWF0Y2gSEQoJ",
+            "ZGV2aWNlX2lkGBUgASgJEhYKDmxhc3RfZGV2aWNlX2lkGBYgASgJEhAKCHJl",
+            "Zl9nYW1lGBcgASgJEhIKCmN1cnJlbnRfaXAYGCABKAkSEQoJdmlwX3BvaW50",
+            "GBkgASgDEhEKCWlzX29ubGluZRgaIAEoCBIRCglpc19iYW5uZWQYGyABKAgS",
+            "FwoPbGFzdF9sb2dpbl91bml4GBwgASgDEhAKCHVzZXJfc2lkGB0gASgDIlwK",
+            "DFBsYXlpbmdNYXRjaBIMCgRjb2RlGAEgASgJEhAKCG1hdGNoX2lkGAIgASgJ",
+            "EhIKCmxlYXZlX3RpbWUYAyABKAMSCwoDbWNiGAQgASgDEgsKA2JldBgFIAEo",
+            "AyItCgtMaXN0UHJvZmlsZRIeCghwcm9maWxlcxgBIAMoCzIMLmFwaS5Qcm9m",
+            "aWxlItEBCg1TaW1wbGVQcm9maWxlEg8KB3VzZXJfaWQYASABKAkSEQoJdXNl",
+            "cl9uYW1lGAIgASgJEhQKDGRpc3BsYXlfbmFtZRgDIAEoCRIOCgZzdGF0dXMY",
+            "BCABKAkSFAoMYWNjb3VudF9jaGlwGAUgASgDEhEKCWF2YXRhcl9pZBgGIAEo",
+            "CRIRCgl2aXBfbGV2ZWwYByABKAMSKAoNcGxheWluZ19tYXRjaBgIIAEoCzIR",
+            "LmFwaS5QbGF5aW5nTWF0Y2gSEAoIdXNlcl9zaWQYCSABKAMiOQoRTGlzdFNp",
+            "bXBsZVByb2ZpbGUSJAoIcHJvZmlsZXMYASADKAsyEi5hcGkuU2ltcGxlUHJv",
+            "ZmlsZSInChZRdWlja0NoYXRVcGRhdGVSZXF1ZXN0Eg0KBXRleHRzGAEgAygJ",
+            "IiIKEVF1aWNrQ2hhdFJlc3BvbnNlEg0KBXRleHRzGAEgAygJIkYKCExhbmdD",
+            "b2RlEhAKCGlzb19jb2RlGAEgASgJEhQKDGRpc3BsYXlfbmFtZRgCIAEoCRIS",
+            "Cgpzb3VyY2VfdXJsGAMgASgJQjxaOmdpdGh1Yi5jb20vTG9uZ3BoYW05OC90",
+            "ZWVuLXBhdHRpLXNlcnZlci9jb21tb24vcHJvdG87cHJvdG9iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.ChangePasswordRequest), global::Api.ChangePasswordRequest.Parser, new[]{ "OldPassword", "Password" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.ChangeCredentialsRequest), global::Api.ChangeCredentialsRequest.Parser, new[]{ "OldPassword", "NewUsername", "NewPassword" }, new[]{ "OldPassword", "NewUsername", "NewPassword" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.RegisterRequest), global::Api.RegisterRequest.Parser, new[]{ "UserName", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.Profile), global::Api.Profile.Parser, new[]{ "UserId", "UserName", "DisplayName", "AvatarUrl", "Status", "AccountChip", "BankChip", "RefCode", "LangTag", "LinkGroup", "LinkFanpageFb", "AppConfig", "AvatarId", "Registrable", "VipLevel", "LastOnlineTimeUnix", "CreateTimeUnix", "RemainTimeInputRefCode", "LangAvailables", "PlayingMatch", "DeviceId", "LastDeviceId", "RefGame", "CurrentIp", "VipPoint", "IsOnline", "IsBanned", "LastLoginUnix", "UserSid" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.PlayingMatch), global::Api.PlayingMatch.Parser, new[]{ "Code", "MatchId", "LeaveTime", "Mcb", "Bet" }, null, null, null, null),
@@ -316,320 +311,6 @@ namespace Api {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class ChangeCredentialsRequest : pb::IMessage<ChangeCredentialsRequest>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<ChangeCredentialsRequest> _parser = new pb::MessageParser<ChangeCredentialsRequest>(() => new ChangeCredentialsRequest());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<ChangeCredentialsRequest> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[1]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ChangeCredentialsRequest() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ChangeCredentialsRequest(ChangeCredentialsRequest other) : this() {
-      oldPassword_ = other.oldPassword_;
-      newUsername_ = other.newUsername_;
-      newPassword_ = other.newPassword_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ChangeCredentialsRequest Clone() {
-      return new ChangeCredentialsRequest(this);
-    }
-
-    /// <summary>Field number for the "old_password" field.</summary>
-    public const int OldPasswordFieldNumber = 1;
-    private readonly static string OldPasswordDefaultValue = "";
-
-    private string oldPassword_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string OldPassword {
-      get { return oldPassword_ ?? OldPasswordDefaultValue; }
-      set {
-        oldPassword_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-    /// <summary>Gets whether the "old_password" field is set</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasOldPassword {
-      get { return oldPassword_ != null; }
-    }
-    /// <summary>Clears the value of the "old_password" field</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearOldPassword() {
-      oldPassword_ = null;
-    }
-
-    /// <summary>Field number for the "new_username" field.</summary>
-    public const int NewUsernameFieldNumber = 2;
-    private readonly static string NewUsernameDefaultValue = "";
-
-    private string newUsername_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string NewUsername {
-      get { return newUsername_ ?? NewUsernameDefaultValue; }
-      set {
-        newUsername_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-    /// <summary>Gets whether the "new_username" field is set</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasNewUsername {
-      get { return newUsername_ != null; }
-    }
-    /// <summary>Clears the value of the "new_username" field</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearNewUsername() {
-      newUsername_ = null;
-    }
-
-    /// <summary>Field number for the "new_password" field.</summary>
-    public const int NewPasswordFieldNumber = 3;
-    private readonly static string NewPasswordDefaultValue = "";
-
-    private string newPassword_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string NewPassword {
-      get { return newPassword_ ?? NewPasswordDefaultValue; }
-      set {
-        newPassword_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-    /// <summary>Gets whether the "new_password" field is set</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasNewPassword {
-      get { return newPassword_ != null; }
-    }
-    /// <summary>Clears the value of the "new_password" field</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearNewPassword() {
-      newPassword_ = null;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as ChangeCredentialsRequest);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(ChangeCredentialsRequest other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (OldPassword != other.OldPassword) return false;
-      if (NewUsername != other.NewUsername) return false;
-      if (NewPassword != other.NewPassword) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (HasOldPassword) hash ^= OldPassword.GetHashCode();
-      if (HasNewUsername) hash ^= NewUsername.GetHashCode();
-      if (HasNewPassword) hash ^= NewPassword.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (HasOldPassword) {
-        output.WriteRawTag(10);
-        output.WriteString(OldPassword);
-      }
-      if (HasNewUsername) {
-        output.WriteRawTag(18);
-        output.WriteString(NewUsername);
-      }
-      if (HasNewPassword) {
-        output.WriteRawTag(26);
-        output.WriteString(NewPassword);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (HasOldPassword) {
-        output.WriteRawTag(10);
-        output.WriteString(OldPassword);
-      }
-      if (HasNewUsername) {
-        output.WriteRawTag(18);
-        output.WriteString(NewUsername);
-      }
-      if (HasNewPassword) {
-        output.WriteRawTag(26);
-        output.WriteString(NewPassword);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (HasOldPassword) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(OldPassword);
-      }
-      if (HasNewUsername) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(NewUsername);
-      }
-      if (HasNewPassword) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(NewPassword);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(ChangeCredentialsRequest other) {
-      if (other == null) {
-        return;
-      }
-      if (other.HasOldPassword) {
-        OldPassword = other.OldPassword;
-      }
-      if (other.HasNewUsername) {
-        NewUsername = other.NewUsername;
-      }
-      if (other.HasNewPassword) {
-        NewPassword = other.NewPassword;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            OldPassword = input.ReadString();
-            break;
-          }
-          case 18: {
-            NewUsername = input.ReadString();
-            break;
-          }
-          case 26: {
-            NewPassword = input.ReadString();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 10: {
-            OldPassword = input.ReadString();
-            break;
-          }
-          case 18: {
-            NewUsername = input.ReadString();
-            break;
-          }
-          case 26: {
-            NewPassword = input.ReadString();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class RegisterRequest : pb::IMessage<RegisterRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -644,7 +325,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[2]; }
+      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -879,7 +560,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[3]; }
+      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2111,7 +1792,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[4]; }
+      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2457,7 +2138,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[5]; }
+      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2644,7 +2325,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[6]; }
+      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3147,7 +2828,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[7]; }
+      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3334,7 +3015,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[8]; }
+      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3521,7 +3202,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[9]; }
+      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3708,7 +3389,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[10]; }
+      get { return global::Api.AuthenApiReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

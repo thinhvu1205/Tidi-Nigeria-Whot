@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -25,10 +26,11 @@ public class ChangeNameView : BaseView
 
         try
         {
-            DataSender.ChangeCredentials(newUsername: userName, newPassword: password);
+            DataSender.LinkUsername(username: userName, password: password);
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
+            Debug.LogError($"Error changing name: {ex.Message}");
         }
     }
 }

@@ -5,7 +5,6 @@ using Api;
 using Cysharp.Threading.Tasks;
 using Google.Protobuf;
 using Nakama;
-using Nakama.TinyJson;
 using SimpleJSON;
 using UnityEngine;
 
@@ -14,7 +13,8 @@ public class DataSender
     #region ApiNames
     public const string get_world_with_areas = "get_world_with_areas";
     public const string GET_PROFILE = "get_profile";
-    public const string USER_CHANGE_CREDENTIALS = "user_change_credentials";
+    public const string USER_CHANGE_PASS = "user_change_pass";
+    public const string LINK_USERNAME = "link_username";
     #endregion
 
     #region RPC
@@ -24,7 +24,7 @@ public class DataSender
         {
             ["id"] = idArea
         };
-        _ = NetworkManager.INSTANCE.RPCSend(get_world_with_areas, data);
+        _ = NetworkManager.INSTANCE.RPCSend(get_world_with_areas);
     }
 
     #region Login
@@ -44,23 +44,33 @@ public class DataSender
     }
     #endregion
 
-    public static async UniTask GetProfile()
+    public static async UniTask<Profile> GetProfile()
     {
-        JSONObject data = new();
+        var response = await NetworkManager.INSTANCE.RPCSend(GET_PROFILE);
 
-        await NetworkManager.INSTANCE.RPCSend(GET_PROFILE, data);
+        byte[] bytes = Convert.FromBase64String(response.Payload);
+        Profile profile = Profile.Parser.ParseFrom(bytes);
+        return profile;
     }
 
-    public static void ChangeCredentials(string newUsername = "", string oldPassword = "", string newPassword = "")
+    public static void ChangePassword(string oldPassword = "", string password = "")
     {
-        ChangeCredentialsRequest data = new ChangeCredentialsRequest
+        ChangePasswordRequest data = new()
         {
             OldPassword = oldPassword,
-            NewPassword = newPassword,
-            NewUsername = newUsername
+            Password = password
         };
-        data.OldPassword = string.IsNullOrEmpty(data.OldPassword) ? "" : data.OldPassword;
-        _ = NetworkManager.INSTANCE.RPCSend(USER_CHANGE_CREDENTIALS, data);
+        _ = NetworkManager.INSTANCE.RPCSend(USER_CHANGE_PASS, data);
+    }
+
+    public static void LinkUsername(string username = "", string password = "")
+    {
+        RegisterRequest data = new()
+        {
+            UserName = username,
+            Password = password
+        };
+        _ = NetworkManager.INSTANCE.RPCSend(LINK_USERNAME, data);
     }
     #endregion
 

@@ -49,46 +49,48 @@ public class NetworkManager : MonoBehaviour
     #endregion
 
     #region RPC
-    public async UniTask RPCSend(string apiName, JSONObject jsonData)
-    {
-        Debug.Log("--Send--/ " + apiName + "/ " + jsonData.ToString());
-        IApiRpc rpc = await _SocketIS.RpcAsync(apiName, jsonData.ToString());
-        if (rpc == null || string.IsNullOrEmpty(rpc.Payload)) return;
-        JSONObject obj = JSON.Parse(rpc.Payload).AsObject;
-        Debug.Log("--Receive--/ " + apiName + "/ " + rpc.Payload);
-        _DataHandlerAs.Add(() =>
-        {
-            _PreHandleData(apiName, obj);
-            for (int i = _ListenerGLs.Count - 1; i >= 0; i--)
-            {
-                GameListener gl = _ListenerGLs[i];
-                if (gl.IsReady()) gl.HandleData(apiName, obj);
-            }
-        });
-    }
-    public async UniTask RPCSend(string apiName, IMessage protoMessage)
+    // public async UniTask RPCSend(string apiName, JSONObject jsonData)
+    // {
+    //     Debug.Log("--Send--/ " + apiName + "/ " + jsonData.ToString());
+    //     IApiRpc rpc = await _SocketIS.RpcAsync(apiName, jsonData.ToString());
+    //     if (rpc == null || string.IsNullOrEmpty(rpc.Payload)) return;
+    //     JSONObject obj = JSON.Parse(rpc.Payload).AsObject;
+    //     Debug.Log("--Receive--/ " + apiName + "/ " + rpc.Payload);
+    //     _DataHandlerAs.Add(() =>
+    //     {
+    //         _PreHandleData(apiName, obj);
+    //         for (int i = _ListenerGLs.Count - 1; i >= 0; i--)
+    //         {
+    //             GameListener gl = _ListenerGLs[i];
+    //             if (gl.IsReady()) gl.HandleData(apiName, obj);
+    //         }
+    //     });
+    // }
+    public async UniTask<IApiRpc> RPCSend(string apiName, IMessage protoMessage = null)
     {
         try
         {
-            Debug.Log("--Send--/ " + apiName + "/ " + protoMessage.ToString());
-            IApiRpc rpc = await _SocketIS.RpcAsync(apiName, protoMessage.ToString());
+            Debug.Log("--Send--/ " + apiName + "/ " + protoMessage?.ToString());
+            IApiRpc rpc = await _SocketIS.RpcAsync(apiName, protoMessage?.ToByteArray().ToString());
             Debug.Log("RPC: " + rpc.ToString());
-            if (rpc == null || string.IsNullOrEmpty(rpc.Payload)) return;
-            JSONObject obj = JSON.Parse(rpc.Payload).AsObject;
+            if (rpc == null || string.IsNullOrEmpty(rpc.Payload)) return null;
+            // JSONObject obj = JSON.Parse(rpc.Payload).AsObject;
             Debug.Log("--Receive--/ " + apiName + "/ " + rpc.Payload);
-            _DataHandlerAs.Add(() =>
-            {
-                _PreHandleData(apiName, obj);
-                for (int i = _ListenerGLs.Count - 1; i >= 0; i--)
-                {
-                    GameListener gl = _ListenerGLs[i];
-                    if (gl.IsReady()) gl.HandleData(apiName, obj);
-                }
-            });
+            // _DataHandlerAs.Add(() =>
+            // {
+            //     _PreHandleData(apiName, obj);
+            //     for (int i = _ListenerGLs.Count - 1; i >= 0; i--)
+            //     {
+            //         GameListener gl = _ListenerGLs[i];
+            //         if (gl.IsReady()) gl.HandleData(apiName, obj);
+            //     }
+            // });
+            return rpc;
         }
         catch (Exception e)
         {
             Debug.LogError($"❌ RPC [{apiName}] failed: {e.Message}");
+            return null;
         }
     }
     #endregion
@@ -174,8 +176,6 @@ public class NetworkManager : MonoBehaviour
         Debug.Log($"🔐 Logged in! Token: {_SessionIS.AuthToken}, RefreshToken: {_SessionIS.RefreshToken}");
         Debug.Log($"🔐 Session:{_SessionIS}");
         await ConnectSocketAsync();
-        await DataSender.GetProfile();
-        SceneManager.LoadScene(Config.MAIN_SCENE);
     }
 
     public async UniTask<bool> TryLoginWithNewSessionAsync(string username, string password)
@@ -186,11 +186,6 @@ public class NetworkManager : MonoBehaviour
             {
                 case LoginType.NORMAL:
                     Debug.Log("Đăng nhập bằng tài khoản thường.");
-                    if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-                    {
-                        Debug.LogWarning("⚠️ Tên đăng nhập hoặc mật khẩu không được để trống.");
-                        return false;
-                    }
                     _SessionIS = await _ClientC.AuthenticateEmailAsync("", password, username, create: false);
                     break;
 
@@ -292,11 +287,12 @@ public class NetworkManager : MonoBehaviour
     private void _OnConnectCb() { Debug.Log("Socket Connected"); }
     private void _OnCloseCb() { Debug.Log("Socket Closed"); }
     private void _OnErrorCb(Exception exception) { Debug.Log("Socket Error: " + exception.ToString()); }
+
+    #region Config
     public void PreConnect()
     {
-
-        _ClientC = new Client("http", "103.226.250.195", 7353, "defaultkey");
-        // _ClientC = new("http", "172.16.56.51", 7350, "defaultkey");
+        // _ClientC = new Client("http", "103.226.250.195", 7353, "defaultkey");
+        _ClientC = new Client("http", "172.16.56.51", 7350, "defaultkey");
         string storedSessionToken = PlayerPrefs.GetString(SESSION);
         _SessionIS = null;
         if (!string.IsNullOrEmpty(storedSessionToken))
@@ -347,6 +343,7 @@ public class NetworkManager : MonoBehaviour
             });
         };
     }
+    #endregion
 
     private async UniTask ConnectSocketAsync()
     {
@@ -376,5 +373,13 @@ public class NetworkManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         PreConnect();
         RestoreSession();
+
+
+// #if UNITY_EDITOR
+//         if (SceneManager.GetActiveScene().name != "Login")
+//         {
+//             SceneManager.LoadScene("Login");
+//         }
+// #endif
     }
 }

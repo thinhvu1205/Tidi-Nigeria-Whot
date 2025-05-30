@@ -21,7 +21,7 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenShop()
     {
-        ShopView shopView = Instantiate(LoadPrefabPopup("ExchangeView"), parentLobby).GetComponent<ShopView>();
+        ShopView shopView = Instantiate(LoadPrefabLobby("ShopView"), parentLobby).GetComponent<ShopView>();
         shopView.transform.localScale = Vector3.one;
     }
 
