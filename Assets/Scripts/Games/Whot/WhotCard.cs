@@ -1,16 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Api;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class WhotCard : MonoBehaviour
 {
-    [SerializeField] private Image cardImage, cardBackImage;
-
+    public event EventHandler<OnCardSelectedEventArg> OnCardSelected;
+    public class OnCardSelectedEventArg : EventArgs
+    {
+        public bool isSelected;
+    }
+    [SerializeField] private Image cardImage, cardBackImage, lightImage;
+    [SerializeField] private Sprite backSprite;
     private CardSuit suit;
     private CardRank value;
+    private Vector2 position;
+    private bool isSelected = false;
 
+    public CardSuit GetCardSuit() => suit;
+    public CardRank GetCardRank() => value;
+    public Vector2 GetLocalPosition() => position;
     public void SetInfo(CardSuit suit, CardRank value)
     {
         this.suit = suit;
@@ -19,6 +31,46 @@ public class WhotCard : MonoBehaviour
         cardImage.sprite = GetSprite();
         cardImage.SetNativeSize();
         cardBackImage.gameObject.SetActive(false);
+    }
+
+    public void SetLocalPosition(Vector2 position)
+    {
+        this.position = position;
+    }
+
+    public void OnSelect()
+    {
+        OnCardSelected?.Invoke(this, new OnCardSelectedEventArg { isSelected = isSelected });
+        isSelected = true;
+        transform.DOLocalMoveY(position.y + 50f, 0.25f)
+            .SetEase(Ease.OutQuad);
+    }
+
+    public void Unselect()
+    {
+        isSelected = false;
+        transform.DOLocalMoveY(position.y, 0.25f)
+            .SetEase(Ease.OutQuad);
+    }
+
+    public void SetHighLight()
+    {
+        lightImage.gameObject.SetActive(true);
+    }
+
+    public void SetDark()
+    {
+        cardImage.color = new Color(0.5f, 0.5f, 0.5f, 1f); // Set to dark color
+    }
+
+    public void SetFaceUp()
+    {
+        cardImage.sprite = GetSprite();
+    }
+
+    public void SetFaceDown()
+    {
+        cardImage.sprite = backSprite;
     }
 
     private Sprite GetSprite()
