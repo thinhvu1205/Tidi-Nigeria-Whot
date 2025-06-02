@@ -16,7 +16,16 @@ public class DataSender
     public const string USER_CHANGE_PASS = "user_change_pass";
     public const string LINK_USERNAME = "link_username";
     #endregion
-
+    
+    #region ConvertProtobuf
+    private static T DecodeFromBase64<T>(string base64) where T : IMessage<T>, new()
+    {
+        byte[] data = Convert.FromBase64String(base64);
+        var parser = new MessageParser<T>(() => new T());
+        return parser.ParseFrom(data);
+    }
+    #endregion
+    
     #region RPC
     public static void GetWordWithAreas(int idArea)
     {
@@ -47,10 +56,7 @@ public class DataSender
     public static async UniTask<Profile> GetProfile()
     {
         var response = await NetworkManager.INSTANCE.RPCSend(GET_PROFILE);
-
-        byte[] bytes = Convert.FromBase64String(response.Payload);
-        Profile profile = Profile.Parser.ParseFrom(bytes);
-        return profile;
+        return DecodeFromBase64<Profile>(response.Payload);
     }
 
     public static void ChangePassword(string oldPassword = "", string password = "")

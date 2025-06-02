@@ -66,6 +66,7 @@ public class NetworkManager : MonoBehaviour
     //         }
     //     });
     // }
+    
     public async UniTask<IApiRpc> RPCSend(string apiName, IMessage protoMessage = null)
     {
         try
@@ -74,15 +75,6 @@ public class NetworkManager : MonoBehaviour
             byte[] payload = protoMessage != null ? protoMessage.ToByteArray() : Array.Empty<byte>();
             IApiRpc rpc = await _SocketIS.RpcAsync(apiName, payload);
             Debug.Log("--Receive--/ " + apiName + "/ " + rpc.Payload);
-            // _DataHandlerAs.Add(() =>
-            // {
-            //     _PreHandleData(apiName, obj);
-            //     for (int i = _ListenerGLs.Count - 1; i >= 0; i--)
-            //     {
-            //         GameListener gl = _ListenerGLs[i];
-            //         if (gl.IsReady()) gl.HandleData(apiName, obj);
-            //     }
-            // });
             return rpc;
         }
         catch (Exception e)
@@ -283,7 +275,9 @@ public class NetworkManager : MonoBehaviour
     }
     #endregion
     private void _OnConnectCb() { Debug.Log("Socket Connected"); }
+    
     private void _OnCloseCb() { Debug.Log("Socket Closed"); }
+    
     private void _OnErrorCb(Exception exception) { Debug.Log("Socket Error: " + exception.ToString()); }
 
     #region Config
@@ -291,13 +285,7 @@ public class NetworkManager : MonoBehaviour
     {
         // _ClientC = new Client("http", "103.226.250.195", 7353, "defaultkey");
         _ClientC = new Client("http", "172.16.56.51", 7350, "defaultkey");
-        string storedSessionToken = PlayerPrefs.GetString(SESSION);
-        _SessionIS = null;
-        if (!string.IsNullOrEmpty(storedSessionToken))
-        {
-            ISession restoredSessionS = Session.Restore(storedSessionToken);
-            if (!restoredSessionS.IsExpired) _SessionIS = restoredSessionS;
-        }
+        RestoreSession();
         string deviceId;
         if (PlayerPrefs.HasKey(DEVICE_ID)) deviceId = PlayerPrefs.GetString(DEVICE_ID);
         else
@@ -305,13 +293,8 @@ public class NetworkManager : MonoBehaviour
             deviceId = SystemInfo.deviceUniqueIdentifier;
             if (deviceId == SystemInfo.unsupportedIdentifier) deviceId = Guid.NewGuid().ToString();
             PlayerPrefs.SetString(DEVICE_ID, deviceId);
-            Config.deviceId = deviceId;
         }
-        // if (_SessionIS == null)
-        // {
-        //     _SessionIS = await _ClientC.AuthenticateDeviceAsync(deviceId);
-        //     PlayerPrefs.SetString(SESSION, _SessionIS.AuthToken);
-        // }
+        Config.deviceId = deviceId;
         _SocketIS = _ClientC.NewSocket();
         _SocketIS.Connected += _OnConnectCb;
         _SocketIS.Closed += _OnCloseCb;
@@ -369,8 +352,6 @@ public class NetworkManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
         PreConnect();
-        RestoreSession();
-
 
 // #if UNITY_EDITOR
 //         if (SceneManager.GetActiveScene().name != "Login")
