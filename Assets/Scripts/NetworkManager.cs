@@ -71,10 +71,8 @@ public class NetworkManager : MonoBehaviour
         try
         {
             Debug.Log("--Send--/ " + apiName + "/ " + protoMessage?.ToString());
-            IApiRpc rpc = await _SocketIS.RpcAsync(apiName, protoMessage?.ToByteArray().ToString());
-            Debug.Log("RPC: " + rpc.ToString());
-            if (rpc == null || string.IsNullOrEmpty(rpc.Payload)) return null;
-            // JSONObject obj = JSON.Parse(rpc.Payload).AsObject;
+            byte[] payload = protoMessage != null ? protoMessage.ToByteArray() : Array.Empty<byte>();
+            IApiRpc rpc = await _SocketIS.RpcAsync(apiName, payload);
             Debug.Log("--Receive--/ " + apiName + "/ " + rpc.Payload);
             // _DataHandlerAs.Add(() =>
             // {
@@ -350,7 +348,6 @@ public class NetworkManager : MonoBehaviour
         if (!_SocketIS.IsConnected)
         {
             await _SocketIS.ConnectAsync(_SessionIS, true);
-            Debug.Log("🔌 Socket connected.");
         }
     }
 
