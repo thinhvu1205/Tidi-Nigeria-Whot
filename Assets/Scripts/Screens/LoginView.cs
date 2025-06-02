@@ -109,7 +109,7 @@ public class LoginView : BaseView
             switch (Config.loginType)
             {
                 case LoginType.PLAYNOW:
-                    await HandleClickButtonPlayGuest();
+                    await DataSender.LoginAsGuest();
                     break;
                 case LoginType.NORMAL:
                     string id = Config.userName;
@@ -124,7 +124,7 @@ public class LoginView : BaseView
         }
         catch (Exception)
         {
-            throw;
+            Debug.LogError($"Error during reconnect with login type: {Config.loginType}");
         }
     }
 
