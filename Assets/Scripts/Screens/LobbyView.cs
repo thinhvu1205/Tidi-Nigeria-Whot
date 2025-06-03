@@ -20,7 +20,7 @@ public class LobbyView : BaseView
         if (User.userMain != null)
         {
             displayNameText.text = User.userMain.displayName;
-            userIdText.text = "ID: " + User.userMain.userId;
+            userIdText.text = "ID: " + User.userMain.userSid;
             accountChip.text = User.userMain.accountChip;
         }
     }

@@ -19,6 +19,7 @@ public class WhotCard : MonoBehaviour
     private CardRank value;
     private Vector2 position;
     private bool isSelected = false;
+    private bool isSelectable = true;
 
     public CardSuit GetCardSuit() => suit;
     public CardRank GetCardRank() => value;
@@ -38,8 +39,14 @@ public class WhotCard : MonoBehaviour
         this.position = position;
     }
 
+    public void SetSelectable(bool isSelectable)
+    {
+        this.isSelectable = isSelectable;
+    }
+
     public void OnSelect()
     {
+        if (!isSelectable) return;
         OnCardSelected?.Invoke(this, new OnCardSelectedEventArg { isSelected = isSelected });
         isSelected = true;
         transform.DOLocalMoveY(position.y + 50f, 0.25f)
@@ -48,6 +55,7 @@ public class WhotCard : MonoBehaviour
 
     public void Unselect()
     {
+        if (!isSelected) return;
         isSelected = false;
         transform.DOLocalMoveY(position.y, 0.25f)
             .SetEase(Ease.OutQuad);

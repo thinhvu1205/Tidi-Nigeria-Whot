@@ -944,7 +944,12 @@ MonoBehaviour:
   chipText: {fileID: 7505550380906259916}
   cardsLeftText: {fileID: 7814395316598773971}
   lastCardNoti: {fileID: 7381651333494913610}
-  cards: {fileID: 116395859874360449}
+  cardsDisplay: {fileID: 116395859874360449}
+  cardPrefab: {fileID: 9120301256744507343, guid: dc97c59986f4144e28f2082e917e6a80, type: 3}
+  drawnCardParent: {fileID: 0}
+  cards:
+  - {fileID: 0}
+  isCurrentPlayer: 0
 --- !u!114 &688296107783268787
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ public class WhotPlayerHand : MonoBehaviour
     [SerializeField] private GameObject cardPrefab;
     private WhotGame whotGame;
     private const float CARD_SPACING = 56f;
-    public List<WhotCard> cardsInHand = new();
+    [HideInInspector] public List<WhotCard> cardsInHand = new();
     public Transform GetCardsParent() => cardsParent;
 
     private readonly Dictionary<CardSuit, int> SuitSortOrder = new()
@@ -28,14 +28,11 @@ public class WhotPlayerHand : MonoBehaviour
     private void Awake()
     {
         whotGame = GetComponent<WhotGame>();
-        AddCards();
-        SpreadCards();
-        SortCardsAnimation();
     }
 
     #region Animations
 
-    private void SortCardsAnimation()
+    public void AnimateSortCards()
     {
         Sequence sequence = DOTween.Sequence();
         sequence
@@ -120,25 +117,6 @@ public class WhotPlayerHand : MonoBehaviour
 
         return targetPos;
     }
-
-    private void AddCards()
-    {
-        for (int i = 0; i < 5; i++)
-        {
-            GameObject cardObject = Instantiate(cardPrefab, cardsParent);
-            if (cardObject.TryGetComponent<WhotCard>(out var card))
-            {
-                cardsInHand.Add(card);
-                card.OnCardSelected += WhotCard_OnCardSelected;
-
-                card.SetInfo(
-                    (CardSuit)Random.Range(1, 5),
-                    (CardRank)Random.Range(1, 4)
-                );
-            }
-        }
-    }
-
     #endregion
 
     public void WhotCard_OnCardSelected(object sender, WhotCard.OnCardSelectedEventArg e)
@@ -155,8 +133,13 @@ public class WhotPlayerHand : MonoBehaviour
                 if (e.isSelected)
                 {
                     cardsInHand.Remove(card);
-                    whotGame.PlayCard(card);
+                    card.SetSelectable(false);
+                    whotGame.PlayACard(card, card.transform);
                     Destroy(card.gameObject);
+                    if (cardsInHand.Count == 0)
+                    {
+                        whotGame.AnimateLastCard();
+                    }
                     SpreadCards();
                 }
             }
