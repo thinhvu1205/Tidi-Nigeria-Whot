@@ -141,7 +141,7 @@ public class WhotPlayerHand : MonoBehaviour
 
     #endregion
 
-    private void WhotCard_OnCardSelected(object sender, WhotCard.OnCardSelectedEventArg e)
+    public void WhotCard_OnCardSelected(object sender, WhotCard.OnCardSelectedEventArg e)
     {
         WhotCard selectedCard = sender as WhotCard;
         foreach (var card in cardsInHand.ToList())

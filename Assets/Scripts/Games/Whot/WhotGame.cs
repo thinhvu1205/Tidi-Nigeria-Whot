@@ -15,7 +15,7 @@ public class WhotGame : MonoBehaviour
     [SerializeField] private TextMeshProUGUI betText, cardsLeftText;
     private WhotPlayerHand playerHand;
 
-    private const float ANIMATION_TIME = 0.5f;
+    private const float ANIMATION_TIME = 0.3f;
     private const string
         MATCH_SYMBOL_SQUARE_ANIMATION_NAME = "vuong",
         MATCH_SYMBOL_CROSS_ANIMATION_NAME = "thap",
@@ -43,6 +43,7 @@ public class WhotGame : MonoBehaviour
         WhotCard whotCard = card.GetComponent<WhotCard>();
         whotCard.SetInfo(CardSuit.SuitCross, CardRank.Rank1);
         whotCard.SetFaceDown();
+        whotCard.OnCardSelected += playerHand.WhotCard_OnCardSelected;
         playerHand.cardsInHand.Add(whotCard);
 
         AnimateCardToHand(whotCard);
