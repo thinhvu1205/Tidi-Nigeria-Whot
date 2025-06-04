@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,11 @@ public class WhotPlayerHand : MonoBehaviour
 {
     [SerializeField] private Transform cardsParent;
     [SerializeField] private GameObject cardPrefab;
-    private WhotGame whotGame;
-    private const float CARD_SPACING = 56f;
     [HideInInspector] public List<WhotCard> cardsInHand = new();
+    private WhotGame whotGame;
+    private WhotSuitPicker suitPicker;
+
+    private const float CARD_SPACING = 56f;
     public Transform GetCardsParent() => cardsParent;
 
     private readonly Dictionary<CardSuit, int> SuitSortOrder = new()
@@ -28,6 +31,9 @@ public class WhotPlayerHand : MonoBehaviour
     private void Awake()
     {
         whotGame = GetComponent<WhotGame>();
+        whotGame.OnCardPlayed += WhotGame_OnCardPlayed;
+        suitPicker = FindFirstObjectByType<WhotSuitPicker>();
+        suitPicker.OnSuitPicked += WhotSuitPicker_OnSuitPicked;
     }
 
     #region Animations
@@ -70,6 +76,82 @@ public class WhotPlayerHand : MonoBehaviour
             card.SetLocalPosition(targetPos);
             card.transform.SetSiblingIndex(i);
             card.transform.DOLocalMove(targetPos, 0.25f);
+        }
+    }
+    #endregion
+
+    #region Events
+    public void WhotGame_OnCardPlayed(WhotGame.OnCardPlayedEventArg e )
+    {
+        foreach (var card in cardsInHand.ToList())
+        {
+            // Nếu là người chơi hiện tại đánh bài
+            if (e.isCurrentPlayer)
+            {
+                card.SetSelectable(true);
+                card.SetNormal();
+                continue;
+            }
+            // Nếu là người chơi khác đánh bài
+            if (card.GetCardSuit() == e.lastCard.GetCardSuit() ||
+                card.GetCardRank() == e.lastCard.GetCardRank() ||
+                card.GetCardRank() == CardRank.Rank20
+            )
+            {
+                card.SetSelectable(true);
+                card.SetHighLight();
+            }
+            else
+            {
+                card.SetSelectable(false);
+                card.SetDark();
+            }
+        }
+    }
+
+    private void WhotSuitPicker_OnSuitPicked(CardSuit cardSuit)
+    {
+        foreach (var card in cardsInHand.ToList())
+        {
+            if (card.GetCardSuit() == cardSuit
+                || card.GetCardRank() == CardRank.Rank20
+            )
+            {
+                card.SetSelectable(true);
+                card.SetHighLight();
+            }
+            else
+            {
+                card.SetSelectable(false);
+                card.SetDark();
+            }
+        }
+    }
+
+    public void WhotCard_OnCardSelected(object sender, WhotCard.OnCardSelectedEventArg e)
+    {
+        WhotCard selectedCard = sender as WhotCard;
+        foreach (var card in cardsInHand.ToList())
+        {
+            if (card != selectedCard)
+            {
+                card.Unselect();
+            }
+            else
+            {
+                if (e.isSelected)
+                {
+                    cardsInHand.Remove(card);
+                    card.SetSelectable(false);
+                    whotGame.PlayACard(card, card.transform, true);
+                    Destroy(card.gameObject);
+                    if (cardsInHand.Count == 0)
+                    {
+                        whotGame.AnimateLastCard();
+                    }
+                    SpreadCards();
+                }
+            }
         }
     }
     #endregion
@@ -119,30 +201,5 @@ public class WhotPlayerHand : MonoBehaviour
     }
     #endregion
 
-    public void WhotCard_OnCardSelected(object sender, WhotCard.OnCardSelectedEventArg e)
-    {
-        WhotCard selectedCard = sender as WhotCard;
-        foreach (var card in cardsInHand.ToList())
-        {
-            if (card != selectedCard)
-            {
-                card.Unselect();
-            }
-            else
-            {
-                if (e.isSelected)
-                {
-                    cardsInHand.Remove(card);
-                    card.SetSelectable(false);
-                    whotGame.PlayACard(card, card.transform);
-                    Destroy(card.gameObject);
-                    if (cardsInHand.Count == 0)
-                    {
-                        whotGame.AnimateLastCard();
-                    }
-                    SpreadCards();
-                }
-            }
-        }
-    }
+    
 }

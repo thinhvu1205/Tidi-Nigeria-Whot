@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Api;
@@ -9,19 +10,25 @@ using UnityEngine;
 
 public class WhotGame : MonoBehaviour
 {
+    public event Action<OnCardPlayedEventArg> OnCardPlayed;
+    public class OnCardPlayedEventArg : EventArgs
+    {
+        public bool isCurrentPlayer;
+        public WhotCard lastCard;
+    }
     [SerializeField] private GameObject whotPlayerPrefab, cardPrefab;
     [SerializeField] private List<Transform> playerPositionsList;
     [SerializeField] private SkeletonGraphic betterLuckNextTimeAnimation, victoryAnimation, matchSymbolAnimation, effectAnimation, lastCardAnimation;
     [SerializeField] private Transform matchResultTransform, yourTurnTransform, wheelTransform, effectAnimationParent,
-    victoryAnimationParent, loseAnimationParent, matchSymbolAnimationParent, lastCardAnimationParent, deckOfCardParent, drawnCardParent;
+    victoryAnimationParent, loseAnimationParent, matchSymbolAnimationParent, lastCardAnimationParent, deckOfCardParent, lastCardParent;
     [SerializeField] private TextMeshProUGUI betText, cardsLeftText;
+    public WhotCard LastCard { get; private set; }
     private List<WhotPlayer> playersList;
     private List<WhotCard> mockCardsList;
 
     private WhotPlayerHand playerHand;
     private WhotSuitPicker suitPicker;
-    private WhotCard lastCard;
-    private const float ANIMATION_TIME = 0.3f;
+    private const float ANIMATION_TIME = 0.5f;
     private const string
         MATCH_SYMBOL_SQUARE_ANIMATION_NAME = "vuong",
         MATCH_SYMBOL_CROSS_ANIMATION_NAME = "thap",
@@ -50,10 +57,14 @@ public class WhotGame : MonoBehaviour
         StartCoroutine(DealCards());
     }
 
+    public void OnDrawCard()
+    {
+        DrawACard(playerHand.cardsInHand, playerHand.GetCardsParent(), true);
+    }
+
     public IEnumerator DealCards()
     {
         int length = playersList.Count;
-        Debug.Log($"Dealing cards to {length} players.");
         for (int i = 0; i < length * 5; i++)
         {
             int index = i % length;
@@ -70,39 +81,51 @@ public class WhotGame : MonoBehaviour
             }
             else
             {
-                AnimateDealACard(whotCard, player.GetDealedCardParent(), player);
+                AnimateDealACard(whotCard, player.GetDealedCardParent(), player, i / length);
             }
         }
     }
 
-    public void DrawACard()
+    public void DrawACard(List<WhotCard> cardsList, Transform targetPosition, bool isCurrentPlayer)
     {
         GameObject card = Instantiate(cardPrefab, deckOfCardParent);
         card.transform.localPosition = Vector3.zero;
         card.transform.localScale = Vector3.one;
-        card.transform.SetParent(playerHand.GetCardsParent());
+        card.transform.SetParent(targetPosition);
         WhotCard whotCard = card.GetComponent<WhotCard>();
         whotCard.SetInfo(CardSuit.SuitCross, CardRank.Rank1);
         whotCard.SetFaceDown();
-        whotCard.OnCardSelected += playerHand.WhotCard_OnCardSelected;
-        playerHand.cardsInHand.Add(whotCard);
 
-        AnimateDrawACard(whotCard);
+        if (isCurrentPlayer)
+        {
+            whotCard.OnCardSelected += playerHand.WhotCard_OnCardSelected;
+            AnimateCurrentPlayerDrawACard(whotCard);
+        }
+        else
+        {
+            AnimateOtherPlayerDrawACard(whotCard, targetPosition);   
+        }
+        cardsList.Add(whotCard);
     }
 
-    public void PlayACard(WhotCard card, Transform startingPosition)
+    public void PlayACard(WhotCard card, Transform startingPosition, bool isCurrentPlayer)
     {
         GameObject cardInstance = Instantiate(cardPrefab, startingPosition);
         cardInstance.transform.localPosition = Vector3.zero;
         cardInstance.transform.localScale = Vector3.one;
-        cardInstance.transform.SetParent(drawnCardParent);
+        cardInstance.transform.SetParent(lastCardParent);
         WhotCard whotCard = cardInstance.GetComponent<WhotCard>();
         whotCard.SetInfo(card.GetCardSuit(), card.GetCardRank());
         whotCard.SetSelectable(false);
-        lastCard = whotCard;
-        AnimatePlayCard(whotCard);
+        LastCard = whotCard;
+        AnimatePlayACard(whotCard);
         HandleCardEffect(whotCard);
 
+        OnCardPlayed?.Invoke(new OnCardPlayedEventArg
+        {
+            isCurrentPlayer = isCurrentPlayer,
+            lastCard = LastCard
+        });
     }
 
     private void HandleCardEffect(WhotCard card)
@@ -119,13 +142,30 @@ public class WhotGame : MonoBehaviour
                 AnimateSuspension();
                 break;
             case CardRank.Rank14:
-                AnimateGeneralMarket();
+                HandleGeneralMarketEffect();
                 break;
             default:
                 Debug.LogWarning($"Unhandled card effect for rank: {card.GetCardRank()}");
                 break;
         }
     }
+    #region Card Effect
+    public void HandleGeneralMarketEffect()
+    {
+        foreach (WhotPlayer player in playersList)
+        {
+            if (player.isCurrentPlayer)
+            {
+                continue;
+            }
+            else
+            {
+                player.DrawACard();
+            }
+        }
+        AnimateGeneralMarket();
+    }
+    #endregion
 
     #region Animations
     private void AnimateGeneralMarket()
@@ -172,7 +212,7 @@ public class WhotGame : MonoBehaviour
     {
         Sequence sequence = DOTween.Sequence();
         sequence
-            .AppendInterval(1f)
+            .AppendInterval(0.5f)
             .AppendCallback(() =>
             {
                 matchSymbolAnimationParent.gameObject.SetActive(true);
@@ -230,6 +270,7 @@ public class WhotGame : MonoBehaviour
             }
             else
             {
+                WhotCard card = mockCardsList[index];
                 player.cards.Add(card);
                 player.UpdateCardsLeftVisual();
             }
@@ -237,7 +278,7 @@ public class WhotGame : MonoBehaviour
         });
     }
 
-    private void AnimateDrawACard(WhotCard card)
+    private void AnimateCurrentPlayerDrawACard(WhotCard card)
     {
         card.transform.DOScale(new Vector2(0.01f, 1f), ANIMATION_TIME / 2f).OnComplete(() =>
         {
@@ -258,7 +299,16 @@ public class WhotGame : MonoBehaviour
         });
     }
 
-    private void AnimatePlayCard(WhotCard card)
+    private void AnimateOtherPlayerDrawACard(WhotCard card, Transform targetPosition)
+    {
+        card.transform.localScale = Vector3.one * 0.6f;
+        card.transform.DOMove(targetPosition.position, ANIMATION_TIME).SetEase(Ease.InOutCubic).OnComplete(() =>
+        {
+            Destroy(card.gameObject);
+        });
+    }
+
+    private void AnimatePlayACard(WhotCard card)
     {
         card.SetFaceDown();
         card.transform.DOScale(new Vector2(0.01f, 1f), ANIMATION_TIME / 2f).OnComplete(() =>
@@ -273,7 +323,7 @@ public class WhotGame : MonoBehaviour
             card.transform.localRotation = newRotation;
             card.transform.DOLocalRotate(Vector3.zero, ANIMATION_TIME * 4 / 5).SetEase(Ease.InOutCubic);
         });
-        card.transform.DOMove(drawnCardParent.position, ANIMATION_TIME).SetEase(Ease.InOutCubic).OnComplete(() =>
+        card.transform.DOMove(lastCardParent.position, ANIMATION_TIME).SetEase(Ease.InOutCubic).OnComplete(() =>
         {
             playerHand.SortCards();
             playerHand.SpreadCards();
@@ -288,6 +338,9 @@ public class WhotGame : MonoBehaviour
         AnimateMatchSymbol(cardSuit);
     }
     #endregion
+
+    public Transform GetLastCardParent() => lastCardParent;
+    public Transform GetDeckOfCardParent() => deckOfCardParent;
     private void InitPlayer()
     {
         for (int i = 0; i < playersList.Count; i++)
@@ -357,6 +410,7 @@ public class WhotGame : MonoBehaviour
                 $"Player {i + 1}",
                 1000
             );
+            player.SetWhotGame(this);
             if (i == 0)
             {
                 player.isCurrentPlayer = true;

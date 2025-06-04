@@ -13,9 +13,11 @@ public class WhotPlayer : MonoBehaviour
     [SerializeField] private GameObject lastCardNoti, cardsDisplay, cardPrefab;
     [HideInInspector] public List<WhotCard> cards;
     [HideInInspector] public bool isCurrentPlayer = false;
+    private WhotGame whotGame;
+    private float turnTimer = 10f; // Default turn timer duration
     private float countDownTimer = 10f;
     private bool isCountingDown = false;
-    private const float ANIMATION_TIME = 0.3f;
+    private const float ANIMATION_TIME = 0.5f;
 
     private void Awake()
     {
@@ -41,8 +43,8 @@ public class WhotPlayer : MonoBehaviour
             }
             else
             {
-                countdownImage.fillAmount = countDownTimer / 10f;
-                lightImage.fillAmount = countDownTimer / 10f;
+                countdownImage.fillAmount = countDownTimer / turnTimer;
+                lightImage.fillAmount = countDownTimer / turnTimer;
             }
         }
     }
@@ -58,14 +60,47 @@ public class WhotPlayer : MonoBehaviour
         chipText.text = chipAmount.ToString();
     }
 
+    public void SetWhotGame(WhotGame whotGame)
+    {
+        this.whotGame = whotGame;
+    }
+
     public void ToggleLastCardNoti()
     {
         lastCardNoti.SetActive(!lastCardNoti.activeSelf);
     }
 
+    public void DrawACard()
+    {
+        Debug.Log("Drawing a card for player: " + nameText.text);
+        whotGame.DrawACard(cards, GetPlayedCardParent(), isCurrentPlayer);
+        UpdateCardsLeftVisual();
+
+    }
+
+    public void PlayACard()
+    {
+        if (cards.Count > 0)
+        {
+            WhotCard card = cards[0];
+            cards.RemoveAt(0);
+            whotGame.PlayACard(card, GetPlayedCardParent(), isCurrentPlayer);
+            UpdateCardsLeftVisual();
+
+            if (cards.Count == 1)
+            {
+                AnimateShowLastCardNoti();
+            }
+            else
+            {
+                AnimateHideLastCardNoti();
+            }
+        }
+    }
+
     public void StartCountDown()
     {
-        countDownTimer = 10f; // Reset the countdown timer
+        countDownTimer = turnTimer; // Reset the countdown timer
         isCountingDown = true;
         countdownImage.gameObject.SetActive(true);
         lightImage.gameObject.SetActive(true);
@@ -93,8 +128,28 @@ public class WhotPlayer : MonoBehaviour
         }
     }
 
+    public void AnimateShowLastCardNoti()
+    {
+        lastCardNoti.SetActive(true);
+        lastCardNoti.transform.localScale = Vector3.zero;
+        lastCardNoti.transform.DOScale(Vector3.one, ANIMATION_TIME).SetEase(Ease.OutBack);
+    }
+
+    public void AnimateHideLastCardNoti()
+    {
+        lastCardNoti.transform.DOScale(Vector3.zero, ANIMATION_TIME).SetEase(Ease.InBack).OnComplete(() =>
+        {
+            lastCardNoti.SetActive(false);
+        });
+    }
+
     public Transform GetDealedCardParent()
     {
         return cardsDisplay.transform;
+    }
+
+    public Transform GetPlayedCardParent()
+    {
+        return avatarImage.transform;
     }
 }

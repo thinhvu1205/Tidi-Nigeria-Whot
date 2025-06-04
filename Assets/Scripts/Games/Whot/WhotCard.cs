@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class WhotCard : MonoBehaviour
 {
     public event EventHandler<OnCardSelectedEventArg> OnCardSelected;
+
     public class OnCardSelectedEventArg : EventArgs
     {
         public bool isSelected;
@@ -61,14 +62,22 @@ public class WhotCard : MonoBehaviour
             .SetEase(Ease.OutQuad);
     }
 
+    public void SetNormal()
+    {
+        cardImage.color = Color.white; // Reset to normal color
+        lightImage.gameObject.SetActive(false);
+    }
+
     public void SetHighLight()
     {
         lightImage.gameObject.SetActive(true);
+        cardImage.color = Color.white;
     }
 
     public void SetDark()
     {
         cardImage.color = new Color(0.5f, 0.5f, 0.5f, 1f); // Set to dark color
+        lightImage.gameObject.SetActive(false);
     }
 
     public void SetFaceUp()
