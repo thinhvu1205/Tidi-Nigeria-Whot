@@ -8,7 +8,7 @@ using DG.Tweening;
 
 public class WhotPlayer : MonoBehaviour
 {
-    [SerializeField] private Image avatarImage, countdownImage, lightImage;
+    [SerializeField] private Image avatarImage, countdownImage, lightImage, suspensionImage;
     [SerializeField] private TextMeshProUGUI nameText, chipText, cardsLeftText;
     [SerializeField] private GameObject lastCardNoti, cardsDisplay, cardPrefab;
     [HideInInspector] public List<WhotCard> cards;
@@ -24,6 +24,7 @@ public class WhotPlayer : MonoBehaviour
         lastCardNoti.SetActive(false);
         countdownImage.gameObject.SetActive(false);
         lightImage.gameObject.SetActive(false);
+        suspensionImage.gameObject.SetActive(false);
         cards = new();
         HideCardsLeft();
         UpdateCardsLeftVisual();
@@ -140,6 +141,21 @@ public class WhotPlayer : MonoBehaviour
         lastCardNoti.transform.DOScale(Vector3.zero, ANIMATION_TIME).SetEase(Ease.InBack).OnComplete(() =>
         {
             lastCardNoti.SetActive(false);
+        });
+    }
+
+    public void AnimateShowSuspension()
+    {
+        suspensionImage.gameObject.SetActive(true);
+        suspensionImage.transform.localScale = Vector3.zero;
+        suspensionImage.transform.DOScale(Vector3.one, ANIMATION_TIME).SetEase(Ease.OutBack);
+    }
+
+    public void AnimateHideSuspension()
+    {
+        suspensionImage.transform.DOScale(Vector3.zero, ANIMATION_TIME).SetEase(Ease.InBack).OnComplete(() =>
+        {
+            suspensionImage.gameObject.SetActive(false);
         });
     }
 
