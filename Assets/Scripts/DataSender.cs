@@ -12,6 +12,7 @@ public class DataSender
 {
     #region ApiNames
     public const string get_world_with_areas = "get_world_with_areas";
+    public const string GET_LIST_BET = "list_bet";
     public const string GET_PROFILE = "get_profile";
     public const string USER_CHANGE_PASS = "user_change_pass";
     public const string LINK_USERNAME = "link_username";
@@ -81,6 +82,23 @@ public class DataSender
     #endregion
 
     #region MatchState
+
+    public static async UniTask<Bets> GetListBet(string gameCode)
+    {
+        BetListRequest betListRequest = new(){Code = gameCode};
+        var response = await NetworkManager.INSTANCE.RPCSend(GET_LIST_BET, betListRequest);
+        return DecodeFromBase64<Bets>(response.Payload);
+    }
+
+    public static async UniTask MakingMatch(string gameCode)
+    {
+        NetworkManager.INSTANCE.MakingMatch();
+    }
+
+    public static async UniTask CreateMatch(string gameCode)
+    {
+         NetworkManager.INSTANCE.CreateMatch(gameCode);
+    }
     public static void JoinMatch(string matchId) => NetworkManager.INSTANCE.JoinMatch(matchId);
     public static void LeaveMatch() => NetworkManager.INSTANCE.LeaveMatch();
     public static void ExampleSendMatchState(long opCode, string data)
