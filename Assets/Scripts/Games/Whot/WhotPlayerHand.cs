@@ -4,36 +4,33 @@ using System.Collections.Generic;
 using System.Linq;
 using Api;
 using DG.Tweening;
+using Globals;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class WhotPlayerHand : MonoBehaviour
 {
-    [SerializeField] private Transform cardsParent;
+    [SerializeField] private Transform cardsParent, scoreParent;
     [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private WhotSuitPicker suitPicker;
     [HideInInspector] public List<WhotCard> cardsInHand = new();
+    
     private WhotGame whotGame;
-    private WhotSuitPicker suitPicker;
 
     private const float CARD_SPACING = 56f;
-    public Transform GetCardsParent() => cardsParent;
+    private const float ANIMATION_TIME = 0.35f;
 
-    private readonly Dictionary<CardSuit, int> SuitSortOrder = new()
-    {
-        { CardSuit.SuitCircle, 0 },
-        { CardSuit.SuitTriangle, 1 },
-        { CardSuit.SuitCross, 2 },
-        { CardSuit.SuitStar, 3 },
-        { CardSuit.SuitSquare, 4 },
-        { CardSuit.SuitUnspecified, 5 }, // Whot
-    };
+    public Transform GetCardsParent() => cardsParent;
 
     private void Awake()
     {
         whotGame = GetComponent<WhotGame>();
         whotGame.OnCardPlayed += WhotGame_OnCardPlayed;
-        suitPicker = FindFirstObjectByType<WhotSuitPicker>();
         suitPicker.OnSuitPicked += WhotSuitPicker_OnSuitPicked;
+
+        scoreParent.gameObject.SetActive(false);
     }
 
     #region Animations
@@ -78,10 +75,23 @@ public class WhotPlayerHand : MonoBehaviour
             card.transform.DOLocalMove(targetPos, 0.25f);
         }
     }
+
+    public void DisplayScore()
+    {
+        CanvasGroup scoreCanvasGroup = scoreParent.GetComponent<CanvasGroup>();
+        scoreCanvasGroup.alpha = 0f;
+        float totalWidth = (cardsInHand.Count - 1) * CARD_SPACING;
+        float startX = -totalWidth / 2f;
+        scoreText.text = "20";
+        scoreParent.gameObject.SetActive(true);
+        scoreParent.localPosition = new Vector2(startX + totalWidth + 120f, scoreParent.localPosition.y);
+        scoreCanvasGroup.DOFade(1f, ANIMATION_TIME / 2);
+
+    }
     #endregion
 
     #region Events
-    public void WhotGame_OnCardPlayed(WhotGame.OnCardPlayedEventArg e )
+    public void WhotGame_OnCardPlayed(WhotGame.OnCardPlayedEventArg e)
     {
         foreach (var card in cardsInHand.ToList())
         {
@@ -148,6 +158,7 @@ public class WhotPlayerHand : MonoBehaviour
                     if (cardsInHand.Count == 0)
                     {
                         whotGame.AnimateLastCard();
+                        whotGame.AnimateShowRemainingCards(true);
                     }
                     SpreadCards();
                 }
@@ -156,11 +167,20 @@ public class WhotPlayerHand : MonoBehaviour
     }
     #endregion
 
+    public void Reset()
+    {
+        foreach (var card in cardsInHand)
+        {
+            Destroy(card.gameObject);
+        }
+        cardsInHand.Clear();
+        scoreParent.gameObject.SetActive(false);
+    }
     #region Helpers
 
     private int GetSortValue(WhotCard card)
     {
-        int suitOrder = SuitSortOrder.TryGetValue(card.GetCardSuit(), out var order) ? order : 999;
+        int suitOrder = Constants.WhotSuitSortOrder.TryGetValue(card.GetCardSuit(), out var order) ? order : 999;
         int rank = (int)card.GetCardRank();
         return suitOrder * 100 + rank;
     }
