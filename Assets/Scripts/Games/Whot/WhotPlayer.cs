@@ -17,6 +17,7 @@ public class WhotPlayer : MonoBehaviour
     [HideInInspector] public List<WhotCard> cards;
     [HideInInspector] public bool isCurrentPlayer = false;
     [HideInInspector] public bool isWinner = false;
+    public string playerId { get; private set; } = string.Empty;
     private WhotGame whotGame;
     private PlayerLayout playerLayout;
     private float turnTimer = 10f; // Default turn timer duration
@@ -64,11 +65,13 @@ public class WhotPlayer : MonoBehaviour
     }
 
     public void SetPlayerInfo(
+        string playerId,
         Sprite avatarSprite,
         string playerName,
         int chipAmount
     )
     {
+        this.playerId = playerId;
         avatarImage.sprite = avatarSprite;
         nameText.text = playerName;
         chipText.text = chipAmount.ToString();
@@ -77,6 +80,7 @@ public class WhotPlayer : MonoBehaviour
     public void SetWhotGame(WhotGame whotGame)
     {
         this.whotGame = whotGame;
+        whotGame.OnNextTurn += WhotGame_OnNextTurn;
     }
 
     public void ToggleLastCardNoti()
@@ -93,27 +97,29 @@ public class WhotPlayer : MonoBehaviour
 
     public void PlayACard()
     {
-        if (cards.Count > 0)
+        if (whotGame.GetCurrentPlayerTurnId() != playerId || cards.Count == 0)
         {
-            WhotCard card = cards[0];
-            cards.RemoveAt(0);
-            whotGame.PlayACard(card, GetPlayedCardParent(), isCurrentPlayer);
-            UpdateCardsLeftVisual();
+            return;
+        }
 
-            if (cards.Count == 1)
-            {
-                AnimateShowLastCardNoti();
-            }
-            else if (cards.Count == 0)
-            {
-                AnimateHideLastCardNoti();
-                whotGame.AnimateShowRemainingCards(false);
-                isWinner = true;
-            }
-            else
-            {
-                AnimateHideLastCardNoti();
-            }
+        WhotCard card = cards[0];
+        cards.RemoveAt(0);
+        whotGame.PlayACard(this, card, GetPlayedCardParent());
+        UpdateCardsLeftVisual();
+        StopCountDown();
+        if (cards.Count == 1)
+        {
+            AnimateShowLastCardNoti();
+        }
+        else if (cards.Count == 0)
+        {
+            AnimateHideLastCardNoti();
+            whotGame.AnimateShowRemainingCards();
+            isWinner = true;
+        }
+        else
+        {
+            AnimateHideLastCardNoti();
         }
     }
 
@@ -138,7 +144,7 @@ public class WhotPlayer : MonoBehaviour
             WhotCard card = cards[i];
             WhotCard whotCard = Instantiate(cardPrefab, remainingCardsParent).GetComponent<WhotCard>();
             whotCard.SetInfo(card.GetCardSuit(), card.GetCardRank());
-
+            whotCard.SetSelectable(false);
             whotCard.transform.localScale = Vector3.one * CARD_SCALE;
 
             CanvasGroup cardCanvasGroup = whotCard.GetComponent<CanvasGroup>();
@@ -198,7 +204,7 @@ public class WhotPlayer : MonoBehaviour
         }
     }
 
-    public void StartCountDown()
+    private void StartCountDown()
     {
         countDownTimer = turnTimer; // Reset the countdown timer
         isCountingDown = true;
@@ -206,6 +212,13 @@ public class WhotPlayer : MonoBehaviour
         lightImage.gameObject.SetActive(true);
         countdownImage.fillAmount = 1f;
         lightImage.fillAmount = 1f;
+    }
+
+    public void StopCountDown()
+    {
+        isCountingDown = false;
+        countdownImage.gameObject.SetActive(false);
+        lightImage.gameObject.SetActive(false);
     }
 
     public void ShowCardsLeft()
@@ -233,6 +246,16 @@ public class WhotPlayer : MonoBehaviour
         AnimateShowEffectNoti();
     }
 
+    #endregion
+
+    #region Events
+    private void WhotGame_OnNextTurn(WhotGame.OnNextTurnEventArg e)
+    {
+        if (e.playerTurn == playerId)
+        {
+            StartCountDown();
+        }
+    }
     #endregion
 
     #region Animations 

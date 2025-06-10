@@ -27,8 +27,7 @@ public class WhotPlayerHand : MonoBehaviour
     private void Awake()
     {
         whotGame = GetComponent<WhotGame>();
-        whotGame.OnCardPlayed += WhotGame_OnCardPlayed;
-        suitPicker.OnSuitPicked += WhotSuitPicker_OnSuitPicked;
+        whotGame.OnNextTurn += WhotGame_OnNextTurn;
 
         scoreParent.gameObject.SetActive(false);
     }
@@ -48,12 +47,16 @@ public class WhotPlayerHand : MonoBehaviour
                     card.transform.DOLocalMove(GetHandPosition(), 0.25f);
                 }
             })
-            .AppendInterval(1f)
+            .AppendInterval(0.5f)
             .AppendCallback(() =>
             {
                 SortCards();
                 SpreadCards();
-
+            })
+            .AppendInterval(0.5f)
+            .OnComplete(() =>
+            {
+                whotGame.NextTurn();
             });
     }
 
@@ -86,54 +89,68 @@ public class WhotPlayerHand : MonoBehaviour
         scoreParent.gameObject.SetActive(true);
         scoreParent.localPosition = new Vector2(startX + totalWidth + 120f, scoreParent.localPosition.y);
         scoreCanvasGroup.DOFade(1f, ANIMATION_TIME / 2);
-
     }
-    #endregion
-
-    #region Events
-    public void WhotGame_OnCardPlayed(WhotGame.OnCardPlayedEventArg e)
+    
+    private void SetNormalCards()
     {
-        foreach (var card in cardsInHand.ToList())
+        foreach (var card in cardsInHand)
         {
-            // Nếu là người chơi hiện tại đánh bài
-            if (e.isCurrentPlayer)
-            {
-                card.SetSelectable(true);
-                card.SetNormal();
-                continue;
-            }
-            // Nếu là người chơi khác đánh bài
-            if (card.GetCardSuit() == e.lastCard.GetCardSuit() ||
-                card.GetCardRank() == e.lastCard.GetCardRank() ||
-                card.GetCardRank() == CardRank.Rank20
-            )
-            {
-                card.SetSelectable(true);
-                card.SetHighLight();
-            }
-            else
-            {
-                card.SetSelectable(false);
-                card.SetDark();
-            }
+            card.SetNormal();
+            card.SetSelectable(false);
         }
     }
 
-    private void WhotSuitPicker_OnSuitPicked(CardSuit cardSuit)
+    #endregion
+
+    #region Events
+    public void WhotGame_OnNextTurn(WhotGame.OnNextTurnEventArg e)
     {
-        foreach (var card in cardsInHand.ToList())
+        if (e.playerTurn == whotGame.GetCurrentPlayer().playerId)
         {
-            if (card.GetCardSuit() == cardSuit
-                || card.GetCardRank() == CardRank.Rank20
-            )
+            Debug.Log("Your turn");
+            WhotCard callCard = e.callCard;
+            CardSuit callCardSuit = e.cardSuit ?? CardSuit.SuitUnspecified;
+            foreach (var card in cardsInHand.ToList())
             {
-                card.SetSelectable(true);
-                card.SetHighLight();
-            }
-            else
-            {
-                card.SetSelectable(false);
-                card.SetDark();
+                if (callCard.GetCardRank() == CardRank.Rank2 &&
+                    card.GetCardRank() == CardRank.Rank2)
+                {
+                    card.SetSelectable(true);
+                    card.SetHighLight();
+                    continue;
+                }
+
+                if (callCard.GetCardRank() == CardRank.Rank5 &&
+                    card.GetCardRank() == CardRank.Rank5)
+                {
+                    card.SetSelectable(true);
+                    card.SetHighLight();
+                    continue;
+                }
+
+                if (callCard.GetCardRank() == CardRank.Rank20 &&
+                    callCardSuit != CardSuit.SuitUnspecified && 
+                    card.GetCardSuit() == callCardSuit
+                )
+                {
+                    card.SetSelectable(true);
+                    card.SetHighLight();
+                    continue;
+                }
+
+                if (card.GetCardSuit() == callCard.GetCardSuit() ||
+                    card.GetCardRank() == callCard.GetCardRank()
+                )
+                {
+                    card.SetSelectable(true);
+                    card.SetHighLight();
+                }
+                else
+                {
+                    card.SetSelectable(false);
+                    card.SetDark();
+                }
+
             }
         }
     }
@@ -153,12 +170,13 @@ public class WhotPlayerHand : MonoBehaviour
                 {
                     cardsInHand.Remove(card);
                     card.SetSelectable(false);
-                    whotGame.PlayACard(card, card.transform, true);
+                    whotGame.PlayACard(whotGame.GetCurrentPlayer(), card, card.transform);
+                    EndTurn();
                     Destroy(card.gameObject);
                     if (cardsInHand.Count == 0)
                     {
                         whotGame.AnimateLastCard();
-                        whotGame.AnimateShowRemainingCards(true);
+                        whotGame.AnimateShowRemainingCards();
                     }
                     SpreadCards();
                 }
@@ -166,6 +184,13 @@ public class WhotPlayerHand : MonoBehaviour
         }
     }
     #endregion
+
+    public void EndTurn()
+    {
+        whotGame.GetCurrentPlayer().StopCountDown();
+        whotGame.AnimateHideDeckHighlight();
+        SetNormalCards();
+    }
 
     public void Reset()
     {
