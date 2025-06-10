@@ -329,23 +329,24 @@ public class NetworkManager : MonoBehaviour
         _SocketIS.Closed += _OnCloseCb;
         _SocketIS.ReceivedError += err => _OnErrorCb(err);
         _SocketIS.ReceivedMatchState += state =>
-        { 
+        {
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
             {
                 GameManager.Instance.HandleMatchState(state);
             });
         };
         _SocketIS.ReceivedNotification += notification =>
-        { 
-            
+        {
+
         };
         _SocketIS.ReceivedMatchPresence += presence =>
-        { 
+        {
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
             {
                 GameManager.Instance.HandleMatchPresence(presence);
             });
         };
+        
     }
 
     private async UniTask ConnectSocketAsync()

@@ -7,8 +7,13 @@ public interface IGameHandler
 {
     void OnMatchFound(IMatchmakerMatched matchmakerMatched);
     void OnMatchJoin(IMatch match);
-    void OnMatchState(IMatchState state);
     void OnMatchPresence(IMatchPresenceEvent presenceEvent);
     void OnMatchLeave();
+    void OnUpdateTable(IMatchState matchState);
+    void OnUpdateDeal(IMatchState matchState);
+    void OnUpdateTurn(IMatchState matchState);
+    void OnUpdateCardState(IMatchState matchState);
+    void OnUpdateGameState(IMatchState matchState);
+    void OnFinish(IMatchState matchState);
 }
 
