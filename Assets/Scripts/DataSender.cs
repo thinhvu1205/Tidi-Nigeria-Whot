@@ -12,9 +12,11 @@ public class DataSender
 {
     #region ApiNames
     public const string get_world_with_areas = "get_world_with_areas";
+    public const string GET_LIST_BET = "list_bet";
     public const string GET_PROFILE = "get_profile";
     public const string USER_CHANGE_PASS = "user_change_pass";
     public const string LINK_USERNAME = "link_username";
+    public const string CREATE_MATCH = "create_match";
     #endregion
     
     #region ConvertProtobuf
@@ -81,6 +83,26 @@ public class DataSender
     #endregion
 
     #region MatchState
+
+    public static async UniTask<Bets> GetListBet(string gameCode)
+    {
+        BetListRequest betListRequest = new(){Code = gameCode};
+        var response = await NetworkManager.INSTANCE.RPCSend(GET_LIST_BET, betListRequest);
+        return DecodeFromBase64<Bets>(response.Payload);
+    }
+
+    public static async UniTask MakingMatch(string gameCode)
+    {
+        NetworkManager.INSTANCE.MakingMatch(gameCode);
+    }
+
+    public static async UniTask<RpcCreateMatchResponse> CreateMatch(string gameCode)
+    {
+         // NetworkManager.INSTANCE.CreateMatch(gameCode);
+         RpcCreateMatchRequest rpcCreateMatchRequest = new() { GameCode = gameCode, MaxSize = 4, Name = "assassin", MarkUnit = 0};
+         var response = await NetworkManager.INSTANCE.RPCSend(CREATE_MATCH, rpcCreateMatchRequest);
+         return DecodeFromBase64<RpcCreateMatchResponse>(response.Payload);
+    }
     public static void JoinMatch(string matchId) => NetworkManager.INSTANCE.JoinMatch(matchId);
     public static void LeaveMatch() => NetworkManager.INSTANCE.LeaveMatch();
     public static void ExampleSendMatchState(long opCode, string data)
