@@ -8,9 +8,6 @@ using UnityEngine.UI;
 
 namespace Globals
 {
-
-
-    #region Enums
     public enum GameID
     {
 
@@ -37,7 +34,5 @@ namespace Globals
         NORMAL = 0,
         PLAYNOW = 1,
     }
-
-    #endregion
 }
 

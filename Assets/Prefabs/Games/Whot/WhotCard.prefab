@@ -236,6 +236,7 @@ GameObject:
   - component: {fileID: 5852745355828655244}
   - component: {fileID: 4742981569650111606}
   - component: {fileID: -487574287794548071}
+  - component: {fileID: 7689726080013516905}
   m_Layer: 5
   m_Name: WhotCard
   m_TagString: Untagged
@@ -337,3 +338,15 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!225 &7689726080013516905
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9120301256744507343}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

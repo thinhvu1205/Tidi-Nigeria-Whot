@@ -147,6 +147,7 @@ public class LoginView : BaseView
 
     private void UpdateProfile(Profile profile)
     {
+        Debug.Log("Profile: " + profile.ToString());
         User.userMain = new()
         {
             userId = profile.UserId,
@@ -154,6 +155,7 @@ public class LoginView : BaseView
             avatarId = profile.AvatarId,
             accountChip = profile.AccountChip.ToString(),
             bankChip = profile.BankChip.ToString(),
+            userSid = profile.UserSid.ToString(),
         };
 
     }

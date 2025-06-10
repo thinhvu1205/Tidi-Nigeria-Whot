@@ -20,12 +20,11 @@ public class LobbyView : BaseView
         if (User.userMain != null)
         {
             displayNameText.text = User.userMain.displayName;
-            userIdText.text = "ID: " + User.userMain.userId;
+            userIdText.text = "ID: " + User.userMain.userSid;
             accountChip.text = User.userMain.accountChip;
         }
     }
     #region Buttons
-
     public void OnClickProfile() => UIManager.Instance.OpenProfile();
     public void OnClickLeaderboard() => UIManager.Instance.OpenLeaderboard();
     public void OnClickFreeChips() => UIManager.Instance.OpenFreeChips();

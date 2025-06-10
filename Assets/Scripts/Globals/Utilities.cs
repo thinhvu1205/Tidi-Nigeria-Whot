@@ -490,7 +490,7 @@ namespace Globals
         #endregion
 
         #region Spine Animation
-        public void PlayAnimation(SkeletonGraphic skeletonGraphic, string animationName, bool loop)
+        public static void PlayAnimation(SkeletonGraphic skeletonGraphic, string animationName, bool loop)
         {
             if (skeletonGraphic != null && skeletonGraphic.AnimationState != null)
             {
