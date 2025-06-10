@@ -16,6 +16,7 @@ public class DataSender
     public const string GET_PROFILE = "get_profile";
     public const string USER_CHANGE_PASS = "user_change_pass";
     public const string LINK_USERNAME = "link_username";
+    public const string CREATE_MATCH = "create_match";
     #endregion
     
     #region ConvertProtobuf
@@ -92,12 +93,15 @@ public class DataSender
 
     public static async UniTask MakingMatch(string gameCode)
     {
-        NetworkManager.INSTANCE.MakingMatch();
+        NetworkManager.INSTANCE.MakingMatch(gameCode);
     }
 
-    public static async UniTask CreateMatch(string gameCode)
+    public static async UniTask<RpcCreateMatchResponse> CreateMatch(string gameCode)
     {
-         NetworkManager.INSTANCE.CreateMatch(gameCode);
+         // NetworkManager.INSTANCE.CreateMatch(gameCode);
+         RpcCreateMatchRequest rpcCreateMatchRequest = new() { GameCode = gameCode, MaxSize = 4, Name = "assassin", MarkUnit = 0};
+         var response = await NetworkManager.INSTANCE.RPCSend(CREATE_MATCH, rpcCreateMatchRequest);
+         return DecodeFromBase64<RpcCreateMatchResponse>(response.Payload);
     }
     public static void JoinMatch(string matchId) => NetworkManager.INSTANCE.JoinMatch(matchId);
     public static void LeaveMatch() => NetworkManager.INSTANCE.LeaveMatch();

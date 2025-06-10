@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Api;
 using Cysharp.Threading.Tasks;
+using Games.Whot;
 using UnityEngine;
 
 public class TableViewWhot : MonoBehaviour
@@ -10,6 +11,7 @@ public class TableViewWhot : MonoBehaviour
     void Start()
     {
         CallApi();
+        GameManager.Instance.SetGameHandler(new WhotHandler());
     }
 
     // Update is called once per frame
@@ -26,8 +28,16 @@ public class TableViewWhot : MonoBehaviour
 
     public void OnClickMatchMaking()
     {
+        // HandleMatchMaking();
         DataSender.MakingMatch("whot-game");
-        // DataSender.CreateMatch("whot-game");
+       // NetworkManager.INSTANCE.CreateMatch("whot-game");
+    }
+
+    private async UniTask HandleMatchMaking()
+    {
+        var response = await DataSender.CreateMatch("whot-game");
+        DataSender.JoinMatch(response.MatchId);
+        Debug.Log(response.MatchId);
     }
     
 }
