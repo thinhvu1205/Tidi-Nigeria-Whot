@@ -91,7 +91,7 @@ public class DataSender
         return DecodeFromBase64<Bets>(response.Payload);
     }
 
-    public static async UniTask MakingMatch(string gameCode)
+    public static void MakingMatch(string gameCode)
     {
         NetworkManager.INSTANCE.MakingMatch(gameCode);
     }

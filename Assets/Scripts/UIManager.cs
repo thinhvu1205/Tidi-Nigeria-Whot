@@ -6,7 +6,7 @@ using UnityEngine;
 public class UIManager : Singleton<UIManager>
 {
     [SerializeField] private Transform parentPopups, parentGames, parentBanners, parentLobby;
-
+    private BaseView currentView;
     protected override void Awake()
     {
         base.Awake();
@@ -17,7 +17,23 @@ public class UIManager : Singleton<UIManager>
         Config.UpdateConfigSettings();   
     }
 
-    #region Display Popups
+    #region Games
+    public void OpenGame(string game)
+    {
+        currentView = null;
+        switch (game)
+        {
+            case "whot":
+                currentView = Instantiate(LoadPrefabGame("Whot/WhotView"), parentGames).GetComponent<WhotView>();
+                break;
+            default:
+                Debug.LogError("Game not found: " + game);
+                break;
+        }
+    }
+    #endregion
+
+    #region Popups
 
     public void OpenShop()
     {

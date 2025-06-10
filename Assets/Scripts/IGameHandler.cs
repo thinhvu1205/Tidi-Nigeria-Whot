@@ -5,7 +5,8 @@ using UnityEngine;
 
 public interface IGameHandler
 {
-    void OnMatchJoin(IApiMatch match);
+    void OnMatchFound(IMatchmakerMatched matchmakerMatched);
+    void OnMatchJoin(IMatch match);
     void OnMatchState(IMatchState state);
     void OnMatchPresence(IMatchPresenceEvent presenceEvent);
     void OnMatchLeave();

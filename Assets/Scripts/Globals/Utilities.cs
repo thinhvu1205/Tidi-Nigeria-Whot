@@ -418,6 +418,13 @@ namespace Globals
             int s = seconds % 60;
             return (h < 10 ? "0" : "") + h + ":" + (p < 10 ? "0" : "") + p + ":" + (s < 10 ? "0" : "") + s;
         }
+
+        public static string ConvertSecondToMMSS(int totalSeconds)
+        {
+            int minutes = totalSeconds / 60;
+            int seconds = totalSeconds % 60;
+            return $"{minutes:D2}:{seconds:D2}";
+        }
         // public static string ConvertSeccondToDDHHMMSS(int timeRemain)
         // {
         //     long deltaTime = timeRemain * 1000;

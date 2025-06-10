@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Api;
 using DG.Tweening;
 using Globals;
+using Nakama;
 using Spine.Unity;
 using TMPro;
 using UnityEngine;
@@ -80,6 +81,14 @@ public class WhotGame : MonoBehaviour
         InitPlayer();
         StartCoroutine(DealCards());
     }
+
+    #region API Handlers
+    public void HandleJoinMatch(IMatch match)
+    {
+        Debug.Log("Join Match: " + match.ToString());
+    }
+    #endregion
+
     #region UI 
     private void UpdateCardsLeft()
     {

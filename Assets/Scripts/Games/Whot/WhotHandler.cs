@@ -1,26 +1,42 @@
 using Nakama;
 using UnityEngine;
 
-namespace Games.Whot
+public class WhotHandler : IGameHandler
 {
-    public class WhotHandler : IGameHandler
+    private readonly WhotView whotView;
+
+    public WhotHandler(WhotView whotView)
     {
-        public void OnMatchJoin(IApiMatch match) {
-            Debug.Log("WHOT Join Match: " + match.MatchId);
-            // parse match.Label hoặc chờ MatchState 
-        }
+        this.whotView = whotView;
+    }
+    public void OnMatchFound(IMatchmakerMatched matchmakerMatched)
+    {
+        whotView.HandleMatchFound(matchmakerMatched);
 
-        public void OnMatchState(IMatchState state) {
-            Debug.Log("WHOT Match State: " + state.OpCode);
-            // parse JSON và xử lý tùy theo OpCode
-        }
+    }
 
-        public void OnMatchPresence(IMatchPresenceEvent presenceEvent) {
-            // xử lý khi người chơi vào/ra
-        }
+    public void OnMatchJoin(IMatch match)
+    {
+        whotView.HandleJoinMatch(match);
+        // parse match.Label hoặc chờ MatchState 
+    }
 
-        public void OnMatchLeave() {
-            // cleanup
-        }
+    public void OnMatchState(IMatchState state) {
+        whotView.HandleMatchState(state);
+        Debug.Log("WHOT Match State: " + state.OpCode);
+        // parse JSON và xử lý tùy theo OpCode
+    }
+
+    public void OnMatchPresence(IMatchPresenceEvent presenceEvent)
+    {
+        // xử lý khi người chơi vào/ra
+        whotView.HandleMatchPresence(presenceEvent);
+    }
+
+    public void OnMatchLeave()
+    {
+        // cleanup
+        whotView.HandleMatchLeave();
     }
 }
+

@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using Nakama;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    public static GameManager Instance;
-
     private IGameHandler _currentHandler;
-
-    void Awake() {
-        Instance = this;
-    }
 
     public void SetGameHandler(IGameHandler handler) {
         _currentHandler = handler;
     }
+    
+    public void HandleMatchFound(IMatchmakerMatched matchmakerMatched)
+    {
+        Debug.Log("Match found: " + matchmakerMatched.MatchId);
+        _currentHandler?.OnMatchFound(matchmakerMatched);
+    }
 
-    public void HandleMatchJoin(IApiMatch match) {
+    public void HandleMatchJoin(IMatch match)
+    {
+        Debug.Log("Joining match: " + match.ToString());
         _currentHandler?.OnMatchJoin(match);
     }
 

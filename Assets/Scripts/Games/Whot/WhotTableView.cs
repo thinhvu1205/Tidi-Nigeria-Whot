@@ -2,34 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using Api;
 using Cysharp.Threading.Tasks;
-using Games.Whot;
 using UnityEngine;
 
-public class TableViewWhot : MonoBehaviour
+public class WhotTableView : BaseView
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Transform betItemParent;
+    [SerializeField] private GameObject betItemPrefab;
+    private Bets betsList;
+    private void Start()
     {
-        CallApi();
-        GameManager.Instance.SetGameHandler(new WhotHandler());
+        GetListBet();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnClickBetItem()
     {
-        
+        UIManager.Instance.OpenGame("whot");
     }
 
-    private async UniTask CallApi()
+    private void UpdateVisuals()
     {
-        Bets bets = await  DataSender.GetListBet("whot-game");
+
+    }
+
+    private async UniTask GetListBet()
+    {
+        Bets bets = await DataSender.GetListBet("whot-game");
+        betsList = bets;
         Debug.Log("List bet game whot : " + bets.ToString());
     }
 
     public void OnClickMatchMaking()
     {
         // HandleMatchMaking();
-        DataSender.MakingMatch("whot-game");
        // NetworkManager.INSTANCE.CreateMatch("whot-game");
     }
 

@@ -307,22 +307,55 @@ public class NetworkManager : MonoBehaviour
         _SocketIS.Connected += _OnConnectCb;
         _SocketIS.ReceivedMatchmakerMatched += async (matched) =>
         {
-            Debug.Log("Match found " + matched.ToString());
-            var match = await _SocketIS.JoinMatchAsync(matched);
-            Debug.Log("Match join " + match.ToString());
+            try
+            {
+                UnityMainThreadDispatcher.Instance.Enqueue(() =>
+                {
+                    GameManager.Instance.HandleMatchFound(matched);
+                });
+                IMatch match = await _SocketIS.JoinMatchAsync(matched);
+
+                UnityMainThreadDispatcher.Instance.Enqueue(() =>
+                {
+                    GameManager.Instance.HandleMatchJoin(match);
+                });
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Error joining match: " + e);
+                throw;
+            }
         };
         _SocketIS.Closed += _OnCloseCb;
         _SocketIS.ReceivedError += err => _OnErrorCb(err);
-        _SocketIS.ReceivedMatchState += state => { Debug.Log("Match state " + state.ToString()); };
-        _SocketIS.ReceivedNotification += notification => { Debug.Log("Match notification " + notification); };
+        _SocketIS.ReceivedMatchState += state =>
+        { 
+            UnityMainThreadDispatcher.Instance.Enqueue(() =>
+            {
+                GameManager.Instance.HandleMatchState(state);
+            });
+        };
+        _SocketIS.ReceivedNotification += notification =>
+        { 
+            
+        };
+        _SocketIS.ReceivedMatchPresence += presence =>
+        { 
+            UnityMainThreadDispatcher.Instance.Enqueue(() =>
+            {
+                GameManager.Instance.HandleMatchPresence(presence);
+            });
+        };
     }
-    
+
     private async UniTask ConnectSocketAsync()
     {
         if (!_SocketIS.IsConnected)
         {
             await _SocketIS.ConnectAsync(_SessionIS, true);
+            RegisterCallback();
         }
+
     }
     
     private void _OnConnectCb()
@@ -360,7 +393,6 @@ public class NetworkManager : MonoBehaviour
 
         Config.deviceId = deviceId;
         _SocketIS = _ClientC.NewSocket();
-        RegisterCallback();
     }
 
     #endregion
