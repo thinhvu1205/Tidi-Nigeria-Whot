@@ -86,67 +86,38 @@ public class NetworkManager : MonoBehaviour
     #endregion
 
     #region Match
-
-    public async void CreateMatch(string gameCode)
-    {
-        var match = await _SocketIS.CreateMatchAsync(gameCode);
-        Debug.Log("-----Match----- " + match.ToString());
-        JoinMatch(match.Id);
-    }
-    public async void MakingMatch(string gameCode)
-    {
-        try {
-            var stringProps = new Dictionary<string, string> {
-                { "mode", "quick-match" },
-                {"game" , gameCode},
-                {"name", "assassin"},
-                {"password", ""}
-            };
-            var numericProps = new Dictionary<string, double>()
-            {
-                {"bet" , 25}
-            };
-            var matchTicket = await _SocketIS.AddMatchmakerAsync(
-                query: $"+properties.game:{gameCode} +properties.bet:25",       
-                minCount: 2,
-                maxCount: 4,
-                stringProperties: stringProps,
-                numericProperties: numericProps
-            );
-                
-            Debug.Log("Đã gửi yêu cầu ghép trận. Ticket: " + matchTicket.Ticket);
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError("Lỗi khi tìm trận: " + ex.Message);
-        }
-    }
-
-    public async void JoinMatch(string matchId)
+    public async void CreateMatch()
     {
         try
-        {
-            var match = await _SocketIS.JoinMatchAsync(matchId);
-        
-            // Lưu lại thông tin match nếu cần
-            _MatchId = matchId;
+            {
+                // Gửi yêu cầu ghép trận với điều kiện tối thiểu và tối đa người chơi
+                var matchTicket = await _SocketIS.AddMatchmakerAsync(
+                    query: "*",       // tất cả phòng đều hợp lệ
+                    minCount: 2,
+                    maxCount: 4,
+                    stringProperties: null,
+                    numericProperties: null
+                );
 
-            // ✅ Chuyển sang UI game tại đây
-            // GameUIManager.Instance.ShowGameScreen(match); // ví dụ
+                Debug.Log("Đã gửi yêu cầu ghép trận. Ticket: " + matchTicket.Ticket);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError("Lỗi khi tìm trận: " + ex.Message);
+            }
+    }
 
-            Debug.Log("Joined match: " + match.ToString());
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError("JoinMatch failed: " + ex.Message);
-            // Gợi ý: hiển thị popup hoặc retry tùy logic game
-        }
+    public void JoinMatch(string matchId)
+    {
+        _MatchId = "";
+        _SocketIS.JoinMatchAsync(matchId);
     }
     public void LeaveMatch() => _SocketIS.LeaveMatchAsync(_MatchId);
     public void SendMatchState(long opCode, string data) => _SocketIS.SendMatchStateAsync(_MatchId, opCode, data);
     #endregion
 
     #region Authen
+
     public async UniTask LoginAsync(string username = "", string password = "")
     {
         Debug.Log("Session: " + _SessionIS);
@@ -246,14 +217,16 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    public async UniTask LogoutAsync(){
+    public async UniTask LogoutAsync()
+    {
         if (_SessionIS == null)
         {
             Debug.LogWarning("⚠️ Không có session để logout.");
             return;
         }
 
-        try{
+        try
+        {
             await _ClientC.SessionLogoutAsync(_SessionIS.AuthToken, _SessionIS.RefreshToken);
             Debug.Log("✅ Đã logout thành công.");
             Config.loginType = LoginType.NONE;
@@ -324,11 +297,6 @@ public class NetworkManager : MonoBehaviour
         Config.deviceId = deviceId;
         _SocketIS = _ClientC.NewSocket();
         _SocketIS.Connected += _OnConnectCb;
-        _SocketIS.ReceivedMatchmakerMatched += async(matched) => {
-            Debug.Log("Match found " + matched.ToString());
-            var match = await _SocketIS.JoinMatchAsync(matched);
-            Debug.Log("Match join " + match.ToString());
-        };
         _SocketIS.Closed += _OnCloseCb;
         _SocketIS.ReceivedError += err => _OnErrorCb(err);
         _SocketIS.ReceivedMatchState += state =>
@@ -379,7 +347,6 @@ public class NetworkManager : MonoBehaviour
         if (INSTANCE == null) INSTANCE = this;
         else
         {
-             
             Destroy(gameObject);
             return;
         }

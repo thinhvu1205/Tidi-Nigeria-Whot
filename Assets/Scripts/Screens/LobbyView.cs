@@ -25,8 +25,6 @@ public class LobbyView : BaseView
         }
     }
     #region Buttons
-    public void MakingMatch() => NetworkManager.INSTANCE.MakingMatch("whot-game");
-
     public void OnClickProfile() => UIManager.Instance.OpenProfile();
     public void OnClickLeaderboard() => UIManager.Instance.OpenLeaderboard();
     public void OnClickFreeChips() => UIManager.Instance.OpenFreeChips();
