@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Api;
 using DG.Tweening;
 using Nakama;
 using TMPro;
@@ -8,44 +9,45 @@ using UnityEngine.UI;
 
 public class WhotView : GameView
 {
-    [SerializeField] private Transform matchMakingContainer, gameContainer;
-    private WhotMatchMaking matchMaking;
+    [SerializeField] private Transform gameContainer;
     private WhotGame game;
     protected override void Awake()
     {
         WhotHandler whotHandler = new(this);
         GameManager.Instance.SetGameHandler(whotHandler);
-        matchMaking = matchMakingContainer.GetComponent<WhotMatchMaking>();
         game = gameContainer.GetComponent<WhotGame>();
-
-        matchMakingContainer.gameObject.SetActive(true);
-        gameContainer.gameObject.SetActive(false);
-    }
-
-    public void HandleMatchFound(IMatchmakerMatched matchmakerMatched)
-    {
-        matchMaking.HandleMatchFound(matchmakerMatched);
+        game.gameObject.SetActive(true);
     }
 
     public void HandleJoinMatch(IMatch match)
     {
         game.HandleJoinMatch(match);
-
-        Sequence sequence = DOTween.Sequence();
-        sequence.AppendCallback(() =>
-        {
-            gameContainer.gameObject.SetActive(true);
-        })
-        .AppendInterval(3f)
-        .OnComplete(() =>
-        {
-            matchMakingContainer.gameObject.SetActive(false);
-        });
     }
 
-    public void HandleMatchState(IMatchState state)
+    public void HandleUpdateTable(UpdateTable data)
     {
+        game.HandleUpdateTable(data);
         // Handle match state updates
+    }
+
+    public void HandleUpdateGameState(UpdateGameState data)
+    {
+        game.HandleUpdateGameState(data);
+    }
+
+    public void HandleUpdateDeal(UpdateDeal data)
+    {
+        game.HandleUpdateDeal(data);
+    }
+
+    public void HandleUpdateTurn(UpdateTurn data)
+    {
+        game.HandleUpdateTurn(data);
+    }
+
+    public void HandleUpdateCardState(UpdateCardState data)
+    {
+        game.HandleUpdateCardState(data);
     }
 
     public void HandleMatchPresence(IMatchPresenceEvent presenceEvent)

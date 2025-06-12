@@ -59,17 +59,17 @@ public class WhotPlayerResultItem : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        for (int i = 0; i < player.cards.Count; i++)
-        {
-            WhotCard card = SortedCards(player.cards)[i];
-            GameObject cardInstance = Instantiate(cardLeftPrefab, cardLeftParent);
-            WhotCard whotCard = cardInstance.GetComponent<WhotCard>();
-            whotCard.transform.localScale = Vector3.one * CARD_SCALE;
-            whotCard.transform.localPosition = Vector3.zero;
-            whotCard.transform.Translate(CARD_SPACING * i, 0f, 0f);
-            whotCard.SetInfo(card.GetCardSuit(), card.GetCardRank());
-            whotCard.SetSelectable(false);
-        }
+        // for (int i = 0; i < player.cards.Count; i++)
+        // {
+        //     WhotCard card = SortedCards(player.cards)[i];
+        //     GameObject cardInstance = Instantiate(cardLeftPrefab, cardLeftParent);
+        //     WhotCard whotCard = cardInstance.GetComponent<WhotCard>();
+        //     whotCard.transform.localScale = Vector3.one * CARD_SCALE;
+        //     whotCard.transform.localPosition = Vector3.zero;
+        //     whotCard.transform.Translate(CARD_SPACING * i, 0f, 0f);
+        //     whotCard.SetInfo(card.GetCardSuit(), card.GetCardRank());
+        //     whotCard.SetSelectable(false);
+        // }
     }
 
     private void SetTextColor(Color textColor)

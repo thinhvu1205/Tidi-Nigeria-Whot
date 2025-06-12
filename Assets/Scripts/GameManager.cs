@@ -15,13 +15,11 @@ public class GameManager : Singleton<GameManager>
 
     public void HandleMatchFound(IMatchmakerMatched matchmakerMatched)
     {
-        Debug.Log("Match found: " + matchmakerMatched.MatchId);
         _currentHandler?.OnMatchFound(matchmakerMatched);
     }
 
     public void HandleMatchJoin(IMatch match)
     {
-        Debug.Log("Joining match: " + match.ToString());
         _currentHandler?.OnMatchJoin(match);
     }
 

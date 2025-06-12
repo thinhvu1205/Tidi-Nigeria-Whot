@@ -29,8 +29,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7685574218595862727}
-  - {fileID: 7703758953536002777}
   - {fileID: 1686584219369130510}
+  - {fileID: 7703758953536002777}
   - {fileID: 2426616378402454076}
   m_Father: {fileID: 6937775054076971841}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -189,7 +189,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4295129655635548693
 RectTransform:
   m_ObjectHideFlags: 0
@@ -235,8 +235,8 @@ MonoBehaviour:
   cardPrefab: {fileID: 9120301256744507343, guid: dc97c59986f4144e28f2082e917e6a80, type: 3}
   playerPositionsList:
   - {fileID: 7685574218595862727}
-  - {fileID: 7703758953536002777}
   - {fileID: 1686584219369130510}
+  - {fileID: 7703758953536002777}
   - {fileID: 2426616378402454076}
   betterLuckNextTimeAnimation: {fileID: 7373465379628247397}
   victoryAnimation: {fileID: 5106629690599917844}
@@ -254,6 +254,7 @@ MonoBehaviour:
   deckOfCardParent: {fileID: 6205735016135746426}
   callCardParent: {fileID: 1479352102202718276}
   playAreaParent: {fileID: 3408475195346821732}
+  playersParent: {fileID: 6937775054076971841}
   betText: {fileID: 4838851619454793626}
   cardsLeftText: {fileID: 7660614336331429407}
   betterLuckNextTimeText: {fileID: 6302499259635809483}
@@ -2209,7 +2210,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6634003772533348078
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4770,7 +4771,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1686584219369130510}
   m_Layer: 5
-  m_Name: Player 3
+  m_Name: Player 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7401,7 +7402,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7703758953536002777}
   m_Layer: 5
-  m_Name: Player 2
+  m_Name: Player 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7887,7 +7888,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6937775054076971841}
   m_Layer: 5
-  m_Name: Player Info
+  m_Name: Players Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

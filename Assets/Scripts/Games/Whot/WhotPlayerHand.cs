@@ -5,6 +5,7 @@ using System.Linq;
 using Api;
 using DG.Tweening;
 using Globals;
+using Google.Protobuf;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,6 +33,21 @@ public class WhotPlayerHand : MonoBehaviour
         scoreParent.gameObject.SetActive(false);
     }
 
+    public void PlayACard(WhotCard card)
+    {
+        card.SetSelectable(false);
+        whotGame.PlayACard(whotGame.GetCurrentPlayer(), card, GetCardsParent());
+        EndTurn();
+        cardsInHand.Remove(card);
+        Destroy(card.gameObject);
+        if (cardsInHand.Count == 0)
+        {
+            whotGame.AnimateLastCard();
+            whotGame.AnimateShowRemainingCards();
+        }
+        SpreadCards();
+    }
+
     #region Animations
 
     public void AnimateSortCards()
@@ -56,7 +72,7 @@ public class WhotPlayerHand : MonoBehaviour
             .AppendInterval(0.5f)
             .OnComplete(() =>
             {
-                whotGame.NextTurn();
+                // whotGame.NextTurn();
             });
     }
 
@@ -75,7 +91,7 @@ public class WhotPlayerHand : MonoBehaviour
             Vector2 targetPos = new Vector2(startX + i * CARD_SPACING, GetHandPosition().y);
             card.SetLocalPosition(targetPos);
             card.transform.SetSiblingIndex(i);
-            card.transform.DOLocalMove(targetPos, 0.25f);
+            card.transform.DOLocalMove(targetPos, 0.1f);
         }
     }
 
@@ -168,17 +184,12 @@ public class WhotPlayerHand : MonoBehaviour
             {
                 if (e.isSelected)
                 {
-                    cardsInHand.Remove(card);
-                    card.SetSelectable(false);
-                    whotGame.PlayACard(whotGame.GetCurrentPlayer(), card, card.transform);
-                    EndTurn();
-                    Destroy(card.gameObject);
-                    if (cardsInHand.Count == 0)
+                    Card cardObject = new()
                     {
-                        whotGame.AnimateLastCard();
-                        whotGame.AnimateShowRemainingCards();
-                    }
-                    SpreadCards();
+                        Suit = card.GetCardSuit(),
+                        Rank = card.GetCardRank()
+                    };
+                    DataSender.SendMatchState((long)OpCodeRequest.PlayCard, cardObject.ToByteArray());
                 }
             }
         }
@@ -187,6 +198,10 @@ public class WhotPlayerHand : MonoBehaviour
 
     public void EndTurn()
     {
+        foreach (var card in cardsInHand)
+        {
+            card.Unselect();
+        }
         whotGame.GetCurrentPlayer().StopCountDown();
         whotGame.AnimateHideDeckHighlight();
         SetNormalCards();

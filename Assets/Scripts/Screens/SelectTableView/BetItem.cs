@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Api;
 using Globals;
 using Newtonsoft.Json.Linq;
 using TMPro;
@@ -13,13 +14,23 @@ public class BetItem : MonoBehaviour
     [SerializeField] private Button button;
     [SerializeField] private List<Sprite> backgroundSpriteList;
 
-    public void SetData(JObject dataItem, int index)
+    public void SetData(Bet dataItem, int index)
     {
         print("SetData: " + dataItem.ToString());
-        gameObject.name = "" + (int)dataItem["mark"];
-        betAmountText.text = Utility.FormatMoney((int)dataItem["mark"], true);
-        betTitleText.text = Utility.FormatMoney((int)dataItem["mark"], true);
+        gameObject.name = "" + dataItem.MarkUnit;
+        betAmountText.text = Utility.FormatMoney((int)dataItem.MarkUnit, true);
+        // betTitleText.text = Utility.FormatMoney((int)dataItem["mark"], true);
         backgroundImage.sprite = backgroundSpriteList[index % 4];
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(async () =>
+        {
+            RpcFindMatchResponse response = await DataSender.FindMatch(Constants.WhotGameID, (int)dataItem.MarkUnit);
+            if (response != null && response.Matches.Count > 0)
+            {
+                DataSender.JoinMatch(response.Matches[0].MatchId);
+                UIManager.Instance.OpenGame("whot");
+            }
+        });
         // if (dataItem.ContainsKey("minAgCon"))
         // {
         //     if (Globals.User.userMain.AG >= (int)_dataItem["minAgCon"])

@@ -40,6 +40,18 @@ message BetListRequest { string code = 1; }
 
 message BetListResponse { repeated int32 bets = 1; }
 
+message BetPlayerCount {
+  int64 bet_id = 1;
+  float mark_unit = 2;
+  int32 player_count = 3;
+}
+
+message PlayerCountByBetResponse {
+  string game_code = 1;
+  repeated BetPlayerCount bet_counts = 2;
+  int32 total_players = 3;
+}
+
 enum TypeChat {
   TYPE_CHAT_UNSPECIFIED = 0;
   TYPE_CHAT_ROOM = 1;

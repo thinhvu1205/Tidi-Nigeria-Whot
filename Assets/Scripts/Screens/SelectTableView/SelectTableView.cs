@@ -1,6 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Api;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Globals;
 using Newtonsoft.Json.Linq;
 using TMPro;
 using UnityEngine;
@@ -14,191 +18,47 @@ public class SelectTableView : BaseView
     [SerializeField] private ScrollRect scrollRectTable, scrollRectBet;
     [SerializeField] private GameObject tableItemPrefab, betItemPrefab, tabItemPrefab;
     [SerializeField] private Transform tableItemParent, betItemParent, tabItemParent;
+    [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TMP_InputField findTableInputField;
     [SerializeField] private List<Sprite> buttonSpriteList;
-    private JArray mockArray = new();
-    private JArray mockTableArray = new();
+    private Bets bets;
     private int currentTab = 0;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        UpdateTitle();
+        GetListBet().Forget();
+    }
     protected override void Start()
     {
         base.Start();
-        mockArray = CreateMockRoomList();
-        mockTableArray = CreateMockTableList();
+
+    }
+    #region API Handlers
+    private async UniTask GetListBet()
+    {
+        Bets bets = await DataSender.GetListBet(Constants.WhotGameID);
+        PlayerCountByBetResponse playerCounts = await DataSender.GetPlayerCountByBet(Constants.WhotGameID);
+        this.bets = bets;
+        Debug.Log("List bet game whot : " + bets.ToString());
+        Debug.Log("Player count by bet: " + playerCounts.ToString());
         LoadListBetItem();
 
-        Debug.Log("Mock Table List: " + mockTableArray.ToString());
-    }
-    #region Data
-    public JArray CreateMockRoomList()
-    {
-        var roomList = new JArray
-        {
-            new JObject
-            {
-                ["mark"] = 2000,
-                ["ag"] = 20000,
-                ["agPn"] = 0,
-                ["agD"] = 0,
-                ["minAgCon"] = 20000,
-                ["maxAgCon"] = 0,
-                ["currplay"] = 5,
-                ["room"] = 0,
-                ["minChipbanker"] = 0,
-                ["maxBet"] = 0,
-                ["agLeft"] = 10000,
-                ["agRaiseFee"] = 0,
-                ["fee"] = 0.0
-            },
-            new JObject
-            {
-                ["mark"] = 10000,
-                ["ag"] = 150000,
-                ["agPn"] = 0,
-                ["agD"] = 0,
-                ["minAgCon"] = 150000,
-                ["maxAgCon"] = 0,
-                ["currplay"] = 5,
-                ["room"] = 0,
-                ["minChipbanker"] = 0,
-                ["maxBet"] = 0,
-                ["agLeft"] = 70000,
-                ["agRaiseFee"] = 100000,
-                ["fee"] = 1.5
-            },
-            new JObject
-            {
-                ["mark"] = 20000,
-                ["ag"] = 300000,
-                ["agPn"] = 0,
-                ["agD"] = 0,
-                ["minAgCon"] = 300000,
-                ["maxAgCon"] = 0,
-                ["currplay"] = 5,
-                ["room"] = 0,
-                ["minChipbanker"] = 0,
-                ["maxBet"] = 0,
-                ["agLeft"] = 140000,
-                ["agRaiseFee"] = 200000,
-                ["fee"] = 1.5
-            },
-            new JObject
-            {
-                ["mark"] = 50000,
-                ["ag"] = 750000,
-                ["agPn"] = 0,
-                ["agD"] = 0,
-                ["minAgCon"] = 750000,
-                ["maxAgCon"] = 0,
-                ["currplay"] = 4,
-                ["room"] = 0,
-                ["minChipbanker"] = 0,
-                ["maxBet"] = 0,
-                ["agLeft"] = 350000,
-                ["agRaiseFee"] = 500000,
-                ["fee"] = 1.5
-            },
-            new JObject
-            {
-                ["mark"] = 100000,
-                ["ag"] = 1500000,
-                ["agPn"] = 0,
-                ["agD"] = 0,
-                ["minAgCon"] = 1500000,
-                ["maxAgCon"] = 0,
-                ["currplay"] = 5,
-                ["room"] = 0,
-                ["minChipbanker"] = 0,
-                ["maxBet"] = 0,
-                ["agLeft"] = 700000,
-                ["agRaiseFee"] = 1000000,
-                ["fee"] = 1.5
-            },
-            new JObject
-            {
-                ["mark"] = 200000,
-                ["ag"] = 3000000,
-                ["agPn"] = 0,
-                ["agD"] = 0,
-                ["minAgCon"] = 3000000,
-                ["maxAgCon"] = 0,
-                ["currplay"] = 5,
-                ["room"] = 0,
-                ["minChipbanker"] = 0,
-                ["maxBet"] = 0,
-                ["agLeft"] = 1400000,
-                ["agRaiseFee"] = 2000000,
-                ["fee"] = 1.5
-            },
-            new JObject
-            {
-                ["mark"] = 500000,
-                ["ag"] = 7500000,
-                ["agPn"] = 0,
-                ["agD"] = 0,
-                ["minAgCon"] = 7500000,
-                ["maxAgCon"] = 0,
-                ["currplay"] = 5,
-                ["room"] = 0,
-                ["minChipbanker"] = 0,
-                ["maxBet"] = 0,
-                ["agLeft"] = 3500000,
-                ["agRaiseFee"] = 5000000,
-                ["fee"] = 1.5
-            },
-            new JObject
-            {
-                ["mark"] = 1000000,
-                ["ag"] = 15000000,
-                ["agPn"] = 0,
-                ["agD"] = 0,
-                ["minAgCon"] = 15000000,
-                ["maxAgCon"] = 0,
-                ["currplay"] = 0,
-                ["room"] = 0,
-                ["minChipbanker"] = 0,
-                ["maxBet"] = 0,
-                ["agLeft"] = 7000000,
-                ["agRaiseFee"] = 10000000,
-                ["fee"] = 1.5
-            }
-        };
-
-        return roomList;
-    }
-
-    public JArray CreateMockTableList()
-    {
-        int[] mark = { 2000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000 };
-        JArray roomArray = new JArray();    
-        for (int i = 0; i < mark.Length; i++) 
-        {
-            JObject room = new JObject
-            {
-                ["id"] = 12148 + i,
-                ["N"] = $"Let is play LUCKY9 Amateur #{i + 1}",
-                ["mark"] = mark[i],
-                ["isPrivate"] = false,
-                ["player"] = i + 1,
-                ["size"] = 8,
-                ["ArrName"] = new JArray
-                {
-                    $"PlayerA_{i}",
-                    $"PlayerB_{i}",
-                    $"PlayerC_{i}",
-                    $"PlayerD_{i}"
-                },
-                ["H"] = 999 + i * 10,
-                ["minAgCon"] = 10000 + i * 2000
-            };
-
-            roomArray.Add(room);
-        }
-
-        return roomArray;
     }
     #endregion
-
+    private void UpdateTitle()
+    {
+        switch (Config.currentGameId)
+        {
+            case Constants.WhotGameID:
+                titleText.text = "Whot";
+                break;
+            default:
+                // titleText.text = "Select Table";
+                break;
+        }
+    }
     private void LoadListBetItem()
     {
 
@@ -206,41 +66,42 @@ public class SelectTableView : BaseView
         {
             Destroy(betItemParent.GetChild(i).gameObject);
         }
-        for (int i = 0; i < mockArray.Count; i++)
+        List<Bet> betList = bets.Bets_.ToList();
+        for (int i = 0; i < betList.Count; i++)
         {
             int index = i;
             var betItem = Instantiate(betItemPrefab, betItemParent);
-            betItem.GetComponent<BetItem>().SetData(mockArray[index] as JObject, index);
-            var tableTabItem = Instantiate(tabItemPrefab, tabItemParent);
-            tableTabItem.GetComponent<TableTabItem>().SetData(mockArray[index] as JObject);
-            tableTabItem.GetComponent<Button>().onClick.AddListener(() =>
-            {
-                OnClickTab(tableTabItem.GetComponent<TableTabItem>(), mockArray[index] as JObject, index);
-            });
-            if (index == 0)
-            {
-                OnClickTab(tableTabItem.GetComponent<TableTabItem>(), mockArray[index] as JObject, index);
-            }
+            betItem.GetComponent<BetItem>().SetData(betList[index], index);
+            // var tableTabItem = Instantiate(tabItemPrefab, tabItemParent);
+            // tableTabItem.GetComponent<TableTabItem>().SetData(betList[index] as JObject);
+            // tableTabItem.GetComponent<Button>().onClick.AddListener(() =>
+            // {
+            //     OnClickTab(tableTabItem.GetComponent<TableTabItem>(), mockArray[index] as JObject, index);
+            // });
+            // if (index == 0)
+            // {
+            //     OnClickTab(tableTabItem.GetComponent<TableTabItem>(), mockArray[index] as JObject, index);
+            // }
         }
-        tabItemParent.GetChild(currentTab).GetComponent<TableTabItem>().SetSelected();
+        // tabItemParent.GetChild(currentTab).GetComponent<TableTabItem>().SetSelected();
     }
 
     private void LoadListTableItem(int mark)
     {
         scrollRectTable.DOVerticalNormalizedPos(1.0f, 0.2f).SetEase(Ease.OutSine);
 
-        for (int i = 0; i < tableItemParent.childCount; i++)
-        {
-            Destroy(tableItemParent.GetChild(i).gameObject);
-        }
-        for (int i = 0; i < mockTableArray.Count; i++)
-        {
-            if ((int)mockTableArray[i]["mark"] != mark) continue;
-            int index = i;
-            var tableItem = Instantiate(tableItemPrefab, tableItemParent);
-            tableItem.GetComponent<TableItem>().SetData(mockTableArray[index] as JObject, index);
+        // for (int i = 0; i < tableItemParent.childCount; i++)
+        // {
+        //     Destroy(tableItemParent.GetChild(i).gameObject);
+        // }
+        // for (int i = 0; i < mockTableArray.Count; i++)
+        // {
+        //     if ((int)mockTableArray[i]["mark"] != mark) continue;
+        //     int index = i;
+        //     var tableItem = Instantiate(tableItemPrefab, tableItemParent);
+        //     tableItem.GetComponent<TableItem>().SetData(mockTableArray[index] as JObject, index);
 
-        }
+        // }
     }
 
     #region Button
@@ -272,7 +133,7 @@ public class SelectTableView : BaseView
         scrollRectBet.gameObject.SetActive(true);
         selectBetButton.GetComponent<Image>().sprite = buttonSpriteList[0];
         selectTableButton.GetComponent<Image>().sprite = buttonSpriteList[1];
-        scrollRectBet.DOVerticalNormalizedPos(0f, 0.2f).SetEase(Ease.OutSine);
+        // scrollRectBet.DOVerticalNormalizedPos(0f, 0.2f).SetEase(Ease.OutSine);
 
     }
 

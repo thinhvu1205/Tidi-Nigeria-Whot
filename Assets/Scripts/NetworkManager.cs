@@ -135,7 +135,7 @@ public class NetworkManager : MonoBehaviour
     }
 
     public void LeaveMatch() => _SocketIS.LeaveMatchAsync(_MatchId);
-    public void SendMatchState(long opCode, string data) => _SocketIS.SendMatchStateAsync(_MatchId, opCode, data);
+    public void SendMatchState(long opCode, byte[] data) => _SocketIS.SendMatchStateAsync(_MatchId, opCode, data);
 
     #endregion
 
@@ -318,6 +318,7 @@ public class NetworkManager : MonoBehaviour
                 UnityMainThreadDispatcher.Instance.Enqueue(() =>
                 {
                     GameManager.Instance.HandleMatchJoin(match);
+                    _MatchId = matched.MatchId;
                 });
             }
             catch (Exception e)

@@ -12,7 +12,6 @@ public class WhotHandler : IGameHandler
     }
     public void OnMatchFound(IMatchmakerMatched matchmakerMatched)
     {
-        whotView.HandleMatchFound(matchmakerMatched);
 
     }
 
@@ -20,13 +19,6 @@ public class WhotHandler : IGameHandler
     {
         whotView.HandleJoinMatch(match);
         // parse match.Label hoặc chờ MatchState 
-    }
-
-    public void OnMatchState(IMatchState state)
-    {
-        whotView.HandleMatchState(state);
-        Debug.Log("WHOT Match State: " + state.OpCode);
-        // parse JSON và xử lý tùy theo OpCode
     }
 
     public void OnMatchPresence(IMatchPresenceEvent presenceEvent)
@@ -44,6 +36,7 @@ public class WhotHandler : IGameHandler
     public void OnUpdateTable(IMatchState matchState)
     {
         var updateTable = UpdateTable.Parser.ParseFrom(matchState.State);
+        whotView.HandleUpdateTable(updateTable);
         Debug.Log("OpCodeUpdate.Table " + updateTable.ToString());
     }
 
@@ -51,23 +44,29 @@ public class WhotHandler : IGameHandler
     {
         var updateTurn = UpdateTurn.Parser.ParseFrom(matchState.State);
         Debug.Log("OpCodeUpdate.Turn " + updateTurn.ToString());
+        whotView.HandleUpdateTurn(updateTurn);
     }
 
     public void OnUpdateDeal(IMatchState matchState)
     {
         var deal = UpdateDeal.Parser.ParseFrom(matchState.State);
         Debug.Log("OpCodeUpdate.Deal " + deal.ToString());
+        whotView.HandleUpdateDeal(deal);
     }
-    
-    public void OnUpdateCardState(IMatchState matchState) {
+
+    public void OnUpdateCardState(IMatchState matchState)
+    {
         var updateCardState = UpdateCardState.Parser.ParseFrom(matchState.State);
         Debug.Log("WHOT OnUpdateCardState: " + updateCardState.ToString());
+        whotView.HandleUpdateCardState(updateCardState);
     }
 
     public void OnUpdateGameState(IMatchState matchState)
     {
         var updateGameState = UpdateGameState.Parser.ParseFrom(matchState.State);
         Debug.Log("WHOT OnUpdateGameState: " + updateGameState.ToString());
+        whotView.HandleUpdateGameState(updateGameState);
+
     }
 
     public void OnFinish(IMatchState matchState)

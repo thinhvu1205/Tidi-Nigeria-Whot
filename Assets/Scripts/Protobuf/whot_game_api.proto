@@ -114,6 +114,7 @@ message UpdateDeal {
   PresenceCards presence_card = 1;
   map<string,CardEvent> card_event = 2;
   Card top_card = 3; // card on top of deck
+  string id_dealer = 4;
 }
 
 
@@ -132,13 +133,15 @@ message UpdateCardState {
   CardEffect effect = 6;
   int32 pick_penalty = 7;
   string target_user_id = 8;
+  bool is_auto_play = 9;
 }
 
 enum CardEvent {
   NONE = 0;         
   PLAY = 1;         
   DRAW = 2;         
-  PASS = 3;           
+  PASS = 3;  
+  AUTO_PLAY = 4;         
 }
 
 enum CardEffect {
