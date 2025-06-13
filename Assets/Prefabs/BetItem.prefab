@@ -168,7 +168,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -53}
+  m_AnchoredPosition: {x: 2.9, y: -40.3}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1620633204394302957
@@ -201,15 +201,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 100
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d386dad490be84c84aa7705743688592, type: 2}
-  m_sharedMaterial: {fileID: 4116357285063013880, guid: d386dad490be84c84aa7705743688592, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8feb5cfe9655942e3a1e6dcd968ed3dc, type: 2}
+  m_sharedMaterial: {fileID: 7174879361119641898, guid: 8feb5cfe9655942e3a1e6dcd968ed3dc, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4283934161
-  m_fontColor: {r: 0.81960785, g: 0.64705884, b: 0.34117648, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -226,8 +226,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -236,7 +236,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -20
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -323,7 +323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   betTitleText: {fileID: 99215942665220126}
   betAmountText: {fileID: 2393506859560243074}
-  playerCountText: {fileID: 99215942665220126}
+  playerCountText: {fileID: 6229088224979732610}
   backgroundImage: {fileID: 408563114085617938}
   button: {fileID: 6143548541286863507}
   backgroundSpriteList:
@@ -331,6 +331,14 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 1a9adfed590e44392992a885fb25b955, type: 3}
   - {fileID: 21300000, guid: e20c8e9052d514ec1baa581fbba38664, type: 3}
   - {fileID: 21300000, guid: d27d30d39f2f8405c9e9e9a099bcf257, type: 3}
+  disabledBackgroundSpriteList:
+  - {fileID: 21300000, guid: 81d84947c33d74b0b91d6ba1556ff416, type: 3}
+  - {fileID: 21300000, guid: 051afaa59fac9429480576b11c7c9149, type: 3}
+  - {fileID: 21300000, guid: a6575630086a549d3a47bac3576c2a47, type: 3}
+  - {fileID: 21300000, guid: e65e5d02f18d04456b7b7d2da38dbd25, type: 3}
+  disableFont: {fileID: 11400000, guid: 88eebc4cf5e904c10ada9d98e100a182, type: 2}
+  disabledTitleTextColor: {r: 0.32156864, g: 0.31764707, b: 0.32156864, a: 1}
+  disablePlayerCountTextColor: {r: 0.91764706, g: 0.9098039, b: 0.9764706, a: 1}
 --- !u!114 &6143548541286863507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -440,7 +448,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d386dad490be84c84aa7705743688592, type: 2}
   m_sharedMaterial: {fileID: 4116357285063013880, guid: d386dad490be84c84aa7705743688592, type: 2}

@@ -12,49 +12,47 @@ public class BetItem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI betTitleText, betAmountText, playerCountText;
     [SerializeField] private Image backgroundImage;
     [SerializeField] private Button button;
-    [SerializeField] private List<Sprite> backgroundSpriteList;
+    [SerializeField] private List<Sprite> backgroundSpriteList, disabledBackgroundSpriteList;
+    [SerializeField] private TMP_FontAsset disableFont;
+    [SerializeField] private Color disabledTitleTextColor, disablePlayerCountTextColor;
 
     public void SetData(Bet dataItem, int index)
     {
-        print("SetData: " + dataItem.ToString());
         gameObject.name = "" + dataItem.MarkUnit;
         betAmountText.text = Utility.FormatMoney((int)dataItem.MarkUnit, true);
-        // betTitleText.text = Utility.FormatMoney((int)dataItem["mark"], true);
-        backgroundImage.sprite = backgroundSpriteList[index % 4];
-        button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(async () =>
+        if (dataItem.Enable)
         {
-            RpcFindMatchResponse response = await DataSender.FindMatch(Constants.WhotGameID, (int)dataItem.MarkUnit);
-            if (response != null && response.Matches.Count > 0)
+            backgroundImage.sprite = backgroundSpriteList[index % 4];
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(async () =>
             {
-                DataSender.JoinMatch(response.Matches[0].MatchId);
-                UIManager.Instance.OpenGame("whot");
-            }
-        });
-        // if (dataItem.ContainsKey("minAgCon"))
-        // {
-        //     if (Globals.User.userMain.AG >= (int)_dataItem["minAgCon"])
-        //     {
-        //         //bkg.sprite = lsBkg[1];
-        //         backgroundImage.color = Color.white;
-        //         txtBet.color = Color.white;
+                RpcFindMatchResponse response = await DataSender.FindMatch(Constants.WhotGameID, (int)dataItem.MarkUnit);
+                Debug.Log("Find match response: " + response.ToString());
+                if (response != null && response.Matches.Count > 0)
+                {
+                    await DataSender.JoinMatch(response.Matches[0].MatchId);
+                    UIManager.Instance.OpenGame("whot");
+                }
+            });
+        }
+        else
+        {
+            backgroundImage.sprite = disabledBackgroundSpriteList[index % 4];
+            betAmountText.font = disableFont;
+            betTitleText.color = disabledTitleTextColor;
+            playerCountText.color = disablePlayerCountTextColor;
 
-        //         //ColorUtility.TryParseHtmlString("#F2A433", out colorLine);
-        //         //txtBet.GetComponent<Outline>().effectColor = colorLine;
-        //         //txtBet.outlineColor = colorLine;
-        //         // txtBet.fontMaterial = ndex%2==0? Mat_green: Mat_yellow;
-        //     }
-        //     else
-        //     {
-        //         bkg.sprite = lsBkg[2];
+   
+        }
+    }
 
-        //         //bkg.color = Color.gray;
-        //         //txtBet.color = Color.gray;
-        //         //ColorUtility.TryParseHtmlString("#986C2C", out colorLine);
-        //         //txtBet.GetComponent<Outline>().effectColor = colorLine;
-        //         //txtBet.outlineColor = colorLine;
-        //         // txtBet.fontMaterial = Mat_gray;
-        //     }
-        // }
+    private async void OnClickBetItem(int markUnit)
+    {
+        RpcFindMatchResponse response = await DataSender.FindMatch(Constants.WhotGameID, markUnit);
+        if (response != null && response.Matches.Count > 0)
+        {
+            DataSender.JoinMatch(response.Matches[0].MatchId);
+            UIManager.Instance.OpenGame("whot");
+        }
     }
 }

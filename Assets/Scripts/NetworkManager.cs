@@ -113,7 +113,7 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    public async void JoinMatch(string matchId)
+    public async UniTask JoinMatch(string matchId)
     {
         try
         {

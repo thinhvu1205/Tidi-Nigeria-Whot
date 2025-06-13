@@ -120,7 +120,7 @@ public class DataSender
          var response = await NetworkManager.INSTANCE.RPCSend(CREATE_MATCH, rpcCreateMatchRequest);
          return DecodeFromBase64<RpcCreateMatchResponse>(response.Payload);
     }
-    public static void JoinMatch(string matchId) => NetworkManager.INSTANCE.JoinMatch(matchId);
+    public static async UniTask JoinMatch(string matchId) => await NetworkManager.INSTANCE.JoinMatch(matchId);
     public static void LeaveMatch() => NetworkManager.INSTANCE.LeaveMatch();
     public static void SendMatchState(long opCode, byte[] data)
     {

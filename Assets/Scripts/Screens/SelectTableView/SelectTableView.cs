@@ -18,7 +18,7 @@ public class SelectTableView : BaseView
     [SerializeField] private ScrollRect scrollRectTable, scrollRectBet;
     [SerializeField] private GameObject tableItemPrefab, betItemPrefab, tabItemPrefab;
     [SerializeField] private Transform tableItemParent, betItemParent, tabItemParent;
-    [SerializeField] private TextMeshProUGUI titleText;
+    [SerializeField] private TextMeshProUGUI titleText, accountChip;
     [SerializeField] private TMP_InputField findTableInputField;
     [SerializeField] private List<Sprite> buttonSpriteList;
     private Bets bets;
@@ -27,6 +27,8 @@ public class SelectTableView : BaseView
     protected override void Awake()
     {
         base.Awake();
+        Config.currentGameId = Constants.WhotGameID;
+        UpdateVisuals();
         UpdateTitle();
         GetListBet().Forget();
     }
@@ -47,6 +49,10 @@ public class SelectTableView : BaseView
 
     }
     #endregion
+    private void UpdateVisuals()
+    {
+        accountChip.text = User.userMain.accountChip;
+    }
     private void UpdateTitle()
     {
         switch (Config.currentGameId)

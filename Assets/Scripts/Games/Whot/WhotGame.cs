@@ -103,6 +103,7 @@ public class WhotGame : MonoBehaviour
     // Khi có người chơi join hoặc leave
     public void HandleUpdateTable(UpdateTable data)
     {
+        SetActivePlayersParent();
         List<Player> players = data.Players.ToList();
         string currentPlayerId = User.userMain.userId; 
         Player currentPlayer = players.Find((player) => player.Id == currentPlayerId);    
@@ -124,8 +125,10 @@ public class WhotGame : MonoBehaviour
         // Khởi tạo List Player lần đầu
         if (playersList.Count == 0)
         {
+            Debug.Log("Initializing players list with " + players.Count + " players.");
             for (int i = 0; i < players.Count; i++)
             {
+                Debug.Log("Adding player: " + players[i].UserName);
                 Player player = players[i];
                 int spawnIndex = spawnOrders[players.Count - 1][i];
                 WhotPlayer whotPlayer = Instantiate(whotPlayerPrefab, playerPositionsList[spawnIndex]).GetComponent<WhotPlayer>();
