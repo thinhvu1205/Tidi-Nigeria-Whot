@@ -2,13 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SafeArea : Singleton<SafeArea>
+public class SafeArea : MonoBehaviour
 {
+    public static SafeArea Instance { get; private set; }
     private RectTransform rectTransform;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
         rectTransform = GetComponent<RectTransform>();
         ChangeOrient();
     }

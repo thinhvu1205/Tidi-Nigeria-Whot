@@ -160,8 +160,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: WhotGame, Assembly-CSharp
+      - m_Target: {fileID: 8738457346684950406}
+        m_TargetAssemblyTypeName: WhotView, Assembly-CSharp
         m_MethodName: OnDrawACard
         m_Mode: 1
         m_Arguments:

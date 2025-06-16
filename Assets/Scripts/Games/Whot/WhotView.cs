@@ -13,7 +13,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using GameState = Api.GameState;
 
-public class WhotView : BaseView
+public class WhotView : GameView
 {
     public event Action<OnNextTurnEventArg> OnNextTurn;
     public class OnNextTurnEventArg : EventArgs
@@ -53,9 +53,7 @@ public class WhotView : BaseView
         LAST_CARD_EFFECT_ANIMATION_NAME = "1",
         LOSE_ANIMATION_NAME = "better",
         VICTORY_MARKET_ANIMATION_NAME = "victory";
-        public WhotCard CallCard { get; private set; }
-    public List<string> PlayerIdsList { get; private set; }
-    private int currentTurnIndex = 5;
+    public WhotCard CallCard { get; private set; }
     private List<WhotPlayer> playersList;
     private List<WhotCard> initialCardsList;
     private Stack<WhotCard> deck;
@@ -74,7 +72,6 @@ public class WhotView : BaseView
         playersList = new();
         deck = new();
         initialCardsList = new();
-        PlayerIdsList = new();
         HandleResetGame();
     }
 
@@ -84,7 +81,7 @@ public class WhotView : BaseView
         playerHand = GetComponent<WhotPlayerHand>();
         playerHand.Reset();
         suitPicker.OnSuitPicked += WhotSuitPicker_OnSuitPicked;
-        playAreaParent.gameObject.SetActive(false);
+        // playAreaParent.gameObject.SetActive(false);
         playersParent.gameObject.SetActive(false);
         suitPicker.gameObject.SetActive(false);
         deckHighlightImage.gameObject.SetActive(false);
@@ -108,6 +105,7 @@ public class WhotView : BaseView
     {
         SetActivePlayersParent();
         List<Player> players = data.Players.ToList();
+        List<Player> joinPlayers = data.JoinPlayers.ToList();
         string currentPlayerId = User.userMain.userId; 
         Player currentPlayer = players.Find((player) => player.Id == currentPlayerId);    
         int startIndex = players.IndexOf(currentPlayer);
@@ -128,7 +126,6 @@ public class WhotView : BaseView
         // Khởi tạo List Player lần đầu
         if (playersList.Count == 0)
         {
-            Debug.Log("Initializing players list with " + players.Count + " players.");
             for (int i = 0; i < players.Count; i++)
             {
                 Debug.Log("Adding player: " + players[i].UserName);
@@ -143,7 +140,6 @@ public class WhotView : BaseView
                 );
                 whotPlayer.transform.localPosition = Vector3.zero;
                 whotPlayer.SetWhotGame(this);
-                whotPlayer.isWinner = false;
                 whotPlayer.HideCardsLeft();
                 if (player.Id == currentPlayerId)
                 {
@@ -158,13 +154,15 @@ public class WhotView : BaseView
         }
         else
         {
-            for (int i = 0; i < players.Count; i++)
+            for (int i = 0; i < joinPlayers.Count; i++)
             {
-                Player player = players[i];
-                if (players.Find((p) => p.Id == player.Id) == null)
+                Player player = joinPlayers[i];
+                if (playersList.Find((p) => p.playerId == player.Id) == null)
                 {
+                    Debug.Log("Adding player: " + joinPlayers[i].UserName);
+
                     // Nếu người chơi là người chơi mới vào
-                    int spawnIndex = spawnOrders[players.Count][i];
+                    int spawnIndex = spawnOrders[players.Count - 1][players.Count - 1];
                     WhotPlayer whotPlayer = Instantiate(whotPlayerPrefab, playerPositionsList[spawnIndex]).GetComponent<WhotPlayer>();
                     whotPlayer.SetPlayerInfo(
                         player.Id,
@@ -174,9 +172,15 @@ public class WhotView : BaseView
                     );
                     whotPlayer.transform.localPosition = Vector3.zero;
                     whotPlayer.SetWhotGame(this);
-                    whotPlayer.isWinner = false;
                     whotPlayer.HideCardsLeft();
-                    whotPlayer.isCurrentPlayer = false;
+                    if (player.Id == currentPlayerId)
+                    {
+                        whotPlayer.isCurrentPlayer = true;
+                    }
+                    else
+                    {
+                        whotPlayer.isCurrentPlayer = false;
+                    }
                     playersList.Add(whotPlayer);
                 }
             }
@@ -192,8 +196,9 @@ public class WhotView : BaseView
 
         if (!hasDealtCards)
         {
+            // Lần đầu thì chia bài
             Card callCard = data.TopCard;
-            CallCard = Instantiate(cardPrefab, GetCallCardParent()).GetComponent<WhotCard>();
+            CallCard = Instantiate(cardPrefab).GetComponent<WhotCard>();
             CallCard.SetInfo(callCard.Suit, callCard.Rank);
             foreach (Card card in presenceCard)
             {
@@ -204,17 +209,25 @@ public class WhotView : BaseView
             StartCoroutine(DealCards());
             hasDealtCards = true;
         }
+        else
+        {
+            // Ko phải lần đầu thì là bốc 1 lá bài, lá bài mới sẽ là phần tử cuối cùng của mảng
+            Card drawnCard = presenceCard.Last();
+            WhotCard card = Instantiate(cardPrefab).GetComponent<WhotCard>();
+            card.SetInfo(drawnCard.Suit, drawnCard.Rank);
+            DrawACard(card, playerHand.GetCardsParent(), true);
+        }
     }
 
     public void HandleUpdateGameState(UpdateGameState data)
     {
 
         gameState = data.State;
-        if (Config.currentGameId != Constants.WhotGameID)
-        {
-            Config.currentGameId = Constants.WhotGameID;
-            UIManager.Instance.OpenGame("whot");
-        }
+        // if (Config.currentGameId != Constants.WhotGameID)
+        // {
+        //     Config.currentGameId = Constants.WhotGameID;
+        //     UIManager.Instance.OpenGame("whot");
+        // }
 
         switch (gameState)
         {
@@ -264,7 +277,7 @@ public class WhotView : BaseView
     {
         switch (data.Event)
         {
-            case CardEvent.Play:
+            case CardEvent.Play when data.Effect != CardEffect.ChoiceShapeGhost:
                 if (data.UserId == User.userMain.userId)
                 {
                     // Khi người chơi hiện tại đánh 1 lá bài
@@ -273,25 +286,23 @@ public class WhotView : BaseView
                         (data.TopCard.Rank == CardRank.Rank20 || card.GetCardSuit() == data.TopCard.Suit)
                     );
                     // Nếu TopCard.Rank == 20, thì chỉ cần check Rank, bỏ qua Suit. Nếu TopCard.Rank != 20, thì phải match cả Rank và Suit.
+                    if (playedCard == null) return;
                     playerHand.PlayACard(playedCard);
                 }
                 else
                 {
                     // Khi người chơi khác đánh 1 lá bài
                     WhotPlayer player = playersList.Find(p => p.playerId == data.UserId);
-                    WhotCard playedCard = Instantiate(cardPrefab, player.GetPlayedCardParent()).GetComponent<WhotCard>();
+                    if (!Instantiate(cardPrefab, player.GetPlayedCardParent()).TryGetComponent<WhotCard>(out var playedCard)) return;
                     playedCard.SetInfo(data.TopCard.Suit, data.TopCard.Rank);
                     player.PlayACard(playedCard);
                 }
+                HandleCardEffect(data);
                 break;
             case CardEvent.Draw:
-                WhotCard drawnCard = Instantiate(cardPrefab, GetDeckOfCardParent()).GetComponent<WhotCard>();
-                if (data.UserId == User.userMain.userId)
-                {
-                    // Khi người chơi hiện tại rút 1 lá bài
-                    DrawACard(drawnCard, playerHand.GetCardsParent(), true);
-                }
-                else
+                WhotCard drawnCard = Instantiate(cardPrefab).GetComponent<WhotCard>();
+                drawnCard.SetInfo(data.TopCard.Suit, data.TopCard.Rank);
+                if (data.UserId != User.userMain.userId)
                 {
                     // Khi người chơi khác rút 1 lá bài
                     WhotPlayer player = playersList.Find(p => p.playerId == data.UserId);
@@ -366,6 +377,7 @@ public class WhotView : BaseView
 
     public void DrawACard(WhotCard card, Transform targetPosition, bool isCurrentPlayer)
     {
+        Debug.Log("Drawing a card: " + card.GetCardRank() + " of " + card.GetCardSuit() + " for " + (isCurrentPlayer ? "current player" : "other player"));
         GameObject cardInstance = Instantiate(cardPrefab, GetDeckOfCardParent());
         cardInstance.transform.localPosition = Vector3.zero;
         cardInstance.transform.localScale = Vector3.one;
@@ -383,6 +395,7 @@ public class WhotView : BaseView
         {
             AnimateOtherPlayerDrawACard(whotCard, targetPosition);
         }
+        Destroy(card.gameObject);
         UpdateCardsLeft();
     }
 
@@ -409,30 +422,43 @@ public class WhotView : BaseView
     #endregion
 
     #region Card Effects
-    private void HandleCardEffect(WhotPlayer player, WhotCard card)
+    private void HandleCardEffect(UpdateCardState data)
     {
-        switch (card.GetCardRank())
+        WhotPlayer player = playersList.Find(p => p.playerId == data.UserId);
+        bool isCurrentPlayer = player.isCurrentPlayer;
+        switch (data.Effect)
         {
-            case CardRank.Rank20:
+            case CardEffect.Whot when isCurrentPlayer:
                 AnimateOpenSuitPickerWheel(player);
                 break;
-            case CardRank.Rank1:
-                HandleHoldOnEffect(player);
+            case CardEffect.Whot when !isCurrentPlayer:
+                AnimateWait();
                 break;
-            case CardRank.Rank2:
-                HandlePick2Effect(player);
+            case CardEffect.ChoiceShapeGhost:
+                WhotCard whotCard = Instantiate(cardPrefab).GetComponent<WhotCard>();
+                whotCard.SetInfo(data.TopCard.Suit, data.TopCard.Rank);
+                whotCard.SetSelectable(false);
+                CallCard = whotCard;
+                AnimateMatchSymbol(data.TopCard.Suit);
+                Destroy(whotCard.gameObject);
+                StopWaitAnimation();
                 break;
-            case CardRank.Rank5:
-                HandlePick3Effect(player);
+            case CardEffect.HoldOn:
+                // HandleHoldOnEffect(player);
                 break;
-            case CardRank.Rank8:
+            case CardEffect.PickTwo:
+                // HandlePick2Effect(player);
+                break;
+            case CardEffect.PickThree:
+                // HandlePick3Effect(player);
+                break;
+            case CardEffect.Suspension:
                 HandleSuspensionEffect();
                 break;
-            case CardRank.Rank14:
-                HandleGeneralMarketEffect(player);
+            case CardEffect.GeneralMarket:
+                // HandleGeneralMarketEffect(player);
                 break;
             default:
-                Debug.LogWarning($"Unhandled card effect for rank: {card.GetCardRank()}");
                 break;
         }
     }
@@ -467,10 +493,7 @@ public class WhotView : BaseView
     {
         foreach (WhotPlayer player in playersList)
         {
-            if (player.playerId == GetCurrentPlayerTurnId())
-            {
-                player.AnimateShowSuspension();
-            }
+    
         }
     }
     private void HandleGeneralMarketEffect(WhotPlayer activePlayer)
@@ -856,12 +879,18 @@ public class WhotView : BaseView
     #region Events
     private void WhotSuitPicker_OnSuitPicked(CardSuit cardSuit)
     {
+        CallCard.SetSuit(cardSuit);
+        Card cardObject = new()
+        {
+            Suit = cardSuit,
+            Rank = CardRank.Rank20
+        };
+        DataSender.SendMatchState((long)OpCodeRequest.CallWhot, cardObject.ToByteArray());
         Sequence sequence = DOTween.Sequence();
         sequence
             .AppendCallback(() =>
             {
                 AnimateMatchSymbol(cardSuit);
-                StopWaitAnimation();
             });
     }
     #endregion
@@ -878,7 +907,6 @@ public class WhotView : BaseView
     public Transform GetDeckOfCardParent() => deckOfCardParent;
     public WhotPlayer GetCurrentPlayer() => playersList.Find(player => player.isCurrentPlayer);
     private WhotPlayer GetWinner() => playersList.Find(player => player.isWinner);
-    public string GetCurrentPlayerTurnId() => PlayerIdsList[currentTurnIndex];
     #endregion
 
     private void AdjustPlayerLayout()

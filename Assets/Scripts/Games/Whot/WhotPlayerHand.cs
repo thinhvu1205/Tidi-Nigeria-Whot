@@ -121,6 +121,7 @@ public class WhotPlayerHand : MonoBehaviour
     #region Events
     public void WhotGame_OnNextTurn(WhotView.OnNextTurnEventArg e)
     {
+        Debug.Log("CALL CARD: " + e.callCard.GetCardRank() + " - " + e.callCard.GetCardSuit());
         if (e.playerTurn == whotGame.GetCurrentPlayer().playerId)
         {
             Debug.Log("Your turn");
@@ -128,25 +129,8 @@ public class WhotPlayerHand : MonoBehaviour
             CardSuit callCardSuit = e.cardSuit ?? CardSuit.SuitUnspecified;
             foreach (var card in cardsInHand.ToList())
             {
-                if (callCard.GetCardRank() == CardRank.Rank2 &&
-                    card.GetCardRank() == CardRank.Rank2)
-                {
-                    card.SetSelectable(true);
-                    card.SetHighLight();
-                    continue;
-                }
 
-                if (callCard.GetCardRank() == CardRank.Rank5 &&
-                    card.GetCardRank() == CardRank.Rank5)
-                {
-                    card.SetSelectable(true);
-                    card.SetHighLight();
-                    continue;
-                }
-
-                if (callCard.GetCardRank() == CardRank.Rank20 &&
-                    callCardSuit != CardSuit.SuitUnspecified && 
-                    card.GetCardSuit() == callCardSuit
+                if (card.GetCardRank() == CardRank.Rank20
                 )
                 {
                     card.SetSelectable(true);

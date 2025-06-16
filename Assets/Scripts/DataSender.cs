@@ -132,6 +132,7 @@ public class DataSender
     public static void LeaveMatch() => NetworkManager.INSTANCE.LeaveMatch();
     public static void SendMatchState(long opCode, byte[] data)
     {
+        Debug.Log("SendMatchState opCode: " + opCode + ", data: " + BitConverter.ToString(data));
         NetworkManager.INSTANCE.SendMatchState(opCode, data);
     }
     #endregion

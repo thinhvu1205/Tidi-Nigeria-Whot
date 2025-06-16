@@ -90,10 +90,20 @@ public class WhotCard : MonoBehaviour
         cardImage.sprite = backSprite;
     }
 
+    public void SetSuit(CardSuit cardSuit)
+    {
+        suit = cardSuit;
+    }
+
     private Sprite GetSprite()
     {
         string spriteName = GetSuitName() + "_" + GetRankName();
-        Sprite cardSprite = Resources.Load<Sprite>("Games/Whot/Cut/Bai_Whot/" + spriteName);
+        Sprite cardSprite;
+        if (GetCardRank() == CardRank.Rank20)
+        {
+            return Resources.Load<Sprite>("Games/Whot/Cut/Bai_Whot/Whot_0");
+        }
+        cardSprite = Resources.Load<Sprite>("Games/Whot/Cut/Bai_Whot/" + spriteName);
         if (cardSprite == null)
         {
             Debug.LogError($"Sprite not found: Games/Whot/Cut/Bai_Whot/{spriteName}");

@@ -36,7 +36,6 @@ public class BetItem : MonoBehaviour
                     {
                         await DataSender.JoinMatch(response.Matches[0].MatchId);
                         UIManager.Instance.OpenGame("whot");
-                        PlayingMatch playingMatch;
                     }
                 }
                 catch (Exception e)

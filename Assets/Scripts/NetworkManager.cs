@@ -332,7 +332,7 @@ public class NetworkManager : MonoBehaviour
         {
             lock (queueLock)
             {
-                Debug.Log("add state queue " + state);
+                // Debug.Log("add state queue " + state);
                 matchStateQueue.Enqueue(state);
             }
         };
@@ -438,7 +438,7 @@ public class NetworkManager : MonoBehaviour
                     return;
                 }
                 var state = matchStateQueue.Dequeue();
-                Debug.Log("get state dequeue " + state);
+                // Debug.Log("get state dequeue " + state);
                 GameManager.Instance.HandleMatchState(state);
             }
         }
