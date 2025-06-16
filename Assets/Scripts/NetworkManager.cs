@@ -16,7 +16,7 @@ using UnityEngine.SceneManagement;
 public class NetworkManager : MonoBehaviour
 {
     #region Variables
-    
+
     public static NetworkManager INSTANCE { get; private set; }
 
     private const string SESSION = "session",
@@ -33,7 +33,7 @@ public class NetworkManager : MonoBehaviour
     private string _MatchId;
 
     #endregion
-    
+
     #region RPC
 
     public async UniTask<IApiRpc> RPCSend(string apiName, IMessage protoMessage = null)
@@ -52,7 +52,7 @@ public class NetworkManager : MonoBehaviour
             return null;
         }
     }
-    
+
     // public async UniTask RPCSend(string apiName, JSONObject jsonData)
     // {
     //     Debug.Log("--Send--/ " + apiName + "/ " + jsonData.ToString());
@@ -70,7 +70,7 @@ public class NetworkManager : MonoBehaviour
     //         }
     //     });
     // }
-    
+
     #endregion
 
     #region Match
@@ -79,7 +79,7 @@ public class NetworkManager : MonoBehaviour
     {
         var match = await _SocketIS.CreateMatchAsync(gameCode);
         Debug.Log("-----Match----- " + match.ToString());
-        JoinMatch(match.Id);
+        await JoinMatch(match.Id);
     }
 
     public async void MakingMatch(string gameCode)

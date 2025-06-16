@@ -18,7 +18,7 @@ public class WhotPlayerHand : MonoBehaviour
     [SerializeField] private WhotSuitPicker suitPicker;
     [HideInInspector] public List<WhotCard> cardsInHand = new();
     
-    private WhotGame whotGame;
+    private WhotView whotGame;
 
     private const float CARD_SPACING = 56f;
     private const float ANIMATION_TIME = 0.35f;
@@ -27,7 +27,7 @@ public class WhotPlayerHand : MonoBehaviour
 
     private void Awake()
     {
-        whotGame = GetComponent<WhotGame>();
+        whotGame = GetComponent<WhotView>();
         whotGame.OnNextTurn += WhotGame_OnNextTurn;
 
         scoreParent.gameObject.SetActive(false);
@@ -119,7 +119,7 @@ public class WhotPlayerHand : MonoBehaviour
     #endregion
 
     #region Events
-    public void WhotGame_OnNextTurn(WhotGame.OnNextTurnEventArg e)
+    public void WhotGame_OnNextTurn(WhotView.OnNextTurnEventArg e)
     {
         if (e.playerTurn == whotGame.GetCurrentPlayer().playerId)
         {

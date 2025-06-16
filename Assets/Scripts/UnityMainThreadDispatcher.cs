@@ -4,8 +4,12 @@ using System.Collections.Generic;
 
 public class UnityMainThreadDispatcher : Singleton<UnityMainThreadDispatcher>
 {
-    private static readonly Queue<Action> _executionQueue = new();
+    private static  Queue<Action> _executionQueue = new();
 
+    void Start()
+    {
+        _executionQueue = new();
+    }
     public void Enqueue(Action action)
     {
         lock (_executionQueue)

@@ -30,7 +30,8 @@ public class SelectTableView : BaseView
         Config.currentGameId = Constants.WhotGameID;
         UpdateVisuals();
         UpdateTitle();
-        GetListBet().Forget();
+        SetupButtons();
+        GetListBet().Forget();        
     }
     protected override void Start()
     {
@@ -41,10 +42,8 @@ public class SelectTableView : BaseView
     private async UniTask GetListBet()
     {
         Bets bets = await DataSender.GetListBet(Constants.WhotGameID);
-        PlayerCountByBetResponse playerCounts = await DataSender.GetPlayerCountByBet(Constants.WhotGameID);
         this.bets = bets;
         Debug.Log("List bet game whot : " + bets.ToString());
-        Debug.Log("Player count by bet: " + playerCounts.ToString());
         LoadListBetItem();
 
     }
@@ -152,9 +151,9 @@ public class SelectTableView : BaseView
         LoadListBetItem();
     }
 
-    public void OnClickQuickStart()
+    public async void OnClickQuickStart()
     {
-
+        await DataSender.QuickMatch(Config.currentGameId);
     }
 
     public void OnClickCreateTable()
@@ -191,6 +190,12 @@ public class SelectTableView : BaseView
         float contentWidth = scrollRectBet.content.GetComponent<RectTransform>().rect.width;
         prevButton.gameObject.SetActive(viewportWidth < contentWidth && posX > 0.25f);
         nextButton.gameObject.SetActive(viewportWidth < contentWidth && posX < 0.75f);
+    }
+
+    private void SetupButtons()
+    {
+        selectBetButton.onClick.AddListener(() => OnClickQuickStart());
+        createTableButton.onClick.AddListener(() => OnClickCreateTable());
     }
     #endregion
 }

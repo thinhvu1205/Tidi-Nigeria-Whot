@@ -15,6 +15,7 @@ public class DataSender
     public const string GET_LIST_BET = "list_bet";
     public const string GET_PLAYER_COUNT_BY_BET = "get_player_count_by_bet";
     public const string FIND_MATCH = "find_match";
+    public const string QUICK_MATCH = "quick_match";
     public const string GET_PROFILE = "get_profile";
     public const string USER_CHANGE_PASS = "user_change_pass";
     public const string LINK_USERNAME = "link_username";
@@ -121,6 +122,13 @@ public class DataSender
          return DecodeFromBase64<RpcCreateMatchResponse>(response.Payload);
     }
     public static async UniTask JoinMatch(string matchId) => await NetworkManager.INSTANCE.JoinMatch(matchId);
+    public static async UniTask<RpcFindMatchResponse> QuickMatch(string gameCode)
+    {
+        RpcFindMatchRequest rpcFindMatchRequest = new() { GameCode = gameCode, Create = true };
+        var response = await NetworkManager.INSTANCE.RPCSend(QUICK_MATCH, rpcFindMatchRequest);
+        Debug.Log("Quick match response: " + response.Payload);
+        return DecodeFromBase64<RpcFindMatchResponse>(response.Payload);
+    }
     public static void LeaveMatch() => NetworkManager.INSTANCE.LeaveMatch();
     public static void SendMatchState(long opCode, byte[] data)
     {

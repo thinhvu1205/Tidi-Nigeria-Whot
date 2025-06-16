@@ -8,9 +8,9 @@ public class WhotMatchResult : MonoBehaviour
     [SerializeField] private Transform backgroundWin, backgroundLose, playerResultParent;
     [SerializeField] private Image victoryImage, loseImage;
     [SerializeField] private GameObject playerResultPrefab;
-    private WhotGame whotGame;
+    private WhotView whotGame;
 
-    public void SetInfo(WhotGame whotGame, List<WhotPlayer> players, bool isVictory)
+    public void SetInfo(WhotView whotGame, List<WhotPlayer> players, bool isVictory)
     {
         this.whotGame = whotGame;
         backgroundWin.gameObject.SetActive(isVictory);

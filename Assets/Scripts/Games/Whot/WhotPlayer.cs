@@ -18,7 +18,7 @@ public class WhotPlayer : MonoBehaviour
     [HideInInspector] public bool isWinner = false;
     public string playerId { get; private set; } = string.Empty;
     public int cardsLeft { get; private set; } = 0;
-    private WhotGame whotGame;
+    private WhotView whotGame;
     private PlayerLayout playerLayout;
     private float turnTimer = 10f; // Default turn timer duration
     private float countDownTimer = 10f;
@@ -76,7 +76,7 @@ public class WhotPlayer : MonoBehaviour
         chipText.text = chipAmount;
     }
 
-    public void SetWhotGame(WhotGame whotGame)
+    public void SetWhotGame(WhotView whotGame)
     {
         this.whotGame = whotGame;
         whotGame.OnNextTurn += WhotGame_OnNextTurn;
@@ -249,7 +249,7 @@ public class WhotPlayer : MonoBehaviour
     #endregion
 
     #region Events
-    private void WhotGame_OnNextTurn(WhotGame.OnNextTurnEventArg e)
+    private void WhotGame_OnNextTurn(WhotView.OnNextTurnEventArg e)
     {
         if (e.playerTurn == playerId)
         {

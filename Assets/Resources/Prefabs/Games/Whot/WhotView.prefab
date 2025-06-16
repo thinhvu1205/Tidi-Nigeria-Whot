@@ -160,7 +160,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1599812151615830731}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: WhotGame, Assembly-CSharp
         m_MethodName: OnDrawACard
         m_Mode: 1
@@ -181,8 +181,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4295129655635548693}
-  - component: {fileID: 1599812151615830731}
-  - component: {fileID: 2592546125036779601}
   m_Layer: 5
   m_Name: Game Container
   m_TagString: Untagged
@@ -219,67 +217,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1599812151615830731
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 178067685294920146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13ec8a97da7b6487ba71a62acb52146c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  whotPlayerPrefab: {fileID: 3897063733063811495, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
-  cardPrefab: {fileID: 9120301256744507343, guid: dc97c59986f4144e28f2082e917e6a80, type: 3}
-  playerPositionsList:
-  - {fileID: 7685574218595862727}
-  - {fileID: 1686584219369130510}
-  - {fileID: 7703758953536002777}
-  - {fileID: 2426616378402454076}
-  betterLuckNextTimeAnimation: {fileID: 7373465379628247397}
-  victoryAnimation: {fileID: 5106629690599917844}
-  matchSymbolAnimation: {fileID: 8144691786802965830}
-  effectAnimation: {fileID: 75754279654924657}
-  lastCardAnimation: {fileID: 8804853128043951258}
-  matchResultTransform: {fileID: 4570951327840237289}
-  yourTurnTransform: {fileID: 7072498280087488}
-  wheelTransform: {fileID: 5547712401382966086}
-  effectAnimationParent: {fileID: 8949447053244151195}
-  victoryAnimationParent: {fileID: 8079609684198237835}
-  loseAnimationParent: {fileID: 4087674403738951245}
-  matchSymbolAnimationParent: {fileID: 8726725992722608607}
-  lastCardAnimationParent: {fileID: 7977673881436017428}
-  deckOfCardParent: {fileID: 6205735016135746426}
-  callCardParent: {fileID: 1479352102202718276}
-  playAreaParent: {fileID: 3408475195346821732}
-  playersParent: {fileID: 6937775054076971841}
-  betText: {fileID: 4838851619454793626}
-  cardsLeftText: {fileID: 7660614336331429407}
-  betterLuckNextTimeText: {fileID: 6302499259635809483}
-  waitImage: {fileID: 9115565352463937040}
-  victoryImage: {fileID: 7388222867838073854}
-  deckHighlightImage: {fileID: 2874961805052884047}
-  suitPicker: {fileID: 3164017183271437074}
---- !u!114 &2592546125036779601
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 178067685294920146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7bf138c3f8074931a2ee5e0a71a0042, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardsParent: {fileID: 2276550832765345030}
-  scoreParent: {fileID: 2680620017653176772}
-  cardPrefab: {fileID: 9120301256744507343, guid: dc97c59986f4144e28f2082e917e6a80, type: 3}
-  scoreText: {fileID: 8278786799678823542}
-  suitPicker: {fileID: 3164017183271437074}
-  cardsInHand: []
 --- !u!1 &246558253107087104
 GameObject:
   m_ObjectHideFlags: 0
@@ -4191,6 +4128,7 @@ GameObject:
   - component: {fileID: 8738457346684950406}
   - component: {fileID: 9072182399196722712}
   - component: {fileID: 5671088908575677336}
+  - component: {fileID: 8901810478117720029}
   m_Layer: 5
   m_Name: WhotView
   m_TagString: Untagged
@@ -4230,14 +4168,43 @@ MonoBehaviour:
   m_GameObject: {fileID: 4365937123006909866}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66f813fe1e6b1465b8e5a368b8f5539e, type: 3}
+  m_Script: {fileID: 11500000, guid: 13ec8a97da7b6487ba71a62acb52146c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   effectPopup: 0
   effectPopupReverse: 0
   popupBackground: {fileID: 0}
-  matchMakingContainer: {fileID: 6634003772533348078}
-  gameContainer: {fileID: 4295129655635548693}
+  whotPlayerPrefab: {fileID: 3897063733063811495, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+  cardPrefab: {fileID: 9120301256744507343, guid: dc97c59986f4144e28f2082e917e6a80, type: 3}
+  playerPositionsList:
+  - {fileID: 7685574218595862727}
+  - {fileID: 1686584219369130510}
+  - {fileID: 7703758953536002777}
+  - {fileID: 2426616378402454076}
+  betterLuckNextTimeAnimation: {fileID: 7373465379628247397}
+  victoryAnimation: {fileID: 5106629690599917844}
+  matchSymbolAnimation: {fileID: 8144691786802965830}
+  effectAnimation: {fileID: 75754279654924657}
+  lastCardAnimation: {fileID: 8804853128043951258}
+  matchResultTransform: {fileID: 4570951327840237289}
+  yourTurnTransform: {fileID: 7072498280087488}
+  wheelTransform: {fileID: 5547712401382966086}
+  effectAnimationParent: {fileID: 8949447053244151195}
+  victoryAnimationParent: {fileID: 8079609684198237835}
+  loseAnimationParent: {fileID: 4087674403738951245}
+  matchSymbolAnimationParent: {fileID: 8726725992722608607}
+  lastCardAnimationParent: {fileID: 7977673881436017428}
+  deckOfCardParent: {fileID: 6205735016135746426}
+  callCardParent: {fileID: 1479352102202718276}
+  playAreaParent: {fileID: 3408475195346821732}
+  playersParent: {fileID: 6937775054076971841}
+  betText: {fileID: 4838851619454793626}
+  cardsLeftText: {fileID: 7660614336331429407}
+  betterLuckNextTimeText: {fileID: 6302499259635809483}
+  waitImage: {fileID: 9115565352463937040}
+  victoryImage: {fileID: 7388222867838073854}
+  deckHighlightImage: {fileID: 2874961805052884047}
+  suitPicker: {fileID: 3164017183271437074}
 --- !u!222 &9072182399196722712
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4276,6 +4243,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8901810478117720029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4365937123006909866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7bf138c3f8074931a2ee5e0a71a0042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardsParent: {fileID: 2276550832765345030}
+  scoreParent: {fileID: 2680620017653176772}
+  cardPrefab: {fileID: 9120301256744507343, guid: dc97c59986f4144e28f2082e917e6a80, type: 3}
+  scoreText: {fileID: 8278786799678823542}
+  suitPicker: {fileID: 3164017183271437074}
+  cardsInHand: []
 --- !u!1 &4460262377185213781
 GameObject:
   m_ObjectHideFlags: 0

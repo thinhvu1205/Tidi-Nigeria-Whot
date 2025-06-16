@@ -20,20 +20,12 @@ public class BetItem : MonoBehaviour
     {
         gameObject.name = "" + dataItem.MarkUnit;
         betAmountText.text = Utility.FormatMoney((int)dataItem.MarkUnit, true);
+        playerCountText.text = dataItem.CountPlaying.ToString();
         if (dataItem.Enable)
         {
             backgroundImage.sprite = backgroundSpriteList[index % 4];
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(async () =>
-            {
-                RpcFindMatchResponse response = await DataSender.FindMatch(Constants.WhotGameID, (int)dataItem.MarkUnit);
-                Debug.Log("Find match response: " + response.ToString());
-                if (response != null && response.Matches.Count > 0)
-                {
-                    await DataSender.JoinMatch(response.Matches[0].MatchId);
-                    UIManager.Instance.OpenGame("whot");
-                }
-            });
+            button.onClick.AddListener(() => OnClickBetItem((int)dataItem.MarkUnit));
         }
         else
         {
@@ -42,7 +34,7 @@ public class BetItem : MonoBehaviour
             betTitleText.color = disabledTitleTextColor;
             playerCountText.color = disablePlayerCountTextColor;
 
-   
+
         }
     }
 
@@ -51,8 +43,8 @@ public class BetItem : MonoBehaviour
         RpcFindMatchResponse response = await DataSender.FindMatch(Constants.WhotGameID, markUnit);
         if (response != null && response.Matches.Count > 0)
         {
-            DataSender.JoinMatch(response.Matches[0].MatchId);
             UIManager.Instance.OpenGame("whot");
+            await DataSender.JoinMatch(response.Matches[0].MatchId);
         }
     }
 }
