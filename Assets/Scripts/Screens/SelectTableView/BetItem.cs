@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Api;
@@ -25,7 +26,24 @@ public class BetItem : MonoBehaviour
         {
             backgroundImage.sprite = backgroundSpriteList[index % 4];
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => OnClickBetItem((int)dataItem.MarkUnit));
+            button.onClick.AddListener(async () =>
+            {
+                try
+                {
+                    RpcFindMatchResponse response = await DataSender.FindMatch(Constants.WhotGameID, (int)dataItem.MarkUnit);
+                    Debug.Log("Find match response: " + response.ToString());
+                    if (response.Matches.Count > 0)
+                    {
+                        await DataSender.JoinMatch(response.Matches[0].MatchId);
+                        UIManager.Instance.OpenGame("whot");
+                        PlayingMatch playingMatch;
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw; // TODO handle exception
+                }
+            });
         }
         else
         {

@@ -35,32 +35,35 @@ public class GameManager : Singleton<GameManager>
     
     public void HandleMatchState(IMatchState matchState)
     {
-        switch (matchState.OpCode)
+        if (_currentHandler != null)
         {
-            case (long)OpCodeUpdate.Table:
-                _currentHandler.OnUpdateTable(matchState);
-                break;
-            case (long)OpCodeUpdate.Deal:
-                _currentHandler.OnUpdateDeal(matchState);
-                break;
-            case (long)OpCodeUpdate.CardState:
-                _currentHandler.OnUpdateCardState(matchState);
-                break;
-            case (long)OpCodeUpdate.Turn:
-                _currentHandler.OnUpdateTurn(matchState);
-                break;
-            case (long)OpCodeUpdate.GameState:
-                _currentHandler.OnUpdateGameState(matchState);
-                break;
-            case (long)OpCodeUpdate.Wallet:
-                Debug.Log("OpCodeUpdate.Wallet " + matchState.ToString());
-                break;
-            case (long)OpCodeUpdate.OpcodeKickOffTheTable:
-                Debug.Log("OpCodeUpdate.OpcodeKickOffTheTable " + matchState.ToString());
-                break;
-            case (long)OpCodeUpdate.Finish:
-               _currentHandler.OnFinish(matchState);
-                break; 
+            switch (matchState.OpCode)
+            {
+                case (long)OpCodeUpdate.Table:
+                    _currentHandler?.OnUpdateTable(matchState);
+                    break;
+                case (long)OpCodeUpdate.Deal:
+                    _currentHandler?.OnUpdateDeal(matchState);
+                    break;
+                case (long)OpCodeUpdate.CardState:
+                    _currentHandler?.OnUpdateCardState(matchState);
+                    break;
+                case (long)OpCodeUpdate.Turn:
+                    _currentHandler?.OnUpdateTurn(matchState);
+                    break;
+                case (long)OpCodeUpdate.GameState:
+                    _currentHandler?.OnUpdateGameState(matchState);
+                    break;
+                case (long)OpCodeUpdate.Wallet:
+                    Debug.Log("OpCodeUpdate.Wallet " + matchState.ToString());
+                    break;
+                case (long)OpCodeUpdate.OpcodeKickOffTheTable:
+                    Debug.Log("OpCodeUpdate.OpcodeKickOffTheTable " + matchState.ToString());
+                    break;
+                case (long)OpCodeUpdate.Finish:
+                    _currentHandler?.OnFinish(matchState);
+                    break; 
+            }
         }
     }
 }
