@@ -349,13 +349,27 @@ public class NetworkManager : MonoBehaviour
         };
         
     }
+    
+    private void UnregisterCallback()
+    {
+        if (_SocketIS == null) return;
+
+        // _SocketIS.Connected -= _OnConnectCb;
+        // _SocketIS.ReceivedMatchmakerMatched -= null;
+        // _SocketIS.Closed -= _OnCloseCb;
+        // _SocketIS.ReceivedError -= null;
+        // _SocketIS.ReceivedMatchState = null;
+        // _SocketIS.ReceivedNotification -= null;
+        // _SocketIS.ReceivedMatchPresence -= null;
+    }
+
 
     private async UniTask ConnectSocketAsync()
     {
         if (!_SocketIS.IsConnected)
         {
-            await _SocketIS.ConnectAsync(_SessionIS, true);
             RegisterCallback();
+            await _SocketIS.ConnectAsync(_SessionIS, true);
         }
 
     }

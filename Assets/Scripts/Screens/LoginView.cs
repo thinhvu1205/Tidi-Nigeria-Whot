@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Api;
 using Cysharp.Threading.Tasks;
 using Globals;
+using Nakama.Snippets;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -137,6 +138,13 @@ public class LoginView : BaseView
                 Profile profile = await DataSender.GetProfile();
                 UpdateProfile(profile);
                 SceneManager.LoadScene(Config.MAIN_SCENE);
+                if (profile.PlayingMatch.MatchId != "")
+                {
+                    Config.currentGameId = profile.PlayingMatch.Code;
+                    Config.currentMatchId = profile.PlayingMatch.MatchId;
+                    await DataSender.JoinMatch(Config.currentMatchId);
+                    UIManager.Instance.OpenGame("whot");
+                }
             }
         }
         catch (Exception e)
