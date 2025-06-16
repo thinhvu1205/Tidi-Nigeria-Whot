@@ -15,6 +15,7 @@ namespace Globals
 
         public static string currentServerIp = "";
         public static string currentGameId = "";
+        public static GameView currentGameView = null;
         public static string currentMatchId = "";
         public static string deviceId = SystemInfo.deviceUniqueIdentifier;
         public static string versionGame = Application.version;

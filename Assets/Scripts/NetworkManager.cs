@@ -31,7 +31,8 @@ public class NetworkManager : MonoBehaviour
     private ISocket _SocketIS;
     private List<Action> _DataHandlerAs = new();
     private string _MatchId;
-
+    private readonly Queue<IMatchState> matchStateQueue = new Queue<IMatchState>();
+    private readonly object queueLock = new object();
     #endregion
     
     #region RPC
@@ -121,9 +122,7 @@ public class NetworkManager : MonoBehaviour
 
             // Lưu lại thông tin match nếu cần
             _MatchId = matchId;
-
-            // ✅ Chuyển sang UI game tại đây
-            // GameUIManager.Instance.ShowGameScreen(match); // ví dụ
+            Config.currentMatchId = matchId;
 
             Debug.Log("Joined match: " + match.ToString());
         }
@@ -331,10 +330,11 @@ public class NetworkManager : MonoBehaviour
         _SocketIS.ReceivedError += err => _OnErrorCb(err);
         _SocketIS.ReceivedMatchState += state =>
         {
-            UnityMainThreadDispatcher.Instance.Enqueue(() =>
+            lock (queueLock)
             {
-                GameManager.Instance.HandleMatchState(state);
-            });
+                Debug.Log("add state queue " + state);
+                matchStateQueue.Enqueue(state);
+            }
         };
         _SocketIS.ReceivedNotification += notification =>
         {
@@ -425,7 +425,25 @@ public class NetworkManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         PreConnect();
     }
-    
+
+    private void Update()
+    {
+        lock (queueLock)
+        {
+            while (matchStateQueue.Count > 0)
+            {
+                if (!Config.currentGameView)
+                {
+                    Debug.Log("game view null");
+                    return;
+                }
+                var state = matchStateQueue.Dequeue();
+                Debug.Log("get state dequeue " + state);
+                GameManager.Instance.HandleMatchState(state);
+            }
+        }
+    }
+
     void LateUpdate()
     {
         while (_DataHandlerAs.Any())

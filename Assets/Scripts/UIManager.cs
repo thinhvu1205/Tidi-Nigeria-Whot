@@ -25,6 +25,7 @@ public class UIManager : Singleton<UIManager>
         {
             case "whot":
                 currentView = Instantiate(LoadPrefabGame("Whot/WhotView"), parentGames).GetComponent<WhotView>();
+                Config.currentGameView = (GameView) currentView;
                 break;
             default:
                 Debug.LogError("Game not found: " + game);

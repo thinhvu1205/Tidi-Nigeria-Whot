@@ -41,10 +41,10 @@ public class SelectTableView : BaseView
     private async UniTask GetListBet()
     {
         Bets bets = await DataSender.GetListBet(Constants.WhotGameID);
-        PlayerCountByBetResponse playerCounts = await DataSender.GetPlayerCountByBet(Constants.WhotGameID);
+        // PlayerCountByBetResponse playerCounts = await DataSender.GetPlayerCountByBet(Constants.WhotGameID);
         this.bets = bets;
         Debug.Log("List bet game whot : " + bets.ToString());
-        Debug.Log("Player count by bet: " + playerCounts.ToString());
+        // Debug.Log("Player count by bet: " + playerCounts.ToString());
         LoadListBetItem();
 
     }

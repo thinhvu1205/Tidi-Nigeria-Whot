@@ -140,10 +140,10 @@ public class LoginView : BaseView
                 SceneManager.LoadScene(Config.MAIN_SCENE);
                 if (profile.PlayingMatch.MatchId != "")
                 {
-                    Config.currentGameId = profile.PlayingMatch.Code;
-                    Config.currentMatchId = profile.PlayingMatch.MatchId;
-                    await DataSender.JoinMatch(Config.currentMatchId);
+                    await DataSender.JoinMatch(profile.PlayingMatch.MatchId);
                     UIManager.Instance.OpenGame("whot");
+                    Config.currentGameId = profile.PlayingMatch.Code;
+                    // NetworkManager.INSTANCE.OnJoinMatch();
                 }
             }
         }
