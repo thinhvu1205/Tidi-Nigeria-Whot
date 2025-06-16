@@ -306,6 +306,7 @@ public class WhotView : GameView
                 {
                     // Khi người chơi khác rút 1 lá bài
                     WhotPlayer player = playersList.Find(p => p.playerId == data.UserId);
+                    player.AddACard();
                     DrawACard(drawnCard, player.GetDealedCardParent(), false);
                 }
                 break;
@@ -435,16 +436,16 @@ public class WhotView : GameView
                 AnimateWait();
                 break;
             case CardEffect.ChoiceShapeGhost:
+                StopWaitAnimation();
                 WhotCard whotCard = Instantiate(cardPrefab).GetComponent<WhotCard>();
                 whotCard.SetInfo(data.TopCard.Suit, data.TopCard.Rank);
                 whotCard.SetSelectable(false);
                 CallCard = whotCard;
                 AnimateMatchSymbol(data.TopCard.Suit);
                 Destroy(whotCard.gameObject);
-                StopWaitAnimation();
                 break;
             case CardEffect.HoldOn:
-                // HandleHoldOnEffect(player);
+                HandleHoldOnEffect(player);
                 break;
             case CardEffect.PickTwo:
                 // HandlePick2Effect(player);
