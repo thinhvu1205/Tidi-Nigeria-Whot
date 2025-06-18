@@ -11,12 +11,13 @@ using System;
 public class WhotPlayer : MonoBehaviour
 {
     [SerializeField] private Image avatarImage, countdownImage, lightImage, holdOnImage, suspensionImage, scoreImage;
-    [SerializeField] private TextMeshProUGUI nameText, chipText, cardsLeftText, effectText, scoreText;
+    [SerializeField] private TextMeshProUGUI nameText, chipText, cardsLeftText, effectText, scoreText, plusText;
     [SerializeField] private GameObject lastCardNoti, effectNoti, cardsDisplay, cardPrefab, chipPrefab;
     [SerializeField] private Transform remainingCardsParent;
     [HideInInspector] public bool isCurrentPlayer = false;
     [HideInInspector] public bool isWinner = false;
     public string playerId { get; private set; } = string.Empty;
+    public int pickPenalty { get; set; } = 0;
     public int cardsLeft { get; private set; } = 0;
     private WhotView whotGame;
     private PlayerLayout playerLayout;
@@ -39,6 +40,7 @@ public class WhotPlayer : MonoBehaviour
         suspensionImage.gameObject.SetActive(false);
         effectNoti.SetActive(false);
         scoreImage.gameObject.SetActive(false);
+        plusText.gameObject.SetActive(false);
         // HideCardsLeft();
         UpdateCardsLeftVisual();
 
@@ -101,7 +103,7 @@ public class WhotPlayer : MonoBehaviour
 
     public void PlayACard(WhotCard card)
     {
-        cardsLeft--;
+        RemoveACard();
         card.SetSelectable(false);
         whotGame.PlayACard(this, card, GetPlayedCardParent());
         UpdateCardsLeftVisual();
@@ -340,6 +342,21 @@ public class WhotPlayer : MonoBehaviour
         effectNoti.transform.DOScale(Vector3.zero, ANIMATION_TIME).SetEase(Ease.InBack).OnComplete(() =>
         {
             effectNoti.SetActive(false);
+        });
+    }
+
+    public void AnimatePlusText()
+    {
+        plusText.transform.localPosition = GetAvatarImage().transform.localPosition + new Vector3(-12f, 50f, 0f); 
+        CanvasGroup canvasGroup = plusText.GetComponent<CanvasGroup>();
+
+        Sequence sequence = DOTween.Sequence();
+        plusText.gameObject.SetActive(true);
+        sequence.Join(plusText.transform.DOLocalMove(GetAvatarImage().transform.localPosition + new Vector3(-12f, 130f, 0f), 1.5f).SetEase(Ease.OutQuad));
+        sequence.Insert(0.75f, canvasGroup.DOFade(0f, 0.75f)).OnComplete(() => 
+        {
+            plusText.gameObject.SetActive(false);
+            canvasGroup.alpha = 1f; 
         });
     }
 

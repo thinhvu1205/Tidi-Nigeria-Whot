@@ -69,11 +69,7 @@ public class WhotPlayerHand : MonoBehaviour
                 SortCards();
                 SpreadCards();
             })
-            .AppendInterval(0.5f)
-            .OnComplete(() =>
-            {
-                // whotGame.NextTurn();
-            });
+            .AppendInterval(0.5f);
     }
 
     public void SortCards()
@@ -126,10 +122,9 @@ public class WhotPlayerHand : MonoBehaviour
         {
             Debug.Log("Your turn");
             WhotCard callCard = e.callCard;
-            CardSuit callCardSuit = e.cardSuit ?? CardSuit.SuitUnspecified;
-            foreach (var card in cardsInHand.ToList())
+            foreach (WhotCard card in cardsInHand.ToList())
             {
-
+                // Debug.Log("Card: " + card.GetCardRank() + " - " + card.GetCardSuit());
                 if (card.GetCardRank() == CardRank.Rank20
                 )
                 {

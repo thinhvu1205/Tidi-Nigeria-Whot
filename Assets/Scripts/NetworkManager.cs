@@ -123,7 +123,7 @@ public class NetworkManager : MonoBehaviour
             // Lưu lại thông tin match nếu cần
             _MatchId = matchId;
             Config.currentMatchId = matchId;
-
+            GameManager.Instance.HandleMatchJoin(match);
             Debug.Log("Joined match: " + match.ToString());
         }
         catch (Exception ex)

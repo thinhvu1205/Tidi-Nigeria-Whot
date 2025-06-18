@@ -200,6 +200,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3982146061202434384}
   - {fileID: 3408475195346821732}
   - {fileID: 6937775054076971841}
   - {fileID: 7072498280087488}
@@ -2581,7 +2582,7 @@ RectTransform:
   m_Children:
   - {fileID: 5337385695053709241}
   - {fileID: 1397955073461096758}
-  m_Father: {fileID: 3408475195346821732}
+  m_Father: {fileID: 4295129655635548693}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4201,6 +4202,7 @@ MonoBehaviour:
   betText: {fileID: 4838851619454793626}
   cardsLeftText: {fileID: 7660614336331429407}
   betterLuckNextTimeText: {fileID: 6302499259635809483}
+  yourTurnText: {fileID: 7129455705920510871}
   waitImage: {fileID: 9115565352463937040}
   victoryImage: {fileID: 7388222867838073854}
   deckHighlightImage: {fileID: 2874961805052884047}
@@ -9129,7 +9131,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3982146061202434384}
   - {fileID: 5255604315826809953}
   - {fileID: 1479352102202718276}
   - {fileID: 5547712401382966086}
