@@ -24,6 +24,7 @@ public class WhotCard : MonoBehaviour
 
     public CardSuit GetCardSuit() => suit;
     public CardRank GetCardRank() => value;
+    public bool GetIsSelected() => isSelected;
     public Vector2 GetLocalPosition() => position;
     public void SetInfo(CardSuit suit, CardRank value)
     {

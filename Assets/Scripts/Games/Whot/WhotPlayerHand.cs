@@ -129,10 +129,11 @@ public class WhotPlayerHand : MonoBehaviour
         if (e.playerTurn == whotGame.GetCurrentPlayer().playerId)
         {
             WhotCard callCard = e.callCard;
+            CardEffect cardEffect = e.cardEffect;
             foreach (WhotCard card in cardsInHand.ToList())
             {
                 // Debug.Log("Card: " + card.GetCardRank() + " - " + card.GetCardSuit());
-                if (callCard.GetCardRank() == CardRank.Rank2)
+                if (callCard.GetCardRank() == CardRank.Rank2 && cardEffect != CardEffect.EffectNone)
                 {
                     if (card.GetCardRank() == CardRank.Rank2)
                     {
@@ -147,7 +148,7 @@ public class WhotPlayerHand : MonoBehaviour
                     continue;
                 }
 
-                if (callCard.GetCardRank() == CardRank.Rank5)
+                if (callCard.GetCardRank() == CardRank.Rank5 && cardEffect != CardEffect.EffectNone)
                 {
                     if (card.GetCardRank() == CardRank.Rank5)
                     {

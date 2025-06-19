@@ -134,6 +134,8 @@ message UpdateCardState {
   int32 pick_penalty = 7;
   string target_user_id = 8;
   bool is_auto_play = 9;
+  int32 deck_count = 10;
+  map<string, int32> player_card_counts = 11;
 }
 
 enum CardEvent {

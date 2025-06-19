@@ -41,8 +41,6 @@ public class WhotPlayer : MonoBehaviour
         scoreImage.gameObject.SetActive(false);
         plusText.gameObject.SetActive(false);
         // HideCardsLeft();
-        UpdateCardsLeftVisual();
-
     }
 
     private void Update()
@@ -88,24 +86,10 @@ public class WhotPlayer : MonoBehaviour
         lastCardNoti.SetActive(!lastCardNoti.activeSelf);
     }
 
-    public void AddACard()
-    {
-        cardsLeft++;
-        UpdateCardsLeftVisual();
-    }
-
-    public void RemoveACard()
-    {
-        cardsLeft--;
-        UpdateCardsLeftVisual();
-    }
-
     public void PlayACard(WhotCard card)
     {
-        RemoveACard();
         card.SetSelectable(false);
         whotGame.PlayACard(card, GetPlayedCardParent());
-        UpdateCardsLeftVisual();
         StopCountDown();
         if (cardsLeft == 1)
         {
@@ -114,8 +98,8 @@ public class WhotPlayer : MonoBehaviour
         else if (cardsLeft == 0)
         {
             AnimateHideLastCardNoti();
-            whotGame.AnimateShowRemainingCards();
-            isWinner = true;
+            // whotGame.AnimateShowRemainingCards();
+            // isWinner = true;
         }
         else
         {
@@ -232,13 +216,10 @@ public class WhotPlayer : MonoBehaviour
         cardsDisplay.SetActive(false);
     }
 
-    public void UpdateCardsLeftVisual()
+    public void UpdateCardsLeftVisual(int cardsCount)
     {
-        cardsLeftText.text = cardsLeft.ToString();
-        if (!isCurrentPlayer && cardsLeft > 0)
-        {
-            cardsDisplay.SetActive(true);
-        }
+        if (cardsCount > 0 && !isCurrentPlayer) ShowCardsLeft();
+        cardsLeftText.text = cardsCount.ToString();
     }
 
     public void UpdateEffectNoti(string effect)
