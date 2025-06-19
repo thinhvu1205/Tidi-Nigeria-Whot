@@ -20,7 +20,7 @@ public class WhotPlayerHand : MonoBehaviour
     
     private WhotView whotGame;
 
-    private const float CARD_SPACING = 56f;
+    private float CARD_SPACING = 56f;
     private const float ANIMATION_TIME = 0.35f;
 
     public Transform GetCardsParent() => cardsParent;
@@ -36,7 +36,7 @@ public class WhotPlayerHand : MonoBehaviour
     public void PlayACard(WhotCard card)
     {
         card.SetSelectable(false);
-        whotGame.PlayACard(whotGame.GetCurrentPlayer(), card, GetCardsParent());
+        whotGame.PlayACard(card, GetCardsParent());
         EndTurn();
         cardsInHand.Remove(card);
         Destroy(card.gameObject);
@@ -79,6 +79,14 @@ public class WhotPlayerHand : MonoBehaviour
 
     public void SpreadCards()
     {
+        if (cardsInHand.Count > 14)
+        {
+            CARD_SPACING = 44f; // Giảm khoảng cách nếu có quá nhiều thẻ
+        }
+        else
+        {
+            CARD_SPACING = 56f; // Khoảng cách bình thường
+        }
         float totalWidth = (cardsInHand.Count - 1) * CARD_SPACING;
         float startX = -totalWidth / 2f;
         for (int i = 0; i < cardsInHand.Count; i++)
@@ -103,7 +111,7 @@ public class WhotPlayerHand : MonoBehaviour
         scoreCanvasGroup.DOFade(1f, ANIMATION_TIME / 2);
     }
     
-    private void SetNormalCards()
+    private void SetCardsToNormal()
     {
         foreach (var card in cardsInHand)
         {
@@ -120,11 +128,40 @@ public class WhotPlayerHand : MonoBehaviour
         Debug.Log("CALL CARD: " + e.callCard.GetCardRank() + " - " + e.callCard.GetCardSuit());
         if (e.playerTurn == whotGame.GetCurrentPlayer().playerId)
         {
-            Debug.Log("Your turn");
             WhotCard callCard = e.callCard;
             foreach (WhotCard card in cardsInHand.ToList())
             {
                 // Debug.Log("Card: " + card.GetCardRank() + " - " + card.GetCardSuit());
+                if (callCard.GetCardRank() == CardRank.Rank2)
+                {
+                    if (card.GetCardRank() == CardRank.Rank2)
+                    {
+                        card.SetSelectable(true);
+                        card.SetHighLight();
+                    }
+                    else
+                    {
+                        card.SetSelectable(false);
+                        card.SetDark();
+                    }
+                    continue;
+                }
+
+                if (callCard.GetCardRank() == CardRank.Rank5)
+                {
+                    if (card.GetCardRank() == CardRank.Rank5)
+                    {
+                        card.SetSelectable(true);
+                        card.SetHighLight();
+                    }
+                    else
+                    {
+                        card.SetSelectable(false);
+                        card.SetDark();
+                    }
+                    continue;
+                }
+
                 if (card.GetCardRank() == CardRank.Rank20
                 )
                 {
@@ -183,7 +220,7 @@ public class WhotPlayerHand : MonoBehaviour
         }
         whotGame.GetCurrentPlayer().StopCountDown();
         whotGame.AnimateHideDeckHighlight();
-        SetNormalCards();
+        SetCardsToNormal();
     }
 
     public void Reset()

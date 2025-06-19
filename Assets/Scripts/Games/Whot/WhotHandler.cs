@@ -17,9 +17,9 @@ public class WhotHandler : IGameHandler
 
     public void OnMatchJoin(IMatch match)
     {
+        // string labelJson = match.Label;
+        // MatchLabel label = JsonConvert.DeserializeObject<MatchLabel>(labelJson);
         whotGame.HandleJoinMatch(match);
-                Debug.Log("HandleJoinMatch called with match ID: " + match.ToString());
-
         // parse match.Label hoặc chờ MatchState 
     }
 

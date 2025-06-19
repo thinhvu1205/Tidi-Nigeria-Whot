@@ -21,6 +21,7 @@ public class WhotView : GameView
         public string playerTurn;
         public WhotCard callCard;
         public int countdown;
+        public CardEffect cardEffect;
     }
     [SerializeField] private GameObject whotPlayerPrefab, cardPrefab;
     [SerializeField] private List<Transform> playerPositionsList;
@@ -61,7 +62,6 @@ public class WhotView : GameView
     private Tween waitRotationTween;
     private bool hasDealtCards = false;
     private int cardsLeft = 54;
-    private int pickPenalty = 0;
 
     protected override void Awake()
     {
@@ -98,6 +98,7 @@ public class WhotView : GameView
     {
         Debug.Log("HandleJoinMatch called with match ID: " + match.ToString());
         SetActivePlayersParent();
+        // UpdateBetText(match.Label);
     }
 
     // Khi có người chơi join hoặc leave
@@ -156,7 +157,8 @@ public class WhotView : GameView
         {
             for (int i = 0; i < joinPlayers.Count; i++)
             {
-                Player player = joinPlayers[i];
+                Player joinPlayer = joinPlayers[i];
+                Player player = players.Find((p) => p.Id == joinPlayer.Id);
                 if (playersList.Find((p) => p.playerId == player.Id) == null)
                 {
                     Debug.Log("Adding player: " + joinPlayers[i].UserName);
@@ -216,6 +218,7 @@ public class WhotView : GameView
             int diff = presenceCard.Count - playerHand.cardsInHand.Count;
             if (diff > 0)
             {
+                Debug.Log("Drawing " + diff + " new cards for the current player.");
                 List<Card> newCards = presenceCard.Skip(presenceCard.Count - diff).ToList();
                 Sequence sequence = DOTween.Sequence();
                 foreach (Card drawnCard in newCards)
@@ -263,7 +266,7 @@ public class WhotView : GameView
 
     public void HandleUpdateTurn(UpdateTurn data)
     {
-        if (data.UserId == User.userMain.userId)
+        if (data.UserId == GetCurrentPlayer().playerId)
         {
             ShowYourTurn();
             AnimateHighlightDeck();
@@ -286,7 +289,7 @@ public class WhotView : GameView
         switch (data.Event)
         {
             case CardEvent.Play:
-                if (data.UserId == User.userMain.userId)
+                if (data.UserId == GetCurrentPlayer().playerId)
                 {
                     // Khi người chơi hiện tại đánh 1 lá bài
                     WhotCard playedCard = playerHand.cardsInHand.Find(card =>
@@ -308,7 +311,7 @@ public class WhotView : GameView
                         CallCard = playedCard;
                         Destroy(playedCard.gameObject);
                     }
-                    else 
+                    else
                     {
                         // Khi người chơi khác đánh 1 lá bài
                         player.PlayACard(playedCard);
@@ -319,13 +322,14 @@ public class WhotView : GameView
             case CardEvent.Draw:
                 WhotCard drawnCard = Instantiate(cardPrefab).GetComponent<WhotCard>();
                 drawnCard.SetInfo(data.TopCard.Suit, data.TopCard.Rank);
-                if (data.UserId != User.userMain.userId)
+                if (data.UserId != GetCurrentPlayer().playerId)
                 {
                     // Khi người chơi khác rút 1 lá bài
                     WhotPlayer player = GetPlayerByID(data.UserId);
                     // player.pickPenalty = data.PickPenalty;
                     if (data.PickPenalty > 0)
                     {
+                        player.AnimatePlusText(data.PickPenalty);
                         AnimateDrawMultipleCards(player, data.PickPenalty, "", drawnCard);
                     }
                     else
@@ -364,6 +368,7 @@ public class WhotView : GameView
 
     private void HideYourTurn()
     {
+        UpdateYourTurnText("Your turn");
         yourTurnTransform.gameObject.SetActive(false);
     }
 
@@ -381,6 +386,7 @@ public class WhotView : GameView
     #region Card Actions
     public void OnDrawACard()
     {
+        if (!yourTurnTransform.gameObject.activeSelf) return;
         DataSender.SendMatchState((long)OpCodeRequest.DrawCard, new byte[0]);
     }
 
@@ -434,7 +440,7 @@ public class WhotView : GameView
         UpdateCardsLeft();
     }
 
-    public void PlayACard(WhotPlayer player, WhotCard card, Transform startingPosition)
+    public void PlayACard(WhotCard card, Transform startingPosition)
     {
         GameObject cardInstance = Instantiate(cardPrefab, startingPosition);
         cardInstance.transform.localPosition = Vector3.zero;
@@ -444,8 +450,6 @@ public class WhotView : GameView
         whotCard.SetInfo(card.GetCardSuit(), card.GetCardRank());
         whotCard.SetSelectable(false);
         CallCard = whotCard;
-
-        WhotPlayer whotPlayer = playersList.Find(player => player.isCurrentPlayer);
         AnimatePlayACard(whotCard);
         Destroy(card.gameObject);
     }
@@ -454,7 +458,7 @@ public class WhotView : GameView
     #region Card Effects
     private void HandleCardEffect(UpdateCardState data)
     {
-        Debug.Log("Handle card effect: " + data.Effect);
+        Debug.Log("Handling card effect: " + data.Effect);
         WhotPlayer player = playersList.Find(p => p.playerId == data.UserId);
         WhotPlayer targetPlayer = playersList.Find(p => p.playerId == data.TargetUserId);
         bool isCurrentPlayer = player.isCurrentPlayer;
@@ -466,7 +470,11 @@ public class WhotView : GameView
             case CardEffect.Whot when !isCurrentPlayer:
                 AnimateWait();
                 break;
+            case CardEffect.ChoiceShapeGhost when isCurrentPlayer:
+                matchSymbolAnimationParent.gameObject.SetActive(false);
+                break;
             case CardEffect.ChoiceShapeGhost when !isCurrentPlayer:
+                matchSymbolAnimationParent.gameObject.SetActive(false);
                 player.StopCountDown();
                 StopWaitAnimation();
                 HandleOtherPlayerPickSuit(data.TopCard);
@@ -476,12 +484,20 @@ public class WhotView : GameView
                 break;
             case CardEffect.PickTwo:
                 HandlePick2Effect(targetPlayer);
+                if (targetPlayer.playerId == GetCurrentPlayer().playerId)
+                {
+                    UpdateYourTurnText("Pick 2");
+                }   
                 break;
             case CardEffect.PickThree:
-                // HandlePick3Effect(player);
+                HandlePick3Effect(targetPlayer);
+                if (targetPlayer.playerId == GetCurrentPlayer().playerId)
+                {
+                    UpdateYourTurnText("Pick 3");
+                }
                 break;
             case CardEffect.Suspension:
-                HandleSuspensionEffect();
+                HandleSuspensionEffect(targetPlayer);
                 break;
             case CardEffect.GeneralMarket:
                 HandleGeneralMarketEffect(player);
@@ -517,23 +533,21 @@ public class WhotView : GameView
         AnimateDrawMultipleCards(targetPlayer, 3, "Pick 3");
     }
 
-    private void HandleSuspensionEffect()
+    private void HandleSuspensionEffect(WhotPlayer targetPlayer)
     {
-        foreach (WhotPlayer player in playersList)
-        {
-    
-        }
+        targetPlayer.AnimateShowSuspension();
     }
     private void HandleGeneralMarketEffect(WhotPlayer activePlayer)
     {
         foreach (WhotPlayer player in playersList)
         {
-            if (player.playerId != activePlayer.playerId)
+            if (player.playerId != activePlayer.playerId && !player.isCurrentPlayer)
             {
                 player.AnimateShowSuspension();
+                player.AnimatePlusText(1);
+                AnimateDrawMultipleCards(player, 1);
             }
         }
-        AnimateDrawMultipleCards(activePlayer, 1);
         AnimateGeneralMarket();
     }
 
@@ -573,7 +587,7 @@ public class WhotView : GameView
 
     private void AnimateDrawMultipleCards(WhotPlayer targetPlayer, int numberOfCards, string effectName = "", WhotCard drawnCard = null)
     {
-        if (effectName != "")
+        if (effectName != "" && targetPlayer.playerId != GetCurrentPlayer().playerId)
         {
             targetPlayer.UpdateEffectNoti(effectName);
         }   
@@ -586,7 +600,7 @@ public class WhotView : GameView
                     targetPlayer.AddACard();
                     DrawACard(drawnCard, targetPlayer.GetDealedCardParent(), false);
                 })
-                .AppendInterval(0.2f);
+                .AppendInterval(0.35f);
         }
     }
     private void AnimateGeneralMarket()

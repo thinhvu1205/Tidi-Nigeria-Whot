@@ -17,7 +17,6 @@ public class WhotPlayer : MonoBehaviour
     [HideInInspector] public bool isCurrentPlayer = false;
     [HideInInspector] public bool isWinner = false;
     public string playerId { get; private set; } = string.Empty;
-    public int pickPenalty { get; set; } = 0;
     public int cardsLeft { get; private set; } = 0;
     private WhotView whotGame;
     private PlayerLayout playerLayout;
@@ -105,7 +104,7 @@ public class WhotPlayer : MonoBehaviour
     {
         RemoveACard();
         card.SetSelectable(false);
-        whotGame.PlayACard(this, card, GetPlayedCardParent());
+        whotGame.PlayACard(card, GetPlayedCardParent());
         UpdateCardsLeftVisual();
         StopCountDown();
         if (cardsLeft == 1)
@@ -345,8 +344,9 @@ public class WhotPlayer : MonoBehaviour
         });
     }
 
-    public void AnimatePlusText()
+    public void AnimatePlusText(int amount)
     {
+        plusText.text = $"+{amount}";
         plusText.transform.localPosition = GetAvatarImage().transform.localPosition + new Vector3(-12f, 50f, 0f); 
         CanvasGroup canvasGroup = plusText.GetComponent<CanvasGroup>();
 
