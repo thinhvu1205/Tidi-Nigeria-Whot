@@ -68,7 +68,13 @@ public class WhotHandler : IGameHandler
         var updateGameState = UpdateGameState.Parser.ParseFrom(matchState.State);
         Debug.Log("WHOT OnUpdateGameState: " + updateGameState.ToString());
         whotGame.HandleUpdateGameState(updateGameState);
+    }
 
+    public void OnUpdateWallet(IMatchState matchState)
+    {
+        var updateWallet = BalanceResult.Parser.ParseFrom(matchState.State);
+        Debug.Log("WHOT OnUpdateWallet: " + updateWallet.ToString());
+        whotGame.HandleUpdateWallet(updateWallet);
     }
 
     public void OnFinish(IMatchState matchState)

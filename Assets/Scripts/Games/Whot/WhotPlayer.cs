@@ -109,70 +109,65 @@ public class WhotPlayer : MonoBehaviour
 
     #region Visuals
 
-    public void AnimateShowRemainingCards()
+    public void AnimateShowRemainingCards(List<Card> cards)
     {
-        // remainingCardsParent.gameObject.SetActive(true);
-        // WhotCard[] cardsLeft = remainingCardsParent.GetComponentsInChildren<WhotCard>();
-        // foreach (WhotCard card in cardsLeft)
-        // {
-        //     Destroy(card.gameObject);
-        // }
-        // if (this.cardsLeft >= 8)
-        // {
-        //     CARD_SPACING = CARD_SCALE / 2 * 75;
-        // }
-        // float totalWidth = (cards.Count - 1) * CARD_SPACING;
-        // float startX = -totalWidth / 2f;
-        // for (int i = 0; i < cards.Count; i++)
-        // {
-        //     WhotCard card = cards[i];
-        //     WhotCard whotCard = Instantiate(cardPrefab, remainingCardsParent).GetComponent<WhotCard>();
-        //     whotCard.SetInfo(card.GetCardSuit(), card.GetCardRank());
-        //     whotCard.SetSelectable(false);
-        //     whotCard.transform.localScale = Vector3.one * CARD_SCALE;
+        remainingCardsParent.gameObject.SetActive(true);
+        if (cards.Count >= 8)
+        {
+            CARD_SPACING = CARD_SCALE / 2 * 75;
+        }
+        float totalWidth = (cards.Count - 1) * CARD_SPACING;
+        float startX = -totalWidth / 2f;
+        for (int i = 0; i < cards.Count; i++)
+        {
+            Card card = cards[i];
+            WhotCard whotCard = Instantiate(cardPrefab, remainingCardsParent).GetComponent<WhotCard>();
+            whotCard.SetInfo(card.Suit, card.Rank);
+            whotCard.SetSelectable(false);
+            whotCard.transform.localScale = Vector3.one * CARD_SCALE;
 
-        //     CanvasGroup cardCanvasGroup = whotCard.GetComponent<CanvasGroup>();
-        //     CanvasGroup scoreCanvasGroup = scoreImage.GetComponent<CanvasGroup>();
-        //     cardCanvasGroup.alpha = 0f;
-        //     scoreCanvasGroup.alpha = 0f;
+            CanvasGroup cardCanvasGroup = whotCard.GetComponent<CanvasGroup>();
+            CanvasGroup scoreCanvasGroup = scoreImage.GetComponent<CanvasGroup>();
+            cardCanvasGroup.alpha = 0f;
+            scoreCanvasGroup.alpha = 0f;
 
-        //     Vector3 offset = Vector3.zero;
-        //     Vector3 targetPos = Vector3.zero;
+            Vector3 offset = Vector3.zero;
+            Vector3 targetPos = Vector3.zero;
 
-        //     switch (playerLayout.GetCurrentLayout())
-        //     {
-        //         case PlayerLayout.EPlayerLayout.Left:
-        //             targetPos = new Vector3(i * CARD_SPACING, 0f, 0f);
-        //             offset = new Vector3(-20f, 0f, 0f);
-        //             scoreImage.transform.localPosition = new Vector3(totalWidth + SCORE_IMAGE_OFFSET, 0f, 0f);
-        //             whotCard.transform.SetSiblingIndex(i);
-        //             break;
-        //         case PlayerLayout.EPlayerLayout.Top:
-        //             targetPos = new Vector3(startX + i * CARD_SPACING, 0f, 0f);
-        //             offset = new Vector3(-20f, 0f, 0f);
-        //             scoreImage.transform.localPosition = new Vector3(startX + totalWidth + SCORE_IMAGE_OFFSET, 0f, 0f);
-        //             whotCard.transform.SetSiblingIndex(i);
-        //             break;
-        //         case PlayerLayout.EPlayerLayout.Right:
-        //             targetPos = new Vector3(-i * CARD_SPACING, 0f, 0f);
-        //             offset = new Vector3(20f, 0f, 0f);
-        //             scoreImage.transform.localPosition = new Vector3(-totalWidth - SCORE_IMAGE_OFFSET, 0f, 0f);
-        //             whotCard.transform.SetSiblingIndex(remainingCardsParent.childCount - 1);
-        //             break;
-        //     }
+            switch (playerLayout.GetCurrentLayout())
+            {
+                case PlayerLayout.EPlayerLayout.Left:
+                    targetPos = new Vector3(i * CARD_SPACING, 0f, 0f);
+                    offset = new Vector3(-20f, 0f, 0f);
+                    scoreImage.transform.localPosition = new Vector3(totalWidth + SCORE_IMAGE_OFFSET, 0f, 0f);
+                    whotCard.transform.SetSiblingIndex(i);
+                    break;
+                case PlayerLayout.EPlayerLayout.Top:
+                    targetPos = new Vector3(startX + i * CARD_SPACING, 0f, 0f);
+                    offset = new Vector3(-20f, 0f, 0f);
+                    scoreImage.transform.localPosition = new Vector3(startX + totalWidth + SCORE_IMAGE_OFFSET, 0f, 0f);
+                    whotCard.transform.SetSiblingIndex(i);
+                    break;
+                case PlayerLayout.EPlayerLayout.Right:
+                    targetPos = new Vector3(-i * CARD_SPACING, 0f, 0f);
+                    offset = new Vector3(20f, 0f, 0f);
+                    scoreImage.transform.localPosition = new Vector3(-totalWidth - SCORE_IMAGE_OFFSET, 0f, 0f);
+                    whotCard.transform.SetSiblingIndex(remainingCardsParent.childCount - 1);
+                    break;
+            }
 
-        //     whotCard.transform.localPosition = targetPos + offset;
+            whotCard.transform.localPosition = targetPos + offset;
 
-        //     // Animate move & fade
-        //     whotCard.transform.DOLocalMove(targetPos, ANIMATION_TIME).SetEase(Ease.OutCubic).SetDelay(i * 0.05f);
-        //     cardCanvasGroup.DOFade(1f, ANIMATION_TIME / 2).SetDelay(i * 0.1f);
+            // Animate move & fade
+            whotCard.transform.DOLocalMove(targetPos, ANIMATION_TIME).SetEase(Ease.OutCubic).SetDelay(i * 0.05f);
+            cardCanvasGroup.DOFade(1f, ANIMATION_TIME / 2).SetDelay(i * 0.1f);
 
-        //     if (i == this.cardsLeft - 1)
-        //     {
-        //         scoreImage.gameObject.SetActive(true);
-        //         scoreCanvasGroup.DOFade(1f, ANIMATION_TIME / 2).SetDelay((i + 1) * 0.1f);
-        //     }
-        // }
+            if (i == cards.Count - 1 && cards.Count > 0)
+            {
+                scoreImage.gameObject.SetActive(true);
+                scoreCanvasGroup.DOFade(1f, ANIMATION_TIME / 2).SetDelay((i + 1) * 0.1f);
+            }
+        }
     }
 
     public void HideRemainingCards()
@@ -333,7 +328,7 @@ public class WhotPlayer : MonoBehaviour
 
         Sequence sequence = DOTween.Sequence();
         plusText.gameObject.SetActive(true);
-        sequence.Join(plusText.transform.DOLocalMove(GetAvatarImage().transform.localPosition + new Vector3(-12f, 130f, 0f), 1.5f).SetEase(Ease.OutQuad));
+        sequence.Join(plusText.transform.DOLocalMove(GetAvatarImage().transform.localPosition + new Vector3(-12f, 100f, 0f), 1.5f).SetEase(Ease.OutQuad));
         sequence.Insert(0.75f, canvasGroup.DOFade(0f, 0.75f)).OnComplete(() => 
         {
             plusText.gameObject.SetActive(false);

@@ -26,7 +26,7 @@ public class WhotView : GameView
     [SerializeField] private GameObject whotPlayerPrefab, cardPrefab;
     [SerializeField] private List<Transform> playerPositionsList;
     [SerializeField] private SkeletonGraphic betterLuckNextTimeAnimation, victoryAnimation, matchSymbolAnimation, effectAnimation, lastCardAnimation;
-    [SerializeField] private Transform matchResultTransform, yourTurnTransform, wheelTransform, effectAnimationParent,
+    [SerializeField] private Transform matchResultTransform, yourTurnTransform, suitPickerTransform, effectAnimationParent,
     victoryAnimationParent, loseAnimationParent, matchSymbolAnimationParent, lastCardAnimationParent, deckOfCardParent,
     callCardParent, playAreaParent, playersParent;
     [SerializeField] private TextMeshProUGUI betText, cardsLeftText, betterLuckNextTimeText, yourTurnText;
@@ -56,12 +56,12 @@ public class WhotView : GameView
     public WhotCard CallCard { get; private set; }
     private List<WhotPlayer> playersList;
     private List<WhotCard> initialCardsList;
-    private Stack<WhotCard> deck;
     private GameState gameState = GameState.Preparing;
     private CardEffect currentEffect = CardEffect.EffectNone;
     private WhotPlayerHand playerHand;
     private Tween waitRotationTween;
     private bool hasDealtCards = false;
+    private bool isAutoPlay = false;
 
     protected override void Awake()
     {
@@ -69,7 +69,6 @@ public class WhotView : GameView
         WhotHandler whotHandler = new(this);
         GameManager.Instance.SetGameHandler(whotHandler);
         playersList = new();
-        deck = new();
         initialCardsList = new();
         HandleResetGame();
     }
@@ -210,7 +209,6 @@ public class WhotView : GameView
                 initialCardsList.Add(whotCard);
             }
             StartCoroutine(DealCards());
-            hasDealtCards = true;
         }
         else
         {
@@ -227,6 +225,7 @@ public class WhotView : GameView
                         {
                             WhotCard card = Instantiate(cardPrefab).GetComponent<WhotCard>();
                             card.SetInfo(drawnCard.Suit, drawnCard.Rank);
+                            Debug.Log("Drawing card: " + card.GetCardRank() + " of " + card.GetCardSuit());
                             DrawACard(card, playerHand.GetCardsParent(), true);
                         })
                         .AppendInterval(0.2f);
@@ -252,7 +251,7 @@ public class WhotView : GameView
             case GameState.Idle:
                 break;
             case GameState.Reward:
-                // Handle reward logic
+                AnimateShowRemainingCards(data.PresenceCards.ToList());
                 break;
             case GameState.Finish:
                 // Handle finish logic
@@ -287,6 +286,7 @@ public class WhotView : GameView
     public void HandleUpdateCardState(UpdateCardState data)
     {
         currentEffect = data.Effect;
+        isAutoPlay = data.IsAutoPlay;
         List<KeyValuePair<string, int>> playerCardsCount = data.PlayerCardCounts.ToList();
         switch (data.Event)
         {
@@ -294,10 +294,21 @@ public class WhotView : GameView
                 if (data.UserId == GetCurrentPlayer().playerId)
                 {
                     // Khi người chơi hiện tại đánh 1 lá bài
-                    WhotCard playedCard = playerHand.cardsInHand.Find(card =>
-                        card.GetCardRank() == data.TopCard.Rank &&
-                        (data.TopCard.Rank == CardRank.Rank20 || card.GetCardSuit() == data.TopCard.Suit && card.GetIsSelected())
-                    );
+                   WhotCard playedCard = playerHand.cardsInHand.Find(card =>
+                    {
+                        bool sameRank = card.GetCardRank() == data.TopCard.Rank;
+                        bool isWhot = data.TopCard.Rank == CardRank.Rank20;
+                        bool sameSuit = card.GetCardSuit() == data.TopCard.Suit;
+
+                        if (isAutoPlay)
+                        {
+                            return sameRank && (isWhot || sameSuit);
+                        }
+                        else
+                        {
+                            return sameRank && (isWhot || sameSuit) && card.GetIsSelected();
+                        }
+                    });
                     // Nếu TopCard.Rank == 20, thì chỉ cần check Rank, bỏ qua Suit. Nếu TopCard.Rank != 20, thì phải match cả Rank và Suit.
                     if (playedCard == null) return;
                     playerHand.PlayACard(playedCard);
@@ -341,19 +352,21 @@ public class WhotView : GameView
                         // Khi người chơi khác rút bài bình thường
                         AnimateDrawMultipleCards(player, 1, "", drawnCard);
                     }
-                    // else
-                    // {
-                    //     AnimateDrawMultipleCards(player, data.PickPenalty, "", drawnCard);
-
-                    //     // player.AddACard();
-                    //     // DrawACard(drawnCard, player.GetDealedCardParent(), false);
-                    // }
                 }
                 UpdateCardsCount(data.DeckCount, playerCardsCount);
                 break;
             default:
                 break;
         }
+    }
+
+    public void HandleUpdateWallet(BalanceResult data)
+    {
+        // WhotPlayer player = GetPlayerByID(data.UserId);
+        // if (player != null)
+        // {
+        //     player.UpdateWallet(data.Balance);
+        // }
     }
     #endregion
 
@@ -491,7 +504,7 @@ public class WhotView : GameView
                 AnimateWait();
                 break;
             case CardEffect.ChoiceShapeGhost:
-                WhotSuitPicker_OnSuitPicked(data.TopCard.Suit);
+                OnSuitPicked(data.TopCard.Suit);
                 break;
             case CardEffect.HoldOn:
                 HandleHoldOnEffect(player);
@@ -689,15 +702,15 @@ public class WhotView : GameView
     {
         Sequence sequence = DOTween.Sequence();
         sequence
-            .AppendInterval(0.5f)
+            .AppendInterval(0.25f)
             .AppendCallback(() =>
             {
-                wheelTransform.gameObject.SetActive(true);
+                suitPickerTransform.gameObject.SetActive(true);
             });
     }
 
 
-    public void AnimateShowRemainingCards()
+    public void AnimateShowRemainingCards(List<PresenceCards> presenceCards)
     {
         Sequence sequence = DOTween.Sequence();
         sequence
@@ -706,28 +719,28 @@ public class WhotView : GameView
             {
                 foreach (WhotPlayer player in playersList)
                 {
-                    if (!player.isCurrentPlayer)
+                    List<Card> cards = presenceCards.Find(p => p.Presence == player.playerId)?.Cards.ToList();
+                    if (player.isCurrentPlayer)
                     {
-                        player.HideCardsLeft();
-                        player.AnimateShowRemainingCards();
+                        playerHand.AnimateShowRemainingCards(cards);
                     }
                     else
                     {
-                        playerHand.DisplayScore();
+                        player.AnimateShowRemainingCards(cards);
                     }
                 }
             })
             .AppendInterval(5f)
             .AppendCallback(() =>
             {
-                if (GetCurrentPlayer().isWinner)
-                {
-                    AnimateVictory();
-                }
-                else
-                {
-                    AnimateBetterLuckNextTime();
-                }
+                // if (GetCurrentPlayer().isWinner)
+                // {
+                //     AnimateVictory();
+                // }
+                // else
+                // {
+                //     AnimateBetterLuckNextTime();
+                // }
 
             });
     }
@@ -829,6 +842,7 @@ public class WhotView : GameView
                     {
                         playerHand.AnimateSortCards();
                     }
+                    hasDealtCards = true;
                 }
 
                 Destroy(card.gameObject);
@@ -908,22 +922,29 @@ public class WhotView : GameView
     #endregion
 
     #region Events
-    private void WhotSuitPicker_OnSuitPicked(CardSuit cardSuit)
+    private void OnSuitPicked(CardSuit cardSuit)
     {
+        if (suitPickerTransform.gameObject.activeSelf)
+        {
+            suitPickerTransform.gameObject.SetActive(false);
+        }
         StopWaitAnimation();
         CallCard.SetSuit(cardSuit);
-        Card cardObject = new()
-        {
-            Suit = cardSuit,
-            Rank = CardRank.Rank20
-        };
-        DataSender.SendMatchState((long)OpCodeRequest.CallWhot, cardObject.ToByteArray());
         Sequence sequence = DOTween.Sequence();
         sequence
             .AppendCallback(() =>
             {
                 AnimateMatchSymbol(cardSuit);
             });
+    }
+    private void WhotSuitPicker_OnSuitPicked(CardSuit cardSuit)
+    {
+        Card cardObject = new()
+        {
+            Suit = cardSuit,
+            Rank = CardRank.Rank20
+        };
+        DataSender.SendMatchState((long)OpCodeRequest.CallWhot, cardObject.ToByteArray());
     }
     #endregion
 

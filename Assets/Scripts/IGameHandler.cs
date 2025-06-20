@@ -14,6 +14,7 @@ public interface IGameHandler
     void OnUpdateTurn(IMatchState matchState);
     void OnUpdateCardState(IMatchState matchState);
     void OnUpdateGameState(IMatchState matchState);
+    void OnUpdateWallet(IMatchState matchState);
     void OnFinish(IMatchState matchState);
 }
 

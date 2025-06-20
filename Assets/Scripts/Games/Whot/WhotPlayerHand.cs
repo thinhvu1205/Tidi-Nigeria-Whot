@@ -12,16 +12,18 @@ using UnityEngine.UI;
 
 public class WhotPlayerHand : MonoBehaviour
 {
-    [SerializeField] private Transform cardsParent, scoreParent;
+    [SerializeField] private Transform cardsParent, scoreParent, remainingCardsParent;
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private WhotSuitPicker suitPicker;
     [HideInInspector] public List<WhotCard> cardsInHand = new();
-    
     private WhotView whotGame;
+    private const float ANIMATION_TIME = 0.35f;
+    private const float CARD_SCALE = 0.86f;
+    private const float SCORE_IMAGE_OFFSET = 120f;
+    private float REMAINING_CARD_SPACING = CARD_SCALE / 2 * 100f;
 
     private float CARD_SPACING = 56f;
-    private const float ANIMATION_TIME = 0.35f;
 
     public Transform GetCardsParent() => cardsParent;
 
@@ -43,7 +45,6 @@ public class WhotPlayerHand : MonoBehaviour
         if (cardsInHand.Count == 0)
         {
             whotGame.AnimateLastCard();
-            whotGame.AnimateShowRemainingCards();
         }
         SpreadCards();
     }
@@ -70,6 +71,39 @@ public class WhotPlayerHand : MonoBehaviour
                 SpreadCards();
             })
             .AppendInterval(0.5f);
+    }
+
+    public void AnimateShowRemainingCards(List<Card> cards)
+    {
+        remainingCardsParent.gameObject.SetActive(true);
+        if (cards.Count >= 8)
+        {
+            CARD_SPACING = CARD_SCALE / 2 * 75;
+        }
+        float totalWidth = (cards.Count - 1) * CARD_SPACING;
+        float startX = -totalWidth / 2f;
+        for (int i = 0; i < cards.Count; i++)
+        {
+            Card card = cards[i];
+            WhotCard whotCard = Instantiate(cardPrefab, remainingCardsParent).GetComponent<WhotCard>();
+            whotCard.SetInfo(card.Suit, card.Rank);
+            whotCard.SetSelectable(false);
+            whotCard.transform.localScale = Vector3.one * CARD_SCALE;
+
+            CanvasGroup cardCanvasGroup = whotCard.GetComponent<CanvasGroup>();
+            cardCanvasGroup.alpha = 0f;
+
+            Vector3 offset = new Vector3(-20f, 0f, 0f);
+            Vector3 targetPos = new Vector3(startX + i * CARD_SPACING, 0f, 0f);
+
+            whotCard.transform.localPosition = targetPos + offset;
+
+            // Animate move & fade
+            whotCard.transform.DOLocalMove(targetPos, ANIMATION_TIME).SetEase(Ease.OutCubic).SetDelay(i * 0.05f);
+            cardCanvasGroup.DOFade(1f, ANIMATION_TIME / 2).SetDelay(i * 0.1f);
+
+        }
+        DisplayScore();
     }
 
     public void SortCards()

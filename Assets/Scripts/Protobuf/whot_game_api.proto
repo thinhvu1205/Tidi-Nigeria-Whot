@@ -171,14 +171,15 @@ message WhotScoreResult {
 
 message WhotPlayerResult {
   string user_id = 1;
-  WhotScoreResult score = 2;     
-  repeated Card remaining_cards = 3;
+  int64 total_points = 2;
+  double win_factor = 3;     
+  bool is_winner = 4; 
+  repeated Card remaining_cards = 5;
 }
 
 message UpdateFinish {
   repeated WhotPlayerResult results = 1;
   WhotEndGameReason end_reason = 2;
-  string winner_id = 3; 
   Jackpot jackpot = 4;
   Jackpot jp_treasure = 5;
 }
