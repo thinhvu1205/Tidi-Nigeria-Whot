@@ -81,6 +81,7 @@ public class WhotHandler : IGameHandler
     {
         var updateFinish = UpdateFinish.Parser.ParseFrom(matchState.State);
         Debug.Log("WHOT OnFinish: " + updateFinish.ToString());
+        whotGame.HandleUpdateFinish(updateFinish);
     }
 }
 

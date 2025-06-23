@@ -12,7 +12,7 @@ using UnityEngine.UI;
 
 public class WhotPlayerHand : MonoBehaviour
 {
-    [SerializeField] private Transform cardsParent, scoreParent, remainingCardsParent;
+    [SerializeField] private Transform cardsParent, scoreParent, playerHandParent, remainingCardsParent;
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private WhotSuitPicker suitPicker;
@@ -21,6 +21,7 @@ public class WhotPlayerHand : MonoBehaviour
     private const float ANIMATION_TIME = 0.35f;
     private const float CARD_SCALE = 0.86f;
     private const float SCORE_IMAGE_OFFSET = 120f;
+
     private float REMAINING_CARD_SPACING = CARD_SCALE / 2 * 100f;
 
     private float CARD_SPACING = 56f;
@@ -75,12 +76,13 @@ public class WhotPlayerHand : MonoBehaviour
 
     public void AnimateShowRemainingCards(List<Card> cards)
     {
+        playerHandParent.gameObject.SetActive(false);
         remainingCardsParent.gameObject.SetActive(true);
         if (cards.Count >= 8)
         {
-            CARD_SPACING = CARD_SCALE / 2 * 75;
+            REMAINING_CARD_SPACING = CARD_SCALE / 2 * 75;
         }
-        float totalWidth = (cards.Count - 1) * CARD_SPACING;
+        float totalWidth = (cards.Count - 1) * REMAINING_CARD_SPACING;
         float startX = -totalWidth / 2f;
         for (int i = 0; i < cards.Count; i++)
         {
@@ -94,7 +96,7 @@ public class WhotPlayerHand : MonoBehaviour
             cardCanvasGroup.alpha = 0f;
 
             Vector3 offset = new Vector3(-20f, 0f, 0f);
-            Vector3 targetPos = new Vector3(startX + i * CARD_SPACING, 0f, 0f);
+            Vector3 targetPos = new Vector3(startX + i * REMAINING_CARD_SPACING, 0f, 0f);
 
             whotCard.transform.localPosition = targetPos + offset;
 
@@ -103,7 +105,8 @@ public class WhotPlayerHand : MonoBehaviour
             cardCanvasGroup.DOFade(1f, ANIMATION_TIME / 2).SetDelay(i * 0.1f);
 
         }
-        DisplayScore();
+        scoreParent.transform.localPosition = new Vector3(startX + totalWidth + SCORE_IMAGE_OFFSET, 0f, 0f);
+
     }
 
     public void SortCards()
@@ -133,16 +136,19 @@ public class WhotPlayerHand : MonoBehaviour
         }
     }
 
-    public void DisplayScore()
+    public void DisplayScore(long totalPoints)
     {
-        CanvasGroup scoreCanvasGroup = scoreParent.GetComponent<CanvasGroup>();
-        scoreCanvasGroup.alpha = 0f;
-        float totalWidth = (cardsInHand.Count - 1) * CARD_SPACING;
-        float startX = -totalWidth / 2f;
-        scoreText.text = "20";
-        scoreParent.gameObject.SetActive(true);
-        scoreParent.localPosition = new Vector2(startX + totalWidth + 120f, scoreParent.localPosition.y);
-        scoreCanvasGroup.DOFade(1f, ANIMATION_TIME / 2);
+        if (totalPoints > 0)
+        {
+            CanvasGroup scoreCanvasGroup = scoreParent.GetComponent<CanvasGroup>();
+            scoreCanvasGroup.alpha = 0f;
+            float totalWidth = (cardsInHand.Count - 1) * CARD_SPACING;
+            float startX = -totalWidth / 2f;
+            scoreText.text = totalPoints.ToString();
+            scoreParent.gameObject.SetActive(true);
+            scoreParent.localPosition = new Vector2(startX + totalWidth + 120f, scoreParent.localPosition.y);
+            scoreCanvasGroup.DOFade(1f, ANIMATION_TIME / 2);
+        }
     }
     
     private void SetCardsToNormal()
@@ -266,6 +272,11 @@ public class WhotPlayerHand : MonoBehaviour
         }
         cardsInHand.Clear();
         scoreParent.gameObject.SetActive(false);
+    }
+
+    public void HideRemainingCards()
+    {
+        remainingCardsParent.gameObject.SetActive(false);
     }
     #region Helpers
 

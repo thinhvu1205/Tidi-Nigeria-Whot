@@ -349,9 +349,9 @@ public class NetworkManager : MonoBehaviour
                 GameManager.Instance.HandleMatchPresence(presence);
             });
         };
-        
+
     }
-    
+
     private void UnregisterCallback()
     {
         if (_SocketIS == null) return;
@@ -375,7 +375,7 @@ public class NetworkManager : MonoBehaviour
         }
 
     }
-    
+
     private void _OnConnectCb()
     {
         Debug.Log("Socket Connected");
@@ -390,9 +390,9 @@ public class NetworkManager : MonoBehaviour
     {
         Debug.Log("Socket Error: " + exception.ToString());
     }
-    
+
     #endregion
-    
+
     #region Config
 
     public void PreConnect()

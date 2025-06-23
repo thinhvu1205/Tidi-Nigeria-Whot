@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Api;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +12,7 @@ public class WhotMatchResult : MonoBehaviour
     [SerializeField] private GameObject playerResultPrefab;
     private WhotView whotGame;
 
-    public void SetInfo(WhotView whotGame, List<WhotPlayer> players, bool isVictory)
+    public void SetInfo(WhotView whotGame, List<WhotPlayer> players, List<WhotPlayerResult> result, bool isVictory)
     {
         this.whotGame = whotGame;
         backgroundWin.gameObject.SetActive(isVictory);
@@ -27,10 +29,14 @@ public class WhotMatchResult : MonoBehaviour
         {
             GameObject playerResult = Instantiate(playerResultPrefab, playerResultParent);
             WhotPlayerResultItem resultComponent = playerResult.GetComponent<WhotPlayerResultItem>();
+            long totalPoints = result.Find(r => r.UserId == player.playerId)?.TotalPoints ?? 0;
+            List<Card> remainingCards = result.Find(r => r.UserId == player.playerId)?.RemainingCards.ToList();
+            
             resultComponent.SetInfo(
                 player: player,
                 cash: "2000",
-                score: "20",
+                score: totalPoints.ToString(),
+                remainingCards: remainingCards,
                 isVictory: isVictory
             );
         }

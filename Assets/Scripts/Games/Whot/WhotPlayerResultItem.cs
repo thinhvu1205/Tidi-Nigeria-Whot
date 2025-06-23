@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Api;
 using Globals;
 using TMPro;
 using UnityEngine;
@@ -15,7 +16,7 @@ public class WhotPlayerResultItem : MonoBehaviour
     [SerializeField] private Color greenColor, blueColor, lightBlueColor, yellowColor;
     private const float CARD_SCALE = 0.46f;
     private const float CARD_SPACING = CARD_SCALE / 2 * 100f;
-    public void SetInfo(WhotPlayer player, string cash, string score, bool isVictory)
+    public void SetInfo(WhotPlayer player, string cash, List<Card> remainingCards, string score, bool isVictory)
     {
         if (player.isCurrentPlayer)
         {
@@ -59,17 +60,16 @@ public class WhotPlayerResultItem : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        // for (int i = 0; i < player.cards.Count; i++)
-        // {
-        //     WhotCard card = SortedCards(player.cards)[i];
-        //     GameObject cardInstance = Instantiate(cardLeftPrefab, cardLeftParent);
-        //     WhotCard whotCard = cardInstance.GetComponent<WhotCard>();
-        //     whotCard.transform.localScale = Vector3.one * CARD_SCALE;
-        //     whotCard.transform.localPosition = Vector3.zero;
-        //     whotCard.transform.Translate(CARD_SPACING * i, 0f, 0f);
-        //     whotCard.SetInfo(card.GetCardSuit(), card.GetCardRank());
-        //     whotCard.SetSelectable(false);
-        // }
+        for (int i = 0; i < remainingCards.Count; i++)
+        {
+            Card card = remainingCards[i];
+            WhotCard whotCard = Instantiate(cardLeftPrefab, cardLeftParent).GetComponent<WhotCard>();
+            whotCard.transform.localScale = Vector3.one * CARD_SCALE;
+            whotCard.transform.localPosition = Vector3.zero;
+            whotCard.transform.Translate(CARD_SPACING * i, 0f, 0f);
+            whotCard.SetInfo(card.Suit, card.Rank);
+            whotCard.SetSelectable(false);
+        }
     }
 
     private void SetTextColor(Color textColor)

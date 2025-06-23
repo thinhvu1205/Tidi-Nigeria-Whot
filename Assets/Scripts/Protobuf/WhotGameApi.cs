@@ -43,69 +43,72 @@ namespace Api {
             "EgsKA2tleRgBIAEoCRIdCgV2YWx1ZRgCIAEoDjIOLmFwaS5DYXJkRXZlbnQ6",
             "AjgBIm8KD1VwZGF0ZUdhbWVTdGF0ZRIdCgVzdGF0ZRgBIAEoDjIOLmFwaS5H",
             "YW1lU3RhdGUSEgoKY291bnRfZG93bhgCIAEoAxIpCg1wcmVzZW5jZUNhcmRz",
-            "GAMgAygLMhIuYXBpLlByZXNlbmNlQ2FyZHMigwIKD1VwZGF0ZUNhcmRTdGF0",
+            "GAMgAygLMhIuYXBpLlByZXNlbmNlQ2FyZHMimAMKD1VwZGF0ZUNhcmRTdGF0",
             "ZRIPCgd1c2VyX2lkGAEgASgJEh0KBWV2ZW50GAIgASgOMg4uYXBpLkNhcmRF",
             "dmVudBIeCgtwbGF5ZWRfY2FyZBgDIAEoCzIJLmFwaS5DYXJkEhsKCHRvcF9j",
             "YXJkGAQgASgLMgkuYXBpLkNhcmQSHgoLY2FyZHNfYWZ0ZXIYBSADKAsyCS5h",
             "cGkuQ2FyZBIfCgZlZmZlY3QYBiABKA4yDy5hcGkuQ2FyZEVmZmVjdBIUCgxw",
             "aWNrX3BlbmFsdHkYByABKAUSFgoOdGFyZ2V0X3VzZXJfaWQYCCABKAkSFAoM",
-            "aXNfYXV0b19wbGF5GAkgASgIImcKD1dob3RTY29yZVJlc3VsdBIUCgx0b3Rh",
-            "bF9wb2ludHMYASABKAMSFwoPcmVtYWluaW5nX2NhcmRzGAIgASgFEhEKCWlz",
-            "X3dpbm5lchgDIAEoCBISCgp3aW5fZmFjdG9yGAQgASgBImwKEFdob3RQbGF5",
-            "ZXJSZXN1bHQSDwoHdXNlcl9pZBgBIAEoCRIjCgVzY29yZRgCIAEoCzIULmFw",
-            "aS5XaG90U2NvcmVSZXN1bHQSIgoPcmVtYWluaW5nX2NhcmRzGAMgAygLMgku",
-            "YXBpLkNhcmQitwEKDFVwZGF0ZUZpbmlzaBImCgdyZXN1bHRzGAEgAygLMhUu",
-            "YXBpLldob3RQbGF5ZXJSZXN1bHQSKgoKZW5kX3JlYXNvbhgCIAEoDjIWLmFw",
-            "aS5XaG90RW5kR2FtZVJlYXNvbhIRCgl3aW5uZXJfaWQYAyABKAkSHQoHamFj",
-            "a3BvdBgEIAEoCzIMLmFwaS5KYWNrcG90EiEKC2pwX3RyZWFzdXJlGAUgASgL",
-            "MgwuYXBpLkphY2twb3Qi3gEKDUJhbGFuY2VVcGRhdGUSDwoHdXNlcl9pZBgB",
-            "IAEoCRIaChJhbW91bnRfY2hpcF9iZWZvcmUYAiABKAMSGwoTYW1vdW50X2No",
-            "aXBfY3VycmVudBgDIAEoAxIXCg9hbW91bnRfY2hpcF9hZGQYBCABKAMSFgoO",
-            "YW1vdXRfY2hpcF9iZXQYBSABKAMSFgoOYW1vdXRfY2hpcF9mZWUYBiABKAMS",
-            "HQoVYW1vdXRfY2hpcF9hZGRfcHJlZmVlGAcgASgDEhsKE3RvdGFsX2NoaXBf",
-            "aW5fbWF0Y2gYCCABKAMiUwoNQmFsYW5jZVJlc3VsdBIjCgd1cGRhdGVzGAEg",
-            "AygLMhIuYXBpLkJhbGFuY2VVcGRhdGUSHQoHamFja3BvdBgCIAEoCzIMLmFw",
-            "aS5KYWNrcG90IqsBCgZQbGF5ZXISCgoCaWQYASABKAkSEQoJdXNlcl9uYW1l",
-            "GAIgASgJEg4KBndhbGxldBgDIAEoCRISCgppc19wbGF5aW5nGAQgASgIEhwK",
-            "BWNhcmRzGAUgASgLMg0uYXBpLkxpc3RDYXJkEhEKCXZpcF9sZXZlbBgGIAEo",
-            "AxIRCglhdmF0YXJfaWQYByABKAkSCwoDc2lkGAggASgDEg0KBW9yZGVyGAkg",
-            "ASgFImIKB0phY2twb3QSCgoCaWQYASABKAMSDwoHdXNlcl9pZBgCIAEoCRIR",
-            "CglnYW1lX2NvZGUYAyABKAkSDQoFY2hpcHMYBCABKAMSGAoQY3JlYXRlX3Rp",
-            "bWVfdW5peBgFIAEoAyJPChFIaXRKYWNrcG90SGlzdG9yeRIRCgl1c2VyX25h",
-            "bWUYASABKAkSDQoFY2hpcHMYAiABKAMSGAoQY3JlYXRlX3RpbWVfdW5peBgD",
-            "IAEoAyp0CghDYXJkU3VpdBIUChBTVUlUX1VOU1BFQ0lGSUVEEAASDwoLU1VJ",
-            "VF9DSVJDTEUQARIOCgpTVUlUX0NST1NTEAISDQoJU1VJVF9TVEFSEAMSDwoL",
-            "U1VJVF9TUVVBUkUQBBIRCg1TVUlUX1RSSUFOR0xFEAUqwgEKCENhcmRSYW5r",
-            "EhQKEFJBTktfVU5TUEVDSUZJRUQQABIKCgZSQU5LXzEQARIKCgZSQU5LXzIQ",
-            "AhIKCgZSQU5LXzMQAxIKCgZSQU5LXzQQBBIKCgZSQU5LXzUQBRIKCgZSQU5L",
-            "XzcQBxIKCgZSQU5LXzgQCBILCgdSQU5LXzEwEAoSCwoHUkFOS18xMRALEgsK",
-            "B1JBTktfMTIQDBILCgdSQU5LXzEzEA0SCwoHUkFOS18xNBAOEgsKB1JBTktf",
-            "MjAQFCrdAQoNT3BDb2RlUmVxdWVzdBIWChJPUENPREVfVU5TUEVDSUZJRUQQ",
-            "ABIbChdPUENPREVfUkVRVUVTVF9ORVdfR0FNRRABEh0KGU9QQ09ERV9SRVFV",
-            "RVNUX0xFQVZFX0dBTUUQAhIcChhPUENPREVfUkVRVUVTVF9QTEFZX0NBUkQQ",
-            "AxIcChhPUENPREVfUkVRVUVTVF9EUkFXX0NBUkQQBBIcChhPUENPREVfUkVR",
-            "VUVTVF9DQUxMX1dIT1QQBRIeChpPUENPREVfVVNFUl9JTlRFUkFDVF9DQVJE",
-            "UxAGKqADCgxPcENvZGVVcGRhdGUSHQoZT1BDT0RFX1VQREFURV9VTlNQRUNJ",
-            "RklFRBAAEhcKE09QQ09ERV9VUERBVEVfVEFCTEUQARIWChJPUENPREVfVVBE",
-            "QVRFX0RFQUwQAhIYChRPUENPREVfVVBEQVRFX0ZJTklTSBADEhoKFk9QQ09E",
-            "RV9VUERBVEVfUkVKRUNURUQQBBIcChhPUENPREVfVVBEQVRFX0dBTUVfU1RB",
-            "VEUQBRIdChlPUENPREVfVVBEQVRFX0NBUkRfUExBWUVEEAYSHQoZT1BDT0RF",
-            "X1VQREFURV9EUkFXX1JFU1VMVBAHEiIKHk9QQ09ERV9VUERBVEVfQ0FMTF9X",
-            "SE9UX1JFU1VMVBAIEhYKEk9QQ09ERV9VUERBVEVfVFVSThAJEhwKGE9QQ09E",
-            "RV9VUERBVEVfQ0FSRF9TVEFURRAKEhgKFE9QQ09ERV9VUERBVEVfV0FMTEVU",
-            "EAsSHQoZT1BDT0RFX0tJQ0tfT0ZGX1RIRV9UQUJMRRAMEhsKF09QQ09ERV9V",
-            "UERBVEVfVVNFUl9JTkZPEA0qoAEKCUdhbWVTdGF0ZRIUChBHYW1lU3RhdGVV",
-            "bmtub3duEAASEQoNR2FtZVN0YXRlSWRsZRABEhUKEUdhbWVTdGF0ZU1hdGNo",
-            "aW5nEAISFgoSR2FtZVN0YXRlUHJlcGFyaW5nEAMSEQoNR2FtZVN0YXRlUGxh",
-            "eRAEEhMKD0dhbWVTdGF0ZVJld2FyZBAFEhMKD0dhbWVTdGF0ZUZpbmlzaBAG",
-            "KkIKCUNhcmRFdmVudBIICgROT05FEAASCAoEUExBWRABEggKBERSQVcQAhII",
-            "CgRQQVNTEAMSDQoJQVVUT19QTEFZEAQqjgEKCkNhcmRFZmZlY3QSDwoLRUZG",
-            "RUNUX05PTkUQABILCgdIT0xEX09OEAESDAoIUElDS19UV08QAhIOCgpQSUNL",
-            "X1RIUkVFEAMSDgoKU1VTUEVOU0lPThAEEhIKDkdFTkVSQUxfTUFSS0VUEAUS",
-            "CAoEV0hPVBAGEhYKEkNIT0lDRV9TSEFQRV9HSE9TVBAHKkEKEVdob3RFbmRH",
-            "YW1lUmVhc29uEhUKEVJFQVNPTl9OT1JNQUxfV0lOEAASFQoRUkVBU09OX0RF",
-            "Q0tfRU1QVFkQAUIxWi9naXRodWIuY29tL25ha2FtYUZyYW1ld29yay93aG90",
-            "LW1vZHVsZS9hcGkvd2hvdGIGcHJvdG8z"));
+            "aXNfYXV0b19wbGF5GAkgASgIEhIKCmRlY2tfY291bnQYCiABKAUSRgoScGxh",
+            "eWVyX2NhcmRfY291bnRzGAsgAygLMiouYXBpLlVwZGF0ZUNhcmRTdGF0ZS5Q",
+            "bGF5ZXJDYXJkQ291bnRzRW50cnkaNwoVUGxheWVyQ2FyZENvdW50c0VudHJ5",
+            "EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoBToCOAEiZwoPV2hvdFNjb3Jl",
+            "UmVzdWx0EhQKDHRvdGFsX3BvaW50cxgBIAEoAxIXCg9yZW1haW5pbmdfY2Fy",
+            "ZHMYAiABKAUSEQoJaXNfd2lubmVyGAMgASgIEhIKCndpbl9mYWN0b3IYBCAB",
+            "KAEihAEKEFdob3RQbGF5ZXJSZXN1bHQSDwoHdXNlcl9pZBgBIAEoCRIUCgx0",
+            "b3RhbF9wb2ludHMYAiABKAMSEgoKd2luX2ZhY3RvchgDIAEoARIRCglpc193",
+            "aW5uZXIYBCABKAgSIgoPcmVtYWluaW5nX2NhcmRzGAUgAygLMgkuYXBpLkNh",
+            "cmQipAEKDFVwZGF0ZUZpbmlzaBImCgdyZXN1bHRzGAEgAygLMhUuYXBpLldo",
+            "b3RQbGF5ZXJSZXN1bHQSKgoKZW5kX3JlYXNvbhgCIAEoDjIWLmFwaS5XaG90",
+            "RW5kR2FtZVJlYXNvbhIdCgdqYWNrcG90GAQgASgLMgwuYXBpLkphY2twb3QS",
+            "IQoLanBfdHJlYXN1cmUYBSABKAsyDC5hcGkuSmFja3BvdCLeAQoNQmFsYW5j",
+            "ZVVwZGF0ZRIPCgd1c2VyX2lkGAEgASgJEhoKEmFtb3VudF9jaGlwX2JlZm9y",
+            "ZRgCIAEoAxIbChNhbW91bnRfY2hpcF9jdXJyZW50GAMgASgDEhcKD2Ftb3Vu",
+            "dF9jaGlwX2FkZBgEIAEoAxIWCg5hbW91dF9jaGlwX2JldBgFIAEoAxIWCg5h",
+            "bW91dF9jaGlwX2ZlZRgGIAEoAxIdChVhbW91dF9jaGlwX2FkZF9wcmVmZWUY",
+            "ByABKAMSGwoTdG90YWxfY2hpcF9pbl9tYXRjaBgIIAEoAyJTCg1CYWxhbmNl",
+            "UmVzdWx0EiMKB3VwZGF0ZXMYASADKAsyEi5hcGkuQmFsYW5jZVVwZGF0ZRId",
+            "CgdqYWNrcG90GAIgASgLMgwuYXBpLkphY2twb3QiqwEKBlBsYXllchIKCgJp",
+            "ZBgBIAEoCRIRCgl1c2VyX25hbWUYAiABKAkSDgoGd2FsbGV0GAMgASgJEhIK",
+            "CmlzX3BsYXlpbmcYBCABKAgSHAoFY2FyZHMYBSABKAsyDS5hcGkuTGlzdENh",
+            "cmQSEQoJdmlwX2xldmVsGAYgASgDEhEKCWF2YXRhcl9pZBgHIAEoCRILCgNz",
+            "aWQYCCABKAMSDQoFb3JkZXIYCSABKAUiYgoHSmFja3BvdBIKCgJpZBgBIAEo",
+            "AxIPCgd1c2VyX2lkGAIgASgJEhEKCWdhbWVfY29kZRgDIAEoCRINCgVjaGlw",
+            "cxgEIAEoAxIYChBjcmVhdGVfdGltZV91bml4GAUgASgDIk8KEUhpdEphY2tw",
+            "b3RIaXN0b3J5EhEKCXVzZXJfbmFtZRgBIAEoCRINCgVjaGlwcxgCIAEoAxIY",
+            "ChBjcmVhdGVfdGltZV91bml4GAMgASgDKnQKCENhcmRTdWl0EhQKEFNVSVRf",
+            "VU5TUEVDSUZJRUQQABIPCgtTVUlUX0NJUkNMRRABEg4KClNVSVRfQ1JPU1MQ",
+            "AhINCglTVUlUX1NUQVIQAxIPCgtTVUlUX1NRVUFSRRAEEhEKDVNVSVRfVFJJ",
+            "QU5HTEUQBSrCAQoIQ2FyZFJhbmsSFAoQUkFOS19VTlNQRUNJRklFRBAAEgoK",
+            "BlJBTktfMRABEgoKBlJBTktfMhACEgoKBlJBTktfMxADEgoKBlJBTktfNBAE",
+            "EgoKBlJBTktfNRAFEgoKBlJBTktfNxAHEgoKBlJBTktfOBAIEgsKB1JBTktf",
+            "MTAQChILCgdSQU5LXzExEAsSCwoHUkFOS18xMhAMEgsKB1JBTktfMTMQDRIL",
+            "CgdSQU5LXzE0EA4SCwoHUkFOS18yMBAUKt0BCg1PcENvZGVSZXF1ZXN0EhYK",
+            "Ek9QQ09ERV9VTlNQRUNJRklFRBAAEhsKF09QQ09ERV9SRVFVRVNUX05FV19H",
+            "QU1FEAESHQoZT1BDT0RFX1JFUVVFU1RfTEVBVkVfR0FNRRACEhwKGE9QQ09E",
+            "RV9SRVFVRVNUX1BMQVlfQ0FSRBADEhwKGE9QQ09ERV9SRVFVRVNUX0RSQVdf",
+            "Q0FSRBAEEhwKGE9QQ09ERV9SRVFVRVNUX0NBTExfV0hPVBAFEh4KGk9QQ09E",
+            "RV9VU0VSX0lOVEVSQUNUX0NBUkRTEAYqoAMKDE9wQ29kZVVwZGF0ZRIdChlP",
+            "UENPREVfVVBEQVRFX1VOU1BFQ0lGSUVEEAASFwoTT1BDT0RFX1VQREFURV9U",
+            "QUJMRRABEhYKEk9QQ09ERV9VUERBVEVfREVBTBACEhgKFE9QQ09ERV9VUERB",
+            "VEVfRklOSVNIEAMSGgoWT1BDT0RFX1VQREFURV9SRUpFQ1RFRBAEEhwKGE9Q",
+            "Q09ERV9VUERBVEVfR0FNRV9TVEFURRAFEh0KGU9QQ09ERV9VUERBVEVfQ0FS",
+            "RF9QTEFZRUQQBhIdChlPUENPREVfVVBEQVRFX0RSQVdfUkVTVUxUEAcSIgoe",
+            "T1BDT0RFX1VQREFURV9DQUxMX1dIT1RfUkVTVUxUEAgSFgoST1BDT0RFX1VQ",
+            "REFURV9UVVJOEAkSHAoYT1BDT0RFX1VQREFURV9DQVJEX1NUQVRFEAoSGAoU",
+            "T1BDT0RFX1VQREFURV9XQUxMRVQQCxIdChlPUENPREVfS0lDS19PRkZfVEhF",
+            "X1RBQkxFEAwSGwoXT1BDT0RFX1VQREFURV9VU0VSX0lORk8QDSqgAQoJR2Ft",
+            "ZVN0YXRlEhQKEEdhbWVTdGF0ZVVua25vd24QABIRCg1HYW1lU3RhdGVJZGxl",
+            "EAESFQoRR2FtZVN0YXRlTWF0Y2hpbmcQAhIWChJHYW1lU3RhdGVQcmVwYXJp",
+            "bmcQAxIRCg1HYW1lU3RhdGVQbGF5EAQSEwoPR2FtZVN0YXRlUmV3YXJkEAUS",
+            "EwoPR2FtZVN0YXRlRmluaXNoEAYqQgoJQ2FyZEV2ZW50EggKBE5PTkUQABII",
+            "CgRQTEFZEAESCAoERFJBVxACEggKBFBBU1MQAxINCglBVVRPX1BMQVkQBCqO",
+            "AQoKQ2FyZEVmZmVjdBIPCgtFRkZFQ1RfTk9ORRAAEgsKB0hPTERfT04QARIM",
+            "CghQSUNLX1RXTxACEg4KClBJQ0tfVEhSRUUQAxIOCgpTVVNQRU5TSU9OEAQS",
+            "EgoOR0VORVJBTF9NQVJLRVQQBRIICgRXSE9UEAYSFgoSQ0hPSUNFX1NIQVBF",
+            "X0dIT1NUEAcqQQoRV2hvdEVuZEdhbWVSZWFzb24SFQoRUkVBU09OX05PUk1B",
+            "TF9XSU4QABIVChFSRUFTT05fREVDS19FTVBUWRABQjFaL2dpdGh1Yi5jb20v",
+            "bmFrYW1hRnJhbWV3b3JrL3dob3QtbW9kdWxlL2FwaS93aG90YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Api.CardSuit), typeof(global::Api.CardRank), typeof(global::Api.OpCodeRequest), typeof(global::Api.OpCodeUpdate), typeof(global::Api.GameState), typeof(global::Api.CardEvent), typeof(global::Api.CardEffect), typeof(global::Api.WhotEndGameReason), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -117,10 +120,10 @@ namespace Api {
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.PresenceCards), global::Api.PresenceCards.Parser, new[]{ "Presence", "Cards" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateDeal), global::Api.UpdateDeal.Parser, new[]{ "PresenceCard", "CardEvent", "TopCard", "IdDealer" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateGameState), global::Api.UpdateGameState.Parser, new[]{ "State", "CountDown", "PresenceCards" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateCardState), global::Api.UpdateCardState.Parser, new[]{ "UserId", "Event", "PlayedCard", "TopCard", "CardsAfter", "Effect", "PickPenalty", "TargetUserId", "IsAutoPlay" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateCardState), global::Api.UpdateCardState.Parser, new[]{ "UserId", "Event", "PlayedCard", "TopCard", "CardsAfter", "Effect", "PickPenalty", "TargetUserId", "IsAutoPlay", "DeckCount", "PlayerCardCounts" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.WhotScoreResult), global::Api.WhotScoreResult.Parser, new[]{ "TotalPoints", "RemainingCards", "IsWinner", "WinFactor" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.WhotPlayerResult), global::Api.WhotPlayerResult.Parser, new[]{ "UserId", "Score", "RemainingCards" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateFinish), global::Api.UpdateFinish.Parser, new[]{ "Results", "EndReason", "WinnerId", "Jackpot", "JpTreasure" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.WhotPlayerResult), global::Api.WhotPlayerResult.Parser, new[]{ "UserId", "TotalPoints", "WinFactor", "IsWinner", "RemainingCards" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateFinish), global::Api.UpdateFinish.Parser, new[]{ "Results", "EndReason", "Jackpot", "JpTreasure" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.BalanceUpdate), global::Api.BalanceUpdate.Parser, new[]{ "UserId", "AmountChipBefore", "AmountChipCurrent", "AmountChipAdd", "AmoutChipBet", "AmoutChipFee", "AmoutChipAddPrefee", "TotalChipInMatch" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.BalanceResult), global::Api.BalanceResult.Parser, new[]{ "Updates", "Jackpot" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.Player), global::Api.Player.Parser, new[]{ "Id", "UserName", "Wallet", "IsPlaying", "Cards", "VipLevel", "AvatarId", "Sid", "Order" }, null, null, null, null),
@@ -2438,6 +2441,8 @@ namespace Api {
       pickPenalty_ = other.pickPenalty_;
       targetUserId_ = other.targetUserId_;
       isAutoPlay_ = other.isAutoPlay_;
+      deckCount_ = other.deckCount_;
+      playerCardCounts_ = other.playerCardCounts_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2554,6 +2559,29 @@ namespace Api {
       }
     }
 
+    /// <summary>Field number for the "deck_count" field.</summary>
+    public const int DeckCountFieldNumber = 10;
+    private int deckCount_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int DeckCount {
+      get { return deckCount_; }
+      set {
+        deckCount_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "player_card_counts" field.</summary>
+    public const int PlayerCardCountsFieldNumber = 11;
+    private static readonly pbc::MapField<string, int>.Codec _map_playerCardCounts_codec
+        = new pbc::MapField<string, int>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForInt32(16, 0), 90);
+    private readonly pbc::MapField<string, int> playerCardCounts_ = new pbc::MapField<string, int>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::MapField<string, int> PlayerCardCounts {
+      get { return playerCardCounts_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -2578,6 +2606,8 @@ namespace Api {
       if (PickPenalty != other.PickPenalty) return false;
       if (TargetUserId != other.TargetUserId) return false;
       if (IsAutoPlay != other.IsAutoPlay) return false;
+      if (DeckCount != other.DeckCount) return false;
+      if (!PlayerCardCounts.Equals(other.PlayerCardCounts)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2594,6 +2624,8 @@ namespace Api {
       if (PickPenalty != 0) hash ^= PickPenalty.GetHashCode();
       if (TargetUserId.Length != 0) hash ^= TargetUserId.GetHashCode();
       if (IsAutoPlay != false) hash ^= IsAutoPlay.GetHashCode();
+      if (DeckCount != 0) hash ^= DeckCount.GetHashCode();
+      hash ^= PlayerCardCounts.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2645,6 +2677,11 @@ namespace Api {
         output.WriteRawTag(72);
         output.WriteBool(IsAutoPlay);
       }
+      if (DeckCount != 0) {
+        output.WriteRawTag(80);
+        output.WriteInt32(DeckCount);
+      }
+      playerCardCounts_.WriteTo(output, _map_playerCardCounts_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2688,6 +2725,11 @@ namespace Api {
         output.WriteRawTag(72);
         output.WriteBool(IsAutoPlay);
       }
+      if (DeckCount != 0) {
+        output.WriteRawTag(80);
+        output.WriteInt32(DeckCount);
+      }
+      playerCardCounts_.WriteTo(ref output, _map_playerCardCounts_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -2723,6 +2765,10 @@ namespace Api {
       if (IsAutoPlay != false) {
         size += 1 + 1;
       }
+      if (DeckCount != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(DeckCount);
+      }
+      size += playerCardCounts_.CalculateSize(_map_playerCardCounts_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -2766,6 +2812,10 @@ namespace Api {
       if (other.IsAutoPlay != false) {
         IsAutoPlay = other.IsAutoPlay;
       }
+      if (other.DeckCount != 0) {
+        DeckCount = other.DeckCount;
+      }
+      playerCardCounts_.Add(other.playerCardCounts_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -2827,6 +2877,14 @@ namespace Api {
             IsAutoPlay = input.ReadBool();
             break;
           }
+          case 80: {
+            DeckCount = input.ReadInt32();
+            break;
+          }
+          case 90: {
+            playerCardCounts_.AddEntriesFrom(input, _map_playerCardCounts_codec);
+            break;
+          }
         }
       }
     #endif
@@ -2886,6 +2944,14 @@ namespace Api {
           }
           case 72: {
             IsAutoPlay = input.ReadBool();
+            break;
+          }
+          case 80: {
+            DeckCount = input.ReadInt32();
+            break;
+          }
+          case 90: {
+            playerCardCounts_.AddEntriesFrom(ref input, _map_playerCardCounts_codec);
             break;
           }
         }
@@ -3240,7 +3306,9 @@ namespace Api {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public WhotPlayerResult(WhotPlayerResult other) : this() {
       userId_ = other.userId_;
-      score_ = other.score_ != null ? other.score_.Clone() : null;
+      totalPoints_ = other.totalPoints_;
+      winFactor_ = other.winFactor_;
+      isWinner_ = other.isWinner_;
       remainingCards_ = other.remainingCards_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -3263,22 +3331,46 @@ namespace Api {
       }
     }
 
-    /// <summary>Field number for the "score" field.</summary>
-    public const int ScoreFieldNumber = 2;
-    private global::Api.WhotScoreResult score_;
+    /// <summary>Field number for the "total_points" field.</summary>
+    public const int TotalPointsFieldNumber = 2;
+    private long totalPoints_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.WhotScoreResult Score {
-      get { return score_; }
+    public long TotalPoints {
+      get { return totalPoints_; }
       set {
-        score_ = value;
+        totalPoints_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "win_factor" field.</summary>
+    public const int WinFactorFieldNumber = 3;
+    private double winFactor_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public double WinFactor {
+      get { return winFactor_; }
+      set {
+        winFactor_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "is_winner" field.</summary>
+    public const int IsWinnerFieldNumber = 4;
+    private bool isWinner_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool IsWinner {
+      get { return isWinner_; }
+      set {
+        isWinner_ = value;
       }
     }
 
     /// <summary>Field number for the "remaining_cards" field.</summary>
-    public const int RemainingCardsFieldNumber = 3;
+    public const int RemainingCardsFieldNumber = 5;
     private static readonly pb::FieldCodec<global::Api.Card> _repeated_remainingCards_codec
-        = pb::FieldCodec.ForMessage(26, global::Api.Card.Parser);
+        = pb::FieldCodec.ForMessage(42, global::Api.Card.Parser);
     private readonly pbc::RepeatedField<global::Api.Card> remainingCards_ = new pbc::RepeatedField<global::Api.Card>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3302,7 +3394,9 @@ namespace Api {
         return true;
       }
       if (UserId != other.UserId) return false;
-      if (!object.Equals(Score, other.Score)) return false;
+      if (TotalPoints != other.TotalPoints) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(WinFactor, other.WinFactor)) return false;
+      if (IsWinner != other.IsWinner) return false;
       if(!remainingCards_.Equals(other.remainingCards_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -3312,7 +3406,9 @@ namespace Api {
     public override int GetHashCode() {
       int hash = 1;
       if (UserId.Length != 0) hash ^= UserId.GetHashCode();
-      if (score_ != null) hash ^= Score.GetHashCode();
+      if (TotalPoints != 0L) hash ^= TotalPoints.GetHashCode();
+      if (WinFactor != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(WinFactor);
+      if (IsWinner != false) hash ^= IsWinner.GetHashCode();
       hash ^= remainingCards_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -3336,9 +3432,17 @@ namespace Api {
         output.WriteRawTag(10);
         output.WriteString(UserId);
       }
-      if (score_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(Score);
+      if (TotalPoints != 0L) {
+        output.WriteRawTag(16);
+        output.WriteInt64(TotalPoints);
+      }
+      if (WinFactor != 0D) {
+        output.WriteRawTag(25);
+        output.WriteDouble(WinFactor);
+      }
+      if (IsWinner != false) {
+        output.WriteRawTag(32);
+        output.WriteBool(IsWinner);
       }
       remainingCards_.WriteTo(output, _repeated_remainingCards_codec);
       if (_unknownFields != null) {
@@ -3355,9 +3459,17 @@ namespace Api {
         output.WriteRawTag(10);
         output.WriteString(UserId);
       }
-      if (score_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(Score);
+      if (TotalPoints != 0L) {
+        output.WriteRawTag(16);
+        output.WriteInt64(TotalPoints);
+      }
+      if (WinFactor != 0D) {
+        output.WriteRawTag(25);
+        output.WriteDouble(WinFactor);
+      }
+      if (IsWinner != false) {
+        output.WriteRawTag(32);
+        output.WriteBool(IsWinner);
       }
       remainingCards_.WriteTo(ref output, _repeated_remainingCards_codec);
       if (_unknownFields != null) {
@@ -3373,8 +3485,14 @@ namespace Api {
       if (UserId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
       }
-      if (score_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Score);
+      if (TotalPoints != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(TotalPoints);
+      }
+      if (WinFactor != 0D) {
+        size += 1 + 8;
+      }
+      if (IsWinner != false) {
+        size += 1 + 1;
       }
       size += remainingCards_.CalculateSize(_repeated_remainingCards_codec);
       if (_unknownFields != null) {
@@ -3392,11 +3510,14 @@ namespace Api {
       if (other.UserId.Length != 0) {
         UserId = other.UserId;
       }
-      if (other.score_ != null) {
-        if (score_ == null) {
-          Score = new global::Api.WhotScoreResult();
-        }
-        Score.MergeFrom(other.Score);
+      if (other.TotalPoints != 0L) {
+        TotalPoints = other.TotalPoints;
+      }
+      if (other.WinFactor != 0D) {
+        WinFactor = other.WinFactor;
+      }
+      if (other.IsWinner != false) {
+        IsWinner = other.IsWinner;
       }
       remainingCards_.Add(other.remainingCards_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -3422,14 +3543,19 @@ namespace Api {
             UserId = input.ReadString();
             break;
           }
-          case 18: {
-            if (score_ == null) {
-              Score = new global::Api.WhotScoreResult();
-            }
-            input.ReadMessage(Score);
+          case 16: {
+            TotalPoints = input.ReadInt64();
             break;
           }
-          case 26: {
+          case 25: {
+            WinFactor = input.ReadDouble();
+            break;
+          }
+          case 32: {
+            IsWinner = input.ReadBool();
+            break;
+          }
+          case 42: {
             remainingCards_.AddEntriesFrom(input, _repeated_remainingCards_codec);
             break;
           }
@@ -3456,14 +3582,19 @@ namespace Api {
             UserId = input.ReadString();
             break;
           }
-          case 18: {
-            if (score_ == null) {
-              Score = new global::Api.WhotScoreResult();
-            }
-            input.ReadMessage(Score);
+          case 16: {
+            TotalPoints = input.ReadInt64();
             break;
           }
-          case 26: {
+          case 25: {
+            WinFactor = input.ReadDouble();
+            break;
+          }
+          case 32: {
+            IsWinner = input.ReadBool();
+            break;
+          }
+          case 42: {
             remainingCards_.AddEntriesFrom(ref input, _repeated_remainingCards_codec);
             break;
           }
@@ -3511,7 +3642,6 @@ namespace Api {
     public UpdateFinish(UpdateFinish other) : this() {
       results_ = other.results_.Clone();
       endReason_ = other.endReason_;
-      winnerId_ = other.winnerId_;
       jackpot_ = other.jackpot_ != null ? other.jackpot_.Clone() : null;
       jpTreasure_ = other.jpTreasure_ != null ? other.jpTreasure_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -3543,18 +3673,6 @@ namespace Api {
       get { return endReason_; }
       set {
         endReason_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "winner_id" field.</summary>
-    public const int WinnerIdFieldNumber = 3;
-    private string winnerId_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string WinnerId {
-      get { return winnerId_; }
-      set {
-        winnerId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -3599,7 +3717,6 @@ namespace Api {
       }
       if(!results_.Equals(other.results_)) return false;
       if (EndReason != other.EndReason) return false;
-      if (WinnerId != other.WinnerId) return false;
       if (!object.Equals(Jackpot, other.Jackpot)) return false;
       if (!object.Equals(JpTreasure, other.JpTreasure)) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -3611,7 +3728,6 @@ namespace Api {
       int hash = 1;
       hash ^= results_.GetHashCode();
       if (EndReason != global::Api.WhotEndGameReason.ReasonNormalWin) hash ^= EndReason.GetHashCode();
-      if (WinnerId.Length != 0) hash ^= WinnerId.GetHashCode();
       if (jackpot_ != null) hash ^= Jackpot.GetHashCode();
       if (jpTreasure_ != null) hash ^= JpTreasure.GetHashCode();
       if (_unknownFields != null) {
@@ -3637,10 +3753,6 @@ namespace Api {
         output.WriteRawTag(16);
         output.WriteEnum((int) EndReason);
       }
-      if (WinnerId.Length != 0) {
-        output.WriteRawTag(26);
-        output.WriteString(WinnerId);
-      }
       if (jackpot_ != null) {
         output.WriteRawTag(34);
         output.WriteMessage(Jackpot);
@@ -3664,10 +3776,6 @@ namespace Api {
         output.WriteRawTag(16);
         output.WriteEnum((int) EndReason);
       }
-      if (WinnerId.Length != 0) {
-        output.WriteRawTag(26);
-        output.WriteString(WinnerId);
-      }
       if (jackpot_ != null) {
         output.WriteRawTag(34);
         output.WriteMessage(Jackpot);
@@ -3690,9 +3798,6 @@ namespace Api {
       if (EndReason != global::Api.WhotEndGameReason.ReasonNormalWin) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) EndReason);
       }
-      if (WinnerId.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(WinnerId);
-      }
       if (jackpot_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Jackpot);
       }
@@ -3714,9 +3819,6 @@ namespace Api {
       results_.Add(other.results_);
       if (other.EndReason != global::Api.WhotEndGameReason.ReasonNormalWin) {
         EndReason = other.EndReason;
-      }
-      if (other.WinnerId.Length != 0) {
-        WinnerId = other.WinnerId;
       }
       if (other.jackpot_ != null) {
         if (jackpot_ == null) {
@@ -3755,10 +3857,6 @@ namespace Api {
           }
           case 16: {
             EndReason = (global::Api.WhotEndGameReason) input.ReadEnum();
-            break;
-          }
-          case 26: {
-            WinnerId = input.ReadString();
             break;
           }
           case 34: {
@@ -3800,10 +3898,6 @@ namespace Api {
           }
           case 16: {
             EndReason = (global::Api.WhotEndGameReason) input.ReadEnum();
-            break;
-          }
-          case 26: {
-            WinnerId = input.ReadString();
             break;
           }
           case 34: {

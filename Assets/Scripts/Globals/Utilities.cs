@@ -180,27 +180,27 @@ namespace Globals
         #endregion
 
         #region Tween Number
-        public static void TweenNumberFromK(TMPro.TextMeshProUGUI lbText, int toNumber, int startNumber = 0, float timeRun = 0.3f, bool isFormatK = false)
+        public static void TweenNumberFromK(TextMeshProUGUI lbText, int toNumber, int startNumber = 0, float timeRun = 0.3f, bool isFormatK = false)
         {
             DOTween.To(() => startNumber, x => startNumber = x, toNumber, timeRun).OnUpdate(() => lbText.text = FormatMoney2(startNumber, isFormatK));
         }
 
-        public static void TweenNumberTo(TMPro.TextMeshProUGUI lbText, int toNumber, int startNumber = 0, float timeRun = 0.3f, bool isFormatK = false)
+        public static void TweenNumberTo(TextMeshProUGUI lbText, int toNumber, int startNumber = 0, float timeRun = 0.3f, bool isFormatK = false)
         {
             DOTween.To(() => startNumber, x => startNumber = x, toNumber, timeRun).OnUpdate(() => lbText.text = FormatMoney2(startNumber, isFormatK, true));
         }
-        public static void TweenNumberTo(TMPro.TextMeshProUGUI lbText, long toNumber, long startNumber = 0, float timeRun = 0.3f, bool isFormatK = false, bool is2Digit = true)
+        public static void TweenNumberTo(TextMeshProUGUI lbText, long toNumber, long startNumber = 0, float timeRun = 0.3f, bool isFormatK = false, bool is2Digit = true)
         {
             if (!is2Digit)
                 DOTween.To(() => startNumber, x => startNumber = x, toNumber, timeRun).OnUpdate(() => lbText.text = FormatMoney(startNumber, isFormatK));
             else
                 DOTween.To(() => startNumber, x => startNumber = x, toNumber, timeRun).OnUpdate(() => lbText.text = FormatMoney2(startNumber, isFormatK, true));
         }
-        public static void TweenNumberToMoney(TMPro.TextMeshProUGUI lbText, int toNumber, int startNumber = 0, float timeRun = 0.3f, long valueMinFormatK = 10000)
+        public static void TweenNumberToMoney(TextMeshProUGUI lbText, int toNumber, int startNumber = 0, float timeRun = 0.3f, long valueMinFormatK = 10000)
         {
             DOTween.To(() => startNumber, x => startNumber = x, toNumber, timeRun).OnUpdate(() => lbText.text = FormatMoney3(startNumber, valueMinFormatK));
         }
-        public static void TweenNumberToMoney(TMPro.TextMeshProUGUI lbText, long toNumber, long startNumber = 0, float timeRun = 0.3f, long valueMinFormatK = 10000, bool isLowerCase = false)
+        public static void TweenNumberToMoney(TextMeshProUGUI lbText, long toNumber, long startNumber = 0, float timeRun = 0.3f, long valueMinFormatK = 10000, bool isLowerCase = false)
         {
             DOTween.To(() => startNumber, x => startNumber = x, toNumber, timeRun).OnUpdate(()
                 =>
@@ -216,7 +216,7 @@ namespace Globals
             }
                 );
         }
-        public static void TweenNumberToNumber(TMPro.TextMeshProUGUI lbText, int toNumber, int startNumber = 0, float timeRun = 0.3f, bool isLowerCase = false)
+        public static void TweenNumberToNumber(TextMeshProUGUI lbText, int toNumber, int startNumber = 0, float timeRun = 0.3f, bool isLowerCase = false)
         {
 
             DOTween.To(() => startNumber, x => startNumber = x, toNumber, timeRun).SetEase(Ease.InSine).OnUpdate(() => { if (isLowerCase) lbText.text = FormatNumber(startNumber).ToLower(); else lbText.text = FormatNumber(startNumber); });
@@ -228,7 +228,7 @@ namespace Globals
             .AppendInterval(timeRun * 0.45f)
             .Append(lbText.transform.DOScale(normalScale, timeRun * 0.1f));
         }
-        public static void TweenNumberToNumber(TMPro.TextMeshProUGUI lbText, long toNumber, long startNumber = 0, float timeRun = 0.5f, bool isLowerCase = false)
+        public static void TweenNumberToNumber(TextMeshProUGUI lbText, long toNumber, long startNumber = 0, float timeRun = 0.5f, bool isLowerCase = false)
         {
             DOTween.To(() => startNumber, x => startNumber = x, toNumber, timeRun).OnUpdate(() => { if (isLowerCase) lbText.text = FormatNumber(startNumber).ToLower(); else lbText.text = FormatNumber(startNumber); }).OnComplete(() =>
             {
@@ -241,7 +241,7 @@ namespace Globals
             .AppendInterval(timeRun * 0.45f)
             .Append(lbText.transform.DOScale(normalScale, timeRun * 0.1f));
         }
-        public static void TweenNumberTo(TMPro.TextMeshProUGUI lbText, long toNumber, long startNumber = 0, float timeRun = 0.3f)
+        public static void TweenNumberTo(TextMeshProUGUI lbText, long toNumber, long startNumber = 0, float timeRun = 0.3f)
         {
             if (toNumber < 10000)
             {

@@ -11,11 +11,13 @@ using System;
 public class WhotPlayer : MonoBehaviour
 {
     [SerializeField] private Image avatarImage, countdownImage, lightImage, holdOnImage, suspensionImage, scoreImage;
-    [SerializeField] private TextMeshProUGUI nameText, chipText, cardsLeftText, effectText, scoreText, plusText;
+    [SerializeField] private TextMeshProUGUI nameText, chipText, cardsLeftText, effectText, scoreText, plusText, chipAddText;
     [SerializeField] private GameObject lastCardNoti, effectNoti, cardsDisplay, cardPrefab, chipPrefab;
     [SerializeField] private Transform remainingCardsParent;
+    [SerializeField] private TMP_FontAsset chipWinFont, chipLoseFont;
     [HideInInspector] public bool isCurrentPlayer = false;
     [HideInInspector] public bool isWinner = false;
+    [HideInInspector] public bool isPlaying = true;
     public string playerId { get; private set; } = string.Empty;
     public int cardsLeft { get; private set; } = 0;
     private WhotView whotGame;
@@ -40,6 +42,7 @@ public class WhotPlayer : MonoBehaviour
         effectNoti.SetActive(false);
         scoreImage.gameObject.SetActive(false);
         plusText.gameObject.SetActive(false);
+        chipAddText.gameObject.SetActive(false);
         // HideCardsLeft();
     }
 
@@ -66,13 +69,15 @@ public class WhotPlayer : MonoBehaviour
         string playerId,
         string avatarSprite,
         string playerName,
-        string chipAmount
+        string chipAmount = "0"
     )
     {
+        Debug.Log("Chip AMOUNT: " + chipAmount);    
         this.playerId = playerId;
         // avatarImage.sprite = avatarSprite;
         nameText.text = playerName;
         chipText.text = chipAmount;
+        // AnimateChipValue(long.Parse(chipAmount));
     }
 
     public void SetWhotGame(WhotView whotGame)
@@ -111,6 +116,7 @@ public class WhotPlayer : MonoBehaviour
 
     public void AnimateShowRemainingCards(List<Card> cards)
     {
+        Debug.Log("AnimateShowRemainingCards called with " + cards.Count + " cards.");
         remainingCardsParent.gameObject.SetActive(true);
         if (cards.Count >= 8)
         {
@@ -168,6 +174,12 @@ public class WhotPlayer : MonoBehaviour
                 scoreCanvasGroup.DOFade(1f, ANIMATION_TIME / 2).SetDelay((i + 1) * 0.1f);
             }
         }
+    }
+
+    public void DisplayScore(long totalPoints)
+    {
+        if (totalPoints > 0)
+            scoreText.text = totalPoints.ToString();
     }
 
     public void HideRemainingCards()
@@ -336,7 +348,25 @@ public class WhotPlayer : MonoBehaviour
         });
     }
 
-    public void AnimateChipTransfer(Transform otherPlayerTransform)
+    public void AnimateAddChipText(long amount)
+    {
+        chipAddText.font = amount > 0 ? chipWinFont : chipLoseFont;
+        chipAddText.text = $"{amount}";
+
+        chipAddText.transform.localPosition = GetAvatarImage().transform.localPosition + new Vector3(-12f, 20f, 0f);
+
+        Sequence sequence = DOTween.Sequence();
+        chipAddText.gameObject.SetActive(true);
+        sequence
+            .Append(chipAddText.transform.DOLocalMove(GetAvatarImage().transform.localPosition + new Vector3(-12f, 70f, 0f), 1.2f)
+            .SetEase(Ease.OutQuad))
+            .OnComplete(() =>
+            {
+                chipAddText.gameObject.SetActive(false);
+            });
+    }
+
+    public void AnimateChipTransfer(Transform otherPlayerTransform, long amountChipAdd)
     {
         for (int i = 0; i < 5; i++)
         {
@@ -355,8 +385,14 @@ public class WhotPlayer : MonoBehaviour
                 .OnComplete(() =>
                 {
                     Destroy(chipInstance);
+                    AnimateAddChipText(amountChipAdd);
                 });
         }
+    }
+
+    public void AnimateChipValue(long toNumber = 0)
+    {
+        Utility.TweenNumberTo(chipText, toNumber, GetChipAmount(), 0.3f, false);
     }
     #endregion
 
@@ -370,6 +406,15 @@ public class WhotPlayer : MonoBehaviour
     {
         return nameText.text;
     }   
+
+    public long GetChipAmount()
+    {
+        if (long.TryParse(chipText.text, out long chipAmount))
+        {
+            return chipAmount;
+        }
+        return 0;
+    }
     public Transform GetDealedCardParent()
     {
         return cardsDisplay.transform;
