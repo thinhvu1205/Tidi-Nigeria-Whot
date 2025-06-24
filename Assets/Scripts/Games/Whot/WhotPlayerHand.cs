@@ -45,7 +45,7 @@ public class WhotPlayerHand : MonoBehaviour
         Destroy(card.gameObject);
         if (cardsInHand.Count == 0)
         {
-            whotGame.AnimateLastCard();
+            whotGame.AnimateLastCardEffect();
         }
         SpreadCards();
     }
@@ -78,7 +78,7 @@ public class WhotPlayerHand : MonoBehaviour
     {
         playerHandParent.gameObject.SetActive(false);
         remainingCardsParent.gameObject.SetActive(true);
-        if (cards.Count >= 8)
+        if (cards.Count >= 10)
         {
             REMAINING_CARD_SPACING = CARD_SCALE / 2 * 75;
         }

@@ -77,6 +77,11 @@ public class WhotHandler : IGameHandler
         whotGame.HandleUpdateWallet(updateWallet);
     }
 
+    public void OnUpdateKickOffTheTable(IMatchState matchState)
+    {
+        whotGame.OnQuitMatch();
+    }
+
     public void OnFinish(IMatchState matchState)
     {
         var updateFinish = UpdateFinish.Parser.ParseFrom(matchState.State);

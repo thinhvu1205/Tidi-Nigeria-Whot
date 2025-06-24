@@ -58,7 +58,7 @@ public class GameManager : Singleton<GameManager>
                     _currentHandler?.OnUpdateWallet(matchState);
                     break;
                 case (long)OpCodeUpdate.OpcodeKickOffTheTable:
-                    Debug.Log("OpCodeUpdate.OpcodeKickOffTheTable " + matchState.ToString());
+                    _currentHandler?.OnUpdateKickOffTheTable(matchState);
                     break;
                 case (long)OpCodeUpdate.Finish:
                     _currentHandler?.OnFinish(matchState);

@@ -95,21 +95,6 @@ public class WhotPlayer : MonoBehaviour
     {
         card.SetSelectable(false);
         whotGame.PlayACard(card, GetPlayedCardParent());
-        StopCountDown();
-        if (cardsLeft == 1)
-        {
-            AnimateShowLastCardNoti();
-        }
-        else if (cardsLeft == 0)
-        {
-            AnimateHideLastCardNoti();
-            // whotGame.AnimateShowRemainingCards();
-            // isWinner = true;
-        }
-        else
-        {
-            AnimateHideLastCardNoti();
-        }
     }
 
     #region Visuals
@@ -118,7 +103,7 @@ public class WhotPlayer : MonoBehaviour
     {
         Debug.Log("AnimateShowRemainingCards called with " + cards.Count + " cards.");
         remainingCardsParent.gameObject.SetActive(true);
-        if (cards.Count >= 8)
+        if (cards.Count >= 10)
         {
             CARD_SPACING = CARD_SCALE / 2 * 75;
         }
@@ -223,10 +208,22 @@ public class WhotPlayer : MonoBehaviour
         cardsDisplay.SetActive(false);
     }
 
-    public void UpdateCardsLeftVisual(int cardsCount)
+    public void UpdateCardsLeftVisual(int cardsCount, bool isDealingCard = false)
     {
         if (cardsCount > 0 && !isCurrentPlayer) ShowCardsLeft();
         cardsLeftText.text = cardsCount.ToString();
+        if (cardsCount == 0)
+        {
+            whotGame.AnimateLastCardEffect()
+;        }
+        if (cardsCount == 1 && !lastCardNoti.activeSelf && !isDealingCard)
+        {
+            AnimateShowLastCardNoti();
+        }
+        else
+        {
+            AnimateHideLastCardNoti();
+        }
     }
 
     public void UpdateEffectNoti(string effect)
@@ -243,6 +240,10 @@ public class WhotPlayer : MonoBehaviour
         if (e.playerTurn == playerId)
         {
             StartCountDown(e.countdown);
+        }
+        else
+        {
+            StopCountDown();
         }
     }
     #endregion
@@ -385,7 +386,10 @@ public class WhotPlayer : MonoBehaviour
                 .OnComplete(() =>
                 {
                     Destroy(chipInstance);
-                    AnimateAddChipText(amountChipAdd);
+                    if (i == 4)
+                    {
+                        AnimateAddChipText(amountChipAdd);
+                    }
                 });
         }
     }

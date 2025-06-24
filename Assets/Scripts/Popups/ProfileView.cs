@@ -22,7 +22,7 @@ public class ProfileView : BaseView
         if (User.userMain != null)
         {
             nameText.text = User.userMain.displayName;
-            idText.text = "ID: " + User.userMain.userId;
+            idText.text = "ID: " + User.userMain.userSid;
             chipText.text = User.userMain.accountChip;
             if (IsDefaultName(User.userMain.displayName))
             {

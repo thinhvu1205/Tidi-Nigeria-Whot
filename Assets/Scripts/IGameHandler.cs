@@ -15,6 +15,7 @@ public interface IGameHandler
     void OnUpdateCardState(IMatchState matchState);
     void OnUpdateGameState(IMatchState matchState);
     void OnUpdateWallet(IMatchState matchState);
+    void OnUpdateKickOffTheTable(IMatchState matchState);
     void OnFinish(IMatchState matchState);
 }
 

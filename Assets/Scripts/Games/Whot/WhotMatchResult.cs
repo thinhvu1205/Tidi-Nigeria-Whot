@@ -49,7 +49,6 @@ public class WhotMatchResult : MonoBehaviour
 
     public void OnClickPlayAgain()
     {
-        whotGame.HandleResetGame();
         gameObject.SetActive(false);
     }
 }
