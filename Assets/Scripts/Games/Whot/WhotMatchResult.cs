@@ -12,7 +12,7 @@ public class WhotMatchResult : MonoBehaviour
     [SerializeField] private GameObject playerResultPrefab;
     private WhotView whotGame;
 
-    public void SetInfo(WhotView whotGame, List<WhotPlayer> players, List<WhotPlayerResult> result, bool isVictory)
+    public void SetInfo(WhotView whotGame, List<WhotPlayer> players, List<WhotPlayerResult> result, List<BalanceUpdate> balanceUpdates, bool isVictory)
     {
         this.whotGame = whotGame;
         backgroundWin.gameObject.SetActive(isVictory);
@@ -31,10 +31,11 @@ public class WhotMatchResult : MonoBehaviour
             WhotPlayerResultItem resultComponent = playerResult.GetComponent<WhotPlayerResultItem>();
             long totalPoints = result.Find(r => r.UserId == player.playerId)?.TotalPoints ?? 0;
             List<Card> remainingCards = result.Find(r => r.UserId == player.playerId)?.RemainingCards.ToList();
-            
+            long amountChipAdd = balanceUpdates.Find(b => b.UserId == player.playerId)?.AmountChipAdd ?? 0;
+
             resultComponent.SetInfo(
                 player: player,
-                cash: "2000",
+                cash: amountChipAdd.ToString(),
                 score: totalPoints.ToString(),
                 remainingCards: remainingCards,
                 isVictory: isVictory

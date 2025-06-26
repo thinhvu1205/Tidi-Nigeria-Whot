@@ -266,17 +266,22 @@ public class WhotPlayerHand : MonoBehaviour
 
     public void Reset()
     {
-        foreach (var card in cardsInHand)
+        foreach (Transform card in playerHandParent)
+        {
+            Destroy(card.gameObject);
+        }
+        foreach (Transform card in remainingCardsParent)
         {
             Destroy(card.gameObject);
         }
         cardsInHand.Clear();
-        scoreParent.gameObject.SetActive(false);
+        playerHandParent.gameObject.SetActive(true);
     }
 
     public void HideRemainingCards()
     {
         remainingCardsParent.gameObject.SetActive(false);
+        scoreParent.gameObject.SetActive(false);
     }
     #region Helpers
 

@@ -46,6 +46,11 @@ public class WhotPlayer : MonoBehaviour
         // HideCardsLeft();
     }
 
+    private void OnDestroy()
+    {
+        whotGame.OnNextTurn -= WhotGame_OnNextTurn;
+    }
+
     private void Update()
     {
         if (isCountingDown)
@@ -72,7 +77,6 @@ public class WhotPlayer : MonoBehaviour
         string chipAmount = "0"
     )
     {
-        Debug.Log("Chip AMOUNT: " + chipAmount);    
         this.playerId = playerId;
         // avatarImage.sprite = avatarSprite;
         nameText.text = playerName;
@@ -95,6 +99,12 @@ public class WhotPlayer : MonoBehaviour
     {
         card.SetSelectable(false);
         whotGame.PlayACard(card, GetPlayedCardParent());
+    }
+
+    public void Reset()
+    {
+        HideCardsLeft();
+        cardsLeftText.text = "0";   
     }
 
     #region Visuals
@@ -367,7 +377,7 @@ public class WhotPlayer : MonoBehaviour
             });
     }
 
-    public void AnimateChipTransfer(Transform otherPlayerTransform, long amountChipAdd)
+    public void AnimateChipTransfer(Transform otherPlayerTransform, BalanceUpdate playerWallet)
     {
         for (int i = 0; i < 5; i++)
         {
@@ -388,7 +398,8 @@ public class WhotPlayer : MonoBehaviour
                     Destroy(chipInstance);
                     if (i == 4)
                     {
-                        AnimateAddChipText(amountChipAdd);
+                        AnimateAddChipText(playerWallet.AmountChipAdd);
+                        AnimateChipValue(playerWallet.AmountChipCurrent);
                     }
                 });
         }

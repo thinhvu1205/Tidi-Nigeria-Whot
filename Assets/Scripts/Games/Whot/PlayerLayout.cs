@@ -57,6 +57,9 @@ public class PlayerLayout : MonoBehaviour
 
                 break;
         }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(cards.parent as RectTransform);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(avatar.parent as RectTransform);
+
     }
 
     private void SetOrder(RectTransform target, int index)
