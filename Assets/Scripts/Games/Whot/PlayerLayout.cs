@@ -12,6 +12,7 @@ public class PlayerLayout : MonoBehaviour
     [SerializeField] private Transform chip;
     [SerializeField] private Transform effect;
     [SerializeField] private Transform remainingCardsParent;
+    [SerializeField] private Transform lastCardNoti;
     [SerializeField] private Image backgroundImage;
     private EPlayerLayout currentLayout;
     public enum EPlayerLayout
@@ -36,6 +37,7 @@ public class PlayerLayout : MonoBehaviour
                 SetOrder(cards, 1);
                 SetOrder(info, 2);
                 remainingCardsParent.Translate(-100f, 0f, 0f);
+                lastCardNoti.Translate(50f, 0f, 0f);
                 break;
 
             case EPlayerLayout.Top:
@@ -54,10 +56,11 @@ public class PlayerLayout : MonoBehaviour
                 effect.Translate(116f, 0f, 0f);
                 backgroundImage.transform.Rotate(0, 0, 180f);
                 remainingCardsParent.Translate(100f, 0f, 0f);
-
+                lastCardNoti.Translate(180f, 0f, 0f);
                 break;
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(cards.parent as RectTransform);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(info.parent as RectTransform);
         LayoutRebuilder.ForceRebuildLayoutImmediate(avatar.parent as RectTransform);
 
     }

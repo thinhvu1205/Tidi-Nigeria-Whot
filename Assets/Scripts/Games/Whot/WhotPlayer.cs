@@ -19,7 +19,6 @@ public class WhotPlayer : MonoBehaviour
     [HideInInspector] public bool isWinner = false;
     [HideInInspector] public bool isPlaying = true;
     public string playerId { get; private set; } = string.Empty;
-    public int cardsLeft { get; private set; } = 0;
     private WhotView whotGame;
     private PlayerLayout playerLayout;
     private float turnTimer = 10f; // Default turn timer duration
@@ -111,7 +110,7 @@ public class WhotPlayer : MonoBehaviour
 
     public void AnimateShowRemainingCards(List<Card> cards)
     {
-        Debug.Log("AnimateShowRemainingCards called with " + cards.Count + " cards.");
+        if (cards == null) return;
         remainingCardsParent.gameObject.SetActive(true);
         if (cards.Count >= 10)
         {
@@ -192,7 +191,6 @@ public class WhotPlayer : MonoBehaviour
 
     private void StartCountDown(int countdown)
     {
-        turnTimer = countdown;
         countDownTimer = countdown; // Reset the countdown timer
         isCountingDown = true;
         countdownImage.gameObject.SetActive(true);

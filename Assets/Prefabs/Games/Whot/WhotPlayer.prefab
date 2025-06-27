@@ -1546,6 +1546,7 @@ MonoBehaviour:
   chip: {fileID: 2550457850821981860}
   effect: {fileID: 2616645370476565714}
   remainingCardsParent: {fileID: 7107553626782955985}
+  lastCardNoti: {fileID: 7041566551525584878}
   backgroundImage: {fileID: 4753096025806832475}
 --- !u!1 &4219335751972251826
 GameObject:

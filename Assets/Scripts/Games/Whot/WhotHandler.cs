@@ -79,7 +79,7 @@ public class WhotHandler : IGameHandler
 
     public void OnUpdateKickOffTheTable(IMatchState matchState)
     {
-        whotGame.OnQuitMatch();
+        whotGame.OnUpdateKickOffTable();
     }
 
     public void OnFinish(IMatchState matchState)

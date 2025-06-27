@@ -12,10 +12,9 @@ using UnityEngine.UI;
 
 public class WhotPlayerHand : MonoBehaviour
 {
-    [SerializeField] private Transform cardsParent, scoreParent, playerHandParent, remainingCardsParent;
+    [SerializeField] private Transform cardsParent, scoreParent, remainingCardsParent;
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private WhotSuitPicker suitPicker;
     [HideInInspector] public List<WhotCard> cardsInHand = new();
     private WhotView whotGame;
     private const float ANIMATION_TIME = 0.35f;
@@ -76,36 +75,46 @@ public class WhotPlayerHand : MonoBehaviour
 
     public void AnimateShowRemainingCards(List<Card> cards)
     {
-        playerHandParent.gameObject.SetActive(false);
-        remainingCardsParent.gameObject.SetActive(true);
-        if (cards.Count >= 10)
+        try
         {
-            REMAINING_CARD_SPACING = CARD_SCALE / 2 * 75;
+            if (cards == null) return;
+            cardsParent.gameObject.SetActive(false);
+            remainingCardsParent.gameObject.SetActive(true);
+            if (cards.Count >= 10)
+            {
+                REMAINING_CARD_SPACING = CARD_SCALE / 2 * 75;
+            }
+            float totalWidth = (cards.Count - 1) * REMAINING_CARD_SPACING;
+            float startX = -totalWidth / 2f;
+            for (int i = 0; i < cards.Count; i++)
+            {
+                Card card = cards[i];
+                WhotCard whotCard = Instantiate(cardPrefab, remainingCardsParent).GetComponent<WhotCard>();
+                whotCard.SetInfo(card.Suit, card.Rank);
+                whotCard.SetSelectable(false);
+                whotCard.transform.localScale = Vector3.one * CARD_SCALE;
+
+                CanvasGroup cardCanvasGroup = whotCard.GetComponent<CanvasGroup>();
+                cardCanvasGroup.alpha = 0f;
+
+                Vector3 offset = new Vector3(-20f, 0f, 0f);
+                Vector3 targetPos = new Vector3(startX + i * REMAINING_CARD_SPACING, 0f, 0f);
+
+                whotCard.transform.localPosition = targetPos + offset;
+
+                // Animate move & fade
+                whotCard.transform.DOLocalMove(targetPos, ANIMATION_TIME).SetEase(Ease.OutCubic).SetDelay(i * 0.05f);
+                cardCanvasGroup.DOFade(1f, ANIMATION_TIME / 2).SetDelay(i * 0.1f);
+
+            }
+            scoreParent.transform.localPosition = new Vector3(startX + totalWidth + SCORE_IMAGE_OFFSET, 0f, 0f);
+            
         }
-        float totalWidth = (cards.Count - 1) * REMAINING_CARD_SPACING;
-        float startX = -totalWidth / 2f;
-        for (int i = 0; i < cards.Count; i++)
+        catch (System.Exception)
         {
-            Card card = cards[i];
-            WhotCard whotCard = Instantiate(cardPrefab, remainingCardsParent).GetComponent<WhotCard>();
-            whotCard.SetInfo(card.Suit, card.Rank);
-            whotCard.SetSelectable(false);
-            whotCard.transform.localScale = Vector3.one * CARD_SCALE;
-
-            CanvasGroup cardCanvasGroup = whotCard.GetComponent<CanvasGroup>();
-            cardCanvasGroup.alpha = 0f;
-
-            Vector3 offset = new Vector3(-20f, 0f, 0f);
-            Vector3 targetPos = new Vector3(startX + i * REMAINING_CARD_SPACING, 0f, 0f);
-
-            whotCard.transform.localPosition = targetPos + offset;
-
-            // Animate move & fade
-            whotCard.transform.DOLocalMove(targetPos, ANIMATION_TIME).SetEase(Ease.OutCubic).SetDelay(i * 0.05f);
-            cardCanvasGroup.DOFade(1f, ANIMATION_TIME / 2).SetDelay(i * 0.1f);
-
+            Debug.LogError("Error animating remaining cards: " + cards.Count);
+            throw;
         }
-        scoreParent.transform.localPosition = new Vector3(startX + totalWidth + SCORE_IMAGE_OFFSET, 0f, 0f);
 
     }
 
@@ -266,16 +275,22 @@ public class WhotPlayerHand : MonoBehaviour
 
     public void Reset()
     {
-        foreach (Transform card in playerHandParent)
+        foreach (Transform card in cardsParent)
         {
-            Destroy(card.gameObject);
+            if (card.GetComponent<WhotCard>() != null)
+            {
+                Destroy(card.gameObject);
+            }
         }
         foreach (Transform card in remainingCardsParent)
         {
-            Destroy(card.gameObject);
+            if (card.GetComponent<WhotCard>() != null)
+            {
+                Destroy(card.gameObject);
+            }
         }
         cardsInHand.Clear();
-        playerHandParent.gameObject.SetActive(true);
+        cardsParent.gameObject.SetActive(true);
     }
 
     public void HideRemainingCards()
