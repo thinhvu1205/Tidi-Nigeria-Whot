@@ -437,7 +437,6 @@ public class NetworkManager : MonoBehaviour
             {
                 if (!Config.currentGameView)
                 {
-                    Debug.Log("game view null");
                     return;
                 }
                 var state = matchStateQueue.Dequeue();

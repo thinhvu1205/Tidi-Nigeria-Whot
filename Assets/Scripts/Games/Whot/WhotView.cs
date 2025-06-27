@@ -73,7 +73,7 @@ public class WhotView : GameView
         WhotHandler whotHandler = new(this);
         GameManager.Instance.SetGameHandler(whotHandler);
 
-        HandleResetGame();
+        Init();
     }
 
     private void Update()
@@ -85,7 +85,7 @@ public class WhotView : GameView
         }
     }
 
-    public void HandleResetGame()
+    public void Init()
     {
         DOTween.KillAll(true);
         playersList = new();
@@ -134,7 +134,7 @@ public class WhotView : GameView
         isRejoinTable =
             (!(new GameState[] { GameState.Preparing, GameState.Idle, GameState.Matching }).Contains(gameState))
             && joinPlayers.Find((player) => player.Id == currentPlayerId) != null;
-        Debug.Log("Is rejoin table: " + isRejoinTable);
+
         // Order lại List Player sao cho currentPlayer luôn ở đầu
         if (startIndex >= 0)
         {
@@ -262,6 +262,7 @@ public class WhotView : GameView
 
         if (isRejoinTable)
         {
+            // Kết nối lại bàn cũ
             foreach (Card card in presenceCard)
             {
                 WhotCard whotCard = Instantiate(cardPrefab, playerHand.GetCardsParent()).GetComponent<WhotCard>();
@@ -283,7 +284,6 @@ public class WhotView : GameView
         }
         if (!hasDealtCards)
         {
-            Debug.Log("DEALING CARDS");
             // Lần đầu thì chia bài
             Card callCard = data.TopCard;
             CallCard = Instantiate(cardPrefab).GetComponent<WhotCard>();
@@ -329,6 +329,7 @@ public class WhotView : GameView
             case GameState.Preparing:
 
                 // HandleResetGame();
+                matchResultTransform.gameObject.SetActive(false);
                 countdownTransform.gameObject.SetActive(true);
                 countdownText.text = data.CountDown.ToString();
                 foreach (WhotPlayer player in playersList)
@@ -337,6 +338,7 @@ public class WhotView : GameView
                     player.Reset();
                 }
                 initialCardsList.Clear();
+                balanceUpdates.Clear();
                 hasDealtCards = false;
                 playerHand.Reset();
                 break;
@@ -461,11 +463,11 @@ public class WhotView : GameView
                 break;
             default:
                 // Khi vào bàn đang dang chơi dở 
+                UpdateCardsCount(data.DeckCount, playerCardsCount);
                 if (data.TopCard == null) return;
                 CallCard = Instantiate(cardPrefab).GetComponent<WhotCard>();
                 CallCard.SetInfo(data.TopCard.Suit, data.TopCard.Rank);
                 AnimateChooseCallCard();
-                UpdateCardsCount(data.DeckCount, playerCardsCount);
                 break;
         }
     }
@@ -562,7 +564,7 @@ public class WhotView : GameView
             int index = i % length;
             WhotPlayer player = playersList[index];
             if (!player.isPlaying) continue;
-            yield return new WaitForSeconds(0.6f / (length * cardsPerPlayer));
+            yield return new WaitForSeconds(0.8f / (length * cardsPerPlayer));
 
             GameObject card = Instantiate(cardPrefab, GetDeckOfCardParent());
             WhotCard whotCard = card.GetComponent<WhotCard>();
@@ -697,7 +699,10 @@ public class WhotView : GameView
     private void HandleSuspensionEffect(WhotPlayer targetPlayer)
     {
         targetPlayer.AnimateShowSuspension();
-        targetPlayer.UpdateEffectNoti("Suspension");
+        if (targetPlayer.playerId != GetCurrentPlayer().playerId)
+        {
+            targetPlayer.UpdateEffectNoti("Suspension");
+        }
     }
     private void HandleGeneralMarketEffect(WhotPlayer activePlayer)
     {
@@ -901,7 +906,7 @@ public class WhotView : GameView
                         }
                         player.isWinner = data.IsWinner;
                     }
-                
+
                 }
             })
             .AppendInterval(4f)
@@ -942,19 +947,13 @@ public class WhotView : GameView
         {
             victoryAnimationParent.gameObject.SetActive(false);
             Sequence chipSequence = DOTween.Sequence();
+            int transferCount = 0;
+            int totalTransfers = playersList.Count(p => p.isPlaying && !p.isWinner);
             foreach (WhotPlayer player in playersList)
             {
-                if (!player.isPlaying) continue;
-                BalanceUpdate playerWallet = balanceUpdates.Find((playerWallet) => playerWallet.UserId == player.playerId);
-                if (!player.isCurrentPlayer)
-                {
-                    player.AnimateChipTransfer(GetCurrentPlayer().GetPlayedCardParent(), playerWallet);
-                }
-                else
-                {
-                    chipSequence.AppendInterval(2f);
-                    player.AnimateAddChipText(playerWallet.AmountChipAdd);
-                }
+                if (!player.isPlaying || player.isWinner) continue;
+                bool isLast = ++transferCount == totalTransfers;
+                player.AnimateChipTransfer(GetWinner(), isLast);
             }
             chipSequence.AppendInterval(2.5f);
             chipSequence.OnComplete(() =>
@@ -962,7 +961,6 @@ public class WhotView : GameView
                 HandleShowMatchResult(result, balanceUpdates, true);
             });
         };
-
     }
 
     public void AnimateBetterLuckNextTime(List<WhotPlayerResult> result)
@@ -989,14 +987,15 @@ public class WhotView : GameView
 
             // Animation transfer chips from other players to the winner
             Sequence chipSequence = DOTween.Sequence();
+            int transferCount = 0;
+            int totalTransfers = playersList.Count(p => p.isPlaying && !p.isWinner);
+
             foreach (WhotPlayer player in playersList)
             {
-                if (!player.isPlaying) continue;
-                BalanceUpdate playerWallet = balanceUpdates.Find((playerWallet) => playerWallet.UserId == player.playerId);
-                if (!player.isWinner)
-                {
-                    player.AnimateChipTransfer(GetWinner().GetPlayedCardParent(), playerWallet);
-                }
+                if (!player.isPlaying || player.isWinner) continue;
+
+                bool isLast = ++transferCount == totalTransfers;
+                player.AnimateChipTransfer(GetWinner(), isLast);
             }
             chipSequence.AppendInterval(2.5f);
             chipSequence.OnComplete(() =>
@@ -1004,6 +1003,27 @@ public class WhotView : GameView
                 HandleShowMatchResult(result, balanceUpdates, false);
             });
         };
+    }
+
+    public void AnimateAllPlayersAddChip()
+    {
+        Dictionary<string, BalanceResultData> playerResults = balanceUpdates
+            .Where(r => !string.IsNullOrEmpty(r.UserId))
+            .ToDictionary(
+                r => r.UserId,
+                r => new BalanceResultData(
+                    r.AmountChipAdd,
+                    r.AmountChipCurrent
+                )
+            );
+        foreach (WhotPlayer player in playersList)
+        {
+            if (player.isPlaying && playerResults.TryGetValue(player.playerId, out BalanceResultData data))
+            {
+                player.AnimateAddChipText(data.AmountChipAdd);
+                player.AnimateChipValue(data.AmountChipCurrent);
+            }
+        }
     }
     private void AnimateDealACard(WhotCard card, Transform targetTransform, WhotPlayer player, int index = 0)
     {
@@ -1171,7 +1191,7 @@ public class WhotView : GameView
 
     public void OnQuitMatch()
     {
-        if (new GameState[] { GameState.Idle, GameState.Matching, GameState.Preparing }.Contains(gameState))
+        if (new GameState[] { GameState.Idle, GameState.Matching, GameState.Preparing }.Contains(gameState) || !GetCurrentPlayer().isPlaying)
         {
             NetworkManager.INSTANCE.LeaveMatch();
             Destroy(gameObject);
@@ -1205,7 +1225,7 @@ public class WhotView : GameView
             }
         }
     }
-    
+
     private struct PlayerResultData
     {
         public List<Card> RemainingCards;
@@ -1217,6 +1237,18 @@ public class WhotView : GameView
             RemainingCards = remainingCards;
             TotalPoints = totalPoints;
             IsWinner = isWinner;
+        }
+    }
+
+    private struct BalanceResultData
+    {
+        public long AmountChipAdd;
+        public long AmountChipCurrent;
+
+        public BalanceResultData(long amountChipAdd, long amountChipCurrent)
+        {
+            AmountChipAdd = amountChipAdd;
+            AmountChipCurrent = amountChipCurrent;
         }
     }
 }

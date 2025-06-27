@@ -27,7 +27,7 @@ public class WhotPlayer : MonoBehaviour
     private const float ANIMATION_TIME = 0.35f;
     private const float ANIMATION_DURATION = 0.4f;
     private const float CARD_SCALE = 0.86f;
-    private const float SCORE_IMAGE_OFFSET = 120f;
+    private float SCORE_IMAGE_OFFSET = 120f;
     private float CARD_SPACING = CARD_SCALE / 2 * 100f;
 
     private void Awake()
@@ -102,8 +102,16 @@ public class WhotPlayer : MonoBehaviour
 
     public void Reset()
     {
+        foreach (Transform card in remainingCardsParent)
+        {
+            if (card.GetComponent<WhotCard>() != null)
+            {
+                Destroy(card.gameObject);
+            }
+        }
         HideCardsLeft();
-        cardsLeftText.text = "0";   
+        cardsLeftText.text = "0";  
+        remainingCardsParent.gameObject.SetActive(false); 
     }
 
     #region Visuals
@@ -115,6 +123,7 @@ public class WhotPlayer : MonoBehaviour
         if (cards.Count >= 10)
         {
             CARD_SPACING = CARD_SCALE / 2 * 75;
+            SCORE_IMAGE_OFFSET = 80f;
         }
         float totalWidth = (cards.Count - 1) * CARD_SPACING;
         float startX = -totalWidth / 2f;
@@ -375,7 +384,7 @@ public class WhotPlayer : MonoBehaviour
             });
     }
 
-    public void AnimateChipTransfer(Transform otherPlayerTransform, BalanceUpdate playerWallet)
+    public void AnimateChipTransfer(WhotPlayer winner, bool isLast)
     {
         for (int i = 0; i < 5; i++)
         {
@@ -385,27 +394,25 @@ public class WhotPlayer : MonoBehaviour
 
             Sequence chipSequence = DOTween.Sequence();
             chipSequence
-                .AppendInterval(i * 0.1f)
+                .AppendInterval(i * 0.12f)
                 .Append(
                     chipInstance.transform
-                        .DOMove(otherPlayerTransform.position, ANIMATION_TIME)
+                        .DOMove(winner.GetPlayedCardParent().position, ANIMATION_TIME)
                         .SetEase(Ease.OutCubic)
                 )
                 .OnComplete(() =>
                 {
                     Destroy(chipInstance);
-                    if (i == 4)
+                    if (isLast)
                     {
-                        AnimateAddChipText(playerWallet.AmountChipAdd);
-                        AnimateChipValue(playerWallet.AmountChipCurrent);
+                        whotGame.AnimateAllPlayersAddChip();
                     }
                 });
         }
     }
-
     public void AnimateChipValue(long toNumber = 0)
     {
-        Utility.TweenNumberTo(chipText, toNumber, GetChipAmount(), 0.3f, false);
+        Utility.TweenNumberTo(chipText, toNumber, GetChipAmount(), 0.5f, false);
     }
     #endregion
 

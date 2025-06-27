@@ -101,11 +101,16 @@ public class DataSender
     #region Match
 
 
-    public static async UniTask<RpcFindMatchResponse> FindMatch(string gameCode, int markUnit)
+    public static async UniTask<RpcFindMatchResponse> FindMatch(string gameCode, int markUnit, bool isCreateGame)
     {
-        RpcFindMatchRequest rpcFindMatchRequest = new() { GameCode = gameCode, MarkUnit = markUnit, Create = true };
+        RpcFindMatchRequest rpcFindMatchRequest = new() { GameCode = gameCode, MarkUnit = markUnit, Create = isCreateGame };
         var response = await NetworkManager.INSTANCE.RPCSend(FIND_MATCH, rpcFindMatchRequest);
         Debug.Log("FindMatch response: " + response.Payload);
+        if (string.IsNullOrEmpty(response.Payload) || response.Payload == "[]")
+        {
+            Debug.Log("FindMatch response payload is empty");
+            return null;
+        }
         return DecodeFromBase64<RpcFindMatchResponse>(response.Payload);
     }
 

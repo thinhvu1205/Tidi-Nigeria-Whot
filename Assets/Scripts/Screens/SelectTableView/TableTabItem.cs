@@ -11,10 +11,10 @@ public class TableTabItem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI amountText;
     [SerializeField] private Image backgroundImage, backGroundImageActive;
 
-    public void SetData(JObject dataItem)
+    public void SetData(float mark, bool isDisable)
     {
-        gameObject.name = "" + (int)dataItem["mark"];
-        amountText.text = Utility.FormatMoney((int)dataItem["mark"], true);
+        gameObject.name = "" + mark.ToString();
+        amountText.text = Utility.FormatMoney((int)mark, true);
     }
 
     public void SetSelected()

@@ -8,40 +8,25 @@ using UnityEngine.UI;
 
 public class TableItem : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI betAmountText, userNameText, roomIDText;
+    [SerializeField] TextMeshProUGUI markUnitText, tableNameText, tableIDText;
     [SerializeField] List<Image> playerSlotImageList;
     [SerializeField] List<Sprite> slotIconList;
     [SerializeField] Button joinButton;
     [SerializeField] GameObject fullObject;
 
-    public void SetData(JObject dataItem, int index)
+    public void SetData(int countPlaying, int maxSize, float markUnit, string roomName, string roomId, bool isOpen)
     {
-        Debug.Log("SetData: " + dataItem.ToString());
-        int sizeTable = (int)dataItem["size"];
         for (var i = 0; i < playerSlotImageList.Count; i++)
         {
-            playerSlotImageList[i].sprite = i <= (int)dataItem["player"] - 1 ? slotIconList[1] : slotIconList[0];
-            playerSlotImageList[i].gameObject.SetActive(!(i >= sizeTable));
+            playerSlotImageList[i].sprite = i <= countPlaying - 1 ? slotIconList[1] : slotIconList[0];
+            playerSlotImageList[i].gameObject.SetActive(!(i >= maxSize));
             playerSlotImageList[i].SetNativeSize();
         }
 
-        // fullObject.SetActive((int)dataItem["player"] == (int)dataItem["size"]);
-        // joinButton.gameObject.SetActive(!fullObject.activeSelf);
-        betAmountText.text = Utility.FormatMoney((long)dataItem["mark"], true);
-        //txtName.text = (string)dataItem["N"];
-        JArray nameArray = (JArray)dataItem["ArrName"];
-        List<string> arrName = nameArray.ToObject<List<string>>();
-        string tableName = "";
-        foreach (string name in arrName)
-        {
-            string tbName = name;
-            if (name.Length > 10)
-            {
-                tbName = name[..7] + "..., ";
-            }
-            tableName += tbName;
-        }
-        userNameText.text = tableName;
-        roomIDText.text = (int)dataItem["id"] + "";
+        // fullObject.SetActive(!isOpen);
+        joinButton.gameObject.SetActive(isOpen);
+        markUnitText.text = Utility.FormatMoney((int)markUnit, true);
+        tableNameText.text = roomName;
+        tableIDText.text = roomId; 
     }
 }

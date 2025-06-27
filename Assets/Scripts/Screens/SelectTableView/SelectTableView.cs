@@ -7,6 +7,7 @@ using DG.Tweening;
 using Globals;
 using Newtonsoft.Json.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,8 +22,9 @@ public class SelectTableView : BaseView
     [SerializeField] private TextMeshProUGUI titleText, accountChip;
     [SerializeField] private TMP_InputField findTableInputField;
     [SerializeField] private List<Sprite> buttonSpriteList;
-    private Bets bets;
-    private int currentTab = 0;
+    private List<Bet> betItemList = new();
+    private List<Match> matchList = new();
+    private int currentMarkUnitTab = 0;
 
     protected override void Awake()
     {
@@ -30,8 +32,8 @@ public class SelectTableView : BaseView
         Config.currentGameId = Constants.WhotGameID;
         UpdateVisuals();
         UpdateTitle();
-        SetupButtons();
-        GetListBet().Forget();        
+        SetupButtonListeners();
+        GetListBet().Forget();
     }
     protected override void Start()
     {
@@ -41,11 +43,22 @@ public class SelectTableView : BaseView
     #region API Handlers
     private async UniTask GetListBet()
     {
-        Bets bets = await DataSender.GetListBet(Constants.WhotGameID);
-        this.bets = bets;
+        Bets bets = await DataSender.GetListBet(Config.currentGameId);
+        betItemList = bets.Bets_.ToList();
         Debug.Log("List bet game whot : " + bets.ToString());
         LoadListBetItem();
+        LoadListTableTab();
+    }
 
+    private async UniTask GetListBetByMarkUnit(int markUnit)
+    {
+        matchList.Clear();
+        RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, false);
+        if (response == null) return;
+
+        Debug.Log("Find match response: " + response.ToString());
+        matchList = response.Matches.ToList();
+        LoadListTableItem();
     }
     #endregion
     private void UpdateVisuals()
@@ -71,66 +84,76 @@ public class SelectTableView : BaseView
         {
             Destroy(betItemParent.GetChild(i).gameObject);
         }
-        List<Bet> betList = bets.Bets_.ToList();
-        for (int i = 0; i < betList.Count; i++)
+        for (int i = 0; i < betItemList.Count; i++)
         {
+            Debug.Log("Bet item: " + betItemList[i].ToString());
             int index = i;
-            var betItem = Instantiate(betItemPrefab, betItemParent);
-            betItem.GetComponent<BetItem>().SetData(betList[index], index);
-            // var tableTabItem = Instantiate(tabItemPrefab, tabItemParent);
-            // tableTabItem.GetComponent<TableTabItem>().SetData(betList[index] as JObject);
-            // tableTabItem.GetComponent<Button>().onClick.AddListener(() =>
-            // {
-            //     OnClickTab(tableTabItem.GetComponent<TableTabItem>(), mockArray[index] as JObject, index);
-            // });
-            // if (index == 0)
-            // {
-            //     OnClickTab(tableTabItem.GetComponent<TableTabItem>(), mockArray[index] as JObject, index);
-            // }
+            // Instantiate bet item
+            BetItem betItem = Instantiate(betItemPrefab, betItemParent).GetComponent<BetItem>();
+            betItem.SetData(betItemList[index], index);
         }
         // tabItemParent.GetChild(currentTab).GetComponent<TableTabItem>().SetSelected();
     }
 
-    private void LoadListTableItem(int mark)
+    private void LoadListTableTab()
     {
-        scrollRectTable.DOVerticalNormalizedPos(1.0f, 0.2f).SetEase(Ease.OutSine);
+        foreach (Transform transform in tabItemParent)
+        {
+            Destroy(transform.gameObject);
+        }
+        bool isTableTabSelected = false;
 
-        // for (int i = 0; i < tableItemParent.childCount; i++)
-        // {
-        //     Destroy(tableItemParent.GetChild(i).gameObject);
-        // }
-        // for (int i = 0; i < mockTableArray.Count; i++)
-        // {
-        //     if ((int)mockTableArray[i]["mark"] != mark) continue;
-        //     int index = i;
-        //     var tableItem = Instantiate(tableItemPrefab, tableItemParent);
-        //     tableItem.GetComponent<TableItem>().SetData(mockTableArray[index] as JObject, index);
+        foreach (Bet bet in betItemList)
+        {
+            // Instantiate table tab item
+            if (!bet.Enable) continue;
+            TableTabItem tableTabItem = Instantiate(tabItemPrefab, tabItemParent).GetComponent<TableTabItem>();
+            tableTabItem.SetData(bet.MarkUnit, true);
+            tableTabItem.GetComponent<Button>().onClick.AddListener(async () =>
+            {
+                foreach (Transform child in tabItemParent)
+                {
+                    child.GetComponent<TableTabItem>().SetUnselected();
+                }
+                tableTabItem.SetSelected();
+                currentMarkUnitTab = (int)bet.MarkUnit;
+                await GetListBetByMarkUnit(currentMarkUnitTab);
+            });
+            if (!isTableTabSelected && bet.Enable)
+            {
+                currentMarkUnitTab = (int)bet.MarkUnit;
+                tableTabItem.SetSelected();
+                isTableTabSelected = true;
+            }
+            else
+            {
+                tableTabItem.SetUnselected();
+            }
+        }
+    }
 
-        // }
+    private void LoadListTableItem()
+    {
+        matchList.Clear();
+        foreach (Transform transform in tableItemParent)
+        {
+            Destroy(transform.gameObject);
+        }
+        for (int i = 0; i < matchList.Count; i++)
+        {
+            Match match = matchList[i];
+            // Instantiate table item
+            TableItem tableItem = Instantiate(tableItemPrefab, tableItemParent).GetComponent<TableItem>();
+            tableItem.SetData(match.Size, match.MaxSize, match.MarkUnit, match.Name, match.TableId, match.Open);
+            // tableItem.GetComponent<Button>().onClick.AddListener(async () =>
+            // {
+            //     await DataSender.JoinMatch(match.MatchId);
+            //     UIManager.Instance.OpenGame("whot");
+            // });
+        }
     }
 
     #region Button
-    public void OnClickTab(TableTabItem tableTabItem, JObject dataItem, int index)
-    {
-        currentTab = index;
-        for (int i = 0; i < tabItemParent.childCount; i++)
-        {
-            var item = tabItemParent.GetChild(i).GetComponent<TableTabItem>();
-            if (item != null)
-            {
-                if (item.gameObject.name == tableTabItem.gameObject.name)
-                {
-                    item.SetSelected();
-                }
-                else
-                {
-                    item.SetUnselected();
-                }
-            }
-        }
-        int mark = (int)dataItem["mark"];
-        LoadListTableItem(mark);
-    }
 
     public void OnClickSelectBet()
     {
@@ -148,7 +171,7 @@ public class SelectTableView : BaseView
         scrollRectBet.gameObject.SetActive(false);
         selectBetButton.GetComponent<Image>().sprite = buttonSpriteList[1];
         selectTableButton.GetComponent<Image>().sprite = buttonSpriteList[0];
-        LoadListBetItem();
+        GetListBetByMarkUnit(currentMarkUnitTab).Forget();
     }
 
     public async void OnClickQuickStart()
@@ -158,12 +181,11 @@ public class SelectTableView : BaseView
 
     public void OnClickCreateTable()
     {
-
     }
 
     public void OnClickReload()
     {
-
+        GetListBetByMarkUnit(currentMarkUnitTab).Forget();
     }
 
     public void OnClickNext()
@@ -192,9 +214,9 @@ public class SelectTableView : BaseView
         nextButton.gameObject.SetActive(viewportWidth < contentWidth && posX < 0.75f);
     }
 
-    private void SetupButtons()
+    private void SetupButtonListeners()
     {
-        selectBetButton.onClick.AddListener(() => OnClickQuickStart());
+        // selectBetButton.onClick.AddListener(() => OnClickQuickStart());
         createTableButton.onClick.AddListener(() => OnClickCreateTable());
     }
     #endregion

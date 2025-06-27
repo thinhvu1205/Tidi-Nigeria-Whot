@@ -30,7 +30,7 @@ public class BetItem : MonoBehaviour
             {
                 try
                 {
-                    RpcFindMatchResponse response = await DataSender.FindMatch(Constants.WhotGameID, (int)dataItem.MarkUnit);
+                    RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, (int)dataItem.MarkUnit, true);
                     Debug.Log("Find match response: " + response.ToString());
                     if (response.Matches.Count > 0)
                     {
@@ -57,11 +57,11 @@ public class BetItem : MonoBehaviour
 
     private async void OnClickBetItem(int markUnit)
     {
-        RpcFindMatchResponse response = await DataSender.FindMatch(Constants.WhotGameID, markUnit);
+        RpcFindMatchResponse response = await DataSender.FindMatch(Constants.WhotGameID, markUnit, true);
         if (response != null && response.Matches.Count > 0)
         {
-            UIManager.Instance.OpenGame("whot");
             await DataSender.JoinMatch(response.Matches[0].MatchId);
+            UIManager.Instance.OpenGame("whot");
         }
     }
 }
