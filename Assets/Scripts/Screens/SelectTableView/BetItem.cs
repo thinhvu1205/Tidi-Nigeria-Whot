@@ -34,13 +34,21 @@ public class BetItem : MonoBehaviour
                     Debug.Log("Find match response: " + response.ToString());
                     if (response.Matches.Count > 0)
                     {
-                        await DataSender.JoinMatch(response.Matches[0].MatchId);
-                        UIManager.Instance.OpenGame("whot");
+                        try
+                        {
+                            await DataSender.JoinMatch(response.Matches[0].MatchId);
+                            UIManager.Instance.OpenGame("whot");
+                        }
+                        catch (Exception joinEx)
+                        {
+                            Debug.Log("Error joining match: " + joinEx.Message);
+                            UIManager.Instance.OpenDialog(joinEx.Message, null, null);
+                        }
                     }
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    throw; // TODO handle exception
+                    UIManager.Instance.OpenDialog(ex.Message, null, null);
                 }
             });
         }

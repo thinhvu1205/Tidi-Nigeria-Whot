@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Globals;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,7 +24,7 @@ public class SettingsView : BaseView
     #region Button
     public void OnClickLogout()
     {
-
+        DataSender.Logout().Forget();
     }
 
     public void OnClickQuitGame()

@@ -1,20 +1,34 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Globals;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIManager : Singleton<UIManager>
 {
-    [SerializeField] private Transform parentPopups, parentGames, parentBanners, parentLobby;
+    private Transform parentPopups, parentGames, parentBanners, parentLobby, parentLoading;
     private BaseView currentView;
+    private const string POPUP_PARENT_TAG = "Parent Popups";
+    private const string GAME_PARENT_TAG = "Parent Games";
+    private const string BANNER_PARENT_TAG = "Parent Banner";
+    private const string LOBBY_PARENT_TAG = "Parent Lobby";
+    private const string LOADING_PARENT_TAG = "Parent Loading";
+
     protected override void Awake()
     {
         base.Awake();
-
+        SetUpParentTransforms();
+        SceneManager.sceneLoaded += OnSceneLoaded;
         Application.targetFrameRate = 60;
         Input.multiTouchEnabled = false;
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
-        Config.UpdateConfigSettings();   
+        Config.UpdateConfigSettings();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SetUpParentTransforms();
     }
 
     #region Games
@@ -25,7 +39,7 @@ public class UIManager : Singleton<UIManager>
         {
             case "whot":
                 currentView = Instantiate(LoadPrefabGame("Whot/WhotView"), parentGames).GetComponent<WhotView>();
-                Config.currentGameView = (GameView) currentView;
+                Config.currentGameView = (GameView)currentView;
                 break;
             default:
                 Debug.LogError("Game not found: " + game);
@@ -35,7 +49,14 @@ public class UIManager : Singleton<UIManager>
     #endregion
 
     #region Popups
-
+    public void OpenDialog(string content, Action confirmCallback = null, Action cancelCallback = null)
+    {
+        DialogView dialogView = Instantiate(LoadPrefabPopup("Dialog"), parentPopups).GetComponent<DialogView>();
+        dialogView.transform.localScale = Vector3.one;
+        dialogView.SetContent(content);
+        dialogView.ConfigConfirmButton(true, "OK", confirmCallback);
+        dialogView.ConfigCancelButton(false, "Cancel", cancelCallback);
+    }
     public void OpenShop()
     {
         ShopView shopView = Instantiate(LoadPrefabLobby("ShopView"), parentLobby).GetComponent<ShopView>();
@@ -59,7 +80,7 @@ public class UIManager : Singleton<UIManager>
         SelectTableView selectTableView = Instantiate(LoadPrefabLobby("SelectTableView"), parentLobby).GetComponent<SelectTableView>();
         selectTableView.transform.localScale = Vector3.one;
     }
-    
+
     public void OpenLeaderboard()
     {
         LeaderBoardView leaderBoardView = Instantiate(LoadPrefabLobby("LeaderboardView"), parentLobby).GetComponent<LeaderBoardView>();
@@ -148,6 +169,15 @@ public class UIManager : Singleton<UIManager>
     public GameObject LoadPrefabGame(string name)
     {
         return LoadPrefab("Prefabs/Games/" + name);
+    }
+
+    private void SetUpParentTransforms()
+    {
+        parentPopups = GameObject.FindWithTag(POPUP_PARENT_TAG)?.transform;
+        parentGames = GameObject.FindWithTag(GAME_PARENT_TAG)?.transform;
+        parentBanners = GameObject.FindWithTag(BANNER_PARENT_TAG)?.transform;
+        parentLobby = GameObject.FindWithTag(LOBBY_PARENT_TAG)?.transform;
+        parentLoading = GameObject.FindWithTag(LOADING_PARENT_TAG)?.transform;
     }
 
     // private SkeletonDataAsset LoadSkeletonData(string path)

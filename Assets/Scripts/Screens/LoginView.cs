@@ -15,6 +15,7 @@ public class LoginView : BaseView
     [SerializeField] private GameObject loginView, loginForm;
     [SerializeField] private TMP_InputField idInputField, passwordInputField;
     private const string FIRST_LOGIN_KEY = "firstLogin";
+
     protected override void Awake()
     {
         base.Awake();
@@ -115,6 +116,11 @@ public class LoginView : BaseView
                 case LoginType.NORMAL:
                     string id = Config.userName;
                     string password = Config.userPass;
+                    Debug.Log($"Reconnecting with ID: {id}, Password: {password}");
+                    if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(password))
+                    {
+                        return;
+                    }
                     await DataSender.LoginWithAccount(id, password);
                     break;
                 default:

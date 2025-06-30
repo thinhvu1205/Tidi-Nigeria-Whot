@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Parent Popups
+  - Parent Lobby
+  - Parent Games
+  - Parent Loading
+  - Parent Alert
+  - Parent Banner
   layers:
   - Default
   - TransparentFX

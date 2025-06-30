@@ -46,11 +46,6 @@ public class ProfileView : BaseView
     public void OnClickChangePassword() => UIManager.Instance.OpenChangePassword();
     public void OnClickChangeName() => UIManager.Instance.OpenChangeName();
 
-    public async void OnClickLogout()
-    {
-        await DataSender.Logout();
-    }
-
     #endregion
     
 }

@@ -65,7 +65,6 @@ public class WhotMatchResult : MonoBehaviour
 
     public void OnClickPlayAgain()
     {
-        whotGame.hasPreparedNewGame = false;
         gameObject.SetActive(false);
     }
 

@@ -311,7 +311,7 @@ public class WhotView : GameView
                         .AppendCallback(() =>
                         {
                             WhotCard card = InitCard(drawnCard);
-                            DrawACard(card, GetCurrentPlayer());
+                            DrawACard(card, GetCurrentPlayer(), true);
                         })
                         .AppendInterval(0.2f);
                 }
@@ -333,6 +333,8 @@ public class WhotView : GameView
                 playAreaParent.gameObject.SetActive(true);
                 break;
             case GameState.Matching:
+                matchResultTransform.gameObject.SetActive(false);
+                hasPreparedNewGame = false;
                 break;
             case GameState.Idle:
                 break;
@@ -416,16 +418,19 @@ public class WhotView : GameView
                     {
                         // Khi người chơi khác đánh 1 lá bài
                         player.PlayACard(playedCard);
+                        player.CardsLeft--;
+                        player.UpdateCardsLeftVisual();
                     }
                 }
 
                 // Nếu effect là chọn chất lá Whot thì ko update card count vì server ko trả về
-                if (data.Effect != CardEffect.ChoiceShapeGhost)
-                {
-                    UpdateCardsCount(data.DeckCount, playerCardsCount);
-                }
+                // if (data.Effect != CardEffect.ChoiceShapeGhost && data.Effect != CardEffect.GeneralMarket)
+                // {
+                //     UpdateCardsCount(data.DeckCount, playerCardsCount);
+                // }
                 break;
             case CardEvent.Draw:
+            Debug.Log("Handling Draw Event: " + data.UserId + ", PickPenalty: " + data.PickPenalty);
                 WhotCard drawnCard = InitCard(data.TopCard);
                 if (data.UserId != GetCurrentPlayer().Id)
                 {
@@ -442,7 +447,7 @@ public class WhotView : GameView
                     {
                         // Khi người chơi khác rút bài bình thường
                         AnimateDrawMultipleCards(player, 1, drawnCard);
-                        UpdateCardsCount(data.DeckCount, playerCardsCount);
+                        // UpdateCardsCount(data.DeckCount, playerCardsCount);
                     }
                 }
                 break;
@@ -568,12 +573,11 @@ public class WhotView : GameView
         AnimateChooseCallCard();
     }
 
-    public void DrawACard(WhotCard card, WhotPlayer player)
+    public void DrawACard(WhotCard card, WhotPlayer player, bool isCurrentPlayer)
     {
-        Debug.Log("Drawing card for player: " + player.GetPlayerName());
         WhotCard whotCard = InitCard(card, GetDeckOfCardParent());
         whotCard.SetFaceDown();
-        if (player.isCurrentPlayer)
+        if (isCurrentPlayer)
         {
             whotCard.transform.SetParent(playerHand.GetCardsParent());
             AnimateCurrentPlayerDrawACard(whotCard);
@@ -692,7 +696,6 @@ public class WhotView : GameView
             {
                 player.AnimateShowSuspension();
                 player.AnimatePlusText(1);
-                AnimateDrawMultipleCards(player, 1, callCard);
             }
         }
         AnimateGeneralMarket();
@@ -731,7 +734,11 @@ public class WhotView : GameView
             sequence
                 .AppendCallback(() =>
                 {
-                    DrawACard(drawnCard, targetPlayer);
+                    // Ko Check currentPlayerId vì đã được thêm bài ở UpdateDeal
+                    if (targetPlayer.Id != GetCurrentPlayer().Id)
+                    {
+                        DrawACard(drawnCard, targetPlayer, false);
+                    }
                 })
                 .AppendInterval(0.35f)
                 .OnComplete(() => Destroy(drawnCard));
@@ -1068,11 +1075,11 @@ public class WhotView : GameView
 
     private void AnimateOtherPlayerDrawACard(WhotCard card, WhotPlayer player)
     {
+        DecreaseCardsLeft();
         card.SetFaceDown();
         card.transform.localScale = Vector3.one * 0.6f;
         card.transform.DOMove(player.GetDealedCardParent().position, ANIMATION_TIME).SetEase(Ease.InOutCubic).OnComplete(() =>
         {
-            DecreaseCardsLeft();
             player.CardsLeft++;
             player.UpdateCardsLeftVisual();
             Destroy(card.gameObject);

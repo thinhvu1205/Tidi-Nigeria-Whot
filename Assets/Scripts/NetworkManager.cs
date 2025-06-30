@@ -170,12 +170,10 @@ public class NetworkManager : MonoBehaviour
             var isLoginSuccess = await TryLoginWithNewSessionAsync(username, password);
             if (!isLoginSuccess)
             {
-                Debug.LogError("❌ Đăng nhập thất bại.");
                 Config.isLoginSuccessful = false;
                 return;
             }
         }
-
         Config.userName = username;
         Config.userPass = password;
         await FinalizeLoginAsync();
@@ -221,12 +219,11 @@ public class NetworkManager : MonoBehaviour
 
             PlayerPrefs.SetInt(LOGIN_TYPE_KEY, (int)Config.loginType);
             Config.isLoginSuccessful = true;
-            Debug.Log("✅ Login mới thành công.");
             return true;
         }
         catch (Exception e)
         {
-            Debug.LogError($"❌ Login thất bại: {e.Message}");
+            UIManager.Instance.OpenDialog(e.Message);
             _SessionIS = null;
             return false;
         }
@@ -241,7 +238,7 @@ public class NetworkManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogWarning($"⚠️ RefreshSession thất bại: {e.Message}");
+            UIManager.Instance.OpenDialog(e.Message);
             _SessionIS = null;
             return false;
         }
@@ -263,7 +260,7 @@ public class NetworkManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"❌ Logout thất bại: {e.Message}");
+            UIManager.Instance.OpenDialog(e.Message);
         }
     }
 
@@ -402,8 +399,8 @@ public class NetworkManager : MonoBehaviour
     public void PreConnect()
     {
         // _ClientC = new Client("http", "103.226.250.195", 7353, "defaultkey");
-        // _ClientC = new Client("http", "172.16.56.51", 57350, "defaultkey");
-        _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey");
+        _ClientC = new Client("http", "172.16.56.51", 57350, "defaultkey");
+        // _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey");
         RestoreSession();
         string deviceId;
         if (PlayerPrefs.HasKey(DEVICE_ID)) deviceId = PlayerPrefs.GetString(DEVICE_ID);
