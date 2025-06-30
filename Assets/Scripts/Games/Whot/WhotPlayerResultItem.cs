@@ -60,6 +60,7 @@ public class WhotPlayerResultItem : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+        SortRemainingCards(remainingCards);
         for (int i = 0; i < remainingCards.Count; i++)
         {
             Card card = remainingCards[i];
@@ -79,15 +80,16 @@ public class WhotPlayerResultItem : MonoBehaviour
         scoreText.color = textColor;
     }
 
-    private List<WhotCard> SortedCards(List<WhotCard> cards)
+    
+    private void SortRemainingCards(List<Card> cards)
     {
-        return cards.OrderBy(c => GetSortValue(c)).ToList();
+        cards.Sort((a, b) => GetSortValue(a).CompareTo(GetSortValue(b)));
     }
 
-    private int GetSortValue(WhotCard card)
+    private int GetSortValue(Card card)
     {
-        int suitOrder = Constants.WhotSuitSortOrder.TryGetValue(card.GetCardSuit(), out var order) ? order : 999;
-        int rank = (int)card.GetCardRank();
+        int suitOrder = Constants.WhotSuitSortOrder.TryGetValue(card.Suit, out var order) ? order : 999;
+        int rank = (int)card.Rank;
         return suitOrder * 100 + rank;
     }
 }

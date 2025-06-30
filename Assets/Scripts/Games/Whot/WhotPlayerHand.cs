@@ -8,7 +8,6 @@ using Globals;
 using Google.Protobuf;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class WhotPlayerHand : MonoBehaviour
 {
@@ -78,10 +77,11 @@ public class WhotPlayerHand : MonoBehaviour
         if (cards == null) return;
         cardsParent.gameObject.SetActive(false);
         remainingCardsParent.gameObject.SetActive(true);
+        SortRemainingCards(cards);
         if (cards.Count >= 15)
         {
             REMAINING_CARD_SPACING = CARD_SCALE / 2 * 75;
-            SCORE_IMAGE_OFFSET = 80f;
+            SCORE_IMAGE_OFFSET = 50f;
         }
         float totalWidth = (cards.Count - 1) * REMAINING_CARD_SPACING;
         float startX = -totalWidth / 2f;
@@ -112,6 +112,11 @@ public class WhotPlayerHand : MonoBehaviour
     public void SortCards()
     {
         cardsInHand = cardsInHand.OrderBy(c => GetSortValue(c)).ToList();
+    }
+
+    private void SortRemainingCards(List<Card> cards)
+    {
+        cards.Sort((a, b) => GetSortValue(a).CompareTo(GetSortValue(b)));
     }
 
     public void SpreadCards()
@@ -165,65 +170,36 @@ public class WhotPlayerHand : MonoBehaviour
     #region Events
     public void WhotGame_OnNextTurn(WhotView.OnNextTurnEventArg e)
     {
-        Debug.Log("CALL CARD: " + e.callCard.GetCardRank() + " - " + e.callCard.GetCardSuit());
-        if (e.playerTurn == whotGame.GetCurrentPlayer().playerId)
+        if (e.playerTurn == whotGame.GetCurrentPlayer().Id)
         {
             WhotCard callCard = e.callCard;
             CardEffect cardEffect = e.cardEffect;
-            foreach (WhotCard card in cardsInHand.ToList())
+            foreach (WhotCard card in cardsInHand)
             {
-                // Debug.Log("Card: " + card.GetCardRank() + " - " + card.GetCardSuit());
+                bool isSelectable = false;
+
                 if (callCard.GetCardRank() == CardRank.Rank2 && cardEffect != CardEffect.EffectNone)
                 {
-                    if (card.GetCardRank() == CardRank.Rank2)
-                    {
-                        card.SetSelectable(true);
-                        card.SetHighLight();
-                    }
-                    else
-                    {
-                        card.SetSelectable(false);
-                        card.SetDark();
-                    }
-                    continue;
+                    isSelectable = card.GetCardRank() == CardRank.Rank2;
+                }
+                else if (callCard.GetCardRank() == CardRank.Rank5 && cardEffect != CardEffect.EffectNone)
+                {
+                    isSelectable = card.GetCardRank() == CardRank.Rank5;
+                }
+                else if (card.GetCardRank() == CardRank.Rank20)
+                {
+                    isSelectable = true;
+                }
+                else if (card.GetCardSuit() == callCard.GetCardSuit() || card.GetCardRank() == callCard.GetCardRank())
+                {
+                    isSelectable = true;
                 }
 
-                if (callCard.GetCardRank() == CardRank.Rank5 && cardEffect != CardEffect.EffectNone)
-                {
-                    if (card.GetCardRank() == CardRank.Rank5)
-                    {
-                        card.SetSelectable(true);
-                        card.SetHighLight();
-                    }
-                    else
-                    {
-                        card.SetSelectable(false);
-                        card.SetDark();
-                    }
-                    continue;
-                }
-
-                if (card.GetCardRank() == CardRank.Rank20
-                )
-                {
-                    card.SetSelectable(true);
+                card.SetSelectable(isSelectable);
+                if (isSelectable)
                     card.SetHighLight();
-                    continue;
-                }
-
-                if (card.GetCardSuit() == callCard.GetCardSuit() ||
-                    card.GetCardRank() == callCard.GetCardRank()
-                )
-                {
-                    card.SetSelectable(true);
-                    card.SetHighLight();
-                }
                 else
-                {
-                    card.SetSelectable(false);
                     card.SetDark();
-                }
-
             }
         }
     }
@@ -255,7 +231,7 @@ public class WhotPlayerHand : MonoBehaviour
 
     public void EndTurn()
     {
-        foreach (var card in cardsInHand)
+        foreach (WhotCard card in cardsInHand)
         {
             card.Unselect();
         }
@@ -295,6 +271,13 @@ public class WhotPlayerHand : MonoBehaviour
     {
         int suitOrder = Constants.WhotSuitSortOrder.TryGetValue(card.GetCardSuit(), out var order) ? order : 999;
         int rank = (int)card.GetCardRank();
+        return suitOrder * 100 + rank;
+    }
+
+    private int GetSortValue(Card card)
+    {
+        int suitOrder = Constants.WhotSuitSortOrder.TryGetValue(card.Suit, out var order) ? order : 999;
+        int rank = (int)card.Rank;
         return suitOrder * 100 + rank;
     }
 

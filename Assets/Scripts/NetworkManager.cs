@@ -118,7 +118,11 @@ public class NetworkManager : MonoBehaviour
     {
         try
         {
-            var match = await _SocketIS.JoinMatchAsync(matchId);
+            var properties = new Dictionary<string, string>
+            {
+                { "device_id", Config.deviceId },
+            };
+            var match = await _SocketIS.JoinMatchAsync(matchId, properties);
 
             // Lưu lại thông tin match nếu cần
             _MatchId = matchId;
@@ -398,8 +402,8 @@ public class NetworkManager : MonoBehaviour
     public void PreConnect()
     {
         // _ClientC = new Client("http", "103.226.250.195", 7353, "defaultkey");
-        _ClientC = new Client("http", "172.16.56.51", 57350, "defaultkey");
-        // _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey");
+        // _ClientC = new Client("http", "172.16.56.51", 57350, "defaultkey");
+        _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey");
         RestoreSession();
         string deviceId;
         if (PlayerPrefs.HasKey(DEVICE_ID)) deviceId = PlayerPrefs.GetString(DEVICE_ID);
@@ -409,7 +413,7 @@ public class NetworkManager : MonoBehaviour
             if (deviceId == SystemInfo.unsupportedIdentifier) deviceId = Guid.NewGuid().ToString();
             PlayerPrefs.SetString(DEVICE_ID, deviceId);
         }
-
+        Debug.Log("DEVICE ID: " + deviceId);
         Config.deviceId = deviceId;
         _SocketIS = _ClientC.NewSocket();
     }

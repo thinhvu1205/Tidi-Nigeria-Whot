@@ -58,9 +58,9 @@ namespace Globals
             return (money < 0 ? "-" : "") + FormatNumber(integerValue) + floatPart + format;
         }
 
-        public static string FormatMoney(long money, bool isK = false)
+        public static string FormatMoney(float money, bool isK = false)
         {
-            double absoluteValue = Mathf.Abs(money);
+            float absoluteValue = Mathf.Abs(money);
             string input = absoluteValue.ToString(), floatPart = "", format = "";
             int idNumberNextToDotFromTail = 0, integerValue = 0;
             int aBillion = 1000000000, aMillion = 1000000, aThousand = 1000;

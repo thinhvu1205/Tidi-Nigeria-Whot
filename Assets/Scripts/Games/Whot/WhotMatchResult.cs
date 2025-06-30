@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Api;
+using Globals;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +21,21 @@ public class WhotMatchResult : MonoBehaviour
         victoryImage.gameObject.SetActive(isVictory);
         loseImage.gameObject.SetActive(!isVictory);
 
+        Dictionary<string, PlayerResultData> playerResults = result
+            .Where(r => !string.IsNullOrEmpty(r.UserId))
+            .ToDictionary(
+                r => r.UserId,
+                r =>
+                {
+                    var balance = balanceUpdates.Find(b => b.UserId == r.UserId);
+                    return new PlayerResultData(
+                        r.RemainingCards?.ToList() ?? new List<Card>(),
+                        r.TotalPoints,
+                        r.IsWinner,
+                        balance?.AmountChipAdd ?? 0
+                    );
+                }
+            );
         foreach (Transform child in playerResultParent)
         {
             Destroy(child.gameObject);
@@ -27,19 +43,18 @@ public class WhotMatchResult : MonoBehaviour
 
         foreach (WhotPlayer player in players)
         {
-            GameObject playerResult = Instantiate(playerResultPrefab, playerResultParent);
-            WhotPlayerResultItem resultComponent = playerResult.GetComponent<WhotPlayerResultItem>();
-            long totalPoints = result.Find(r => r.UserId == player.playerId)?.TotalPoints ?? 0;
-            List<Card> remainingCards = result.Find(r => r.UserId == player.playerId)?.RemainingCards.ToList();
-            long amountChipAdd = balanceUpdates.Find(b => b.UserId == player.playerId)?.AmountChipAdd ?? 0;
+            if (playerResults.TryGetValue(player.Id, out PlayerResultData resultData))
+            {
+                WhotPlayerResultItem playerResult = Instantiate(playerResultPrefab, playerResultParent).GetComponent<WhotPlayerResultItem>();
+                playerResult.SetInfo(
+                    player: player,
+                    cash: resultData.AmountChipAdd.ToString(),
+                    score: resultData.TotalPoints.ToString(),
+                    remainingCards: resultData.RemainingCards,
+                    isVictory: isVictory
+                );
 
-            resultComponent.SetInfo(
-                player: player,
-                cash: amountChipAdd.ToString(),
-                score: totalPoints.ToString(),
-                remainingCards: remainingCards,
-                isVictory: isVictory
-            );
+            }
         }
     }
 
@@ -50,6 +65,23 @@ public class WhotMatchResult : MonoBehaviour
 
     public void OnClickPlayAgain()
     {
+        whotGame.hasPreparedNewGame = false;
         gameObject.SetActive(false);
+    }
+
+    private struct PlayerResultData
+    {
+        public List<Card> RemainingCards;
+        public long TotalPoints;
+        public bool IsWinner;
+        public long AmountChipAdd;
+
+        public PlayerResultData(List<Card> remainingCards, long totalPoints, bool isWinner, long amountChipAdd)
+        {
+            RemainingCards = remainingCards;
+            TotalPoints = totalPoints;
+            IsWinner = isWinner;
+            AmountChipAdd = amountChipAdd;
+        }
     }
 }

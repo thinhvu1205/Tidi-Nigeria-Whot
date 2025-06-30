@@ -18,7 +18,8 @@ public class WhotPlayer : MonoBehaviour
     [HideInInspector] public bool isCurrentPlayer = false;
     [HideInInspector] public bool isWinner = false;
     [HideInInspector] public bool isPlaying = true;
-    public string playerId { get; private set; } = string.Empty;
+    public string Id { get; private set; } = string.Empty;
+    public int CardsLeft { get; set; } = 0;
     private WhotView whotGame;
     private PlayerLayout playerLayout;
     private float turnTimer = 10f; // Default turn timer duration
@@ -76,11 +77,11 @@ public class WhotPlayer : MonoBehaviour
         string chipAmount = "0"
     )
     {
-        this.playerId = playerId;
+        this.Id = playerId;
         // avatarImage.sprite = avatarSprite;
         nameText.text = playerName;
-        chipText.text = chipAmount;
-        // AnimateChipValue(long.Parse(chipAmount));
+        // chipText.text = Utility.FormatMoney(Utility.ConvertStringToNumber(chipAmount), true);
+        AnimateChipValue(long.Parse(chipAmount));
     }
 
     public void SetWhotGame(WhotView whotGame)
@@ -102,13 +103,7 @@ public class WhotPlayer : MonoBehaviour
 
     public void Reset()
     {
-        foreach (Transform card in remainingCardsParent)
-        {
-            if (card.GetComponent<WhotCard>() != null)
-            {
-                Destroy(card.gameObject);
-            }
-        }
+        isPlaying = true;
         HideCardsLeft();
         cardsLeftText.text = "0";  
         remainingCardsParent.gameObject.SetActive(false); 
@@ -120,6 +115,7 @@ public class WhotPlayer : MonoBehaviour
     {
         if (cards == null) return;
         remainingCardsParent.gameObject.SetActive(true);
+        SortRemainingCards(cards);
         if (cards.Count >= 10)
         {
             CARD_SPACING = CARD_SCALE / 2 * 75;
@@ -158,11 +154,11 @@ public class WhotPlayer : MonoBehaviour
                     whotCard.transform.SetSiblingIndex(i);
                     break;
                 case PlayerLayout.EPlayerLayout.Right:
-                    targetPos = new Vector3(-i * CARD_SPACING, 0f, 0f);
+                    targetPos = new Vector3(2 * startX + i * CARD_SPACING, 0f, 0f); // giống Left & Top
                     offset = new Vector3(20f, 0f, 0f);
                     scoreImage.transform.localPosition = new Vector3(-totalWidth - SCORE_IMAGE_OFFSET, 0f, 0f);
-                    whotCard.transform.SetSiblingIndex(remainingCardsParent.childCount - 1);
-                    break;
+                    whotCard.transform.SetSiblingIndex(i); // thêm theo thứ tự chuẩn
+                    break;      
             }
 
             whotCard.transform.localPosition = targetPos + offset;
@@ -194,7 +190,10 @@ public class WhotPlayer : MonoBehaviour
         }
         foreach (Transform child in remainingCardsParent)
         {
-            Destroy(child.gameObject);
+            if (child.GetComponent<WhotCard>() != null)
+            {
+                Destroy(child.gameObject);
+            }
         }
     }
 
@@ -225,15 +224,15 @@ public class WhotPlayer : MonoBehaviour
         cardsDisplay.SetActive(false);
     }
 
-    public void UpdateCardsLeftVisual(int cardsCount, bool isDealingCard = false)
+    public void UpdateCardsLeftVisual(bool isDealingCard = false)
     {
-        if (cardsCount > 0 && !isCurrentPlayer) ShowCardsLeft();
-        cardsLeftText.text = cardsCount.ToString();
-        if (cardsCount == 0)
+        if (CardsLeft > 0 && !isCurrentPlayer) ShowCardsLeft();
+        cardsLeftText.text = CardsLeft.ToString();
+        if (CardsLeft == 0)
         {
             whotGame.AnimateLastCardEffect()
 ;        }
-        if (cardsCount == 1 && !lastCardNoti.activeSelf && !isDealingCard)
+        if (CardsLeft == 1 && !lastCardNoti.activeSelf && !isDealingCard)
         {
             AnimateShowLastCardNoti();
         }
@@ -254,7 +253,7 @@ public class WhotPlayer : MonoBehaviour
     #region Events
     private void WhotGame_OnNextTurn(WhotView.OnNextTurnEventArg e)
     {
-        if (e.playerTurn == playerId)
+        if (e.playerTurn == Id)
         {
             StartCountDown(e.countdown);
         }
@@ -414,6 +413,18 @@ public class WhotPlayer : MonoBehaviour
     {
         Utility.TweenNumberTo(chipText, toNumber, GetChipAmount(), 0.5f, false);
     }
+
+    private void SortRemainingCards(List<Card> cards)
+    {
+        cards.Sort((a, b) => GetSortValue(a).CompareTo(GetSortValue(b)));
+    }
+
+    private int GetSortValue(Card card)
+    {
+        int suitOrder = Constants.WhotSuitSortOrder.TryGetValue(card.Suit, out var order) ? order : 999;
+        int rank = (int)card.Rank;
+        return suitOrder * 100 + rank;
+    }
     #endregion
 
     #region Getters and Setters
@@ -443,11 +454,6 @@ public class WhotPlayer : MonoBehaviour
     public Transform GetPlayedCardParent()
     {
         return avatarImage.transform;
-    }
-
-    private Vector2 GetRemainingCardPosition()
-    {
-        return new Vector2(0f, 0f);
     }
     #endregion
 
