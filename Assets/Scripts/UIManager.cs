@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Globals;
+using Spine.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -182,6 +183,12 @@ public class UIManager : Singleton<UIManager>
     public GameObject LoadPrefabGame(string name)
     {
         return LoadPrefab("Prefabs/Games/" + name);
+    }
+
+    public SkeletonDataAsset LoadSkeletonData(string name)
+    {
+        return Resources.Load<SkeletonDataAsset>("BundlePack/Anims/anim_iconGames/" + name);
+
     }
 
     private void SetUpParentTransforms()

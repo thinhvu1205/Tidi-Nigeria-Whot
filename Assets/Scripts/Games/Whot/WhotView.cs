@@ -26,7 +26,7 @@ public class WhotView : GameView
         public CardEffect cardEffect;
     }
     [SerializeField] private GameObject whotPlayerPrefab, cardPrefab;
-    [SerializeField] private Transform[] playerPositionsList;
+    [SerializeField] private WhotPlayer[] playersByPosition;
     [SerializeField] private SkeletonGraphic betterLuckNextTimeAnimation, victoryAnimation, matchSymbolAnimation, effectAnimation, lastCardAnimation;
     [SerializeField] private Transform matchResultTransform, yourTurnTransform, suitPickerTransform, effectAnimationParent,
     victoryAnimationParent, loseAnimationParent, matchSymbolAnimationParent, lastCardAnimationParent, deckOfCardParent,
@@ -112,6 +112,10 @@ public class WhotView : GameView
         {
             Destroy(child.gameObject);
         }
+        foreach (WhotPlayer whotPlayer in playersByPosition)
+        {
+            whotPlayer.gameObject.SetActive(false);
+        }
     }
 
     #region API Handlers
@@ -164,7 +168,9 @@ public class WhotView : GameView
                 Debug.Log("Instantiating player: " + players[i].UserName);
                 Player player = players[i];
                 int spawnIndex = spawnOrders[players.Count - 1][i];
-                WhotPlayer whotPlayer = Instantiate(whotPlayerPrefab, playerPositionsList[spawnIndex]).GetComponent<WhotPlayer>();
+                // WhotPlayer whotPlayer = Instantiate(whotPlayerPrefab, playerPositionsList[spawnIndex]).GetComponent<WhotPlayer>();
+                WhotPlayer whotPlayer = playersByPosition[spawnIndex];
+                whotPlayer.gameObject.SetActive(true);
                 whotPlayer.SetPlayerInfo(
                     player.Id,
                     player.AvatarId,
@@ -209,7 +215,10 @@ public class WhotView : GameView
 
                     // Nếu người chơi là người chơi mới vào thì cho vào slot còn trống 
                     // int spawnIndex = spawnOrders[players.Count - 1][players.Count - 1];
-                    WhotPlayer whotPlayer = Instantiate(whotPlayerPrefab, GetEmptyPlayerSlot(out int index)).GetComponent<WhotPlayer>();
+                    // WhotPlayer whotPlayer = Instantiate(whotPlayerPrefab, GetEmptyPlayerSlot(out int index)).GetComponent<WhotPlayer>();
+                    int emptySlotIndex = GetEmptyPlayerSlot();
+                    WhotPlayer whotPlayer = playersByPosition[emptySlotIndex];
+                    whotPlayer.gameObject.SetActive(true);
                     whotPlayer.SetPlayerInfo(
                         player.Id,
                         player.AvatarId,
@@ -236,7 +245,7 @@ public class WhotView : GameView
                         whotPlayer.isPlaying = false;
                         whotPlayer.HideCardsLeft();
                     }
-                    playersList.Insert(index, whotPlayer);
+                    playersList.Insert(emptySlotIndex, whotPlayer);
                 }
             }
 
@@ -251,10 +260,11 @@ public class WhotView : GameView
                 if (whotPlayer != null)
                 {
                     Debug.Log("Removing player: " + whotPlayer.GetPlayerName());
-                    foreach (Transform child in playerPositionsList[spawnOrders[playersList.Count - 1][index]])
-                    {
-                        Destroy(child.gameObject);
-                    }
+                    // foreach (Transform child in playerPositionsList[spawnOrders[playersList.Count - 1][index]])
+                    // {
+                    //     Destroy(child.gameObject);
+                    // }
+                    playersByPosition[spawnOrders[playersList.Count - 1][index]].gameObject.SetActive(false);
                     playersList.Remove(whotPlayer);
                 }
             }
@@ -1171,25 +1181,23 @@ public class WhotView : GameView
     public WhotPlayer GetCurrentPlayer() => playersList.Find(player => player.isCurrentPlayer);
     public WhotPlayer GetPlayerByID(string id) => playersList.Find(player => player.Id == id);
     private WhotPlayer GetWinner() => playersList.Find(player => player.isWinner);
-    private Transform GetEmptyPlayerSlot(out int index)
+    private int GetEmptyPlayerSlot()
     {
-        for (int i = 0; i < playerPositionsList.Length; i++)
+        for (int i = 0; i < playersByPosition.Length; i++)
         {
-            if (playerPositionsList[i].childCount == 0)
+            if (!playersByPosition[i].gameObject.activeSelf)
             {
-                index = i;
-                return playerPositionsList[i];
+                return i;
             }
         }
 
-        index = -1;
-        return null;
+        return -1;
     }
     #endregion
 
     public void OnQuitMatch()
     {
-        if (new GameState[] { GameState.Idle, GameState.Matching, GameState.Preparing }.Contains(gameState) || !GetCurrentPlayer().isPlaying)
+        if (new GameState[] { GameState.Idle, GameState.Matching, GameState.Preparing, GameState.Finish }.Contains(gameState) || !GetCurrentPlayer().isPlaying)
         {
             NetworkManager.INSTANCE.LeaveMatch();
             Destroy(gameObject);
@@ -1278,21 +1286,17 @@ public class WhotView : GameView
     private void RearrangePlayerPosition()
     {
         playersList.Clear();
-        foreach (Transform playerPosition in playerPositionsList)
+        foreach (WhotPlayer whotPlayer in playersByPosition)
         {
-            foreach (Transform child in playerPosition)
-            {
-                Destroy(child.gameObject);
-            }
+            whotPlayer.gameObject.SetActive(false);
         }
         string currentPlayerId = User.userMain.userId;
-        Debug.Log("rearrangedPlayersList.Count: " + rearrangedPlayersList.Count);
         for (int i = 0; i < rearrangedPlayersList.Count; i++)
         {
-            Debug.Log("Reinstantiating player: " + rearrangedPlayersList[i].UserName);
             Player player = rearrangedPlayersList[i];
             int spawnIndex = spawnOrders[rearrangedPlayersList.Count - 1][i];
-            WhotPlayer whotPlayer = Instantiate(whotPlayerPrefab, playerPositionsList[spawnIndex]).GetComponent<WhotPlayer>();
+            WhotPlayer whotPlayer = playersByPosition[spawnIndex];
+            whotPlayer.gameObject.SetActive(true);
             whotPlayer.SetPlayerInfo(
                 player.Id,
                 player.AvatarId,
@@ -1314,19 +1318,15 @@ public class WhotView : GameView
             whotPlayer.isPlaying = true;
             playersList.Add(whotPlayer);
         }
-        AdjustPlayerLayout();
     }
     private void AdjustPlayerLayout()
     {
-        Debug.Log("Adjust Player layout!!!");
-        for (int i = 0; i < playerPositionsList.Length; i++)
+        for (int i = 0; i < playersByPosition.Length; i++)
         {
             int index = i;
-            Transform playerPosition = playerPositionsList[i];
-            WhotPlayer player = playerPosition.GetComponentInChildren<WhotPlayer>();
+            WhotPlayer player = playersByPosition[index];
             if (player != null)
             {
-                Debug.Log("Player " + player.GetPlayerName() + " in position " + i);
                 PlayerLayout playerLayout = player.GetComponent<PlayerLayout>();
                 switch (index)
                 {
