@@ -134,8 +134,7 @@ public class NetworkManager : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError("JoinMatch failed: " + ex.Message);
-            // Gợi ý: hiển thị popup hoặc retry tùy logic game
+            throw ex;
         }
     }
 

@@ -29,7 +29,7 @@ public class SelectTableView : BaseView
     protected override void Awake()
     {
         base.Awake();
-        Config.currentGameId = Constants.WhotGameID;
+        Config.currentGameId = Constants.WHOT_GAME_ID;
         UpdateVisuals();
         UpdateTitle();
         SetupButtonListeners();
@@ -54,7 +54,11 @@ public class SelectTableView : BaseView
     {
         matchList.Clear();
         RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, false);
-        if (response == null) return;
+        if (response == null)
+        {
+            LoadListTableItem();
+            return;
+        }
 
         Debug.Log("Find match response: " + response.ToString());
         matchList = response.Matches.ToList();
@@ -69,7 +73,7 @@ public class SelectTableView : BaseView
     {
         switch (Config.currentGameId)
         {
-            case Constants.WhotGameID:
+            case Constants.WHOT_GAME_ID:
                 titleText.text = "Whot";
                 break;
             default:
@@ -134,7 +138,6 @@ public class SelectTableView : BaseView
 
     private void LoadListTableItem()
     {
-        matchList.Clear();
         foreach (Transform transform in tableItemParent)
         {
             Destroy(transform.gameObject);
@@ -144,16 +147,12 @@ public class SelectTableView : BaseView
             Match match = matchList[i];
             // Instantiate table item
             TableItem tableItem = Instantiate(tableItemPrefab, tableItemParent).GetComponent<TableItem>();
-            tableItem.SetData(match.Size, match.MaxSize, match.MarkUnit, match.Name, match.TableId, match.Open);
-            // tableItem.GetComponent<Button>().onClick.AddListener(async () =>
-            // {
-            //     await DataSender.JoinMatch(match.MatchId);
-            //     UIManager.Instance.OpenGame("whot");
-            // });
+            tableItem.SetData(this, match.Size, match.MaxSize, match.MarkUnit, match.Name, match.TableId, match.Open, match.MatchId);
         }
     }
 
     #region Button
+ 
 
     public void OnClickSelectBet()
     {

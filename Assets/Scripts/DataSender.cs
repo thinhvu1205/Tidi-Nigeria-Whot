@@ -11,12 +11,13 @@ using UnityEngine;
 public class DataSender
 {
     #region ApiNames
-    public const string get_world_with_areas = "get_world_with_areas";
+    public const string GET_PROFILE = "get_profile";
+    public const string GET_LIST_GAME = "list_game";
+    public const string GET_LIST_NOTIFICATION = "list_notification";
     public const string GET_LIST_BET = "list_bet";
     public const string GET_PLAYER_COUNT_BY_BET = "get_player_count_by_bet";
     public const string FIND_MATCH = "find_match";
     public const string QUICK_MATCH = "quick_match";
-    public const string GET_PROFILE = "get_profile";
     public const string USER_CHANGE_PASS = "user_change_pass";
     public const string LINK_USERNAME = "link_username";
     public const string CREATE_MATCH = "create_match";
@@ -32,14 +33,6 @@ public class DataSender
     #endregion
     
     #region RPC
-    public static void GetWordWithAreas(int idArea)
-    {
-        JSONObject data = new()
-        {
-            ["id"] = idArea
-        };
-        _ = NetworkManager.INSTANCE.RPCSend(get_world_with_areas);
-    }
 
     #region Login
     public static async UniTask LoginAsGuest()
@@ -62,6 +55,18 @@ public class DataSender
     {
         var response = await NetworkManager.INSTANCE.RPCSend(GET_PROFILE);
         return DecodeFromBase64<Profile>(response.Payload);
+    }
+
+    public static async UniTask<GameListResponse> GetListGame()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(GET_LIST_GAME);
+        return DecodeFromBase64<GameListResponse>(response.Payload);
+    }
+
+    public static async UniTask<ListNotification> GetListNotification()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(GET_LIST_NOTIFICATION);
+        return DecodeFromBase64<ListNotification>(response.Payload);
     }
 
     public static void ChangePassword(string oldPassword = "", string password = "")

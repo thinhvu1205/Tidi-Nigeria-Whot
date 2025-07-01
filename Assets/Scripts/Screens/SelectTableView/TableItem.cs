@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Globals;
@@ -14,7 +15,7 @@ public class TableItem : MonoBehaviour
     [SerializeField] Button joinButton;
     [SerializeField] GameObject fullObject;
 
-    public void SetData(int countPlaying, int maxSize, float markUnit, string roomName, string roomId, bool isOpen)
+    public void SetData(SelectTableView tableView, int countPlaying, int maxSize, float markUnit, string roomName, string roomId, bool isOpen, string matchId)
     {
         for (var i = 0; i < playerSlotImageList.Count; i++)
         {
@@ -27,6 +28,20 @@ public class TableItem : MonoBehaviour
         joinButton.gameObject.SetActive(isOpen);
         markUnitText.text = Utility.FormatMoney((int)markUnit, true);
         tableNameText.text = roomName;
-        tableIDText.text = roomId; 
+        tableIDText.text = roomId;
+        joinButton.onClick.RemoveAllListeners();
+        joinButton.onClick.AddListener(async () =>
+        {
+            try
+            {
+                await DataSender.JoinMatch(matchId);
+                UIManager.Instance.HandleOpenGame();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Error joining match: " + ex.Message);
+                UIManager.Instance.OpenDialog(ex.Message, null, null);
+            }
+        });
     }
 }

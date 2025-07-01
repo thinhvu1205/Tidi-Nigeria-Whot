@@ -37,7 +37,7 @@ public class BetItem : MonoBehaviour
                         try
                         {
                             await DataSender.JoinMatch(response.Matches[0].MatchId);
-                            UIManager.Instance.OpenGame("whot");
+                            UIManager.Instance.HandleOpenGame();
                         }
                         catch (Exception joinEx)
                         {
@@ -65,7 +65,7 @@ public class BetItem : MonoBehaviour
 
     private async void OnClickBetItem(int markUnit)
     {
-        RpcFindMatchResponse response = await DataSender.FindMatch(Constants.WhotGameID, markUnit, true);
+        RpcFindMatchResponse response = await DataSender.FindMatch(Constants.WHOT_GAME_ID, markUnit, true);
         if (response != null && response.Matches.Count > 0)
         {
             await DataSender.JoinMatch(response.Matches[0].MatchId);

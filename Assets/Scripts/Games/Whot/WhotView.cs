@@ -58,6 +58,7 @@ public class WhotView : GameView
         VICTORY_ANIMATION_NAME = "victory";
     private WhotCard callCard;
     private List<WhotPlayer> playersList;
+    private List<Player> rearrangedPlayersList;
     private List<WhotCard> dealCardsList;
     private List<BalanceUpdate> balanceUpdates = new();
     private GameState gameState = GameState.Preparing;
@@ -96,6 +97,7 @@ public class WhotView : GameView
             actionOnDestroy: card => Destroy(card.gameObject)
         );
         playersList = new();
+        rearrangedPlayersList = new();
         dealCardsList = new();
         playerHand = GetComponent<WhotPlayerHand>();
         suitPicker.OnSuitPicked += WhotSuitPicker_OnSuitPicked;
@@ -151,6 +153,7 @@ public class WhotView : GameView
                 reordered.Add(players[index]);
             }
             players = reordered;
+            rearrangedPlayersList = new(reordered);
         }
 
         // Khởi tạo List Player lần đầu
@@ -1243,6 +1246,7 @@ public class WhotView : GameView
     {
         if (hasPreparedNewGame) return;
         Debug.Log("Preparing new game...");
+        RearrangePlayerPosition();
         totalCardsLeft = 54;
         cardsLeftText.text = totalCardsLeft.ToString();
         matchResultTransform.gameObject.SetActive(false);
@@ -1253,10 +1257,10 @@ public class WhotView : GameView
         callCard = null;
         isRejoinTable = false;
         playerHand.Reset();
-        foreach (WhotPlayer player in playersList)
-        {
-            player.Reset();
-        }
+        // foreach (WhotPlayer player in playersList)
+        // {
+        //     player.Reset();
+        // }
         foreach (Transform card in deckOfCardParent)
         {
             if (card.GetComponent<WhotCard>() != null)
@@ -1270,16 +1274,61 @@ public class WhotView : GameView
         }
         hasPreparedNewGame = true;
     }
+
+    private void RearrangePlayerPosition()
+    {
+        playersList.Clear();
+        foreach (Transform playerPosition in playerPositionsList)
+        {
+            foreach (Transform child in playerPosition)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+        string currentPlayerId = User.userMain.userId;
+        Debug.Log("rearrangedPlayersList.Count: " + rearrangedPlayersList.Count);
+        for (int i = 0; i < rearrangedPlayersList.Count; i++)
+        {
+            Debug.Log("Reinstantiating player: " + rearrangedPlayersList[i].UserName);
+            Player player = rearrangedPlayersList[i];
+            int spawnIndex = spawnOrders[rearrangedPlayersList.Count - 1][i];
+            WhotPlayer whotPlayer = Instantiate(whotPlayerPrefab, playerPositionsList[spawnIndex]).GetComponent<WhotPlayer>();
+            whotPlayer.SetPlayerInfo(
+                player.Id,
+                player.AvatarId,
+                player.UserName,
+                player.Wallet
+            );
+            whotPlayer.transform.localPosition = Vector3.zero;
+            whotPlayer.SetWhotGame(this);
+            whotPlayer.HideCardsLeft();
+
+            if (player.Id == currentPlayerId)
+            {
+                whotPlayer.isCurrentPlayer = true;
+            }
+            else
+            {
+                whotPlayer.isCurrentPlayer = false;
+            }
+            whotPlayer.isPlaying = true;
+            playersList.Add(whotPlayer);
+        }
+        AdjustPlayerLayout();
+    }
     private void AdjustPlayerLayout()
     {
+        Debug.Log("Adjust Player layout!!!");
         for (int i = 0; i < playerPositionsList.Length; i++)
         {
+            int index = i;
             Transform playerPosition = playerPositionsList[i];
             WhotPlayer player = playerPosition.GetComponentInChildren<WhotPlayer>();
             if (player != null)
             {
+                Debug.Log("Player " + player.GetPlayerName() + " in position " + i);
                 PlayerLayout playerLayout = player.GetComponent<PlayerLayout>();
-                switch (i)
+                switch (index)
                 {
                     case 0:
                         playerLayout.SetLayout(PlayerLayout.EPlayerLayout.Top);

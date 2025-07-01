@@ -29,6 +29,7 @@ public class PlayerLayout : MonoBehaviour
 
     public void SetLayout(EPlayerLayout layout)
     {
+        Debug.Log($"Setting layout {layout} for player");
         currentLayout = layout;
         switch (layout)
         {

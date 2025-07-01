@@ -46,6 +46,19 @@ public class UIManager : Singleton<UIManager>
                 break;
         }
     }
+
+    public void HandleOpenGame()
+    {
+        switch (Config.currentGameId)
+        {
+            case Constants.WHOT_GAME_ID:
+                OpenGame("whot");
+                break;
+            default:
+                Debug.LogError("Unsupported game ID: " + Config.currentGameId);
+                break;
+        }
+    }
     #endregion
 
     #region Popups

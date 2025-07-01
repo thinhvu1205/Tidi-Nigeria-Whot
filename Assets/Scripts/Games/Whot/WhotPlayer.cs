@@ -114,6 +114,7 @@ public class WhotPlayer : MonoBehaviour
     public void AnimateShowRemainingCards(List<Card> cards)
     {
         if (cards == null) return;
+        lastCardNoti.gameObject.SetActive(false);
         remainingCardsParent.gameObject.SetActive(true);
         SortRemainingCards(cards);
         if (cards.Count >= 10)

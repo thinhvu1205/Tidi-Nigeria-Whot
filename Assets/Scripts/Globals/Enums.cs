@@ -34,5 +34,20 @@ namespace Globals
         NORMAL = 0,
         PLAYNOW = 1,
     }
+
+    public enum SpinType
+    {
+        NORMAL,
+        AUTO,
+        FREE_NORMAL,
+        FREE_AUTO
+    }
+    public enum SlotGameState
+    {
+        PREPARE,
+        SPINNING,
+        SHOWING_RESULT,
+        JOIN_GAME
+    }
 }
 
