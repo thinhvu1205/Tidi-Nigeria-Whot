@@ -1,20 +1,21 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Api;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Globals;
-using Newtonsoft.Json.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SelectTableView : BaseView
 {
-    [SerializeField]
-    private Button selectBetButton, selectTableButton, quickStartButton, createTableButton,
+    private enum SelectTableTab
+    {
+        TABLE,
+        BET,
+    }
+    [SerializeField] private Button selectBetButton, selectTableButton, quickStartButton, createTableButton,
     nextButton, prevButton, refreshButton, findTableButton;
     [SerializeField] private ScrollRect scrollRectTable, scrollRectBet;
     [SerializeField] private GameObject tableItemPrefab, betItemPrefab, tabItemPrefab;
@@ -25,12 +26,13 @@ public class SelectTableView : BaseView
     private List<Bet> betItemList = new();
     private List<Match> matchList = new();
     private int currentMarkUnitTab = 0;
+    private SelectTableTab currentSelectTableTab;
 
     protected override void Awake()
     {
         base.Awake();
-        Config.currentGameId = Constants.WHOT_GAME_ID;
         UpdateVisuals();
+        OnClickSelectBet();
         UpdateTitle();
         SetupButtonListeners();
         GetListBet().Forget();
@@ -152,24 +154,28 @@ public class SelectTableView : BaseView
     }
 
     #region Button
- 
+
 
     public void OnClickSelectBet()
     {
+        if (currentSelectTableTab == SelectTableTab.BET) return;
         scrollRectTable.gameObject.SetActive(false);
         scrollRectBet.gameObject.SetActive(true);
         selectBetButton.GetComponent<Image>().sprite = buttonSpriteList[0];
         selectTableButton.GetComponent<Image>().sprite = buttonSpriteList[1];
+        currentSelectTableTab = SelectTableTab.BET;
         // scrollRectBet.DOVerticalNormalizedPos(0f, 0.2f).SetEase(Ease.OutSine);
 
     }
 
     public void OnClickSelectTable()
     {
+        if (currentSelectTableTab == SelectTableTab.TABLE) return;
         scrollRectTable.gameObject.SetActive(true);
         scrollRectBet.gameObject.SetActive(false);
         selectBetButton.GetComponent<Image>().sprite = buttonSpriteList[1];
         selectTableButton.GetComponent<Image>().sprite = buttonSpriteList[0];
+        currentSelectTableTab = SelectTableTab.TABLE;
         GetListBetByMarkUnit(currentMarkUnitTab).Forget();
     }
 

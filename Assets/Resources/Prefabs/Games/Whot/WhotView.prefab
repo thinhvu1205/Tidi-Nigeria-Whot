@@ -3657,6 +3657,10 @@ MonoBehaviour:
   victoryImage: {fileID: 1913201866871773810}
   loseImage: {fileID: 5778050365381774867}
   playerResultPrefab: {fileID: 4083093643671292965, guid: bd6714741c1aa457bac3f94f93921365, type: 3}
+  betMoreNote: {fileID: 4672702269956167935}
+  timerText: {fileID: 2240189625095155746}
+  betMoreNoteText: {fileID: 85485418578551646}
+  winMoreButton: {fileID: 6335988232593496037}
 --- !u!1 &3536114919914368987
 GameObject:
   m_ObjectHideFlags: 0
@@ -4377,6 +4381,8 @@ RectTransform:
   - {fileID: 6634003772533348078}
   - {fileID: 4295129655635548693}
   - {fileID: 6878247090524692325}
+  - {fileID: 8808726122827468607}
+  - {fileID: 4595041311614719203}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4424,6 +4430,8 @@ MonoBehaviour:
   playAreaParent: {fileID: 3408475195346821732}
   playersParent: {fileID: 6937775054076971841}
   countdownTransform: {fileID: 6878247090524692325}
+  cardPoolParent: {fileID: 8808726122827468607}
+  coinPoolParent: {fileID: 4595041311614719203}
   betText: {fileID: 4838851619454793626}
   cardsLeftText: {fileID: 7660614336331429407}
   betterLuckNextTimeText: {fileID: 6302499259635809483}
@@ -4706,6 +4714,7 @@ GameObject:
   - component: {fileID: 722937836428974822}
   - component: {fileID: 1334301206136095337}
   - component: {fileID: 5204161138004092407}
+  - component: {fileID: 6580674700773955503}
   m_Layer: 5
   m_Name: Note
   m_TagString: Untagged
@@ -4771,6 +4780,50 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6580674700773955503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4672702269956167935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 5204161138004092407}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4712309654177153960
 GameObject:
   m_ObjectHideFlags: 0
@@ -5270,6 +5323,41 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &5455908364028152776
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8808726122827468607}
+  m_Layer: 5
+  m_Name: Card Pool Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8808726122827468607
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5455908364028152776}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4401498215101152306}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5470538196739474956
 GameObject:
   m_ObjectHideFlags: 0
@@ -6390,7 +6478,7 @@ GameObject:
   - component: {fileID: 4887916196339566404}
   - component: {fileID: 85485418578551646}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Bet More Note Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8166,6 +8254,41 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &7652823181438542798
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4595041311614719203}
+  m_Layer: 5
+  m_Name: Coin Pool Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4595041311614719203
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7652823181438542798}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4401498215101152306}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7684080998984423193
 GameObject:
   m_ObjectHideFlags: 0
@@ -8310,7 +8433,7 @@ GameObject:
   - component: {fileID: 8650010516248453827}
   - component: {fileID: 2240189625095155746}
   m_Layer: 5
-  m_Name: Text (TMP) (1)
+  m_Name: Timer Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

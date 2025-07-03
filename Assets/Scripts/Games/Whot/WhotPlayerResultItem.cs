@@ -6,7 +6,7 @@ using Globals;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
+using Color = UnityEngine.Color;
 public class WhotPlayerResultItem : MonoBehaviour
 {
     [SerializeField] private Image backgroundWinImage, backgroundLoseImage, avatarImage, winnerImage;

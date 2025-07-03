@@ -5,6 +5,7 @@ using Api;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using Color = UnityEngine.Color;
 
 public class WhotCard : MonoBehaviour
 {

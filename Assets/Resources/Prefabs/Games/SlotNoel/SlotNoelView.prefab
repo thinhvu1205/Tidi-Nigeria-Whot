@@ -1685,6 +1685,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8587314b9cd944269d6f2757e5af398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  effectPopup: 0
+  effectPopupReverse: 0
+  popupBackground: {fileID: 0}
+  maxBetButton: {fileID: 5939724008549616577}
+  plusBetButton: {fileID: 27311480529664196}
+  minusBetButton: {fileID: 548142527881278028}
+  betAmountText: {fileID: 8646157219736781123}
+  betInfoSessionText: {fileID: 2691765179116933101}
+  betStateText: {fileID: 3485137353094876107}
+  stateWinText: {fileID: 1729993073022710598}
+  freeSpinLeftText: {fileID: 0}
+  spinBackgroundImage: {fileID: 5537974223246595255}
+  stateWinSpriteList:
+  - {fileID: 21300000, guid: b044ba1f744624021965d12eccf11983, type: 3}
+  - {fileID: 21300000, guid: 637f17615dfb74c53a919f6e51bf0fc2, type: 3}
+  - {fileID: 21300000, guid: 8f6b39416fde64e68a89319ffeca4183, type: 3}
+  itemSpriteList:
+  - {fileID: 21300000, guid: 461480c3cc23644058b07d14e7bbed89, type: 3}
+  - {fileID: 21300000, guid: b0e1b56aa292e494f87b78d846ef7836, type: 3}
+  - {fileID: 21300000, guid: 981445e8762d8443a91970071990ebff, type: 3}
+  - {fileID: 21300000, guid: ce0bf27585cfc4185a3ddb135d702373, type: 3}
+  - {fileID: 21300000, guid: e70cb5a3b26b74944babaf1d75d1db0d, type: 3}
+  - {fileID: 21300000, guid: b60c2eefab7ae4027ad2949d3f1385bc, type: 3}
+  - {fileID: 21300000, guid: 303537fd898d44f10bbf507399331d74, type: 3}
+  - {fileID: 21300000, guid: 052c48f8ffcf94e58ba7153c5eeca8ee, type: 3}
+  - {fileID: 21300000, guid: 02b68616085a24345955a3f1bff08d81, type: 3}
+  - {fileID: 21300000, guid: ae38210821f9a44cea4cc9304358c46c, type: 3}
+  - {fileID: 21300000, guid: 5fb0d7fc79917462097b88ad1bc72bc8, type: 3}
+  - {fileID: 21300000, guid: 422a9564c3a1e4ddca1b25f4a82350f5, type: 3}
+  - {fileID: 21300000, guid: 0893d2ef219ee4af0b6eda1eecab050a, type: 3}
+  lineContainer: {fileID: 4704892954112796580}
+  effectContainer: {fileID: 4702937930617995445}
+  paylineInfoContainer: {fileID: 0}
+  columnContainer: {fileID: 0}
+  coinParent: {fileID: 0}
+  rulePrefab: {fileID: 0}
+  linePrefab: {fileID: 0}
+  coinPrefab: {fileID: 5775115196986566630, guid: a9c914c2a21b84cf9b137696d366c3e4, type: 3}
+  backgroundFreeSpinAnimation: {fileID: 0}
+  nearFreeSpinAnimation: {fileID: 0}
+  buttonSpinAnimation: {fileID: 0}
 --- !u!1 &3649586517760866002
 GameObject:
   m_ObjectHideFlags: 0
@@ -1719,6 +1760,7 @@ RectTransform:
   - {fileID: 8081269419837131431}
   - {fileID: 1006075942004095636}
   - {fileID: 4704892954112796580}
+  - {fileID: 4702937930617995445}
   - {fileID: 9050437391199508555}
   - {fileID: 7365876530365911917}
   m_Father: {fileID: 563174890790211589}
@@ -5716,6 +5758,41 @@ RectTransform:
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &9031933196538661217
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4702937930617995445}
+  m_Layer: 5
+  m_Name: Effect Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4702937930617995445
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9031933196538661217}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 429272486432799158}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &9103863940947915605
 GameObject:

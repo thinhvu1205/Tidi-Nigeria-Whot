@@ -1,14 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Api;
 using Cysharp.Threading.Tasks;
 using Globals;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LobbyView : BaseView
@@ -59,15 +56,7 @@ public class LobbyView : BaseView
                 gameIcon.SetInfo(game.Code, false);
             }
 
-            if (new string[] {
-                Constants.FRUIT_SLOT_GAME_ID,
-                Constants.INCA_GAME_ID,
-                Constants.JUICY_GARDEN_GAME_ID,
-                Constants.NOEL_GAME_ID,
-                Constants.TARZAN_GAME_ID,
-                Constants.SIXIANG_GAME_ID,
-            }
-                .Contains(game.Code))
+            if (Constants.SLOT_GAMES_ID.Contains(game.Code))
             {
                 GameIcon slotGameIcon = Instantiate(gameIconPrefab, slotGameIconParent).GetComponent<GameIcon>();
                 slotGameIcon.SetInfo(game.Code, true);

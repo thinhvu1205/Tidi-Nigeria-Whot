@@ -71,6 +71,12 @@ public class UIManager : Singleton<UIManager>
         dialogView.ConfigConfirmButton(true, "OK", confirmCallback);
         dialogView.ConfigCancelButton(false, "Cancel", cancelCallback);
     }
+
+    public void OpenSelectTableView()
+    {
+        SelectTableView selectTableView = Instantiate(LoadPrefabLobby("SelectTableView"), parentGames).GetComponent<SelectTableView>();
+        selectTableView.transform.localScale = Vector3.one;
+    }
     public void OpenShop()
     {
         ShopView shopView = Instantiate(LoadPrefabLobby("ShopView"), parentLobby).GetComponent<ShopView>();

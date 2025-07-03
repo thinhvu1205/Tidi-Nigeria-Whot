@@ -56,6 +56,7 @@ enum OpCodeRequest {
   OPCODE_REQUEST_DRAW_CARD = 4;        // client yêu cầu rút bài
   OPCODE_REQUEST_CALL_WHOT = 5;   // nếu client đánh WHOT, call lựa chọn suit
   OPCODE_USER_INTERACT_CARDS = 6; // client tương tác với cards
+  OPCODE_REQUEST_SPIN = 7;
 }
 
 

@@ -158,8 +158,6 @@ public class LoginView : BaseView
         }
         catch (Exception e)
         {
-            UIManager.Instance.OpenDialog(e.Message, null, null);                        
-
             Debug.LogError($"err : {e.Message}");
         }
     }

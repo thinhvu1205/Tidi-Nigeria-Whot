@@ -2,21 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Globals;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SettingsView : BaseView
 {
     [SerializeField] private Image toggleSoundImage, toggleMusicImage;
+    [SerializeField] private TextMeshProUGUI displayNameText, userIdText;
     
     protected override void Start()
     {
         base.Start();
-        InitVisual();
+        UpdateVisuals();
     }
 
-    private void InitVisual()
+    private void UpdateVisuals()
     {
+        if (User.userMain != null)
+        {
+            displayNameText.text = User.userMain.displayName;
+            userIdText.text = "ID: " + User.userMain.userSid;
+        }
         toggleSoundImage.gameObject.SetActive(Config.isOpenSound);
         toggleMusicImage.gameObject.SetActive(Config.isOpenMusic);
     }

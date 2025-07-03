@@ -15,7 +15,7 @@ public class BetItem : MonoBehaviour
     [SerializeField] private Button button;
     [SerializeField] private List<Sprite> backgroundSpriteList, disabledBackgroundSpriteList;
     [SerializeField] private TMP_FontAsset disableFont;
-    [SerializeField] private Color disabledTitleTextColor, disablePlayerCountTextColor;
+    [SerializeField] private UnityEngine.Color disabledTitleTextColor, disablePlayerCountTextColor;
 
     public void SetData(Bet dataItem, int index)
     {

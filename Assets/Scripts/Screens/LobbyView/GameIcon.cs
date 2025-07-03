@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Globals;
 using Spine.Unity;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameIcon : MonoBehaviour
 {
@@ -15,7 +17,7 @@ public class GameIcon : MonoBehaviour
         {
             RectTransform rectTransform = GetComponent<RectTransform>();
             Vector2 size = rectTransform.sizeDelta;
-            size.x = 315f; 
+            size.x = 315f;
             rectTransform.sizeDelta = size;
         }
         skeletonGraphic.TrimRenderers();
@@ -23,11 +25,31 @@ public class GameIcon : MonoBehaviour
         skeletonGraphic.transform.localPosition = Vector3.zero;
         skeletonGraphic.skeletonDataAsset = UIManager.Instance.LoadSkeletonData(GetAnimationPath(gameID));
         skeletonGraphic.Initialize(true);
+
+        Button button = GetComponent<Button>();
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(() =>
+        {
+            OnClick(gameID);
+        });
+    }
+
+    private void OnClick(string gameID)
+    {
+        Config.currentGameId = gameID;
+        if (Constants.SELECT_TABLE_GAMES_ID.Contains(gameID))
+        {
+            UIManager.Instance.OpenSelectTableView();
+        }
+        else
+        {
+            UIManager.Instance.HandleOpenGame();
+        }
     }
 
     private string GetAnimationPath(string gameID)
     {
-        string animationPath; 
+        string animationPath;
         if (isBigIcon)
         {
             animationPath = gameID switch

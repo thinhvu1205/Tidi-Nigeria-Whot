@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Api;
+using Cysharp.Threading.Tasks;
 using Globals;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,8 +13,32 @@ public class WhotMatchResult : MonoBehaviour
 {
     [SerializeField] private Transform backgroundWin, backgroundLose, playerResultParent;
     [SerializeField] private Image victoryImage, loseImage;
-    [SerializeField] private GameObject playerResultPrefab;
+    [SerializeField] private GameObject playerResultPrefab, betMoreNote;
+    [SerializeField] private TextMeshProUGUI timerText, betMoreNoteText;
+    [SerializeField] private Button winMoreButton;
+
+    private List<Bet> betItemList = new();
     private WhotView whotGame;
+    private int timer = 10;
+    private float higherMarkUnit;
+
+    private void OnEnable()
+    {
+        timer = 10;
+        StartCoroutine(Countdown());
+        GetListBet().Forget();
+    }
+
+    private IEnumerator Countdown()
+    {
+        while (timer > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            timer--;
+            timerText.text = timer.ToString();
+        }
+        if (timer == 0) OnClickPlayAgain();
+    }
 
     public void SetInfo(WhotView whotGame, List<WhotPlayer> players, List<WhotPlayerResult> result, List<BalanceUpdate> balanceUpdates, bool isVictory)
     {
@@ -58,15 +85,68 @@ public class WhotMatchResult : MonoBehaviour
         }
     }
 
-    public void OnClickWinMore()
-    {
-
-    }
-
     public void OnClickPlayAgain()
     {
         gameObject.SetActive(false);
     }
+
+    public void OnClickBetMoreNote()
+    {
+        betMoreNote.SetActive(false);
+    }
+
+    private async UniTask GetListBet()
+    {
+        Bets bets = await DataSender.GetListBet(Config.currentGameId);
+        betItemList = bets.Bets_.ToList();
+
+        Bet higherBet = betItemList
+            .Where(b => b.Enable && b.MarkUnit > whotGame.CurrentMarkUnit)
+            .OrderBy(b => b.MarkUnit)
+            .FirstOrDefault();
+
+        higherMarkUnit = higherBet != null ? higherBet.MarkUnit : whotGame.CurrentMarkUnit;
+        UpdateBetNoteText();
+        SetWinMoreButtonListener();
+    }
+
+    private void UpdateBetNoteText()
+    {
+        betMoreNote.SetActive(true);
+        betMoreNoteText.text = $"Bet more win more, click here to the higher bet ({higherMarkUnit}) games!";
+    }
+
+    private void SetWinMoreButtonListener()
+    {
+        winMoreButton.onClick.RemoveAllListeners();
+        winMoreButton.onClick.AddListener(async () =>
+        { 
+            try
+            {
+                RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, (int)higherMarkUnit, true);
+                Debug.Log("Find match response: " + response.ToString());
+                if (response.Matches.Count > 0)
+                {
+                    try
+                    {
+                        await DataSender.JoinMatch(response.Matches[0].MatchId);
+                        Destroy(whotGame.gameObject);
+                        UIManager.Instance.HandleOpenGame();
+                    }
+                    catch (Exception joinEx)
+                    {
+                        Debug.Log("Error joining match: " + joinEx.Message);
+                        UIManager.Instance.OpenDialog(joinEx.Message, null, null);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                UIManager.Instance.OpenDialog(ex.Message, null, null);
+            }
+        });
+    }
+
 
     private struct PlayerResultData
     {
