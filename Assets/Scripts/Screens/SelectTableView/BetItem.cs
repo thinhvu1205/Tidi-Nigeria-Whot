@@ -62,14 +62,4 @@ public class BetItem : MonoBehaviour
 
         }
     }
-
-    private async void OnClickBetItem(int markUnit)
-    {
-        RpcFindMatchResponse response = await DataSender.FindMatch(Constants.WHOT_GAME_ID, markUnit, true);
-        if (response != null && response.Matches.Count > 0)
-        {
-            await DataSender.JoinMatch(response.Matches[0].MatchId);
-            UIManager.Instance.OpenGame("whot");
-        }
-    }
 }

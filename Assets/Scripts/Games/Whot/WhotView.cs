@@ -15,7 +15,7 @@ using UnityEngine.Pool;
 using UnityEngine.UI;
 using GameState = Api.GameState;
 
-public class WhotView : GameView
+public class WhotView : BaseGameView
 {
     public event Action<OnNextTurnEventArg> OnNextTurn;
     public class OnNextTurnEventArg : EventArgs

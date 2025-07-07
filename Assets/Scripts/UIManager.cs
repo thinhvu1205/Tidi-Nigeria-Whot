@@ -40,7 +40,7 @@ public class UIManager : Singleton<UIManager>
         {
             case "whot":
                 currentView = Instantiate(LoadPrefabGame("Whot/WhotView"), parentGames).GetComponent<WhotView>();
-                Config.currentGameView = (GameView)currentView;
+                Config.currentGameView = (BaseGameView)currentView;
                 break;
             default:
                 Debug.LogError("Game not found: " + game);
@@ -53,11 +53,40 @@ public class UIManager : Singleton<UIManager>
         switch (Config.currentGameId)
         {
             case Constants.WHOT_GAME_ID:
-                OpenGame("whot");
+                currentView = Instantiate(LoadPrefabGame("Whot/WhotView"), parentGames).GetComponent<WhotView>();
+                break;
+            case Constants.NOEL_GAME_ID:
+                currentView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
+                break;
+            case Constants.TARZAN_GAME_ID:
+                currentView = Instantiate(LoadPrefabGame("Tarzan/TarzanView"), parentGames).GetComponent<SlotNoelView>();
+                break;
+            case Constants.FRUIT_SLOT_GAME_ID:
+                currentView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
+                break;
+            case Constants.INCA_GAME_ID:
+                currentView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
+                break;
+            case Constants.SIXIANG_GAME_ID:
+                currentView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
+                break;
+            case Constants.JUICY_GARDEN_GAME_ID:
+                currentView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
                 break;
             default:
                 Debug.LogError("Unsupported game ID: " + Config.currentGameId);
                 break;
+        }
+        Config.currentGameView = (BaseGameView)currentView;
+    }
+
+    public void HandleLeaveGame()
+    {
+        currentView = null;
+        Config.currentGameView = null;
+        foreach (Transform item in parentGames)
+        {
+            Destroy(item.gameObject);
         }
     }
     #endregion
@@ -168,6 +197,27 @@ public class UIManager : Singleton<UIManager>
         FriendsView friendsView = Instantiate(LoadPrefabLobby("FriendsView"), parentLobby).GetComponent<FriendsView>();
         friendsView.transform.localScale = Vector3.one;
     }
+
+    public void OpenGroupMenu()
+    {
+        GroupMenuView groupMenuView = Instantiate(LoadPrefabPopup("GroupMenu"), parentGames).GetComponent<GroupMenuView>();
+        groupMenuView.transform.localScale = Vector3.one;
+    }
+
+    public void OpenRule()
+    {
+        if (currentView is BaseGameView gameView)
+        {
+            gameView.OpenRule();
+        }
+    }
+
+    public void OpenWebView(string url = "", string title = "")
+    {
+        // WebViewControl webview = Instantiate(LoadPrefabPopup("WebView"), transform).GetComponent<WebViewControl>();
+        // webview.loadUrl(url, title);
+        // webview.transform.SetAsLastSibling();
+    }
     #endregion
 
     #region Helpers
@@ -193,7 +243,7 @@ public class UIManager : Singleton<UIManager>
 
     public SkeletonDataAsset LoadSkeletonData(string name)
     {
-        return Resources.Load<SkeletonDataAsset>("BundlePack/Anims/anim_iconGames/" + name);
+        return Resources.Load<SkeletonDataAsset>("BundlePack/Anims/" + name);
 
     }
 

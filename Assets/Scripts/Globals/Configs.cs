@@ -15,7 +15,7 @@ namespace Globals
 
         public static string currentServerIp = "";
         public static string currentGameId = "";
-        public static GameView currentGameView = null;
+        public static BaseGameView currentGameView = null;
         public static string currentMatchId = "";
         public static string deviceId = SystemInfo.deviceUniqueIdentifier;
         public static string versionGame = Application.version;
@@ -25,6 +25,8 @@ namespace Globals
         public static string versionNameOS = SystemInfo.operatingSystem;
         public static string model = SystemInfo.deviceName;
         public static string brand = SystemInfo.deviceModel;
+
+        public static string currentUrlRule = "";
 
         public static bool isOpenSound = true;
         public static bool isOpenMusic = true;

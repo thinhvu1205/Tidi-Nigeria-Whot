@@ -18,8 +18,8 @@ public class BaseView : MonoBehaviour
 
     [SerializeField] private EFFECT_POPUP effectPopup = EFFECT_POPUP.NONE;
     [SerializeField] private EFFECT_POPUP effectPopupReverse = EFFECT_POPUP.NONE;
-    [SerializeField] private Image popupBackground;
-    private float originX = 0, originY = 0;
+    [SerializeField] protected Image popupBackground;
+    protected float originX = 0, originY = 0;
     private const float ANIMATION_TIME = 0.3f;
 
     protected virtual void Awake()
@@ -70,13 +70,13 @@ public class BaseView : MonoBehaviour
                     sequence.Append(popupBackground.rectTransform.DOScale(targetScale, ANIMATION_TIME).SetEase(Ease.OutBack).SetAutoKill(true));
                     break;
                 case EFFECT_POPUP.MOVE_LEFT:
-                    effectPopupReverse = EFFECT_POPUP.MOVE_RIGHT;
+                    // effectPopupReverse = EFFECT_POPUP.MOVE_RIGHT;
                     Fade();
                     popupBackground.transform.localPosition = new Vector3(-Screen.width, originY);
                     sequence.Append(popupBackground.transform.DOLocalMoveX(originX, ANIMATION_TIME).SetEase(Ease.InSine).SetAutoKill(true));
                     break;
                 case EFFECT_POPUP.MOVE_RIGHT:
-                    effectPopupReverse = EFFECT_POPUP.MOVE_LEFT;
+                    // effectPopupReverse = EFFECT_POPUP.MOVE_LEFT;
                     Fade();
                     popupBackground.rectTransform.localPosition = new Vector3(Screen.width, originY);
                     sequence.Append(popupBackground.rectTransform.DOLocalMoveX(originX, ANIMATION_TIME).SetEase(Ease.InSine).SetAutoKill(true));

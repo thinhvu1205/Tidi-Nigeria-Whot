@@ -4,7 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BasePopupGuide : MonoBehaviour
+public class BasePopupGuide : BaseView
 {
     [SerializeField] ScrollRect scrView;
 

@@ -70,6 +70,7 @@ GameObject:
   - component: {fileID: 1745356416654238284}
   - component: {fileID: 4000692088148507752}
   - component: {fileID: 3434858591461084043}
+  - component: {fileID: 1558099204542198938}
   m_Layer: 5
   m_Name: Scroll View
   m_TagString: Untagged
@@ -165,6 +166,26 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1558099204542198938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 700992661120623433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de8de41ebb4285143853479cc599d902, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minDeltaDrag: 0.1
+  _snapDuration: 0.3
+  OnPageChangeStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPageChangeEnded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1693626925063663830
 GameObject:
   m_ObjectHideFlags: 0
@@ -197,9 +218,9 @@ RectTransform:
   - {fileID: 4227838562110391646}
   m_Father: {fileID: 2375735479468205647}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 479, y: -150}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 958, y: 487}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9206594339723258605
@@ -266,11 +287,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dotsIndicator: {fileID: 3247960457761856331}
-  _pages: []
+  _pages:
+  - {fileID: 9206594339723258605}
+  - {fileID: 6213906367250775257}
+  - {fileID: 5457114393258512376}
   OnPageChanged:
     m_PersistentCalls:
       m_Calls: []
-  Content: {fileID: 0}
+  Content: {fileID: 4072483022177154603}
   currentPage: 0
 --- !u!1 &2644895236013522209
 GameObject:
@@ -805,9 +829,9 @@ RectTransform:
   - {fileID: 720729176521369843}
   m_Father: {fileID: 2375735479468205647}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 2395, y: -150}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 958, y: 487}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5457114393258512376
@@ -943,10 +967,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6326939138278802662}
         m_TargetAssemblyTypeName: BaseView, Assembly-CSharp
-        m_MethodName: onClickClose
-        m_Mode: 6
+        m_MethodName: OnClickCloseButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1134,6 +1158,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef922df6c271943b8a1fb538dc74d315, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  effectPopup: 5
+  effectPopupReverse: 4
+  popupBackground: {fileID: 4475429356916861155}
   scrView: {fileID: 3434858591461084043}
 --- !u!1 &8000546734260557512
 GameObject:
@@ -1167,9 +1194,9 @@ RectTransform:
   - {fileID: 233782597798384334}
   m_Father: {fileID: 2375735479468205647}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1437, y: -150}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 958, y: 487}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6213906367250775257

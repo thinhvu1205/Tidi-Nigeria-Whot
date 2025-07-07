@@ -35,6 +35,16 @@ namespace Globals
             SIXIANG_GAME_ID,
         };
 
+        public static readonly string[] INGAME_RULES_ID = new string[]
+        {
+            FRUIT_SLOT_GAME_ID,
+            INCA_GAME_ID,
+            JUICY_GARDEN_GAME_ID,
+            NOEL_GAME_ID,
+            TARZAN_GAME_ID,
+            SIXIANG_GAME_ID,
+        };
+
         public static readonly string[] SELECT_TABLE_GAMES_ID = new string[]
         {
             WHOT_GAME_ID
