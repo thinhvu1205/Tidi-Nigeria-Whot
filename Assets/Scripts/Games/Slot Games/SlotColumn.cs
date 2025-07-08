@@ -15,6 +15,8 @@ public class SlotColumn : MonoBehaviour
     protected int columnIndex = 0;
     public bool IsLastColumn { get { return columnIndex == 4; } }
     public bool IsSpinning { get; set; } = false;
+    public bool IsShowingThirdScatter { get; set; } = false;
+    public float ExtraTime { get; set; } = 0f;
 
     [Header("Constants")]
 
@@ -63,15 +65,24 @@ public class SlotColumn : MonoBehaviour
         {
             SlotItem item = itemList[i];
             item.SetInfo(this);
-            item.SetFinishIndices(new List<int> { 1, 1, 1 });
+            item.SetFinishIndices(new List<int> { 1, 12, 5 });
             item.StartSpin(speed, backSpinSpeed);
         }
     }
 
     private IEnumerator SpinDuration()
     {
-        float duration = DEFAULT_SPIN_DURATION + 0.3f * (columnIndex - 1);
-        yield return new WaitForSeconds(duration);
+        float delayBetweenColumns = slotView.GetSpinType() == SpinType.NORMAL ? 0.3f : 0.2f;
+        float defaultSpinDuration = slotView.GetSpinType() == SpinType.NORMAL ? DEFAULT_SPIN_DURATION : DEFAULT_SPIN_DURATION * 0.75f;
+        float duration = defaultSpinDuration + delayBetweenColumns * (columnIndex - 1);
+
+        float timer = 0f;
+        while (timer < duration + ExtraTime)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
         IsSpinning = false;
     }
 
@@ -107,10 +118,25 @@ public class SlotColumn : MonoBehaviour
         }
     }
 
+    public void SetAnimationForItemAtIndex(int itemIndex)
+    {
+        resultItem.SetItemAnimation(itemIndex);
+    }
+
     #region Events
     public void OnAllColumnsStop()
     {
         slotView.OnStopSpin();
+    }
+
+    public void OnColumnStop()
+    {
+        slotView.OnColumnStop(columnIndex);
+    }
+
+    public void CheckThirdScatter()
+    {
+        slotView.CheckThirdScatter(columnIndex);
     }
 
     #endregion
@@ -126,5 +152,12 @@ public class SlotColumn : MonoBehaviour
     public void SetRandomSprite()
     {
         defaultItem.SetRandomData();
+    }
+
+    public int GetScatterCount() => slotView.ScatterCount;
+    public void IncreaseScatterCount()
+    {
+            Debug.Log($"[IncreaseScatterCount] ScatterCount = {slotView.ScatterCount}, called by: {this.name}");
+        slotView.ScatterCount++;
     }
 }

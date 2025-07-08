@@ -52,7 +52,7 @@ public class SelectTableView : BaseView
         LoadListTableTab();
     }
 
-    private async UniTask GetListBetByMarkUnit(int markUnit)
+    private async UniTask GetListTableByMarkUnit(int markUnit)
     {
         matchList.Clear();
         RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, false);
@@ -123,7 +123,7 @@ public class SelectTableView : BaseView
                 }
                 tableTabItem.SetSelected();
                 currentMarkUnitTab = (int)bet.MarkUnit;
-                await GetListBetByMarkUnit(currentMarkUnitTab);
+                await GetListTableByMarkUnit(currentMarkUnitTab);
             });
             if (!isTableTabSelected && bet.Enable)
             {
@@ -176,7 +176,7 @@ public class SelectTableView : BaseView
         selectBetButton.GetComponent<Image>().sprite = buttonSpriteList[1];
         selectTableButton.GetComponent<Image>().sprite = buttonSpriteList[0];
         currentSelectTableTab = SelectTableTab.TABLE;
-        GetListBetByMarkUnit(currentMarkUnitTab).Forget();
+        GetListTableByMarkUnit(currentMarkUnitTab).Forget();
     }
 
     public async void OnClickQuickStart()
@@ -190,7 +190,7 @@ public class SelectTableView : BaseView
 
     public void OnClickReload()
     {
-        GetListBetByMarkUnit(currentMarkUnitTab).Forget();
+        GetListTableByMarkUnit(currentMarkUnitTab).Forget();
     }
 
     public void OnClickNext()

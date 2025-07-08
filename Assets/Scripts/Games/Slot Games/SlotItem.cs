@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Globals;
 using Spine.Unity;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ public class SlotItem : MonoBehaviour
 {
     [SerializeField] protected Image[] slotImageList;
     [SerializeField] protected Sprite[] spriteList;
-    [SerializeField] protected SkeletonGraphic[] spineList;
+    [SerializeField] protected SkeletonGraphic spineItem;
 
     protected Vector2[] itemPositionList = {
         new(0, 144),
@@ -20,11 +21,13 @@ public class SlotItem : MonoBehaviour
     protected SlotColumn column;
     protected List<int> iconIdList = new();
     protected List<int> finishView = new();
-    protected int typePosition = 0;
+    protected int position = 0;
 
     public float Speed { get; set; } = 0.075f;
     public float SpeedBackSpin { get; set; } = 0.175f;
     protected const float POSITION_RESET_Y = 1023;
+    protected string ICON_ANIMATION_PATH = "SlotSpine/Noel/SpineIcon/%id/skeleton_SkeletonData";
+    protected string ICON_ANIMATION_NAME = "animation";
 
     public void SetInfo(SlotColumn slotColumn)
     {
@@ -32,11 +35,10 @@ public class SlotItem : MonoBehaviour
     }
 
     #region Spin Animations
-    public virtual void StartSpin(float speed, float backspinSpeed)
+    public void StartSpin(float speed, float backspinSpeed)
     {
         Speed = speed;
         SpeedBackSpin = backspinSpeed;
-        Debug.Log("Item start spin");
         Sequence seq = DOTween.Sequence();
         RectTransform rect = GetComponent<RectTransform>();
         Vector3 backPos = rect.localPosition + new Vector3(0, 30, 0);
@@ -65,21 +67,21 @@ public class SlotItem : MonoBehaviour
         Vector3 localPos = rect.localPosition;
 
         // float moveSpeed = Speed * (CollumSpinCtrl.gameView.countScatter > 2 ? 1.75f : 1);
-        float moveSpeed = Speed;
+        float multiplier = column.GetScatterCount() > 2 ? 1.75f : 1f;
+        float moveSpeed = Speed * multiplier;
             rect.DOBlendableLocalMoveBy(new Vector2(0, -rect.sizeDelta.y), moveSpeed)
             .SetEase(Ease.Linear) // Quan trọng: để tốc độ đều
             .OnComplete(() =>
             {
-                typePosition--;
+                position--;
                 if (rect.localPosition.y < 0)
                 {
                     rect.localPosition = new Vector3(localPos.x, POSITION_RESET_Y, 0);
-                    typePosition = 3;
+                    position = 3;
                 }
 
                 if (column.IsSpinning)
                 {
-                    SetRandomData();
                     MoveDownLoop();
                 }
                 else
@@ -89,7 +91,7 @@ public class SlotItem : MonoBehaviour
             });
     }
 
-    protected virtual void StopSpin()
+    protected void StopSpin()
     {
         Sequence seq = DOTween.Sequence();
         RectTransform rect = GetComponent<RectTransform>();
@@ -97,28 +99,29 @@ public class SlotItem : MonoBehaviour
         Vector3 endPos = rect.localPosition + new Vector3(0, -rect.sizeDelta.y, 0);
         seq.AppendCallback(() =>
         {
-            if (typePosition == 2)
+            if (position == 2)
             {
                 column.SetResultItem(this);
                 SetFinishView();
-                // if (arrID.Contains(12))
-                // {
-                //     CollumSpinCtrl.gameView.countScatter++;
-                // }
+                if (finishView.Contains(12)) // Scatter
+                {
+                    column.IncreaseScatterCount();
+                    column.CheckThirdScatter();
+
+                }
                 // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT.STOP_SPIN);
             }
             else
             {
                 SetRandomData();
             }
-
         });
         seq.Append(rect.DOLocalMoveY(downPos.y, Speed).SetEase(Ease.OutCirc));
         seq.Append(rect.DOLocalMoveY(endPos.y, SpeedBackSpin).SetEase(Ease.InCirc));
         seq.OnComplete(() =>
         {
 
-            if (typePosition == 1)
+            if (position == 1)
             {
                 column.IsSpinning = false;
                 // if (column.isNearFreeSpin)
@@ -129,6 +132,10 @@ public class SlotItem : MonoBehaviour
                 if (column.IsLastColumn)
                 {
                     column.OnAllColumnsStop();
+                }
+                else
+                {
+                    column.OnColumnStop();
                 }
             }
         });
@@ -183,18 +190,32 @@ public class SlotItem : MonoBehaviour
         }
     }
 
-    private void SetItemAnimation(int index, int id, bool isWild = false)
+    public void SetItemAnimation(int index)
     {
+        int itemIndex = finishView[index];
+        spineItem.transform.localScale = itemIndex switch
+        {
+            0 or 1 or 2 or 3 => (Vector3)new Vector2(0.8f, 0.8f),
+            11 => (Vector3)new Vector2(0.52f, 0.6f),
+            12 => (Vector3)new Vector2(0.52f, 0.6f),
+            4 or 5 or 6 or 7 or 8 => (Vector3)new Vector2(0.65f, 0.65f),
+            _ => (Vector3)Vector2.one,
+        };
+        spineItem.gameObject.transform.localPosition = slotImageList[index].gameObject.GetComponent<RectTransform>().localPosition;
+        spineItem.gameObject.SetActive(true);
+        string itemAnimationPath = ICON_ANIMATION_PATH.Replace("%id", itemIndex.ToString());
+        Utility.PlayAnimationByPath(spineItem, itemAnimationPath, ICON_ANIMATION_NAME);
 
     }
 
     public void SetDark(bool isDark, int index = -1)
     {
+        if (isDark) spineItem.gameObject.SetActive(false);
         Color colorState = isDark ? Color.gray : Color.white;
         if (index >= 0 && index < slotImageList.Length)
         {
             slotImageList[index].color = colorState;
-            // SetItemAnimation(index, iconIdList[index]);
+            // Debug.Log("iconIdList[index]: " + iconIdList[index]);
         }
         else
         {
@@ -202,7 +223,7 @@ public class SlotItem : MonoBehaviour
             {
                 slotImageList[i].color = colorState;
                 slotImageList[i].gameObject.SetActive(true);
-
+                spineItem.gameObject.SetActive(false);
                 // Nếu cần clear animation thì xử lý ở đây
                 // listSpineItem[i].gameObject.SetActive(false);
                 // CollumSpinCtrl.gameView.removeAnimIcon(listSpineItem[i].gameObject);
