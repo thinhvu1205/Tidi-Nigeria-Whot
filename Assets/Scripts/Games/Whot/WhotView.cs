@@ -89,8 +89,6 @@ public class WhotView : BaseGameView
 
     public void Init()
     {
-        WhotHandler whotHandler = new(this);
-        GameManager.Instance.SetGameHandler(whotHandler);
         DOTween.KillAll(true);
         cardPool = new ObjectPool<WhotCard>(cardPrefab.GetComponent<WhotCard>(), 20, cardPoolParent);;
         playersList = new();
@@ -116,7 +114,7 @@ public class WhotView : BaseGameView
     }
 
     #region API Handlers
-    public void HandleJoinMatch(IMatch match)
+    public override void HandleMatchJoin(IMatch match)
     {
         playersParent.gameObject.SetActive(true);
         string labelJson = match.Label;
@@ -126,8 +124,9 @@ public class WhotView : BaseGameView
     }
 
     // Khi có người chơi join hoặc leave
-    public void HandleUpdateTable(UpdateTable data)
+    public override void HandleUpdateTable(IMatchState matchState)
     {
+        var data = UpdateTable.Parser.ParseFrom(matchState.State);
         Debug.Log(data.ToString());
         playersParent.gameObject.SetActive(true);
         gameState = data.GameState;
@@ -272,8 +271,9 @@ public class WhotView : BaseGameView
     }
 
     // Gọi khi bài trên tay của người chơi hiện tại thay đổi
-    public void HandleUpdateDeal(UpdateDeal data)
+    public override void HandleUpdateDeal(IMatchState matchState)
     {
+        var data = UpdateDeal.Parser.ParseFrom(matchState.State);
         playAreaParent.gameObject.SetActive(true);
         List<Card> presenceCard = data.PresenceCard.Cards.ToList();
 
@@ -332,8 +332,9 @@ public class WhotView : BaseGameView
         }
     }
 
-    public void HandleUpdateGameState(UpdateGameState data)
+    public override void HandleUpdateGameState(IMatchState matchState)
     {
+        var data = UpdateGameState.Parser.ParseFrom(matchState.State);
         gameState = data.State;
         switch (gameState)
         {
@@ -360,8 +361,9 @@ public class WhotView : BaseGameView
         }
     }
 
-    public void HandleUpdateTurn(UpdateTurn data)
+    public override void HandleUpdateTurn(IMatchState matchState)
     {
+        var data = UpdateTurn.Parser.ParseFrom(matchState.State);
         if (data.UserId == GetCurrentPlayer().Id)
         {
             yourTurnTransform.gameObject.SetActive(true);
@@ -381,8 +383,9 @@ public class WhotView : BaseGameView
         });
     }
 
-    public void HandleUpdateCardState(UpdateCardState data)
+    public override void HandleUpdateCardState(IMatchState matchState)
     {
+        var data = UpdateCardState.Parser.ParseFrom(matchState.State);
         playAreaParent.gameObject.SetActive(true);
 
         currentEffect = data.Effect;
@@ -479,13 +482,15 @@ public class WhotView : BaseGameView
         }
     }
 
-    public void HandleUpdateWallet(BalanceResult data)
+    public override void HandleUpdateWallet(IMatchState matchState)
     {
+        var data = BalanceResult.Parser.ParseFrom(matchState.State);
         balanceUpdates = data.Updates.ToList();
     }
 
-    public void HandleUpdateFinish(UpdateFinish data)
+    public override void HandleFinish(IMatchState matchState)
     {
+        var data = UpdateFinish.Parser.ParseFrom(matchState.State);
         Sequence sequence = DOTween.Sequence();
         sequence
             .AppendInterval(1.2f)
@@ -502,7 +507,7 @@ public class WhotView : BaseGameView
             });
     }
 
-    public void OnUpdateKickOffTable()
+    public override void HandleUpdateKickOffTheTable(IMatchState matchState)
     {
         Destroy(gameObject);
     }

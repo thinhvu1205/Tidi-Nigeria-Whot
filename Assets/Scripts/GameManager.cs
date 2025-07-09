@@ -6,62 +6,56 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    private IGameHandler _currentHandler;
-
-    public void SetGameHandler(IGameHandler handler)
-    {
-        _currentHandler = handler;
-    }
-
+    
     public void HandleMatchFound(IMatchmakerMatched matchmakerMatched)
     {
-        _currentHandler?.OnMatchFound(matchmakerMatched);
+        UIManager.Instance.gameView.HandleMatchFound(matchmakerMatched);
     }
 
     public void HandleMatchJoin(IMatch match)
     {
-        _currentHandler?.OnMatchJoin(match);
+        UIManager.Instance.gameView.HandleMatchJoin(match);
     }
 
     public void HandleMatchPresence(IMatchPresenceEvent presenceEvent)
     {
-        _currentHandler?.OnMatchPresence(presenceEvent);
+        UIManager.Instance.gameView.HandleMatchPresence(presenceEvent);
     }
 
     public void HandleMatchLeave()
     {
-        _currentHandler?.OnMatchLeave();
+        UIManager.Instance.gameView.HandleMatchLeave();
     }
     
     public void HandleMatchState(IMatchState matchState)
     {
-        if (_currentHandler != null)
+        if (UIManager.Instance.gameView != null)
         {
             switch (matchState.OpCode)
             {
                 case (long)OpCodeUpdate.Table:
-                    _currentHandler?.OnUpdateTable(matchState);
+                    UIManager.Instance.gameView.HandleUpdateTable(matchState);
                     break;
                 case (long)OpCodeUpdate.Deal:
-                    _currentHandler?.OnUpdateDeal(matchState);
+                    UIManager.Instance.gameView.HandleUpdateDeal(matchState);
                     break;
                 case (long)OpCodeUpdate.CardState:
-                    _currentHandler?.OnUpdateCardState(matchState);
+                    UIManager.Instance.gameView.HandleUpdateCardState(matchState);
                     break;
                 case (long)OpCodeUpdate.Turn:
-                    _currentHandler?.OnUpdateTurn(matchState);
+                    UIManager.Instance.gameView.HandleUpdateTurn(matchState);
                     break;
                 case (long)OpCodeUpdate.GameState:
-                    _currentHandler?.OnUpdateGameState(matchState);
+                    UIManager.Instance.gameView.HandleUpdateGameState(matchState);
                     break;
                 case (long)OpCodeUpdate.Wallet:
-                    _currentHandler?.OnUpdateWallet(matchState);
+                    UIManager.Instance.gameView.HandleUpdateWallet(matchState);
                     break;
                 case (long)OpCodeUpdate.OpcodeKickOffTheTable:
-                    _currentHandler?.OnUpdateKickOffTheTable(matchState);
+                    UIManager.Instance.gameView.HandleUpdateKickOffTheTable(matchState);
                     break;
                 case (long)OpCodeUpdate.Finish:
-                    _currentHandler?.OnFinish(matchState);
+                    UIManager.Instance.gameView.HandleFinish(matchState);
                     break; 
             }
         }

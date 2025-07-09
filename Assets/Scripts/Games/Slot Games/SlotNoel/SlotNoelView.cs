@@ -1,10 +1,86 @@
 using System.Collections;
 using System.Collections.Generic;
 using Globals;
+using Nakama;
 using UnityEngine;
 
 public class SlotNoelView : BaseSlotView
 {
+    protected override void Awake()
+    {
+        base.Awake();
+        Init();
+    }
+
+    public void Init()
+    {
+   
+    }
+    
+    #region handle Match
+
+    public override void HandleMatchFound(IMatchmakerMatched matchmakerMatched)
+    {
+        base.HandleMatchFound(matchmakerMatched);
+    }
+
+    public override void HandleMatchJoin(IMatch match)
+    {
+        base.HandleMatchJoin(match);
+    }
+
+    public override void HandleMatchPresence(IMatchPresenceEvent presenceEvent)
+    {
+        base.HandleMatchPresence(presenceEvent);
+    }
+
+    public override void HandleMatchLeave()
+    {
+        base.HandleMatchLeave();
+    }
+
+    public override void HandleUpdateTable(IMatchState matchState)
+    {
+        base.HandleUpdateTable(matchState);
+    }
+
+    public override void HandleUpdateDeal(IMatchState matchState)
+    {
+        base.HandleUpdateDeal(matchState);
+    }
+
+    public override void HandleUpdateTurn(IMatchState matchState)
+    {
+        base.HandleUpdateTurn(matchState);
+    }
+
+    public override void HandleUpdateCardState(IMatchState matchState)
+    {
+        base.HandleUpdateCardState(matchState);
+    }
+
+    public override void HandleUpdateGameState(IMatchState matchState)
+    {
+        base.HandleUpdateGameState(matchState);
+    }
+
+    public override void HandleUpdateWallet(IMatchState matchState)
+    {
+        base.HandleUpdateWallet(matchState);
+    }
+
+    public override void HandleUpdateKickOffTheTable(IMatchState matchState)
+    {
+        base.HandleUpdateKickOffTheTable(matchState);
+    }
+
+    public override void HandleFinish(IMatchState matchState)
+    {
+        base.HandleFinish(matchState);
+    }
+
+    #endregion
+
     protected override void UpdateSpinButtonUI()
     {
         base.UpdateSpinButtonUI();
