@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Api;
 using Nakama;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ public class BaseGameView : BaseView
         
     }
 
-    public virtual void HandleMatchJoin(IMatch match)
+    public virtual void HandleMatchJoin(Match match)
     {
         
     }

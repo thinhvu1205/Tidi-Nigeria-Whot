@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Api;
 using Globals;
 using Nakama;
-using UnityEngine;
+using Color = UnityEngine.Color;
 
 public class SlotNoelView : BaseSlotView
 {
@@ -24,7 +25,7 @@ public class SlotNoelView : BaseSlotView
         base.HandleMatchFound(matchmakerMatched);
     }
 
-    public override void HandleMatchJoin(IMatch match)
+    public override void HandleMatchJoin(Match match)
     {
         base.HandleMatchJoin(match);
     }

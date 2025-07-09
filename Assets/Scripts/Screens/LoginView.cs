@@ -148,9 +148,12 @@ public class LoginView : BaseView
                 {
 
                     Debug.Log($"Joining match with ID: {profile.PlayingMatch.MatchId}");
-                    await DataSender.JoinMatch(profile.PlayingMatch.MatchId);
-                    UIManager.Instance.HandleOpenGame();
-                    Config.currentGameId = profile.PlayingMatch.Code;
+                    var labelMatch = await DataSender.JoinMatch(profile.PlayingMatch.MatchId);
+                    if (labelMatch != null)
+                    {
+                        Config.currentGameId = profile.PlayingMatch.Code;
+                        UIManager.Instance.HandleOpenGame(labelMatch);
+                    }
  
                     // NetworkManager.INSTANCE.OnJoinMatch();
                 }

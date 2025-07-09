@@ -12,7 +12,7 @@ public class GameManager : Singleton<GameManager>
         UIManager.Instance.gameView.HandleMatchFound(matchmakerMatched);
     }
 
-    public void HandleMatchJoin(IMatch match)
+    public void HandleMatchJoin(Match match)
     {
         UIManager.Instance.gameView.HandleMatchJoin(match);
     }

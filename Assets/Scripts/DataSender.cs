@@ -5,6 +5,7 @@ using Api;
 using Cysharp.Threading.Tasks;
 using Google.Protobuf;
 using Nakama;
+using Newtonsoft.Json;
 using SimpleJSON;
 using UnityEngine;
 
@@ -151,8 +152,24 @@ public class DataSender
          var response = await NetworkManager.INSTANCE.RPCSend(CREATE_MATCH, rpcCreateMatchRequest);
          return DecodeFromBase64<RpcCreateMatchResponse>(response.Payload);
     }
+
+    public static async UniTask<Match> JoinMatch(string matchId)
+    {
+        try
+        {
+            var match = await NetworkManager.INSTANCE.JoinMatch(matchId);
+            Match data = JsonConvert.DeserializeObject<Match>(match.Label);
+            return data;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("FindMatch failed: " + ex.Message);
+            UIManager.Instance.OpenDialog("Lỗi khi vào trận : " + ex.Message, null, null);
+            return null;
+        }
+    }
     
-    public static async UniTask JoinMatch(string matchId) => await NetworkManager.INSTANCE.JoinMatch(matchId);
+        
     
     public static async UniTask<RpcFindMatchResponse> QuickMatch(string gameCode)
     {

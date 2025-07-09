@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Api;
 using Cysharp.Threading.Tasks;
 using Globals;
+using Nakama;
 using Spine.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -43,17 +44,21 @@ public class UIManager : Singleton<UIManager>
         Debug.Log("Find match response: " + response.ToString());
         if (response.Matches.Count > 0)
         {
-            await DataSender.JoinMatch(response.Matches[0].MatchId);
-            HandleOpenGame();
+            var labelMatch = await DataSender.JoinMatch(response.Matches[0].MatchId);
+            if (labelMatch != null)
+            {
+                HandleOpenGame(labelMatch);
+            }
         }
     }
     
-    public void HandleOpenGame()
+    public void HandleOpenGame(Match labelMatch)
     {
         if (gameView != null)
         {
             Destroy(gameView.gameObject);
         }
+        
         switch (Config.currentGameId)
         {
             case Constants.WHOT_GAME_ID:
@@ -81,6 +86,7 @@ public class UIManager : Singleton<UIManager>
                 Debug.LogError("Unsupported game ID: " + Config.currentGameId);
                 break;
         }
+        gameView?.HandleMatchJoin(labelMatch);
     }
 
     public void HandleLeaveGame()

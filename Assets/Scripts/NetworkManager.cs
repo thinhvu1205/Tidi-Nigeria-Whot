@@ -114,7 +114,7 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    public async UniTask JoinMatch(string matchId)
+    public async UniTask<IMatch> JoinMatch(string matchId)
     {
         try
         {
@@ -125,16 +125,16 @@ public class NetworkManager : MonoBehaviour
             var match = await _SocketIS.JoinMatchAsync(matchId, properties);
 
             // Lưu lại thông tin match nếu cần
-            _MatchId = matchId;
+            _MatchId = match.Id;
             Config.currentMatchId = matchId;
-            UnityMainThreadDispatcher.Instance.Enqueue(() =>
-            {
-                GameManager.Instance.HandleMatchJoin(match);
-            });
+            return match;
+            
         }
         catch (Exception ex)
         {
-            throw ex;
+            Debug.Log("Err when join match : " + ex.Message);
+            Config.currentMatchId = "";
+            throw;
         }
     }
 
@@ -306,28 +306,28 @@ public class NetworkManager : MonoBehaviour
     private void RegisterCallback()
     {
         _SocketIS.Connected += _OnConnectCb;
-        _SocketIS.ReceivedMatchmakerMatched += async (matched) =>
-        {
-            try
-            {
-                UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                {
-                    GameManager.Instance.HandleMatchFound(matched);
-                });
-                IMatch match = await _SocketIS.JoinMatchAsync(matched);
-
-                UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                {
-                    GameManager.Instance.HandleMatchJoin(match);
-                    _MatchId = matched.MatchId;
-                });
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Error joining match: " + e);
-                throw;
-            }
-        };
+        // _SocketIS.ReceivedMatchmakerMatched += async (matched) =>
+        // {
+        //     try
+        //     {
+        //         UnityMainThreadDispatcher.Instance.Enqueue(() =>
+        //         {
+        //             GameManager.Instance.HandleMatchFound(matched);
+        //         });
+        //         IMatch match = await _SocketIS.JoinMatchAsync(matched);
+        //
+        //         UnityMainThreadDispatcher.Instance.Enqueue(() =>
+        //         {
+        //             GameManager.Instance.HandleMatchJoin(match);
+        //             _MatchId = matched.MatchId;
+        //         });
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         Debug.LogError("Error joining match: " + e);
+        //         throw;
+        //     }
+        // };
         _SocketIS.Closed += _OnCloseCb;
         _SocketIS.ReceivedError += err => _OnErrorCb(err);
         _SocketIS.ReceivedMatchState += state =>
@@ -342,13 +342,13 @@ public class NetworkManager : MonoBehaviour
         {
 
         };
-        _SocketIS.ReceivedMatchPresence += presence =>
-        {
-            UnityMainThreadDispatcher.Instance.Enqueue(() =>
-            {
-                GameManager.Instance.HandleMatchPresence(presence);
-            });
-        };
+        // _SocketIS.ReceivedMatchPresence += presence =>
+        // {
+        //     UnityMainThreadDispatcher.Instance.Enqueue(() =>
+        //     {
+        //         GameManager.Instance.HandleMatchPresence(presence);
+        //     });
+        // };
 
     }
 

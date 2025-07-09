@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Globals;
 using Newtonsoft.Json.Linq;
 using TMPro;
@@ -30,18 +31,16 @@ public class TableItem : MonoBehaviour
         tableNameText.text = roomName;
         tableIDText.text = roomId;
         joinButton.onClick.RemoveAllListeners();
-        joinButton.onClick.AddListener(async () =>
+        joinButton.onClick.AddListener(() => _ = BtnJoinClicked(matchId));
+    }
+
+    private async UniTask BtnJoinClicked(string matchId)
+    {
+        var labelMatch = await DataSender.JoinMatch(matchId);
+        if (labelMatch != null)
         {
-            try
-            {
-                await DataSender.JoinMatch(matchId);
-                UIManager.Instance.HandleOpenGame();
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError("Error joining match: " + ex.Message);
-                UIManager.Instance.OpenDialog(ex.Message, null, null);
-            }
-        });
+            Config.currentGameId = labelMatch.Name;
+            UIManager.Instance.HandleOpenGame(labelMatch);
+        }
     }
 }

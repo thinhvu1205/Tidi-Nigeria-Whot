@@ -114,12 +114,12 @@ public class WhotView : BaseGameView
     }
 
     #region API Handlers
-    public override void HandleMatchJoin(IMatch match)
+    public override void HandleMatchJoin(Match match)
     {
         playersParent.gameObject.SetActive(true);
-        string labelJson = match.Label;
-        Match data = JsonConvert.DeserializeObject<Match>(labelJson);
-        CurrentMarkUnit = data.Bet.MarkUnit;
+        // string labelJson = match.Label;
+        // Match data = JsonConvert.DeserializeObject<Match>(labelJson);
+        CurrentMarkUnit = match.Bet.MarkUnit;
         betText.text = "Bet: " + CurrentMarkUnit;
     }
 
