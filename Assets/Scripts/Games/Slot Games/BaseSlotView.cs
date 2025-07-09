@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Globals;
+using Spine;
 using Spine.Unity;
 using TMPro;
 using UnityEngine;
@@ -17,15 +18,16 @@ public class BaseSlotView : BaseGameView
         HUGE_WIN,
         FREE_SPIN,
         FIVE_OF_A_KIND,
-        SCATTER
+        SCATTER,
+        NONE
     }
     [SerializeField] protected Button maxBetButton, plusBetButton, minusBetButton;
     [SerializeField] protected TextMeshProUGUI betAmountText, betInfoSessionText, betStateText, stateWinText, freeSpinLeftText, bigWinText, chipWinText, currentChipText;
-    [SerializeField] protected Image spinBackgroundImage, chipImage;
+    [SerializeField] protected Image spinBackgroundImage, chipImage, spinButton;
     [SerializeField] protected List<Sprite> stateWinSpriteList, itemSpriteList;
     [SerializeField] protected Transform lineContainer, effectContainer, paylineInfoContainer, columnContainer, coinParent;
     [SerializeField] protected GameObject rulePrefab, linePrefab, coinPrefab, columnPrefab;
-    [SerializeField] protected SkeletonGraphic backgroundFreeSpinAnimation, nearFreeSpinAnimation, buttonSpinAnimation, animationEffect;
+    [SerializeField] protected SkeletonGraphic backgroundFreeSpinAnimation, thirdScatterAnimation, buttonSpinAnimation, animationEffect;
 
     [Header("Constants")]
     protected readonly List<string> colorsList = new List<string>
@@ -44,19 +46,20 @@ public class BaseSlotView : BaseGameView
     protected readonly Vector2 RECT_SIZE = new(200, 170);
 
     protected const float AUTO_SPIN_HOLD_DURATION = 1.3f;
-    protected const string BIG_WIN_ANIMATION_PATH = "SlotSpine/Common/BigWin/skeleton_SkeletonData";
-    protected const string MEGA_WIN_ANIMATION_PATH = "SlotSpine/Common/BigWin/skeleton_SkeletonData";
+    protected const string BIG_WIN_ANIMATION_PATH = "SlotSpine/Noel/big_megawinNoel/skeleton_SkeletonData";
+    protected const string MEGA_WIN_ANIMATION_PATH = "SlotSpine/Noel/big_megawinNoel/skeleton_SkeletonData";
     protected const string HUGE_WIN_ANIMATION_PATH = "SlotSpine/";
     protected const string FIVE_OF_A_KIND_ANIMATION_PATH = "SlotSpine/FiveOfAKind/skeleton_SkeletonData";
     protected const string FREE_SPIN_ANIMATION_PATH = "SlotSpine/freespin/skeleton_SkeletonData";
-    protected const string BIG_WIN_ANIMATION_NAME = "bigwin";
-    protected const string MEGA_WIN_ANIMATION_NAME = "megawin";
+    protected const string BIG_WIN_ANIMATION_NAME = "big";
+    protected const string MEGA_WIN_ANIMATION_NAME = "mega";
     protected const string HUGE_WIN_ANIMATION_NAME = "hugethai";
     protected const string FIVE_OF_A_KIND_ANIMATION_NAME = "animation";
     protected const string FREE_SPIN_ANIMATION_NAME = "eng";
     [Header("Game State")]
     protected SpinType spinType = SpinType.NORMAL;
     protected SlotGameState gameState = SlotGameState.JOIN_GAME;
+    protected WinType winType = WinType.NONE;
 
     [Header(" Object Pools ")]
     protected UnityEngine.Pool.ObjectPool<Image> coinPool;
@@ -67,10 +70,12 @@ public class BaseSlotView : BaseGameView
     protected List<GameObject> allLinesList = new();
     protected List<GameObject> lineOneByOneList = new();
     protected Queue<TweenCallback> tweenQueue = new();
+    protected Sequence lineOneByOneSequence;
     protected long playerWallet;
     protected int totalLineWin;
+    public int ScatterCount { get; set; } = 0;
     public bool IsSpinning { get; set; } = false;
-    protected bool isHoldingSpin, isFreeSpin;
+    protected bool isHoldingSpin, isFreeSpin = false;
     protected float holdingSpinTime = 0;
 
     protected override void Awake()
@@ -78,6 +83,7 @@ public class BaseSlotView : BaseGameView
         base.Awake();
         Init();
         InitColumns();
+        UpdateSpinButtonUI();
     }
 
     protected void Update()
@@ -88,6 +94,8 @@ public class BaseSlotView : BaseGameView
     #region Spin Actions
     protected void OnStartSpin()
     {
+        Debug.Log("START SPIN!!!");
+        UpdateGameState(SlotGameState.SPINNING);
         IsSpinning = true;
         foreach (SlotColumn column in slotColumnList)
         {
@@ -99,42 +107,164 @@ public class BaseSlotView : BaseGameView
     {
         winningLineIdList.Add(1);
         winningLineIdList.Add(2);
-        AnimateCoinsFly();
-        if (CheckFiveOfAKind())
-        {
-            tweenQueue.Enqueue(() => ShowWinAnimation(WinType.FIVE_OF_A_KIND));
-        }
+
+        ///------------------CHECK SHOW WIN SCATTER--------------------//
         // if (CheckWinScatter())
         // {
         //     tweenQueue.Enqueue(() => ShowWinAnimation(WinType.SCATTER));
         // }
-        tweenQueue.Enqueue(() => ShowWinAnimation(WinType.BIG_WIN));
-        // if (winningLineIdList.Count > 0)
-        // {
-        //     tweenQueue.Enqueue(() => ShowAllWinLines());
-        // }
-        // tweenQueue.Enqueue(() => ShowWinLineOneByOne());
+
+        ///------------------CHECK SHOW FIVE OF A KIND--------------------///
+        if (CheckFiveOfAKind())
+        {
+            tweenQueue.Enqueue(() => ShowWinAnimation(WinType.FIVE_OF_A_KIND));
+        }
+
+        ///------------------CHECK SHOW FREESPIN--------------------//
+        if (CheckGetFreeSpin())
+        {
+            // Nếu đang quay thường hoặc quay auto mà đc freespin -> dừng lại
+            tweenQueue.Enqueue(() => ShowWinAnimation(WinType.FREE_SPIN));
+        }
+        
+        ///------------------CHECK SHOW ALL LINE--------------------///
+        if (winningLineIdList.Count > 0)
+        {
+            tweenQueue.Enqueue(() => ShowAllWinLines());
+        }
+
+
+        ///------------------CHECK SHOW TYPE WIN--------------------///
+        if (!isFreeSpin)
+        {
+            switch (winType)
+            {
+                case WinType.BIG_WIN:
+                    tweenQueue.Enqueue(() => ShowWinAnimation(WinType.BIG_WIN));
+                    break;
+                case WinType.MEGA_WIN:
+                    tweenQueue.Enqueue(() => ShowWinAnimation(WinType.MEGA_WIN));
+                    break;
+                case WinType.HUGE_WIN:
+                    tweenQueue.Enqueue(() => ShowWinAnimation(WinType.HUGE_WIN));
+                    break;
+            }
+        }
+
+        ///------------------CHECK SHOW ONE BY ONE--------------------//
+        if (winningLineIdList.Count > 0)
+        {
+            if (spinType == SpinType.NORMAL)
+            {
+                // if (freespinLeft == 0) listActionHandleSpin.Add(acShowOneWinLine);
+                tweenQueue.Enqueue(() => ShowWinLineOneByOne());
+            }
+            else if (spinType == SpinType.AUTO || spinType == SpinType.FREE_AUTO)
+            {
+                if (winningLineIdList.Count == 1) tweenQueue.Enqueue(() => ShowWinLineOneByOne());
+                // if (!isInFreeSpin) listActionHandleSpin.Add(acShowAnimChipBay);
+            }
+        }
 
         NextTween();
+    }
+
+    public void OnColumnStop(int columnIndex)
+    {
+        if (slotColumnList[columnIndex].IsShowingThirdScatter)
+        {
+            slotColumnList[columnIndex].IsShowingThirdScatter = false;
+            HideThirdScatterColumn();
+        }
+    }
+
+    public void CheckThirdScatter(int columnIndex)
+    {
+        Debug.Log("SCATTER COUNT: " + ScatterCount);
+        if (ScatterCount == 2)
+        {
+            foreach (SlotColumn column in slotColumnList)
+            {
+                if (column.IsSpinning)
+                {
+                    column.ExtraTime += 2f;
+                }
+            }
+            slotColumnList[columnIndex + 1].IsShowingThirdScatter = true;
+            ShowThirdScatterColumn(columnIndex + 1);
+        }
     }
     #endregion
 
     #region Buttons
-    public void OnClickSpinButton()
-    {
-        OnStartSpin();
-    }
-
     // giữ nút spin
     public void OnTriggerDownSpinButton()
     {
-
+        holdingSpinTime = 0f;
+        isHoldingSpin = true;
     }
 
     // thả nút spin
     public void OnTriggerUpSpinButton()
     {
+        isHoldingSpin = false;
+        if (holdingSpinTime < AUTO_SPIN_HOLD_DURATION)
+        {
+            if (spinType == SpinType.NORMAL || spinType == SpinType.FREE_NORMAL)
+            {
+                switch (gameState)
+                {
+                    case SlotGameState.PREPARE:
+                    case SlotGameState.JOIN_GAME:
+                        OnStartSpin();
+                        break;
+                    case SlotGameState.SHOWING_RESULT:
+                        tweenQueue.Clear();
+                        NextTween();
+                        break;
 
+                }
+            }
+            else
+            {
+                switch (gameState)
+                {
+                    case SlotGameState.SPINNING:
+                    case SlotGameState.SHOWING_RESULT:
+                        spinType = SpinType.NORMAL;
+                        UpdateSpinButtonUI();
+                        break;
+
+                }
+                tweenQueue.Clear();
+                NextTween();
+                // spinType = SpinType.NORMAL;
+            }
+        }
+
+    }
+    protected void HandleHoldingSpin()
+    {
+        // Ko Auto thì mới hold dc
+        if (isHoldingSpin && spinType != SpinType.AUTO && spinType != SpinType.FREE_AUTO)
+        {
+            holdingSpinTime += Time.deltaTime;
+            if (holdingSpinTime > AUTO_SPIN_HOLD_DURATION)
+            {
+                // if (agPlayer < totalListBetRoom[currentMarkBet])
+                // {
+                //     lbInfoSession.text = Config.getTextConfig("msg_warrning_send");
+                //     return;
+                // }
+                if (spinType == SpinType.NORMAL)
+                    spinType = SpinType.AUTO;
+                else
+                    spinType = SpinType.FREE_AUTO;
+                OnStartSpin();
+                UpdateSpinButtonUI();
+                isHoldingSpin = false;
+            }
+        }
     }
 
     public void OnClickPlusBetButton()
@@ -169,25 +299,6 @@ public class BaseSlotView : BaseGameView
 
     #endregion
 
-    protected void HandleHoldingSpin()
-    {
-        if (isHoldingSpin)
-        {
-            holdingSpinTime += Time.deltaTime;
-            if (holdingSpinTime > AUTO_SPIN_HOLD_DURATION)
-            {
-                // if (agPlayer < totalListBetRoom[currentMarkBet])
-                // {
-                //     lbInfoSession.text = Config.getTextConfig("msg_warrning_send");
-                //     return;
-                // }
-                spinType = SpinType.AUTO;
-
-                OnClickSpinButton();
-                isHoldingSpin = false;
-            }
-        }
-    }
 
     #region Win Effects
     protected void ShowAllWinLines()
@@ -212,7 +323,7 @@ public class BaseSlotView : BaseGameView
 
         // Show Line từ listLine
         int totalLines = allLinesList.Count;
-        Sequence sequence = DOTween.Sequence().SetAutoKill(true);;
+        Sequence sequence = DOTween.Sequence().SetAutoKill(true); ;
 
         // Hiện line lên, mỗi line cách nhau 0.1s
         for (int i = 0; i < totalLines; i++)
@@ -239,7 +350,8 @@ public class BaseSlotView : BaseGameView
 
     protected void ShowWinLineOneByOne()
     {
-
+        AnimateCoinsFly();
+        UpdateGameState(SlotGameState.SHOWING_RESULT);
         for (int i = 0; i < winningLineIdList.Count; i++)
         {
 
@@ -249,16 +361,15 @@ public class BaseSlotView : BaseGameView
             List<int> lineWinID = new() { 0, 2, 1, 2, 0 };
             ColorUtility.TryParseHtmlString(colorsList[lineId % colorsList.Count], out Color colorLine);
 
-            Sequence sequence = DOTween.Sequence().SetAutoKill(true);;
+            lineOneByOneSequence = DOTween.Sequence();
             // sequence.Add(s);
-            sequence
+            lineOneByOneSequence
                 .AppendInterval(2.0f * i)
                 .AppendCallback(() =>
                 {
                     if (transform == null)
                     {
-                        DOTween.Kill(sequence);
-
+                        DOTween.Kill(lineOneByOneSequence);
                     }
                     else
                     {
@@ -300,7 +411,6 @@ public class BaseSlotView : BaseGameView
 
     private void ShowWinAnimation(WinType winType)
     {
-        Debug.Log("Show Animation: " + winType);
         effectContainer.gameObject.SetActive(true);
         animationEffect.gameObject.SetActive(true);
 
@@ -310,6 +420,8 @@ public class BaseSlotView : BaseGameView
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
                 Utility.TweenNumberTo(bigWinText, 100000, 0, 2.0f);
+                animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
+                animationEffect.transform.localPosition = new Vector2(0, -70);
                 Utility.PlayAnimationByPath(animationEffect, BIG_WIN_ANIMATION_PATH, BIG_WIN_ANIMATION_NAME, false);
 
                 break;
@@ -317,14 +429,22 @@ public class BaseSlotView : BaseGameView
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
                 Utility.TweenNumberTo(bigWinText, 100000, 0, 2.0f);
+                animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
+                animationEffect.transform.localPosition = new Vector2(0, -70);
                 Utility.PlayAnimationByPath(animationEffect, MEGA_WIN_ANIMATION_PATH, MEGA_WIN_ANIMATION_NAME, false);
                 break;
             case WinType.HUGE_WIN:
                 break;
             case WinType.FIVE_OF_A_KIND:
+                animationEffect.transform.localScale = Vector2.one;
+                animationEffect.transform.localPosition = Vector2.zero;
+                bigWinText.transform.parent.gameObject.SetActive(false);
                 Utility.PlayAnimationByPath(animationEffect, FIVE_OF_A_KIND_ANIMATION_PATH, FIVE_OF_A_KIND_ANIMATION_NAME, false);
                 break;
             case WinType.FREE_SPIN:
+                animationEffect.transform.localScale = Vector2.one;
+                animationEffect.transform.localPosition = Vector2.zero;
+                bigWinText.transform.parent.gameObject.SetActive(false);
                 Utility.PlayAnimationByPath(animationEffect, FREE_SPIN_ANIMATION_PATH, FREE_SPIN_ANIMATION_NAME, false);
                 break;
 
@@ -334,10 +454,20 @@ public class BaseSlotView : BaseGameView
         {
             effectContainer.gameObject.SetActive(false);
             bigWinText.transform.parent.gameObject.SetActive(false);
-            gameState = SlotGameState.SHOWING_RESULT;
             NextTween();
             effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
         };
+    }
+
+    private void ShowThirdScatterColumn(int indexCol)
+    {
+        thirdScatterAnimation.gameObject.SetActive(true);
+        thirdScatterAnimation.transform.localPosition = new Vector2(thirdScatterAnimation.transform.parent.InverseTransformPoint(slotColumnList[indexCol].transform.position).x, thirdScatterAnimation.transform.localPosition.y);
+    }
+
+    private void HideThirdScatterColumn()
+    {
+        thirdScatterAnimation.gameObject.SetActive(false);
     }
 
     private void HideWinAnimation()
@@ -352,7 +482,13 @@ public class BaseSlotView : BaseGameView
 
     private bool CheckFiveOfAKind()
     {
-        return true;
+        return false;
+    }
+
+    private bool CheckGetFreeSpin()
+    {
+
+        return false;
     }
     #endregion
 
@@ -421,6 +557,7 @@ public class BaseSlotView : BaseGameView
         {
             int itemIndex = lineWinID[colIndex];
             slotColumnList[colIndex].SetLightItemAtIndex(itemIndex);
+            slotColumnList[colIndex].SetAnimationForItemAtIndex(itemIndex);
         }
 
         // Bước 4: Vẽ line highlight
@@ -541,6 +678,37 @@ public class BaseSlotView : BaseGameView
     #endregion
 
     #region UI
+    protected virtual void UpdateSpinButtonUI()
+    {
+        if (spinType == SpinType.NORMAL)
+        {
+            switch (gameState)
+            {
+                case SlotGameState.PREPARE:
+                case SlotGameState.JOIN_GAME:
+                    break;
+                case SlotGameState.SPINNING:
+                    break;
+                case SlotGameState.SHOWING_RESULT:
+
+                    break;
+            }
+        }
+        else
+        {
+            switch (gameState)
+            {
+                case SlotGameState.PREPARE:
+                case SlotGameState.JOIN_GAME:
+
+                    break;
+                case SlotGameState.SPINNING:
+                    break;
+                case SlotGameState.SHOWING_RESULT:
+                    break;
+            }
+        }
+    }
     protected void SetInfoSessionText(string text)
     {
         betInfoSessionText.gameObject.SetActive(true);
@@ -636,6 +804,23 @@ public class BaseSlotView : BaseGameView
             TweenCallback nextTween = tweenQueue.Dequeue();
             DOTween.Sequence().AppendCallback(nextTween);
         }
+        // Hết tween = hết show win line
+        else
+        {
+            if (CheckGetFreeSpin())
+            {
+                if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO)
+                {
+                    spinType = SpinType.FREE_NORMAL;
+                }
+            }
+            Reset();
+            // Nếu đang auto spin thì spin tiếp
+            if (spinType == SpinType.AUTO || spinType == SpinType.FREE_AUTO)
+            {
+                OnStartSpin();
+            }
+        }
     }
 
     protected void SetDarkAllItems()
@@ -655,25 +840,37 @@ public class BaseSlotView : BaseGameView
             column.SetLightAllItems();
         }
     }
-    
+
+    private void UpdateGameState(SlotGameState gameState)
+    {
+        this.gameState = gameState;
+        UpdateSpinButtonUI();
+    }
+
     private void Reset()
     {
-        gameState = SlotGameState.PREPARE;
-
+        if (spinType == SpinType.NORMAL || spinType == SpinType.FREE_NORMAL)
+        {
+            UpdateGameState(SlotGameState.PREPARE);
+        }
+        if (lineOneByOneSequence.IsActive())
+        {
+            lineOneByOneSequence.Kill();
+        }
         allLinesList.Clear();
         lineOneByOneList.Clear();
         winningLineIdList.Clear();
         SetLightAllItems();
-        foreach (GameObject lineRect in allLinesList)
+        foreach (Transform lineRect in lineContainer)
         {
-            Destroy(lineRect);
+            Destroy(lineRect.gameObject);
         }
-        foreach (GameObject lineStraight in lineOneByOneList)
+        foreach (SlotColumn column in slotColumnList)
         {
-            Destroy(lineStraight);
+            column.ExtraTime = 0f;
         }
         SetInfoSessionText("");
-   
+        ScatterCount = 0;
         paylineInfoContainer.gameObject.SetActive(false);
 
 
@@ -722,4 +919,6 @@ public class BaseSlotView : BaseGameView
     }
 
     #endregion
+
+    public SpinType GetSpinType() => spinType;
 }

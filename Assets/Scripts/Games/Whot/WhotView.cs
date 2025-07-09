@@ -1197,7 +1197,7 @@ public class WhotView : BaseGameView
 
     public void OnQuitMatch()
     {
-        if (new GameState[] { GameState.Idle, GameState.Matching, GameState.Preparing, GameState.Finish }.Contains(gameState) || !GetCurrentPlayer().isPlaying)
+        if (new GameState[] { GameState.Idle, GameState.Matching, GameState.Finish }.Contains(gameState) || !GetCurrentPlayer().isPlaying)
         {
             NetworkManager.INSTANCE.LeaveMatch();
             Destroy(gameObject);

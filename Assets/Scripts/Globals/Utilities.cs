@@ -512,8 +512,8 @@ namespace Globals
         public static void PlayAnimationByPath(SkeletonGraphic skeletonGraphic, string path, string animationName = "", bool loop = true)
         {
             skeletonGraphic.TrimRenderers();
-            skeletonGraphic.transform.localScale = Vector3.one;
-            skeletonGraphic.transform.localPosition = Vector3.zero;
+            // skeletonGraphic.transform.localScale = Vector3.one;
+            // skeletonGraphic.transform.localPosition = Vector3.zero;
             skeletonGraphic.skeletonDataAsset = UIManager.Instance.LoadSkeletonData(path);
             skeletonGraphic.Initialize(true);
             if (!string.IsNullOrEmpty(animationName))
