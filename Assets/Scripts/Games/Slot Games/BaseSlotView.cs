@@ -1,14 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Api;
 using DG.Tweening;
 using Globals;
+using Google.Protobuf;
 using Spine;
 using Spine.Unity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
+using Color = UnityEngine.Color;
 public class BaseSlotView : BaseGameView
 {
     protected enum WinType
@@ -63,6 +65,7 @@ public class BaseSlotView : BaseGameView
 
     [Header(" Object Pools ")]
     protected UnityEngine.Pool.ObjectPool<Image> coinPool;
+    protected UnityEngine.Pool.ObjectPool<GameObject> linePool;
 
     [Header("Game Data")]
     protected List<SlotColumn> slotColumnList = new();
@@ -216,6 +219,13 @@ public class BaseSlotView : BaseGameView
                 {
                     case SlotGameState.PREPARE:
                     case SlotGameState.JOIN_GAME:
+                        InfoBet infoBet = new()
+                        {
+                            Id = 1,
+                            Chips = 2,
+                            NUserBet = 3
+                        };
+                        // DataSender.SendMatchState((long)OpCodeRequest.Spin, infoBet.ToByteArray());
                         OnStartSpin();
                         break;
                     case SlotGameState.SHOWING_RESULT:
@@ -341,7 +351,7 @@ public class BaseSlotView : BaseGameView
             {
                 foreach (GameObject line in allLinesList)
                 {
-                    Destroy(line);
+                    linePool.Release(line);
                 }
                 SetLightAllItems();
                 NextTween();
@@ -385,7 +395,7 @@ public class BaseSlotView : BaseGameView
                 {
                     foreach (GameObject line in lineOneByOneList)
                     {
-                        Destroy(line);
+                        linePool.Release(line);
                     }
                     lineOneByOneList.Clear();
                 })
@@ -499,7 +509,7 @@ public class BaseSlotView : BaseGameView
         Vector2 lastPosition = new(positionList[^1].x + 90, positionList[^1].y);
         positionList.Insert(0, startPosition);
         positionList.Add(lastPosition);
-        GameObject line = Instantiate(linePrefab, lineContainer);
+        GameObject line = linePool.Get();
 
         RectTransform rectTransform = line.GetComponent<RectTransform>();
         rectTransform.localPosition = new Vector3(rectTransform.localPosition.x, rectTransform.localPosition.y, 0);
@@ -511,7 +521,7 @@ public class BaseSlotView : BaseGameView
 
     private void DrawLineBetween2Points(List<Vector2> listPos, Color colorLine)
     {
-        GameObject line = Instantiate(linePrefab, lineContainer.transform);
+        GameObject line = linePool.Get();
         line.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
         lineOneByOneList.Add(line);
         LineController lineController = line.GetComponent<LineController>();
@@ -520,7 +530,7 @@ public class BaseSlotView : BaseGameView
 
     private void DrawSquare(Vector2 startPos, Color colorLine)
     {
-        GameObject lineRect = Instantiate(linePrefab, lineContainer);
+        GameObject lineRect = linePool.Get();
         RectTransform rectTransform = lineRect.GetComponent<RectTransform>();
         rectTransform.localPosition = new Vector3(rectTransform.localPosition.x, rectTransform.localPosition.y, 0);
         LineController lineController = lineRect.GetComponent<LineController>();
@@ -783,6 +793,30 @@ public class BaseSlotView : BaseGameView
             defaultCapacity: 10,     // số lượng khởi tạo
             maxSize: 20             // tối đa object trong pool
         );
+        linePool = new UnityEngine.Pool.ObjectPool<GameObject>(
+            createFunc: () =>
+            {
+                var line = Instantiate(linePrefab, lineContainer);
+                line.SetActive(false); // bắt đầu ẩn
+                return line;
+            },
+            actionOnGet: (line) =>
+            {
+                line.SetActive(true);
+                line.transform.localScale = Vector3.one;
+            },
+            actionOnRelease: (line) =>
+            {
+                line.SetActive(false);
+            },
+            actionOnDestroy: (line) =>
+            {
+                Destroy(line);
+            },
+            collectionCheck: false,  // không cần check trùng (cho nhanh)
+            defaultCapacity: 20,     // số lượng khởi tạo
+            maxSize: 100             // tối đa object trong pool
+        );
     }
 
 
@@ -863,7 +897,7 @@ public class BaseSlotView : BaseGameView
         SetLightAllItems();
         foreach (Transform lineRect in lineContainer)
         {
-            Destroy(lineRect.gameObject);
+            linePool.Release(lineRect.gameObject);
         }
         foreach (SlotColumn column in slotColumnList)
         {

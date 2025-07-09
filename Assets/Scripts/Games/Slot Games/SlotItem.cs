@@ -66,11 +66,10 @@ public class SlotItem : MonoBehaviour
         Vector3 nextPos = rect.localPosition - new Vector3(0, rect.sizeDelta.y, 0);
         Vector3 localPos = rect.localPosition;
 
-        // float moveSpeed = Speed * (CollumSpinCtrl.gameView.countScatter > 2 ? 1.75f : 1);
         float multiplier = column.GetScatterCount() > 2 ? 1.75f : 1f;
         float moveSpeed = Speed * multiplier;
             rect.DOBlendableLocalMoveBy(new Vector2(0, -rect.sizeDelta.y), moveSpeed)
-            .SetEase(Ease.Linear) // Quan trọng: để tốc độ đều
+            .SetEase(Ease.Linear)
             .OnComplete(() =>
             {
                 position--;
