@@ -40,7 +40,7 @@ public class GameIcon : MonoBehaviour
         }
         else
         {
-            UIManager.Instance.HandleOpenGame();
+            _ = UIManager.Instance.HandleFindMatch(0);
         }
     }
 

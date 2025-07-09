@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Api;
+using Cysharp.Threading.Tasks;
 using Globals;
 using Newtonsoft.Json.Linq;
 using TMPro;
@@ -26,31 +27,7 @@ public class BetItem : MonoBehaviour
         {
             backgroundImage.sprite = backgroundSpriteList[index % 4];
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(async () =>
-            {
-                try
-                {
-                    RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, (int)dataItem.MarkUnit, true);
-                    Debug.Log("Find match response: " + response.ToString());
-                    if (response.Matches.Count > 0)
-                    {
-                        try
-                        {
-                            await DataSender.JoinMatch(response.Matches[0].MatchId);
-                            UIManager.Instance.HandleOpenGame();
-                        }
-                        catch (Exception joinEx)
-                        {
-                            Debug.Log("Error joining match: " + joinEx.Message);
-                            UIManager.Instance.OpenDialog(joinEx.Message, null, null);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    UIManager.Instance.OpenDialog(ex.Message, null, null);
-                }
-            });
+            button.onClick.AddListener(() => _ = UIManager.Instance.HandleFindMatch((int) dataItem.MarkUnit));
         }
         else
         {
@@ -58,8 +35,6 @@ public class BetItem : MonoBehaviour
             betAmountText.font = disableFont;
             betTitleText.color = disabledTitleTextColor;
             playerCountText.color = disablePlayerCountTextColor;
-
-
         }
     }
 }

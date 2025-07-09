@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Api;
+using Cysharp.Threading.Tasks;
 using Globals;
 using Spine.Unity;
 using UnityEngine;
@@ -9,13 +11,13 @@ using UnityEngine.SceneManagement;
 public class UIManager : Singleton<UIManager>
 {
     private Transform parentPopups, parentGames, parentBanners, parentLobby, parentLoading;
-    private BaseView currentView;
+    [HideInInspector] public BaseGameView gameView;
     private const string POPUP_PARENT_TAG = "Parent Popups";
     private const string GAME_PARENT_TAG = "Parent Games";
     private const string BANNER_PARENT_TAG = "Parent Banner";
     private const string LOBBY_PARENT_TAG = "Parent Lobby";
     private const string LOADING_PARENT_TAG = "Parent Loading";
-
+    
     protected override void Awake()
     {
         base.Awake();
@@ -33,62 +35,63 @@ public class UIManager : Singleton<UIManager>
     }
 
     #region Games
-    public void OpenGame(string game)
+
+    public async UniTask HandleFindMatch(int markUnit)
     {
-        currentView = null;
-        switch (game)
+        RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, true);
+        if (response == null) return;
+        Debug.Log("Find match response: " + response.ToString());
+        if (response.Matches.Count > 0)
         {
-            case "whot":
-                currentView = Instantiate(LoadPrefabGame("Whot/WhotView"), parentGames).GetComponent<WhotView>();
-                Config.currentGameView = (BaseGameView)currentView;
-                break;
-            default:
-                Debug.LogError("Game not found: " + game);
-                break;
+            await DataSender.JoinMatch(response.Matches[0].MatchId);
+            HandleOpenGame();
         }
     }
-
+    
     public void HandleOpenGame()
     {
+        if (gameView != null)
+        {
+            Destroy(gameView.gameObject);
+        }
         switch (Config.currentGameId)
         {
             case Constants.WHOT_GAME_ID:
-                currentView = Instantiate(LoadPrefabGame("Whot/WhotView"), parentGames).GetComponent<WhotView>();
+                gameView = Instantiate(LoadPrefabGame("Whot/WhotView"), parentGames).GetComponent<WhotView>();
                 break;
             case Constants.NOEL_GAME_ID:
-                currentView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
+                gameView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
                 break;
             case Constants.TARZAN_GAME_ID:
-                currentView = Instantiate(LoadPrefabGame("Tarzan/TarzanView"), parentGames).GetComponent<SlotNoelView>();
+                gameView = Instantiate(LoadPrefabGame("Tarzan/TarzanView"), parentGames).GetComponent<SlotNoelView>();
                 break;
             case Constants.FRUIT_SLOT_GAME_ID:
-                currentView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
+                gameView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
                 break;
             case Constants.INCA_GAME_ID:
-                currentView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
+                gameView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
                 break;
             case Constants.SIXIANG_GAME_ID:
-                currentView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
+                gameView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
                 break;
             case Constants.JUICY_GARDEN_GAME_ID:
-                currentView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
+                gameView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
                 break;
             default:
                 Debug.LogError("Unsupported game ID: " + Config.currentGameId);
                 break;
         }
-        Config.currentGameView = (BaseGameView)currentView;
     }
 
     public void HandleLeaveGame()
     {
-        currentView = null;
-        Config.currentGameView = null;
+        gameView = null;
         foreach (Transform item in parentGames)
         {
             Destroy(item.gameObject);
         }
     }
+    
     #endregion
 
     #region Popups
@@ -206,10 +209,7 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenRule()
     {
-        if (currentView is BaseGameView gameView)
-        {
-            gameView.OpenRule();
-        }
+        gameView.OpenRule();
     }
 
     public void OpenWebView(string url = "", string title = "")

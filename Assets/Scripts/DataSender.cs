@@ -103,21 +103,41 @@ public class DataSender
         var response = await NetworkManager.INSTANCE.RPCSend(GET_PLAYER_COUNT_BY_BET, betListRequest);
         return DecodeFromBase64<PlayerCountByBetResponse>(response.Payload);
     }
+    
     #region Match
-
-
+    
     public static async UniTask<RpcFindMatchResponse> FindMatch(string gameCode, int markUnit, bool isCreateGame)
     {
-        RpcFindMatchRequest rpcFindMatchRequest = new() { GameCode = gameCode, MarkUnit = markUnit, Create = isCreateGame };
-        var response = await NetworkManager.INSTANCE.RPCSend(FIND_MATCH, rpcFindMatchRequest);
-        Debug.Log("FindMatch response: " + response.Payload);
-        if (string.IsNullOrEmpty(response.Payload) || response.Payload == "[]")
+        try
         {
-            Debug.Log("FindMatch response payload is empty");
+            RpcFindMatchRequest rpcFindMatchRequest = new()
+            {
+                GameCode = gameCode,
+                MarkUnit = markUnit,
+                Create = isCreateGame,
+                WithNonOpen = false
+            };
+
+            var response = await NetworkManager.INSTANCE.RPCSend(FIND_MATCH, rpcFindMatchRequest);
+
+            Debug.Log("FindMatch response: " + response.Payload);
+
+            if (string.IsNullOrEmpty(response.Payload) || response.Payload == "[]")
+            {
+                Debug.Log("FindMatch response payload is empty");
+                return null;
+            }
+
+            return DecodeFromBase64<RpcFindMatchResponse>(response.Payload);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("FindMatch failed: " + ex.Message);
+            UIManager.Instance.OpenDialog("Lỗi khi vào trận : " + ex.Message, null, null);
             return null;
         }
-        return DecodeFromBase64<RpcFindMatchResponse>(response.Payload);
     }
+
 
     public static void MakingMatch(string gameCode)
     {
@@ -131,7 +151,9 @@ public class DataSender
          var response = await NetworkManager.INSTANCE.RPCSend(CREATE_MATCH, rpcCreateMatchRequest);
          return DecodeFromBase64<RpcCreateMatchResponse>(response.Payload);
     }
+    
     public static async UniTask JoinMatch(string matchId) => await NetworkManager.INSTANCE.JoinMatch(matchId);
+    
     public static async UniTask<RpcFindMatchResponse> QuickMatch(string gameCode)
     {
         RpcFindMatchRequest rpcFindMatchRequest = new() { GameCode = gameCode, Create = true };
@@ -139,7 +161,9 @@ public class DataSender
         Debug.Log("Quick match response: " + response.Payload);
         return DecodeFromBase64<RpcFindMatchResponse>(response.Payload);
     }
+    
     public static void LeaveMatch() => NetworkManager.INSTANCE.LeaveMatch();
+    
     public static void SendMatchState(long opCode, byte[] data)
     {
         Debug.Log("SendMatchState opCode: " + opCode + ", data: " + BitConverter.ToString(data));

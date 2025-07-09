@@ -119,32 +119,7 @@ public class WhotMatchResult : MonoBehaviour
     private void SetWinMoreButtonListener()
     {
         winMoreButton.onClick.RemoveAllListeners();
-        winMoreButton.onClick.AddListener(async () =>
-        { 
-            try
-            {
-                RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, (int)higherMarkUnit, true);
-                Debug.Log("Find match response: " + response.ToString());
-                if (response.Matches.Count > 0)
-                {
-                    try
-                    {
-                        await DataSender.JoinMatch(response.Matches[0].MatchId);
-                        Destroy(whotGame.gameObject);
-                        UIManager.Instance.HandleOpenGame();
-                    }
-                    catch (Exception joinEx)
-                    {
-                        Debug.Log("Error joining match: " + joinEx.Message);
-                        UIManager.Instance.OpenDialog(joinEx.Message, null, null);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                UIManager.Instance.OpenDialog(ex.Message, null, null);
-            }
-        });
+        winMoreButton.onClick.AddListener( () => _ = UIManager.Instance.HandleFindMatch((int)higherMarkUnit));
     }
 
 
