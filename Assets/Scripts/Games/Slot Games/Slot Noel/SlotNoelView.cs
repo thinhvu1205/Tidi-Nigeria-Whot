@@ -66,11 +66,6 @@ public class SlotNoelView : BaseSlotView
         base.HandleMatchFound(matchmakerMatched);
     }
 
-    public override void HandleMatchJoin(IMatch match)
-    {
-        base.HandleMatchJoin(match);
-    }
-
     public override void HandleMatchPresence(IMatchPresenceEvent presenceEvent)
     {
         base.HandleMatchPresence(presenceEvent);

@@ -106,12 +106,6 @@ public class BaseSlotView : BaseGameView
     }
 
     #region API Handlers
-    public override void HandleMatchJoin(IMatch match)
-    {
-        base.HandleMatchJoin(match);
-        string labelJson = match.Label;
-        Match data = JsonConvert.DeserializeObject<Match>(labelJson);
-    }
     public override void HandleUpdateTable(IMatchState matchState)
     {
         base.HandleUpdateTable(matchState);
