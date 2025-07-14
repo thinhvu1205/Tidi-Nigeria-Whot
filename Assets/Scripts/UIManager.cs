@@ -61,6 +61,30 @@ public class UIManager : Singleton<UIManager>
             }
         }
     }
+
+    public async UniTask HandleQuickMatch()
+    {
+        RpcFindMatchResponse response = await DataSender.QuickMatch(Config.currentGameId);
+        if (response == null) return;
+        Debug.Log("Quick match response: " + response.ToString());
+        var labelMatch = await DataSender.JoinMatch(response.Matches[0].MatchId);
+        if (labelMatch != null)
+        {
+            HandleOpenGame(labelMatch);
+        }
+    }
+    
+    public async UniTask HandleCreateMatch(string passWord, int markUnit, string customData)
+    {
+        RpcCreateMatchResponse response = await DataSender.CreateMatch(Config.currentGameId ,passWord, markUnit, customData);
+        if (response == null) return;
+        Debug.Log("Create match response: " + response.ToString());
+        var labelMatch = await DataSender.JoinMatch(response.MatchId);
+        if (labelMatch != null)
+        {
+            HandleOpenGame(labelMatch);
+        }
+    }
     
     public void HandleOpenGame(Match labelMatch)
     {

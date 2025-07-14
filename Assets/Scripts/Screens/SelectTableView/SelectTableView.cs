@@ -178,9 +178,9 @@ public class SelectTableView : BaseView
         GetListTableByMarkUnit(currentMarkUnitTab).Forget();
     }
 
-    public async void OnClickQuickStart()
+    public void OnClickQuickStart()
     {
-        await DataSender.QuickMatch(Config.currentGameId);
+        _ = UIManager.Instance.HandleQuickMatch();
     }
 
     public void OnClickCreateTable()

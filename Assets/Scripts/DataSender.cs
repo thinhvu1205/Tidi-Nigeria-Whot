@@ -120,9 +120,7 @@ public class DataSender
             };
 
             var response = await NetworkManager.INSTANCE.RPCSend(FIND_MATCH, rpcFindMatchRequest);
-
-            Debug.Log("FindMatch response: " + response.Payload);
-
+            
             if (string.IsNullOrEmpty(response.Payload) || response.Payload == "[]")
             {
                 Debug.Log("FindMatch response payload is empty");
@@ -134,7 +132,7 @@ public class DataSender
         catch (Exception ex)
         {
             Debug.LogError("FindMatch failed: " + ex.Message);
-            UIManager.Instance.OpenDialog("Lỗi khi vào trận : " + ex.Message, null, null);
+            UIManager.Instance.OpenDialog("FindMatch failed : " + ex.Message, null, null);
             return null;
         }
     }
@@ -145,12 +143,26 @@ public class DataSender
     //     NetworkManager.INSTANCE.MakingMatch(gameCode);
     // }
 
-    public static async UniTask<RpcCreateMatchResponse> CreateMatch(string gameCode)
+    public static async UniTask<RpcCreateMatchResponse> CreateMatch(string gameCode, string passWord, int markUnit, string customData)
     {
-         // NetworkManager.INSTANCE.CreateMatch(gameCode);
-         RpcCreateMatchRequest rpcCreateMatchRequest = new() { GameCode = gameCode, MaxSize = 4, Name = "assassin", MarkUnit = 0};
-         var response = await NetworkManager.INSTANCE.RPCSend(CREATE_MATCH, rpcCreateMatchRequest);
-         return DecodeFromBase64<RpcCreateMatchResponse>(response.Payload);
+        try
+        {
+            RpcCreateMatchRequest rpcCreateMatchRequest = new() { GameCode = gameCode, Password = passWord, MarkUnit = markUnit, CustomData = customData };
+            Debug.Log("CreateMatch with data : " + rpcCreateMatchRequest.ToString());
+            var response = await NetworkManager.INSTANCE.RPCSend(CREATE_MATCH, rpcCreateMatchRequest);
+            if (string.IsNullOrEmpty(response.Payload) || response.Payload == "[]")
+            {
+                Debug.Log("CreateMatch response payload is empty");
+                return null;
+            }
+            return DecodeFromBase64<RpcCreateMatchResponse>(response.Payload);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("CreateMatch failed : " + ex.Message);
+            UIManager.Instance.OpenDialog("CreateMatch failed : " + ex.Message, null, null);
+            return null;
+        }
     }
 
     public static async UniTask<Match> JoinMatch(string matchId)
@@ -163,20 +175,32 @@ public class DataSender
         }
         catch (Exception ex)
         {
-            Debug.LogError("FindMatch failed: " + ex.Message);
+            Debug.LogError("JoinMatch failed: " + ex.Message);
             UIManager.Instance.OpenDialog("Lỗi khi vào trận : " + ex.Message, null, null);
             return null;
         }
     }
     
-        
-    
     public static async UniTask<RpcFindMatchResponse> QuickMatch(string gameCode)
     {
-        RpcFindMatchRequest rpcFindMatchRequest = new() { GameCode = gameCode, Create = true };
-        var response = await NetworkManager.INSTANCE.RPCSend(QUICK_MATCH, rpcFindMatchRequest);
-        Debug.Log("Quick match response: " + response.Payload);
-        return DecodeFromBase64<RpcFindMatchResponse>(response.Payload);
+        try
+        {
+            RpcCreateMatchRequest rpcFindMatchRequest = new() { GameCode = gameCode};
+            var response = await NetworkManager.INSTANCE.RPCSend(QUICK_MATCH, rpcFindMatchRequest);
+            Debug.Log("QuickMatch response: " + response.Payload);
+            if (string.IsNullOrEmpty(response.Payload) || response.Payload == "[]")
+            {
+                Debug.Log("QuickMatch response payload is empty");
+                return null;
+            }
+            return DecodeFromBase64<RpcFindMatchResponse>(response.Payload);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("QuickMatch failed: " + ex.Message);
+            UIManager.Instance.OpenDialog("Lỗi khi vào trận : " + ex.Message, null, null);
+            return null;
+        }
     }
     
     public static void LeaveMatch() => NetworkManager.INSTANCE.LeaveMatch();

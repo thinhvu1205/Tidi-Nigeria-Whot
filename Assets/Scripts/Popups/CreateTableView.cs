@@ -75,7 +75,12 @@ public class CreateTableView : BaseView
 
     public void OnClickCreateTable()
     {
-        
+        string customData = "";
+        if (isDoubleDecking)
+        {
+            customData = "{\"is_double_decking\": true}";
+        }
+        _ = UIManager.Instance.HandleCreateMatch(passwordInputField.text, currentBetValue, customData);
     }
 
     private async UniTask GetListBet()

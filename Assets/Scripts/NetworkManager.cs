@@ -139,6 +139,7 @@ public class NetworkManager : MonoBehaviour
     }
 
     public void LeaveMatch() => _SocketIS.LeaveMatchAsync(_MatchId);
+    
     public void SendMatchState(long opCode, byte[] data) => _SocketIS.SendMatchStateAsync(_MatchId, opCode, data);
 
     #endregion
