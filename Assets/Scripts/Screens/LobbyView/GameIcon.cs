@@ -41,6 +41,8 @@ public class GameIcon : MonoBehaviour
         else
         {
             _ = UIManager.Instance.HandleFindMatch(0);
+                        // UIManager.Instance.HandleOpenGame();
+
         }
     }
 

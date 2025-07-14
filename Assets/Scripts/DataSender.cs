@@ -140,10 +140,10 @@ public class DataSender
     }
 
 
-    public static void MakingMatch(string gameCode)
-    {
-        NetworkManager.INSTANCE.MakingMatch(gameCode);
-    }
+    // public static void MakingMatch(string gameCode)
+    // {
+    //     NetworkManager.INSTANCE.MakingMatch(gameCode);
+    // }
 
     public static async UniTask<RpcCreateMatchResponse> CreateMatch(string gameCode)
     {

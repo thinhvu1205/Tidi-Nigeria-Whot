@@ -35,6 +35,16 @@ public class UIManager : Singleton<UIManager>
         SetUpParentTransforms();
     }
 
+    public void ShowLoading()
+    {
+        parentLoading.gameObject.SetActive(true);
+    }
+
+    public void HideLoading()
+    {
+        parentLoading.gameObject.SetActive(false);
+    }
+
     #region Games
 
     public async UniTask HandleFindMatch(int markUnit)
@@ -62,25 +72,26 @@ public class UIManager : Singleton<UIManager>
         switch (Config.currentGameId)
         {
             case Constants.WHOT_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("Whot/WhotView"), parentGames).GetComponent<WhotView>();
+                gameView = Instantiate(LoadPrefabGame("WhotView"), parentGames).GetComponent<WhotView>();
                 break;
             case Constants.NOEL_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
+                gameView = Instantiate(LoadPrefabGame("SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
+                // gameView = Instantiate(LoadPrefabGame("SlotFruitView"), parentGames).GetComponent<SlotFruitView>();
                 break;
             case Constants.TARZAN_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("Tarzan/TarzanView"), parentGames).GetComponent<SlotNoelView>();
+                gameView = Instantiate(LoadPrefabGame("TarzanView"), parentGames).GetComponent<SlotTarzanView>();
                 break;
             case Constants.FRUIT_SLOT_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
+                gameView = Instantiate(LoadPrefabGame("SlotFruitView"), parentGames).GetComponent<SlotFruitView>();
                 break;
             case Constants.INCA_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
+                gameView = Instantiate(LoadPrefabGame("SlotIncaView"), parentGames).GetComponent<SlotIncaView>();
                 break;
             case Constants.SIXIANG_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
+                gameView = Instantiate(LoadPrefabGame("SlotSixiangView"), parentGames).GetComponent<SlotSixiangView>();
                 break;
             case Constants.JUICY_GARDEN_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("SlotNoel/SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
+                gameView = Instantiate(LoadPrefabGame("SlotJuicyView"), parentGames).GetComponent<SlotJuicyView>();
                 break;
             default:
                 Debug.LogError("Unsupported game ID: " + Config.currentGameId);
@@ -115,6 +126,13 @@ public class UIManager : Singleton<UIManager>
         SelectTableView selectTableView = Instantiate(LoadPrefabLobby("SelectTableView"), parentGames).GetComponent<SelectTableView>();
         selectTableView.transform.localScale = Vector3.one;
     }
+
+    public void OpenCreateTableView()
+    {
+        CreateTableView createTableView = Instantiate(LoadPrefabPopup("PopupCreateTable"), parentGames).GetComponent<CreateTableView>();
+        createTableView.transform.localScale = Vector3.one;
+    }
+
     public void OpenShop()
     {
         ShopView shopView = Instantiate(LoadPrefabLobby("ShopView"), parentLobby).GetComponent<ShopView>();

@@ -83,36 +83,36 @@ public class NetworkManager : MonoBehaviour
         await JoinMatch(match.Id);
     }
 
-    public async void MakingMatch(string gameCode)
-    {
-        try
-        {
-            var stringProps = new Dictionary<string, string>
-            {
-                { "mode", "quick-match" },
-                { "game", gameCode },
-                { "name", "assassin" },
-                { "password", "" }
-            };
-            var numericProps = new Dictionary<string, double>()
-            {
-                { "bet", 25 }
-            };
-            var matchTicket = await _SocketIS.AddMatchmakerAsync(
-                query: $"+properties.game:{gameCode} +properties.bet:25",
-                minCount: 2,
-                maxCount: 4,
-                stringProperties: stringProps,
-                numericProperties: numericProps
-            );
+    // public async void MakingMatch(string gameCode)
+    // {
+    //     try
+    //     {
+    //         var stringProps = new Dictionary<string, string>
+    //         {
+    //             { "mode", "quick-match" },
+    //             { "game", gameCode },
+    //             { "name", "assassin" },
+    //             { "password", "" }
+    //         };
+    //         var numericProps = new Dictionary<string, double>()
+    //         {
+    //             { "bet", 25 }
+    //         };
+    //         var matchTicket = await _SocketIS.AddMatchmakerAsync(
+    //             query: $"+properties.game:{gameCode} +properties.bet:25",
+    //             minCount: 2,
+    //             maxCount: 4,
+    //             stringProperties: stringProps,
+    //             numericProperties: numericProps
+    //         );
 
-            Debug.Log("Đã gửi yêu cầu ghép trận. Ticket: " + matchTicket.Ticket);
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError("Lỗi khi tìm trận: " + ex.Message);
-        }
-    }
+    //         Debug.Log("Đã gửi yêu cầu ghép trận. Ticket: " + matchTicket.Ticket);
+    //     }
+    //     catch (System.Exception ex)
+    //     {
+    //         Debug.LogError("Lỗi khi tìm trận: " + ex.Message);
+    //     }
+    // }
 
     public async UniTask<IMatch> JoinMatch(string matchId)
     {
@@ -398,7 +398,8 @@ public class NetworkManager : MonoBehaviour
     public void PreConnect()
     {
         // _ClientC = new Client("http", "103.226.250.195", 7353, "defaultkey");
-        _ClientC = new Client("http", "172.16.56.51", 57350, "defaultkey");
+        // _ClientC = new Client("http", "172.16.56.71", 57350, "defaultkey");
+        _ClientC = new Client("http", "172.23.112.71", 57350, "defaultkey");
         // _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey");
         RestoreSession();
         string deviceId;

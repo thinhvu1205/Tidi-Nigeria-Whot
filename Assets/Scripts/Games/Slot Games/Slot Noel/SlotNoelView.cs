@@ -1,12 +1,53 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Api;
 using Globals;
 using Nakama;
+using UnityEngine;
 using Color = UnityEngine.Color;
 
 public class SlotNoelView : BaseSlotView
 {
+    protected override Dictionary<SiXiangSymbol, int> SymbolDictionary => new()
+    {
+        { SiXiangSymbol.K, 0 },
+        { SiXiangSymbol.J, 1 },
+        { SiXiangSymbol.A, 2 },
+        { SiXiangSymbol.Q, 3 },
+        { SiXiangSymbol.SuitHearts, 4 },
+        { SiXiangSymbol.SuitDiamonds, 5 },
+        { SiXiangSymbol.SuitSpades, 6 },
+        { SiXiangSymbol.SuitClubs, 7 },
+        { SiXiangSymbol.ChrismasRing, 8 },
+        { SiXiangSymbol.ChrismasCandy, 9 },
+        { SiXiangSymbol.ChrismasGift, 10 },
+        { SiXiangSymbol.Wild, 11 },
+        { SiXiangSymbol.Scatter, 12 }
+    };
+    protected override List<int[]> PaylineIdList => new List<int[]>
+    {
+        new int[] {1, 1, 1, 1, 1},
+        new int[] {0, 0, 0, 0, 0},
+        new int[] {2, 2, 2, 2, 2},
+        new int[] {0, 1, 2, 1, 0},
+        new int[] {2, 1, 0, 1, 2},
+        new int[] {0, 0, 1, 2, 2},
+        new int[] {2, 2, 1, 0, 0},
+        new int[] {1, 0, 1, 2, 1},
+        new int[] {1, 2, 1, 0, 1},
+        new int[] {1, 0, 0, 1, 0},
+        new int[] {1, 2, 2, 1, 2},
+        new int[] {0, 1, 0, 0, 1},
+        new int[] {2, 1, 2, 2, 1},
+        new int[] {0, 2, 0, 2, 0},
+        new int[] {2, 0, 2, 0, 2},
+        new int[] {1, 0, 2, 0, 1},
+        new int[] {1, 2, 0, 2, 1},
+        new int[] {0, 1, 1, 1, 0},
+        new int[] {2, 1, 1, 1, 2},
+        new int[] {0, 2, 2, 2, 0},
+    };
     protected override void Awake()
     {
         base.Awake();
@@ -25,7 +66,7 @@ public class SlotNoelView : BaseSlotView
         base.HandleMatchFound(matchmakerMatched);
     }
 
-    public override void HandleMatchJoin(Match match)
+    public override void HandleMatchJoin(IMatch match)
     {
         base.HandleMatchJoin(match);
     }
@@ -81,57 +122,14 @@ public class SlotNoelView : BaseSlotView
     }
 
     #endregion
-
-    protected override void UpdateSpinButtonUI()
-    {
-        base.UpdateSpinButtonUI();
-
-        // Mặc định màu trắng
-        buttonSpinAnimation.color = Color.white;
-
-        // Hàm set animation theo loại spin
-
-
-        // Xử lý theo state
-        switch (gameState)
-        {
-            case SlotGameState.SPINNING:
-                SetSpinAnimation(spinType);
-
-                // Nếu đang spin mà không phải auto, set màu xám
-                if (spinType == SpinType.NORMAL || spinType == SpinType.FREE_NORMAL)
-                {
-                    buttonSpinAnimation.color = Color.gray;
-                }
-                break;
-
-            case SlotGameState.SHOWING_RESULT:
-                SetSpinAnimation(spinType);
-                break;
-
-            case SlotGameState.PREPARE:
-            case SlotGameState.JOIN_GAME:
-                SetSpinAnimation(spinType);
-
-                // Nếu hết tiền và không phải free spin => disable
-                // if (listBetRoom.Count > 0 && agPlayer < totalListBetRoom[currentMarkBet] && !isFreeSpin)
-                // {
-                //     buttonSpinAnimation.color = Color.gray;
-                // }
-             
-                break;
-        }
-
-        buttonSpinAnimation.Initialize(true);
-    }
     
-    private void SetSpinAnimation(SpinType type)
+    protected override void SetSpinAnimation(SpinType type)
     {
         buttonSpinAnimation.startingAnimation = type switch
         {
             SpinType.NORMAL => "autospin",
-            SpinType.FREE_NORMAL => "freespin",
-            SpinType.AUTO or SpinType.FREE_AUTO => "stop",
+            SpinType.FREE_NORMAL or SpinType.FREE_AUTO => "freespin",
+            SpinType.AUTO => "stop",
             _ => "autospin"
         };
     }

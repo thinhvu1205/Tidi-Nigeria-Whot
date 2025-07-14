@@ -23,7 +23,7 @@ public class WhotMatchMaking : MonoBehaviour
 
     private void Start()
     {
-        DataSender.MakingMatch("whot-game");
+        // DataSender.MakingMatch("whot-game");
     }
 
     public void HandleMatchFound(IMatchmakerMatched matchmakerMatched)
