@@ -34,7 +34,6 @@ public class SelectTableView : BaseView
         UpdateVisuals();
         OnClickSelectBet();
         UpdateTitle();
-        SetupButtonListeners();
         GetListBet().Forget();
     }
     protected override void Start()
@@ -186,6 +185,7 @@ public class SelectTableView : BaseView
 
     public void OnClickCreateTable()
     {
+        UIManager.Instance.OpenCreateTableView();
     }
 
     public void OnClickReload()
@@ -219,10 +219,6 @@ public class SelectTableView : BaseView
         nextButton.gameObject.SetActive(viewportWidth < contentWidth && posX < 0.75f);
     }
 
-    private void SetupButtonListeners()
-    {
-        // selectBetButton.onClick.AddListener(() => OnClickQuickStart());
-        createTableButton.onClick.AddListener(() => OnClickCreateTable());
-    }
+
     #endregion
 }

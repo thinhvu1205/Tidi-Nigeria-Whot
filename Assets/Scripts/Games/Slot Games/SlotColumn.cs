@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Api;
 using DG.Tweening;
 using Globals;
 using UnityEngine;
@@ -9,7 +10,7 @@ using UnityEngine.UIElements;
 public class SlotColumn : MonoBehaviour
 {
     [SerializeField] protected SlotItem defaultItem;
-    protected SlotItem resultItem;
+    public SlotItem ResultItem { get; set; }
     protected List<SlotItem> itemList = new();
     protected BaseSlotView slotView;
     protected int columnIndex = 0;
@@ -28,7 +29,7 @@ public class SlotColumn : MonoBehaviour
 
     protected void Awake()
     {
-        // foreach(Imag)
+        ResultItem = defaultItem;
     }
 
     protected void Update()
@@ -65,7 +66,6 @@ public class SlotColumn : MonoBehaviour
         {
             SlotItem item = itemList[i];
             item.SetInfo(this);
-            item.SetFinishIndices(new List<int> { 1, 12, 5 });
             item.StartSpin(speed, backSpinSpeed);
         }
     }
@@ -120,7 +120,7 @@ public class SlotColumn : MonoBehaviour
 
     public void SetAnimationForItemAtIndex(int itemIndex)
     {
-        resultItem.SetItemAnimation(itemIndex);
+        ResultItem.SetItemAnimation(itemIndex);
     }
 
     #region Events
@@ -142,13 +142,23 @@ public class SlotColumn : MonoBehaviour
     #endregion
     public Vector2 GetItemPositionAtIndex(int index)
     {
-        return resultItem.GetItemPositionAtIndex(index);
+        return ResultItem.GetItemPositionAtIndex(index);
     }
 
-    public void SetResultItem(SlotItem item)
+    public void SetStartView(int[] symbolIdArray)
     {
-        resultItem = item;
+        defaultItem.SetFinishIndices(symbolIdArray);
+        defaultItem.SetFinishView();
     }
+
+    public void SetFinishView(int[] symbolIdArray)
+    {
+        foreach(SlotItem item in itemList)
+        {
+            item.SetFinishIndices(symbolIdArray);
+        }
+    }
+
     public void SetRandomSprite()
     {
         defaultItem.SetRandomData();
@@ -157,7 +167,6 @@ public class SlotColumn : MonoBehaviour
     public int GetScatterCount() => slotView.ScatterCount;
     public void IncreaseScatterCount()
     {
-            Debug.Log($"[IncreaseScatterCount] ScatterCount = {slotView.ScatterCount}, called by: {this.name}");
         slotView.ScatterCount++;
     }
 }

@@ -191,10 +191,14 @@ namespace Globals
         }
         public static void TweenNumberTo(TextMeshProUGUI lbText, long toNumber, long startNumber = 0, float timeRun = 0.3f, bool isFormatK = false, bool is2Digit = true)
         {
+            // if (!is2Digit)
+            //     DOTween.To(() => startNumber, x => startNumber = x, toNumber, timeRun).OnUpdate(() => lbText.text = FormatMoney(startNumber, isFormatK));
+            // else
+            //     DOTween.To(() => startNumber, x => startNumber = x, toNumber, timeRun).OnUpdate(() => lbText.text = FormatMoney2(startNumber, isFormatK, true));
             if (!is2Digit)
-                DOTween.To(() => startNumber, x => startNumber = x, toNumber, timeRun).OnUpdate(() => lbText.text = FormatMoney(startNumber, isFormatK));
+                DOTween.To(() => startNumber, x => startNumber = x, toNumber, timeRun).OnUpdate(() => lbText.text = startNumber.ToString());
             else
-                DOTween.To(() => startNumber, x => startNumber = x, toNumber, timeRun).OnUpdate(() => lbText.text = FormatMoney2(startNumber, isFormatK, true));
+                DOTween.To(() => startNumber, x => startNumber = x, toNumber, timeRun).OnUpdate(() => lbText.text = startNumber.ToString());
         }
         public static void TweenNumberToMoney(TextMeshProUGUI lbText, int toNumber, int startNumber = 0, float timeRun = 0.3f, long valueMinFormatK = 10000)
         {
