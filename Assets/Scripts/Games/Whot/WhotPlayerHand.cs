@@ -222,6 +222,7 @@ public class WhotPlayerHand : MonoBehaviour
                         Suit = card.GetCardSuit(),
                         Rank = card.GetCardRank()
                     };
+                    Debug.Log("CHECK LOG: " + selectedCard.ToString());
                     DataSender.SendMatchState((long)OpCodeRequest.PlayCard, cardObject.ToByteArray());
                 }
             }

@@ -15,7 +15,7 @@ public class SlotItem : MonoBehaviour
     [SerializeField] protected Image[] slotImageList;
     [SerializeField] protected Sprite[] spriteList;
     [SerializeField] protected SkeletonGraphic spineItem;
-
+    public Image[] ImageList => slotImageList;
     protected virtual Vector2[] ItemPositionList => new Vector2[]
     {
         new(0, 144),
@@ -106,7 +106,8 @@ public class SlotItem : MonoBehaviour
             {
                 column.ResultItem = this;
                 SetFinishView();
-                if (finishView.Contains(12)) 
+                SetItemValuePackage();
+                if (finishView.Contains(12))
                 {
                     column.IncreaseScatterCount();
                     column.CheckThirdScatter();
@@ -143,6 +144,11 @@ public class SlotItem : MonoBehaviour
             }
         });
     }
+
+    public virtual void SetItemValuePackage()
+    {
+
+    }
     #endregion
 
     #region Getters
@@ -163,16 +169,16 @@ public class SlotItem : MonoBehaviour
             Image image = slotImageList[i];
             image.sprite = spriteList[finishView[i]];
             image.SetNativeSize();
-            image.transform.localScale = Vector2.one * IconScale;
+            // image.transform.localScale = Vector2.one * IconScale;
 
-            // if (finishView[i] == 12)
-            // {
-            //     slotImageList[i].transform.localScale = new Vector2(0.8f, 0.8f);
-            // }
-            // else
-            // {
-            //     slotImageList[i].transform.localScale = Vector2.one;
-            // }
+            if (finishView[i] == 12)
+            {
+                slotImageList[i].transform.localScale = new Vector2(0.8f, 0.8f);
+            }
+            else
+            {
+                slotImageList[i].transform.localScale = Vector2.one * IconScale;
+            }
         }
     }
     protected void SetIconData(int index, int id)

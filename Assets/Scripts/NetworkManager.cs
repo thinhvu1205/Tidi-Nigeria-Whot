@@ -398,7 +398,7 @@ public class NetworkManager : MonoBehaviour
     public void PreConnect()
     {
         // _ClientC = new Client("http", "103.226.250.195", 7353, "defaultkey");
-        // _ClientC = new Client("http", "172.16.56.71", 57350, "defaultkey");
+        // _ClientC = new Client("http", "192.168.153.83", 57350, "defaultkey");
         // _ClientC = new Client("http", "172.23.112.71", 57350, "defaultkey");
         _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey");
         RestoreSession();

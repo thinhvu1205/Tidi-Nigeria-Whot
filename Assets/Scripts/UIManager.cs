@@ -68,7 +68,7 @@ public class UIManager : Singleton<UIManager>
         {
             Destroy(gameView.gameObject);
         }
-        
+        Debug.Log("CURRENT GAME: " + Config.currentGameId);
         switch (Config.currentGameId)
         {
             case Constants.WHOT_GAME_ID:
@@ -79,7 +79,7 @@ public class UIManager : Singleton<UIManager>
                 // gameView = Instantiate(LoadPrefabGame("SlotFruitView"), parentGames).GetComponent<SlotFruitView>();
                 break;
             case Constants.TARZAN_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("TarzanView"), parentGames).GetComponent<SlotTarzanView>();
+                gameView = Instantiate(LoadPrefabGame("SlotTarzanView"), parentGames).GetComponent<SlotTarzanView>();
                 break;
             case Constants.FRUIT_SLOT_GAME_ID:
                 gameView = Instantiate(LoadPrefabGame("SlotFruitView"), parentGames).GetComponent<SlotFruitView>();
@@ -91,7 +91,7 @@ public class UIManager : Singleton<UIManager>
                 gameView = Instantiate(LoadPrefabGame("SlotSixiangView"), parentGames).GetComponent<SlotSixiangView>();
                 break;
             case Constants.JUICY_GARDEN_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("SlotJuicyView"), parentGames).GetComponent<SlotJuicyView>();
+                gameView = Instantiate(LoadPrefabGame("SlotJuicyGardenView"), parentGames).GetComponent<SlotJuicyView>();
                 break;
             default:
                 Debug.LogError("Unsupported game ID: " + Config.currentGameId);

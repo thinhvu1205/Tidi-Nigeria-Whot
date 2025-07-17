@@ -8,7 +8,7 @@ namespace Globals
         public const string WHOT_GAME_ID = "whot-game";
         // public const string COLOR_GAME_ID = "color-game";
         // public const string ROULETTE_GAME_ID = "roulette";
-        public const string FRUIT_SLOT_GAME_ID = "fruit-slot";
+        public const string FRUIT_SLOT_GAME_ID = "fruit";
         // public const string SABONG_CARDS_GAME_ID = "sabong-cards";
         // public const string CHINESE_POKER_GAME_ID = "chinese-poker";
         // public const string BACCARAT_GAME_ID = "baccarat";

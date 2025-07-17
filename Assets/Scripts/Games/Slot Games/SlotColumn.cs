@@ -30,22 +30,6 @@ public class SlotColumn : MonoBehaviour
     protected void Awake()
     {
         ResultItem = defaultItem;
-    }
-
-    protected void Update()
-    {
-
-    }
-
-    public void SetInfo(BaseSlotView slotView, int index)
-    {
-        this.slotView = slotView;
-        columnIndex = index;
-    }
-    public void StartSpin(SpinType spinType)
-    {
-        IsSpinning = true;
-        StartCoroutine(SpinDuration());
         if (itemList.Count == 0)
         {
             SlotItem item2 = Instantiate(defaultItem.gameObject, transform).GetComponent<SlotItem>();
@@ -60,6 +44,18 @@ public class SlotColumn : MonoBehaviour
             itemList.Add(item2);
             itemList.Add(defaultItem);
         }
+    }
+
+    public void SetInfo(BaseSlotView slotView, int index)
+    {
+        this.slotView = slotView;
+        columnIndex = index;
+    }
+    public void StartSpin(SpinType spinType)
+    {
+        IsSpinning = true;
+        StartCoroutine(SpinDuration());
+
         float speed = spinType == SpinType.NORMAL ? SPEED_NORMAL : SPEED_AUTO;
         float backSpinSpeed = spinType == SpinType.NORMAL ? SPEED_BACKSPIN_NORMAL : SPEED_BACKSPIN_AUTO;
         for (int i = 0; i < itemList.Count; i++)
@@ -123,6 +119,29 @@ public class SlotColumn : MonoBehaviour
         ResultItem.SetItemAnimation(itemIndex);
     }
 
+    public void ShowPackageValue()
+    {
+        foreach (SlotItem item in itemList)
+        {
+            if (item is SlotJuicyItem juicyItem)
+            {
+                juicyItem.SetItemValuePackage();
+            }
+        }
+    }
+
+    public void SetPackageValue(long[] packageValue)
+    {
+        foreach (SlotItem item in itemList)
+        {
+            if (item is SlotJuicyItem juicyItem)
+            {
+                juicyItem.ClearValuePackage();
+                juicyItem.ValuePackageList = packageValue;
+            }
+        }
+    }
+
     #region Events
     public void OnAllColumnsStop()
     {
@@ -153,7 +172,7 @@ public class SlotColumn : MonoBehaviour
 
     public void SetFinishView(int[] symbolIdArray)
     {
-        foreach(SlotItem item in itemList)
+        foreach (SlotItem item in itemList)
         {
             item.SetFinishIndices(symbolIdArray);
         }

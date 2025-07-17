@@ -58,7 +58,7 @@ enum OpCodeRequest {
   OPCODE_USER_INTERACT_CARDS = 6; // client tương tác với cards
 
   OPCODE_REQUEST_SPIN = 7; // game slots
-  OPCODE_REQUEST_BET = 8;
+  OPCODE_REQUEST_BET = 8; //
   OPCODE_REQUEST_USER_IN_TABLE = 9;   // get table info
   OPCODE_REQUEST_INFO_TABLE = 10;     //
   OPCODE_REQUEST_HISTORY_RESULT = 11; //
