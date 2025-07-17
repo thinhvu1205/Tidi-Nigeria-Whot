@@ -41,75 +41,80 @@ namespace Api {
             "cGRhdGVEZWFsLkNhcmRFdmVudEVudHJ5EhsKCHRvcF9jYXJkGAMgASgLMgku",
             "YXBpLkNhcmQSEQoJaWRfZGVhbGVyGAQgASgJGkAKDkNhcmRFdmVudEVudHJ5",
             "EgsKA2tleRgBIAEoCRIdCgV2YWx1ZRgCIAEoDjIOLmFwaS5DYXJkRXZlbnQ6",
-            "AjgBIm8KD1VwZGF0ZUdhbWVTdGF0ZRIdCgVzdGF0ZRgBIAEoDjIOLmFwaS5H",
-            "YW1lU3RhdGUSEgoKY291bnRfZG93bhgCIAEoAxIpCg1wcmVzZW5jZUNhcmRz",
-            "GAMgAygLMhIuYXBpLlByZXNlbmNlQ2FyZHMimAMKD1VwZGF0ZUNhcmRTdGF0",
-            "ZRIPCgd1c2VyX2lkGAEgASgJEh0KBWV2ZW50GAIgASgOMg4uYXBpLkNhcmRF",
-            "dmVudBIeCgtwbGF5ZWRfY2FyZBgDIAEoCzIJLmFwaS5DYXJkEhsKCHRvcF9j",
-            "YXJkGAQgASgLMgkuYXBpLkNhcmQSHgoLY2FyZHNfYWZ0ZXIYBSADKAsyCS5h",
-            "cGkuQ2FyZBIfCgZlZmZlY3QYBiABKA4yDy5hcGkuQ2FyZEVmZmVjdBIUCgxw",
-            "aWNrX3BlbmFsdHkYByABKAUSFgoOdGFyZ2V0X3VzZXJfaWQYCCABKAkSFAoM",
-            "aXNfYXV0b19wbGF5GAkgASgIEhIKCmRlY2tfY291bnQYCiABKAUSRgoScGxh",
-            "eWVyX2NhcmRfY291bnRzGAsgAygLMiouYXBpLlVwZGF0ZUNhcmRTdGF0ZS5Q",
-            "bGF5ZXJDYXJkQ291bnRzRW50cnkaNwoVUGxheWVyQ2FyZENvdW50c0VudHJ5",
-            "EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoBToCOAEiZwoPV2hvdFNjb3Jl",
-            "UmVzdWx0EhQKDHRvdGFsX3BvaW50cxgBIAEoAxIXCg9yZW1haW5pbmdfY2Fy",
-            "ZHMYAiABKAUSEQoJaXNfd2lubmVyGAMgASgIEhIKCndpbl9mYWN0b3IYBCAB",
-            "KAEihAEKEFdob3RQbGF5ZXJSZXN1bHQSDwoHdXNlcl9pZBgBIAEoCRIUCgx0",
-            "b3RhbF9wb2ludHMYAiABKAMSEgoKd2luX2ZhY3RvchgDIAEoARIRCglpc193",
-            "aW5uZXIYBCABKAgSIgoPcmVtYWluaW5nX2NhcmRzGAUgAygLMgkuYXBpLkNh",
-            "cmQipAEKDFVwZGF0ZUZpbmlzaBImCgdyZXN1bHRzGAEgAygLMhUuYXBpLldo",
-            "b3RQbGF5ZXJSZXN1bHQSKgoKZW5kX3JlYXNvbhgCIAEoDjIWLmFwaS5XaG90",
-            "RW5kR2FtZVJlYXNvbhIdCgdqYWNrcG90GAQgASgLMgwuYXBpLkphY2twb3QS",
-            "IQoLanBfdHJlYXN1cmUYBSABKAsyDC5hcGkuSmFja3BvdCLeAQoNQmFsYW5j",
-            "ZVVwZGF0ZRIPCgd1c2VyX2lkGAEgASgJEhoKEmFtb3VudF9jaGlwX2JlZm9y",
-            "ZRgCIAEoAxIbChNhbW91bnRfY2hpcF9jdXJyZW50GAMgASgDEhcKD2Ftb3Vu",
-            "dF9jaGlwX2FkZBgEIAEoAxIWCg5hbW91dF9jaGlwX2JldBgFIAEoAxIWCg5h",
-            "bW91dF9jaGlwX2ZlZRgGIAEoAxIdChVhbW91dF9jaGlwX2FkZF9wcmVmZWUY",
-            "ByABKAMSGwoTdG90YWxfY2hpcF9pbl9tYXRjaBgIIAEoAyJTCg1CYWxhbmNl",
-            "UmVzdWx0EiMKB3VwZGF0ZXMYASADKAsyEi5hcGkuQmFsYW5jZVVwZGF0ZRId",
-            "CgdqYWNrcG90GAIgASgLMgwuYXBpLkphY2twb3QiqwEKBlBsYXllchIKCgJp",
-            "ZBgBIAEoCRIRCgl1c2VyX25hbWUYAiABKAkSDgoGd2FsbGV0GAMgASgJEhIK",
-            "CmlzX3BsYXlpbmcYBCABKAgSHAoFY2FyZHMYBSABKAsyDS5hcGkuTGlzdENh",
-            "cmQSEQoJdmlwX2xldmVsGAYgASgDEhEKCWF2YXRhcl9pZBgHIAEoCRILCgNz",
-            "aWQYCCABKAMSDQoFb3JkZXIYCSABKAUiYgoHSmFja3BvdBIKCgJpZBgBIAEo",
-            "AxIPCgd1c2VyX2lkGAIgASgJEhEKCWdhbWVfY29kZRgDIAEoCRINCgVjaGlw",
-            "cxgEIAEoAxIYChBjcmVhdGVfdGltZV91bml4GAUgASgDIk8KEUhpdEphY2tw",
-            "b3RIaXN0b3J5EhEKCXVzZXJfbmFtZRgBIAEoCRINCgVjaGlwcxgCIAEoAxIY",
-            "ChBjcmVhdGVfdGltZV91bml4GAMgASgDKnQKCENhcmRTdWl0EhQKEFNVSVRf",
-            "VU5TUEVDSUZJRUQQABIPCgtTVUlUX0NJUkNMRRABEg4KClNVSVRfQ1JPU1MQ",
-            "AhINCglTVUlUX1NUQVIQAxIPCgtTVUlUX1NRVUFSRRAEEhEKDVNVSVRfVFJJ",
-            "QU5HTEUQBSrCAQoIQ2FyZFJhbmsSFAoQUkFOS19VTlNQRUNJRklFRBAAEgoK",
-            "BlJBTktfMRABEgoKBlJBTktfMhACEgoKBlJBTktfMxADEgoKBlJBTktfNBAE",
-            "EgoKBlJBTktfNRAFEgoKBlJBTktfNxAHEgoKBlJBTktfOBAIEgsKB1JBTktf",
-            "MTAQChILCgdSQU5LXzExEAsSCwoHUkFOS18xMhAMEgsKB1JBTktfMTMQDRIL",
-            "CgdSQU5LXzE0EA4SCwoHUkFOS18yMBAUKvYBCg1PcENvZGVSZXF1ZXN0EhYK",
-            "Ek9QQ09ERV9VTlNQRUNJRklFRBAAEhsKF09QQ09ERV9SRVFVRVNUX05FV19H",
-            "QU1FEAESHQoZT1BDT0RFX1JFUVVFU1RfTEVBVkVfR0FNRRACEhwKGE9QQ09E",
-            "RV9SRVFVRVNUX1BMQVlfQ0FSRBADEhwKGE9QQ09ERV9SRVFVRVNUX0RSQVdf",
-            "Q0FSRBAEEhwKGE9QQ09ERV9SRVFVRVNUX0NBTExfV0hPVBAFEh4KGk9QQ09E",
-            "RV9VU0VSX0lOVEVSQUNUX0NBUkRTEAYSFwoTT1BDT0RFX1JFUVVFU1RfU1BJ",
-            "ThAHKqADCgxPcENvZGVVcGRhdGUSHQoZT1BDT0RFX1VQREFURV9VTlNQRUNJ",
-            "RklFRBAAEhcKE09QQ09ERV9VUERBVEVfVEFCTEUQARIWChJPUENPREVfVVBE",
-            "QVRFX0RFQUwQAhIYChRPUENPREVfVVBEQVRFX0ZJTklTSBADEhoKFk9QQ09E",
-            "RV9VUERBVEVfUkVKRUNURUQQBBIcChhPUENPREVfVVBEQVRFX0dBTUVfU1RB",
-            "VEUQBRIdChlPUENPREVfVVBEQVRFX0NBUkRfUExBWUVEEAYSHQoZT1BDT0RF",
-            "X1VQREFURV9EUkFXX1JFU1VMVBAHEiIKHk9QQ09ERV9VUERBVEVfQ0FMTF9X",
-            "SE9UX1JFU1VMVBAIEhYKEk9QQ09ERV9VUERBVEVfVFVSThAJEhwKGE9QQ09E",
-            "RV9VUERBVEVfQ0FSRF9TVEFURRAKEhgKFE9QQ09ERV9VUERBVEVfV0FMTEVU",
-            "EAsSHQoZT1BDT0RFX0tJQ0tfT0ZGX1RIRV9UQUJMRRAMEhsKF09QQ09ERV9V",
-            "UERBVEVfVVNFUl9JTkZPEA0qoAEKCUdhbWVTdGF0ZRIUChBHYW1lU3RhdGVV",
-            "bmtub3duEAASEQoNR2FtZVN0YXRlSWRsZRABEhUKEUdhbWVTdGF0ZU1hdGNo",
-            "aW5nEAISFgoSR2FtZVN0YXRlUHJlcGFyaW5nEAMSEQoNR2FtZVN0YXRlUGxh",
-            "eRAEEhMKD0dhbWVTdGF0ZVJld2FyZBAFEhMKD0dhbWVTdGF0ZUZpbmlzaBAG",
-            "KkIKCUNhcmRFdmVudBIICgROT05FEAASCAoEUExBWRABEggKBERSQVcQAhII",
-            "CgRQQVNTEAMSDQoJQVVUT19QTEFZEAQqjgEKCkNhcmRFZmZlY3QSDwoLRUZG",
-            "RUNUX05PTkUQABILCgdIT0xEX09OEAESDAoIUElDS19UV08QAhIOCgpQSUNL",
-            "X1RIUkVFEAMSDgoKU1VTUEVOU0lPThAEEhIKDkdFTkVSQUxfTUFSS0VUEAUS",
-            "CAoEV0hPVBAGEhYKEkNIT0lDRV9TSEFQRV9HSE9TVBAHKkEKEVdob3RFbmRH",
-            "YW1lUmVhc29uEhUKEVJFQVNPTl9OT1JNQUxfV0lOEAASFQoRUkVBU09OX0RF",
-            "Q0tfRU1QVFkQAUIxWi9naXRodWIuY29tL25ha2FtYUZyYW1ld29yay93aG90",
-            "LW1vZHVsZS9hcGkvd2hvdGIGcHJvdG8z"));
+            "AjgBIkQKD1VwZGF0ZUdhbWVTdGF0ZRIdCgVzdGF0ZRgBIAEoDjIOLmFwaS5H",
+            "YW1lU3RhdGUSEgoKY291bnRfZG93bhgCIAEoAyKYAwoPVXBkYXRlQ2FyZFN0",
+            "YXRlEg8KB3VzZXJfaWQYASABKAkSHQoFZXZlbnQYAiABKA4yDi5hcGkuQ2Fy",
+            "ZEV2ZW50Eh4KC3BsYXllZF9jYXJkGAMgASgLMgkuYXBpLkNhcmQSGwoIdG9w",
+            "X2NhcmQYBCABKAsyCS5hcGkuQ2FyZBIeCgtjYXJkc19hZnRlchgFIAMoCzIJ",
+            "LmFwaS5DYXJkEh8KBmVmZmVjdBgGIAEoDjIPLmFwaS5DYXJkRWZmZWN0EhQK",
+            "DHBpY2tfcGVuYWx0eRgHIAEoBRIWCg50YXJnZXRfdXNlcl9pZBgIIAEoCRIU",
+            "Cgxpc19hdXRvX3BsYXkYCSABKAgSEgoKZGVja19jb3VudBgKIAEoBRJGChJw",
+            "bGF5ZXJfY2FyZF9jb3VudHMYCyADKAsyKi5hcGkuVXBkYXRlQ2FyZFN0YXRl",
+            "LlBsYXllckNhcmRDb3VudHNFbnRyeRo3ChVQbGF5ZXJDYXJkQ291bnRzRW50",
+            "cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgFOgI4ASKEAQoQV2hvdFBs",
+            "YXllclJlc3VsdBIPCgd1c2VyX2lkGAEgASgJEhQKDHRvdGFsX3BvaW50cxgC",
+            "IAEoAxISCgp3aW5fZmFjdG9yGAMgASgBEhEKCWlzX3dpbm5lchgEIAEoCBIi",
+            "Cg9yZW1haW5pbmdfY2FyZHMYBSADKAsyCS5hcGkuQ2FyZCKkAQoMVXBkYXRl",
+            "RmluaXNoEiYKB3Jlc3VsdHMYASADKAsyFS5hcGkuV2hvdFBsYXllclJlc3Vs",
+            "dBIqCgplbmRfcmVhc29uGAIgASgOMhYuYXBpLldob3RFbmRHYW1lUmVhc29u",
+            "Eh0KB2phY2twb3QYBCABKAsyDC5hcGkuSmFja3BvdBIhCgtqcF90cmVhc3Vy",
+            "ZRgFIAEoCzIMLmFwaS5KYWNrcG90It4BCg1CYWxhbmNlVXBkYXRlEg8KB3Vz",
+            "ZXJfaWQYASABKAkSGgoSYW1vdW50X2NoaXBfYmVmb3JlGAIgASgDEhsKE2Ft",
+            "b3VudF9jaGlwX2N1cnJlbnQYAyABKAMSFwoPYW1vdW50X2NoaXBfYWRkGAQg",
+            "ASgDEhYKDmFtb3V0X2NoaXBfYmV0GAUgASgDEhYKDmFtb3V0X2NoaXBfZmVl",
+            "GAYgASgDEh0KFWFtb3V0X2NoaXBfYWRkX3ByZWZlZRgHIAEoAxIbChN0b3Rh",
+            "bF9jaGlwX2luX21hdGNoGAggASgDIlMKDUJhbGFuY2VSZXN1bHQSIwoHdXBk",
+            "YXRlcxgBIAMoCzISLmFwaS5CYWxhbmNlVXBkYXRlEh0KB2phY2twb3QYAiAB",
+            "KAsyDC5hcGkuSmFja3BvdCKrAQoGUGxheWVyEgoKAmlkGAEgASgJEhEKCXVz",
+            "ZXJfbmFtZRgCIAEoCRIOCgZ3YWxsZXQYAyABKAkSEgoKaXNfcGxheWluZxgE",
+            "IAEoCBIcCgVjYXJkcxgFIAEoCzINLmFwaS5MaXN0Q2FyZBIRCgl2aXBfbGV2",
+            "ZWwYBiABKAMSEQoJYXZhdGFyX2lkGAcgASgJEgsKA3NpZBgIIAEoAxINCgVv",
+            "cmRlchgJIAEoBSJiCgdKYWNrcG90EgoKAmlkGAEgASgDEg8KB3VzZXJfaWQY",
+            "AiABKAkSEQoJZ2FtZV9jb2RlGAMgASgJEg0KBWNoaXBzGAQgASgDEhgKEGNy",
+            "ZWF0ZV90aW1lX3VuaXgYBSABKAMiTwoRSGl0SmFja3BvdEhpc3RvcnkSEQoJ",
+            "dXNlcl9uYW1lGAEgASgJEg0KBWNoaXBzGAIgASgDEhgKEGNyZWF0ZV90aW1l",
+            "X3VuaXgYAyABKAMqdAoIQ2FyZFN1aXQSFAoQU1VJVF9VTlNQRUNJRklFRBAA",
+            "Eg8KC1NVSVRfQ0lSQ0xFEAESDgoKU1VJVF9DUk9TUxACEg0KCVNVSVRfU1RB",
+            "UhADEg8KC1NVSVRfU1FVQVJFEAQSEQoNU1VJVF9UUklBTkdMRRAFKsIBCghD",
+            "YXJkUmFuaxIUChBSQU5LX1VOU1BFQ0lGSUVEEAASCgoGUkFOS18xEAESCgoG",
+            "UkFOS18yEAISCgoGUkFOS18zEAMSCgoGUkFOS180EAQSCgoGUkFOS181EAUS",
+            "CgoGUkFOS183EAcSCgoGUkFOS184EAgSCwoHUkFOS18xMBAKEgsKB1JBTktf",
+            "MTEQCxILCgdSQU5LXzEyEAwSCwoHUkFOS18xMxANEgsKB1JBTktfMTQQDhIL",
+            "CgdSQU5LXzIwEBQq1AMKDU9wQ29kZVJlcXVlc3QSFgoST1BDT0RFX1VOU1BF",
+            "Q0lGSUVEEAASGwoXT1BDT0RFX1JFUVVFU1RfTkVXX0dBTUUQARIdChlPUENP",
+            "REVfUkVRVUVTVF9MRUFWRV9HQU1FEAISHAoYT1BDT0RFX1JFUVVFU1RfUExB",
+            "WV9DQVJEEAMSHAoYT1BDT0RFX1JFUVVFU1RfRFJBV19DQVJEEAQSHAoYT1BD",
+            "T0RFX1JFUVVFU1RfQ0FMTF9XSE9UEAUSHgoaT1BDT0RFX1VTRVJfSU5URVJB",
+            "Q1RfQ0FSRFMQBhIXChNPUENPREVfUkVRVUVTVF9TUElOEAcSFgoST1BDT0RF",
+            "X1JFUVVFU1RfQkVUEAgSIAocT1BDT0RFX1JFUVVFU1RfVVNFUl9JTl9UQUJM",
+            "RRAJEh0KGU9QQ09ERV9SRVFVRVNUX0lORk9fVEFCTEUQChIhCh1PUENPREVf",
+            "UkVRVUVTVF9ISVNUT1JZX1JFU1VMVBALEiIKHk9QQ09ERV9SRVFVRVNUX0JV",
+            "WV9TSVhJQU5HX0dFTRAMEh0KGU9QQ09ERV9SRVFVRVNUX1RJUF9JTkdBTUUQ",
+            "DRIdChlPUENPREVfUkVRVUVTVF9TWU5DX1RBQkxFEA4qxwQKDE9wQ29kZVVw",
+            "ZGF0ZRIdChlPUENPREVfVVBEQVRFX1VOU1BFQ0lGSUVEEAASFwoTT1BDT0RF",
+            "X1VQREFURV9UQUJMRRABEhYKEk9QQ09ERV9VUERBVEVfREVBTBACEhgKFE9Q",
+            "Q09ERV9VUERBVEVfRklOSVNIEAMSGgoWT1BDT0RFX1VQREFURV9SRUpFQ1RF",
+            "RBAEEhwKGE9QQ09ERV9VUERBVEVfR0FNRV9TVEFURRAFEh0KGU9QQ09ERV9V",
+            "UERBVEVfQ0FSRF9QTEFZRUQQBhIdChlPUENPREVfVVBEQVRFX0RSQVdfUkVT",
+            "VUxUEAcSIgoeT1BDT0RFX1VQREFURV9DQUxMX1dIT1RfUkVTVUxUEAgSFgoS",
+            "T1BDT0RFX1VQREFURV9UVVJOEAkSHAoYT1BDT0RFX1VQREFURV9DQVJEX1NU",
+            "QVRFEAoSGAoUT1BDT0RFX1VQREFURV9XQUxMRVQQCxIdChlPUENPREVfS0lD",
+            "S19PRkZfVEhFX1RBQkxFEAwSGwoXT1BDT0RFX1VQREFURV9VU0VSX0lORk8Q",
+            "DRIdChlPUENPREVfVVNFUl9JTl9UQUJMRV9JTkZPEA4SEAoMT1BDT0RFX0VS",
+            "Uk9SEA8SGgoWT1BDT0RFX0JVWV9TSVhJQU5HX0dFTRAQEhgKFE9QQ09ERV9Q",
+            "TEFZRVJfQ0hBTkdFEBESHgoaT1BDT0RFX1JFU1BPTlNFX1RJUF9JTkdBTUUQ",
+            "EhIeChpPUENPREVfUkVTUE9OU0VfU1lOQ19UQUJMRRATKqABCglHYW1lU3Rh",
+            "dGUSFAoQR2FtZVN0YXRlVW5rbm93bhAAEhEKDUdhbWVTdGF0ZUlkbGUQARIV",
+            "ChFHYW1lU3RhdGVNYXRjaGluZxACEhYKEkdhbWVTdGF0ZVByZXBhcmluZxAD",
+            "EhEKDUdhbWVTdGF0ZVBsYXkQBBITCg9HYW1lU3RhdGVSZXdhcmQQBRITCg9H",
+            "YW1lU3RhdGVGaW5pc2gQBipCCglDYXJkRXZlbnQSCAoETk9ORRAAEggKBFBM",
+            "QVkQARIICgREUkFXEAISCAoEUEFTUxADEg0KCUFVVE9fUExBWRAEKo4BCgpD",
+            "YXJkRWZmZWN0Eg8KC0VGRkVDVF9OT05FEAASCwoHSE9MRF9PThABEgwKCFBJ",
+            "Q0tfVFdPEAISDgoKUElDS19USFJFRRADEg4KClNVU1BFTlNJT04QBBISCg5H",
+            "RU5FUkFMX01BUktFVBAFEggKBFdIT1QQBhIWChJDSE9JQ0VfU0hBUEVfR0hP",
+            "U1QQBypBChFXaG90RW5kR2FtZVJlYXNvbhIVChFSRUFTT05fTk9STUFMX1dJ",
+            "ThAAEhUKEVJFQVNPTl9ERUNLX0VNUFRZEAFCMVovZ2l0aHViLmNvbS9uYWth",
+            "bWFGcmFtZXdvcmsvd2hvdC1tb2R1bGUvYXBpL3dob3RiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Api.CardSuit), typeof(global::Api.CardRank), typeof(global::Api.OpCodeRequest), typeof(global::Api.OpCodeUpdate), typeof(global::Api.GameState), typeof(global::Api.CardEvent), typeof(global::Api.CardEffect), typeof(global::Api.WhotEndGameReason), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -120,9 +125,8 @@ namespace Api {
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateTable), global::Api.UpdateTable.Parser, new[]{ "Players", "PlayingPlayers", "JoinPlayers", "LeavePlayers", "Bet", "Vip", "TimePlay", "RemainTime", "GameState", "JpTreasure" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.PresenceCards), global::Api.PresenceCards.Parser, new[]{ "Presence", "Cards" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateDeal), global::Api.UpdateDeal.Parser, new[]{ "PresenceCard", "CardEvent", "TopCard", "IdDealer" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateGameState), global::Api.UpdateGameState.Parser, new[]{ "State", "CountDown", "PresenceCards" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateGameState), global::Api.UpdateGameState.Parser, new[]{ "State", "CountDown" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateCardState), global::Api.UpdateCardState.Parser, new[]{ "UserId", "Event", "PlayedCard", "TopCard", "CardsAfter", "Effect", "PickPenalty", "TargetUserId", "IsAutoPlay", "DeckCount", "PlayerCardCounts" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.WhotScoreResult), global::Api.WhotScoreResult.Parser, new[]{ "TotalPoints", "RemainingCards", "IsWinner", "WinFactor" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.WhotPlayerResult), global::Api.WhotPlayerResult.Parser, new[]{ "UserId", "TotalPoints", "WinFactor", "IsWinner", "RemainingCards" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.UpdateFinish), global::Api.UpdateFinish.Parser, new[]{ "Results", "EndReason", "Jackpot", "JpTreasure" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.BalanceUpdate), global::Api.BalanceUpdate.Parser, new[]{ "UserId", "AmountChipBefore", "AmountChipCurrent", "AmountChipAdd", "AmoutChipBet", "AmoutChipFee", "AmoutChipAddPrefee", "TotalChipInMatch" }, null, null, null, null),
@@ -185,7 +189,26 @@ namespace Api {
     /// client tương tác với cards
     /// </summary>
     [pbr::OriginalName("OPCODE_USER_INTERACT_CARDS")] OpcodeUserInteractCards = 6,
+    /// <summary>
+    /// game slots
+    /// </summary>
     [pbr::OriginalName("OPCODE_REQUEST_SPIN")] Spin = 7,
+    /// <summary>
+    /// </summary>
+    [pbr::OriginalName("OPCODE_REQUEST_BET")] Bet = 8,
+    /// <summary>
+    /// get table info
+    /// </summary>
+    [pbr::OriginalName("OPCODE_REQUEST_USER_IN_TABLE")] UserInTable = 9,
+    /// <summary>
+    /// </summary>
+    [pbr::OriginalName("OPCODE_REQUEST_INFO_TABLE")] InfoTable = 10,
+    /// <summary>
+    /// </summary>
+    [pbr::OriginalName("OPCODE_REQUEST_HISTORY_RESULT")] HistoryResult = 11,
+    [pbr::OriginalName("OPCODE_REQUEST_BUY_SIXIANG_GEM")] BuySixiangGem = 12,
+    [pbr::OriginalName("OPCODE_REQUEST_TIP_INGAME")] TipIngame = 13,
+    [pbr::OriginalName("OPCODE_REQUEST_SYNC_TABLE")] SyncTable = 14,
   }
 
   public enum OpCodeUpdate {
@@ -224,6 +247,12 @@ namespace Api {
     [pbr::OriginalName("OPCODE_UPDATE_WALLET")] Wallet = 11,
     [pbr::OriginalName("OPCODE_KICK_OFF_THE_TABLE")] OpcodeKickOffTheTable = 12,
     [pbr::OriginalName("OPCODE_UPDATE_USER_INFO")] UserInfo = 13,
+    [pbr::OriginalName("OPCODE_USER_IN_TABLE_INFO")] OpcodeUserInTableInfo = 14,
+    [pbr::OriginalName("OPCODE_ERROR")] OpcodeError = 15,
+    [pbr::OriginalName("OPCODE_BUY_SIXIANG_GEM")] OpcodeBuySixiangGem = 16,
+    [pbr::OriginalName("OPCODE_PLAYER_CHANGE")] OpcodePlayerChange = 17,
+    [pbr::OriginalName("OPCODE_RESPONSE_TIP_INGAME")] OpcodeResponseTipIngame = 18,
+    [pbr::OriginalName("OPCODE_RESPONSE_SYNC_TABLE")] OpcodeResponseSyncTable = 19,
   }
 
   public enum GameState {
@@ -2175,7 +2204,6 @@ namespace Api {
     public UpdateGameState(UpdateGameState other) : this() {
       state_ = other.state_;
       countDown_ = other.countDown_;
-      presenceCards_ = other.presenceCards_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2209,17 +2237,6 @@ namespace Api {
       }
     }
 
-    /// <summary>Field number for the "presenceCards" field.</summary>
-    public const int PresenceCardsFieldNumber = 3;
-    private static readonly pb::FieldCodec<global::Api.PresenceCards> _repeated_presenceCards_codec
-        = pb::FieldCodec.ForMessage(26, global::Api.PresenceCards.Parser);
-    private readonly pbc::RepeatedField<global::Api.PresenceCards> presenceCards_ = new pbc::RepeatedField<global::Api.PresenceCards>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Api.PresenceCards> PresenceCards {
-      get { return presenceCards_; }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -2237,7 +2254,6 @@ namespace Api {
       }
       if (State != other.State) return false;
       if (CountDown != other.CountDown) return false;
-      if(!presenceCards_.Equals(other.presenceCards_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2247,7 +2263,6 @@ namespace Api {
       int hash = 1;
       if (State != global::Api.GameState.Unknown) hash ^= State.GetHashCode();
       if (CountDown != 0L) hash ^= CountDown.GetHashCode();
-      hash ^= presenceCards_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2274,7 +2289,6 @@ namespace Api {
         output.WriteRawTag(16);
         output.WriteInt64(CountDown);
       }
-      presenceCards_.WriteTo(output, _repeated_presenceCards_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2293,7 +2307,6 @@ namespace Api {
         output.WriteRawTag(16);
         output.WriteInt64(CountDown);
       }
-      presenceCards_.WriteTo(ref output, _repeated_presenceCards_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -2310,7 +2323,6 @@ namespace Api {
       if (CountDown != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(CountDown);
       }
-      size += presenceCards_.CalculateSize(_repeated_presenceCards_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -2329,7 +2341,6 @@ namespace Api {
       if (other.CountDown != 0L) {
         CountDown = other.CountDown;
       }
-      presenceCards_.Add(other.presenceCards_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -2357,10 +2368,6 @@ namespace Api {
             CountDown = input.ReadInt64();
             break;
           }
-          case 26: {
-            presenceCards_.AddEntriesFrom(input, _repeated_presenceCards_codec);
-            break;
-          }
         }
       }
     #endif
@@ -2386,10 +2393,6 @@ namespace Api {
           }
           case 16: {
             CountDown = input.ReadInt64();
-            break;
-          }
-          case 26: {
-            presenceCards_.AddEntriesFrom(ref input, _repeated_presenceCards_codec);
             break;
           }
         }
@@ -2964,315 +2967,6 @@ namespace Api {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class WhotScoreResult : pb::IMessage<WhotScoreResult>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<WhotScoreResult> _parser = new pb::MessageParser<WhotScoreResult>(() => new WhotScoreResult());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<WhotScoreResult> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[9]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public WhotScoreResult() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public WhotScoreResult(WhotScoreResult other) : this() {
-      totalPoints_ = other.totalPoints_;
-      remainingCards_ = other.remainingCards_;
-      isWinner_ = other.isWinner_;
-      winFactor_ = other.winFactor_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public WhotScoreResult Clone() {
-      return new WhotScoreResult(this);
-    }
-
-    /// <summary>Field number for the "total_points" field.</summary>
-    public const int TotalPointsFieldNumber = 1;
-    private long totalPoints_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public long TotalPoints {
-      get { return totalPoints_; }
-      set {
-        totalPoints_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "remaining_cards" field.</summary>
-    public const int RemainingCardsFieldNumber = 2;
-    private int remainingCards_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int RemainingCards {
-      get { return remainingCards_; }
-      set {
-        remainingCards_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "is_winner" field.</summary>
-    public const int IsWinnerFieldNumber = 3;
-    private bool isWinner_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool IsWinner {
-      get { return isWinner_; }
-      set {
-        isWinner_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "win_factor" field.</summary>
-    public const int WinFactorFieldNumber = 4;
-    private double winFactor_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public double WinFactor {
-      get { return winFactor_; }
-      set {
-        winFactor_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as WhotScoreResult);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(WhotScoreResult other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (TotalPoints != other.TotalPoints) return false;
-      if (RemainingCards != other.RemainingCards) return false;
-      if (IsWinner != other.IsWinner) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(WinFactor, other.WinFactor)) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (TotalPoints != 0L) hash ^= TotalPoints.GetHashCode();
-      if (RemainingCards != 0) hash ^= RemainingCards.GetHashCode();
-      if (IsWinner != false) hash ^= IsWinner.GetHashCode();
-      if (WinFactor != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(WinFactor);
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (TotalPoints != 0L) {
-        output.WriteRawTag(8);
-        output.WriteInt64(TotalPoints);
-      }
-      if (RemainingCards != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(RemainingCards);
-      }
-      if (IsWinner != false) {
-        output.WriteRawTag(24);
-        output.WriteBool(IsWinner);
-      }
-      if (WinFactor != 0D) {
-        output.WriteRawTag(33);
-        output.WriteDouble(WinFactor);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (TotalPoints != 0L) {
-        output.WriteRawTag(8);
-        output.WriteInt64(TotalPoints);
-      }
-      if (RemainingCards != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(RemainingCards);
-      }
-      if (IsWinner != false) {
-        output.WriteRawTag(24);
-        output.WriteBool(IsWinner);
-      }
-      if (WinFactor != 0D) {
-        output.WriteRawTag(33);
-        output.WriteDouble(WinFactor);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (TotalPoints != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(TotalPoints);
-      }
-      if (RemainingCards != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RemainingCards);
-      }
-      if (IsWinner != false) {
-        size += 1 + 1;
-      }
-      if (WinFactor != 0D) {
-        size += 1 + 8;
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(WhotScoreResult other) {
-      if (other == null) {
-        return;
-      }
-      if (other.TotalPoints != 0L) {
-        TotalPoints = other.TotalPoints;
-      }
-      if (other.RemainingCards != 0) {
-        RemainingCards = other.RemainingCards;
-      }
-      if (other.IsWinner != false) {
-        IsWinner = other.IsWinner;
-      }
-      if (other.WinFactor != 0D) {
-        WinFactor = other.WinFactor;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 8: {
-            TotalPoints = input.ReadInt64();
-            break;
-          }
-          case 16: {
-            RemainingCards = input.ReadInt32();
-            break;
-          }
-          case 24: {
-            IsWinner = input.ReadBool();
-            break;
-          }
-          case 33: {
-            WinFactor = input.ReadDouble();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 8: {
-            TotalPoints = input.ReadInt64();
-            break;
-          }
-          case 16: {
-            RemainingCards = input.ReadInt32();
-            break;
-          }
-          case 24: {
-            IsWinner = input.ReadBool();
-            break;
-          }
-          case 33: {
-            WinFactor = input.ReadDouble();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class WhotPlayerResult : pb::IMessage<WhotPlayerResult>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -3287,7 +2981,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[10]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3622,7 +3316,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[11]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3938,7 +3632,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[12]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4395,7 +4089,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[13]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4628,7 +4322,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[14]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[13]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5131,7 +4825,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[15]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[14]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5477,7 +5171,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[16]; }
+      get { return global::Api.WhotGameApiReflection.Descriptor.MessageTypes[15]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

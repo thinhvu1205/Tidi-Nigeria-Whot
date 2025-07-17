@@ -1585,10 +1585,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SiXiangView, Assembly-CSharp
-        m_MethodName: onClickChangeBetLevel
-        m_Mode: 5
+      - m_Target: {fileID: 3575925420491943574}
+        m_TargetAssemblyTypeName: BaseSlotView, Assembly-CSharp
+        m_MethodName: OnClickPlusBetButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1983,10 +1983,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SiXiangView, Assembly-CSharp
-        m_MethodName: onClickChangeBetLevel
-        m_Mode: 5
+      - m_Target: {fileID: 3575925420491943574}
+        m_TargetAssemblyTypeName: BaseSlotView, Assembly-CSharp
+        m_MethodName: OnClickMaxBetButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3907,7 +3907,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7708e67653374c60af5f1595e949403, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: 7800525795003925199, guid: b7708e67653374c60af5f1595e949403, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -5643,7 +5643,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: -40
+  m_Spacing: 40
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -6279,10 +6279,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SiXiangView, Assembly-CSharp
-        m_MethodName: onClickChangeBetLevel
-        m_Mode: 5
+      - m_Target: {fileID: 3575925420491943574}
+        m_TargetAssemblyTypeName: BaseSlotView, Assembly-CSharp
+        m_MethodName: OnClickMinusBetButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -8418,7 +8418,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Choose the game and enjoy the <color=#FF0000>4X</color> reward
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7708e67653374c60af5f1595e949403, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: 7800525795003925199, guid: b7708e67653374c60af5f1595e949403, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -9403,7 +9403,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -38}
-  m_SizeDelta: {x: 49, y: 29}
+  m_SizeDelta: {x: 200, y: 29}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &404614379756933024
 CanvasRenderer:
@@ -9435,7 +9435,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 0b9b1629916ea5542a1e2f64e38496a8, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -9816,9 +9816,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameView, Assembly-CSharp
-        m_MethodName: onClickBack
+      - m_Target: {fileID: 3575925420491943574}
+        m_TargetAssemblyTypeName: BaseSlotView, Assembly-CSharp
+        m_MethodName: OnClickMenuButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10586,9 +10586,9 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 3575925420491943574}
           m_TargetAssemblyTypeName: BaseSlotView, Assembly-CSharp
-          m_MethodName: onSpinTriggerDown
+          m_MethodName: OnStopSpin
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -10602,9 +10602,9 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 3575925420491943574}
           m_TargetAssemblyTypeName: BaseSlotView, Assembly-CSharp
-          m_MethodName: onSpinTriggerUp
+          m_MethodName: OnTriggerUpSpinButton
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -12890,6 +12890,7 @@ GameObject:
   - component: {fileID: 9158675469440060406}
   - component: {fileID: 9158675469440060404}
   - component: {fileID: 9158675469440060407}
+  - component: {fileID: 3575925420491943574}
   m_Layer: 5
   m_Name: SlotSiXiangView
   m_TagString: Untagged
@@ -12963,6 +12964,74 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3575925420491943574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9158675469440060401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34bed00bd137642d99e5379b7319add4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPopup: 0
+  effectPopupReverse: 0
+  popupBackground: {fileID: 0}
+  maxBetButton: {fileID: 2211120393551293966}
+  plusBetButton: {fileID: 7604803048338715678}
+  minusBetButton: {fileID: 221999202210278868}
+  betAmountText: {fileID: 1872184131208251250}
+  betInfoSessionText: {fileID: 7700807509648341474}
+  betStateText: {fileID: 0}
+  stateWinText: {fileID: 0}
+  freeSpinLeftText: {fileID: 0}
+  bigWinText: {fileID: 0}
+  chipWinText: {fileID: 13162776532094585}
+  currentChipText: {fileID: 3881164056177287548}
+  paylineText: {fileID: 7700807509648341474}
+  numLineLeftText: {fileID: 5723863071605462741}
+  numLineRightText: {fileID: 0}
+  spinBackgroundImage: {fileID: 0}
+  chipImage: {fileID: 0}
+  spinButton: {fileID: 3422643427751083862}
+  stateWinImage: {fileID: 4546417864828901344}
+  betStateImage: {fileID: 7657249257536527763}
+  stateWinSpriteList:
+  - {fileID: 21300000, guid: 2e3ed501afbe82e4790ab0fa23c74e39, type: 3}
+  - {fileID: 21300000, guid: 80ad18c6cabd6b34d9e03ff85e4d5d0d, type: 3}
+  - {fileID: 21300000, guid: 192ef19ee5aa2af40803d7c86c22941a, type: 3}
+  itemSpriteList:
+  - {fileID: 21300000, guid: 1d3a280b1c121de43be0340171cf1bd9, type: 3}
+  - {fileID: 21300000, guid: c25c24bdb42d8b34284718d81ad45a3f, type: 3}
+  - {fileID: 21300000, guid: 8cd2c046dda93e2419fcde928520d28f, type: 3}
+  - {fileID: 21300000, guid: ab28c0f2f9665604b84fed5dc2457609, type: 3}
+  - {fileID: 21300000, guid: 52e4722f20d188641a411afb82bd9519, type: 3}
+  - {fileID: 21300000, guid: 6d899cb799bff4d428bdad54ce88e3cd, type: 3}
+  - {fileID: 21300000, guid: eeed39f142f90e9438ba732834f64d88, type: 3}
+  - {fileID: 21300000, guid: e52765246232e3e4481367083f9f88c2, type: 3}
+  - {fileID: 21300000, guid: 922360f8d4df1fd478afbce4d5dd7308, type: 3}
+  - {fileID: 21300000, guid: 9f9387fb9f15cec419b866fb3a5452e5, type: 3}
+  - {fileID: 21300000, guid: 58cf3c00f9751d1448c9a6976a8c3b90, type: 3}
+  betStateSpriteList:
+  - {fileID: 21300000, guid: 0b9b1629916ea5542a1e2f64e38496a8, type: 3}
+  - {fileID: 21300000, guid: bc5a10b1a0284494ab86397821e898ce, type: 3}
+  lineContainer: {fileID: 1714132023750912628}
+  effectContainer: {fileID: 1151945941278691732}
+  paylineInfoContainer: {fileID: 8765382178854434309}
+  paylineIconContainer: {fileID: 8954741523360725864}
+  columnContainer: {fileID: 4409751956257453315}
+  coinParent: {fileID: 5061016822474984051}
+  rulePrefab: {fileID: 8509303910187848506, guid: b43ea45e2e34647c593aeaa3895de537, type: 3}
+  linePrefab: {fileID: 8548897947965680954, guid: 0141132e8370a4b11b5689cdc18d9b49, type: 3}
+  coinPrefab: {fileID: 5775115196986566630, guid: a9c914c2a21b84cf9b137696d366c3e4, type: 3}
+  columnPrefab: {fileID: 2840804155350443499, guid: 8fb02950b24ab4af29d4f4d0f45ea017, type: 3}
+  backgroundFreeSpinAnimation: {fileID: 0}
+  thirdScatterAnimation: {fileID: 0}
+  buttonSpinAnimation: {fileID: 5790761887145093738}
+  animationEffect: {fileID: 0}
+  backgroundFreeSpinLeftAnimation: {fileID: 0}
 --- !u!1 &9158675469752053206
 GameObject:
   m_ObjectHideFlags: 0

@@ -26,11 +26,18 @@ public class BaseSlotView : BaseGameView
         SCATTER,
         NONE
     }
+
+    protected enum StateWin
+    {
+        WIN,
+        TOTAL_WIN,
+        LAST_WIN
+    }
     [SerializeField] protected Button maxBetButton, plusBetButton, minusBetButton;
     [SerializeField] protected TextMeshProUGUI betAmountText, betInfoSessionText, betStateText, stateWinText, freeSpinLeftText, bigWinText, chipWinText, currentChipText, paylineText,
     numLineLeftText, numLineRightText;
-    [SerializeField] protected Image spinBackgroundImage, chipImage, spinButton, stateWinImage;
-    [SerializeField] protected List<Sprite> stateWinSpriteList, itemSpriteList;
+    [SerializeField] protected Image spinBackgroundImage, chipImage, spinButton, stateWinImage, betStateImage;
+    [SerializeField] protected List<Sprite> stateWinSpriteList, itemSpriteList, betStateSpriteList;
     [SerializeField] protected Transform lineContainer, effectContainer, paylineInfoContainer, paylineIconContainer, columnContainer, coinParent;
     [SerializeField] protected GameObject rulePrefab, linePrefab, coinPrefab, columnPrefab;
     [SerializeField] protected SkeletonGraphic backgroundFreeSpinAnimation, thirdScatterAnimation, buttonSpinAnimation, animationEffect, backgroundFreeSpinLeftAnimation;
@@ -109,28 +116,46 @@ public class BaseSlotView : BaseGameView
     public override void HandleUpdateTable(IMatchState matchState)
     {
         base.HandleUpdateTable(matchState);
-
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
+        Debug.Log("Slot : " +data.ToString());
         if (!hasSpinned)
         {
             betLevelList = data.BetLevels.ToList();
             currentBetLevel = data.ChipsMcb;
             SetInfoSessionText("Press SPIN to play");
             SetCurrentBetText(currentBetLevel);
+            SetCurrentBetImage(currentBetLevel);
+
             SetCurrentChipValue(data.GameReward.BalanceChipsWalletAfter);
+            if (data.GameConfig != null)
+            {
+                freeSpinLeft = (int)data.GameConfig.NumFreeSpin;
+                isLastFreeSpin = data.GameConfig.NumFreeSpin <= 0;
+                lastTotalChipWinByGame = totalChipWinByGame;
+                totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
+            }
+            if (freeSpinLeft > 0)
+            {
+                ShowBackGroundFreeSpin();
+                spinType = SpinType.FREE_NORMAL;
+                UpdateSpinButtonUI();
+            }
         }
         else
         {
+            if (!IsSpinning) return;
             OnStartSpin();
         }
         
         // Update UI cho các item
         List<SiXiangSymbol> listSymbols = data.Matrix.Lists.ToList();
+        List<SpinSymbol> spinList = data.Matrix.SpinLists.ToList();
         int totalCol = data.Matrix.Cols;
         for (int col = 0; col < totalCol; col++)
         {
             SlotColumn column = slotColumnList[col];
             int[] columnArray = new int[3];
+            long[] valuePackageColumnArray = new long[3];
 
             for (int row = 0; row < 3; row++)
             {
@@ -143,18 +168,28 @@ public class BaseSlotView : BaseGameView
                 }
                 else
                 {
-                    columnArray[row] = -1; 
+                    columnArray[row] = -1;
+                }
+                if (spinList.Count > 0)
+                {
+                    valuePackageColumnArray[row] = spinList[index].WinAmount;
                 }
             }
+
 
             if (hasSpinned)
             {
                 column.SetFinishView(columnArray);
+                SetPackageValue(column, valuePackageColumnArray);
                 paylineList = data.Paylines.ToList();
                 if (data.GameConfig != null)
                 {
                     freeSpinLeft = (int)data.GameConfig.NumFreeSpin;
-                    isLastFreeSpin = data.GameConfig.NumFreeSpin <= 0;
+                    if (data.GameConfig.NumFreeSpin <= 0)
+                    {
+                        backgroundFreeSpinAnimation.gameObject.SetActive(false);
+                        isLastFreeSpin = true;
+                    }
                     lastTotalChipWinByGame = totalChipWinByGame;
                     totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
                 }
@@ -191,9 +226,10 @@ public class BaseSlotView : BaseGameView
 
         Debug.Log("PLAYER WALLET AFTER: " + playerWalletAfter);
         hasSpinned = true;
-      
+    }
 
-        Debug.Log("Slot : " +data.ToString());
+    protected virtual void SetPackageValue(SlotColumn column, long[] packageValues)
+    {
     }
     #endregion
 
@@ -217,7 +253,7 @@ public class BaseSlotView : BaseGameView
             long updatedWallet = playerWallet - currentBetLevel;
             SetCurrentChipValue(updatedWallet);
             SetInfoSessionText($"Playing {PaylineIdList.Count} lines. Good luck!");
-            stateWinImage.sprite = stateWinSpriteList[2]; // Last win
+            UpdateStateWinUI(StateWin.LAST_WIN); // Last win
         }
         else
         {
@@ -233,8 +269,9 @@ public class BaseSlotView : BaseGameView
         }
     }
 
-    public void OnStopSpin()
+    public virtual void OnStopSpin()
     {
+        IsSpinning = false;
         if (isLastFreeSpin)
         {
             if (totalChipWinByGame > PaylineIdList.Count * currentBetLevel) winType = WinType.BIG_WIN;
@@ -318,7 +355,7 @@ public class BaseSlotView : BaseGameView
         }
     }
 
-    public void CheckThirdScatter(int columnIndex)
+    public virtual void CheckThirdScatter(int columnIndex)
     {
         int nextColumnIndex = columnIndex + 1;
         if (ScatterCount == 2 && nextColumnIndex == ThirdScatterIndex)
@@ -415,7 +452,7 @@ public class BaseSlotView : BaseGameView
         }
     }
 
-    public void OnClickPlusBetButton()
+    public virtual void OnClickPlusBetButton()
     {
         if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT)
         {
@@ -427,9 +464,10 @@ public class BaseSlotView : BaseGameView
             currentBetLevel = betLevelList[0];
         }
         SetCurrentBetText(currentBetLevel);
+        SetCurrentBetImage(currentBetLevel);
     }
 
-    public void OnClickMinusBetButton()
+    public virtual void OnClickMinusBetButton()
     {
         if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT)
         {
@@ -441,9 +479,10 @@ public class BaseSlotView : BaseGameView
             currentBetLevel = betLevelList[^1];
         }
         SetCurrentBetText(currentBetLevel);
+        SetCurrentBetImage(currentBetLevel);
     }
 
-    public void OnClickMaxBetButton()
+    public virtual void OnClickMaxBetButton()
     {
         if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT)
         {
@@ -451,6 +490,7 @@ public class BaseSlotView : BaseGameView
         }
         currentBetLevel = betLevelList[^1];
         SetCurrentBetText(currentBetLevel);
+        SetCurrentBetImage(currentBetLevel);
     }
 
     public void OnClickShopButton()
@@ -624,9 +664,12 @@ public class BaseSlotView : BaseGameView
 
     protected void ShowWinScatter()
     {
-        AnimateCoinsFly();
-        SetCurrentChipValue(playerWalletAfter);
-        UpdateChipWinValue();
+        if (!isInFreeSpin)
+        {
+            AnimateCoinsFly();
+            SetCurrentChipValue(playerWalletAfter);
+            UpdateChipWinValue();
+        }
         List<int> scatterColumnIds = new();
         slotColumnList.ForEach(arr =>
         {
@@ -646,7 +689,7 @@ public class BaseSlotView : BaseGameView
         });
     }
 
-    private void ShowWinAnimation(WinType winType)
+    protected void ShowWinAnimation(WinType winType)
     {
         effectContainer.gameObject.SetActive(true);
         animationEffect.gameObject.SetActive(true);
@@ -656,7 +699,7 @@ public class BaseSlotView : BaseGameView
             case WinType.BIG_WIN:
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
-                Utility.TweenNumberTo(bigWinText, 100000, 0, 2.0f);
+                Utility.TweenNumberTo(bigWinText, totalChipWinByGame, 0, 2.0f);
                 animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
                 animationEffect.transform.localPosition = new Vector2(0, -70);
                 Utility.PlayAnimationByPath(animationEffect, BIG_WIN_ANIMATION_PATH, BIG_WIN_ANIMATION_NAME, false);
@@ -665,7 +708,7 @@ public class BaseSlotView : BaseGameView
             case WinType.MEGA_WIN:
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
-                Utility.TweenNumberTo(bigWinText, 100000, 0, 2.0f);
+                Utility.TweenNumberTo(bigWinText, totalChipWinByGame, 0, 2.0f);
                 animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
                 animationEffect.transform.localPosition = new Vector2(0, -70);
                 Utility.PlayAnimationByPath(animationEffect, MEGA_WIN_ANIMATION_PATH, MEGA_WIN_ANIMATION_NAME, false);
@@ -714,12 +757,13 @@ public class BaseSlotView : BaseGameView
 
     protected virtual bool CheckWinScatter()
     {
-        int numberScatter = slotColumnList.FindAll(col => col.ResultItem.GetFinishView().Contains(12)).Count;
-        if (numberScatter >= 3) hasGotFreeSpin = true;
-        return numberScatter >= 2;
+        return false;
+        // int numberScatter = slotColumnList.FindAll(col => col.ResultItem.GetFinishView().Contains(12)).Count;
+        // if (numberScatter >= 3) hasGotFreeSpin = true;
+        // return numberScatter >= 2;
     }
 
-    private bool CheckFiveOfAKind()
+    protected bool CheckFiveOfAKind()
     {
         bool isFiveOfAKind = false;
         foreach (Payline payline in paylineList)
@@ -958,6 +1002,32 @@ public class BaseSlotView : BaseGameView
         buttonSpinAnimation.Initialize(true);
     }
 
+    protected void UpdateStateWinUI(StateWin stateWin)
+    {
+        bool isUsingStateImage = stateWinImage.gameObject.activeSelf;
+        switch (stateWin)
+        {
+            case StateWin.WIN when isUsingStateImage:
+                stateWinImage.sprite = stateWinSpriteList[0];
+                break;
+            case StateWin.WIN when !isUsingStateImage:
+                stateWinText.text = "Win";
+                break;
+            case StateWin.TOTAL_WIN when isUsingStateImage:
+                stateWinImage.sprite = stateWinSpriteList[1];
+                break;
+            case StateWin.TOTAL_WIN when !isUsingStateImage:
+                stateWinText.text = "Total Win";
+                break;
+            case StateWin.LAST_WIN when isUsingStateImage:
+                stateWinImage.sprite = stateWinSpriteList[2];
+                break;
+            case StateWin.LAST_WIN when !isUsingStateImage:
+                stateWinText.text = "Last Win";
+                break;
+        }
+    }
+
     protected virtual void SetSpinAnimation(SpinType type)
     {
         buttonSpinAnimation.startingAnimation = type switch
@@ -997,8 +1067,15 @@ public class BaseSlotView : BaseGameView
         betStateText.text = text;
     }
 
+    protected void SetBetStateImage(string text)
+    {
+        betStateImage.gameObject.SetActive(true);
+        betStateImage.sprite = text == "Maximun bet" ? betStateSpriteList[1] : betStateSpriteList[0];
+    }
+
     protected void SetCurrentBetText(long betLevel)
     {
+        if (betStateText == null) return;
         betAmountText.text = Utility.FormatNumber(betLevel);
         if (betLevel == betLevelList[^1])
         {
@@ -1010,14 +1087,28 @@ public class BaseSlotView : BaseGameView
         }
     }
 
+    protected void SetCurrentBetImage(long betLevel)
+    {
+        if (betStateImage == null) return;
+        betAmountText.text = Utility.FormatNumber(betLevel);
+        if (betLevel == betLevelList[^1])
+        {
+            SetBetStateImage("Maximun bet");
+        }
+        else
+        {
+            SetBetStateImage("Bet");
+        }
+    }
+
     protected void UpdateChipWinValue()
     {
-        stateWinImage.sprite = stateWinSpriteList[0];
+        UpdateStateWinUI(StateWin.WIN);
         Utility.TweenNumberTo(chipWinText, currentChipWin, lastChipWin, 0.5f, false);
     }
     protected void UpdateTotalChipWinValue()
     {
-        stateWinImage.sprite = stateWinSpriteList[1];
+        UpdateStateWinUI(StateWin.TOTAL_WIN);
         Utility.TweenNumberTo(chipWinText, totalChipWinByGame, lastTotalChipWinByGame, 0.5f, false);
     }
 
@@ -1077,8 +1168,8 @@ public class BaseSlotView : BaseGameView
     private void Init()
     {
         paylineInfoContainer.gameObject.SetActive(false);
-        numLineLeftText.text = PaylineIdList.Count.ToString();
-        numLineRightText.text = PaylineIdList.Count.ToString();
+        if (numLineLeftText != null) numLineLeftText.text = PaylineIdList.Count.ToString();
+        if (numLineRightText != null) numLineRightText.text = PaylineIdList.Count.ToString();
         coinPool = new UnityEngine.Pool.ObjectPool<Image>(
             createFunc: () =>
             {
@@ -1141,7 +1232,7 @@ public class BaseSlotView : BaseGameView
         }
     }
 
-    private void NextTween()
+    protected virtual void NextTween()
     {
         if (tweenQueue.Count > 0)
         {
@@ -1157,7 +1248,7 @@ public class BaseSlotView : BaseGameView
                 {
                     spinType = SpinType.FREE_NORMAL;
                 }
-                stateWinImage.sprite = stateWinSpriteList[1];
+                UpdateStateWinUI(StateWin.TOTAL_WIN);
                 chipWinText.text = "0";
                 hasGotFreeSpin = false;
 
@@ -1171,9 +1262,12 @@ public class BaseSlotView : BaseGameView
         }
     }
 
-    protected void SetDarkAllItems()
+    protected void SetDarkAllItems(bool isBackgroundDark = true)
     {
-        spinBackgroundImage.color = Color.gray;
+        if (isBackgroundDark)
+        {
+            spinBackgroundImage.color = Color.gray;
+        }
         foreach (SlotColumn column in slotColumnList)
         {
             column.SetDarkAllItems();
@@ -1189,13 +1283,13 @@ public class BaseSlotView : BaseGameView
         }
     }
 
-    private void UpdateGameState(SlotGameState gameState)
+    protected void UpdateGameState(SlotGameState gameState)
     {
         this.gameState = gameState;
         UpdateSpinButtonUI();
     }
 
-    private void Reset()
+    protected virtual void Reset()
     {
         if (spinType == SpinType.NORMAL || spinType == SpinType.FREE_NORMAL)
         {

@@ -14788,6 +14788,7 @@ GameObject:
   - component: {fileID: 8753862968189356550}
   - component: {fileID: 8753862968189356552}
   - component: {fileID: 8753862968189356551}
+  - component: {fileID: 1503507703121900181}
   m_Layer: 5
   m_Name: SlotTarzanView
   m_TagString: Untagged
@@ -14860,6 +14861,58 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1503507703121900181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8753862968189356549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 406eee0009e2047cf9eb3a86f1f2695e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPopup: 0
+  effectPopupReverse: 0
+  popupBackground: {fileID: 0}
+  maxBetButton: {fileID: 0}
+  plusBetButton: {fileID: 0}
+  minusBetButton: {fileID: 0}
+  betAmountText: {fileID: 0}
+  betInfoSessionText: {fileID: 0}
+  betStateText: {fileID: 0}
+  stateWinText: {fileID: 0}
+  freeSpinLeftText: {fileID: 0}
+  bigWinText: {fileID: 0}
+  chipWinText: {fileID: 0}
+  currentChipText: {fileID: 0}
+  paylineText: {fileID: 0}
+  numLineLeftText: {fileID: 0}
+  numLineRightText: {fileID: 0}
+  spinBackgroundImage: {fileID: 0}
+  chipImage: {fileID: 0}
+  spinButton: {fileID: 0}
+  stateWinImage: {fileID: 0}
+  betStateImage: {fileID: 0}
+  stateWinSpriteList: []
+  itemSpriteList: []
+  betStateSpriteList: []
+  lineContainer: {fileID: 0}
+  effectContainer: {fileID: 0}
+  paylineInfoContainer: {fileID: 0}
+  paylineIconContainer: {fileID: 0}
+  columnContainer: {fileID: 0}
+  coinParent: {fileID: 0}
+  rulePrefab: {fileID: 0}
+  linePrefab: {fileID: 0}
+  coinPrefab: {fileID: 0}
+  columnPrefab: {fileID: 0}
+  backgroundFreeSpinAnimation: {fileID: 0}
+  thirdScatterAnimation: {fileID: 0}
+  buttonSpinAnimation: {fileID: 0}
+  animationEffect: {fileID: 0}
+  backgroundFreeSpinLeftAnimation: {fileID: 0}
 --- !u!1 &8753862968546525064
 GameObject:
   m_ObjectHideFlags: 0
