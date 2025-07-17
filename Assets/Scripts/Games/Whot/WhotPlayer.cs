@@ -7,12 +7,13 @@ using Api;
 using DG.Tweening;
 using Globals;
 using System;
+using Common.Pool;
 
 public class WhotPlayer : MonoBehaviour
 {
     [SerializeField] private Image avatarImage, countdownImage, lightImage, holdOnImage, suspensionImage, scoreImage;
     [SerializeField] private TextMeshProUGUI nameText, chipText, cardsLeftText, effectText, scoreText, plusText, chipAddText;
-    [SerializeField] private GameObject lastCardNoti, effectNoti, cardsDisplay, cardPrefab, chipPrefab;
+    [SerializeField] private GameObject lastCardNoti, effectNoti, cardsDisplay, cardPrefab;
     [SerializeField] private Transform remainingCardsParent;
     [SerializeField] private TMP_FontAsset chipWinFont, chipLoseFont;
     [HideInInspector] public bool isCurrentPlayer = false;
@@ -127,7 +128,8 @@ public class WhotPlayer : MonoBehaviour
         for (int i = 0; i < cards.Count; i++)
         {
             Card card = cards[i];
-            WhotCard whotCard = Instantiate(cardPrefab, remainingCardsParent).GetComponent<WhotCard>();
+            WhotCard whotCard = PoolService.Instance.Get<WhotCard>(PrefabType.WhotCard);
+            whotCard.transform.SetParent(remainingCardsParent);
             whotCard.SetInfo(card.Suit, card.Rank);
             whotCard.SetSelectable(false);
             whotCard.transform.localScale = Vector3.one * CARD_SCALE;
@@ -191,9 +193,11 @@ public class WhotPlayer : MonoBehaviour
         }
         foreach (Transform child in remainingCardsParent)
         {
-            if (child.GetComponent<WhotCard>() != null)
+            WhotCard whotCard = child.GetComponent<WhotCard>();
+            if (whotCard != null)
             {
-                Destroy(child.gameObject);
+                // Destroy(child.gameObject);
+                PoolService.Instance.Release(PrefabType.WhotCard, whotCard);
             }
         }
     }
@@ -388,10 +392,11 @@ public class WhotPlayer : MonoBehaviour
     {
         for (int i = 0; i < 5; i++)
         {
-            GameObject chipInstance = Instantiate(chipPrefab, transform);
+            // GameObject chipInstance = Instantiate(chipPrefab, transform);
+            WhotChip chipInstance = PoolService.Instance.Get<WhotChip>(PrefabType.ChipPlayerWhot);
             chipInstance.transform.position = GetPlayedCardParent().position;
             chipInstance.transform.localScale = Vector3.one;
-
+            
             Sequence chipSequence = DOTween.Sequence();
             chipSequence
                 .AppendInterval(i * 0.12f)
@@ -402,7 +407,8 @@ public class WhotPlayer : MonoBehaviour
                 )
                 .OnComplete(() =>
                 {
-                    Destroy(chipInstance);
+                    // Destroy(chipInstance);
+                    PoolService.Instance.Release(PrefabType.ChipPlayerWhot ,chipInstance);
                     if (isLast)
                     {
                         whotGame.AnimateAllPlayersAddChip();

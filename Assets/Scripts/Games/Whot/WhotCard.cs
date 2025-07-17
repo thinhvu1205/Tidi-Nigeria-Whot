@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Api;
+using Common.Pool;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using Color = UnityEngine.Color;
 
-public class WhotCard : MonoBehaviour
+public class WhotCard : MonoBehaviour,IPoolable
 {
     public event EventHandler<OnCardSelectedEventArg> OnCardSelected;
 
@@ -148,4 +149,20 @@ public class WhotCard : MonoBehaviour
             _ => "Unknown"
         };
     }
+
+    public void OnGetFromPool()
+    {
+        
+    }
+
+    public void OnReturnToPool()
+    {
+        isSelected = false;
+        isSelectable = true;
+        position = Vector2.zero;
+        SetNormal();
+        SetFaceDown();
+        OnCardSelected = null;
+    }
+    
 }

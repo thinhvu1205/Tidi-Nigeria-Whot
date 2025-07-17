@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Api;
+using Common.Pool;
 using DG.Tweening;
 using Globals;
 using Google.Protobuf;
@@ -14,7 +15,7 @@ public class WhotPlayerHand : MonoBehaviour
     [SerializeField] private Transform cardsParent, scoreParent, remainingCardsParent;
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private TextMeshProUGUI scoreText;
-    [HideInInspector] public List<WhotCard> cardsInHand = new();
+    [HideInInspector] public List<WhotCard> cardsInHand, remainingWhotCards = new();
     private WhotView whotGame;
     private const float ANIMATION_TIME = 0.35f;
     private const float CARD_SCALE = 0.86f;
@@ -37,10 +38,9 @@ public class WhotPlayerHand : MonoBehaviour
     public void PlayACard(WhotCard card)
     {
         card.SetSelectable(false);
+        cardsInHand.Remove(card);
         whotGame.PlayACard(card, GetCardsParent());
         EndTurn();
-        cardsInHand.Remove(card);
-        Destroy(card.gameObject);
         if (cardsInHand.Count == 0)
         {
             whotGame.AnimateLastCardEffect();
@@ -88,7 +88,9 @@ public class WhotPlayerHand : MonoBehaviour
         for (int i = 0; i < cards.Count; i++)
         {
             Card card = cards[i];
-            WhotCard whotCard = Instantiate(cardPrefab, remainingCardsParent).GetComponent<WhotCard>();
+            WhotCard whotCard = PoolService.Instance.Get<WhotCard>(PrefabType.WhotCard);
+            whotCard.transform.SetParent(remainingCardsParent);
+            remainingWhotCards.Add(whotCard);
             whotCard.SetInfo(card.Suit, card.Rank);
             whotCard.SetSelectable(false);
             whotCard.transform.localScale = Vector3.one * CARD_SCALE;
@@ -111,7 +113,7 @@ public class WhotPlayerHand : MonoBehaviour
 
     public void SortCards()
     {
-        cardsInHand = cardsInHand.OrderBy(c => GetSortValue(c)).ToList();
+        cardsInHand = cardsInHand.OrderBy(GetSortValue).ToList();
     }
 
     private void SortRemainingCards(List<Card> cards)
@@ -207,22 +209,25 @@ public class WhotPlayerHand : MonoBehaviour
     public void WhotCard_OnCardSelected(object sender, WhotCard.OnCardSelectedEventArg e)
     {
         WhotCard selectedCard = sender as WhotCard;
-        foreach (var card in cardsInHand.ToList())
+        if (selectedCard != null)
         {
-            if (card != selectedCard)
+            foreach (var card in cardsInHand.ToList())
             {
-                card.Unselect();
-            }
-            else
-            {
-                if (e.isSelected)
+                if (card != selectedCard)
                 {
-                    Card cardObject = new()
+                    card.Unselect();
+                }
+                else
+                {
+                    if (e.isSelected)
                     {
-                        Suit = card.GetCardSuit(),
-                        Rank = card.GetCardRank()
-                    };
-                    DataSender.SendMatchState((long)OpCodeRequest.PlayCard, cardObject.ToByteArray());
+                        Card cardObject = new()
+                        {
+                            Suit = card.GetCardSuit(),
+                            Rank = card.GetCardRank()
+                        };
+                        DataSender.SendMatchState((long)OpCodeRequest.PlayCard, cardObject.ToByteArray());
+                    }
                 }
             }
         }
@@ -242,21 +247,16 @@ public class WhotPlayerHand : MonoBehaviour
 
     public void Reset()
     {
-        foreach (Transform card in cardsParent)
+        foreach (WhotCard card in cardsInHand)
         {
-            if (card.GetComponent<WhotCard>() != null)
-            {
-                Destroy(card.gameObject);
-            }
+            PoolService.Instance.Release(PrefabType.WhotCard, card);
         }
-        foreach (Transform card in remainingCardsParent)
+        foreach (WhotCard card in remainingWhotCards)
         {
-            if (card.GetComponent<WhotCard>() != null)
-            {
-                Destroy(card.gameObject);
-            }
+            PoolService.Instance.Release(PrefabType.WhotCard, card);
         }
         cardsInHand.Clear();
+        remainingWhotCards.Clear();
         cardsParent.gameObject.SetActive(true);
     }
 

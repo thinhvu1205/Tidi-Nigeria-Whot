@@ -34,6 +34,12 @@ namespace Globals
         NORMAL = 0,
         PLAYNOW = 1,
     }
+    
+    public enum PrefabType
+    {
+        WhotCard,
+        ChipPlayerWhot,
+    }
 
     public enum SpinType
     {

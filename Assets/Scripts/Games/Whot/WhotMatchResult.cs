@@ -24,20 +24,18 @@ public class WhotMatchResult : MonoBehaviour
 
     private void OnEnable()
     {
-        timer = 10;
-        StartCoroutine(Countdown());
         GetListBet().Forget();
     }
-
-    private IEnumerator Countdown()
+    
+    public void UpdateTimerCountdown(int countdown)
     {
-        while (timer > 0)
+        timer = countdown;
+        timerText.text = timer.ToString();
+
+        if (timer == 0)
         {
-            yield return new WaitForSeconds(1f);
-            timer--;
-            timerText.text = timer.ToString();
+            OnClickPlayAgain();
         }
-        if (timer == 0) OnClickPlayAgain();
     }
 
     public void SetInfo(WhotView whotGame, List<WhotPlayer> players, List<WhotPlayerResult> result, List<BalanceUpdate> balanceUpdates, bool isVictory)
