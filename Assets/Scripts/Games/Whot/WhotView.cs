@@ -312,6 +312,7 @@ public class WhotView : BaseGameView
             foreach (Card card in presenceCard)
             {
                 WhotCard whotCard = InitCard(card);
+                whotCard.gameObject.SetActive(false);
                 dealCardsList.Add(whotCard);
             }
             StartCoroutine(DealCards());
@@ -478,9 +479,6 @@ public class WhotView : BaseGameView
                     Debug.Log("Has dealt cards, updating cards count");
                     UpdateCardsCount(data.DeckCount, playerCardsCount);
                 }
-                if (data.TopCard == null) return;
-                callCard = InitCard(data.TopCard, GetDeckOfCardParent());
-                AnimateChooseCallCard();
                 break;
         }
     }
@@ -1063,6 +1061,7 @@ public class WhotView : BaseGameView
                     whotCard.transform.SetParent(playerHand.GetCardsParent(), worldPositionStays: false);
                     whotCard.transform.localPosition = playerHand.GetNewCardPosition(whotCard);
                     whotCard.transform.localScale = Vector3.one;
+                    whotCard.gameObject.SetActive(true);
                     playerHand.cardsInHand.Add(whotCard);
                     playerHand.SpreadCards();
 
