@@ -178,6 +178,14 @@ public class SlotColumn : MonoBehaviour
         }
     }
 
+    public void SetSpreadFinishView(int[] symbolIdArray)
+    {
+        foreach (SlotItem item in itemList)
+        {
+            item.SetSpreadFinishIndices(symbolIdArray);
+        }
+    }
+
     public void SetRandomSprite()
     {
         defaultItem.SetRandomData();

@@ -57,7 +57,29 @@ public class BaseSlotView : BaseGameView
         "#1DC42C", "#6C58B1", "#97B158", "#0F0098", "#6700BE"
     };
     protected virtual Dictionary<SiXiangSymbol, int> SymbolDictionary => new();
-    protected virtual List<int[]> PaylineIdList => new();
+    protected virtual List<int[]> PaylineIdList => new List<int[]>
+    {
+        new int[] {1, 1, 1, 1, 1},
+        new int[] {0, 0, 0, 0, 0},
+        new int[] {2, 2, 2, 2, 2},
+        new int[] {0, 1, 2, 1, 0},
+        new int[] {2, 1, 0, 1, 2},
+        new int[] {0, 0, 1, 2, 2},
+        new int[] {2, 2, 1, 0, 0},
+        new int[] {1, 0, 1, 2, 1},
+        new int[] {1, 2, 1, 0, 1},
+        new int[] {1, 0, 0, 1, 0},
+        new int[] {1, 2, 2, 1, 2},
+        new int[] {0, 1, 0, 0, 1},
+        new int[] {2, 1, 2, 2, 1},
+        new int[] {0, 2, 0, 2, 0},
+        new int[] {2, 0, 2, 0, 2},
+        new int[] {1, 0, 2, 0, 1},
+        new int[] {1, 2, 0, 2, 1},
+        new int[] {0, 1, 1, 1, 0},
+        new int[] {2, 1, 1, 1, 2},
+        new int[] {0, 2, 2, 2, 0},
+    };
     protected virtual Vector2 RECT_SIZE => new(200, 170);
 
     protected virtual float AUTO_SPIN_HOLD_DURATION => 1.3f;
@@ -96,7 +118,7 @@ public class BaseSlotView : BaseGameView
     protected int totalLineWin = 0, freeSpinLeft = 0;
     public int ScatterCount { get; set; } = 0;
     public bool IsSpinning { get; set; } = false;
-    protected bool isHoldingSpin, hasGotFreeSpin, isInFreeSpin, isLastFreeSpin, hasSpinned = false;
+    protected bool isHoldingSpin, hasGotFreeSpin, isInFreeSpin, isLastFreeSpin, hasSetupStartView = false;
     protected float holdingSpinTime = 0;
 
     protected override void Awake()
@@ -117,119 +139,26 @@ public class BaseSlotView : BaseGameView
     {
         base.HandleUpdateTable(matchState);
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
-        Debug.Log("Slot : " +data.ToString());
-        if (!hasSpinned)
+        winType = data.BigWin switch
         {
-            betLevelList = data.BetLevels.ToList();
-            currentBetLevel = data.ChipsMcb;
-            SetInfoSessionText("Press SPIN to play");
-            SetCurrentBetText(currentBetLevel);
-            SetCurrentBetImage(currentBetLevel);
-
-            SetCurrentChipValue(data.GameReward.BalanceChipsWalletAfter);
-            if (data.GameConfig != null)
-            {
-                freeSpinLeft = (int)data.GameConfig.NumFreeSpin;
-                isLastFreeSpin = data.GameConfig.NumFreeSpin <= 0;
-                lastTotalChipWinByGame = totalChipWinByGame;
-                totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
-            }
-            if (freeSpinLeft > 0)
-            {
-                ShowBackGroundFreeSpin();
-                spinType = SpinType.FREE_NORMAL;
-                UpdateSpinButtonUI();
-            }
+            BigWin.Big => WinType.BIG_WIN,
+            BigWin.Mega => WinType.MEGA_WIN,
+            _ => WinType.NONE,
+        };       
+        Debug.Log("Slot : " +data.ToString());
+        if (!hasSetupStartView)
+        {
+            SetupStartView(data);
         }
         else
         {
             if (!IsSpinning) return;
             OnStartSpin();
         }
-        
-        // Update UI cho các item
-        List<SiXiangSymbol> listSymbols = data.Matrix.Lists.ToList();
-        List<SpinSymbol> spinList = data.Matrix.SpinLists.ToList();
-        int totalCol = data.Matrix.Cols;
-        for (int col = 0; col < totalCol; col++)
-        {
-            SlotColumn column = slotColumnList[col];
-            int[] columnArray = new int[3];
-            long[] valuePackageColumnArray = new long[3];
 
-            for (int row = 0; row < 3; row++)
-            {
-                // Tính index theo layout ngang
-                int index = row * 5 + col;
-                SiXiangSymbol symbol = listSymbols[index];
-                if (SymbolDictionary.TryGetValue(symbol, out int mappedValue))
-                {
-                    columnArray[row] = mappedValue;
-                }
-                else
-                {
-                    columnArray[row] = -1;
-                }
-                if (spinList.Count > 0)
-                {
-                    valuePackageColumnArray[row] = spinList[index].WinAmount;
-                }
-            }
-
-
-            if (hasSpinned)
-            {
-                column.SetFinishView(columnArray);
-                SetPackageValue(column, valuePackageColumnArray);
-                paylineList = data.Paylines.ToList();
-                if (data.GameConfig != null)
-                {
-                    freeSpinLeft = (int)data.GameConfig.NumFreeSpin;
-                    if (data.GameConfig.NumFreeSpin <= 0)
-                    {
-                        backgroundFreeSpinAnimation.gameObject.SetActive(false);
-                        isLastFreeSpin = true;
-                    }
-                    lastTotalChipWinByGame = totalChipWinByGame;
-                    totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
-                }
-                else
-                {
-                    freeSpinLeft = (int)data.NumSpinLeft;
-                    // freeSpinLeft = (int)15;
-                    isLastFreeSpin = false;
-                    lastTotalChipWinByGame = 0;
-                }
-                isInFreeSpin = freeSpinLeft > 0;
-                winType = data.BigWin switch
-                {
-                    BigWin.Big => WinType.BIG_WIN,
-                    BigWin.Mega => WinType.MEGA_WIN,
-                    _ => WinType.NONE,
-                };
-            }
-            else
-            {
-                column.SetStartView(columnArray);
-            }
-        }
-
-        // Update Reward
-        if (data.GameReward.UpdateWallet)
-        {
-            lastChipWin = currentChipWin;
-            currentChipWin = data.GameReward.ChipsWin;
-            // totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
-            totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
-            playerWalletAfter = data.GameReward.BalanceChipsWalletAfter;  
-        }
-
-        Debug.Log("PLAYER WALLET AFTER: " + playerWalletAfter);
-        hasSpinned = true;
-    }
-
-    protected virtual void SetPackageValue(SlotColumn column, long[] packageValues)
-    {
+        UpdateColumnView(data);
+        UpdateReward(data);
+        if (!hasSetupStartView) hasSetupStartView = true;
     }
     #endregion
 
@@ -281,8 +210,8 @@ public class BaseSlotView : BaseGameView
                 AnimateCoinsFly();
             }
             isLastFreeSpin = false;
-            UpdateGameState(SlotGameState.PREPARE);
             spinType = SpinType.NORMAL;
+            UpdateGameState(SlotGameState.PREPARE);
         }
 
         ///------------------CHECK SHOW WIN SCATTER--------------------//
@@ -357,8 +286,9 @@ public class BaseSlotView : BaseGameView
 
     public virtual void CheckThirdScatter(int columnIndex)
     {
+        if (columnIndex == 4 || isInFreeSpin) return;
         int nextColumnIndex = columnIndex + 1;
-        if (ScatterCount == 2 && nextColumnIndex == ThirdScatterIndex)
+        if (ScatterCount == 2)
         {
             foreach (SlotColumn column in slotColumnList)
             {
@@ -599,7 +529,7 @@ public class BaseSlotView : BaseGameView
             lineOneByOneSequence = DOTween.Sequence();
             // sequence.Add(s);
             lineOneByOneSequence
-                .AppendInterval(2.0f * i)
+                .AppendInterval(2.0f * index)
                 .AppendCallback(() =>
                 {
                     if (lineOneByOneSequence == null || !lineOneByOneSequence.IsActive())
@@ -629,7 +559,6 @@ public class BaseSlotView : BaseGameView
                         if (spinType == SpinType.NORMAL)
                         {
                             SetLightAllItems();
-                            Reset();
                         }
                         NextTween();
                     }
@@ -664,6 +593,7 @@ public class BaseSlotView : BaseGameView
 
     protected void ShowWinScatter()
     {
+        // Nếu đang ko Free Spin (tính cả Fruit Rain) thì có hiệu ứng tiền bay và Update tiền thưởng ngay lập tức
         if (!isInFreeSpin)
         {
             AnimateCoinsFly();
@@ -727,9 +657,7 @@ public class BaseSlotView : BaseGameView
                 bigWinText.transform.parent.gameObject.SetActive(false);
                 Utility.PlayAnimationByPath(animationEffect, FREE_SPIN_ANIMATION_PATH, FREE_SPIN_ANIMATION_NAME, false);
                 break;
-
         }
-
         animationEffect.AnimationState.Complete += delegate
         {
             effectContainer.gameObject.SetActive(false);
@@ -757,10 +685,9 @@ public class BaseSlotView : BaseGameView
 
     protected virtual bool CheckWinScatter()
     {
-        return false;
-        // int numberScatter = slotColumnList.FindAll(col => col.ResultItem.GetFinishView().Contains(12)).Count;
-        // if (numberScatter >= 3) hasGotFreeSpin = true;
-        // return numberScatter >= 2;
+        int numberScatter = slotColumnList.FindAll(col => col.ResultItem.GetFinishView().Contains(12)).Count;
+        if (numberScatter >= 3) hasGotFreeSpin = true;
+        return numberScatter >= 2;
     }
 
     protected bool CheckFiveOfAKind()
@@ -907,41 +834,6 @@ public class BaseSlotView : BaseGameView
 
     }
 
-    // Đếm số Item giống nhau liên tục trong 1 line
-    private int CountConsecutiveMatchingItems(List<int> listIds)
-    {
-        if (listIds == null || listIds.Count == 0)
-            return 0;
-
-        int count = 1;
-        int referenceId = listIds[0];
-
-        for (int i = 1; i < listIds.Count; i++)
-        {
-            int currentId = listIds[i];
-
-            // Nếu reference ko phải là Wild
-            if (referenceId != 11)
-            {
-                if (currentId == referenceId || currentId == 11)
-                {
-                    count++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-            else
-            {
-                referenceId = currentId;
-                count++;
-            }
-        }
-
-        return count;
-    }
-
     protected Vector2 GetIntersectPoint(Vector2 vector1, Vector2 vector2)
     {
 
@@ -1039,7 +931,7 @@ public class BaseSlotView : BaseGameView
         };
     }
 
-    protected void ShowBackGroundFreeSpin()
+    protected virtual void ShowBackGroundFreeSpin()
     {
         if (backgroundFreeSpinAnimation != null)
         {
@@ -1051,7 +943,11 @@ public class BaseSlotView : BaseGameView
             Utility.PlayAnimationByPath(backgroundFreeSpinAnimation, BACKGROUND_FREE_SPIN_ANIMATION_PATH, BACKGROUND_FREE_SPIN_ANIMATION_NAME, true);
         }
 
-        backgroundFreeSpinLeftAnimation.gameObject.SetActive(true);
+        if (backgroundFreeSpinLeftAnimation != null)
+        {
+            backgroundFreeSpinLeftAnimation.gameObject.SetActive(true);
+        }
+
         freeSpinLeftText.text = $"Freespin left: {freeSpinLeft}";
     }
 
@@ -1117,6 +1013,103 @@ public class BaseSlotView : BaseGameView
         Utility.TweenNumberTo(currentChipText, value, playerWallet, 0.5f, false);
         playerWallet = value;
     }
+
+    protected void SetupStartView(SlotDesk data)
+    {
+        betLevelList = data.BetLevels.ToList();
+        currentBetLevel = data.ChipsMcb;
+        SetInfoSessionText("Press SPIN to play");
+        SetCurrentBetText(currentBetLevel);
+        SetCurrentBetImage(currentBetLevel);
+
+        SetCurrentChipValue(data.GameReward.BalanceChipsWalletAfter);
+        if (data.GameConfig != null)
+        {
+            freeSpinLeft = (int)data.GameConfig.NumFreeSpin;
+            isLastFreeSpin = data.GameConfig.NumFreeSpin <= 0;
+            lastTotalChipWinByGame = totalChipWinByGame;
+            totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
+        }
+        if (freeSpinLeft > 0)
+        {
+            ShowBackGroundFreeSpin();
+            spinType = SpinType.FREE_NORMAL;
+            UpdateSpinButtonUI();
+        }
+    }
+
+    protected void UpdateColumnView(SlotDesk data)
+    {
+        List<SiXiangSymbol> listSymbols = data.Matrix.Lists.ToList();
+        List<SpinSymbol> spinList = data.Matrix.SpinLists.ToList();
+        int totalCol = data.Matrix.Cols;
+        for (int col = 0; col < totalCol; col++)
+        {
+            SlotColumn column = slotColumnList[col];
+            int[] columnArray = new int[3];
+            long[] valuePackageColumnArray = new long[3];
+
+            for (int row = 0; row < 3; row++)
+            {
+                // Tính index theo layout ngang
+                int index = row * 5 + col;
+                SiXiangSymbol symbol = listSymbols[index];
+                if (SymbolDictionary.TryGetValue(symbol, out int mappedValue))
+                {
+                    columnArray[row] = mappedValue;
+                }
+                else
+                {
+                    columnArray[row] = -1;
+                }
+                if (spinList.Count > 0)
+                {
+                    valuePackageColumnArray[row] = spinList[index].WinAmount;
+                }
+            }
+
+            if (hasSetupStartView)
+            {
+                column.SetFinishView(columnArray);
+                paylineList = data.Paylines.ToList();
+
+            }
+            else
+            {
+                column.SetStartView(columnArray);
+            }
+        }
+    }
+
+    protected void UpdateReward(SlotDesk data)
+    {
+        if (data.GameConfig != null)
+        {
+            freeSpinLeft = (int)data.GameConfig.NumFreeSpin;
+            if (data.GameConfig.NumFreeSpin <= 0)
+            {
+                backgroundFreeSpinAnimation.gameObject.SetActive(false);
+                isLastFreeSpin = true;
+            }
+            lastTotalChipWinByGame = totalChipWinByGame;
+            totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
+        }
+        else
+        {
+            freeSpinLeft = (int)data.NumSpinLeft;
+            isLastFreeSpin = false;
+            lastTotalChipWinByGame = 0;
+        }
+        isInFreeSpin = freeSpinLeft > 0;
+    
+        if (data.GameReward.UpdateWallet)
+        {
+            lastChipWin = currentChipWin;
+            currentChipWin = data.GameReward.ChipsWin;
+            totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
+            playerWalletAfter = data.GameReward.BalanceChipsWalletAfter;
+        }
+    }
     #endregion
 
     #region Effects
@@ -1154,7 +1147,7 @@ public class BaseSlotView : BaseGameView
             .AppendInterval(.5f)
             .Append(coin.transform.DOScale(2, 0.25f))
             .AppendInterval(0.15f)
-            .Append(coin.transform.DOScale(1, 0.25f))//0.85
+            .Append(coin.transform.DOScale(0.75f, 0.25f))//0.85
             .AppendInterval(0.6f)
             .Append(coin.DOFade(0, .25f)).AppendCallback(() =>
             {
@@ -1216,7 +1209,7 @@ public class BaseSlotView : BaseGameView
                 Destroy(line);
             },
             defaultCapacity: 1,     // số lượng khởi tạo
-            maxSize: 30             // tối đa object trong pool
+            maxSize: 200             // tối đa object trong pool
         );
     }
 
@@ -1248,8 +1241,10 @@ public class BaseSlotView : BaseGameView
                 {
                     spinType = SpinType.FREE_NORMAL;
                 }
+                ShowBackGroundFreeSpin();
                 UpdateStateWinUI(StateWin.TOTAL_WIN);
                 chipWinText.text = "0";
+                freeSpinLeftText.text = "9";
                 hasGotFreeSpin = false;
 
             }
@@ -1291,6 +1286,7 @@ public class BaseSlotView : BaseGameView
 
     protected virtual void Reset()
     {
+        Debug.Log("RESET");
         if (spinType == SpinType.NORMAL || spinType == SpinType.FREE_NORMAL)
         {
             UpdateGameState(SlotGameState.PREPARE);
@@ -1326,14 +1322,24 @@ public class BaseSlotView : BaseGameView
 
         if (isInFreeSpin)
         {
-            Debug.Log("SET ACTIVE BACJKGROUND FREE SPIN");
-            backgroundFreeSpinAnimation.gameObject.SetActive(true);
             ShowBackGroundFreeSpin();
+            freeSpinLeftText.gameObject.SetActive(true);
         }
         else
         {
             backgroundFreeSpinAnimation.gameObject.SetActive(false);
             backgroundFreeSpinLeftAnimation.gameObject.SetActive(false);
+            freeSpinLeftText.gameObject.SetActive(false);
+        }
+
+        if (hasGotFreeSpin)
+        {
+            freeSpinLeftText.gameObject.SetActive(true);
+        }
+
+        if (isLastFreeSpin)
+        {
+            freeSpinLeftText.gameObject.SetActive(false);
         }
         // isFiveOfaKind = false;
         // isWinScatter = false;

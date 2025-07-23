@@ -24,6 +24,7 @@ public class SlotItem : MonoBehaviour
     };
     protected SlotColumn column;
     protected int[] finishView = new int[3];
+    protected int[] spreadFinishView = new int[3];
     protected int position = 0;
 
     public float Speed { get; set; } = 0.075f;
@@ -72,26 +73,26 @@ public class SlotItem : MonoBehaviour
 
         float multiplier = column.GetScatterCount() > 2 ? 2f : 1.25f;
         float moveSpeed = Speed * multiplier;
-            rect.DOBlendableLocalMoveBy(new Vector2(0, -rect.sizeDelta.y), moveSpeed)
-            .SetEase(Ease.Linear)
-            .OnComplete(() =>
+        rect.DOBlendableLocalMoveBy(new Vector2(0, -rect.sizeDelta.y), moveSpeed)
+        .SetEase(Ease.Linear)
+        .OnComplete(() =>
+        {
+            position--;
+            if (rect.localPosition.y < 0)
             {
-                position--;
-                if (rect.localPosition.y < 0)
-                {
-                    rect.localPosition = new Vector3(localPos.x, PositionResetY, 0);
-                    position = 3;
-                }
+                rect.localPosition = new Vector3(localPos.x, PositionResetY, 0);
+                position = 3;
+            }
 
-                if (column.IsSpinning)
-                {
-                    MoveDownLoop();
-                }
-                else
-                {
-                    StopSpin();
-                }
-            });
+            if (column.IsSpinning)
+            {
+                MoveDownLoop();
+            }
+            else
+            {
+                StopSpin();
+            }
+        });
     }
 
     protected void StopSpin()
@@ -133,14 +134,14 @@ public class SlotItem : MonoBehaviour
                 //     column.gameView.offAnimNearFreeSpin();
                 //     //column.isNearFreeSpin = false;
                 // }
+                column.OnColumnStop();
+
                 if (column.IsLastColumn)
                 {
                     column.OnAllColumnsStop();
+
                 }
-                else
-                {
-                    column.OnColumnStop();
-                }
+
             }
         });
     }
@@ -162,7 +163,7 @@ public class SlotItem : MonoBehaviour
     #endregion
 
     #region Set Data
-    public void SetFinishView()
+    public virtual void SetFinishView()
     {
         for (int i = 0; i < finishView.Length; i++)
         {
@@ -199,7 +200,7 @@ public class SlotItem : MonoBehaviour
         }
     }
 
-    public virtual void SetItemAnimation(int index)
+    public virtual void SetItemAnimation(int index, bool isWild = false)
     {
         int itemIndex = finishView[index];
         spineItem.transform.localScale = itemIndex switch
@@ -222,7 +223,7 @@ public class SlotItem : MonoBehaviour
         SetItemAnimation(indexScatter);
     }
 
-    public void SetDark(bool isDark, int index = -1)
+    public virtual void SetDark(bool isDark, int index = -1)
     {
         if (isDark) spineItem.gameObject.SetActive(false);
         Color colorState = isDark ? Color.gray : Color.white;
@@ -251,6 +252,11 @@ public class SlotItem : MonoBehaviour
     public void SetFinishIndices(int[] symbolIdArray)
     {
         finishView = symbolIdArray;
+    }
+
+    public void SetSpreadFinishIndices(int[] symbolIdArray)
+    {
+        spreadFinishView = symbolIdArray;
     }
     #endregion
 }

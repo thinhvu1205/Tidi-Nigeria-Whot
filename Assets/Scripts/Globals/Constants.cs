@@ -11,7 +11,7 @@ namespace Globals
         public const string FRUIT_SLOT_GAME_ID = "fruit";
         // public const string SABONG_CARDS_GAME_ID = "sabong-cards";
         // public const string CHINESE_POKER_GAME_ID = "chinese-poker";
-        // public const string BACCARAT_GAME_ID = "baccarat";
+        public const string BACCARAT_GAME_ID = "baccarat";
         // public const string LUCKY_NUMBER_GAME_ID = "lucky-number";
         public const string SIXIANG_GAME_ID = "sixiang";
         public const string TARZAN_GAME_ID = "tarzan";
@@ -47,7 +47,8 @@ namespace Globals
 
         public static readonly string[] SELECT_TABLE_GAMES_ID = new string[]
         {
-            WHOT_GAME_ID
+            WHOT_GAME_ID,
+            BACCARAT_GAME_ID
         };
 
         public static readonly Dictionary<CardSuit, int> WhotSuitSortOrder = new()

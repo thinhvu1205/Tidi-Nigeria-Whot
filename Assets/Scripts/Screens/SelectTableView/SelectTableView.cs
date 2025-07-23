@@ -77,6 +77,9 @@ public class SelectTableView : BaseView
             case Constants.WHOT_GAME_ID:
                 titleText.text = "Whot";
                 break;
+            case Constants.BACCARAT_GAME_ID:
+                titleText.text = "Baccarat";
+                break;
             default:
                 // titleText.text = "Select Table";
                 break;
