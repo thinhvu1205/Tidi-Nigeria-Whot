@@ -15,9 +15,10 @@ using Color = UnityEngine.Color;
 
 public class SlotJuicyView : BaseSlotView
 {
-    [SerializeField] private Transform holdPackageContainer;
+    [SerializeField] private Transform holdPackageContainer, basketGetFreeGame, basketGetFruitRain;
     [SerializeField] private TextNumberControl grandJackpotText, majorJackpotText, minorJackpotText, miniJackpotText;
-    [SerializeField] private TextMeshProUGUI totalPackageValueText, packageValueWinText, jackpotText;
+    [SerializeField] private TextMeshProUGUI totalPackageValueText, packageValueWinText, jackpotText, titleBasketAddedWild, titleBasketTotalFreeSpin;
+    [SerializeField] private Image titleBasketGetFruitRain;
     [SerializeField] private SkeletonGraphic popupChooseABucketAnimation, popupResultPackageAnimation, jackpotAnimation, totalMoneyPackageAnimation, effectPackageAnimation;
     [SerializeField] private DialogView popupGetFruitRain;
     [SerializeField] private Material grandJackpotMaterial, majorJackpotMaterial, minorJackpotMaterial, miniJackpotMaterial;
@@ -32,10 +33,10 @@ public class SlotJuicyView : BaseSlotView
     private const string RESULT_BONUSGAME_ANIMPATH = "SlotSpine/JuicyGarden/EndGame/skeleton_SkeletonData";
     private const string JACKPOT_ANIMPATH = "SlotSpine/JuicyGarden/Jackpot/skeleton_SkeletonData";
     private List<SpinSymbol> spinList;
-    private WinJackpot winJackpot;
+    private WinJackpot? winJackpot;
     private JackpotHistory jackpotHistory;
-    private SiXiangGame currentGame = SiXiangGame.Normal, nextGame = SiXiangGame.Normal;
     private long rateJackpotGrand = 0, rateJackpotMajor = 0, rateJackpotMinor = 0, rateJackpotMini = 0, jpGrandPlayer = 0, jpMajorPlayer = 0, totalPackageValue = 0;
+    private bool isStartFruitRain, isEndFruitRain, isChooseFreeGame, isChooseFruitRain, isEndFreeGame, isChooseBasket;
     protected override Dictionary<SiXiangSymbol, int> SymbolDictionary => new()
     {
         { SiXiangSymbol.K, 0 },
@@ -63,173 +64,167 @@ public class SlotJuicyView : BaseSlotView
         { SiXiangSymbol.JuiceFruitbasketRandom6, 13 },
         { SiXiangSymbol.JuiceFruitbasketRandom7, 13 },
     };
-    protected override List<int[]> PaylineIdList => new List<int[]>
-    {
-        new int[] {1, 1, 1, 1, 1},
-        new int[] {0, 0, 0, 0, 0},
-        new int[] {2, 2, 2, 2, 2},
-        new int[] {0, 1, 2, 1, 0},
-        new int[] {2, 1, 0, 1, 2},
-        new int[] {0, 0, 1, 2, 2},
-        new int[] {2, 2, 1, 0, 0},
-        new int[] {1, 0, 1, 2, 1},
-        new int[] {1, 2, 1, 0, 1},
-        new int[] {1, 0, 0, 1, 0},
-        new int[] {1, 2, 2, 1, 2},
-        new int[] {0, 1, 0, 0, 1},
-        new int[] {2, 1, 2, 2, 1},
-        new int[] {0, 2, 0, 2, 0},
-        new int[] {2, 0, 2, 0, 2},
-        new int[] {1, 0, 2, 0, 1},
-        new int[] {1, 2, 0, 2, 1},
-        new int[] {0, 1, 1, 1, 0},
-        new int[] {2, 1, 1, 1, 2},
-        new int[] {0, 2, 2, 2, 0},
-    };
-
     public override void HandleUpdateTable(IMatchState matchState)
     {
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
                 Debug.Log("Slot : " +data.ToString());
-        if (!hasSpinned)
-        {
 
+        // Update UI cho các item
+        List<SiXiangSymbol> listSymbols = data.Matrix.Lists.ToList();
+        int totalCol = data.Matrix.Cols;
+        spinList = data.Matrix.SpinLists.ToList();
+        jackpotHistory = data.WinJpHistory;
+        winJackpot = data.WinJp;
+
+        isInFreeSpin = data.CurrentSixiangGame == SiXiangGame.JuiceFreeGame || data.CurrentSixiangGame == SiXiangGame.JuiceFruitRain;
+        isStartFruitRain = data.NextSixiangGame == SiXiangGame.JuiceFruitRain && data.CurrentSixiangGame != SiXiangGame.JuiceFruitRain;
+        isEndFruitRain = data.CurrentSixiangGame == SiXiangGame.JuiceFruitRain && data.NextSixiangGame != SiXiangGame.JuiceFruitRain;
+        isEndFreeGame = data.CurrentSixiangGame == SiXiangGame.JuiceFreeGame && data.NextSixiangGame != SiXiangGame.JuiceFreeGame;
+        isChooseFreeGame = data.NextSixiangGame == SiXiangGame.JuiceFreeGame && data.CurrentSixiangGame == SiXiangGame.JuiceFruitBasket;
+        isChooseFruitRain = data.NextSixiangGame == SiXiangGame.JuiceFruitRain && data.CurrentSixiangGame == SiXiangGame.JuiceFruitBasket;
+        isChooseBasket = data.NextSixiangGame == SiXiangGame.JuiceFruitBasket && data.CurrentSixiangGame != SiXiangGame.JuiceFruitBasket;
+
+  
+        
+
+        winType = data.BigWin switch
+        {
+            BigWin.Big => WinType.BIG_WIN,
+            BigWin.Mega => WinType.MEGA_WIN,
+            _ => WinType.NONE,
+        };
+
+
+        if (totalCol >= 5)
+        {   
+            for (int col = 0; col < totalCol; col++)
+            {
+                SlotColumn column = slotColumnList[col];
+                int[] columnArray = new int[3];
+                long[] valuePackageColumnArray = new long[3];
+
+                for (int row = 0; row < 3; row++)
+                {
+                    // Tính index theo layout ngang
+                    int index = row * 5 + col;
+                    SiXiangSymbol symbol = listSymbols[index];
+                    if (SymbolDictionary.TryGetValue(symbol, out int mappedValue))
+                    {
+                        columnArray[row] = mappedValue;
+                    }
+                    else
+                    {
+                        columnArray[row] = -1;
+                    }
+                    if (spinList.Count > 0)
+                    {
+                        valuePackageColumnArray[row] = spinList[index].WinAmount;
+                    }
+                }
+
+                SetPackageValue(column, valuePackageColumnArray);
+
+                // Khi đã bấm Spin
+                if (hasSetupStartView)
+                {
+                    column.SetFinishView(columnArray);
+                    paylineList = data.Paylines.ToList();
+
+                }
+                // Khi lần đầu vào game -> Setup Views
+                else
+                {
+                    column.SetStartView(columnArray);
+
+                    if (data.CurrentSixiangGame == SiXiangGame.JuiceFruitRain)
+                    {
+                        column.ShowPackageValue();
+                    }
+                }
+            }
+        }
+
+        if (data.GameConfig != null)
+        {
+            freeSpinLeft = (int)data.GameConfig.NumFreeSpin;
+            isLastFreeSpin = data.GameConfig.NumFreeSpin <= 0;
+            lastTotalChipWinByGame = totalChipWinByGame;
+            totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
         }
         else
         {
-            if (!IsSpinning) return;
-            OnStartSpin();
+            freeSpinLeft = (int)data.NumSpinLeft;
+            isLastFreeSpin = false;
+            lastTotalChipWinByGame = 0;
         }
-        // Update UI cho các item
-        List<SiXiangSymbol> listSymbols = data.Matrix.Lists.ToList();
-        spinList = data.Matrix.SpinLists.ToList();
-        currentGame = data.CurrentSixiangGame;
-        nextGame = data.NextSixiangGame;
-        jackpotHistory = data.WinJpHistory;
-        int totalCol = data.Matrix.Cols;
-
-        for (int col = 0; col < totalCol; col++)
+        if (hasSetupStartView)
         {
-            SlotColumn column = slotColumnList[col];
-            int[] columnArray = new int[3];
-            long[] valuePackageColumnArray = new long[3];
-
-            for (int row = 0; row < 3; row++)
-            {
-                // Tính index theo layout ngang
-                int index = row * 5 + col;
-                SiXiangSymbol symbol = listSymbols[index];
-                if (SymbolDictionary.TryGetValue(symbol, out int mappedValue))
-                {
-                    columnArray[row] = mappedValue;
-                }
-                else
-                {
-                    columnArray[row] = -1;
-                }
-                if (spinList.Count > 0)
-                {
-                    valuePackageColumnArray[row] = spinList[index].WinAmount;
-                }
-            }
-
-            SetPackageValue(column, valuePackageColumnArray);
-
-            // Gán chung trước
-            if (data.GameConfig != null)
-            {
-                freeSpinLeft = (int)data.GameConfig.NumFreeSpin;
-                isLastFreeSpin = data.GameConfig.NumFreeSpin <= 0;
-                lastTotalChipWinByGame = totalChipWinByGame;
-                totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
-            }
+            // Bấm Spin
+            if (IsSpinning)
+                OnStartSpin();
+            // Chỉ thay đổi mức cược (Update Jackpot)
             else
             {
-                freeSpinLeft = (int)data.NumSpinLeft;
-                isLastFreeSpin = false;
-                lastTotalChipWinByGame = 0;
-            }
-
-            isInFreeSpin = freeSpinLeft > 0;
-
-            // Xử lý winType chung
-            winType = data.BigWin switch
-            {
-                BigWin.Big => WinType.BIG_WIN,
-                BigWin.Mega => WinType.MEGA_WIN,
-                _ => WinType.NONE,
-            };
-            winJackpot = data.WinJp;
-
-            // Logic riêng
-            if (hasSpinned)
-            {
-                column.SetFinishView(columnArray);
-                paylineList = data.Paylines.ToList();
-            }
-            else
-            {
-                InitJackpot();
-                column.SetStartView(columnArray);
-
-                betLevelList = data.BetLevels.ToList();
-                currentBetLevel = data.ChipsMcb;
-                SetInfoSessionText("Press SPIN to play");
-                SetCurrentBetText(currentBetLevel);
-                SetCurrentChipValue(data.GameReward.BalanceChipsWalletAfter);
-
-                if (currentGame == SiXiangGame.JuiceFruitRain)
-                {
-                    spinType = SpinType.FREE_NORMAL;
-                    column.ShowPackageValue();
-                    ShowBackGroundFreeSpin();
-                    CreateHolderPackageView();
-                    UpdateSpinButtonUI();
-                }
+                UpdateJackpot();
+                return;
             }
         }
+        else
+        {
+            UpdateJackpot();
+            betLevelList = data.BetLevels.ToList();
+            currentBetLevel = data.ChipsMcb;
+            SetInfoSessionText("Press SPIN to play");
+            SetCurrentBetText(currentBetLevel);
+            SetCurrentChipValue(data.GameReward.BalanceChipsWalletAfter);
+            if (data.CurrentSixiangGame == SiXiangGame.JuiceFruitRain)
+            {
+                spinType = SpinType.FREE_NORMAL;
+                ShowBackGroundFreeSpin();
+                CreateHolderPackageView();
+                UpdateSpinButtonUI();
+            }
 
+            if (data.CurrentSixiangGame == SiXiangGame.JuiceFreeGame)
+            {
+                spinType = SpinType.FREE_NORMAL;
+                ShowBackGroundFreeSpin();
+                UpdateSpinButtonUI();
+            }
+        }
 
         // Update Reward
-            if (data.GameReward.UpdateWallet)
-            {
-                lastChipWin = currentChipWin;
-                currentChipWin = data.GameReward.ChipsWin;
-                // totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
-                totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
-                playerWalletAfter = data.GameReward.BalanceChipsWalletAfter;
-            }
+        if (data.GameReward.UpdateWallet)
+        {
+            lastChipWin = currentChipWin;
+            currentChipWin = data.GameReward.ChipsWin;
+            // totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
+            totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
+            playerWalletAfter = data.GameReward.BalanceChipsWalletAfter;
+        }
 
-        hasSpinned = true;
+        hasSetupStartView = true;
     }
 
     public override void OnStopSpin()
     {
         IsSpinning = false;
-        InitJackpot();
-        if (isLastFreeSpin)
+        UpdateJackpot();
+
+
+        if (isChooseBasket)
         {
-            if (totalChipWinByGame > PaylineIdList.Count * currentBetLevel) winType = WinType.BIG_WIN;
-            if (totalChipWinByGame > 50 * currentBetLevel) winType = WinType.MEGA_WIN;
-            if (totalChipWinByGame > 0)
-            {
-                AnimateCoinsFly();
-            }
-            isLastFreeSpin = false;
-            UpdateGameState(SlotGameState.PREPARE);
-            spinType = SpinType.NORMAL;
+            tweenQueue.Enqueue(() => ShowPopupChooseABucket());
         }
 
-        // Từ Minigame chuyển sang Normal Game
-        // if (CheckNormalGame())
-        // {
-        //    
-        // }
-        
-        // Đang từ Normal game chuyển sang Fruit Rain
-        if (CheckStartFruitRain())
+        if (isChooseFreeGame || isChooseFruitRain)
         {
-            backgroundFreeSpinAnimation.gameObject.SetActive(true);
+            AnimateChooseBucket();
+        }
+        
+        ///------------------CHECK FRUIT RAIN--------------------//
+        if (isStartFruitRain)
+        {
             freeSpinLeft = 3;
             ShowBackGroundFreeSpin();
             CreateHolderPackageView();
@@ -247,12 +242,16 @@ public class SlotJuicyView : BaseSlotView
             return;
         }
 
-        if (CheckEndFruitRain())
+        ///------------------CHECK END FRUIT RAIN --------------------//
+        if (isEndFruitRain)
         {
             totalPackageValue = 0;
             ShowTotalMoneyPackage();
             tweenQueue.Enqueue(() => ShowPackageResult());
-            tweenQueue.Enqueue(() => ShowJackpotAnimation());
+            if (winJackpot.HasValue)
+            {
+                tweenQueue.Enqueue(() => ShowJackpotAnimation());
+            }
         }
         else
         {
@@ -269,18 +268,35 @@ public class SlotJuicyView : BaseSlotView
             tweenQueue.Enqueue(() => ShowWinScatter());
         }
 
+        ///------------------CHECK FREE GAME--------------------//
+        if (isChooseFreeGame)
+        {
+            spinType = SpinType.FREE_NORMAL;
+            UpdateGameState(SlotGameState.PREPARE);
+            ShowBackGroundFreeSpin();
+        }
+
+        ///------------------CHECK END FREE GAME--------------------//
+        if (isEndFreeGame)
+        {
+            backgroundFreeSpinAnimation.gameObject.SetActive(false);
+            backgroundFreeSpinLeftAnimation.gameObject.SetActive(false);
+            if (totalChipWinByGame > PaylineIdList.Count * currentBetLevel) winType = WinType.BIG_WIN;
+            if (totalChipWinByGame > 50 * currentBetLevel) winType = WinType.MEGA_WIN;
+            if (totalChipWinByGame > 0)
+            {
+                AnimateCoinsFly();
+            }
+            UpdateGameState(SlotGameState.PREPARE);
+            spinType = SpinType.NORMAL;
+        }
+
+
         ///------------------CHECK SHOW FIVE OF A KIND--------------------///
         if (CheckFiveOfAKind())
         {
             tweenQueue.Enqueue(() => ShowWinAnimation(WinType.FIVE_OF_A_KIND));
-        }
-
-        ///------------------CHECK SHOW FREESPIN--------------------//
-        if (hasGotFreeSpin)
-        {
-            // Nếu đang quay thường hoặc quay auto mà đc freespin -> dừng lại
-            tweenQueue.Enqueue(() => ShowWinAnimation(WinType.FREE_SPIN));
-        }
+        } 
         
         ///------------------CHECK SHOW ALL LINE--------------------///
         if (paylineList.Count > 0)
@@ -325,7 +341,7 @@ public class SlotJuicyView : BaseSlotView
 
     }
 
-    protected override void SetPackageValue(SlotColumn column, long[] packageValues)
+    private void SetPackageValue(SlotColumn column, long[] packageValues)
     {
         column.SetPackageValue(packageValues);
     }
@@ -334,18 +350,30 @@ public class SlotJuicyView : BaseSlotView
 
     public override void OnClickMaxBetButton()
     {
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT)
+        {
+            return; 
+        }
         base.OnClickMaxBetButton();
         OnBetLevelChanged();
     }
 
     public override void OnClickMinusBetButton()
     {
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT)
+        {
+            return; 
+        }
         base.OnClickMinusBetButton();
         OnBetLevelChanged();
     }
 
     public override void OnClickPlusBetButton()
     {
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT)
+        {
+            return; 
+        }
         base.OnClickPlusBetButton();
         OnBetLevelChanged();
     }
@@ -354,6 +382,8 @@ public class SlotJuicyView : BaseSlotView
     {
         effectContainer.gameObject.SetActive(false);
         popupResultPackageAnimation.gameObject.SetActive(false);
+        AnimateCoinsFly();
+        UpdateTotalChipWinValue();
     }
 
     private void OnBetLevelChanged()
@@ -365,6 +395,30 @@ public class SlotJuicyView : BaseSlotView
         DataSender.SendMatchState((long)OpCodeRequest.Bet, infoBet.ToByteArray());
     }
     #endregion
+
+    protected override bool CheckWinScatter()
+    {
+        int consecutiveColumns = 0;
+        for (int i = 0; i < slotColumnList.Count; i++)
+        {
+            bool hasScatter = slotColumnList[i].ResultItem.GetFinishView().Contains(12);
+            if (hasScatter)
+            {
+                consecutiveColumns++; // tăng nếu có scatter
+                if (consecutiveColumns >= 3)
+                {
+                    hasGotFreeSpin = true;
+                    return true; // tìm thấy 3 cột liền nhau có scatter
+                }
+            }
+            else
+            {
+                consecutiveColumns = 0; // reset nếu gặp cột không có scatter
+            }
+        }
+
+        return false; // không tìm thấy 3 cột liền nhau
+    }
 
     #region Popups
     private void ShowPopupGetFruitRain()
@@ -407,6 +461,8 @@ public class SlotJuicyView : BaseSlotView
     #region Choose A Bucket
     public void ChooseBucket(int type)
     {
+        bucketLeft.interactable = true;
+        bucketRight.interactable = true;
         Debug.Log("Choose " + type + " bucket");
         InfoBet infoBet = new()
         {
@@ -420,26 +476,53 @@ public class SlotJuicyView : BaseSlotView
             _ => "thung"
         };
         Utility.PlayAnimationByPath(popupChooseABucketAnimation, BACKGROUND_CHOOSE_A_BUCKET_ANIMATION_PATH, animationName, false);
+        bucketLeft.interactable = false;
+        bucketRight.interactable = false;
+    }
 
+    private void AnimateChooseBucket()
+    {
+        DOTween.Sequence()
+            .AppendInterval(2.0f)
+            .AppendCallback(() =>
+            {
+                if (isChooseFreeGame)
+                {
+                    int wildNumber = 10;
+                    basketGetFreeGame.gameObject.SetActive(true);
+                    basketGetFruitRain.gameObject.SetActive(false);
+                    basketGetFreeGame.DOScale(Vector2.one, 0.3f).SetEase(Ease.OutBack);
+                    Utility.TweenNumberToNumber(titleBasketTotalFreeSpin, freeSpinLeft, 0, 1.0f);      
+                    Utility.TweenNumberToNumber(titleBasketAddedWild, wildNumber, 0, 1.0f);      
+                }
+                if (isChooseFruitRain)
+                {
+                    basketGetFreeGame.gameObject.SetActive(false);
+                    basketGetFruitRain.gameObject.SetActive(true);
+                    titleBasketGetFruitRain.gameObject.SetActive(true);
+                    titleBasketGetFruitRain.transform.localScale = Vector2.zero;
+                    titleBasketGetFruitRain.transform.DOScale(new Vector2(1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
+                }
+            });
+
+        
+        popupChooseABucketAnimation.AnimationState.Complete += delegate
+        {
+            popupChooseABucketAnimation.gameObject.SetActive(false);
+            effectContainer.gameObject.SetActive(false);
+            if (isChooseFruitRain)
+            {
+                ShowPopupGetFruitRain();
+            }
+            else
+            {
+                NextTween();
+            }
+        };
     }
     #endregion
 
     #region Fruit Rain
-    private bool CheckStartFruitRain()
-    {
-        return currentGame != SiXiangGame.JuiceFruitRain && nextGame == SiXiangGame.JuiceFruitRain;
-    }
-
-    private bool CheckEndFruitRain()
-    {
-        return currentGame == SiXiangGame.JuiceFruitRain && nextGame != SiXiangGame.JuiceFruitRain;
-    }
-
-    private bool CheckNormalGame()
-    {
-        return currentGame != SiXiangGame.Normal && nextGame == SiXiangGame.Normal;
-    }
-
 
     public void HidePopupGetFruitRain()
     {
@@ -489,7 +572,7 @@ public class SlotJuicyView : BaseSlotView
         totalPackageValue += value;
         Utility.TweenNumberToNumber(totalPackageValueText, totalPackageValue, totalPackageValue - value);
         effectPackageAnimation.gameObject.SetActive(true);
-        Utility.PlayAnimationByPath(effectPackageAnimation, BACKGROUND_MONEY_PACKAGE_ANIMATION_PATH, (index + 1).ToString(), false);
+        Utility.PlayAnimationByPath(effectPackageAnimation, BACKGROUND_MONEY_PACKAGE_ANIMATION_PATH, index.ToString(), false);
         effectPackageAnimation.AnimationState.Complete += delegate
         {
             // NextTween();
@@ -508,7 +591,7 @@ public class SlotJuicyView : BaseSlotView
 
     private void ShowPackageResult()
     {
-        Debug.Log("SHOW PACKAGE RESULT");
+        backgroundFreeSpinLeftAnimation.gameObject.SetActive(false);
         Sequence sequence = DOTween.Sequence();
         for (int i = 0; i < spinList.Count; i++)
         {
@@ -517,7 +600,6 @@ public class SlotJuicyView : BaseSlotView
             sequence
                 .AppendCallback(() =>
                 {
-                    Debug.Log("ShowEffectPackageWithIndex: " + index + " - " + spinList[index].WinAmount);
                     ShowEffectPackageWithIndex(index + 1, spinList[index].WinAmount);
                 })
                 .AppendInterval(1.0f);
@@ -534,8 +616,8 @@ public class SlotJuicyView : BaseSlotView
                 }
             }
             backgroundFreeSpinAnimation.gameObject.SetActive(false);
-            backgroundFreeSpinLeftAnimation.gameObject.SetActive(false);
             totalMoneyPackageAnimation.gameObject.SetActive(false);
+            effectPackageAnimation.gameObject.SetActive(false);
             spinType = SpinType.NORMAL;
             UpdateGameState(SlotGameState.PREPARE);
             SetLightAllItems();
@@ -639,8 +721,9 @@ public class SlotJuicyView : BaseSlotView
         // }
     }
 
-    public void InitJackpot()
+    public void UpdateJackpot()
     {
+        Debug.Log("INIT JACKPOT");
         if (jackpotHistory != null)
         {
             jpGrandPlayer = jackpotHistory.Grand.ChipsAccum;

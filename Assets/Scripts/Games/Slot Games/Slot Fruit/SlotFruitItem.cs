@@ -15,7 +15,7 @@ public class SlotFruitItem : SlotItem
     };
     protected override string ICON_ANIMATION_PATH => "SlotSpine/Fruit/SpineIcon/%id/skeleton_SkeletonData";
 
-    public override void SetItemAnimation(int index)
+    public override void SetItemAnimation(int index, bool isWild = false)
     {
         int itemIndex = finishView[index];
         Vector2 posSpine = slotImageList[index].gameObject.GetComponent<RectTransform>().localPosition;

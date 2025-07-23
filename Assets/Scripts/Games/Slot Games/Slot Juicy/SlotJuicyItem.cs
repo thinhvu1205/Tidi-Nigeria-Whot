@@ -9,7 +9,7 @@ public class SlotJuicyItem : SlotItem
     [SerializeField] private TextMeshProUGUI[] valuePackageTextList;
     public long[] ValuePackageList { get; set; } = new long[3];
     protected override float PositionResetY => base.PositionResetY - 5f;
-    protected override float IconScale => 1f;
+    protected override float IconScale => 1.02f;
     protected override string ICON_ANIMATION_PATH => "SlotSpine/JuicyGarden/SpineIcon/%id/skeleton_SkeletonData";
     protected override Vector2[] ItemPositionList => new Vector2[]
     {
@@ -17,7 +17,7 @@ public class SlotJuicyItem : SlotItem
         new(0, 0),
         new(0, -160),
     };
-    public override void SetItemAnimation(int index)
+    public override void SetItemAnimation(int index, bool isWild = false)
     {
         if (index < 13)
         {
@@ -81,16 +81,44 @@ public class SlotJuicyItem : SlotItem
             else
             {
                 textElement.gameObject.SetActive(true);
-                textElement.text = Utility.FormatMoney3(value); // hoặc FormatMoney nếu cần
+                textElement.text = Utility.FormatMoney3(value);
+                SetDark(false, i);
             }
         }
     }
 
     public void ClearValuePackage()
     {
-        foreach(TextMeshProUGUI text in valuePackageTextList)
+        foreach (TextMeshProUGUI text in valuePackageTextList)
         {
             text.gameObject.SetActive(false);
+        }
+    }
+    
+    public override void SetDark(bool isDark, int index = -1)
+    {
+        if (isDark) spineItem.gameObject.SetActive(false);
+        Color colorState = isDark ? Color.gray : Color.white;
+        if (index >= 0 && index < slotImageList.Length)
+        {
+            slotImageList[index].color = colorState;
+            valuePackageTextList[index].color = colorState;
+        }
+        else
+        {
+            for (int i = 0; i < slotImageList.Length; i++)
+            {
+                slotImageList[i].color = colorState;
+                slotImageList[i].gameObject.SetActive(true);
+                valuePackageTextList[i].color = colorState;
+                spineItem.gameObject.SetActive(false);
+                // Nếu cần clear animation thì xử lý ở đây
+                // listSpineItem[i].gameObject.SetActive(false);
+                // CollumSpinCtrl.gameView.removeAnimIcon(listSpineItem[i].gameObject);
+            }
+
+            // Clear animation list nếu cần
+            // listSpineItem.Clear();
         }
     }
 }

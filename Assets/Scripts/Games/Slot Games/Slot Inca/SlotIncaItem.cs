@@ -14,7 +14,7 @@ public class SlotIncaColumn : SlotItem
     protected override string ICON_ANIMATION_PATH => "SlotSpine/InCa/SpineIcon/%id/skeleton_SkeletonData";
     protected override float IconScale => 0.82f;
 
-    public override void SetItemAnimation(int index)
+    public override void SetItemAnimation(int index, bool isWild = false)
     {
         int itemIndex = finishView[index];
         string animPath = "";

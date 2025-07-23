@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 7499255418933379044}
   - component: {fileID: 973238810940353273}
   m_Layer: 0
-  m_Name: animPick
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -436,7 +436,7 @@ GameObject:
   - component: {fileID: 6206688115702323509}
   - component: {fileID: 37491710057736492}
   m_Layer: 0
-  m_Name: animPick
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -651,9 +651,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1503507703121900181}
         m_TargetAssemblyTypeName: SlotTarzanView, Assembly-CSharp
-        m_MethodName: closeMiniGameView
+        m_MethodName: HidePopupResultMiniGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -675,6 +675,7 @@ GameObject:
   - component: {fileID: 5363187210091406616}
   - component: {fileID: 8956751030406022583}
   - component: {fileID: 5822198282846381849}
+  - component: {fileID: 4657068423035113166}
   m_Layer: 5
   m_Name: ItemPick_8
   m_TagString: Untagged
@@ -785,18 +786,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6795075714328153988}
         m_TargetAssemblyTypeName: SlotTarzanMiniGameView, Assembly-CSharp
-        m_MethodName: onClickItem
+        m_MethodName: OnClickItem
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: SlotTarzanItemBonus, Assembly-CSharp
+          m_ObjectArgument: {fileID: 4657068423035113166}
+          m_ObjectArgumentAssemblyTypeName: SlotTarzanMinigameItem, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4657068423035113166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458568127980031625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40fa8d82512b4133845a9836536f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreAnimation: {fileID: 1812957568577952835}
+  valueText: {fileID: 4225340109922719373}
 --- !u!1 &472713693100323485
 GameObject:
   m_ObjectHideFlags: 0
@@ -1917,6 +1932,7 @@ GameObject:
   - component: {fileID: 8118641743175494879}
   - component: {fileID: 7559344611249161579}
   - component: {fileID: 6442971841393267686}
+  - component: {fileID: 4974190392556805362}
   m_Layer: 5
   m_Name: ItemPick_5
   m_TagString: Untagged
@@ -2027,18 +2043,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6795075714328153988}
         m_TargetAssemblyTypeName: SlotTarzanMiniGameView, Assembly-CSharp
-        m_MethodName: onClickItem
+        m_MethodName: OnClickItem
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: SlotTarzanItemBonus, Assembly-CSharp
+          m_ObjectArgument: {fileID: 4974190392556805362}
+          m_ObjectArgumentAssemblyTypeName: SlotTarzanMinigameItem, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4974190392556805362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1074281946141726378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40fa8d82512b4133845a9836536f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreAnimation: {fileID: 5168984401738939584}
+  valueText: {fileID: 8176887532221309025}
 --- !u!1 &1080173172776017274
 GameObject:
   m_ObjectHideFlags: 0
@@ -2161,7 +2191,7 @@ GameObject:
   - component: {fileID: 2842181118735856603}
   - component: {fileID: 1110399622432018218}
   m_Layer: 5
-  m_Name: lbValue
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2316,7 +2346,7 @@ RectTransform:
   - {fileID: 443513229941988419}
   - {fileID: 7399808718495891319}
   - {fileID: 4844257213529969723}
-  - {fileID: 4186594614249409107}
+  - {fileID: 2114318240313634354}
   m_Father: {fileID: 4800380337751880480}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2407,7 +2437,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1694690483548623523}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 12435.324}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2468,7 +2498,7 @@ GameObject:
   - component: {fileID: 956958810845495763}
   - component: {fileID: 3870418126953671522}
   m_Layer: 5
-  m_Name: lbValue
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2657,8 +2687,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: PICK YOUR STONE!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7708e67653374c60af5f1595e949403, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 72e8b5eeedb6f4953b2d51becb22b1af, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
+  m_sharedMaterial: {fileID: 7800525795003925199, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2736,7 +2766,7 @@ GameObject:
   - component: {fileID: 7749977286651124010}
   - component: {fileID: 5168984401738939584}
   m_Layer: 0
-  m_Name: animPick
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2880,10 +2910,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Random bonus multiplier       times
+  m_text: Random bonus multiplier           times
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7708e67653374c60af5f1595e949403, type: 2}
-  m_sharedMaterial: {fileID: 7800525795003925199, guid: b7708e67653374c60af5f1595e949403, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
+  m_sharedMaterial: {fileID: 7800525795003925199, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3042,6 +3072,7 @@ GameObject:
   - component: {fileID: 2192019035505650846}
   - component: {fileID: 3909816706855047162}
   - component: {fileID: 3332393083151434015}
+  - component: {fileID: 2986477231735037157}
   m_Layer: 5
   m_Name: ItemPick_9
   m_TagString: Untagged
@@ -3152,18 +3183,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6795075714328153988}
         m_TargetAssemblyTypeName: SlotTarzanMiniGameView, Assembly-CSharp
-        m_MethodName: onClickItem
+        m_MethodName: OnClickItem
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: SlotTarzanItemBonus, Assembly-CSharp
+          m_ObjectArgument: {fileID: 2986477231735037157}
+          m_ObjectArgumentAssemblyTypeName: SlotTarzanMinigameItem, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2986477231735037157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1892945987910326947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40fa8d82512b4133845a9836536f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreAnimation: {fileID: 8480389471935735693}
+  valueText: {fileID: 7181543971515896459}
 --- !u!1 &2148452813660631879
 GameObject:
   m_ObjectHideFlags: 0
@@ -3176,7 +3221,7 @@ GameObject:
   - component: {fileID: 8393672234376311215}
   - component: {fileID: 820937988567070325}
   m_Layer: 0
-  m_Name: animPick
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3286,11 +3331,11 @@ RectTransform:
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5060916836164810660}
+  m_Father: {fileID: 2114318240313634354}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.7999634, y: -177}
+  m_AnchoredPosition: {x: 0.000036597252, y: 0}
   m_SizeDelta: {x: 28.03, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4614607047347048032
@@ -3636,6 +3681,7 @@ GameObject:
   - component: {fileID: 8329913888287536582}
   - component: {fileID: 9158440829444895669}
   - component: {fileID: 1314883391637464702}
+  - component: {fileID: 6227331819323530614}
   m_Layer: 5
   m_Name: ItemPick_10
   m_TagString: Untagged
@@ -3746,18 +3792,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6795075714328153988}
         m_TargetAssemblyTypeName: SlotTarzanMiniGameView, Assembly-CSharp
-        m_MethodName: onClickItem
+        m_MethodName: OnClickItem
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: SlotTarzanItemBonus, Assembly-CSharp
+          m_ObjectArgument: {fileID: 6227331819323530614}
+          m_ObjectArgumentAssemblyTypeName: SlotTarzanMinigameItem, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6227331819323530614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2574198789452150124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40fa8d82512b4133845a9836536f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreAnimation: {fileID: 1499256642752885057}
+  valueText: {fileID: 8547176929570181132}
 --- !u!1 &2601045940162153328
 GameObject:
   m_ObjectHideFlags: 0
@@ -4070,7 +4130,7 @@ GameObject:
   - component: {fileID: 1875932828768051797}
   - component: {fileID: 6847389143194621709}
   m_Layer: 5
-  m_Name: lbValue
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4257,7 +4317,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e77ca172d14a04ea28a8bc5e1c2ffa74, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a397bf318b3e44870978ddcc2c0e8c15, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4701,6 +4761,41 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &3411897356996685200
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8329427228792037197}
+  m_Layer: 5
+  m_Name: Diamond Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8329427228792037197
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3411897356996685200}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8753862968189356550}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 16}
+  m_SizeDelta: {x: -324, y: -196}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3536852830089091627
 GameObject:
   m_ObjectHideFlags: 0
@@ -4736,7 +4831,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 215}
+  m_AnchoredPosition: {x: 0, y: 229}
   m_SizeDelta: {x: 580, y: 112}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8151861299603012708
@@ -4789,7 +4884,7 @@ GameObject:
   - component: {fileID: 6601934765742510182}
   - component: {fileID: 7341029446024001}
   m_Layer: 5
-  m_Name: lbValue
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4986,6 +5081,97 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &3689240055343159821
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4681551704046620659}
+  - component: {fileID: 2938597116141737702}
+  - component: {fileID: 8995716899788640741}
+  m_Layer: 0
+  m_Name: New SkeletonGraphic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4681551704046620659
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3689240055343159821}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1981908742571511310}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &2938597116141737702
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3689240055343159821}
+  m_CullTransparentMesh: 1
+--- !u!114 &8995716899788640741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3689240055343159821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d85b887af7e6c3f45a2e2d2920d641bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 2100000, guid: b66cf7a186d13054989b33a5c90044e4, type: 2}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  skeletonDataAsset: {fileID: 11400000, guid: 741e35a6787f18b47947031a65500727, type: 2}
+  initialSkinName: 
+  initialFlipX: 0
+  initialFlipY: 0
+  startingAnimation: animation
+  startingLoop: 1
+  timeScale: 1
+  freeze: 0
+  updateWhenInvisible: 3
+  unscaledTime: 0
+  allowMultipleCanvasRenderers: 0
+  canvasRenderers: []
+  separatorSlotNames: []
+  enableSeparatorSlots: 0
+  separatorParts: []
+  updateSeparatorPartLocation: 1
+  meshGenerator:
+    settings:
+      useClipping: 1
+      zSpacing: 0
+      pmaVertexColors: 1
+      tintBlack: 0
+      canvasGroupTintBlack: 0
+      calculateTangents: 0
+      addNormals: 0
+      immutableTriangles: 0
 --- !u!1 &3749014562335836232
 GameObject:
   m_ObjectHideFlags: 0
@@ -5071,6 +5257,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6833536200110225438}
   - component: {fileID: 5120506276044506260}
+  - component: {fileID: 2032805757873588285}
   m_Layer: 5
   m_Name: Container
   m_TagString: Untagged
@@ -5115,6 +5302,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3806251202132570763}
   m_CullTransparentMesh: 1
+--- !u!114 &2032805757873588285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3806251202132570763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: c91e5504a25874159a16b69cddff0da3, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &3828654816757337777
 GameObject:
   m_ObjectHideFlags: 0
@@ -5192,7 +5409,7 @@ GameObject:
   - component: {fileID: 2421131863130021649}
   - component: {fileID: 8480389471935735693}
   m_Layer: 0
-  m_Name: animPick
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5283,7 +5500,7 @@ GameObject:
   - component: {fileID: 3188126881332766924}
   - component: {fileID: 7392897268258835454}
   m_Layer: 0
-  m_Name: animPick
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5498,9 +5715,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1503507703121900181}
         m_TargetAssemblyTypeName: SlotTarzanView, Assembly-CSharp
-        m_MethodName: closePopupResultFreeSpin
+        m_MethodName: HidePopupResultFreeSpin
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5611,7 +5828,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4111145778561063317}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 12435.324}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5688,6 +5905,7 @@ GameObject:
   - component: {fileID: 2079087229017018191}
   - component: {fileID: 8400340120981055831}
   - component: {fileID: 7526762725011083161}
+  - component: {fileID: 6795075714328153988}
   m_Layer: 5
   m_Name: Mini Game View
   m_TagString: Untagged
@@ -5743,7 +5961,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 667311c19a55a4ac68b6b372c2cb8af0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 29d9ef8106bd240738cf4006b8d2593d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5797,6 +6015,40 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6795075714328153988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4167121281744017099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d589cd7a9ea1f4f00ac4c14f088567a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPopup: 1
+  effectPopupReverse: 1
+  popupBackground: {fileID: 8400340120981055831}
+  pickLeftText: {fileID: 2234426419451978429}
+  totalWinText: {fileID: 8182013056627796375}
+  itemContainer: {fileID: 8916145265043546532}
+  itemList:
+  - {fileID: 5456182106658501124}
+  - {fileID: 483835032489916219}
+  - {fileID: 56069982246750612}
+  - {fileID: 4579396538816866950}
+  - {fileID: 1491115362292881262}
+  - {fileID: 4974190392556805362}
+  - {fileID: 6424192378937429891}
+  - {fileID: 8094103813249740732}
+  - {fileID: 4657068423035113166}
+  - {fileID: 2986477231735037157}
+  - {fileID: 6227331819323530614}
+  - {fileID: 344077042502545590}
+  - {fileID: 5526916198073206706}
+  - {fileID: 7399847592820160717}
+  - {fileID: 3033041329458653667}
 --- !u!1 &4187339676801079910
 GameObject:
   m_ObjectHideFlags: 0
@@ -5809,7 +6061,7 @@ GameObject:
   - component: {fileID: 7588595584127389596}
   - component: {fileID: 4225340109922719373}
   m_Layer: 5
-  m_Name: lbValue
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5943,7 +6195,7 @@ GameObject:
   - component: {fileID: 4038175749478311230}
   - component: {fileID: 7994474806868059688}
   m_Layer: 5
-  m_Name: lbValue
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6135,11 +6387,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  skeletonDataAsset: {fileID: 0}
+  skeletonDataAsset: {fileID: 11400000, guid: cf9c0b11290b1b94d8f628b24de5427a, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
-  startingAnimation: 
+  startingAnimation: getgem
   startingLoop: 1
   timeScale: 1
   freeze: 0
@@ -6174,6 +6426,7 @@ GameObject:
   - component: {fileID: 7942106231456282993}
   - component: {fileID: 5476527669326689230}
   - component: {fileID: 1367686440284641549}
+  - component: {fileID: 483835032489916219}
   m_Layer: 5
   m_Name: ItemPick_1
   m_TagString: Untagged
@@ -6284,18 +6537,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6795075714328153988}
         m_TargetAssemblyTypeName: SlotTarzanMiniGameView, Assembly-CSharp
-        m_MethodName: onClickItem
+        m_MethodName: OnClickItem
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: SlotTarzanItemBonus, Assembly-CSharp
+          m_ObjectArgument: {fileID: 483835032489916219}
+          m_ObjectArgumentAssemblyTypeName: SlotTarzanMinigameItem, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &483835032489916219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4287979979518799170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40fa8d82512b4133845a9836536f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreAnimation: {fileID: 973238810940353273}
+  valueText: {fileID: 1110399622432018218}
 --- !u!1 &4296362930344248762
 GameObject:
   m_ObjectHideFlags: 0
@@ -6383,7 +6650,7 @@ GameObject:
   - component: {fileID: 112167039590560117}
   - component: {fileID: 1416854839008788898}
   m_Layer: 0
-  m_Name: animPick
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6537,6 +6804,42 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &4696452465127826539
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2114318240313634354}
+  m_Layer: 0
+  m_Name: Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2114318240313634354
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4696452465127826539}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4186594614249409107}
+  m_Father: {fileID: 5060916836164810660}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4709526607502457132
 GameObject:
   m_ObjectHideFlags: 0
@@ -6640,7 +6943,7 @@ GameObject:
   - component: {fileID: 7769221754563136063}
   - component: {fileID: 6406834600020289498}
   m_Layer: 0
-  m_Name: animPick
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6731,7 +7034,7 @@ GameObject:
   - component: {fileID: 7877907053828291710}
   - component: {fileID: 7181543971515896459}
   m_Layer: 5
-  m_Name: lbValue
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6865,6 +7168,7 @@ GameObject:
   - component: {fileID: 7667274195496342521}
   - component: {fileID: 6953376612774974420}
   - component: {fileID: 489983173407905250}
+  - component: {fileID: 3033041329458653667}
   m_Layer: 5
   m_Name: ItemPick_14
   m_TagString: Untagged
@@ -6975,18 +7279,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6795075714328153988}
         m_TargetAssemblyTypeName: SlotTarzanMiniGameView, Assembly-CSharp
-        m_MethodName: onClickItem
+        m_MethodName: OnClickItem
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: SlotTarzanItemBonus, Assembly-CSharp
+          m_ObjectArgument: {fileID: 3033041329458653667}
+          m_ObjectArgumentAssemblyTypeName: SlotTarzanMinigameItem, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3033041329458653667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4849046095973137491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40fa8d82512b4133845a9836536f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreAnimation: {fileID: 1416854839008788898}
+  valueText: {fileID: 7994474806868059688}
 --- !u!1 &5049474970884511112
 GameObject:
   m_ObjectHideFlags: 0
@@ -6999,7 +7317,7 @@ GameObject:
   - component: {fileID: 2061803334289447291}
   - component: {fileID: 6024199431555017255}
   m_Layer: 0
-  m_Name: animPick
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7224,7 +7542,7 @@ GameObject:
   - component: {fileID: 2487476317941632191}
   - component: {fileID: 2606965962463856376}
   m_Layer: 5
-  m_Name: lbValue
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7575,7 +7893,7 @@ GameObject:
   - component: {fileID: 5026003257610993159}
   - component: {fileID: 8547176929570181132}
   m_Layer: 5
-  m_Name: lbValue
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7908,9 +8226,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1503507703121900181}
         m_TargetAssemblyTypeName: SlotTarzanView, Assembly-CSharp
-        m_MethodName: onClickClosePopupMiniGame
+        m_MethodName: HidePopupMiniGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7987,11 +8305,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  skeletonDataAsset: {fileID: 0}
+  skeletonDataAsset: {fileID: 11400000, guid: a23474cb1bac9e44fb4a95edf5ee12f3, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
-  startingAnimation: Thai
+  startingAnimation: Eng
   startingLoop: 1
   timeScale: 1
   freeze: 0
@@ -8175,7 +8493,7 @@ GameObject:
   - component: {fileID: 7534631209378474462}
   - component: {fileID: 1812957568577952835}
   m_Layer: 0
-  m_Name: animPick
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8266,7 +8584,7 @@ GameObject:
   - component: {fileID: 4073680436920189842}
   - component: {fileID: 8714031994503691113}
   m_Layer: 5
-  m_Name: lbValue
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8398,7 +8716,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3103730921488492517}
   m_Layer: 5
-  m_Name: ff
+  m_Name: Line Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8435,7 +8753,7 @@ GameObject:
   - component: {fileID: 5539561964712347446}
   - component: {fileID: 4310267664637705251}
   m_Layer: 5
-  m_Name: lbValue
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8673,16 +8991,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5715385705045891194}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.008112762, w: -0.9999671}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6630499417489588769}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.93}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.6, y: 3.3}
+  m_AnchoredPosition: {x: -1.6000061, y: 3.2999573}
   m_SizeDelta: {x: 241, y: 36}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7643120224383687849
@@ -8735,6 +9053,7 @@ GameObject:
   - component: {fileID: 3036222196034622328}
   - component: {fileID: 3473732624141334556}
   - component: {fileID: 9124141783360683300}
+  - component: {fileID: 7399847592820160717}
   m_Layer: 5
   m_Name: ItemPick_13
   m_TagString: Untagged
@@ -8845,18 +9164,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6795075714328153988}
         m_TargetAssemblyTypeName: SlotTarzanMiniGameView, Assembly-CSharp
-        m_MethodName: onClickItem
+        m_MethodName: OnClickItem
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: SlotTarzanItemBonus, Assembly-CSharp
+          m_ObjectArgument: {fileID: 7399847592820160717}
+          m_ObjectArgumentAssemblyTypeName: SlotTarzanMinigameItem, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7399847592820160717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5844378445038175047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40fa8d82512b4133845a9836536f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreAnimation: {fileID: 6841395872793377761}
+  valueText: {fileID: 5829184151755276389}
 --- !u!1 &5848538297198622841
 GameObject:
   m_ObjectHideFlags: 0
@@ -9175,6 +9508,7 @@ GameObject:
   - component: {fileID: 3009950227142273844}
   - component: {fileID: 627335817341025087}
   - component: {fileID: 2437759825497146592}
+  - component: {fileID: 344077042502545590}
   m_Layer: 5
   m_Name: ItemPick_11
   m_TagString: Untagged
@@ -9285,18 +9619,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6795075714328153988}
         m_TargetAssemblyTypeName: SlotTarzanMiniGameView, Assembly-CSharp
-        m_MethodName: onClickItem
+        m_MethodName: OnClickItem
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: SlotTarzanItemBonus, Assembly-CSharp
+          m_ObjectArgument: {fileID: 344077042502545590}
+          m_ObjectArgumentAssemblyTypeName: SlotTarzanMinigameItem, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &344077042502545590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6156055568799974528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40fa8d82512b4133845a9836536f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreAnimation: {fileID: 4012986534033541156}
+  valueText: {fileID: 4836676320173264405}
 --- !u!1 &6207729221176843340
 GameObject:
   m_ObjectHideFlags: 0
@@ -9362,12 +9710,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  skeletonDataAsset: {fileID: 0}
+  skeletonDataAsset: {fileID: 11400000, guid: d63c3413cfd934546b739dc1beeadfd7, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
-  startingAnimation: du_day1
-  startingLoop: 0
+  startingAnimation: du_day
+  startingLoop: 1
   timeScale: 1
   freeze: 0
   updateWhenInvisible: 3
@@ -9549,7 +9897,7 @@ GameObject:
   - component: {fileID: 8209534231445255346}
   - component: {fileID: 4012986534033541156}
   m_Layer: 0
-  m_Name: animPick
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9640,6 +9988,7 @@ GameObject:
   - component: {fileID: 7951990530822377913}
   - component: {fileID: 3459051678350858159}
   - component: {fileID: 7625568275623896057}
+  - component: {fileID: 5456182106658501124}
   m_Layer: 5
   m_Name: ItemPick
   m_TagString: Untagged
@@ -9750,18 +10099,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6795075714328153988}
         m_TargetAssemblyTypeName: SlotTarzanMiniGameView, Assembly-CSharp
-        m_MethodName: onClickItem
+        m_MethodName: OnClickItem
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: SlotTarzanItemBonus, Assembly-CSharp
+          m_ObjectArgument: {fileID: 5456182106658501124}
+          m_ObjectArgumentAssemblyTypeName: SlotTarzanMinigameItem, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &5456182106658501124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6544519908691667537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40fa8d82512b4133845a9836536f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreAnimation: {fileID: 6406834600020289498}
+  valueText: {fileID: 7341029446024001}
 --- !u!1 &6634373050909973116
 GameObject:
   m_ObjectHideFlags: 0
@@ -9774,6 +10137,7 @@ GameObject:
   - component: {fileID: 997768312538716419}
   - component: {fileID: 562855959033675331}
   - component: {fileID: 8231839838430321469}
+  - component: {fileID: 6424192378937429891}
   m_Layer: 5
   m_Name: ItemPick_6
   m_TagString: Untagged
@@ -9884,18 +10248,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6795075714328153988}
         m_TargetAssemblyTypeName: SlotTarzanMiniGameView, Assembly-CSharp
-        m_MethodName: onClickItem
+        m_MethodName: OnClickItem
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: SlotTarzanItemBonus, Assembly-CSharp
+          m_ObjectArgument: {fileID: 6424192378937429891}
+          m_ObjectArgumentAssemblyTypeName: SlotTarzanMinigameItem, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6424192378937429891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6634373050909973116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40fa8d82512b4133845a9836536f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreAnimation: {fileID: 820937988567070325}
+  valueText: {fileID: 4310267664637705251}
 --- !u!1 &6729069300235128847
 GameObject:
   m_ObjectHideFlags: 0
@@ -9908,7 +10286,7 @@ GameObject:
   - component: {fileID: 8360378106256109872}
   - component: {fileID: 5829184151755276389}
   m_Layer: 5
-  m_Name: lbValue
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10117,6 +10495,7 @@ GameObject:
   - component: {fileID: 5733488902848997751}
   - component: {fileID: 3320469570569938022}
   - component: {fileID: 2129069863019185621}
+  - component: {fileID: 4579396538816866950}
   m_Layer: 5
   m_Name: ItemPick_3
   m_TagString: Untagged
@@ -10227,18 +10606,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6795075714328153988}
         m_TargetAssemblyTypeName: SlotTarzanMiniGameView, Assembly-CSharp
-        m_MethodName: onClickItem
+        m_MethodName: OnClickItem
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: SlotTarzanItemBonus, Assembly-CSharp
+          m_ObjectArgument: {fileID: 4579396538816866950}
+          m_ObjectArgumentAssemblyTypeName: SlotTarzanMinigameItem, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4579396538816866950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6873857002587837401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40fa8d82512b4133845a9836536f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreAnimation: {fileID: 37491710057736492}
+  valueText: {fileID: 8714031994503691113}
 --- !u!1 &6927498995991844377
 GameObject:
   m_ObjectHideFlags: 0
@@ -10381,8 +10774,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: pays 20.000
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
+  m_sharedMaterial: {fileID: 7800525795003925199, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -10460,6 +10853,7 @@ GameObject:
   - component: {fileID: 1632486261033653129}
   - component: {fileID: 9023617991089373743}
   - component: {fileID: 6608864031873824694}
+  - component: {fileID: 56069982246750612}
   m_Layer: 5
   m_Name: ItemPick_2
   m_TagString: Untagged
@@ -10570,18 +10964,68 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6795075714328153988}
         m_TargetAssemblyTypeName: SlotTarzanMiniGameView, Assembly-CSharp
-        m_MethodName: onClickItem
+        m_MethodName: OnClickItem
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: SlotTarzanItemBonus, Assembly-CSharp
+          m_ObjectArgument: {fileID: 56069982246750612}
+          m_ObjectArgumentAssemblyTypeName: SlotTarzanMinigameItem, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &56069982246750612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7003429559876539778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40fa8d82512b4133845a9836536f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreAnimation: {fileID: 6024199431555017255}
+  valueText: {fileID: 1604688741010805548}
+--- !u!1 &7049746927030931194
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1981908742571511310}
+  m_Layer: 5
+  m_Name: Background Free Spin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1981908742571511310
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7049746927030931194}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4681551704046620659}
+  m_Father: {fileID: 8753862966779158463}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7091033758369045166
 GameObject:
   m_ObjectHideFlags: 0
@@ -10594,6 +11038,7 @@ GameObject:
   - component: {fileID: 3952149120483938416}
   - component: {fileID: 8952985124064264045}
   - component: {fileID: 9171951754166197455}
+  - component: {fileID: 8094103813249740732}
   m_Layer: 5
   m_Name: ItemPick_7
   m_TagString: Untagged
@@ -10704,18 +11149,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6795075714328153988}
         m_TargetAssemblyTypeName: SlotTarzanMiniGameView, Assembly-CSharp
-        m_MethodName: onClickItem
+        m_MethodName: OnClickItem
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: SlotTarzanItemBonus, Assembly-CSharp
+          m_ObjectArgument: {fileID: 8094103813249740732}
+          m_ObjectArgumentAssemblyTypeName: SlotTarzanMinigameItem, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8094103813249740732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7091033758369045166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40fa8d82512b4133845a9836536f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreAnimation: {fileID: 1504498985482843920}
+  valueText: {fileID: 3870418126953671522}
 --- !u!1 &7115693150639128153
 GameObject:
   m_ObjectHideFlags: 0
@@ -10728,7 +11187,7 @@ GameObject:
   - component: {fileID: 3664625181727558043}
   - component: {fileID: 6841395872793377761}
   m_Layer: 0
-  m_Name: animPick
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10807,6 +11266,41 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!1 &7124118125386630440
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4029365251481930129}
+  m_Layer: 5
+  m_Name: Letter Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4029365251481930129
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7124118125386630440}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8753862966779158463}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7244151725849365603
 GameObject:
   m_ObjectHideFlags: 0
@@ -10819,7 +11313,7 @@ GameObject:
   - component: {fileID: 2829383403300722281}
   - component: {fileID: 4836676320173264405}
   m_Layer: 5
-  m_Name: lbValue
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11008,8 +11502,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Keep playing for the big prize!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7708e67653374c60af5f1595e949403, type: 2}
-  m_sharedMaterial: {fileID: 7800525795003925199, guid: b7708e67653374c60af5f1595e949403, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
+  m_sharedMaterial: {fileID: 7800525795003925199, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -11087,6 +11581,7 @@ GameObject:
   - component: {fileID: 2300259026737250213}
   - component: {fileID: 5054976581887195104}
   - component: {fileID: 5265929991918169085}
+  - component: {fileID: 1491115362292881262}
   m_Layer: 5
   m_Name: ItemPick_4
   m_TagString: Untagged
@@ -11197,18 +11692,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6795075714328153988}
         m_TargetAssemblyTypeName: SlotTarzanMiniGameView, Assembly-CSharp
-        m_MethodName: onClickItem
+        m_MethodName: OnClickItem
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: SlotTarzanItemBonus, Assembly-CSharp
+          m_ObjectArgument: {fileID: 1491115362292881262}
+          m_ObjectArgumentAssemblyTypeName: SlotTarzanMinigameItem, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1491115362292881262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7333311797787934080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40fa8d82512b4133845a9836536f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreAnimation: {fileID: 7392897268258835454}
+  valueText: {fileID: 2606965962463856376}
 --- !u!1 &7355237978925914961
 GameObject:
   m_ObjectHideFlags: 0
@@ -11221,7 +11730,7 @@ GameObject:
   - component: {fileID: 3466844437537618980}
   - component: {fileID: 1504498985482843920}
   m_Layer: 0
-  m_Name: animPick
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11807,9 +12316,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1503507703121900181}
         m_TargetAssemblyTypeName: SlotTarzanView, Assembly-CSharp
-        m_MethodName: onClickClosePopupGem
+        m_MethodName: HidePopupResultFreeSpin
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11831,7 +12340,7 @@ GameObject:
   - component: {fileID: 6954488848872194683}
   - component: {fileID: 1499256642752885057}
   m_Layer: 0
-  m_Name: animPick
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11944,7 +12453,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -129.1, y: -0.10002446}
+  m_AnchoredPosition: {x: -129.1, y: 0}
   m_SizeDelta: {x: 146, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1013107204850640881
@@ -12072,7 +12581,7 @@ GameObject:
   - component: {fileID: 245013919024640960}
   - component: {fileID: 1604688741010805548}
   m_Layer: 5
-  m_Name: lbValue
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12415,7 +12924,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: aa5542ee0b5624aaf8f9268317aec45a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c91e5504a25874159a16b69cddff0da3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12469,9 +12978,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BaseSlotGameView, Assembly-CSharp
-        m_MethodName: DoClickShop
+      - m_Target: {fileID: 1503507703121900181}
+        m_TargetAssemblyTypeName: BaseSlotView, Assembly-CSharp
+        m_MethodName: OnClickShopButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12787,9 +13296,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1503507703121900181}
         m_TargetAssemblyTypeName: SlotTarzanView, Assembly-CSharp
-        m_MethodName: onClickClosePopupGetFreespin
+        m_MethodName: HidePopupGetFreeSpin
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12811,7 +13320,7 @@ GameObject:
   - component: {fileID: 8202038501105061634}
   - component: {fileID: 8176887532221309025}
   m_Layer: 5
-  m_Name: lbValue
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12945,7 +13454,7 @@ GameObject:
   - component: {fileID: 1300298473477861639}
   - component: {fileID: 4576956583734920580}
   m_Layer: 0
-  m_Name: animPick
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13061,6 +13570,8 @@ RectTransform:
   - {fileID: 8753862967693624398}
   - {fileID: 3103730921488492517}
   - {fileID: 9111217770255186180}
+  - {fileID: 4029365251481930129}
+  - {fileID: 1981908742571511310}
   m_Father: {fileID: 8753862968189356550}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -13683,10 +14194,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0E01\u0E14 \u0E2B\u0E21\u0E38\u0E19 \u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E40\u0E25\u0E48\u0E19"
+  m_text: Hello
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
+  m_sharedMaterial: {fileID: 7800525795003925199, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -13746,7 +14257,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: -157.33424, y: 0, z: -162.40944, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -13789,8 +14300,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -7.6792}
-  m_SizeDelta: {x: 900, y: 474.6417}
+  m_AnchoredPosition: {x: 0, y: -11.4668}
+  m_SizeDelta: {x: 900, y: 431.3471}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8753862967471444551
 CanvasRenderer:
@@ -14198,9 +14709,9 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: BaseSlotGameView, Assembly-CSharp
-          m_MethodName: onSpinTriggerDown
+        - m_Target: {fileID: 1503507703121900181}
+          m_TargetAssemblyTypeName: BaseSlotView, Assembly-CSharp
+          m_MethodName: OnTriggerDownSpinButton
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -14214,9 +14725,9 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: BaseSlotGameView, Assembly-CSharp
-          m_MethodName: onSpinTriggerUp
+        - m_Target: {fileID: 1503507703121900181}
+          m_TargetAssemblyTypeName: BaseSlotView, Assembly-CSharp
+          m_MethodName: OnTriggerUpSpinButton
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -14246,7 +14757,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: aa5542ee0b5624aaf8f9268317aec45a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c91e5504a25874159a16b69cddff0da3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -14499,10 +15010,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BaseSlotGameView, Assembly-CSharp
-        m_MethodName: changeBetRoom
-        m_Mode: 5
+      - m_Target: {fileID: 1503507703121900181}
+        m_TargetAssemblyTypeName: BaseSlotView, Assembly-CSharp
+        m_MethodName: OnClickMaxBetButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -14578,8 +15089,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: BET
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
+  m_sharedMaterial: {fileID: 7800525795003925199, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -14765,10 +15276,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BaseSlotGameView, Assembly-CSharp
-        m_MethodName: changeBetRoom
-        m_Mode: 5
+      - m_Target: {fileID: 1503507703121900181}
+        m_TargetAssemblyTypeName: BaseSlotView, Assembly-CSharp
+        m_MethodName: OnClickMinusBetButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -14812,6 +15323,7 @@ RectTransform:
   - {fileID: 8753862967530618100}
   - {fileID: 8753862966779158463}
   - {fileID: 8753862967297103083}
+  - {fileID: 8329427228792037197}
   - {fileID: 5643153628255899913}
   - {fileID: 4800380337751880480}
   - {fileID: 3974545820901290097}
@@ -14876,43 +15388,103 @@ MonoBehaviour:
   effectPopup: 0
   effectPopupReverse: 0
   popupBackground: {fileID: 0}
-  maxBetButton: {fileID: 0}
-  plusBetButton: {fileID: 0}
-  minusBetButton: {fileID: 0}
-  betAmountText: {fileID: 0}
-  betInfoSessionText: {fileID: 0}
-  betStateText: {fileID: 0}
+  maxBetButton: {fileID: 8753862967801970926}
+  plusBetButton: {fileID: 8753862968546525066}
+  minusBetButton: {fileID: 8753862968065817123}
+  betAmountText: {fileID: 463271363982801230}
+  betInfoSessionText: {fileID: 8903295820898581454}
+  betStateText: {fileID: 2982529644289516603}
   stateWinText: {fileID: 0}
-  freeSpinLeftText: {fileID: 0}
-  bigWinText: {fileID: 0}
-  chipWinText: {fileID: 0}
-  currentChipText: {fileID: 0}
-  paylineText: {fileID: 0}
+  freeSpinLeftText: {fileID: 2803166672783951867}
+  bigWinText: {fileID: 6217307430584153727}
+  chipWinText: {fileID: 5085785196253921534}
+  currentChipText: {fileID: 5220616634070511319}
+  paylineText: {fileID: 6577063272589519050}
   numLineLeftText: {fileID: 0}
   numLineRightText: {fileID: 0}
-  spinBackgroundImage: {fileID: 0}
-  chipImage: {fileID: 0}
-  spinButton: {fileID: 0}
-  stateWinImage: {fileID: 0}
+  spinBackgroundImage: {fileID: 8753862966779158080}
+  chipImage: {fileID: 8753862967166101969}
+  spinButton: {fileID: 4891739656694669212}
+  stateWinImage: {fileID: 8753862967340459246}
   betStateImage: {fileID: 0}
-  stateWinSpriteList: []
-  itemSpriteList: []
+  stateWinSpriteList:
+  - {fileID: 21300000, guid: 4b188ed5e483b8c4195818a6d6fcd46e, type: 3}
+  - {fileID: 21300000, guid: a8a4be96858f6ba4e8361330612b1e68, type: 3}
+  - {fileID: 21300000, guid: 0d54e6b57318b744390b0f77e43a5b96, type: 3}
+  itemSpriteList:
+  - {fileID: 21300000, guid: cff098faa9ce74146b7522830b8dfdb0, type: 3}
+  - {fileID: 21300000, guid: 5027041f9d60370409a96bf619702fbb, type: 3}
+  - {fileID: 21300000, guid: 2f427143b6d8c3b41bfafb890546a782, type: 3}
+  - {fileID: 21300000, guid: 93837721337ed954c9a71bd7a2ea53f6, type: 3}
+  - {fileID: 21300000, guid: 766aa8d967ed271499bde6b8e21f05ac, type: 3}
+  - {fileID: 21300000, guid: 832fc4ef3942d134c89b783366c59a36, type: 3}
+  - {fileID: 21300000, guid: 5841b981834079448a47b10e3292a407, type: 3}
+  - {fileID: 21300000, guid: 39d06daa12ea1934f925e7fbd6040a9a, type: 3}
+  - {fileID: 21300000, guid: 7650ffc4607b59649a50be68e5ef02ef, type: 3}
+  - {fileID: 21300000, guid: 38774fd688e33a24390b58e02d4cc4de, type: 3}
+  - {fileID: 21300000, guid: a0e9e23e36029fc49baed8ab1a56b5e4, type: 3}
+  - {fileID: 21300000, guid: 228105458deb4a44a8fe9ed812c80a68, type: 3}
+  - {fileID: 21300000, guid: d55b00b34b855454cb78aa9b06103c86, type: 3}
+  - {fileID: 21300000, guid: f7577cab06dd15b4da54ab208b928bbf, type: 3}
+  - {fileID: 21300000, guid: 9f92461c2537376478077367c4353525, type: 3}
   betStateSpriteList: []
-  lineContainer: {fileID: 0}
-  effectContainer: {fileID: 0}
-  paylineInfoContainer: {fileID: 0}
-  paylineIconContainer: {fileID: 0}
-  columnContainer: {fileID: 0}
-  coinParent: {fileID: 0}
-  rulePrefab: {fileID: 0}
-  linePrefab: {fileID: 0}
-  coinPrefab: {fileID: 0}
-  columnPrefab: {fileID: 0}
-  backgroundFreeSpinAnimation: {fileID: 0}
-  thirdScatterAnimation: {fileID: 0}
-  buttonSpinAnimation: {fileID: 0}
-  animationEffect: {fileID: 0}
-  backgroundFreeSpinLeftAnimation: {fileID: 0}
+  lineContainer: {fileID: 3103730921488492517}
+  effectContainer: {fileID: 4800380337751880480}
+  paylineInfoContainer: {fileID: 4091392726482859735}
+  paylineIconContainer: {fileID: 7513769804359027175}
+  columnContainer: {fileID: 4116771159544169848}
+  coinParent: {fileID: 3974545820901290097}
+  rulePrefab: {fileID: 4088362194472957680, guid: 043d12280898a4046980c86940606b3d, type: 3}
+  linePrefab: {fileID: 8548897947965680954, guid: 0141132e8370a4b11b5689cdc18d9b49, type: 3}
+  coinPrefab: {fileID: 5775115196986566630, guid: a9c914c2a21b84cf9b137696d366c3e4, type: 3}
+  columnPrefab: {fileID: 897385539689905776, guid: e51183709b412404798445fef9feaec2, type: 3}
+  backgroundFreeSpinAnimation: {fileID: 8995716899788640741}
+  thirdScatterAnimation: {fileID: 9215603398204476022}
+  buttonSpinAnimation: {fileID: 5368062429095690352}
+  animationEffect: {fileID: 8187385026174909910}
+  backgroundFreeSpinLeftAnimation: {fileID: 8995716899788640741}
+  miniGameView: {fileID: 6795075714328153988}
+  tarzanAnimation: {fileID: 3547157268410882749}
+  characterAnimation: {fileID: 2763211584143094989}
+  lightBarAnimation: {fileID: 2231646293777288137}
+  popupResult: {fileID: 4600601410501167125}
+  popupMinigame: {fileID: 3296321818632863866}
+  popupResultMinigame: {fileID: 1400158805501447940}
+  popupFreeSpin: {fileID: 3779777830285092761}
+  popupResultFreeSpin: {fileID: 8465772378728603310}
+  diamondAnimation: {fileID: 2219555417890088690, guid: fc50b283b3c674e5bb48729a034eb171, type: 3}
+  currentChipBonusText: {fileID: 2690206611642442897}
+  chipRewardText: {fileID: 8783585133647390325}
+  diamondNumberText: {fileID: 4655842825149194602}
+  diamondAmountText: {fileID: 2690206611642442897}
+  freeSpinTurnText: {fileID: 4600856980760054612}
+  freeSpinMultiplierText: {fileID: 8769253362422251589}
+  resultFreeSpinRewardText: {fileID: 8940120798049500631}
+  resultFreeSpinTurnText: {fileID: 5071382779577421439}
+  resultFreeSpinMultiplierText: {fileID: 8379090439739460639}
+  resultMinigameRewardText: {fileID: 6081464309334886510}
+  progressChipBonus: {fileID: 6137030397405137581}
+  getFreeSpinOKButton: {fileID: 5888439149209327542}
+  getFreeSpinResultOKButton: {fileID: 8659474388049173278}
+  diamondPot: {fileID: 5427098711778770836}
+  diamondContainer: {fileID: 8329427228792037197}
+  letterContainer: {fileID: 4029365251481930129}
+  diamondPrefab: {fileID: 1217619970843856215, guid: fc50b283b3c674e5bb48729a034eb171, type: 3}
+  letterPrefab: {fileID: 1217619970843856215, guid: 339c588cc96a9440da7b80d2d5a412b3, type: 3}
+  characterList:
+  - {fileID: 60712050840115801}
+  - {fileID: 7428804111227554403}
+  - {fileID: 7239782601765956150}
+  - {fileID: 3852782873813579426}
+  - {fileID: 7563979471660085462}
+  - {fileID: 2272262680550714415}
+  characterActiveList:
+  - {fileID: 21300000, guid: bf8c6c621bc2762449d04af9238c1c05, type: 3}
+  - {fileID: 21300000, guid: 3f4c2e2d2b90f6241af420d68d417c6b, type: 3}
+  - {fileID: 21300000, guid: 500dcb6584e48be4d878e470255e75d1, type: 3}
+  - {fileID: 21300000, guid: f2542e6a44191194c8c85b2b5554bffb, type: 3}
+  - {fileID: 21300000, guid: 524abf3e963964840823058f1a32e70f, type: 3}
+  - {fileID: 21300000, guid: 9032f1ebced0bf74da9c8d5327d56ed9, type: 3}
 --- !u!1 &8753862968546525064
 GameObject:
   m_ObjectHideFlags: 0
@@ -15033,10 +15605,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BaseSlotGameView, Assembly-CSharp
-        m_MethodName: changeBetRoom
-        m_Mode: 5
+      - m_Target: {fileID: 1503507703121900181}
+        m_TargetAssemblyTypeName: BaseSlotView, Assembly-CSharp
+        m_MethodName: OnClickPlusBetButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -15165,9 +15737,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameView, Assembly-CSharp
-        m_MethodName: onClickBack
+      - m_Target: {fileID: 1503507703121900181}
+        m_TargetAssemblyTypeName: BaseSlotView, Assembly-CSharp
+        m_MethodName: OnClickMenuButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15323,7 +15895,7 @@ GameObject:
   - component: {fileID: 532454109470442948}
   - component: {fileID: 1400158805501447940}
   m_Layer: 0
-  m_Name: Popup Reset Minigame
+  m_Name: Popup Result Minigame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15379,11 +15951,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  skeletonDataAsset: {fileID: 0}
+  skeletonDataAsset: {fileID: 11400000, guid: a0d0b66d4a4f03d44a23398f6ef3e829, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
-  startingAnimation: cam
+  startingAnimation: Eng
   startingLoop: 1
   timeScale: 1
   freeze: 0
@@ -15548,6 +16120,7 @@ GameObject:
   - component: {fileID: 353573785846399697}
   - component: {fileID: 6100544924537062625}
   - component: {fileID: 3377153482622899571}
+  - component: {fileID: 5526916198073206706}
   m_Layer: 5
   m_Name: ItemPick_12
   m_TagString: Untagged
@@ -15658,18 +16231,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6795075714328153988}
         m_TargetAssemblyTypeName: SlotTarzanMiniGameView, Assembly-CSharp
-        m_MethodName: onClickItem
+        m_MethodName: OnClickItem
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: SlotTarzanItemBonus, Assembly-CSharp
+          m_ObjectArgument: {fileID: 5526916198073206706}
+          m_ObjectArgumentAssemblyTypeName: SlotTarzanMinigameItem, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &5526916198073206706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9037160678465909595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40fa8d82512b4133845a9836536f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreAnimation: {fileID: 4576956583734920580}
+  valueText: {fileID: 6847389143194621709}
 --- !u!1 &9197233895591135714
 GameObject:
   m_ObjectHideFlags: 0
