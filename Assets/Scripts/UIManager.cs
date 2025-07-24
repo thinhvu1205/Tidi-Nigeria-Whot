@@ -74,6 +74,9 @@ public class UIManager : Singleton<UIManager>
             case Constants.WHOT_GAME_ID:
                 gameView = Instantiate(LoadPrefabGame("WhotView"), parentGames).GetComponent<WhotView>();
                 break;
+            case Constants.BACCARAT_GAME_ID:
+                gameView = Instantiate(LoadPrefabGame("BaccaratView"), parentGames).GetComponent<BaccaratView>();
+                break;
             case Constants.NOEL_GAME_ID:
                 gameView = Instantiate(LoadPrefabGame("SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
                 // gameView = Instantiate(LoadPrefabGame("SlotFruitView"), parentGames).GetComponent<SlotFruitView>();

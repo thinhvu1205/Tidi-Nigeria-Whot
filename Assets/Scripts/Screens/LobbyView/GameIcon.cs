@@ -74,6 +74,7 @@ public class GameIcon : MonoBehaviour
                 Constants.TARZAN_GAME_ID => "anim_iconGames/tz_small/skeleton_SkeletonData",
                 Constants.INCA_GAME_ID => "anim_iconGames/inca_small/skeleton_SkeletonData",
                 Constants.BACCARAT_GAME_ID => "anim_iconGames/baccarat/skeleton_SkeletonData",
+                Constants.ROULETTE_GAME_ID => "anim_iconGames/roulette/skeleton_SkeletonData",
                 _ => ""
             };
         }
