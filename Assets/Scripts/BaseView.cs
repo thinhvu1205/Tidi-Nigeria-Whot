@@ -35,11 +35,26 @@ public class BaseView : MonoBehaviour
         SetStretch();
     }
 
+    protected virtual void Update()
+    {
+        // if (isAlawayTop)
+        //     transform.SetAsLastSibling();
+    }
+    
     protected virtual void OnEnable()
     {
         Show();
     }
 
+    public virtual void OnDestroy()
+    {
+        //    if (isPopupOnTab)
+        //    {
+        //        SocketIOManager.getInstance().emitSIOCCCNew(Globals.Config.formatStr("ClickClose_%s", Globals.CURRENT_VIEW.getCurrentSceneName()));
+        //        //Globals.CURRENT_VIEW.setCurView(Globals.CURRENT_VIEW.GAMELIST_VIEW);
+        //    }
+    }
+    
     public virtual void OnClickCloseButton()
     {
         Hide();
