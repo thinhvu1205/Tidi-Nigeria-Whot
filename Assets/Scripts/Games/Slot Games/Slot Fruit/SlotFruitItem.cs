@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class SlotFruitItem : SlotItem
 {
-    protected override float IconScale => 0.72f;
-    // protected override float PositionResetY => 1000f;
+    protected override float IconScale => 0.9f;
+    // protected override float PositionResetY => 780f;
     protected override Vector2[] ItemPositionList => new Vector2[]
     {
-        new(0, 120),
+        new(0, 154),
         new(0, 0),
-        new(0, -120),
+        new(0, -154),
     };
     protected override string ICON_ANIMATION_PATH => "SlotSpine/Fruit/SpineIcon/%id/skeleton_SkeletonData";
 

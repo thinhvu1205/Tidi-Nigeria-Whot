@@ -9,7 +9,7 @@ public class SlotFruitView : BaseSlotView
 {
     [SerializeField] private Image spinButtonImage;
     [SerializeField] private Sprite[] spinButtonSprites;
-    protected override Vector2 RECT_SIZE => new(160, 160f);
+    protected override Vector2 RECT_SIZE => new(130, 130f);
     protected override string BIG_WIN_ANIMATION_PATH => "SlotSpine/Common/Bigwin/skeleton_SkeletonData";
     protected override string MEGA_WIN_ANIMATION_PATH => "SlotSpine/Common/Bigwin/skeleton_SkeletonData";
     protected override string BIG_WIN_ANIMATION_NAME => "bigwin";
