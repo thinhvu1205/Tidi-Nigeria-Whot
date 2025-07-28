@@ -34,6 +34,7 @@ namespace Globals
         private const string USER_PASS_KEY = "user_pass";
         private const string USER_NAME_NORMAL_KEY = "username_normal";
         private const string USER_PASS_NORMAL_KEY = "userpass_normal";
+        public const string AUTO_LOGIN = "isAutoLogin";
         public const string TYPE_LOGIN_KEY = "type_login";
         private const string SOUND_KEY = "sound";
         private const string MUSIC_KEY = "music";

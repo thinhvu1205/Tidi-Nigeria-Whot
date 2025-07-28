@@ -27,7 +27,7 @@ public class BetItem : MonoBehaviour
         {
             backgroundImage.sprite = backgroundSpriteList[index % 4];
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => _ = UIManager.Instance.HandleFindMatch((int) dataItem.MarkUnit));
+            button.onClick.AddListener(() => _ = UIManager.Instance.HandleFindAndJoinMatch((int) dataItem.MarkUnit));
         }
         else
         {

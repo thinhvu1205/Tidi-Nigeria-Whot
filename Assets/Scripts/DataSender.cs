@@ -31,43 +31,50 @@ public class DataSender
         var parser = new MessageParser<T>(() => new T());
         return parser.ParseFrom(data);
     }
+
+    private static T DecodeFromJson<T>(string json) where T : IMessage<T>, new()
+    {
+        var parser = new JsonParser(JsonParser.Settings.Default.WithIgnoreUnknownFields(true));
+        return parser.Parse<T>(json);
+    }
+    
     #endregion
     
     #region RPC
 
     #region Login
-    public static async UniTask LoginAsGuest()
-    {
-        await NetworkManager.INSTANCE.LoginAsync();
-    }
-
-    public static async UniTask LoginWithAccount(string username, string password)
-    {
-        await NetworkManager.INSTANCE.LoginAsync(username, password);
-    }
-
-    public static async UniTask Logout()
-    {
-        await NetworkManager.INSTANCE.LogoutAsync();
-    }
+    // public static async UniTask LoginAsGuest()
+    // {
+    //     await NetworkManager.INSTANCE.LoginAsync();
+    // }
+    //
+    // public static async UniTask LoginWithAccount(string username, string password)
+    // {
+    //     await NetworkManager.INSTANCE.LoginAsync(username, password);
+    // }
+    //
+    // public static async UniTask Logout()
+    // {
+    //     await NetworkManager.INSTANCE.LogoutAsync();
+    // }
     #endregion
 
     public static async UniTask<Profile> GetProfile()
     {
         var response = await NetworkManager.INSTANCE.RPCSend(GET_PROFILE);
-        return DecodeFromBase64<Profile>(response.Payload);
+        return DecodeFromJson<Profile>(response.Payload);
     }
 
     public static async UniTask<GameListResponse> GetListGame()
     {
         var response = await NetworkManager.INSTANCE.RPCSend(GET_LIST_GAME);
-        return DecodeFromBase64<GameListResponse>(response.Payload);
+        return DecodeFromJson<GameListResponse>(response.Payload);
     }
 
     public static async UniTask<ListNotification> GetListNotification()
     {
         var response = await NetworkManager.INSTANCE.RPCSend(GET_LIST_NOTIFICATION);
-        return DecodeFromBase64<ListNotification>(response.Payload);
+        return DecodeFromJson<ListNotification>(response.Payload);
     }
 
     public static void ChangePassword(string oldPassword = "", string password = "")
@@ -95,14 +102,14 @@ public class DataSender
     {
         BetListRequest betListRequest = new(){Code = gameCode};
         var response = await NetworkManager.INSTANCE.RPCSend(GET_LIST_BET, betListRequest);
-        return DecodeFromBase64<Bets>(response.Payload);
+        return DecodeFromJson<Bets>(response.Payload);
     }
     
     public static async UniTask<PlayerCountByBetResponse> GetPlayerCountByBet(string gameCode)
     {
         BetListRequest betListRequest = new(){Code = gameCode};
         var response = await NetworkManager.INSTANCE.RPCSend(GET_PLAYER_COUNT_BY_BET, betListRequest);
-        return DecodeFromBase64<PlayerCountByBetResponse>(response.Payload);
+        return DecodeFromJson<PlayerCountByBetResponse>(response.Payload);
     }
     
     #region Match
@@ -127,7 +134,7 @@ public class DataSender
                 return null;
             }
 
-            return DecodeFromBase64<RpcFindMatchResponse>(response.Payload);
+            return DecodeFromJson<RpcFindMatchResponse>(response.Payload);
         }
         catch (Exception ex)
         {
@@ -155,7 +162,7 @@ public class DataSender
                 Debug.Log("CreateMatch response payload is empty");
                 return null;
             }
-            return DecodeFromBase64<RpcCreateMatchResponse>(response.Payload);
+            return DecodeFromJson<RpcCreateMatchResponse>(response.Payload);
         }
         catch (Exception ex)
         {
@@ -193,7 +200,7 @@ public class DataSender
                 Debug.Log("QuickMatch response payload is empty");
                 return null;
             }
-            return DecodeFromBase64<RpcFindMatchResponse>(response.Payload);
+            return DecodeFromJson<RpcFindMatchResponse>(response.Payload);
         }
         catch (Exception ex)
         {
