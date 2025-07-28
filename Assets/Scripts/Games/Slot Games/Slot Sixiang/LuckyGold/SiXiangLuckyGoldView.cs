@@ -8,7 +8,6 @@ using TMPro;
 using System.Threading.Tasks;
 using System;
 using Cysharp.Threading.Tasks;
-using Games.Slot_Games;
 using Newtonsoft.Json.Linq;
 using Random = UnityEngine.Random;
 using Globals;
@@ -87,16 +86,16 @@ public class SiXiangLuckyGoldView : MonoBehaviour
     
     public UniTask Show(SlotSixiangView SiXiangView)
     {
-        GameObject bottom = Instantiate(SlotSixiangView.Instance.transform.Find("Bottom").gameObject, transform);
+        // GameObject bottom = Instantiate(SlotSixiangView.Instance.transform.Find("Bottom").gameObject, transform);
 
-        lbWinAmount = bottom.transform.Find("lbTotalWin").GetComponent<TextNumberControl>();
-        lbWinAmount.Text = Utility.FormatNumber(SlotSixiangView.Instance.winAmount);
-        Destroy(bottom.transform.Find("infoBar").gameObject);
-        bottom.transform.SetSiblingIndex(transform.Find("EffectContainer").GetSiblingIndex() - 1);
-        lbRemainPick.text = remainPick + " Remaining Picks";
-        gameView = SiXiangView;
-        luckyGoldTask = new UniTaskCompletionSource();
-        SiXiangView.gameState = BaseSlotXisiang.GAME_STATE.SHOWING_RESULT;
+        // lbWinAmount = bottom.transform.Find("lbTotalWin").GetComponent<TextNumberControl>();
+        // lbWinAmount.Text = Utility.FormatNumber(SlotSixiangView.Instance.winAmount);
+        // Destroy(bottom.transform.Find("infoBar").gameObject);
+        // bottom.transform.SetSiblingIndex(transform.Find("EffectContainer").GetSiblingIndex() - 1);
+        // lbRemainPick.text = remainPick + " Remaining Picks";
+        // gameView = SiXiangView;
+        // luckyGoldTask = new UniTaskCompletionSource();
+        // SiXiangView.gameState = BaseSlotSymbolView.GAME_STATE.SHOWING_RESULT;
         return luckyGoldTask.Task;
     }
     
@@ -212,7 +211,7 @@ public class SiXiangLuckyGoldView : MonoBehaviour
                     lbChipWin.fontMaterial = materialText[1];
                 }
                 //Globals.Config.tweenNumberToNumber(SiXiangView.instance.lbChipWins, (int)data["winAmount"], totalWinAmount);
-                SlotSixiangView.Instance.lbChipWins.SetValue(totalWinAmount, true);
+                // SlotSixiangView.Instance.textChipWin.SetValue(totalWinAmount, true);
                 lbWinAmount.SetValue(totalWinAmount, true);
                 lbChipWin.transform.localScale = new Vector2(0, 0);
                 lbChipWin.transform.DOScale(new Vector2(1, 1), 0.2f).SetEase(Ease.OutBack);
@@ -266,18 +265,18 @@ public class SiXiangLuckyGoldView : MonoBehaviour
         });
         await UniTask.Delay(2000);
         btnCollect.gameObject.SetActive(true);
-        if (gameView.spintype == BaseSlotXisiang.SPIN_TYPE.AUTO)
-        {
-            DOTween.Sequence()
-                .AppendInterval(3.0f)
-                .AppendCallback(() =>
-                {
-                    if (gameObject.activeSelf)
-                    {
-                        onClickCollect();
-                    }
-                }).SetId("autoEnd");
-        }
+        // if (gameView.spinType == BaseSlotSymbolView.SPIN_TYPE.AUTO)
+        // {
+        //     DOTween.Sequence()
+        //         .AppendInterval(3.0f)
+        //         .AppendCallback(() =>
+        //         {
+        //             if (gameObject.activeSelf)
+        //             {
+        //                 onClickCollect();
+        //             }
+        //         }).SetId("autoEnd");
+        // }
     }
     
     private GameObject createItemGold()
@@ -321,15 +320,15 @@ public class SiXiangLuckyGoldView : MonoBehaviour
     {
         DOTween.Kill("autoPlay");
         DOTween.Kill("autoEnd");
-        SlotSixiangView.Instance.winAmount = totalWinAmount;
-        SlotSixiangView.Instance.setWinType(SlotSixiangView.Instance.winAmount);
+        // SlotSixiangView.Instance.winAmount = totalWinAmount;
+        // SlotSixiangView.Instance.setWinType(SlotSixiangView.Instance.winAmount);
         animResult.transform.parent.gameObject.SetActive(false);
         btnCollect.gameObject.SetActive(false);
         //await gameView.showAnimCutScene();
         JObject dataEnd = new JObject();
         dataEnd["winAmount"] = totalWinAmount;
         dataEnd["userAmount"] = userAmount;
-        dataEnd["gameType"] = (int)SlotSixiangView.GAME_TYPE.LUCKY_GOLD;
+        // dataEnd["gameType"] = (int)SlotSixiangView.GAME_TYPE.LUCKY_GOLD;
         dataEnd["isSelectBonusGame"] = isSelectBonusGame;
 
         // gameView.setStateNodeGameForLuckyGold(true);

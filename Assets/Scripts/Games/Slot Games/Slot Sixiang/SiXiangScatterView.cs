@@ -7,7 +7,6 @@ using UnityEngine.UI;
 using TMPro;
 using System.Threading.Tasks;
 using System;
-using Games.Slot_Games;
 using Newtonsoft.Json.Linq;
 using Globals;
 
@@ -90,7 +89,7 @@ public class SiXiangScatterView : MonoBehaviour
         gameView = SiXiangView;
         for (int i = 0; i < 4; i++)
         {
-            lbGoldValue[i].text = Utility.FormatMoney2(rateGold[i] * SiXiangView.getBetValue(), true);
+            // lbGoldValue[i].text = Utility.FormatMoney2(rateGold[i] * SiXiangView.getBetValue(), true);
         }
     }
     public void onClickSpin(string minigameType)
@@ -246,16 +245,16 @@ public class SiXiangScatterView : MonoBehaviour
         else
         {
             btnCollect.gameObject.SetActive(true);
-            if (gameView.spintype == BaseSlotXisiang.SPIN_TYPE.AUTO)
-            {
-                DOTween.Sequence()
-                    .AppendInterval(5.0f)
-                    .AppendCallback(() =>
-                    {
-                        endView();
-                    })
-                    .SetId("autoEnd");
-            }
+            // if (gameView.spinType == BaseSlotSymbolView.SPIN_TYPE.AUTO)
+            // {
+            //     DOTween.Sequence()
+            //         .AppendInterval(5.0f)
+            //         .AppendCallback(() =>
+            //         {
+            //             endView();
+            //         })
+            //         .SetId("autoEnd");
+            // }
         }
     }
     public void onClickCollect()
@@ -275,7 +274,7 @@ public class SiXiangScatterView : MonoBehaviour
         {
             JObject dataEnd = new JObject();
             dataEnd["winAmount"] = winAmount;
-            dataEnd["gameType"] = (int)SlotSixiangView.GAME_TYPE.SCATTER;
+            // dataEnd["gameType"] = (int)SlotSixiangView.GAME_TYPE.SCATTER;
             dataEnd["userAmount"] = userAmount;
             dataEnd["isSelectBonusGame"] = false;
             // await SlotSixiangView.Instance.endMinigame(dataEnd);

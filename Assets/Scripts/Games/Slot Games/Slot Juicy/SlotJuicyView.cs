@@ -683,11 +683,12 @@ public class SlotJuicyView : BaseSlotView
         {
             UpdateGameState(SlotGameState.PREPARE);
         }
-        if (lineOneByOneSequence.IsActive())
+        foreach(Sequence sequence in lineOneByOneSequenceList)
         {
-            lineOneByOneSequence.Complete(true);
-            // lineOneByOneSequence.Pause();
-            lineOneByOneSequence.Kill(true);
+            if (sequence.IsActive())
+            {
+                sequence.Kill();
+            }
         }
         foreach (GameObject line in allLinesList)
         {

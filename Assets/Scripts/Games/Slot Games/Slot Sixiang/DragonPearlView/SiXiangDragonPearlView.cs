@@ -68,7 +68,7 @@ public class SiXiangDragonPearlView : MonoBehaviour
     
     public async UniTask setInfo(SlotDesk data, bool isInit6Gold, bool isDPSpinn = false)
     {
-        SlotSixiangView.Instance.gameState = SlotSixiangView.GAME_STATE.SHOWING_RESULT;
+        // SlotSixiangView.Instance.gameState = SlotSixiangView.GAME_STATE.SHOWING_RESULT;
         // if (data.ContainsKey("userAmount"))
         // {
         //     userAmount = (long)data["userAmount"];
@@ -180,8 +180,8 @@ public class SiXiangDragonPearlView : MonoBehaviour
             GameObject itemGold = Instantiate(itemInitGold, transform);
 
             itemGold.SetActive(true);
-            Vector2 posSymbol = transform.InverseTransformPoint(SlotSixiangView.Instance.getPosSymbol((int)data["col"], (int)data["row"] + 1));
-            itemGold.transform.DOLocalMove(posSymbol, 1.0f).SetEase(Ease.OutSine);
+            // Vector2 posSymbol = transform.InverseTransformPoint(SlotSixiangView.Instance.getPosSymbol((int)data["col"], (int)data["row"] + 1));
+            // itemGold.transform.DOLocalMove(posSymbol, 1.0f).SetEase(Ease.OutSine);
             itemGold.transform.DOScale(new Vector2(1.0f, 1.0f), 1.0f).SetEase(Ease.OutSine).SetId("itemGold_" + i);
             listItemGold.Add(itemGold);
             // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.PEARL_RUNITEM);

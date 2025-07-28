@@ -41,7 +41,7 @@ public class DragonPearlItem : MonoBehaviour
 
     public UniTask setInfo(JObject data, SiXiangDragonPearlView dpView)
     {
-        cts_ShowEffectItem = SlotSixiangView.Instance.getCancelToken();
+        // cts_ShowEffectItem = SlotSixiangView.Instance.getCancelToken();
         dragonPearlView = dpView;
         var setInfoItemTask = new UniTaskCompletionSource();
         // UnityMainThread.instance.AddJob(async () =>

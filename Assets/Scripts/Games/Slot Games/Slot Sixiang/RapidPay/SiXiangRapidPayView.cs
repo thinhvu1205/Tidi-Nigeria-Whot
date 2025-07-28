@@ -167,7 +167,7 @@ public class SiXiangRapidPayView : MonoBehaviour
         JObject dataEnd = new JObject();
         dataEnd["winAmount"] = winAmount;
         dataEnd["userAmount"] = userAmount;
-        dataEnd["gameType"] = (int)SlotSixiangView.GAME_TYPE.RAPID_PAY;
+        // dataEnd["gameType"] = (int)SlotSixiangView.GAME_TYPE.RAPID_PAY;
         dataEnd["isSelectBonusGame"] = isSelectBonusGame;
         //dataEnd["userAmount"]=
         // await gameView.endMinigame(dataEnd);

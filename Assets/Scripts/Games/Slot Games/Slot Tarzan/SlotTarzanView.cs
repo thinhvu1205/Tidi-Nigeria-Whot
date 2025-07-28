@@ -709,12 +709,14 @@ public class SlotTarzanView : BaseSlotView
     }
     private void ShowAnimationTarzan()
     {
+        SetDarkAllItems();
         tarzanAnimation.Skeleton.SetToSetupPose(); // Reset pose
         tarzanAnimation.AnimationState.ClearTracks(); // Clear animation cũ
         tarzanAnimation.AnimationState.SetEmptyAnimation(0, 0); 
         tarzanAnimation.gameObject.SetActive(true);
         tarzanAnimation.transform.localPosition = new Vector2(0, 26f);
         Utility.PlayAnimation(tarzanAnimation, TARZAN_ANIMATION_NAME_2, false);
+        tarzanAnimation.Initialize(true);
         tarzanAnimation.AnimationState.Complete += delegate
         {
             Utility.PlayAnimation(tarzanAnimation, TARZAN_ANIMATION_NAME_1, false);
@@ -734,6 +736,7 @@ public class SlotTarzanView : BaseSlotView
             .OnComplete(() =>
             {
                 tarzanAnimation.gameObject.SetActive(false);
+                SetLightAllItems();
                 NextTween();
             });
     }

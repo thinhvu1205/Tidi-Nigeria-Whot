@@ -79,9 +79,9 @@ public class SiXiangLuckyDrawView : MonoBehaviour
     {
 
         gameView = SiXiangView;
-        gameView.gameState = SlotSixiangView.GAME_STATE.SHOWING_RESULT;
-        gameView.lbChipWins.ResetValue();
-        gameView.infoBar.setStateWin("totalWin");
+        // gameView.gameState = SlotSixiangView.GAME_STATE.SHOWING_RESULT;
+        // gameView.textChipWin.ResetValue();
+        // gameView.infoBar.setStateWin("totalWin");
         luckyDrawTask = new UniTaskCompletionSource();
         DOTween.Sequence(luckyDrawTask);
         DOTween.Sequence(transform)
@@ -105,9 +105,9 @@ public class SiXiangLuckyDrawView : MonoBehaviour
         isInitView = false;
         winAmount = (long)dataInit["winAmount"];
         userAmount = (long)dataInit["userAmount"];
-        gameView.infoBar.setStateWin("totalWin");
-        gameView.lbChipWins.ResetValue();
-        gameView.lbChipWins.SetValue(winAmount, true);
+        // gameView.infoBar.setStateWin("totalWin");
+        // gameView.textChipWin.ResetValue();
+        // gameView.textChipWin.SetValue(winAmount, true);
     }
     
     public void onClickItem(LuckyDrawItem item)
@@ -201,7 +201,7 @@ public class SiXiangLuckyDrawView : MonoBehaviour
         JObject dataEnd = new JObject();
         dataEnd["winAmount"] = winAmount;
         dataEnd["userAmount"] = userAmount;
-        dataEnd["gameType"] = (int)SlotSixiangView.GAME_TYPE.LUCKY_DRAW;
+        // dataEnd["gameType"] = (int)SlotSixiangView.GAME_TYPE.LUCKY_DRAW;
         dataEnd["isSelectBonusGame"] = isSelectBonusGame;
         //await gameView.showAnimCutScene();
         luckyDrawTask.TrySetResult();

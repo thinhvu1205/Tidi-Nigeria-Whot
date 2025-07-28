@@ -74,25 +74,25 @@ public class SlotItem : MonoBehaviour
         float multiplier = column.GetScatterCount() > 2 ? 2f : 1.25f;
         float moveSpeed = Speed * multiplier;
         rect.DOBlendableLocalMoveBy(new Vector2(0, -rect.sizeDelta.y), moveSpeed)
-        .SetEase(Ease.Linear)
-        .OnComplete(() =>
-        {
-            position--;
-            if (rect.localPosition.y < 0)
+            .SetEase(Ease.Linear)
+            .OnComplete(() =>
             {
-                rect.localPosition = new Vector3(localPos.x, PositionResetY, 0);
-                position = 3;
-            }
+                position--;
+                if (rect.localPosition.y < 0)
+                {
+                    rect.localPosition = new Vector3(localPos.x, PositionResetY, 0);
+                    position = 3;
+                }
 
-            if (column.IsSpinning)
-            {
-                MoveDownLoop();
-            }
-            else
-            {
-                StopSpin();
-            }
-        });
+                if (column.IsSpinning)
+                {
+                    MoveDownLoop();
+                }
+                else
+                {
+                    StopSpin();
+                }
+            });
     }
 
     protected void StopSpin()

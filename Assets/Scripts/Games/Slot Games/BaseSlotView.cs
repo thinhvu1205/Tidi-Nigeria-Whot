@@ -43,7 +43,7 @@ public class BaseSlotView : BaseGameView
     [SerializeField] protected SkeletonGraphic backgroundFreeSpinAnimation, thirdScatterAnimation, buttonSpinAnimation, animationEffect, backgroundFreeSpinLeftAnimation;
 
     [Header("Constants")]
-    protected readonly List<string> colorsList = new List<string>
+    protected readonly string[] colorsList = new string[]
     {
         "#69C4C9", "#067048", "#25A0F0", "#6AF28E", "#003CC3",
         "#1DC42C", "#6C58B1", "#97B158", "#0F0098", "#6700BE",
@@ -113,7 +113,7 @@ public class BaseSlotView : BaseGameView
     protected List<GameObject> allLinesList = new();
     protected List<GameObject> lineOneByOneList = new();
     protected Queue<TweenCallback> tweenQueue = new();
-    protected Sequence lineOneByOneSequence;
+    protected List<Sequence> lineOneByOneSequenceList;
     protected long playerWallet, playerWalletAfter, currentBetLevel, lastChipWin = 0, currentChipWin = 0, totalChipWinByGame = 0, lastTotalChipWinByGame = 0;
     protected int totalLineWin = 0, freeSpinLeft = 0;
     public int ScatterCount { get; set; } = 0;
@@ -129,7 +129,7 @@ public class BaseSlotView : BaseGameView
         UpdateSpinButtonUI();
     }
 
-    protected void Update()
+    protected override void Update()
     {
         HandleHoldingSpin(); 
     }
@@ -458,7 +458,7 @@ public class BaseSlotView : BaseGameView
         foreach (Payline payline in paylineList)
         {
             int[] lineWinID = GetPaylineWithID(payline.Id);
-            ColorUtility.TryParseHtmlString(colorsList[payline.Id % colorsList.Count], out Color colorLine);
+            ColorUtility.TryParseHtmlString(colorsList[payline.Id % colorsList.Length], out Color colorLine);
             List<Vector2> listPosition = new();
             for (int j = 0; j < lineWinID.Length; j++)
             {
@@ -524,15 +524,15 @@ public class BaseSlotView : BaseGameView
             Payline payline = paylineList[i];
             // List<int> lineWinID = getPaylineWithID(lineId);
             int[] lineWinID = GetPaylineWithID(payline.Id);
-            ColorUtility.TryParseHtmlString(colorsList[payline.Id % colorsList.Count], out Color colorLine);
+            ColorUtility.TryParseHtmlString(colorsList[payline.Id % colorsList.Length], out Color colorLine);
 
-            lineOneByOneSequence = DOTween.Sequence();
-            // sequence.Add(s);
-            lineOneByOneSequence
+            Sequence sequence = DOTween.Sequence();
+            lineOneByOneSequenceList.Add(sequence);
+            sequence
                 .AppendInterval(2.0f * index)
                 .AppendCallback(() =>
                 {
-                    if (lineOneByOneSequence == null || !lineOneByOneSequence.IsActive())
+                    if (sequence == null || !sequence.IsActive())
                         return;
                     else
                     {
@@ -1291,11 +1291,12 @@ public class BaseSlotView : BaseGameView
         {
             UpdateGameState(SlotGameState.PREPARE);
         }
-        if (lineOneByOneSequence.IsActive())
+        foreach(Sequence sequence in lineOneByOneSequenceList)
         {
-            lineOneByOneSequence.Complete(true);
-            // lineOneByOneSequence.Pause();
-            lineOneByOneSequence.Kill(true);
+            if (sequence.IsActive())
+            {
+                sequence.Kill();
+            }
         }
         foreach (GameObject line in allLinesList)
         {
