@@ -117,7 +117,7 @@ public class WhotMatchResult : MonoBehaviour
     private void SetWinMoreButtonListener()
     {
         winMoreButton.onClick.RemoveAllListeners();
-        winMoreButton.onClick.AddListener( () => _ = UIManager.Instance.HandleFindMatch((int)higherMarkUnit));
+        winMoreButton.onClick.AddListener( () => _ = UIManager.Instance.HandleFindAndJoinMatch((int)higherMarkUnit));
     }
 
 

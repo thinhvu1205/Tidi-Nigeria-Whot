@@ -31,7 +31,20 @@ public class SettingsView : BaseView
     #region Button
     public void OnClickLogout()
     {
-        DataSender.Logout().Forget();
+        _ = HandleLogOut();
+    }
+
+    private async UniTask HandleLogOut()
+    {
+        // Global.ChatView.clearPrivateChat();
+        // Global.BannerData.IsShow[Constants.BANNER_SHOW_TYPE.HOME_PAGE] = false;
+        // this.onClose();
+        await NetworkManager.INSTANCE.LogoutAsync();
+        Config.loginType = LoginType.NONE;
+        PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
+        PlayerPrefs.DeleteKey("UserName");
+        PlayerPrefs.DeleteKey("PassWord");
+        UIManager.Instance.OpenLoginScene();
     }
 
     public void OnClickQuitGame()

@@ -6,7 +6,7 @@ using Spine.Unity;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameIcon : MonoBehaviour
+public class ItemGame : MonoBehaviour
 {
     [SerializeField] private SkeletonGraphic skeletonGraphic;
     private bool isBigIcon = false;
@@ -27,11 +27,11 @@ public class GameIcon : MonoBehaviour
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(() =>
         {
-            OnClick(gameID);
+            OnClickItemGame(gameID);
         });
     }
 
-    private void OnClick(string gameID)
+    private void OnClickItemGame(string gameID)
     {
         Config.currentGameId = gameID;
         if (Constants.SELECT_TABLE_GAMES_ID.Contains(gameID))
@@ -40,10 +40,9 @@ public class GameIcon : MonoBehaviour
         }
         else
         {
-            _ = UIManager.Instance.HandleFindMatch(0);
-                        // UIManager.Instance.HandleOpenGame();
-
+            _ = UIManager.Instance.HandleFindAndJoinMatch(0);
         }
+        // UIManager.getInstance().setBannerType(Constants.BANNER_SHOW_TYPE.CHOOSE_GAME, true);
     }
 
     private string GetAnimationPath(string gameID)

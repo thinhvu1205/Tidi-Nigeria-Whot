@@ -5,12 +5,14 @@ using Api;
 using Cysharp.Threading.Tasks;
 using Globals;
 using Nakama;
+using Popups;
 using Spine.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class UIManager : Singleton<UIManager>
 {
+    public LobbyView lobbyView;
     private Transform parentPopups, parentGames, parentBanners, parentLobby, parentLoading;
     [HideInInspector] public BaseGameView gameView;
     private const string POPUP_PARENT_TAG = "Parent Popups";
@@ -29,25 +31,57 @@ public class UIManager : Singleton<UIManager>
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Config.UpdateConfigSettings();
     }
+    
+    public void OpenLoginScene()
+    {
+        ShowProgressing();
+        // Global.GameView = null;
+
+        // Preload Scene (in Unity, use LoadSceneAsync)
+        StartCoroutine(PreloadAndLoadScene(Config.LOGIN_SCENE));
+    }
+
+    private IEnumerator PreloadAndLoadScene(string sceneName)
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+        if (asyncLoad != null)
+        {
+            asyncLoad.allowSceneActivation = false;
+
+            // Wait until the scene is loaded
+            while (asyncLoad.progress < 0.9f)
+            {
+                yield return null;
+            }
+
+            // Hide progress UI before activation (simulate preload complete)
+            HideProgressing();
+
+            // Activate the scene
+            asyncLoad.allowSceneActivation = true;
+        }
+    }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         SetUpParentTransforms();
     }
 
-    public void ShowLoading()
+    public void ShowProgressing()
     {
-        parentLoading.gameObject.SetActive(true);
+        // parentLoading.GetChild(0).gameObject.SetActive(true);
+        Progressing.Instance.gameObject.SetActive(true);
     }
 
-    public void HideLoading()
+    public void HideProgressing()
     {
-        parentLoading.gameObject.SetActive(false);
+        // parentLoading.GetChild(0).gameObject.SetActive(false);
+        Progressing.Instance.gameObject.SetActive(false);
     }
 
     #region Games
 
-    public async UniTask HandleFindMatch(int markUnit)
+    public async UniTask HandleFindAndJoinMatch(int markUnit)
     {
         RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, true);
         if (response == null) return;

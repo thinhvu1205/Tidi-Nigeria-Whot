@@ -20,52 +20,54 @@ public class LobbyView : BaseView
     {
         base.Awake();
         OnClickAllGamesTab();
-        GetGameList().Forget();
-        UpdateVisuals();
+        _ = LoadGames();
+        UpdateProfileData();
+        UIManager.Instance.lobbyView = this;
     }
 
-    private async UniTask GetGameList()
+    private async UniTask LoadGames()
     {
         try
         {
             GameListResponse gameListResponse = await DataSender.GetListGame();
             gameList = gameListResponse.Games.ToList();
-            LoadGameList();
+            UpdateUIListGame();
             Debug.Log("GAME LIST: " + gameListResponse.ToString());
         }
         catch (Exception ex)
         {
-
-            throw;
+            Debug.Log("err load list game : "+ ex.Message);
+            // throw;
         }
     }
-    private void LoadGameList()
+    
+    private void UpdateUIListGame()
     {
         foreach (Game game in gameList)
         {
-            GameIcon gameIcon = Instantiate(gameIconPrefab).GetComponent<GameIcon>();
+            ItemGame itemGame = Instantiate(gameIconPrefab).GetComponent<ItemGame>();
             if (game.Code == Constants.WHOT_GAME_ID)
             {
-                gameIcon.gameObject.transform.SetParent(bigGameIconParent);
-                gameIcon.gameObject.transform.SetAsFirstSibling();
-                gameIcon.SetInfo(game.Code, true);
+                itemGame.gameObject.transform.SetParent(bigGameIconParent);
+                itemGame.gameObject.transform.SetAsFirstSibling();
+                itemGame.SetInfo(game.Code, true);
             }
             else
             {
-                gameIcon.gameObject.transform.SetParent(miniGameIconParent);
-                gameIcon.SetInfo(game.Code, false);
+                itemGame.gameObject.transform.SetParent(miniGameIconParent);
+                itemGame.SetInfo(game.Code, false);
             }
 
             if (Constants.SLOT_GAMES_ID.Contains(game.Code))
             {
-                GameIcon slotGameIcon = Instantiate(gameIconPrefab, slotGameIconParent).GetComponent<GameIcon>();
-                slotGameIcon.SetInfo(game.Code, true);
+                ItemGame slotItemGame = Instantiate(gameIconPrefab, slotGameIconParent).GetComponent<ItemGame>();
+                slotItemGame.SetInfo(game.Code, true);
             }
 
         }
     }
 
-    private void UpdateVisuals()
+    public void UpdateProfileData()
     {
         if (User.userMain != null)
         {
@@ -74,6 +76,7 @@ public class LobbyView : BaseView
             accountChip.text = User.userMain.accountChip;
         }
     }
+    
     #region Buttons
     public void OnClickAllGamesTab()
     {
