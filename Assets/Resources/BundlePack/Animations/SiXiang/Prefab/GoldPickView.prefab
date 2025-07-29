@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7416008460948764502}
   - component: {fileID: 7041652737960183698}
   - component: {fileID: 7835851588836908423}
-  - component: {fileID: 2727190272002991049}
+  - component: {fileID: 6225633785421285182}
   m_Layer: 5
-  m_Name: lbTotalWIn
+  m_Name: Text Total Win
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,7 +69,6 @@ MonoBehaviour:
   m_text: 123.456
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
-  m_fixThaiVowel: 1
   m_sharedMaterial: {fileID: 2100000, guid: 7cc0ceefe506f69458a7c1003b817372, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -136,7 +135,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &2727190272002991049
+--- !u!114 &6225633785421285182
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -145,10 +144,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 996523662377013342}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4c13c01ecaf1794c99aebf92acde5a2, type: 3}
+  m_Script: {fileID: 11500000, guid: a7e6b981573a3402b8720694fe64578d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tmPro: {fileID: 7835851588836908423}
+  numberText: {fileID: 0}
   isFormatMoney: 0
   scale: 1
   FormatType: 0
@@ -164,7 +163,7 @@ GameObject:
   - component: {fileID: 2262744323282291178}
   - component: {fileID: 3850732956892395545}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Button Confirm Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -219,9 +218,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: COLLECT
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7708e67653374c60af5f1595e949403, type: 2}
-  m_fixThaiVowel: 1
-  m_sharedMaterial: {fileID: 2100000, guid: bfb96f7d0e52c834292468ebe82f8fad, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
+  m_sharedMaterial: {fileID: 7800525795003925199, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -299,7 +297,7 @@ GameObject:
   - component: {fileID: 5136465920947143806}
   - component: {fileID: 570335052023603386}
   m_Layer: 5
-  m_Name: EffectContainer
+  m_Name: Effect Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -377,7 +375,7 @@ GameObject:
   - component: {fileID: 4804034054002034489}
   - component: {fileID: 5143188967132298871}
   m_Layer: 0
-  m_Name: animResult
+  m_Name: Animation Result
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -434,7 +432,7 @@ MonoBehaviour:
   initialSkinName: default
   initialFlipX: 0
   initialFlipY: 0
-  startingAnimation: 
+  startingAnimation: eng
   startingLoop: 1
   timeScale: 1
   freeze: 0
@@ -468,7 +466,7 @@ GameObject:
   - component: {fileID: 5778933754231359118}
   - component: {fileID: 2226452460311948147}
   m_Layer: 0
-  m_Name: spineItem
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -559,7 +557,7 @@ GameObject:
   - component: {fileID: 2513949296741573294}
   - component: {fileID: 4540900265908895620}
   m_Layer: 5
-  m_Name: lbChipWin
+  m_Name: Text Chip WIn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -615,7 +613,6 @@ MonoBehaviour:
   m_text: Mega
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
-  m_fixThaiVowel: 1
   m_sharedMaterial: {fileID: 2100000, guid: f6cf0f1dfefe66a4294e65d972a0fc11, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -695,7 +692,7 @@ GameObject:
   - component: {fileID: 3806658228941544870}
   - component: {fileID: 7203764553548645279}
   m_Layer: 5
-  m_Name: btnConfirm
+  m_Name: Button Confirm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -804,8 +801,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8815380971884615472}
-        m_TargetAssemblyTypeName: SiXiangLuckyGoldView, Assembly-CSharp
-        m_MethodName: onClickCollect
+        m_TargetAssemblyTypeName: SiXiangGoldPickView, Assembly-CSharp
+        m_MethodName: OnClickCollect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -827,7 +824,7 @@ GameObject:
   - component: {fileID: 7543335127529807054}
   - component: {fileID: 6826728168028118455}
   m_Layer: 5
-  m_Name: pickBox
+  m_Name: Background Pick Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -981,7 +978,7 @@ GameObject:
   - component: {fileID: 7454082013581398316}
   - component: {fileID: 1078988262867940685}
   m_Layer: 5
-  m_Name: itemGold
+  m_Name: Item Gold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1092,8 +1089,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8815380971884615472}
-        m_TargetAssemblyTypeName: SiXiangLuckyGoldView, Assembly-CSharp
-        m_MethodName: onClickItemGold
+        m_TargetAssemblyTypeName: SiXiangGoldPickView, Assembly-CSharp
+        m_MethodName: OnClickItemGold
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 8180161463213084027}
@@ -1115,11 +1112,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0ee00f975314a78bc1b5ed8e7fcaf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemImage: {fileID: 1096496797623076961}
-  bgImage: {fileID: 1266014642283162888}
-  spine: {fileID: 2226452460311948147}
-  btnItem: {fileID: 7454082013581398316}
-  lbMoney: {fileID: 4540900265908895620}
+  ImageItem: {fileID: 1096496797623076961}
+  ImageBackGround: {fileID: 1266014642283162888}
+  Spine: {fileID: 2226452460311948147}
+  Button: {fileID: 7454082013581398316}
+  TextMoney: {fileID: 4540900265908895620}
 --- !u!1 &8223217138620388715
 GameObject:
   m_ObjectHideFlags: 0
@@ -1222,7 +1219,7 @@ GameObject:
   - component: {fileID: 8774940604871079933}
   - component: {fileID: 8815380971884615472}
   m_Layer: 5
-  m_Name: LuckyGoldView
+  m_Name: GoldPickView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1300,17 +1297,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6927b49e45c6d5a479c84345a1a9f783, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemGold: {fileID: 8180161463213084027}
+  itemGoldPrefab: {fileID: 8180161463213084027}
   itemContainer: {fileID: 504490858915903005}
-  lbRemainPick: {fileID: 5044907451657419066}
-  lbTotalWin: {fileID: 2727190272002991049}
-  btnCollect: {fileID: 7203764553548645279}
-  animResult: {fileID: 5143188967132298871}
-  remainPick: 20
-  isAutoPlay: 1
+  textRemainingPick: {fileID: 5044907451657419066}
+  textTotalWin: {fileID: 6225633785421285182}
+  buttonConfirm: {fileID: 7203764553548645279}
+  animationResult: {fileID: 5143188967132298871}
   materialText:
   - {fileID: 2100000, guid: f6cf0f1dfefe66a4294e65d972a0fc11, type: 2}
   - {fileID: 2100000, guid: 0745538ed83de4945ac1fbb020425b30, type: 2}
+  isAutoPlay: 1
 --- !u!1 &8880854558007252015
 GameObject:
   m_ObjectHideFlags: 0
@@ -1323,7 +1319,7 @@ GameObject:
   - component: {fileID: 8196098354907453747}
   - component: {fileID: 5044907451657419066}
   m_Layer: 5
-  m_Name: lbPickRemain
+  m_Name: Text Pick Remain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1378,9 +1374,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 20 Remaining Picks
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7708e67653374c60af5f1595e949403, type: 2}
-  m_fixThaiVowel: 1
-  m_sharedMaterial: {fileID: 7800525795003925199, guid: b7708e67653374c60af5f1595e949403, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
+  m_sharedMaterial: {fileID: 7800525795003925199, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

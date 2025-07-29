@@ -12,59 +12,86 @@ using Newtonsoft.Json.Linq;
 using Random = UnityEngine.Random;
 using Globals;
 using UnityEngine.Events;
+using Api;
+using Google.Protobuf;
 
-public class SiXiangLuckyGoldView : MonoBehaviour
+public class SiXiangGoldPickView : MonoBehaviour
 {
-    // Start is called before the first frame update
-    [SerializeField]
-    public GameObject itemGold;
+    [SerializeField] private GameObject itemGoldPrefab;
 
-    [SerializeField]
-    public Transform itemContainer;
-    [SerializeField]
-    public TextMeshProUGUI lbRemainPick;
-    [SerializeField]
-    public TextNumberControl lbTotalWin;
-    [SerializeField]
-    public Button btnCollect;
-    [SerializeField]
-    public SkeletonGraphic animResult;
-    [HideInInspector]
+    [SerializeField] private Transform itemContainer;
+    [SerializeField] private TextMeshProUGUI textRemainingPick;
+    [SerializeField] private TextNumberControl textTotalWin;
+    [SerializeField] private Button buttonConfirm;
+    [SerializeField] private SkeletonGraphic animationResult;
+    [SerializeField] List<Material> materialText = new(); //0 green,1 gold
+
     private bool isRaining = true;
     private TextNumberControl lbWinAmount;
-    private List<GameObject> itemPool = new List<GameObject>();
+    private UnityEngine.Pool.ObjectPool<GameObject> itemPool;
     private RectTransform itemConTainerRect;
     private SlotSixiangView gameView;
-    private UniTaskCompletionSource luckyGoldTask;
     private GameObject currentItemClick;
-    public int remainPick = 20;
+    private int remainPick = 20;
     private bool isFinished = false;
     private long totalWinAmount = 0;
     private long userAmount = 0;
     private bool canClick = true;
-    private List<GameObject> listItem = new List<GameObject>();
+    private List<GameObject> listItem = new();
     public bool isAutoPlay = true;
     private bool isSelectBonusGame = false;
-    [SerializeField] List<Material> materialText = new List<Material>(); //0 green,1 gold
 
-    void Start()
+    private void Awake()
     {
         itemConTainerRect = itemContainer.GetComponent<RectTransform>();
 
+        itemPool = new UnityEngine.Pool.ObjectPool<GameObject>(
+            createFunc: () =>
+            {
+                var item = Instantiate(itemGoldPrefab, itemContainer);
+                item.SetActive(false); // bắt đầu ẩn
+                return item;
+            },
+            actionOnGet: (item) =>
+            {
+                item.SetActive(true);
+                item.transform.localScale = Vector3.one;
+            },
+            actionOnRelease: (item) =>
+            {
+                item.SetActive(false);
+            },
+            actionOnDestroy: (item) =>
+            {
+                Destroy(item);
+            },
+            defaultCapacity: 5,    
+            maxSize: 30             
+        );   
     }
     
     private void OnEnable()
     {
         canClick = true;
-        initRainItem();
-        DOTween.Sequence().AppendInterval(7.0f).AppendCallback(() =>
-        {
-            onAutoPlay();
-        }).SetId("autoPlay");
+        InitRainItems();
+
+        // Sau 7 giây, tự động gọi hàm AutoPlay
+        DOTween
+            .Sequence()
+            .AppendInterval(7.0f)
+            .AppendCallback(() =>
+            {
+                AutoPlay();
+            }).SetId("autoPlay");
 
     }
+
+    public void SetInfo(SlotSixiangView sixiangView)
+    {
+        gameView = sixiangView;
+    }
     
-    private void onAutoPlay()
+    private void AutoPlay()
     {
         Debug.Log("onAutoPlay");
         GameObject itemAuto = listItem.Find((item) =>
@@ -73,18 +100,18 @@ public class SiXiangLuckyGoldView : MonoBehaviour
             });
         if (itemAuto != null)
         {
-            onClickItemGold(itemAuto);
+            OnClickItemGold(itemAuto);
         }
         else
         {
             DOTween.Sequence().AppendInterval(1.0f).AppendCallback(() =>
             {
-                onAutoPlay();
+                AutoPlay();
             }).SetId("autoPlay");
         }
     }
     
-    public UniTask Show(SlotSixiangView SiXiangView)
+    public void Show(SlotSixiangView SiXiangView)
     {
         // GameObject bottom = Instantiate(SlotSixiangView.Instance.transform.Find("Bottom").gameObject, transform);
 
@@ -96,56 +123,65 @@ public class SiXiangLuckyGoldView : MonoBehaviour
         // gameView = SiXiangView;
         // luckyGoldTask = new UniTaskCompletionSource();
         // SiXiangView.gameState = BaseSlotSymbolView.GAME_STATE.SHOWING_RESULT;
-        return luckyGoldTask.Task;
     }
     
-    private void initRainItem()
+    private void InitRainItems()
     {
         DOTween.Sequence()
             .AppendCallback(() =>
-        {
-            for (int i = 0; i < 10; i++)
             {
-                GameObject item = createItemGold();
-                item.transform.localPosition = new Vector2(Random.Range(-600, 600), Random.Range(400, 500));
-                item.transform.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
-                moveItem(item, i);
-            }
-        })
+                for (int i = 0; i < 10; i++)
+                {
+                    GameObject item = CreateItemGold();
+                    item.transform.localPosition = new Vector2(Random.Range(-600, 600), Random.Range(400, 500));
+                    item.transform.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+                    MoveItem(item, i);
+                }
+            })
             .AppendInterval(3.5f).SetLoops(-1).SetId("initRainItem");
 
     }
     
-    private async void moveItem(GameObject item, int index)
+    private void MoveItem(GameObject item, int index)
     {
-        LuckyGoldItem itemComp = item.GetComponent<LuckyGoldItem>();
-        await UniTask.Delay(TimeSpan.FromSeconds(index * 0.2f));
-        var time = Random.Range(5, 7);
-        item.transform.DOBlendableLocalMoveBy(new Vector3(0, -700), time, true).OnUpdate(() =>
-        {
-            if (item.transform.localPosition.y < -300)
+        GoldPickItem itemComp = item.GetComponent<GoldPickItem>();
+        DOTween.Sequence()
+            .AppendInterval(index * 0.2f);
+        int time = Random.Range(5, 7);
+        item.transform
+            .DOBlendableLocalMoveBy(new Vector3(0, -700), time, true)
+            .SetEase(Ease.Linear)
+            .OnUpdate(() =>
             {
-                removeItem(item);
-            }
-        }).SetLoops(-1, LoopType.Incremental);
-        item.transform.DOBlendableLocalRotateBy(new Vector3(0, 0, Random.Range(1, 3) < 2 ? 360 : -360), time, RotateMode.FastBeyond360).OnUpdate(() =>
-        {
-            itemComp.lbMoney.transform.localEulerAngles = new Vector3(0, 0, -item.transform.localEulerAngles.z);
-        }).SetLoops(-1, LoopType.Incremental);
+                if (item.transform.localPosition.y < -300)
+                {
+                    RemoveItem(item);
+                }
+            })
+            .SetLoops(-1, LoopType.Incremental);
+        item.transform
+            .DOBlendableLocalRotateBy(new Vector3(0, 0, Random.Range(1, 3) < 2 ? 360 : -360), time, RotateMode.FastBeyond360)
+            .OnUpdate(() =>
+            {
+                itemComp.TextMoney.transform.localEulerAngles = new Vector3(0, 0, -item.transform.localEulerAngles.z);
+            })
+            .SetLoops(-1, LoopType.Incremental);
     }
     
-    int index = 0;
-    public void onClickItemGold(GameObject item)
+    public void OnClickItemGold(GameObject item)
     {
         if (canClick)
         {
-            Debug.Log("OnClickItemGold");
-
+            canClick = false;
             currentItemClick = item;
+
+            InfoBet infoBet = new()
+            {
+                ReqSpecGame = (int)SiXiangGame.Goldpick,
+            };
+            DataSender.SendMatchState((long)OpCodeRequest.Spin, infoBet.ToByteArray());
             // SocketSend.sendGoldPickSlotSixiang(Globals.ACTION_SLOT_SIXIANG.goldPick);
             DOTween.Kill("autoPlay");
-            canClick = false;
-
             DOTween.Sequence()
                 .AppendInterval(0.75f)
                 .AppendCallback(() =>
@@ -154,14 +190,9 @@ public class SiXiangLuckyGoldView : MonoBehaviour
                 })
                 .AppendInterval(3.0f).AppendCallback(() =>
                 {
-                    onAutoPlay();
+                    AutoPlay();
                 }).SetId("autoPlay");
         }
-        else
-        {
-            Debug.Log("Chua Dc Click");
-        }
-
     }
     
     public void setResult(JObject data)
@@ -169,10 +200,10 @@ public class SiXiangLuckyGoldView : MonoBehaviour
         if (currentItemClick != null)
         {
 
-            LuckyGoldItem currentItemComp = currentItemClick.GetComponent<LuckyGoldItem>();
-            SkeletonGraphic spineItem = currentItemComp.spine;
-            currentItemComp.bgImage.enabled = false;
-            currentItemComp.btnItem.interactable = false;
+            GoldPickItem currentItemComp = currentItemClick.GetComponent<GoldPickItem>();
+            SkeletonGraphic spineItem = currentItemComp.Spine;
+            currentItemComp.ImageBackGround.enabled = false;
+            currentItemComp.Button.interactable = false;
             long coinAmount = (long)data["coinAmount"];
             userAmount = (long)data["userAmount"];
             isFinished = (bool)data["isFinished"];
@@ -182,7 +213,7 @@ public class SiXiangLuckyGoldView : MonoBehaviour
             if (coinAmount != 0)
             {
                 // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.CLICK_ITEM_WIN);
-                TextMeshProUGUI lbChipWin = currentItemComp.lbMoney;
+                TextMeshProUGUI lbChipWin = currentItemComp.TextMoney;
                 lbChipWin.gameObject.SetActive(true);
                 switch ((int)data["jackpot"])
                 {
@@ -215,7 +246,7 @@ public class SiXiangLuckyGoldView : MonoBehaviour
                 lbWinAmount.SetValue(totalWinAmount, true);
                 lbChipWin.transform.localScale = new Vector2(0, 0);
                 lbChipWin.transform.DOScale(new Vector2(1, 1), 0.2f).SetEase(Ease.OutBack);
-                // spineItem.skeletonDataAsset = UIManager.instance.loadSkeletonData("GameView/SiXiang/Spine/LuckyGoldItem/skeleton_SkeletonData");
+                // spineItem.skeletonDataAsset = UIManager.instance.loadSkeletonData("GameView/SiXiang/Spine/GoldPickItem/skeleton_SkeletonData");
                 spineItem.Initialize(true);
                 spineItem.AnimationState.SetAnimation(0, "animation", false);
             }
@@ -228,9 +259,9 @@ public class SiXiangLuckyGoldView : MonoBehaviour
             }
             spineItem.gameObject.SetActive(true);
             remainPick = (int)data["numberOfPick"];
-            lbRemainPick.text = remainPick + " Remaining Picks";
-            currentItemComp.bgImage.raycastTarget = false;
-            currentItemComp.itemImage.gameObject.SetActive(false);
+            textRemainingPick.text = remainPick + " Remaining Picks";
+            currentItemComp.ImageBackGround.raycastTarget = false;
+            currentItemComp.ImageItem.gameObject.SetActive(false);
             currentItemClick.transform.SetAsLastSibling();
             if (isFinished)
             {
@@ -240,7 +271,7 @@ public class SiXiangLuckyGoldView : MonoBehaviour
                     .AppendInterval(2.0f)
                     .AppendCallback(() =>
                     {
-                        showAnimResult();
+                        ShowAnimationResult();
                     });
                 DOTween.Kill("initRainItem");
                 DOTween.Kill("autoPlay");
@@ -249,58 +280,47 @@ public class SiXiangLuckyGoldView : MonoBehaviour
         }
     }
     
-    private async void showAnimResult()
+    private void ShowAnimationResult()
     {
         // animResult.skeletonDataAsset = UIManager.instance.loadSkeletonData("GameView/SiXiang/Spine/BigWinGoldPick/skeleton_SkeletonData");
-        animResult.Initialize(true);
-        animResult.transform.parent.gameObject.SetActive(true);
-        animResult.AnimationState.SetAnimation(0, "eng", false);
-        //Globals.Config.tweenNumberToNumber(lbTotalWin, totalWinAmount, 0, animResult.Skeleton.Data.FindAnimation("cam").Duration * 0.85f);
-        btnCollect.gameObject.SetActive(false);
         // AudioSource soundMoney = SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_START);
-        lbTotalWin.SetValue(totalWinAmount, true, 2.0f, "", () =>
+        animationResult.transform.parent.gameObject.SetActive(true);
+
+        Utility.PlayAnimation(animationResult, "eng", false);
+        // textTotalWin.SetValue(totalWinAmount, false, 0.85f);
+        buttonConfirm.gameObject.SetActive(false);
+        textTotalWin.SetValue(totalWinAmount, true, 2.0f, "", () =>
         {
             // soundMoney.Stop();
             // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_END);
         });
-        await UniTask.Delay(2000);
-        btnCollect.gameObject.SetActive(true);
-        // if (gameView.spinType == BaseSlotSymbolView.SPIN_TYPE.AUTO)
-        // {
-        //     DOTween.Sequence()
-        //         .AppendInterval(3.0f)
-        //         .AppendCallback(() =>
-        //         {
-        //             if (gameObject.activeSelf)
-        //             {
-        //                 onClickCollect();
-        //             }
-        //         }).SetId("autoEnd");
-        // }
+        DOTween.Sequence()
+            .AppendInterval(2.0f);
+        buttonConfirm.gameObject.SetActive(true);
+        if (gameView.GetSpinType() == SpinType.AUTO)
+        {
+            DOTween.Sequence()
+                .AppendInterval(3.0f)
+                .AppendCallback(() =>
+                {
+                    if (gameObject.activeSelf)
+                    {
+                        OnClickCollect();
+                    }
+                }).SetId("autoEnd");
+        }
     }
     
-    private GameObject createItemGold()
+    private GameObject CreateItemGold()
     {
-        GameObject item;
-        if (itemPool.Count == 0)
-        {
-            //itemPool.Add();
-            item = Instantiate(itemGold, itemContainer);
-
-        }
-        else
-        {
-            item = itemPool[0];
-            itemPool.RemoveAt(0);
-        }
-        LuckyGoldItem itemComp = item.GetComponent<LuckyGoldItem>();
-        item.SetActive(true);
-        itemComp.bgImage.enabled = true;
-        itemComp.spine.gameObject.SetActive(false);
-        itemComp.btnItem.interactable = true;
-        itemComp.lbMoney.gameObject.SetActive(false);
-        itemComp.bgImage.raycastTarget = true;
-        itemComp.itemImage.gameObject.SetActive(true);
+        GameObject item = itemPool.Get();
+        GoldPickItem itemComp = item.GetComponent<GoldPickItem>();
+        itemComp.ImageBackGround.enabled = true;
+        itemComp.Spine.gameObject.SetActive(false);
+        itemComp.Button.interactable = true;
+        itemComp.TextMoney.gameObject.SetActive(false);
+        itemComp.ImageBackGround.raycastTarget = true;
+        itemComp.ImageItem.gameObject.SetActive(true);
         if (!listItem.Contains(item))
         {
             listItem.Add(item);
@@ -309,40 +329,32 @@ public class SiXiangLuckyGoldView : MonoBehaviour
         return item;
     }
    
-    private void removeItem(GameObject item)
+    private void RemoveItem(GameObject item)
     {
-        item.SetActive(false);
+        itemPool.Release(item);
         DOTween.Kill(item.transform);
-        itemPool.Add(item);
     }
     
-    public async void onClickCollect()
+    public void OnClickCollect()
     {
         DOTween.Kill("autoPlay");
         DOTween.Kill("autoEnd");
-        // SlotSixiangView.Instance.winAmount = totalWinAmount;
-        // SlotSixiangView.Instance.setWinType(SlotSixiangView.Instance.winAmount);
-        animResult.transform.parent.gameObject.SetActive(false);
-        btnCollect.gameObject.SetActive(false);
-        //await gameView.showAnimCutScene();
-        JObject dataEnd = new JObject();
-        dataEnd["winAmount"] = totalWinAmount;
-        dataEnd["userAmount"] = userAmount;
-        // dataEnd["gameType"] = (int)SlotSixiangView.GAME_TYPE.LUCKY_GOLD;
-        dataEnd["isSelectBonusGame"] = isSelectBonusGame;
+        DOTween.Kill("initRainItem");
+
+        animationResult.transform.parent.gameObject.SetActive(false);
+        buttonConfirm.gameObject.SetActive(false);
+        gameView.ShowAnimationCutScene();
+        gameView.HideBackgroundGoldPick();
 
         // gameView.setStateNodeGameForLuckyGold(true);
-        luckyGoldTask.TrySetResult();
         totalWinAmount = 0;
         remainPick = 20;
         listItem.ForEach(item =>
         {
-            removeItem(item);
+            RemoveItem(item);
         });
         listItem.Clear();
         isFinished = false;
-        index = 0;
-        DOTween.Kill("initRainItem");
         gameObject.SetActive(false);
         // await gameView.endMinigame(dataEnd);
     }

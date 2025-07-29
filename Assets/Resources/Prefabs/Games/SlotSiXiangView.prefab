@@ -1276,11 +1276,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  skeletonDataAsset: {fileID: 0}
+  skeletonDataAsset: {fileID: 11400000, guid: 40b242264d4c47843a158032f608551b, type: 2}
   initialSkinName: default
   initialFlipX: 0
   initialFlipY: 0
-  startingAnimation: 
+  startingAnimation: animation
   startingLoop: 1
   timeScale: 1
   freeze: 0
@@ -2449,13 +2449,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2799109186998425622}
-        m_TargetAssemblyTypeName: SiXiangView, Assembly-CSharp
-        m_MethodName: onClickBuyPeals
+        m_TargetAssemblyTypeName: BaseSlotSymbolView, Assembly-CSharp
+        m_MethodName: OnClickBuyGem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 4
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3849,8 +3849,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2799109186998425622}
-        m_TargetAssemblyTypeName: SiXiangView, Assembly-CSharp
-        m_MethodName: onClickBuyPeals
+        m_TargetAssemblyTypeName: BaseSlotSymbolView, Assembly-CSharp
+        m_MethodName: OnClickBuyGem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4196,6 +4196,81 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 2bfaf315cd47d0c478fd9a907d5bb574, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!1 &2831683673502189062
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5385564669037964508}
+  - component: {fileID: 1343947655744778785}
+  - component: {fileID: 1840761253554306426}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5385564669037964508
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2831683673502189062}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9158675469233415658}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1343947655744778785
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2831683673502189062}
+  m_CullTransparentMesh: 1
+--- !u!114 &1840761253554306426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2831683673502189062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: a559a0e6dcb6a4f41a7c2416a558cf72, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4764,13 +4839,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2799109186998425622}
-        m_TargetAssemblyTypeName: SiXiangView, Assembly-CSharp
-        m_MethodName: onClickBuyPeals
+        m_TargetAssemblyTypeName: BaseSlotSymbolView, Assembly-CSharp
+        m_MethodName: OnClickBuyGem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 5
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -6150,7 +6225,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -9, y: 122.8}
+  m_AnchoredPosition: {x: -5, y: 122.8}
   m_SizeDelta: {x: 104, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5994686513208828273
@@ -6236,13 +6311,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2799109186998425622}
-        m_TargetAssemblyTypeName: SiXiangView, Assembly-CSharp
-        m_MethodName: onClickBuyPeals
+        m_TargetAssemblyTypeName: BaseSlotSymbolView, Assembly-CSharp
+        m_MethodName: OnClickBuyGem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -9822,7 +9897,7 @@ MonoBehaviour:
   initialSkinName: default
   initialFlipX: 0
   initialFlipY: 0
-  startingAnimation: animation
+  startingAnimation: 3
   startingLoop: 1
   timeScale: 1
   freeze: 0
@@ -11316,7 +11391,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1814957101338912093
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13034,6 +13109,7 @@ RectTransform:
   m_Children:
   - {fileID: 971152181150402320}
   - {fileID: 925023192159287891}
+  - {fileID: 5385564669037964508}
   - {fileID: 4409751956257453315}
   - {fileID: 8571261942296770171}
   - {fileID: 2143027257179275844}
@@ -13194,6 +13270,16 @@ MonoBehaviour:
   - {fileID: 9040228466994775819}
   - {fileID: 8542369788832704516}
   - {fileID: 1475876639331954976}
+  listGemImage:
+  - {fileID: 169820881695563204}
+  - {fileID: 8161828138537314893}
+  - {fileID: 2089719727342122683}
+  - {fileID: 6614742225961835198}
+  listBuyGemButton:
+  - {fileID: 5983323050708763428}
+  - {fileID: 3522389203088572422}
+  - {fileID: 6850712461963048426}
+  - {fileID: 5674749814797827253}
   columnContainer: {fileID: 4409751956257453315}
   lineContainer: {fileID: 1714132023750912628}
   autoSpinContainer: {fileID: 2001434621376966871}
@@ -13203,6 +13289,9 @@ MonoBehaviour:
   paylineInfoContainer: {fileID: 4877833523199133939}
   infoBar: {fileID: 6482916792140384412}
   buttonConfirmSpecialWin: {fileID: 4548516015508786001}
+  backgroundGoldPick: {fileID: 4978684170856986982}
+  animationAnimal: {fileID: 5029282601577538407}
+  animationCutScene: {fileID: 1656969020563298756}
 --- !u!114 &3614311997081481675
 MonoBehaviour:
   m_ObjectHideFlags: 0
