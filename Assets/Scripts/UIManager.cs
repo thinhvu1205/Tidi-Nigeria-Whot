@@ -272,7 +272,7 @@ public class UIManager : Singleton<UIManager>
     #endregion
 
     #region Helpers
-    private GameObject LoadPrefab(string path)
+    public GameObject LoadPrefab(string path)
     {
         return Resources.Load(path) as GameObject;
     }

@@ -174,6 +174,7 @@ public class LoginView : BaseView
             displayName = profile.DisplayName,
             avatarId = profile.AvatarId,
             accountChip = profile.AccountChip.ToString(),
+            currentChip = profile.AccountChip,
             bankChip = profile.BankChip.ToString(),
             userSid = profile.UserSid.ToString(),
         };

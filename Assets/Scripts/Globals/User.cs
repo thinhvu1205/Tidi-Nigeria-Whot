@@ -10,6 +10,7 @@ namespace Globals
         public string avatarUrl;
         public string status;
         public string accountChip;
+        public long currentChip;
         public string bankChip;
         public string refCode;
         public string langTag;

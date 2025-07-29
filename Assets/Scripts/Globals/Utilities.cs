@@ -505,6 +505,7 @@ namespace Globals
         {
             if (skeletonGraphic != null && skeletonGraphic.AnimationState != null)
             {
+                skeletonGraphic.Initialize(true);
                 skeletonGraphic.AnimationState.SetAnimation(0, animationName, loop);
             }
             else

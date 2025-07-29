@@ -52,6 +52,8 @@ public class BaseSlotSymbolView : BaseGameView
     [SerializeField] protected TextMeshProUGUI textAutoRemain, textInfoSession, textCurrentBet, textStateWin;
     [SerializeField] protected TextNumberControl textSpecialWin, textUserChip, textChipWin;
     [SerializeField] protected TextNumberControl[] listTextJackpot;
+    [SerializeField] protected Image[] listGemImage;
+    [SerializeField] protected Button[] listBuyGemButton;
     [SerializeField] protected Transform columnContainer, lineContainer, autoSpinContainer, effectContainer, coinParent, paylineIconContainer, paylineInfoContainer;
     [SerializeField] protected InfoBarController infoBar;
     [SerializeField] protected Button buttonConfirmSpecialWin;
@@ -115,6 +117,7 @@ public class BaseSlotSymbolView : BaseGameView
     protected List<List<int>> finishView = new();
     protected List<Payline> listPayline = new();
     protected List<GameObject> listLine = new();
+    protected List<SiXiangGame> listGem = new();
     protected Queue<TweenCallback> tweenQueue = new();
     protected bool isHoldingSpin = false;
     protected int autoSpinRemain = 0, freeSpinLeft = 0;
@@ -136,6 +139,7 @@ public class BaseSlotSymbolView : BaseGameView
     protected UnityEngine.Pool.ObjectPool<GameObject> linePool;
 
     protected virtual Dictionary<SiXiangSymbol, int> SymbolDictionary => new();
+    protected virtual Dictionary<SiXiangGame, int> GemDictionary => new();
 
     protected override void Awake()
     {
@@ -156,7 +160,7 @@ public class BaseSlotSymbolView : BaseGameView
         base.HandleUpdateTable(matchState);
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
         Debug.Log("Slot : " + data.ToString());
-
+        listGem = data.SixiangGems.ToList();
         winType = data.BigWin switch
         {
             BigWin.Nice => WinType.NICE_WIN,
@@ -173,6 +177,7 @@ public class BaseSlotSymbolView : BaseGameView
         {
             SetupStartView(data);
             UpdateJackpot(data);
+            UpdateGem();
         }
         else
         {
@@ -183,6 +188,7 @@ public class BaseSlotSymbolView : BaseGameView
             else
             {
                 UpdateJackpot(data);
+                UpdateGem();
                 return;
             }
         }
@@ -216,6 +222,7 @@ public class BaseSlotSymbolView : BaseGameView
     #region Spin Actions
     protected void OnStartSpin()
     {
+        HideGemButtons();
         if (!isInFreeSpin)
         {
             // Nếu đang ko Free Spin thì trừ tiền
@@ -230,7 +237,7 @@ public class BaseSlotSymbolView : BaseGameView
                     autoSpinRemain--;
                     SetAutoSpinRemain();
                 }
-    
+
             }
             else if (spinType == SpinType.FREE_AUTO)
             {
@@ -263,8 +270,8 @@ public class BaseSlotSymbolView : BaseGameView
         ///------------------CHECK SPREAD WILD--------------------///
         if (CheckWild())
         {
-            // tweenQueue.Enqueue(() => ShowAnimationWild());
-            // tweenQueue.Enqueue(() => ShowSpreadWild());
+            tweenQueue.Enqueue(() => ShowAnimationWild());
+            tweenQueue.Enqueue(() => ShowSpreadWild());
         }
 
         ///------------------CHECK SHOW ALL LINE--------------------///
@@ -710,6 +717,73 @@ public class BaseSlotSymbolView : BaseGameView
             _ => "autospin"
         };
     }
+
+    
+    protected void UpdateGem()
+    {
+        foreach(Image image in listGemImage)
+        {
+            image.color = Color.gray;
+        }
+        
+        foreach (Button gemButton in listBuyGemButton)
+        {
+            gemButton.transform
+                .DOLocalMoveX(82, 0.5f)
+                .SetEase(Ease.InSine)
+                .OnComplete(() => { gemButton.gameObject.SetActive(true); });
+        }
+
+        HashSet<int> hideIndexes = new();
+
+        foreach (SiXiangGame game in listGem)
+        {
+            if (GemDictionary.TryGetValue(game, out int index))
+            {
+                hideIndexes.Add(index);
+            }
+        }
+
+        for (int i = 0; i < listBuyGemButton.Length; i++)
+        {
+            Image image = listGemImage[i];
+            Button button = listBuyGemButton[i];
+            if (hideIndexes.Any(index => index == i))
+            {
+                image.color = Color.white;
+                DOTween.Kill(button.transform);
+                button.transform.DOLocalMoveX(-5, 0.3f).SetEase(Ease.OutSine).OnComplete(() => { button.gameObject.SetActive(false); });
+            }
+            else
+                button.transform
+                    .DOLocalMoveX(75, 0.3f)
+                    .SetEase(Ease.OutBack)
+                    .SetDelay(0.05f * i)
+                    .OnComplete(() =>
+                    {
+                        button.gameObject.SetActive(true);
+                        button.interactable = true;
+                    });
+        }
+        // listGem.ForEach(btn =>
+        // {
+        //     DOTween.Kill(btn.transform);
+        //     btn.transform.DOLocalMoveX(82, 0.5f).SetEase(Ease.InSine).OnComplete(() => { btn.gameObject.SetActive(true); });
+        // });
+    }
+
+    protected void HideGemButtons()
+    {
+        foreach (Button gemButton in listBuyGemButton)
+        {
+            gemButton.interactable = false;
+            gemButton.transform
+                .DOLocalMoveX(-5, 0.3f)
+                .SetEase(Ease.OutSine)
+                .OnComplete(() => { gemButton.gameObject.SetActive(false); });
+
+        }
+    }
     protected void UpdateJackpot(SlotDesk data)
     {
         Debug.Log("UPDATE JACKPOT");
@@ -1010,6 +1084,14 @@ public class BaseSlotSymbolView : BaseGameView
         OnBetLevelChanged();
     }
 
+    public void OnClickBuyGem(int index)
+    {
+        Debug.Log("INDEX: " + index);
+        long price = 100000;
+        SiXiangBuyGemsPopup popup = Instantiate(UIManager.Instance.LoadPrefabPopup("PopupBuySixiangGem"), transform).GetComponent<SiXiangBuyGemsPopup>();
+        popup.SetInfo(index, price, currentBetLevel);
+    }
+
     public void OnClickShopButton()
     {
 
@@ -1054,6 +1136,7 @@ public class BaseSlotSymbolView : BaseGameView
     protected void Reset()
     {
         Debug.Log("RESET");
+        UpdateGem();
         if (spinType == SpinType.NORMAL || spinType == SpinType.FREE_NORMAL)
         {
             UpdateGameState(SlotGameState.PREPARE);
@@ -1174,6 +1257,7 @@ public class BaseSlotSymbolView : BaseGameView
             playerWalletAfter = data.GameReward.BalanceChipsWalletAfter;
         }
     }
+
 
     private void Init()
     {

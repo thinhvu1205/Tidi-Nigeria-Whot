@@ -113,7 +113,7 @@ public class BaseSlotView : BaseGameView
     protected List<GameObject> allLinesList = new();
     protected List<GameObject> lineOneByOneList = new();
     protected Queue<TweenCallback> tweenQueue = new();
-    protected List<Sequence> lineOneByOneSequenceList;
+    protected List<Sequence> lineOneByOneSequenceList = new();
     protected long playerWallet, playerWalletAfter, currentBetLevel, lastChipWin = 0, currentChipWin = 0, totalChipWinByGame = 0, lastTotalChipWinByGame = 0;
     protected int totalLineWin = 0, freeSpinLeft = 0;
     public int ScatterCount { get; set; } = 0;
