@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Api;
+using Proto;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Globals;

@@ -1,18 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class BaccaratChip : MonoBehaviour
+namespace Games.Baccarat
 {
-    // Start is called before the first frame update
-    void Start()
+    public class BaccaratChip : ChipBet
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public string playerName = "";
+        public int gateId = 0, chipSprite = 0, idPl = 0;
+        public long chipValue = 0;
+   
+ 
     }
 }
+
+

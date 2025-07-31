@@ -1,5 +1,5 @@
 using System;
-using Api;
+using Proto;
 using Cysharp.Threading.Tasks;
 using Globals;
 using Google.Protobuf;

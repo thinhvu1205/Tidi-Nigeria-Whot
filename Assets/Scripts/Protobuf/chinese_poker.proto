@@ -1,0 +1,193 @@
+
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/nk-nigeria/cgp-common/proto";
+
+import "game_common.proto";
+import "whot_game.proto";
+
+
+enum CardStatus {
+  STATUS_HOLD = 0;
+  STATUS_UNHOLD = 1;
+}
+
+enum CardSuit {
+  SUIT_UNSPECIFIED = 0;
+  SUIT_HEARTS = 1;
+  SUIT_DIAMONDS = 2;
+  SUIT_CLUBS = 3;
+  SUIT_SPADES = 4;
+}
+
+enum CardRank {
+  RANK_UNSPECIFIED = 0;
+  RANK_A = 1;
+  RANK_2 = 2;
+  RANK_3 = 3;
+  RANK_4 = 4;
+  RANK_5 = 5;
+  RANK_6 = 6;
+  RANK_7 = 7;
+  RANK_8 = 8;
+  RANK_9 = 9;
+  RANK_10 = 10;
+  RANK_J = 11;
+  RANK_Q = 12;
+  RANK_K = 13;
+}
+
+// The card
+message Card {
+  CardRank rank = 1;
+  CardSuit suit = 2;
+  CardStatus status = 3;
+}
+
+message ListCard { 
+  repeated Card cards = 1;
+  repeated WhotCard whotCards = 2;
+}
+
+enum ChoiceCode {
+  // No choice specified. Unused.
+  CHOICE_UNSPECIFIED = 0;
+  CHOICE_STAND = 1;
+  CHOICE_HIT = 2;
+}
+
+
+message NewGame {}
+
+message Organize {
+  // The current state of the cards.
+  ListCard cards = 1;
+}
+
+message PresenceCards {
+  string presence = 1;
+  repeated Card cards = 2;
+  repeated WhotCard whotCards = 3;
+}
+
+message UpdateDeal { 
+  PresenceCards presence_card = 1;
+  map<string,CardEvent> card_event = 2;
+  WhotCard top_card = 3;
+  string id_dealer = 4;
+}
+
+message UpdateGameState {
+  GameState state = 1;
+  int64 count_down = 2;
+  ArrangeCard arrange_card = 3;
+  repeated PresenceCards presenceCards = 4;
+}
+
+enum CardEvent {
+  COMBINE = 0;
+  SHOW = 1;
+  DECLARE = 2;
+  MOVE = 4;
+}
+
+message ArrangeCard {
+  string Presence = 1;
+  CardEvent card_event = 2;
+}
+
+enum HandRanking {
+  StraightFlush = 0;
+  FourOfAKind = 1;
+  FullHouse = 2;
+  Flush = 3;
+  Straight = 4;
+  ThreeOfAKind = 5;
+  TwoPairs = 6;
+  Pair = 7;
+  HighCard = 8;
+  NaturalThreeStraights = 101;
+  NaturalThreeOfFlushes = 102;
+  NaturalSixPairs = 103;
+  NaturalFullColors = 104;
+  NaturalDragon = 105;
+  NaturalCleanDragon = 106;
+}
+
+enum HandBonusType {
+  None = 0;
+  MisSet = 1;
+  Scoop = 2;
+  ScoopAll = 3;
+  BonusFullHouseMidHand = 101;
+  BonusThreeOfAKindFrontHand = 102;
+  BonusFourOfAKindBackHand = 103;
+  BonusStraightFlushBackHand = 104;
+  BonusFourOfAKindMidHand = 105;
+  BonusStraightFlushMidHand = 106;
+  BonusNaturalThreeStraights = 201;
+  BonusNaturalThreeOfFlushes = 202;
+  BonusNaturalSixPairs = 203;
+  BonusNaturalFullColors = 204;
+  BonusNaturalDragon = 205;
+  BonusNaturalCleanDragon = 206;
+}
+
+message HandBonus {
+  string win = 1;
+  string lose = 2;
+  HandBonusType type = 3;
+  int64 factor = 4;
+}
+
+enum PointType {
+  Point_Normal = 0;
+  Point_Mis_Set = -1;
+  Point_Natural = 1;
+}
+
+message HandResult {
+  HandRanking ranking = 1;
+  uint64 point = 2;
+  uint64 lpoint = 3;
+}
+
+message PointResult {
+  HandResult front = 1;
+  HandResult middle = 2;
+  HandResult back = 3;
+  HandResult natural = 4;
+  PointType type = 5;
+}
+
+message ScoreResult {
+  int64 front_factor = 1;
+  int64 middle_factor = 2;
+  int64 back_factor = 3;
+  int64 front_bonus_factor = 4;
+  int64 middle_bonus_factor = 5;
+  int64 back_bonus_factor = 6;
+  int64 natural_factor = 7;
+  int64 bonus_factor = 8; // mis set, scoop, scoop all
+  int64 scoop = 9;
+  int32 num_hand_win = 10;
+  int64 total_factor = 11;
+}
+
+message ComparisonResult {
+  string user_id = 1;
+  ScoreResult score_result = 2;
+  PointResult point_result = 3;
+}
+
+message UpdateFinish {
+  repeated ComparisonResult results = 1;
+  repeated HandBonus bonuses = 2;
+  repeated WhotPlayerResult resultWhots = 3;
+  proto.Jackpot jackpot = 4;
+  proto.Jackpot jp_treasure = 5;
+}
+
+

@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Api;
+using Proto;
 using Nakama;
 using UnityEngine;
 
@@ -47,6 +47,9 @@ public class GameManager : Singleton<GameManager>
                     break;
                 case (long)OpCodeUpdate.GameState:
                     UIManager.Instance.gameView.HandleUpdateGameState(matchState);
+                    break;
+                case (long)OpCodeUpdate.OpcodeUserInTableInfo:
+                    UIManager.Instance.gameView.HandleUpdateUserInTable(matchState);
                     break;
                 case (long)OpCodeUpdate.Wallet:
                     UIManager.Instance.gameView.HandleUpdateWallet(matchState);

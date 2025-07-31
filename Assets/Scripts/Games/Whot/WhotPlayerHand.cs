@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Api;
+using Proto;
 using Common.Pool;
 using DG.Tweening;
 using Globals;
@@ -15,7 +15,7 @@ public class WhotPlayerHand : MonoBehaviour
     [SerializeField] private Transform cardsParent, scoreParent, remainingCardsParent;
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private TextMeshProUGUI scoreText;
-    [HideInInspector] public List<WhotCard> cardsInHand, remainingWhotCards = new();
+    [HideInInspector] public List<WhotCardModel> cardsInHand, remainingWhotCards = new();
     private WhotView whotGame;
     private const float ANIMATION_TIME = 0.35f;
     private const float CARD_SCALE = 0.86f;
@@ -35,11 +35,11 @@ public class WhotPlayerHand : MonoBehaviour
         scoreParent.gameObject.SetActive(false);
     }
 
-    public void PlayACard(WhotCard card)
+    public void PlayACard(WhotCardModel cardModel)
     {
-        card.SetSelectable(false);
-        cardsInHand.Remove(card);
-        whotGame.PlayACard(card, GetCardsParent());
+        cardModel.SetSelectable(false);
+        cardsInHand.Remove(cardModel);
+        whotGame.PlayACard(cardModel, GetCardsParent());
         EndTurn();
         if (cardsInHand.Count == 0)
         {
@@ -72,7 +72,7 @@ public class WhotPlayerHand : MonoBehaviour
             .AppendInterval(0.5f);
     }
 
-    public void AnimateShowRemainingCards(List<Card> cards)
+    public void AnimateShowRemainingCards(List<WhotCard> cards)
     {
         if (cards == null) return;
         cardsParent.gameObject.SetActive(false);
@@ -87,24 +87,24 @@ public class WhotPlayerHand : MonoBehaviour
         float startX = -totalWidth / 2f;
         for (int i = 0; i < cards.Count; i++)
         {
-            Card card = cards[i];
-            WhotCard whotCard = PoolService.Instance.Get<WhotCard>(PrefabType.WhotCard);
-            whotCard.transform.SetParent(remainingCardsParent);
-            remainingWhotCards.Add(whotCard);
-            whotCard.SetInfo(card.Suit, card.Rank);
-            whotCard.SetSelectable(false);
-            whotCard.transform.localScale = Vector3.one * CARD_SCALE;
+            WhotCard card = cards[i];
+            WhotCardModel whotCardModel = PoolService.Instance.Get<WhotCardModel>(PrefabType.WhotCard);
+            whotCardModel.transform.SetParent(remainingCardsParent);
+            remainingWhotCards.Add(whotCardModel);
+            whotCardModel.SetInfo(card.Suit, card.Rank);
+            whotCardModel.SetSelectable(false);
+            whotCardModel.transform.localScale = Vector3.one * CARD_SCALE;
 
-            CanvasGroup cardCanvasGroup = whotCard.GetComponent<CanvasGroup>();
+            CanvasGroup cardCanvasGroup = whotCardModel.GetComponent<CanvasGroup>();
             cardCanvasGroup.alpha = 0f;
 
             Vector3 offset = new Vector3(-20f, 0f, 0f);
             Vector3 targetPos = new Vector3(startX + i * REMAINING_CARD_SPACING, 0f, 0f);
 
-            whotCard.transform.localPosition = targetPos + offset;
+            whotCardModel.transform.localPosition = targetPos + offset;
 
             // Animate move & fade
-            whotCard.transform.DOLocalMove(targetPos, ANIMATION_TIME).SetEase(Ease.OutCubic).SetDelay(i * 0.05f);
+            whotCardModel.transform.DOLocalMove(targetPos, ANIMATION_TIME).SetEase(Ease.OutCubic).SetDelay(i * 0.05f);
             cardCanvasGroup.DOFade(1f, ANIMATION_TIME / 2).SetDelay(i * 0.1f);
 
         }
@@ -116,7 +116,7 @@ public class WhotPlayerHand : MonoBehaviour
         cardsInHand = cardsInHand.OrderBy(GetSortValue).ToList();
     }
 
-    private void SortRemainingCards(List<Card> cards)
+    private void SortRemainingCards(List<WhotCard> cards)
     {
         cards.Sort((a, b) => GetSortValue(a).CompareTo(GetSortValue(b)));
     }
@@ -135,11 +135,11 @@ public class WhotPlayerHand : MonoBehaviour
         float startX = -totalWidth / 2f;
         for (int i = 0; i < cardsInHand.Count; i++)
         {
-            WhotCard card = cardsInHand[i];
+            WhotCardModel cardModel = cardsInHand[i];
             Vector2 targetPos = new Vector2(startX + i * CARD_SPACING, GetHandPosition().y);
-            card.SetLocalPosition(targetPos);
-            card.transform.SetSiblingIndex(i);
-            card.transform.DOLocalMove(targetPos, 0.1f);
+            cardModel.SetLocalPosition(targetPos);
+            cardModel.transform.SetSiblingIndex(i);
+            cardModel.transform.DOLocalMove(targetPos, 0.1f);
         }
     }
 
@@ -174,25 +174,25 @@ public class WhotPlayerHand : MonoBehaviour
     {
         if (e.playerTurn == whotGame.GetCurrentPlayer().Id)
         {
-            WhotCard callCard = e.callCard;
-            CardEffect cardEffect = e.cardEffect;
-            foreach (WhotCard card in cardsInHand)
+            WhotCardModel callCardModel = e.CallCardModel;
+            WhotCardEffect cardEffect = e.cardEffect;
+            foreach (WhotCardModel card in cardsInHand)
             {
                 bool isSelectable = false;
 
-                if (callCard.GetCardRank() == CardRank.Rank2 && cardEffect != CardEffect.EffectNone)
+                if (callCardModel.GetCardRank() == WhotCardRank.WhotRank2 && cardEffect != WhotCardEffect.EffectNone)
                 {
-                    isSelectable = card.GetCardRank() == CardRank.Rank2;
+                    isSelectable = card.GetCardRank() == WhotCardRank.WhotRank2;
                 }
-                else if (callCard.GetCardRank() == CardRank.Rank5 && cardEffect != CardEffect.EffectNone)
+                else if (callCardModel.GetCardRank() == WhotCardRank.WhotRank5 && cardEffect != WhotCardEffect.EffectNone)
                 {
-                    isSelectable = card.GetCardRank() == CardRank.Rank5;
+                    isSelectable = card.GetCardRank() == WhotCardRank.WhotRank5;
                 }
-                else if (card.GetCardRank() == CardRank.Rank20)
+                else if (card.GetCardRank() == WhotCardRank.WhotRank20)
                 {
                     isSelectable = true;
                 }
-                else if (card.GetCardSuit() == callCard.GetCardSuit() || card.GetCardRank() == callCard.GetCardRank())
+                else if (card.GetCardSuit() == callCardModel.GetCardSuit() || card.GetCardRank() == callCardModel.GetCardRank())
                 {
                     isSelectable = true;
                 }
@@ -206,14 +206,14 @@ public class WhotPlayerHand : MonoBehaviour
         }
     }
 
-    public void WhotCard_OnCardSelected(object sender, WhotCard.OnCardSelectedEventArg e)
+    public void WhotCard_OnCardSelected(object sender, WhotCardModel.OnCardSelectedEventArg e)
     {
-        WhotCard selectedCard = sender as WhotCard;
-        if (selectedCard != null)
+        WhotCardModel selectedCardModel = sender as WhotCardModel;
+        if (selectedCardModel != null)
         {
             foreach (var card in cardsInHand.ToList())
             {
-                if (card != selectedCard)
+                if (card != selectedCardModel)
                 {
                     card.Unselect();
                 }
@@ -221,7 +221,7 @@ public class WhotPlayerHand : MonoBehaviour
                 {
                     if (e.isSelected)
                     {
-                        Card cardObject = new()
+                        WhotCard cardObject = new()
                         {
                             Suit = card.GetCardSuit(),
                             Rank = card.GetCardRank()
@@ -236,7 +236,7 @@ public class WhotPlayerHand : MonoBehaviour
 
     public void EndTurn()
     {
-        foreach (WhotCard card in cardsInHand)
+        foreach (WhotCardModel card in cardsInHand)
         {
             card.Unselect();
         }
@@ -247,11 +247,11 @@ public class WhotPlayerHand : MonoBehaviour
 
     public void Reset()
     {
-        foreach (WhotCard card in cardsInHand)
+        foreach (WhotCardModel card in cardsInHand)
         {
             PoolService.Instance.Release(PrefabType.WhotCard, card);
         }
-        foreach (WhotCard card in remainingWhotCards)
+        foreach (WhotCardModel card in remainingWhotCards)
         {
             PoolService.Instance.Release(PrefabType.WhotCard, card);
         }
@@ -267,14 +267,14 @@ public class WhotPlayerHand : MonoBehaviour
     }
     #region Helpers
 
-    private int GetSortValue(WhotCard card)
+    private int GetSortValue(WhotCardModel cardModel)
     {
-        int suitOrder = Constants.WhotSuitSortOrder.TryGetValue(card.GetCardSuit(), out var order) ? order : 999;
-        int rank = (int)card.GetCardRank();
+        int suitOrder = Constants.WhotSuitSortOrder.TryGetValue(cardModel.GetCardSuit(), out var order) ? order : 999;
+        int rank = (int)cardModel.GetCardRank();
         return suitOrder * 100 + rank;
     }
 
-    private int GetSortValue(Card card)
+    private int GetSortValue(WhotCard card)
     {
         int suitOrder = Constants.WhotSuitSortOrder.TryGetValue(card.Suit, out var order) ? order : 999;
         int rank = (int)card.Rank;
@@ -286,23 +286,23 @@ public class WhotPlayerHand : MonoBehaviour
         return new Vector2(0f, 0f);
     }
 
-    public Vector2 GetCardPosition(WhotCard card)
+    public Vector2 GetCardPosition(WhotCardModel cardModel)
     {
  
         float totalWidth = (cardsInHand.Count - 1) * CARD_SPACING;
         float startX = -totalWidth / 2f;
 
-        int newIndex = cardsInHand.IndexOf(card);
+        int newIndex = cardsInHand.IndexOf(cardModel);
         Vector2 targetPos = new Vector2(startX + newIndex * CARD_SPACING, GetHandPosition().y);
 
         return targetPos;
     }
 
-    public Vector2 GetNewCardPosition(WhotCard newCard)
+    public Vector2 GetNewCardPosition(WhotCardModel newCardModel)
     {
-        List<WhotCard> sortedCards = new List<WhotCard>(cardsInHand)
+        List<WhotCardModel> sortedCards = new List<WhotCardModel>(cardsInHand)
         {
-            newCard
+            newCardModel
         };
 
         sortedCards = sortedCards.OrderBy(c => GetSortValue(c)).ToList();
@@ -310,7 +310,7 @@ public class WhotPlayerHand : MonoBehaviour
         float totalWidth = (sortedCards.Count - 1) * CARD_SPACING;
         float startX = -totalWidth / 2f;
 
-        int newIndex = sortedCards.IndexOf(newCard);
+        int newIndex = sortedCards.IndexOf(newCardModel);
         Vector2 targetPos = new Vector2(startX + newIndex * CARD_SPACING, GetHandPosition().y);
 
         return targetPos;
