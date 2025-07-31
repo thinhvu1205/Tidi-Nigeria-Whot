@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Api;
+using Proto;
 using Cysharp.Threading.Tasks;
 using Globals;
 using TMPro;
@@ -54,7 +54,7 @@ public class WhotMatchResult : MonoBehaviour
                 {
                     var balance = balanceUpdates.Find(b => b.UserId == r.UserId);
                     return new PlayerResultData(
-                        r.RemainingCards?.ToList() ?? new List<Card>(),
+                        r.RemainingCards?.ToList() ?? new List<WhotCard>(),
                         r.TotalPoints,
                         r.IsWinner,
                         balance?.AmountChipAdd ?? 0
@@ -123,12 +123,12 @@ public class WhotMatchResult : MonoBehaviour
 
     private struct PlayerResultData
     {
-        public List<Card> RemainingCards;
+        public List<WhotCard> RemainingCards;
         public long TotalPoints;
         public bool IsWinner;
         public long AmountChipAdd;
 
-        public PlayerResultData(List<Card> remainingCards, long totalPoints, bool isWinner, long amountChipAdd)
+        public PlayerResultData(List<WhotCard> remainingCards, long totalPoints, bool isWinner, long amountChipAdd)
         {
             RemainingCards = remainingCards;
             TotalPoints = totalPoints;

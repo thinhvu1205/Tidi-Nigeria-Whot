@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Api;
+using Proto;
 
 namespace Globals
 {
@@ -51,14 +51,14 @@ namespace Globals
             BACCARAT_GAME_ID
         };
 
-        public static readonly Dictionary<CardSuit, int> WhotSuitSortOrder = new()
+        public static readonly Dictionary<WhotCardSuit, int> WhotSuitSortOrder = new()
         {
-            { CardSuit.SuitCircle, 0 },
-            { CardSuit.SuitTriangle, 1 },
-            { CardSuit.SuitCross, 2 },
-            { CardSuit.SuitStar, 3 },
-            { CardSuit.SuitSquare, 4 },
-            { CardSuit.SuitUnspecified, 5 }, // Whot
+            { WhotCardSuit.WhotSuitCircle, 0 },
+            { WhotCardSuit.WhotSuitTriangle, 1 },
+            { WhotCardSuit.WhotSuitCross, 2 },
+            { WhotCardSuit.WhotSuitStar, 3 },
+            { WhotCardSuit.WhotSuitSquare, 4 },
+            { WhotCardSuit.WhotSuitUnspecified, 5 }, // Whot
         };
     }
 }

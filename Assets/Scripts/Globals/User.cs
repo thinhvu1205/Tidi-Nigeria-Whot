@@ -4,6 +4,8 @@ namespace Globals
     {
         public User() { }
         public static User userMain = null;
+        public static string AccessToken = "";
+        public static string FacebookID;
         public string userId;
         public string userName;
         public string displayName;

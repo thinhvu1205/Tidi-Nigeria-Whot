@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Api;
+using Proto;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Games.Slot_Games;

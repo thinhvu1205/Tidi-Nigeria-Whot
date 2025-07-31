@@ -1,9 +1,10 @@
 syntax = "proto3";
 
-package api;
+package proto;
 
-option go_package = "github.com/nakamaFramework/cgp-bing-module/api";
 import "color_game.proto";
+
+option go_package = "github.com/nk-nigeria/cgp-common/proto";
 
 message SlotDesk {
   // ma trận rowxcol ở dạng array 1 chiều,

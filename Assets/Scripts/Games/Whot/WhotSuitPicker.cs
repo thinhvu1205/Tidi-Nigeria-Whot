@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
-using Api;
+using Proto;
 using DG.Tweening;
+using Proto;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class WhotSuitPicker : MonoBehaviour
 {
-    public event Action<CardSuit> OnSuitPicked;
+    public event Action<WhotCardSuit> OnSuitPicked;
 
     [SerializeField] private Button starButton, circleButton, crossButton, squareButton, triangleButton;
     [SerializeField] private Image starLightImage, circleLightImage, crossLightImage, squareLightImage, triangleLightImage;
@@ -25,27 +26,27 @@ public class WhotSuitPicker : MonoBehaviour
     }
 
 
-    public void OnPickSuit(CardSuit cardSuit)
+    public void OnPickSuit(WhotCardSuit cardSuit)
     {
         switch (cardSuit)
         {
-            case CardSuit.SuitCircle:
+            case WhotCardSuit.WhotSuitCircle:
                 Debug.Log("Picked Circle Suit");
                 circleLightImage.gameObject.SetActive(true);
                 break;
-            case CardSuit.SuitTriangle:
+            case WhotCardSuit.WhotSuitTriangle:
                 Debug.Log("Picked Triangle Suit");
                 triangleLightImage.gameObject.SetActive(true);
                 break;
-            case CardSuit.SuitCross:
+            case WhotCardSuit.WhotSuitCross:
                 Debug.Log("Picked Cross Suit");
                 crossLightImage.gameObject.SetActive(true);
                 break;
-            case CardSuit.SuitStar:
+            case WhotCardSuit.WhotSuitStar:
                 Debug.Log("Picked Star Suit");
                 starLightImage.gameObject.SetActive(true);
                 break;
-            case CardSuit.SuitSquare:
+            case WhotCardSuit.WhotSuitSquare:
                 Debug.Log("Picked Square Suit");
                 squareLightImage.gameObject.SetActive(true);
                 break;
@@ -63,11 +64,11 @@ public class WhotSuitPicker : MonoBehaviour
 
     private void AssignButtonListeners()
     {
-        starButton.onClick.AddListener(() => OnPickSuit(CardSuit.SuitStar));
-        circleButton.onClick.AddListener(() => OnPickSuit(CardSuit.SuitCircle));
-        crossButton.onClick.AddListener(() => OnPickSuit(CardSuit.SuitCross));
-        squareButton.onClick.AddListener(() => OnPickSuit(CardSuit.SuitSquare));
-        triangleButton.onClick.AddListener(() => OnPickSuit(CardSuit.SuitTriangle));
+        starButton.onClick.AddListener(() => OnPickSuit(WhotCardSuit.WhotSuitStar));
+        circleButton.onClick.AddListener(() => OnPickSuit(WhotCardSuit.WhotSuitCircle));
+        crossButton.onClick.AddListener(() => OnPickSuit(WhotCardSuit.WhotSuitCross));
+        squareButton.onClick.AddListener(() => OnPickSuit(WhotCardSuit.WhotSuitSquare));
+        triangleButton.onClick.AddListener(() => OnPickSuit(WhotCardSuit.WhotSuitTriangle));
     }
 
     private void OnDisable()

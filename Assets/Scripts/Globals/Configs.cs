@@ -1,11 +1,19 @@
+using Common.Objects;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Globals
 {
     public class Config
     {
+        public const int CODE_JOKER_BLACK = 60;
+        public const int CODE_JOKER_RED = 61;
         public static string userName = "";
         public static string userPass = "";
+        public static string avatar_fb = "";
         public static string userNameTemp = "";
         public static string userPassTemp = "";
         public static string usernameNormal = "";
@@ -24,7 +32,7 @@ namespace Globals
         public static string versionNameOS = SystemInfo.operatingSystem;
         public static string model = SystemInfo.deviceName;
         public static string brand = SystemInfo.deviceModel;
-
+        public static bool isVibration = false;
         public static string currentUrlRule = "";
 
         public static bool isOpenSound = true;
@@ -56,6 +64,106 @@ namespace Globals
 
             return SystemInfo.operatingSystem;
 #endif
+        }
+        
+        public static void Vibration()
+        {
+            if (isVibration)
+                Handheld.Vibrate();
+        }
+        
+        public static void decodeCard(int code, ref int N, ref int S)
+        {
+            if (code == CODE_JOKER_RED || code == CODE_JOKER_BLACK)
+            {
+                S = code;
+                N = code;
+                return;
+            }
+            // // mỗi game có 1 điều decode # nhau
+            S = ((code - 1) / 13) + 1; //>=1 <=4
+            N = ((code - 1) % 13) + 2; // >=2 , <=14
+
+            // if (currentGameId == (int)GAMEID.LUCKY_89)
+            // {
+            //     N = ((code - 1) % 13) + 1;
+            // }
+            //
+            // if (curGameId == (int)GAMEID.TONGITS_JOKER)
+            // {
+            //     if (N == 14) N = 1;
+            // }
+            //nameCard = N + getSuitInVN();
+        }
+        
+        public static async UniTask<Sprite> GetRemoteSprite(string url, bool isLoadBanner = false)
+        {
+            if (isLoadBanner)
+            {
+                string nameImg = System.IO.Path.GetFileNameWithoutExtension(url);
+                if (ImageManager.Instance.ImageExists(nameImg))
+                    return ImageManager.Instance.LoadSprite(nameImg);
+                else
+                    return await GetRemoteSprite(url, false);
+            }
+            else
+            {
+                using (UnityWebRequest www = UnityWebRequestTexture.GetTexture(url))
+                {
+                    var op = await www.SendWebRequest().ToUniTask(); // UniTask awaitable
+
+                    if (www.result != UnityWebRequest.Result.Success) // Unity >= 2020.1
+                    {
+                        Debug.Log($"Error load Image: {www.error}, URL: {www.url}");
+                        return null;
+                    }
+
+                    Texture2D texture = DownloadHandlerTexture.GetContent(www);
+                    Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(texture.width / 2, texture.height / 2));
+                    return sprite;
+                }
+            }
+        }
+        
+        [Tooltip("Cho text vào 1 thằng cha có RectMask")]
+        public static void EffectTextRunInMask(TextMeshProUGUI txtName, bool isFixLeft = false) //dieu kien la thang text phai co cha la RectMask
+        {
+            RectTransform txtRt = txtName.transform.GetComponent<RectTransform>();
+            float textSize = txtName.preferredWidth;
+            Transform maskText = txtName.transform.parent;
+            RectTransform maskRt = maskText.GetComponent<RectTransform>();
+            DOTween.Kill(txtName);
+            if (textSize > maskRt.sizeDelta.x)
+            {
+                float deltaX = textSize - maskRt.sizeDelta.x;
+                float minPos = -deltaX / 2;
+                float maxPos = deltaX / 2;
+                if (txtName.alignment == TextAlignmentOptions.MidlineLeft)
+                {
+                    minPos = -textSize / 2;
+                    maxPos = 0;
+                }
+                Sequence seqMaskName = DOTween.Sequence();
+                seqMaskName.Append(txtRt.DOLocalMoveX(maxPos, 0f))
+                    .AppendInterval(1.0f)
+                    .Append(txtRt.DOLocalMoveX(minPos, 1.0f))
+                    .AppendInterval(1.0f)
+                    .Append(txtRt.DOLocalMoveX(maxPos, 1.0f))
+                    .AppendInterval(1.0f).SetLoops(-1);
+                seqMaskName.SetTarget(txtName);
+
+            }
+            else
+            {
+
+                DOTween.Kill(txtName);
+                txtRt.localPosition = Vector3.zero;
+                if (isFixLeft)
+                {
+                    float deltaX = textSize - maskRt.sizeDelta.x;
+                    txtRt.localPosition = new Vector2(deltaX / 2, 0);
+                }
+            }
         }
 
         public static void SaveLoginAccount()

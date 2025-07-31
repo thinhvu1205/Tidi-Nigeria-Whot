@@ -1,9 +1,9 @@
 syntax = "proto3";
 
 // The realtime protocol for the template match engine.
-package api;
+package proto;
 
-option go_package = "github.com/nakamaFramework/cgp-bing-module/api";
+option go_package = "github.com/nk-nigeria/cgp-common/proto";
 
 enum Color {
   COLOR_UNSPECIFIED = 0;

@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/nk-nigeria/cgp-common/proto";
+
+
+
+enum WhotCardSuit {
+  WHOT_SUIT_UNSPECIFIED = 0;
+  WHOT_SUIT_CIRCLE = 1;
+  WHOT_SUIT_CROSS = 2;
+  WHOT_SUIT_STAR = 3;
+  WHOT_SUIT_SQUARE = 4;
+  WHOT_SUIT_TRIANGLE = 5;
+}
+
+enum WhotCardRank {
+  WHOT_RANK_UNSPECIFIED = 0;
+  WHOT_RANK_1 = 1;
+  WHOT_RANK_2 = 2;
+  WHOT_RANK_3 = 3;
+  WHOT_RANK_4 = 4;
+  WHOT_RANK_5 = 5;
+  WHOT_RANK_7 = 7;
+  WHOT_RANK_8 = 8;
+  WHOT_RANK_10 = 10;
+  WHOT_RANK_11 = 11;
+  WHOT_RANK_12 = 12;
+  WHOT_RANK_13 = 13;
+  WHOT_RANK_14 = 14;
+  WHOT_RANK_20 = 20; 
+}
+
+message WhotCard {
+  WhotCardRank rank = 1;
+  WhotCardSuit suit = 2;
+}
+
+message UpdateTurn {
+  string user_id = 1;
+  int64 countdown = 2;
+}
+
+message UpdateCardState {
+  string user_id = 1;
+  WhotCardEvent event = 2;
+  WhotCard played_card = 3;
+  WhotCard top_card = 4;
+  repeated WhotCard cards_after = 5;
+  WhotCardEffect effect = 6;
+  int32 pick_penalty = 7;
+  string target_user_id = 8;
+  bool is_auto_play = 9;
+  int32 deck_count = 10;
+  map<string, int32> player_card_counts = 11;
+}
+
+enum WhotCardEvent {
+  WHOT_EVENT_NONE = 0;         
+  WHOT_EVENT_PLAY = 1;         
+  WHOT_EVENT_DRAW = 2;         
+  WHOT_EVENT_PASS = 3;
+  WHOT_EVENT_AUTO_PLAY = 4;           
+}
+
+enum WhotCardEffect {
+  EFFECT_NONE = 0;
+  HOLD_ON = 1;
+  PICK_TWO = 2;
+  PICK_THREE = 3;
+  SUSPENSION = 4;
+  GENERAL_MARKET = 5;
+  WHOT = 6;
+  CHOICE_SHAPE_GHOST = 7;
+}
+
+message WhotPlayerResult {
+  string user_id = 1;
+  int64 total_points = 2;
+  double win_factor = 3;     
+  bool is_winner = 4; 
+  repeated WhotCard remaining_cards = 5;
+}
+
+
+
+

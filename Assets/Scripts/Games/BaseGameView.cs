@@ -1,11 +1,53 @@
 using System.Collections;
 using System.Collections.Generic;
-using Api;
+using Proto;
+using Games;
+using Games.Card;
 using Nakama;
+using Newtonsoft.Json.Linq;
+using TMPro;
 using UnityEngine;
 
 public class BaseGameView : BaseView
 {
+    
+    public List<Player> players = new List<Player>();
+    [SerializeField]
+    protected List<Vector2> listPosView = new List<Vector2>();
+
+    public Player thisPlayer;
+
+    [SerializeField]
+    protected BasePlayerView playerViewPrefab;
+    [SerializeField]
+    TextMeshProUGUI lbInfo;
+
+    [SerializeField]
+    GameObject invitePrefab;
+    [SerializeField]
+    Transform inviteContainer;
+    [SerializeField]
+    public Transform playerContainer;
+    [SerializeField]
+    TextMeshProUGUI txtGameName;
+    [SerializeField] private Transform m_HiddenPlayersTf;
+
+
+    public int agTable;
+    public int maxbet = 0;
+
+    protected List<CardModel> cardPool = new List<CardModel>();
+    protected List<JObject> listDelayEvt = new List<JObject>();
+    protected List<CardModel> cardsOnTable = new List<CardModel>();
+    protected List<ChipBet> chipPool = new List<ChipBet>();
+    protected List<GameObject> listBtnInvite = new List<GameObject>();
+    public List<string> delayEvents = new List<string>();
+    public GameState stateGame = GameState.Idle;
+    [HideInInspector]
+    public JObject dataLeave;
+    // [HideInInspector]
+    // public string soundBg = SOUND_GAME.IN_GAME_COMMON;
+    public int GetCountListPosView() { return listPosView.Count; }
     
     public override void OnDestroy()
     {
@@ -74,7 +116,12 @@ public class BaseGameView : BaseView
     {
         
     }
-
+    
+    public virtual void HandleUpdateUserInTable(IMatchState matchState)
+    {
+        
+    }
+    
     public virtual void HandleUpdateDeal(IMatchState matchState)
     {
         

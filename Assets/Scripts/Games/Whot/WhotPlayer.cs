@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
-using Api;
+using Proto;
 using DG.Tweening;
 using Globals;
 using System;
 using Common.Pool;
+using Games.Whot;
 
 public class WhotPlayer : MonoBehaviour
 {
@@ -96,10 +97,10 @@ public class WhotPlayer : MonoBehaviour
         lastCardNoti.SetActive(!lastCardNoti.activeSelf);
     }
 
-    public void PlayACard(WhotCard card)
+    public void PlayACard(WhotCardModel cardModel)
     {
-        card.SetSelectable(false);
-        whotGame.PlayACard(card, GetPlayedCardParent());
+        cardModel.SetSelectable(false);
+        whotGame.PlayACard(cardModel, GetPlayedCardParent());
     }
 
     public void Reset()
@@ -112,7 +113,7 @@ public class WhotPlayer : MonoBehaviour
 
     #region Visuals
 
-    public void AnimateShowRemainingCards(List<Card> cards)
+    public void AnimateShowRemainingCards(List<WhotCard> cards)
     {
         if (cards == null) return;
         lastCardNoti.gameObject.SetActive(false);
@@ -127,14 +128,14 @@ public class WhotPlayer : MonoBehaviour
         float startX = -totalWidth / 2f;
         for (int i = 0; i < cards.Count; i++)
         {
-            Card card = cards[i];
-            WhotCard whotCard = PoolService.Instance.Get<WhotCard>(PrefabType.WhotCard);
-            whotCard.transform.SetParent(remainingCardsParent);
-            whotCard.SetInfo(card.Suit, card.Rank);
-            whotCard.SetSelectable(false);
-            whotCard.transform.localScale = Vector3.one * CARD_SCALE;
+            WhotCard card = cards[i];
+            WhotCardModel whotCardModel = PoolService.Instance.Get<WhotCardModel>(PrefabType.WhotCard);
+            whotCardModel.transform.SetParent(remainingCardsParent);
+            whotCardModel.SetInfo(card.Suit, card.Rank);
+            whotCardModel.SetSelectable(false);
+            whotCardModel.transform.localScale = Vector3.one * CARD_SCALE;
 
-            CanvasGroup cardCanvasGroup = whotCard.GetComponent<CanvasGroup>();
+            CanvasGroup cardCanvasGroup = whotCardModel.GetComponent<CanvasGroup>();
             CanvasGroup scoreCanvasGroup = scoreImage.GetComponent<CanvasGroup>();
             cardCanvasGroup.alpha = 0f;
             scoreCanvasGroup.alpha = 0f;
@@ -148,26 +149,26 @@ public class WhotPlayer : MonoBehaviour
                     targetPos = new Vector3(i * CARD_SPACING, 0f, 0f);
                     offset = new Vector3(-20f, 0f, 0f);
                     scoreImage.transform.localPosition = new Vector3(totalWidth + SCORE_IMAGE_OFFSET, 0f, 0f);
-                    whotCard.transform.SetSiblingIndex(i);
+                    whotCardModel.transform.SetSiblingIndex(i);
                     break;
                 case PlayerLayout.EPlayerLayout.Top:
                     targetPos = new Vector3(startX + i * CARD_SPACING, 0f, 0f);
                     offset = new Vector3(-20f, 0f, 0f);
                     scoreImage.transform.localPosition = new Vector3(startX + totalWidth + SCORE_IMAGE_OFFSET, 0f, 0f);
-                    whotCard.transform.SetSiblingIndex(i);
+                    whotCardModel.transform.SetSiblingIndex(i);
                     break;
                 case PlayerLayout.EPlayerLayout.Right:
                     targetPos = new Vector3(2 * startX + i * CARD_SPACING, 0f, 0f); // giống Left & Top
                     offset = new Vector3(20f, 0f, 0f);
                     scoreImage.transform.localPosition = new Vector3(-totalWidth - SCORE_IMAGE_OFFSET, 0f, 0f);
-                    whotCard.transform.SetSiblingIndex(i); // thêm theo thứ tự chuẩn
+                    whotCardModel.transform.SetSiblingIndex(i); // thêm theo thứ tự chuẩn
                     break;      
             }
 
-            whotCard.transform.localPosition = targetPos + offset;
+            whotCardModel.transform.localPosition = targetPos + offset;
 
             // Animate move & fade
-            whotCard.transform.DOLocalMove(targetPos, ANIMATION_TIME).SetEase(Ease.OutCubic).SetDelay(i * 0.05f);
+            whotCardModel.transform.DOLocalMove(targetPos, ANIMATION_TIME).SetEase(Ease.OutCubic).SetDelay(i * 0.05f);
             cardCanvasGroup.DOFade(1f, ANIMATION_TIME / 2).SetDelay(i * 0.1f);
 
             if (i == cards.Count - 1 && cards.Count > 0)
@@ -193,11 +194,11 @@ public class WhotPlayer : MonoBehaviour
         }
         foreach (Transform child in remainingCardsParent)
         {
-            WhotCard whotCard = child.GetComponent<WhotCard>();
-            if (whotCard != null)
+            WhotCardModel whotCardModel = child.GetComponent<WhotCardModel>();
+            if (whotCardModel != null)
             {
                 // Destroy(child.gameObject);
-                PoolService.Instance.Release(PrefabType.WhotCard, whotCard);
+                PoolService.Instance.Release(PrefabType.WhotCard, whotCardModel);
             }
         }
     }
@@ -421,12 +422,12 @@ public class WhotPlayer : MonoBehaviour
         Utility.TweenNumberTo(chipText, toNumber, GetChipAmount(), 0.5f, false);
     }
 
-    private void SortRemainingCards(List<Card> cards)
+    private void SortRemainingCards(List<WhotCard> cards)
     {
         cards.Sort((a, b) => GetSortValue(a).CompareTo(GetSortValue(b)));
     }
 
-    private int GetSortValue(Card card)
+    private int GetSortValue(WhotCard card)
     {
         int suitOrder = Constants.WhotSuitSortOrder.TryGetValue(card.Suit, out var order) ? order : 999;
         int rank = (int)card.Rank;

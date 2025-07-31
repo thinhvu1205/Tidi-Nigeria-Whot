@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Api;
+using Proto;
 using Cysharp.Threading.Tasks;
 using Globals;
 using Nakama;
@@ -9,9 +9,12 @@ using Popups;
 using Spine.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.U2D;
 
 public class UIManager : Singleton<UIManager>
 {
+    public SpriteAtlas avatarAtlas, cardAtlas;
+    [SerializeField] Sprite avtDefault;
     public LobbyView lobbyView;
     private Transform parentPopups, parentGames, parentBanners, parentLobby, parentLoading;
     [HideInInspector] public BaseGameView gameView;
@@ -77,6 +80,11 @@ public class UIManager : Singleton<UIManager>
     {
         // parentLoading.GetChild(0).gameObject.SetActive(false);
         Progressing.Instance.gameObject.SetActive(false);
+    }
+    
+    public Sprite getAvatarDefault()
+    {
+        return avtDefault;
     }
 
     #region Games
