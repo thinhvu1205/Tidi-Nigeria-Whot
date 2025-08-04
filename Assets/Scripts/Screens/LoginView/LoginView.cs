@@ -108,12 +108,12 @@ namespace Screens.LoginView
                 if (profile.PlayingMatch.MatchId != "")
                 {
                     Debug.Log($"Joining match with ID: {profile.PlayingMatch.MatchId}");
-                    // var labelMatch = await DataSender.JoinMatch(profile.PlayingMatch.MatchId);
-                    // if (labelMatch != null)
-                    // {
-                    //     Config.currentGameId = profile.PlayingMatch.Code;
-                    //     UIManager.Instance.HandleOpenGame(labelMatch);
-                    // }
+                    var labelMatch = await DataSender.JoinMatch(profile.PlayingMatch.MatchId);
+                    if (labelMatch != null)
+                    {
+                        Config.currentGameId = profile.PlayingMatch.Code;
+                        UIManager.Instance.HandleOpenGame(labelMatch);
+                    }
             
                     // NetworkManager.INSTANCE.OnJoinMatch();
                 }
@@ -130,11 +130,13 @@ namespace Screens.LoginView
             User.userMain = new()
             {
                 userId = profile.UserId,
+                userName = profile.UserName,
                 displayName = profile.DisplayName,
                 avatarId = profile.AvatarId,
                 accountChip = profile.AccountChip.ToString(),
                 bankChip = profile.BankChip.ToString(),
                 userSid = profile.UserSid.ToString(),
+                vipLevel = profile.VipLevel
             };
 
         }

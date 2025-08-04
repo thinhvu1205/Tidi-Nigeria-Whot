@@ -123,8 +123,9 @@ public class WhotView : BaseGameView
     }
 
     #region API Handlers
-    public override void HandleMatchJoin(Match match)
+    public override void LoadInfoMatch(Match match)
     {
+        base.LoadInfoMatch(match);
         playersParent.gameObject.SetActive(true);
         // string labelJson = match.Label;
         // Match data = JsonConvert.DeserializeObject<Match>(labelJson);

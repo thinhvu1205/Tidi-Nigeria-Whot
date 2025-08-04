@@ -86,7 +86,78 @@ public class BasePlayerView : MonoBehaviour
     [Header("=== VIP SYSTEM ===")]
     [Tooltip("VIP item GameObject")]
     GameObject itemVip;
+    
+    private string _id;
+    public string id
+    {
+        get => _id;
+        set => _id = value;
+    }
 
+    private string _userName;
+    public string user_name
+    {
+        get => _userName;
+        set => _userName = value;
+    }
+
+    private string _wallet;
+    public string wallet
+    {
+        get => _wallet;
+        set => _wallet = value;
+    }
+
+    private string _avatarId;
+    public string avatar_id
+    {
+        get => _avatarId;
+        set => _avatarId = value;
+    }
+
+    private long _vipLevel;
+    public long vipLevel
+    {
+        get => _vipLevel;
+        set => _vipLevel = value;
+    }
+
+    private string _sid;
+    public string sid
+    {
+        get => _sid;
+        set => _sid = value;
+    }
+
+
+    public bool isArranging = false;
+
+
+    public void SetData(Player playerData)
+    {
+        id = playerData.Id;
+        user_name = playerData.UserName;
+        wallet = playerData.Wallet;
+        avatar_id = playerData.AvatarId;
+        vipLevel = playerData.VipLevel;
+        sid = playerData.Sid.ToString();
+
+        lbChipWinLose.text = playerData.Wallet;
+        if (avatar_id != "") {
+            // avatar.setSpriteFrame(UIManager.Instance.avatarAtlas.getSpriteFrame(avatar_id));
+        } else {
+            avatar.setSpriteFrame(UIManager.Instance.getAvatarDefault());
+        }
+
+        if (vipLevel != 0) {
+            avatar.setVip((int)vipLevel);
+        } else {
+            avatar.setVip(0);
+        }
+        setName(user_name);
+    }
+    
+    
     /// <summary>
     /// Sets player name with scrolling effect if too long
     /// </summary>
@@ -94,7 +165,7 @@ public class BasePlayerView : MonoBehaviour
     public void setName(string namePl)
     {
         txtName.text = namePl;
-        Config.EffectTextRunInMask(txtName);
+        // Config.EffectTextRunInMask(txtName);
     }
 
     /// <summary>

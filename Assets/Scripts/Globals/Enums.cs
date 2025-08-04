@@ -39,6 +39,8 @@ namespace Globals
     {
         WhotCard,
         ChipPlayerWhot,
+        BaccaratCard,
+        ChipPlayerBaccarat,
     }
 
     public enum SpinType

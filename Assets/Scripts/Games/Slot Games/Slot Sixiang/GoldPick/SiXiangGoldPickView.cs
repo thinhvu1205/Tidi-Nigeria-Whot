@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 using Random = UnityEngine.Random;
 using Globals;
 using UnityEngine.Events;
-using Api;
+using Proto;
 using Google.Protobuf;
 
 public class SiXiangGoldPickView : MonoBehaviour

@@ -166,7 +166,7 @@ public class UIManager : Singleton<UIManager>
                 Debug.LogError("Unsupported game ID: " + Config.currentGameId);
                 break;
         }
-        gameView?.HandleMatchJoin(labelMatch);
+        gameView?.LoadInfoMatch(labelMatch);
     }
 
     public void HandleLeaveGame()

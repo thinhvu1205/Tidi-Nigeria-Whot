@@ -1,3 +1,4 @@
+using Common.Pool;
 using DG.Tweening;
 using Spine.Unity;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace Games.Card
     /// Card - Manages individual card display and animations
     /// Handles card data, visual effects, and game-specific features
     /// </summary>
-    public class CardModel : MonoBehaviour
+    public class CardModel : MonoBehaviour, IPoolable
     {
         [Header("=== CARD TYPE CONSTANTS ===")]
         private static readonly System.Collections.Generic.Dictionary<int, string> CARD_TYPE = new System.Collections.Generic.Dictionary<int, string>
@@ -388,6 +389,14 @@ namespace Games.Card
                 tweenLapLanh.Kill();
                 tweenLapLanh = null;
             }
+        }
+
+        public void OnGetFromPool()
+        {
+        }
+
+        public void OnReturnToPool()
+        {
         }
     }
 } 

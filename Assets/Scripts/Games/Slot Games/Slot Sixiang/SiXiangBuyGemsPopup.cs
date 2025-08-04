@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using Globals;
-using Api;
+using Proto;
 using Google.Protobuf;
 
 public class SiXiangBuyGemsPopup : BaseView

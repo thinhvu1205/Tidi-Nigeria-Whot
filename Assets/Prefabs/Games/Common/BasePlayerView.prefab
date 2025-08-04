@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2570318609059309130}
-  - component: {fileID: 7788171334223056238}
   m_Layer: 5
   m_Name: BasePlayerView
   m_TagString: Untagged
@@ -45,43 +44,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7788171334223056238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 673405649249943447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2953cfd3135574c41bfd78480982e28c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  txtName: {fileID: 4824909067868688869}
-  txtMoney: {fileID: 8707924144333828752}
-  avatar: {fileID: 5733420228663667074}
-  timeCounDown: {fileID: 374816776387471114}
-  objHost: {fileID: 4091494941354847265}
-  objExit: {fileID: 5763518334674394713}
-  dealerIcon: {fileID: 0}
-  bkgThanhBar: {fileID: 2460225446784876679}
-  lbChipWinLose: {fileID: 0}
-  fontWin: {fileID: 0}
-  fontLose: {fileID: 0}
-  agLose: 0
-  agWin: 0
-  isThisPlayer: 0
-  chipJackpot: 0
-  animResult: {fileID: 3649713923496938335}
-  aniAllIn: {fileID: 0}
-  nodeCard: {fileID: 3608726148170956366}
-  lucky9Ani: {fileID: 6723996992458980341}
-  hitpot: {fileID: 0}
-  pots: []
-  listAnimResult:
-  - {fileID: 11400000, guid: 4435b874fb7fe4f35bcac902623030e7, type: 2}
-  - {fileID: 11400000, guid: 6eef1015241d341f087605383b7af518, type: 2}
-  - {fileID: 11400000, guid: a6d54a1328461485bb453552b0911b7a, type: 2}
 --- !u!1 &1080508620323917077
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,7 +447,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  skeletonDataAsset: {fileID: 11400000, guid: 39ff043c692ff4fc681af1d611f031f2, type: 2}
+  skeletonDataAsset: {fileID: 0}
   initialSkinName: default
   initialFlipX: 0
   initialFlipY: 0
@@ -652,7 +614,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  skeletonDataAsset: {fileID: 11400000, guid: cd6c88d4925e754458f3ba490e931132, type: 2}
+  skeletonDataAsset: {fileID: 0}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
@@ -1097,14 +1059,3 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1278971721942095411, guid: 1da8ec4c2c82e0a4b96ce57f5eaebaf6, type: 3}
   m_PrefabInstance: {fileID: 3746262658738777710}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5733420228663667074 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8965634794849699820, guid: 1da8ec4c2c82e0a4b96ce57f5eaebaf6, type: 3}
-  m_PrefabInstance: {fileID: 3746262658738777710}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 102f4975f2354126a211ce97488284ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

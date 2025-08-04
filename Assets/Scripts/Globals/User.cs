@@ -21,7 +21,7 @@ namespace Globals
         public string appConfig;
         public string avatarId;
         public bool registrable;
-        public string vipLevel;
+        public long vipLevel;
         public string lastOnlineTimeUnix;
         public string createTimeUnix;
         public string remainTimeInputRefCode;
