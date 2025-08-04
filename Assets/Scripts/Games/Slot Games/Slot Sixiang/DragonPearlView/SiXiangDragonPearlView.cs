@@ -10,235 +10,251 @@ using Proto;
 using Cysharp.Threading.Tasks;
 // using Facebook.Unity;
 using Globals;
+using System.Linq;
 
 public class SiXiangDragonPearlView : MonoBehaviour
 {
-    // Start is called before the first frame update
-    [SerializeField] List<Sprite> listBgItem = new List<Sprite>();
-    [SerializeField] GameObject itemContainer;
-    [SerializeField] public GameObject itemInitGold;
-    List<List<DragonPearlItem>> listItem = new List<List<DragonPearlItem>>();
-    [HideInInspector] List<GameObject> listItemGold = new List<GameObject>();
-    private List<JObject> dataPearl = new List<JObject>();
-    public bool isFinish = false;
-    private bool isGrandJackpot;
-    private int winAmount = 0;
-    private long userAmount = 0;
-    public bool isDPSpin = false;
-    public bool isBonusGame = false;
+    [SerializeField] private Sprite[] listBackgroundItem;
+    [SerializeField] private GameObject itemGoldPrefab, itemPrefab;
+    [SerializeField] private Transform itemContainer;
+    private List<List<DragonPearlItem>> listItem = new();
+    private List<SpinSymbol> listSpinSymbol = new();
+    private List<GameObject> listItemGold = new();
+    public SlotSixiangView GameView { get; private set; }
+    public bool IsWinWarriorEye { get; private set; }
+    public bool IsWinTigerEye { get; private set; }
+    public bool IsWinBirdEye { get; private set; }
+    private bool hasInitFirst6Gold = false, isFinishGame = false, isWinGrandJackpot = false;
     private bool isAutoPlay = true;
-    private bool isSelectBonusGame = false;
-    private string PATH_ANIM_WINRESULT = "GameView/SiXiang/Spine/BigWinGoldPick/skeleton_SkeletonData";
-    
+    public UnityEngine.Pool.ObjectPool<GameObject> itemGoldPool;
+
     private void Awake()
     {
+        itemGoldPool = new UnityEngine.Pool.ObjectPool<GameObject>(
+            createFunc: () =>
+            {
+                var item = Instantiate(itemGoldPrefab, transform);
+                item.SetActive(false); 
+                return item;
+            },
+            actionOnGet: (item) =>
+            {
+                item.SetActive(true);
+                item.transform.localScale = Vector3.one;
+            },
+            actionOnRelease: (item) =>
+            {
+                item.SetActive(false);
+            },
+            actionOnDestroy: (item) =>
+            {
+                Destroy(item);
+            },
+            defaultCapacity: 5,    
+            maxSize: 20             
+        );  
+        InitItems();
+    }
+
+    private void OnEnable()
+    {
+        DOTween.Sequence()
+            .AppendInterval(10f)
+            .AppendCallback(() =>
+            {
+                if (isAutoPlay)
+                {
+                    // SlotSixiangView.Instance.onClickSpinDP();
+                }
+            });
+    }
+
+    private void OnDisable()
+    {
+        Reset();
+        GameView.OnUpdateTable -= SixiangView_OnUpdateTable;
+    }
+
+    public void SetInfo(SlotSixiangView slotSixiangView)
+    {
+        hasInitFirst6Gold = false;
+        GameView = slotSixiangView;
+        GameView.OnUpdateTable += SixiangView_OnUpdateTable;
+        GameView.UpdateTotalChipWinValue();
+        GameView.SetDarkAllItems();
+        StartView6Gold();
+    }
+
+    private void InitItems()
+    {
+        itemPrefab.GetComponent<DragonPearlItem>().SetDragonPearlView(this);
         for (int i = 1; i < 15; i++)
         {
-            DragonPearlItem item = Instantiate(itemContainer.transform.GetChild(0), itemContainer.transform).GetComponent<DragonPearlItem>();
-            item.setBgItem(listBgItem[i]);
-
+            DragonPearlItem item = Instantiate(itemPrefab, itemContainer.transform).GetComponent<DragonPearlItem>();
+            item.SetBackground(listBackgroundItem[i]);
+            item.SetDragonPearlView(this);
         }
         for (int i = 0; i < 5; i++)
         {
-            List<DragonPearlItem> list = new List<DragonPearlItem>();
-            list.Add(itemContainer.transform.GetChild(i).GetComponent<DragonPearlItem>());
-            list.Add(itemContainer.transform.GetChild(i + 5).GetComponent<DragonPearlItem>());
-            list.Add(itemContainer.transform.GetChild(i + 10).GetComponent<DragonPearlItem>());
+            List<DragonPearlItem> list = new()
+            {
+                itemContainer.transform.GetChild(i).GetComponent<DragonPearlItem>(),
+                itemContainer.transform.GetChild(i + 5).GetComponent<DragonPearlItem>(),
+                itemContainer.transform.GetChild(i + 10).GetComponent<DragonPearlItem>()
+            };
             listItem.Add(list);
         }
+    }
 
-    }
-    
-    private void OnDisable()
+    public void SixiangView_OnUpdateTable(BaseSlotSymbolView.OnUpdateTableEventArgs e)
     {
-        resetView();
+        SlotDesk data = e.data;
+        listSpinSymbol = data.SpinSymbols.ToList();
+        // List<SpinSymbol> listSpinSymbol = data.Matrix.SpinLists.ToList();
+        isFinishGame = data.IsFinishGame;
+        IsWinWarriorEye = listSpinSymbol.Any(symbol => symbol.Symbol == SiXiangSymbol.DragonpearlEyeWarrior);
+        IsWinTigerEye = listSpinSymbol.Any(symbol => symbol.Symbol == SiXiangSymbol.DragonpearlEyeTiger);
+        IsWinBirdEye = listSpinSymbol.Any(symbol => symbol.Symbol == SiXiangSymbol.DragonpearlEyeBird);
+        isWinGrandJackpot = data.WinJp == WinJackpot.Grand;
     }
-    
-    private void OnEnable()
+
+    public void OnStopSpin()
     {
-        isFinish = false;
-        DOTween.Sequence().AppendInterval(10).AppendCallback(() =>
+        GameView.UpdateTotalChipWinValue();
+        GameView.UpdateDragonPearlFreeSpinLeft();
+
+        Sequence mainSequence = DOTween.Sequence();
+
+        foreach (SpinSymbol spinSymbol in listSpinSymbol)
         {
-            if (isAutoPlay)
+            DragonPearlItem dragonPearlItem = listItem[spinSymbol.Col][spinSymbol.Row];
+
+            if (dragonPearlItem.Symbol != SiXiangSymbol.Unspecified)
+                continue;
+
+            // Gọi và join từng sequence
+            Sequence itemSequence = dragonPearlItem.SetInfo(spinSymbol);
+            mainSequence.Join(itemSequence);
+        }
+
+        // Khi toàn bộ sequence hoàn tất, gọi NextTween
+        mainSequence.OnComplete(() =>
+        {
+            if (isFinishGame)
             {
-                // SlotSixiangView.Instance.onClickSpinDP();
+                mainSequence.AppendInterval(0.5f);
+                Debug.Log("FINISH GAME");
+                GameView.OnFinishDragonPearl(isWinGrandJackpot);
+            }
+            else
+            {
+                Debug.Log("SPIN TIEP");
+                GameView.NextTween();
             }
         });
     }
-    
-    public async UniTask setInfo(SlotDesk data, bool isInit6Gold, bool isDPSpinn = false)
-    {
-        // SlotSixiangView.Instance.gameState = SlotSixiangView.GAME_STATE.SHOWING_RESULT;
-        // if (data.ContainsKey("userAmount"))
-        // {
-        //     userAmount = (long)data["userAmount"];
-        // }
-        // isDPSpin = isDPSpinn;
-        // List<JObject> pearls = new List<JObject>();
-        // // List<Task> tasksDP = new List<Task>();
-        // if (data.ContainsKey("dragonPearls"))
-        // {
-        //     pearls = data["dragonPearls"].ToObject<List<JObject>>();
-        // }
-        // else
-        // {
-        //     pearls = data["pearls"].ToObject<List<JObject>>();
-        // }
-        // dataPearl = pearls;
-        // if (data.ContainsKey("dragonPearlWinPot"))
-        // {
-        //     winAmount = (int)data["dragonPearlWinPot"];
-        // }
-        // else
-        // {
-        //     winAmount = (int)data["winAmount"];
-        // }
-        // List<UniTask> tasksSetInfo = new List<UniTask>();
-        // if (!isDPSpin)
-        // {
-        //     resetView();
-        // }
-        // else
-        // {
-        //     isAutoPlay = false;
-        //     isSelectBonusGame = (bool)data["isSelectBonusGame"];
-        // }
-        // if (isInit6Gold)
-        // {
-        //     await startView6Gold(pearls);
-        // }
-        //
-        // pearls.ForEach(dataPearl =>
-        // {
-        //     int row = (int)dataPearl["row"];
-        //     int col = (int)dataPearl["col"];
-        //     if ((bool)dataPearl["isDoubled"] == false && isDPSpin == true)
-        //     {
-        //         DragonPearlItem item = listItem[col][row];
-        //         tasksSetInfo.Add(item.setInfo(dataPearl, this));
-        //     }
-        //     else if (isDPSpin == false)
-        //     {
-        //         DragonPearlItem item = listItem[col][row];
-        //         tasksSetInfo.Add(item.setInfo(dataPearl, this));
-        //     }
-        // });
-        //
-        // if (pearls.Count > 0)
-        // {
-        //     await UniTask.WhenAll(tasksSetInfo.ToArray());
-        //     SlotSixiangView.Instance.updateWinAmount(winAmount);
-        //     SlotSixiangView.Instance.infoBar.setStateWin("totalWin");
-        //     if (isInit6Gold && SlotSixiangView.Instance.spintype == SlotSixiangView.SPIN_TYPE.AUTO)
-        //     {
-        //         SlotSixiangView.Instance.onClickSpinDP();
-        //     }
-        // }
-        // else
-        // {
-        //     await UniTask.Delay(TimeSpan.FromSeconds(0.25f));
-        // }
-        //
-        // if (data.ContainsKey("isFinished"))
-        // {
-        //     isFinish = (bool)data["isFinished"];
-        //     if ((bool)data["isFinished"] == true)
-        //     {
-        //         isGrandJackpot = (bool)data["isGrandJackpot"];
-        //         await UniTask.Delay(TimeSpan.FromSeconds(1.5f));
-        //         await showResult();
-        //     }
-        // }
-        // else
-        // {
-        //     SlotSixiangView.Instance.gameState = SlotSixiangView.GAME_STATE.PREPARE;
-        // }
-    }
-    
-    private async UniTask showResult()
-    {
-        JObject dataEnd = new JObject();
-        dataEnd["winAmount"] = winAmount;
-        // dataEnd["gameType"] = SlotSixiangView.Instance.gameType;
-        dataEnd["isGrandJackpot"] = isGrandJackpot;
-        dataEnd["userAmount"] = userAmount;
-        dataEnd["isSelectBonusGame"] = isSelectBonusGame;
-        // await SlotSixiangView.Instance.endMinigame(dataEnd);
-        gameObject.SetActive(false);
-    }
-    
-    public async UniTask startView6Gold(List<JObject> pearls)
-    {
 
-        Debug.Log("startView6Gold");
-
-        resetView();
+    public void StartView6Gold()
+    {
+        if (hasInitFirst6Gold) return;
+        Debug.Log("START VIEW 6 GOLD");
+        hasInitFirst6Gold = true;
+        Reset();
         listItemGold.Clear();
-        for (int i = 0; i < pearls.Count; i++)
-        {
-            JObject data = pearls[i];
-            GameObject itemGold = Instantiate(itemInitGold, transform);
+        List<SpinSymbol> listSpinSymbol = GameView.ListSpinSymbol;
+        Sequence sequence = DOTween.Sequence();
+        sequence.SetAutoKill(true);
+        sequence.AppendInterval(0.7f);
 
-            itemGold.SetActive(true);
-            // Vector2 posSymbol = transform.InverseTransformPoint(SlotSixiangView.Instance.getPosSymbol((int)data["col"], (int)data["row"] + 1));
-            // itemGold.transform.DOLocalMove(posSymbol, 1.0f).SetEase(Ease.OutSine);
-            itemGold.transform.DOScale(new Vector2(1.0f, 1.0f), 1.0f).SetEase(Ease.OutSine).SetId("itemGold_" + i);
+        for (int i = 0; i < listSpinSymbol.Count; i++)
+        {
+
+            SpinSymbol data = listSpinSymbol[i];
+            if (data.WinAmount <= 0) continue;
+            GameObject itemGold = itemGoldPool.Get();
+
             listItemGold.Add(itemGold);
             // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.PEARL_RUNITEM);
-            await UniTask.Delay(TimeSpan.FromSeconds(i != pearls.Count - 1 ? 0.1f : 0.9f));
+            sequence
+                .AppendCallback(() =>
+                {
+                    Vector2 posSymbol = transform.InverseTransformPoint(GameView.ListColumn[data.Col].GetItemPositionAtIndex(data.Row));
+                    itemGold.transform.DOLocalMove(posSymbol, 0.5f).SetEase(Ease.OutSine);
+                    itemGold.transform.DOScale(new Vector2(1.0f, 1.0f), 1.0f).SetEase(Ease.OutSine);
+                })
+                .AppendInterval(i != listSpinSymbol.Count - 1 ? 0.1f : 0.9f);
         }
-        listItemGold.ForEach(item =>
-        {
-            Destroy(item);
-        });
+        sequence
+            .AppendInterval(1f)
+            .OnComplete(() =>
+            {
+                foreach (GameObject item in listItemGold)
+                {
+                    itemGoldPool.Release(item);
+                }
+                foreach (SpinSymbol item in listSpinSymbol)
+                {
+                    if (item.WinAmount > 0)
+                    {
+                        DragonPearlItem dragonPearlItem = listItem[item.Col][item.Row];
+                        dragonPearlItem.SetInfo(item);
+                    }
+                }
+            });
     }
     
-    private void resetView()
+    private void Reset()
     {
         listItem.ForEach(col =>
         {
             col.ForEach(item =>
             {
-                item.hideItem();
+                item.Reset();
             });
         });
-        isGrandJackpot = false;
-        isBonusGame = false;
+        isWinGrandJackpot = false;
         isAutoPlay = true;
     }
     
-    public Vector2 getPosSymbolChuTuoc()
+    public Vector2 GetEyeWarriorPosition()
     {
-        Vector2 posChuTuoc = Vector2.zero;
-        dataPearl.ForEach(data =>
+        Vector2 position = Vector2.zero;
+        listSpinSymbol.ForEach(data =>
         {
-            if ((int)data["item"] == 1 && (int)data["luckyMoney"] == 3)
+            if (data.Symbol == SiXiangSymbol.DragonpearlEyeWarrior)
             {
-                posChuTuoc = listItem[(int)data["col"]][(int)data["row"]].transform.position;
+                position = GetItemPosition(data.Col, data.Row);
             }
         });
-        return posChuTuoc;
+        return position;
     }
     
-    public Vector2 getPosItem(int col, int row)
+    public Vector2 GetItemPosition(int col, int row)
     {
         return listItem[col][row].transform.position;
     }
-    
-    public async UniTask setDoubleItem()
+
+    public void SetDoubleItem()
     {
-        bool isWait = false;
-        dataPearl.ForEach(dataPearl =>
+        GameView.ListSpinSymbol.ForEach(item =>
         {
-            if ((bool)dataPearl["isDoubled"] == true && isDPSpin == true)
+            if (item.WinAmount > 0)
             {
-                int row = (int)dataPearl["row"];
-                int col = (int)dataPearl["col"];
-                DragonPearlItem item = listItem[col][row];
-                item.setInfo(dataPearl, this);
-                isWait = true;
+                DragonPearlItem dragonPearlItem = listItem[item.Col][item.Row];
+                dragonPearlItem.SetInfo(item, true);
             }
         });
-        await UniTask.Delay(TimeSpan.FromSeconds(isWait ? 2.0f : 0));
+        // dataPearl.ForEach(dataPearl =>
+        // {
+        //     if ((bool)dataPearl["isDoubled"] == true && isDPSpin == true)
+        //     {
+        //         int row = (int)dataPearl["row"];
+        //         int col = (int)dataPearl["col"];
+        //         DragonPearlItem item = listItem[col][row];
+        //         item.setInfo(dataPearl, this);
+        //         isWait = true;
+        //     }
+        // });
+        // await UniTask.Delay(TimeSpan.FromSeconds(isWait ? 2.0f : 0));
     }
 }

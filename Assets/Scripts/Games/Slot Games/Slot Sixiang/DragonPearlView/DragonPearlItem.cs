@@ -10,261 +10,246 @@ using DG.Tweening;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Globals;
+using Api;
 
 public class DragonPearlItem : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField]
-    TextMeshProUGUI lbChipWin;
-    [SerializeField]
-    TextMeshProUGUI lbChipFSP;
+    [SerializeField] TextMeshProUGUI textChipValue;
+    [SerializeField] TextMeshProUGUI textChipFSP;
 
-    [SerializeField] Image BgItem;
-    [SerializeField] SkeletonGraphic SpineItem;
-    [SerializeField] List<Material> materialText = new List<Material>();
-    [HideInInspector] SiXiangDragonPearlView dragonPearlView;
-    // public Task setInfoTask;
-    // public Task setInfoTask2;
-    public CancellationTokenSource cts_ShowEffectItem;
-    private bool isCancelEffect = false;
+    [SerializeField] Image imageBackground;
+    [SerializeField] SkeletonGraphic spine;
+    [SerializeField] List<Material> materialText = new();
+    private SiXiangDragonPearlView dragonPearlView;
+    public SiXiangSymbol Symbol { get; private set; } = SiXiangSymbol.Unspecified;
+    public long WinAmount { get; private set; } = 0;
 
-    private string PATH_ANIM_GOLD = "GameView/SiXiang/Spine/DragonPearl/ItemGold/skeleton_SkeletonData";
-    private string PATH_ANIM_LIXI = "GameView/SiXiang/Spine/DragonPearl/Lixi/skeleton_SkeletonData";
-    private string PATH_ANIM_THANHLONG = "GameView/SiXiang/Spine/DragonPearl/ThanhLong/skeleton_SkeletonData";
-    private string PATH_ANIM_BACHHO = "GameView/SiXiang/Spine/DragonPearl/BachHo/skeleton_SkeletonData";
-    private string PATH_ANIM_CHUTUOC = "GameView/SiXiang/Spine/DragonPearl/ChuTuoc/skeleton_SkeletonData";
-    private string PATH_ANIM_HUYENVU = "GameView/SiXiang/Spine/DragonPearl/HuyenVu/skeleton_SkeletonData";
-    void Start()
+    private const string GOLD_ANIMATION_PATH = "SiXiang/Spine/DragonPearl/ItemGold/skeleton_SkeletonData";
+    private const string ENVELOPE_ANIMATION_PATH = "SiXiang/Spine/DragonPearl/Lixi/skeleton_SkeletonData";
+    private const string DRAGON_EYE_ANIMATION_PATH = "SiXiang/Spine/DragonPearl/ThanhLong/skeleton_SkeletonData";
+    private const string TIGER_EYE_ANIMATION_PATH = "SiXiang/Spine/DragonPearl/BachHo/skeleton_SkeletonData";
+    private const string TURTLE_EYE_ANIMATION_PATH = "SiXiang/Spine/DragonPearl/ChuTuoc/skeleton_SkeletonData";
+    private const string EYE_BIRD_ANIMATION_PATH = "SiXiang/Spine/DragonPearl/HuyenVu/skeleton_SkeletonData";
+
+    public void SetDragonPearlView(SiXiangDragonPearlView dragonPearlView)
     {
-
+        this.dragonPearlView = dragonPearlView;
     }
-
-    public UniTask setInfo(JObject data, SiXiangDragonPearlView dpView)
+    public Sequence SetInfo(SpinSymbol data, bool isDouble = false)
     {
-        // cts_ShowEffectItem = SlotSixiangView.Instance.getCancelToken();
-        dragonPearlView = dpView;
-        var setInfoItemTask = new UniTaskCompletionSource();
-        // UnityMainThread.instance.AddJob(async () =>
-        // {
-        //
-        //     if ((int)data["item"] != 1)
-        //     {
-        //
-        //         Action<SkeletonDataAsset> cb = async (skeData) =>
-        //         {
-        //             try
-        //             {
-        //                 if ((bool)data["isDoubled"] == true) //x2
-        //                 {
-        //                     await UniTask.Delay(TimeSpan.FromSeconds(1.0f), cancellationToken : cts_ShowEffectItem.Token);
-        //                 }
-        //                 if ((bool)data["isBonusSpin"] == true)//add item
-        //                 {
-        //                     await UniTask.Delay(TimeSpan.FromSeconds(2.0f), cancellationToken : cts_ShowEffectItem.Token);
-        //                     Vector2 posChuTuoc = dragonPearlView.getPosSymbolChuTuoc();
-        //                     Vector2 posItem = dragonPearlView.getPosItem((int)data["col"], (int)data["row"]);
-        //                     GameObject itemGold = Instantiate(dragonPearlView.itemInitGold, dragonPearlView.transform);
-        //
-        //                     itemGold.transform.localPosition = dragonPearlView.transform.InverseTransformPoint(posChuTuoc);
-        //                     itemGold.SetActive(true);
-        //                     itemGold.transform.localScale = Vector2.one;
-        //                     itemGold.transform.DOLocalMove(dragonPearlView.transform.InverseTransformPoint(posItem), 1.0f).SetEase(Ease.OutSine).OnComplete(() =>
-        //                     {
-        //                         Destroy(itemGold);
-        //                     });
-        //                     await UniTask.Delay(TimeSpan.FromSeconds(1.0f), cancellationToken : cts_ShowEffectItem.Token);
-        //                 }
-        //                 BgItem.enabled = true;
-        //                 SpineItem.gameObject.SetActive(true);
-        //                 SpineItem.skeletonDataAsset = skeData;
-        //                 SpineItem.Initialize(true);
-        //                 SpineItem.AnimationState.SetAnimation(0, "start", false);
-        //                 SpineItem.transform.localPosition = Vector2.zero;
-        //                 SpineItem.transform.localScale = new Vector2(1, 1);
-        //                 await UniTask.Delay(TimeSpan.FromSeconds(SpineItem.Skeleton.Data.FindAnimation("start").Duration), cancellationToken: cts_ShowEffectItem.Token);
-        //                 SpineItem.AnimationState.SetAnimation(0, "rung", false);
-        //                 SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.PEARL_Item_Normal);
-        //                 await UniTask.Delay(TimeSpan.FromSeconds(SpineItem.Skeleton.Data.FindAnimation("rung").Duration / 2), cancellationToken: cts_ShowEffectItem.Token);
-        //                 lbChipWin.fontMaterial = materialText[0];
-        //                 lbChipWin.gameObject.SetActive(true);
-        //                 int itemWinAmount = (int)data["winAmount"];
-        //                 lbChipWin.text = Globals.Config.FormatMoney(itemWinAmount, true);
-        //                 lbChipWin.transform.localScale = Vector2.zero;
-        //                 lbChipWin.transform.DOScale(Vector2.one, 0.2f).SetEase(Ease.OutBack);
-        //                 SpineItem.AnimationState.SetAnimation(0, "normal", true);
-        //
-        //                 setInfoItemTask.TrySetResult();
-        //             }
-        //             catch (SystemException errr)
-        //             {
-        //                 Debug.Log("errr:" + errr);
-        //             }
-        //
-        //         };
-        //         UnityMainThread.instance.AddJob(() =>
-        //         {
-        //             StartCoroutine(UIManager.instance.loadSkeletonDataAsync(PATH_ANIM_GOLD, cb));
-        //         });
-        //
-        //     }
-        //     else
-        //     {
-        //         try
-        //         {
-        //             //SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.PEARL_ITEM);
-        //             string soundSymbol = Globals.SOUND_SLOT_BASE.PEARL_ITEM;
-        //             BgItem.enabled = true;
-        //             string pathEye = "";
-        //             switch ((int)data["luckyMoney"])
-        //             {
-        //                 case 1:
-        //                     pathEye = PATH_ANIM_HUYENVU;
-        //                     soundSymbol = Globals.SOUND_SLOT_BASE.PEARL_Phoenix;
-        //                     break; // + spin: numberOfBonusSpins
-        //                 case 2:
-        //                     pathEye = PATH_ANIM_BACHHO;
-        //                     soundSymbol = Globals.SOUND_SLOT_BASE.PEARL_Tiger;
-        //                     break; // x2 gia tri tat ca cac o
-        //                 case 3:
-        //                     pathEye = PATH_ANIM_CHUTUOC;
-        //                     soundSymbol = Globals.SOUND_SLOT_BASE.PEARL_Turtle;
-        //                     break; // roi 3 ngoc bat ki
-        //                 case 4:
-        //                     pathEye = PATH_ANIM_THANHLONG;
-        //                     soundSymbol = Globals.SOUND_SLOT_BASE.PEARL_Dragon;
-        //                     break; // roi 1 ngoc jackpot
-        //             }
-        //
-        //             SpineItem.gameObject.SetActive(true);
-        //             SpineItem.transform.localPosition = Vector2.zero;
-        //             SpineItem.skeletonDataAsset = UIManager.instance.loadSkeletonData(PATH_ANIM_LIXI);
-        //             await UniTask.Delay(TimeSpan.FromSeconds(0.1f), cancellationToken: cts_ShowEffectItem.Token);
-        //             SpineItem.Initialize(true);
-        //             SpineItem.AnimationState.SetAnimation(0, "animation", false);
-        //             await UniTask.Delay(TimeSpan.FromSeconds(SpineItem.Skeleton.Data.FindAnimation("animation").Duration),cancellationToken: cts_ShowEffectItem.Token);
-        //             SoundManager.instance.playEffectFromPath(soundSymbol);
-        //             SpineItem.skeletonDataAsset = UIManager.instance.loadSkeletonData(pathEye);
-        //             await UniTask.Delay(TimeSpan.FromSeconds(0.1f), cancellationToken: cts_ShowEffectItem.Token);
-        //             SpineItem.transform.localScale = new Vector2(0.9f, 0.9f);
-        //             Vector2 posSymbol = SpineItem.transform.parent.InverseTransformPoint(SiXiangView.Instance.getPosSymbol((int)data["col"], (int)data["row"] + 1));
-        //             SpineItem.transform.localPosition = new Vector2(posSymbol.x + 2, posSymbol.y);
-        //             //SpineItem.transform.localPosition = transform.parent.InverseTransformPoint(new Vector2(0.2f,-1.31f));
-        //             SpineItem.Initialize(true);
-        //             SpineItem.AnimationState.SetAnimation(0, "animation", false);
-        //             lbChipWin.gameObject.SetActive(false);
-        //             if ((int)data["luckyMoney"] == 4)
-        //             {
-        //                 await UniTask.Delay(TimeSpan.FromSeconds(SpineItem.Skeleton.Data.FindAnimation("animation").Duration), cancellationToken: cts_ShowEffectItem.Token);
-        //                 SpineItem.skeletonDataAsset = UIManager.instance.loadSkeletonData(PATH_ANIM_GOLD);
-        //                 await UniTask.Delay(TimeSpan.FromSeconds(0.1f), cancellationToken: cts_ShowEffectItem.Token);
-        //                 SpineItem.Initialize(true);
-        //                 SpineItem.transform.localScale = Vector2.one;
-        //                 SpineItem.AnimationState.SetAnimation(0, "rung_" + getAnimNameType((int)data["jackpot"]), false);
-        //                 await UniTask.Delay(TimeSpan.FromSeconds(SpineItem.Skeleton.Data.FindAnimation("rung_" + getAnimNameType((int)data["jackpot"])).Duration), cancellationToken: cts_ShowEffectItem.Token);
-        //                 lbChipWin.gameObject.SetActive(true);
-        //                 Debug.Log("Chay vao day");
-        //                 lbChipWin.fontMaterial = materialText[1];
-        //                 switch ((int)data["jackpot"])
-        //                 {
-        //                     case 1:
-        //                         lbChipWin.text = "MINOR";
-        //                         break;
-        //                     case 2:
-        //                         lbChipWin.text = "MAJOR";
-        //                         break;
-        //                     case 3:
-        //                         lbChipWin.text = "MEGA";
-        //                         break;
-        //                     case 4:
-        //                         lbChipWin.text = "GRAND";
-        //                         break;
-        //                 }
-        //                 SpineItem.AnimationState.SetAnimation(0, "normal_" + getAnimNameType((int)data["jackpot"]), true);
-        //             }
-        //             else if ((int)data["luckyMoney"] == 2)
-        //             {
-        //                 //SpineItem.skeletonDataAsset = UIManager.instance.loadSkeletonData(PATH_ANIM_BACHHO);
-        //                 //await Task.Delay(TimeSpan.FromSeconds(0.1f));
-        //                 //SpineItem.Initialize(true);
-        //                 //SpineItem.AnimationState.SetAnimation(0, "animation", false);
-        //                 await dragonPearlView.setDoubleItem();
-        //             }
-        //             else if ((int)data["luckyMoney"] == 1)
-        //             {
-        //                 await UniTask.Delay(TimeSpan.FromSeconds(SpineItem.Skeleton.Data.FindAnimation("animation").Duration * 1.0f), cancellationToken: cts_ShowEffectItem.Token);
-        //                 if (dragonPearlView.isDPSpin)
-        //                 {
-        //                     lbChipFSP.gameObject.SetActive(true);
-        //                     lbChipFSP.alpha = 1.0f;
-        //                     lbChipFSP.transform.localPosition = lbChipFSP.transform.parent.InverseTransformPoint(transform.position);
-        //                     lbChipFSP.fontMaterial = materialText[1];
-        //                     lbChipFSP.text = "+3 freespin";
-        //                     Vector2 posJump = lbChipFSP.transform.parent.InverseTransformPoint(SiXiangView.Instance.infoBar.transform.position);
-        //                     lbChipFSP.transform.DOLocalJump(posJump, 150, 1, 0.5f)
-        //                         .OnComplete(() =>
-        //                         {
-        //                             lbChipFSP.transform.localPosition = Vector2.zero;
-        //                             lbChipFSP.gameObject.SetActive(false);
-        //                             SiXiangView.Instance.updateFreeSpinLeft();
-        //                         });
-        //                     lbChipFSP.DOFade(0, 0.5f).SetEase(Ease.InSine).SetId("fadeEffect");
-        //                     Tween nodeSpinTween = DOTween.TweensById("fadeEffect")[0];
-        //                     await nodeSpinTween.AsyncWaitForCompletion();
-        //                 }
-        //             }
-        //             else if ((int)data["luckyMoney"] == 3)
-        //             {
-        //                 await UniTask.Delay(TimeSpan.FromSeconds(SpineItem.Skeleton.Data.FindAnimation("animation").Duration), cancellationToken: cts_ShowEffectItem.Token);
-        //                 SpineItem.skeletonDataAsset = UIManager.instance.loadSkeletonData(PATH_ANIM_CHUTUOC);
-        //                 await UniTask.Delay(TimeSpan.FromSeconds(0.1f), cancellationToken: cts_ShowEffectItem.Token);
-        //                 SpineItem.Initialize(true);
-        //                 SpineItem.AnimationState.SetAnimation(0, "animation", false);
-        //
-        //             }
-        //             //setInfoTask.Start();
-        //             setInfoItemTask.TrySetResult();
-        //         }
-        //         catch (SystemException e)
-        //         {
-        //             Debug.Log("Errr:" + e);
-        //         }
-        //     }
-        //
-        //
-        // });
-        return setInfoItemTask.Task;
+        Symbol = data.Symbol;
+        WinAmount = data.WinAmount;
+        spine.gameObject.SetActive(false);
+        spine.transform.localPosition = Vector2.zero;
+        spine.transform.localScale = new Vector2(1, 1);
+
+        Sequence sequence = DOTween.Sequence();
+      
+        if (WinAmount > 0)
+        {
+            if (isDouble)
+            {
+                spine.gameObject.SetActive(true);
+                WinAmount *= 2;
+                sequence    
+                    .AppendInterval(1f);
+            }
+            if (dragonPearlView.IsWinWarriorEye)
+            {
+                sequence
+                    .AppendInterval(2f)
+                    .AppendCallback(() =>
+                    {
+                        Vector2 tigerEyePosition = dragonPearlView.GetEyeWarriorPosition();
+                        Vector2 positionItem = dragonPearlView.GetItemPosition(data.Col, data.Row);
+                        GameObject itemGold = dragonPearlView.itemGoldPool.Get();
+
+                        itemGold.transform.localPosition = dragonPearlView.transform.InverseTransformPoint(tigerEyePosition);
+                        itemGold.transform.localScale = Vector2.one;
+                        itemGold.transform.DOLocalMove(dragonPearlView.transform.InverseTransformPoint(positionItem), 1.0f).SetEase(Ease.OutSine).OnComplete(() =>
+                        {
+                            dragonPearlView.itemGoldPool.Release(itemGold);
+                        });
+                    }).
+                    AppendInterval(1f);
+            }
+            
+            sequence
+                .AppendCallback(() =>
+                {
+                    imageBackground.enabled = true;
+                    Utility.PlayAnimationByPath(spine, GOLD_ANIMATION_PATH, "start", false);
+                })
+                .AppendInterval(0.6f)
+                .AppendCallback(() =>
+                {
+                    Utility.PlayAnimationByPath(spine, GOLD_ANIMATION_PATH, "rung", false);
+                    // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.PEARL_Item_Normal);
+                })
+                .AppendInterval(0.33f)
+                .AppendCallback(() =>
+                {
+                    textChipValue.fontMaterial = materialText[0];
+                    textChipValue.gameObject.SetActive(true);
+                    textChipValue.text = Utility.FormatMoney(WinAmount, true);
+                    textChipValue.transform.localScale = Vector2.zero;
+                    textChipValue.transform.DOScale(Vector2.one, 0.2f).SetEase(Ease.OutBack);
+                    Utility.PlayAnimationByPath(spine, GOLD_ANIMATION_PATH, "normal", false);
+                });
+        }
+        else
+        {
+            textChipValue.gameObject.SetActive(false);
+            imageBackground.enabled = true;
+            // string soundSymbol = Globals.SOUND_SLOT_BASE.PEARL_ITEM;
+            string animationPath = "";
+            switch (data.Symbol)
+            {
+                case SiXiangSymbol.DragonpearlEyeBird:
+                    animationPath = EYE_BIRD_ANIMATION_PATH;
+                    // soundSymbol = Globals.SOUND_SLOT_BASE.PEARL_Phoenix;
+                    break; // + thêm số lượt quay 
+                case SiXiangSymbol.DragonpearlEyeTiger:
+                    animationPath = TIGER_EYE_ANIMATION_PATH;
+                    // soundSymbol = Globals.SOUND_SLOT_BASE.PEARL_Tiger;
+                    break; // x2 giá trị ở tất cả các ô
+                case SiXiangSymbol.DragonpearlEyeWarrior:
+                    animationPath = TURTLE_EYE_ANIMATION_PATH;
+                    // soundSymbol = Globals.SOUND_SLOT_BASE.PEARL_Turtle;
+                    break; // rơi 3 ngọc bất kì
+                case SiXiangSymbol.DragonpearlEyeDragon:
+                    animationPath = DRAGON_EYE_ANIMATION_PATH;
+                    // soundSymbol = Globals.SOUND_SLOT_BASE.PEARL_Dragon;
+                    break; // rơi 1 ngọc jackpot
+            }
+            sequence
+                .AppendInterval(0.1f)
+                .AppendCallback(() =>
+                {
+                    Utility.PlayAnimationByPath(spine, ENVELOPE_ANIMATION_PATH, "animation", false);
+                })
+                .AppendInterval(1f)
+                .AppendCallback(() =>
+                {
+                    // SoundManager.instance.playEffectFromPath(soundSymbol);
+                })
+                .AppendInterval(0.1f)
+                .AppendCallback(() =>
+                {
+                    Utility.PlayAnimationByPath(spine, animationPath, "animation", false);
+                    spine.transform.localScale = new Vector2(0.9f, 0.9f);
+                    // Vector2 posSymbol = spine.transform.parent.InverseTransformPoint(SiXiangView.Instance.getPosSymbol((int)data["col"], (int)data["row"] + 1));
+                    //  SpineItem.transform.localPosition = new Vector2(posSymbol.x + 2, posSymbol.y);
+                });
+            switch (data.Symbol)
+            {
+                case SiXiangSymbol.DragonpearlEyeBird:
+                    {
+                        sequence
+                            .AppendInterval(2f)
+                            .AppendCallback(() =>
+                            {
+                                textChipFSP.gameObject.SetActive(true);
+                                textChipFSP.alpha = 1.0f;
+                                textChipFSP.transform.localPosition = textChipFSP.transform.parent.InverseTransformPoint(transform.position);
+                                textChipFSP.fontMaterial = materialText[1];
+                                textChipFSP.text = "+3 freespin";
+                                Vector2 posJump = textChipFSP.transform.parent.InverseTransformPoint(dragonPearlView.GameView.InfoSessionBar.transform.position);
+                                textChipFSP.transform.DOLocalJump(posJump, 150, 1, 0.5f)
+                                    .OnComplete(() =>
+                                    {
+                                        textChipFSP.transform.localPosition = Vector2.zero;
+                                        textChipFSP.gameObject.SetActive(false);
+                                        dragonPearlView.GameView.UpdateDragonPearlFreeSpinLeft(true);
+                                    });
+                                textChipFSP.DOFade(0, 0.5f).SetEase(Ease.InSine).SetId("fadeEffect");
+                            });
+                        // if (dragonPearlView.isDPSpin)
+                        // {
+                        // }
+                        break;
+                    }
+                case SiXiangSymbol.DragonpearlEyeTiger:
+                    {
+                        sequence
+                            .AppendInterval(2f)
+                            .AppendCallback(() =>
+                            {
+                                dragonPearlView.SetDoubleItem();
+                            });
+                        break;
+                    }
+                case SiXiangSymbol.DragonpearlEyeWarrior:
+                    {
+                        sequence
+                            .AppendInterval(2f)
+                            .AppendCallback(() =>
+                            {
+                                Utility.PlayAnimationByPath(spine, animationPath, "animation", false);
+                            });
+                        break;
+                    }
+                case SiXiangSymbol.DragonpearlEyeDragon:
+                    {
+                        string jackpotShakeAnimationName = "rung_" + GetJackpotAnimationName(data.Symbol);
+                        string jackpotNormalAnimationName = "normal_" + GetJackpotAnimationName(data.Symbol);
+
+                        sequence
+                            .AppendInterval(2f)
+                            .AppendCallback(() =>
+                            {
+                                Utility.PlayAnimationByPath(spine, GOLD_ANIMATION_PATH, jackpotShakeAnimationName, false);
+                                spine.transform.localScale = Vector2.one;
+
+
+                            })
+                            .AppendInterval(spine.Skeleton.Data.FindAnimation(jackpotShakeAnimationName).Duration)
+                            .AppendCallback(() =>
+                            {
+                                textChipValue.gameObject.SetActive(true);
+                                textChipValue.fontMaterial = materialText[1];
+                                textChipValue.text = data.Symbol switch
+                                {
+                                    SiXiangSymbol.DragonpearlJpMinor => "MINOR",
+                                    SiXiangSymbol.DragonpearlJpMajor => "MAJOR",
+                                    SiXiangSymbol.DragonpearlJpMega => "MEGA",
+                                    SiXiangSymbol.DragonpearlJpGrand => "GRAND",
+                                    _ => ""
+                                };
+                                spine.AnimationState.SetAnimation(0, jackpotNormalAnimationName, true);
+                            });
+                        break;
+                    }
+            }
+        }
+        return sequence;
     }
     
-    private string getAnimNameType(int type)
+    private string GetJackpotAnimationName(SiXiangSymbol symbol)
     {
-        string name = "";
-        switch (type)
+        string animationName = symbol switch
         {
-            case 1:
-                name = "xanh";
-                break;
-            case 2:
-                name = "bien";
-                break;
-            case 3:
-                name = "tim";
-                break;
-            case 4:
-                name = "do";
-                break;
-        }
-        return name;
+            SiXiangSymbol.DragonpearlJpMinor => "xanh",
+            SiXiangSymbol.DragonpearlJpMajor => "bien",
+            SiXiangSymbol.DragonpearlJpMega => "tim",
+            SiXiangSymbol.DragonpearlJpGrand => "do",
+            _ => "",
+        };
+        return animationName;
     }
-    public void hideItem()
+    public void Reset()
     {
-        BgItem.enabled = false;
-        SpineItem.gameObject.SetActive(false);
-        lbChipWin.gameObject.SetActive(false);
-        lbChipFSP.gameObject.SetActive(false);
+        imageBackground.enabled = false;
+        spine.gameObject.SetActive(false);
+        textChipValue.gameObject.SetActive(false);
+        textChipFSP.gameObject.SetActive(false);
+        Symbol = SiXiangSymbol.Unspecified;
+        WinAmount = 0;
     }
-    public void setBgItem(Sprite spr)
+    public void SetBackground(Sprite spr)
     {
-        BgItem.sprite = spr;
+        imageBackground.sprite = spr;
     }
 
 }

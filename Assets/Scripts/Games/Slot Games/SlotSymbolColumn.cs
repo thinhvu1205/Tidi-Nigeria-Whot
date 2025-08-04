@@ -43,11 +43,24 @@ public class SlotSymbolColumn : MonoBehaviour
         columnIndex = index;
     }
 
+    public void SetRandomFinishView()
+    {
+        FinishView = new List<int>();
+        FinishSymbolView = new List<int>();
+
+        for (int i = 0; i < 3; i++)
+        {
+            int randomValue = UnityEngine.Random.Range(0, 9);
+            FinishView.Add(randomValue);
+            FinishSymbolView.Add(randomValue);
+        }
+    }
+
     public void SetFinishView(List<int> symbolIdArray)
     {
         FinishView = new List<int>(symbolIdArray);
         FinishSymbolView = new List<int>(symbolIdArray);
-     
+
     }
 
     public void UpdateStartViewUI()
@@ -73,7 +86,7 @@ public class SlotSymbolColumn : MonoBehaviour
 
     private IEnumerator SpinDuration()
     {
-        float delayBetweenColumns = slotView.GetSpinType() == SpinType.NORMAL ? 0.4f : 0.35f;
+        float delayBetweenColumns = slotView.GetSpinType() == SpinType.NORMAL ? 0.4f : 0.3f;
         float defaultSpinDuration = slotView.GetSpinType() == SpinType.NORMAL ? DEFAULT_SPIN_DURATION : DEFAULT_SPIN_DURATION * 0.75f;
         float duration = defaultSpinDuration + delayBetweenColumns * (columnIndex - 1);
 

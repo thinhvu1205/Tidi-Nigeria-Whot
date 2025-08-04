@@ -68,7 +68,7 @@ public class SelectTableView : BaseView
     #endregion
     private void UpdateVisuals()
     {
-        accountChip.text = User.userMain.accountChip;
+        accountChip.text = User.userMain.accountChip.ToString();
     }
     private void UpdateTitle()
     {
