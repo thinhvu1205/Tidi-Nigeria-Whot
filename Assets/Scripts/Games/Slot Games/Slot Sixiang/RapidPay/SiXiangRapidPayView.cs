@@ -9,172 +9,160 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Globals;
 using TMPro;
+using Api;
 
 
 public class SiXiangRapidPayView : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] List<RapidPayRow> listRows;
 
-    public static SiXiangRapidPayView instance = null;
-    [SerializeField]
-    List<RapidPayRowController> listRows = new List<RapidPayRowController>();
+    [SerializeField] private SkeletonGraphic animationLight, animationBackgroundRow, animationResult;
+    [SerializeField] private TextMeshProUGUI textTotalBonus;
+    [SerializeField] private TextNumberControl textWinResult, textWinAmount;
+    [SerializeField] private Button buttonCollect;
 
-    [SerializeField]
-    public SkeletonGraphic spineLight;
-    [SerializeField]
-    public SkeletonGraphic spineBgRow, spineResult;
-    [SerializeField]
-    public TextMeshProUGUI lbBonusTotal, lbWinAmount;
-    [SerializeField]
-    public TextNumberControl lbWinResult;
-    [SerializeField]
-    public Button btnCollect;
-
-    private RapidPayRowController currentRow;
-    private int indexRow = 0, totalBonus = 1;
-    public int winAmount = 0;
-    private long userAmount = 0;
-    private bool isFinished = false;
-    private bool isSelectBonusGame = false;
-
-    public int index = 0;
-    [HideInInspector]
     private SlotSixiangView gameView;
-    private List<Button> listItem = new List<Button>();
-    public UniTaskCompletionSource rapidTask;
-    
-    void Start()
+    private RapidPayRow currentRow;
+    private int indexRow = 0, multiplierBonus = 1;
+    private long winAmount = 0;
+
+    private void OnDisable()
     {
-        SiXiangRapidPayView.instance = this;
-        listRows.ForEach(row =>
-        {
-            listItem.AddRange(row.btnItemPick);
-        });
+        gameView.OnUpdateTable -= SixiangView_OnUpdateTable;
     }
 
-    public UniTask Show(SlotSixiangView SiXiangView, bool isUltimate, List<JObject> initData = null)
+    public void SetInfo(SlotSixiangView slotSixiangView)
     {
-        Debug.Log("winAmount====" + Utility.FormatNumber(winAmount));
-        currentRow = listRows[0];
-        currentRow.activeButton();
-        gameView = SiXiangView;
-        totalBonus = isUltimate ? 4 : 1;
-        lbBonusTotal.text = "x" + totalBonus;
-        lbWinAmount.text = Utility.FormatNumber(isUltimate ? winAmount * 4 : winAmount);
-        if (initData != null)
-        {
-            setInitView(initData);
-        }
-
-        rapidTask = new UniTaskCompletionSource();
-        return rapidTask.Task;
+        gameView = slotSixiangView;
+        gameView.OnUpdateTable += SixiangView_OnUpdateTable;
+        SetInitView();
     }
-    
-    private void setInitView(List<JObject> data)
+
+    private void SetInitView()
     {
-        for (int i = 0, l = data.Count; i < l; i++)
-        {
-            JObject dataRow = data[i];
-            totalBonus *= (int)dataRow["multiplier"];
-            listRows[i].setResult(dataRow);
-            indexRow++;
-        }
         currentRow = listRows[indexRow];
-        currentRow.activeButton();
-        spineBgRow.transform.DOLocalMoveY(spineBgRow.transform.localPosition.y + 123 * indexRow - indexRow * 3.5f, 0.3f).SetEase(Ease.InSine);
-        lbBonusTotal.text = "x" + totalBonus;
+        currentRow.ActiveAllButtons();
+        animationBackgroundRow.transform
+            .DOLocalMoveY(animationBackgroundRow.transform.localPosition.y + 123 * indexRow - indexRow * 3.5f, 0.3f)
+            .SetEase(Ease.InSine);
+        textTotalBonus.text = "x" + multiplierBonus;
+        textWinAmount.SetValue(gameView.GetCurrentBetLevel() / 2, true, 0.5f);
 
     }
-    
-    public async void setResult(JObject data)
+
+    private void SixiangView_OnUpdateTable(BaseSlotSymbolView.OnUpdateTableEventArgs e)
     {
-        // Button btnItem = await currentRow.setResult(data);
-        // int indexPick = listItem.IndexOf(btnItem) + 1;
-        // winAmount = (int)data["winAmount"];
-        // isSelectBonusGame = (bool)data["isSelectBonusGame"];
-        // if (data.ContainsKey("userAmount")) userAmount = (long)data["userAmount"];
-        //
-        // isFinished = (bool)data["isFinished"];
-        // int itemPicked = (int)data["item"];
-        // if (itemPicked != 1) //ko pick phai end = 1
-        // {
-        //     spineLight.gameObject.SetActive(true);
-        //     spineLight.Initialize(true);
-        //     spineLight.AnimationState.SetAnimation(0, indexPick.ToString(), false);
-        //     totalBonus *= (int)data["multiplier"];
-        //     SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.RAPID_CHIP_FLY);
-        // }
-        //
-        // DOTween.Sequence()
-        //     .AppendInterval(spineLight.Skeleton.Data.FindAnimation(indexPick.ToString()).Duration - 0.35f)
-        //     .AppendCallback(() =>
-        //     {
-        //         lbBonusTotal.text = "x" + totalBonus;
-        //     }).AppendInterval(0.2f)
-        //     .AppendCallback(() =>
-        //     {
-        //         spineLight.gameObject.SetActive(false);
-        //         Globals.Config.tweenNumberToNumber(lbWinAmount, winAmount);
-        //         if (!isFinished) nextRow();
-        //         else showResult();
-        //     });
+        SlotDesk data = e.data;
+        SpinSymbol item = data.SpinSymbols[0];
+
+        currentRow.SetResult(data);
+        winAmount = data.GameReward.TotalChipsWinByGame;
+        int indexPick = item.Index;
+
+
+        if (indexPick >= 0 && item.Symbol != SiXiangSymbol.RapidpayEnd)
+        {
+            animationLight.gameObject.SetActive(true);
+            Utility.PlayAnimation(animationLight, GetAnimationLightName(indexPick), false);
+            switch (item.Symbol)
+            {
+                case SiXiangSymbol.RapidpayX2:
+                    multiplierBonus *= 2;
+                    break;
+                case SiXiangSymbol.RapidpayX3:
+                    multiplierBonus *= 3;
+                    break;
+                case SiXiangSymbol.RapidpayX4:
+                    multiplierBonus *= 4;
+                    break;
+            }
+            // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.RAPID_CHIP_FLY);
+        }
+        DOTween.Sequence()
+            .AppendInterval(1f)
+            .AppendCallback(() =>
+            {
+                textTotalBonus.text = "x" + multiplierBonus;
+            })
+            .AppendInterval(1.4f)
+            .AppendCallback(() =>
+            {
+                animationLight.gameObject.SetActive(false);
+                if (!data.IsFinishGame) NextRow();
+                else ShowResult();
+            });
     }
-    
-    private void nextRow()
+
+    private string GetAnimationLightName(int index)
     {
-        spineBgRow.transform.DOLocalMoveY(spineBgRow.transform.localPosition.y + 123 - indexRow * 3.5f, 0.3f).SetEase(Ease.InSine);
+        string name = "";
+        name = index switch
+        {
+            0 => "17",
+            1 => "18",
+            5 => "14",
+            6 => "15",
+            7 => "16",
+            10 => "10",
+            11 => "11",
+            12 => "12",
+            13 => "13",
+            15 => "6",
+            16 => "7",
+            17 => "8",
+            18 => "9",
+            20 => "1",
+            21 => "2",
+            22 => "3",
+            23 => "4",
+            24 => "5",
+            _ => name
+        };
+        return name;
+    }
+
+    private void NextRow()
+    {
+        textWinAmount.SetValue(winAmount, true, 0.5f);
+        animationBackgroundRow.transform
+            .DOLocalMoveY(animationBackgroundRow.transform.localPosition.y + 123 - indexRow * 3.5f, 0.3f)
+            .SetEase(Ease.InSine);
         indexRow++;
         currentRow = listRows[indexRow];
-        currentRow.activeButton();
+        currentRow.ActiveAllButtons();
     }
-    
-    private void showResult()
+
+    private void ShowResult()
     {
-        // spineResult.skeletonDataAsset = UIManager.instance.loadSkeletonData("GameView/SiXiang/Spine/BigWinRapid/skeleton_SkeletonData");
-        spineResult.Initialize(true);
-        spineResult.AnimationState.SetAnimation(0, "eng", false);
-        spineResult.transform.parent.gameObject.SetActive(true);
-        //Globals.Config.tweenNumberToNumber(lbWinResult, winAmount);
-        btnCollect.gameObject.SetActive(false);
+        animationResult.transform.parent.gameObject.SetActive(true);
+        Utility.PlayAnimation(animationResult, "eng", false); buttonCollect.gameObject.SetActive(false);
         // AudioSource soundMoney = SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_START);
         float timeRun = 2f;
-        lbWinResult.SetValue(winAmount, true, timeRun, "", () =>
+        textWinResult.SetValue(winAmount, true, timeRun, "", () =>
         {
-            btnCollect.gameObject.SetActive(true);
+            buttonCollect.gameObject.SetActive(true);
             // soundMoney.Stop();
             // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_END);
 
         });
-
-        IEnumerator ShowButtonCollect()
-        {
-            btnCollect.gameObject.SetActive(false);
-            yield return new WaitForSeconds(timeRun);
-            btnCollect.gameObject.SetActive(true);
-        }
     }
-    
-    public async void onClickCollect()
+
+    public void OnClickCollect()
     {
-        spineResult.transform.DOScale(new Vector2(0.8f, 0.8f), 0.3f).SetEase(Ease.InBack).OnComplete(() =>
-        {
-            spineResult.transform.parent.gameObject.SetActive(false);
-        });
-
-
-        //await gameView.showAnimCutScene();
-        Destroy(gameObject);
-        JObject dataEnd = new JObject();
-        dataEnd["winAmount"] = winAmount;
-        dataEnd["userAmount"] = userAmount;
-        // dataEnd["gameType"] = (int)SlotSixiangView.GAME_TYPE.RAPID_PAY;
-        dataEnd["isSelectBonusGame"] = isSelectBonusGame;
-        //dataEnd["userAmount"]=
-        // await gameView.endMinigame(dataEnd);
-        rapidTask.TrySetResult();
-
-
+        animationResult.transform
+            .DOScale(new Vector2(0.8f, 0.8f), 0.3f)
+            .SetEase(Ease.InBack)
+            .OnComplete(() =>
+            {
+                animationResult.transform.parent.gameObject.SetActive(false);
+                Reset();
+                gameView.ShowAnimationCutScene(true);
+            });
     }
 
-
+    private void Reset()
+    {
+        indexRow = 0;
+        multiplierBonus = 1;   
+    }
 }

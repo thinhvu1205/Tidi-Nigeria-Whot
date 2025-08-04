@@ -73,7 +73,7 @@ public class LobbyView : BaseView
         {
             displayNameText.text = User.userMain.displayName;
             userIdText.text = "ID: " + User.userMain.userSid;
-            accountChip.text = User.userMain.accountChip;
+            accountChip.text = User.userMain.accountChip.ToString();
         }
     }
     

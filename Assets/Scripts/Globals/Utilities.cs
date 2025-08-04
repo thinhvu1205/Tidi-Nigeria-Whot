@@ -505,6 +505,7 @@ namespace Globals
         {
             if (skeletonGraphic != null && skeletonGraphic.AnimationState != null)
             {
+                skeletonGraphic.gameObject.SetActive(true);
                 skeletonGraphic.Initialize(true);
                 skeletonGraphic.AnimationState.SetAnimation(0, animationName, loop);
             }
@@ -516,6 +517,7 @@ namespace Globals
 
         public static void PlayAnimationByPath(SkeletonGraphic skeletonGraphic, string path, string animationName = "", bool loop = true)
         {
+            skeletonGraphic.gameObject.SetActive(true);
             skeletonGraphic.TrimRenderers();
             // skeletonGraphic.transform.localScale = Vector3.one;
             // skeletonGraphic.transform.localPosition = Vector3.zero;

@@ -23,7 +23,7 @@ public class ProfileView : BaseView
         {
             nameText.text = User.userMain.displayName;
             idText.text = "ID: " + User.userMain.userSid;
-            chipText.text = User.userMain.accountChip;
+            chipText.text = User.userMain.accountChip.ToString();
             if (IsDefaultName(User.userMain.displayName))
             {
                 changeNameButton.gameObject.SetActive(true);

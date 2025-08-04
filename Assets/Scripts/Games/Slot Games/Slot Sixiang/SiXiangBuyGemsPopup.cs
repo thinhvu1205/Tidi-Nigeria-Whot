@@ -5,6 +5,8 @@ using System;
 using Globals;
 using Api;
 using Google.Protobuf;
+using System.Collections.Generic;
+using Color = UnityEngine.Color;
 
 public class SiXiangBuyGemsPopup : BaseView
 {
@@ -12,23 +14,32 @@ public class SiXiangBuyGemsPopup : BaseView
     [SerializeField] Image imageGem;
     [SerializeField] TextMeshProUGUI textInfo;
     [SerializeField] Sprite[] listSpriteGem;
-    private long betCurrent = 0;
+    [SerializeField] Button buttonConfirm;
     private int typeGameBonus = 0;
     private long price = 0;
+
+    protected Dictionary<int, int> GemIndexDictionary => new()
+    {
+        { 0, 3 }, // Dragon Pearl
+        { 1, 5 }, // Gold Pick
+        { 2, 6 }, // Rapid Pay
+        { 3, 4 }, // Lucky Draw
+    };
     
     public void OnClickConfirm()
     {
         // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.CLICK);
-        long playerBalance = User.userMain.currentChip;
+        long playerBalance = User.userMain.accountChip;
         if (playerBalance >= price)
         {
             InfoBet infoBet = new()
             {
-                Id = UnityEngine.Random.Range(0, 4),
-                Chips = betCurrent
+                Id = GemIndexDictionary[typeGameBonus],
             };
             Debug.Log("TYPEGAMEBONUS: " + typeGameBonus);
             DataSender.SendMatchState((long)OpCodeRequest.BuySixiangGem, infoBet.ToByteArray());
+
+
             // SiXiangView.Instance.agPlayer -= price;
             // SiXiangView.Instance.setAGPlayer();
         }
@@ -45,14 +56,14 @@ public class SiXiangBuyGemsPopup : BaseView
     public void SetInfo(int indexGem, long pricePearl, long bet)
     {
         // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.CLICK);
+        long accountChip = User.userMain.accountChip;
+        bool isEnoughChip = accountChip >= pricePearl;
         price = pricePearl;
      
-        //btnConfirm.interactable = agPlayer >= price;
-        //btnConfirm.GetComponent<Image>().color = agPlayer >= price ? Color.white : Color.gray;
+        buttonConfirm.interactable = isEnoughChip;
+        buttonConfirm.GetComponent<Image>().color = isEnoughChip ? Color.white : Color.gray;
         typeGameBonus = indexGem;
-        betCurrent = bet;
         imageGem.sprite = listSpriteGem[indexGem];
-        Debug.Log("price=" + price);
         textInfo.text = "Pay " + Utility.FormatNumber(price) + " chips to receive this gem!";//Globals.Config.formatStr(Globals.Config.getTextConfig("text_sixiang_buy_gem"), Globals.Config.FormatNumber(price));
     }
 }

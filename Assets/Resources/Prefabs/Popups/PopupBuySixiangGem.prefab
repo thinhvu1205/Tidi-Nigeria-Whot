@@ -440,6 +440,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d97bd357b18d60748ab45f3e778258b2, type: 3}
   - {fileID: 21300000, guid: c4b9606db2fdbfd4381d5723e6cb1d3f, type: 3}
   - {fileID: 21300000, guid: 172afb9d431f1d545be0dd213e631d5f, type: 3}
+  buttonConfirm: {fileID: 1842853373864048744}
 --- !u!1 &3954664356151479979
 GameObject:
   m_ObjectHideFlags: 0

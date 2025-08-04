@@ -132,7 +132,7 @@ namespace Screens.LoginView
                 userId = profile.UserId,
                 displayName = profile.DisplayName,
                 avatarId = profile.AvatarId,
-                accountChip = profile.AccountChip.ToString(),
+                accountChip = profile.AccountChip,
                 bankChip = profile.BankChip.ToString(),
                 userSid = profile.UserSid.ToString(),
             };

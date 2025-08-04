@@ -12,42 +12,13 @@ using Newtonsoft.Json.Linq;
 using Random = UnityEngine.Random;
 using Unity.VisualScripting;
 using Globals;
+using Api;
+using Google.Protobuf;
 
 public class SiXiangLuckyDrawView : MonoBehaviour
 {
-    public static SiXiangLuckyDrawView instance = null;
-    // Start is called before the first frame update
-    [SerializeField]
-    public GameObject itemCollum, collumContainer;
 
-    [SerializeField]
-    public SkeletonGraphic spineResult;
-
-    [SerializeField]
-    public Button btnCollect;
-
-    [SerializeField]
-    public TextNumberControl lbTotalWin;
-
-    [HideInInspector]
-    private UniTaskCompletionSource luckyDrawTask;
-    private SlotSixiangView gameView;
-
-    private LuckyDrawItem currenItem;
-    private List<LuckyDrawItem> listItem = new List<LuckyDrawItem>();
-    private long winAmount = 0;
-    private long userAmount = 0;
-    private bool isFinished = false;
-    private bool isInitView = false;
-    private int jackpotType = 0;
-    private bool isAutoPlay = true;
-    private bool isSelectBonusGame = false;
-    private bool canClick = true;
-    private List<LuckyDrawItem> listItemRemain = new List<LuckyDrawItem>();
-    
-    [HideInInspector]
-    
-    public enum TYPE_ITEM
+    public enum JackpotType
     {
         MINOR = 1,
         MAJOR = 2,
@@ -55,18 +26,57 @@ public class SiXiangLuckyDrawView : MonoBehaviour
         GRAND = 4,
         NORMAL = 0
     }
-    
-    void Awake()
-    {
-        SiXiangLuckyDrawView.instance = this;
-        for (int i = 1; i < 5; i++)
-        {
-            GameObject itemCol = Instantiate(itemCollum, collumContainer.transform);
+    [SerializeField] private GameObject columnPrefab;
+    [SerializeField] private Transform columnContainer, effectContainer;
+    [SerializeField] private SkeletonGraphic animationResult;
+    [SerializeField] private Button buttonCollect;
+    [SerializeField] private TextNumberControl textTotalWin;
 
-        }
+    private readonly List<LuckyDrawItem> listItem = new();
+    private readonly List<LuckyDrawItem> listItemRemain = new();
+    private SlotSixiangView gameView;
+    private JackpotType jackpotType = JackpotType.NORMAL;
+    private long winAmount = 0;
+    private bool isAutoPlay = true;
+    private bool canClick = true;
+    private const string SEQUENCE_ID_AUTOPLAY = "autoPlay";
+    private const string SEQUENCE_ID_AUTOEND = "autoEnd";
+    private const string RESULT_WIN_NORMAL_ANIMATION_PATH = "SiXiang/Spine/BigWinGoldPick/skeleton_SkeletonData";
+    private const string RESULT_WIN_JACKPOT_ANIMATION_PATH = "SiXiang/Spine/LuckyDraw/BigWin/skeleton_SkeletonData";
+
+    private void Awake()
+    {
+        InitDrawItems();
+        effectContainer.gameObject.SetActive(false);
+        DOTween.Sequence(transform)
+            .AppendInterval(10.0f)
+            .AppendCallback(() =>
+            {
+                OnPlayAuto();
+            }).SetId(SEQUENCE_ID_AUTOPLAY);
+    }
+
+    private void OnDisable()
+    {
+        gameView.OnUpdateTable -= SixiangView_OnUpdateTable;
+    }
+
+    public void SetInfo(SlotSixiangView slotSixiangView)
+    {
+        gameView = slotSixiangView;
+        gameView.OnUpdateTable += SixiangView_OnUpdateTable;
+        gameView.UpdateTotalChipWinValue();
+    }
+
+    private void InitDrawItems()
+    {
         for (int i = 0; i < 5; i++)
         {
-            Transform col = collumContainer.transform.GetChild(i);
+            if (i > 0)
+            {
+                Instantiate(columnPrefab, columnContainer);
+            }
+            Transform col = columnContainer.GetChild(i);
             for (int j = 0; j < col.transform.childCount; j++)
             {
                 listItem.Add(col.GetChild(j).GetComponent<LuckyDrawItem>());
@@ -75,48 +85,61 @@ public class SiXiangLuckyDrawView : MonoBehaviour
         listItemRemain.AddRange(listItem);
     }
 
-    public UniTask Show(SlotSixiangView SiXiangView)
+    public void SixiangView_OnUpdateTable(BaseSlotSymbolView.OnUpdateTableEventArgs e)
     {
+        SlotDesk data = e.data;
+        SpinSymbol item = data.SpinSymbols[0];
+        int itemIndex = item.Index;
+        bool isFinishGame = data.IsFinishGame;
+        winAmount = data.GameReward.TotalChipsWinByGame;
+        listItem[itemIndex].SetResult(item, isFinishGame);
+        gameView.UpdateTotalChipWinValue();
 
-        gameView = SiXiangView;
-        // gameView.gameState = SlotSixiangView.GAME_STATE.SHOWING_RESULT;
-        // gameView.textChipWin.ResetValue();
-        // gameView.infoBar.setStateWin("totalWin");
-        luckyDrawTask = new UniTaskCompletionSource();
-        DOTween.Sequence(luckyDrawTask);
-        DOTween.Sequence(transform)
-            .AppendInterval(10.0f)
-            .AppendCallback(() =>
-            {
-                onPlayAuto();
-            }).SetId("autoPlay");
-        return luckyDrawTask.Task;
-    }
-    
-    public void setInitView(JObject dataInit, SlotSixiangView SiXiangView)
-    {
-        gameView = SiXiangView;
-        isInitView = true;
-        List<JObject> initView = dataInit["cards"].ToObject<List<JObject>>();
-        for (int i = 0; i < initView.Count; i++)
+        CheckWinJackpot(data.WinJp);
+        DOTween.Kill(SEQUENCE_ID_AUTOPLAY);
+
+        if (isFinishGame)
         {
-            setInfoItem(initView[i]);
+            DOTween.Sequence()
+                .AppendInterval(1.0f)
+                .AppendCallback(() =>
+                {
+                    if (jackpotType != 0)
+                    {
+                        ShowEffectItemJackpot();
+                    }
+                })
+                .AppendInterval(3.0f)
+                .AppendCallback(() =>
+                {
+                    ShowResult();
+                });
+     
         }
-        isInitView = false;
-        winAmount = (long)dataInit["winAmount"];
-        userAmount = (long)dataInit["userAmount"];
-        // gameView.infoBar.setStateWin("totalWin");
-        // gameView.textChipWin.ResetValue();
-        // gameView.textChipWin.SetValue(winAmount, true);
+        else
+        {
+            DOTween
+                .Sequence(transform)
+                .AppendInterval(4.0f)
+                .AppendCallback(() =>
+                {
+                    isAutoPlay = true;
+                    OnPlayAuto();
+                }).SetId(SEQUENCE_ID_AUTOPLAY);
+        }
+    
     }
     
-    public void onClickItem(LuckyDrawItem item)
+    public void OnClickItem(LuckyDrawItem item)
     {
         if (canClick)
         {
             // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.CLICK);
-            Debug.Log("onClickItem:" + item.typeItem);
-            // SocketSend.sendPackageRapidPay(Globals.ACTION_SLOT_SIXIANG.luckyDraw, listItem.IndexOf(item).ToString());
+            InfoBet infoBet = new() 
+            {
+                Id = listItem.IndexOf(item)
+            };
+            DataSender.SendMatchState((long)OpCodeRequest.Spin, infoBet.ToByteArray());
             listItemRemain.Remove(item);
             isAutoPlay = false;
             canClick = false;
@@ -128,186 +151,134 @@ public class SiXiangLuckyDrawView : MonoBehaviour
 
     }
     
-    private void onPlayAuto()
+    private void OnPlayAuto()
     {
-        Debug.Log("onPlayAuto:" + isAutoPlay);
         if (isAutoPlay)
         {
             int randomIndex = Random.Range(0, listItemRemain.Count);
-            onClickItem(listItemRemain[randomIndex]);
+            OnClickItem(listItemRemain[randomIndex]);
         }
-
-    }
-    
-    public async void setInfoItem(JObject data)
-    {
-        // if (data.ContainsKey("userAmount"))
-        // {
-        //     userAmount = (long)data["userAmount"];
-        // }
-        // if (isInitView == false)
-        // {
-        //     winAmount = (long)data["winAmount"];
-        //     gameView.lbChipWins.setValue(winAmount, true);
-        // }
-        // if (data.ContainsKey("isSelectBonusGame"))
-        // {
-        //     isSelectBonusGame = (bool)data["isSelectBonusGame"];
-        // }
-        // await listItem[(int)data["index"]].setResult(data);
-        // if (data.ContainsKey("isFinished"))
-        // {
-        //     isFinished = (bool)data["isFinished"];
-        // }
-        // jackpotType = (int)data["jackpot"];
-        // DOTween.Kill("autoPlay");
-        // if (isFinished)
-        // {
-        //     //DOTween.Sequence().AppendInterval(1.0f).AppendCallback(async () =>
-        //     //{
-        //     //    if (jackpotType != 0)
-        //     //    {
-        //     //        await showEffectItemJP();
-        //     //    }
-        //     //    showAnimResult();
-        //     //});
-        //     if (jackpotType != 0)
-        //     {
-        //         await showEffectItemJP();
-        //     }
-        //     showAnimResult();
-        // }
-        // else
-        // {
-        //     DOTween.Sequence(transform)
-        //         .AppendInterval(4.0f)
-        //         .AppendCallback(() =>
-        //         {
-        //             isAutoPlay = true;
-        //             onPlayAuto();
-        //         }).SetId("autoPlay");
-        // }
-
     }
 
-    public async void onClickCollect()
+    public void OnClickCollect()
     {
-        Debug.Log("onClickCollect");
-        DOTween.Kill("autoEnd");
-        spineResult.transform.DOScale(new Vector2(0.8f, 0.8f), 0.3f).SetEase(Ease.InBack).OnComplete(() =>
-        {
-            spineResult.transform.parent.gameObject.SetActive(false);
-        });
-        JObject dataEnd = new JObject();
-        dataEnd["winAmount"] = winAmount;
-        dataEnd["userAmount"] = userAmount;
-        // dataEnd["gameType"] = (int)SlotSixiangView.GAME_TYPE.LUCKY_DRAW;
-        dataEnd["isSelectBonusGame"] = isSelectBonusGame;
-        //await gameView.showAnimCutScene();
-        luckyDrawTask.TrySetResult();
-        // gameView.setStateNodeGameForLuckyDraw(true);
-        btnCollect.gameObject.SetActive(false);
-        Destroy(gameObject);
-        // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.CLICK);
-        // await gameView.endMinigame(dataEnd);
+        DOTween.Kill(SEQUENCE_ID_AUTOEND);
+        animationResult.transform
+            .DOScale(new Vector2(0.8f, 0.8f), 0.3f)
+            .SetEase(Ease.InBack)
+            .OnComplete(() =>
+            {
+                buttonCollect.gameObject.SetActive(false);
+                effectContainer.gameObject.SetActive(false);
+                gameView.ShowAnimationCutScene(true);
+                foreach(LuckyDrawItem item in listItem)
+                {
+                    item.Reset();
+                }
+            });
     }
-    
-    
-    public async void showAnimResult()
+
+    public void ShowResult()
     {
-        // long chipWin = 0;
-        // string soundPathStart = "";
-        // string soundPathEnd = "";
+        string soundPathStart = "";
+        string soundPathEnd = "";
         // if (jackpotType != 0)
         // {
         //     spineResult.skeletonDataAsset = UIManager.instance.loadSkeletonData("GameView/SiXiang/Spine/LuckyDraw/BigWin/skeleton_SkeletonData");
-        //     chipWin = gameView.getJackpotValue(SiXiangView.WIN_JACKPOT_TYPE.NONE, jackpotType);
-        //     soundPathStart = Globals.SOUND_SLOT_BASE.WIN_JACKPOT_START;
-        //     soundPathEnd = Globals.SOUND_SLOT_BASE.WIN_JACKPOT_END;
+        //     // soundPathStart = Globals.SOUND_SLOT_BASE.WIN_JACKPOT_START;
+        //     // soundPathEnd = Globals.SOUND_SLOT_BASE.WIN_JACKPOT_END;
         // }
         // else
         // {
-        //     chipWin = winAmount;
         //     spineResult.skeletonDataAsset = UIManager.instance.loadSkeletonData("GameView/SiXiang/Spine/BigWinGoldPick/skeleton_SkeletonData");
-        //     soundPathStart = Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_START;
-        //     soundPathEnd = Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_END;
+        //     // soundPathStart = Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_START;
+        //     // soundPathEnd = Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_END;
         // }
-        // await UniTask.Delay(1000);
-        // spineResult.transform.parent.gameObject.SetActive(true);
-        // spineResult.Initialize(true);
-        // spineResult.AnimationState.SetAnimation(0, getAnimResultName(), false);
-        //
-        // float duration = spineResult.Skeleton.Data.FindAnimation(getAnimResultName()).Duration;
+        float duration = 0; 
         // AudioSource soundCount = SoundManager.instance.playEffectFromPath(soundPathStart);
-        // lbTotalWin.setValue(chipWin, true, duration * 0.85f, "", () =>
-        // {
-        //     soundCount.Stop();
-        //     SoundManager.instance.playEffectFromPath(soundPathEnd);
-        // });
+       
+        DOTween.Sequence()
+            .AppendInterval(1f)
+            .AppendCallback(() =>
+            {
+                effectContainer.gameObject.SetActive(true);
+                if (jackpotType != JackpotType.NORMAL)
+                {
+                    Utility.PlayAnimationByPath(animationResult, RESULT_WIN_JACKPOT_ANIMATION_PATH, GetAnimationResultName(), false);
+                    duration = animationResult.Skeleton.Data.FindAnimation(GetAnimationResultName()).Duration;
+                }
+                else
+                {
+                    Utility.PlayAnimationByPath(animationResult, RESULT_WIN_NORMAL_ANIMATION_PATH, "eng", false);
+                    duration = 3f;
+                }
+                textTotalWin.SetValue(winAmount, true, duration * 0.85f, "", () =>
+                {
+                    // soundCount.Stop();
+                    // SoundManager.instance.playEffectFromPath(soundPathEnd);
+                });
+            })
+            .AppendInterval(duration)
+            .AppendCallback(() =>
+            {
+                buttonCollect.gameObject.SetActive(true);
+                if (gameView.GetSpinType() == SpinType.AUTO)
+                {
+                    DOTween.Sequence()
+                        .SetId(SEQUENCE_ID_AUTOEND)
+                        .AppendInterval(3.0f)
+                        .AppendCallback(() =>
+                        {
+                            OnClickCollect();
+                        });
+                }
+
+            });
+        
         // await UniTask.Delay(TimeSpan.FromSeconds(duration));
-        // btnCollect.gameObject.SetActive(true);
-        // if (gameView.spintype == SiXiangView.SPIN_TYPE.AUTO)
-        // {
-        //     DOTween.Sequence()
-        //         .SetId("autoEnd")
-        //         .AppendInterval(3.0f)
-        //         .AppendCallback(() =>
-        //         {
-        //             onClickCollect();
-        //         });
-        // }
 
     }
     
     private void OnDestroy()
     {
-        DOTween.Kill("autoEnd");
+        DOTween.Kill(SEQUENCE_ID_AUTOEND);
     }
     
-    private async UniTask showEffectItemJP()
+    private void ShowEffectItemJackpot()
     {
         // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.LUCKYDRAW_WIN_JACKPOT);
         listItem.ForEach(item =>
         {
-            if ((int)item.typeItem == jackpotType)
+            if (item.typeItem == jackpotType)
             {
-
-                item.showEffectWinJp();
+                item.ShowEffectWinJackpot();
             }
         });
-        await UniTask.Delay(2000);
+    }
+
+    private void CheckWinJackpot(WinJackpot winJackpot)
+    {
+        jackpotType = winJackpot switch
+        {
+            WinJackpot.Minor => JackpotType.MINOR,
+            WinJackpot.Major => JackpotType.MAJOR,
+            WinJackpot.Mega => JackpotType.MEGA,
+            WinJackpot.Grand => JackpotType.GRAND,
+            _ => JackpotType.NORMAL,
+        };
     }
     
-    private string getAnimResultName()
+    private string GetAnimationResultName()
     {
-        string animName = "";
-        switch (jackpotType)
+        string animationName;
+        animationName = jackpotType switch
         {
-            case (int)TYPE_ITEM.MINOR:
-                {
-                    animName = "minor";
-                    break;
-                }
-            case (int)TYPE_ITEM.MAJOR:
-                {
-                    animName = "major";
-                    break;
-                }
-            case (int)TYPE_ITEM.MEGA:
-                {
-                    animName = "mega";
-                    break;
-                }
-            case (int)TYPE_ITEM.GRAND:
-                {
-                    animName = "grand";
-                    break;
-                }
-            default:
-                animName = "eng";
-                break;
-
-        }
-        return animName;
+            JackpotType.MINOR => "minor",
+            JackpotType.MAJOR => "major",
+            JackpotType.MEGA => "mega",
+            JackpotType.GRAND => "grand",
+            _ => "eng",
+        };
+        return animationName;
     }
 }
