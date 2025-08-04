@@ -3,6 +3,7 @@ syntax = "proto3";
 package proto;
 
 import "chinese_poker.proto";
+import "common.proto";
 
 option go_package = "github.com/nk-nigeria/cgp-common/proto";
 
@@ -81,6 +82,7 @@ message BaccaratUpdateDesk {
   BaccaratPlayerBet user_bet = 5;
   repeated BaccaratBetCellInfo desk_cells = 6;
   BaccaratSimpleHistory history = 7;
+  Error error = 8;
 }
 
 enum BaccaratBetRejectedReason {
