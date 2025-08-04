@@ -44,7 +44,7 @@ public class BasePlayerView : MonoBehaviour
     public long agLose = 0, agWin = 0;
     
     [Tooltip("Current money amount")]
-    private long agCurrent = 0;
+    public long agCurrent = 0;
     
     [Tooltip("Is this the current player")]
     public bool isThisPlayer = false;
