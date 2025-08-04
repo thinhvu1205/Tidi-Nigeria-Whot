@@ -9,7 +9,7 @@ using DG.Tweening;
 using System.Threading.Tasks;
 using System;
 using Cysharp.Threading.Tasks;
-using Api;
+using Proto;
 using Globals;
 
 public class LuckyDrawItem : MonoBehaviour

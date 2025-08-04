@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 using Random = UnityEngine.Random;
 using Unity.VisualScripting;
 using Globals;
-using Api;
+using Proto;
 using Google.Protobuf;
 
 public class SiXiangLuckyDrawView : MonoBehaviour

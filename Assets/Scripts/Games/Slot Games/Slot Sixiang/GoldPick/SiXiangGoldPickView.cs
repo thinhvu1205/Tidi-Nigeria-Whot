@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using Random = UnityEngine.Random;
 using Globals;
-using Api;
+using Proto;
 using Google.Protobuf;
 
 public class SiXiangGoldPickView : MonoBehaviour

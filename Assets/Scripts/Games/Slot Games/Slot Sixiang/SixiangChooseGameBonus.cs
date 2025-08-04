@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Spine.Unity;
 using DG.Tweening;
-using Api;
+using Proto;
 using Google.Protobuf;
-using SixiangSymbol = Api.SiXiangSymbol;
+using SixiangSymbol = Proto.SiXiangSymbol;
 public class SixiangChooseGameBonus : MonoBehaviour
 {
     [SerializeField] Transform container;

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Spine.Unity;
-using Api;
+using Proto;
 using Google.Protobuf;
 using Color = UnityEngine.Color;
 using Globals;

@@ -9,7 +9,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Globals;
 using TMPro;
-using Api;
+using Proto;
 
 
 public class SiXiangRapidPayView : MonoBehaviour

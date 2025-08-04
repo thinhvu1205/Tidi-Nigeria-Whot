@@ -9,7 +9,7 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace Api {
+namespace Proto {
 
   /// <summary>Holder for reflection information generated from slots_game.proto</summary>
   public static partial class SlotsGameReflection {
@@ -24,190 +24,191 @@ namespace Api {
     static SlotsGameReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChBzbG90c19nYW1lLnByb3RvEgNhcGkaEGNvbG9yX2dhbWUucHJvdG8iigYK",
-            "CFNsb3REZXNrEh8KBm1hdHJpeBgBIAEoCzIPLmFwaS5TbG90TWF0cml4EiYK",
-            "DXNwcmVhZF9tYXRyaXgYBCABKAsyDy5hcGkuU2xvdE1hdHJpeBIeCghwYXls",
-            "aW5lcxgFIAMoCzIMLmFwaS5QYXlsaW5lEhEKCWNoaXBzX21jYhgGIAEoAxIr",
-            "ChFuZXh0X3NpeGlhbmdfZ2FtZRgHIAEoDjIQLmFwaS5TaVhpYW5nR2FtZRIu",
-            "ChRjdXJyZW50X3NpeGlhbmdfZ2FtZRhkIAEoDjIQLmFwaS5TaVhpYW5nR2Ft",
-            "ZRIWCg5pc19maW5pc2hfZ2FtZRhlIAEoCBIbChNpc19pbl9zaXhpYW5nX2Jv",
-            "bnVzGG4gASgIEiUKDHNwaW5fc3ltYm9scxgIIAMoCzIPLmFwaS5TcGluU3lt",
-            "Ym9sEh8KBndpbl9qcBgJIAEoDjIPLmFwaS5XaW5KYWNrcG90EhwKB2JpZ193",
-            "aW4YCyABKA4yCy5hcGkuQmlnV2luEiQKC2dhbWVfcmV3YXJkGA4gASgLMg8u",
-            "YXBpLkdhbWVSZXdhcmQSLgoSY29sbGVjdGlvbl9zeW1ib2xzGBAgAygLMhIu",
-            "YXBpLkNvbGxlY3RTeW1ib2wSDwoHdHNfdW5peBgVIAEoAxIaChJyYXRpb19m",
-            "cnVpdF9iYXNrZXQYFiABKAMSFQoNbnVtX3NwaW5fbGVmdBgXIAEoAxISCgpi",
-            "ZXRfbGV2ZWxzGBggAygDEh4KCGluZm9fYmV0GBkgASgLMgwuYXBpLkluZm9C",
-            "ZXQSFQoNY2hpcHNfYnV5X2dlbRgaIAEoAxImCgxzaXhpYW5nX2dlbXMYGyAD",
-            "KA4yEC5hcGkuU2lYaWFuZ0dhbWUSKgoObGV0dGVyX3N5bWJvbHMYHCADKA4y",
-            "Ei5hcGkuU2lYaWFuZ1N5bWJvbBIrCg53aW5fanBfaGlzdG9yeRgdIAEoCzIT",
-            "LmFwaS5KYWNrcG90SGlzdG9yeRIkCgtnYW1lX2NvbmZpZxgeIAEoCzIPLmFw",
-            "aS5HYW1lQ29uZmlnIngKCkdhbWVDb25maWcSFwoPbnVtX3NjYXR0ZXJfc2Vx",
-            "GAEgASgDEhUKDW51bV9mcmVlX3NwaW4YAiABKAMSEAoIbnVtX3dpbGQYAyAB",
-            "KAMSEgoKcmF0aW9fd2lsZBgEIAEoAhIUCgxyYXRpb19iYXNrZXQYBSABKAIi",
-            "cAoKU2xvdE1hdHJpeBIhCgVsaXN0cxgBIAMoDjISLmFwaS5TaVhpYW5nU3lt",
-            "Ym9sEgwKBHJvd3MYAiABKAUSDAoEY29scxgDIAEoBRIjCgpzcGluX2xpc3Rz",
-            "GAQgAygLMg8uYXBpLlNwaW5TeW1ib2wisgEKClNwaW5TeW1ib2wSIgoGc3lt",
-            "Ym9sGAEgASgOMhIuYXBpLlNpWGlhbmdTeW1ib2wSCwoDY29sGAIgASgFEgsK",
-            "A3JvdxgDIAEoBRINCgVyYXRpbxgEIAEoAhINCgVpbmRleBgFIAEoBRIfCgZ3",
-            "aW5fanAYBiABKA4yDy5hcGkuV2luSmFja3BvdBISCgp3aW5fYW1vdW50GAcg",
-            "ASgDEhMKC3JhdGlvX2JvbnVzGAggASgCIk8KDUNvbGxlY3RTeW1ib2wSIgoG",
-            "c3ltYm9sGAEgASgOMhIuYXBpLlNpWGlhbmdTeW1ib2wSCwoDcXR5GAIgASgD",
-            "Eg0KBXJhdGlvGAMgASgCIncKDUphY2twb3RSZXdhcmQSJAoLd2luX2phY2tw",
-            "b3QYASABKA4yDy5hcGkuV2luSmFja3BvdBINCgVyYXRpbxgCIAEoAxINCgVj",
-            "b3VudBgDIAEoAxINCgVjaGlwcxgEIAEoAxITCgtjaGlwc19hY2N1bRgFIAEo",
-            "AyK9AQoOSmFja3BvdEhpc3RvcnkSIQoFbWlub3IYASABKAsyEi5hcGkuSmFj",
-            "a3BvdFJld2FyZBIhCgVtYWpvchgCIAEoCzISLmFwaS5KYWNrcG90UmV3YXJk",
-            "EiAKBG1lZ2EYAyABKAsyEi5hcGkuSmFja3BvdFJld2FyZBIhCgVncmFuZBgE",
-            "IAEoCzISLmFwaS5KYWNrcG90UmV3YXJkEiAKBG1pbmkYBSABKAsyEi5hcGku",
-            "SmFja3BvdFJld2FyZCJ6CgdQYXlsaW5lEgoKAmlkGAEgASgFEiIKBnN5bWJv",
-            "bBgCIAEoDjISLmFwaS5TaVhpYW5nU3ltYm9sEhEKCW51bV9vY2N1chgDIAEo",
-            "BRIMCgRyYXRlGAQgASgBEg0KBWNoaXBzGAUgASgDEg8KB2luZGljZXMYBiAD",
-            "KAUitAMKCkdhbWVSZXdhcmQSFQoNdXBkYXRlX3dhbGxldBgBIAEoCBIjChti",
-            "YWxhbmNlX2NoaXBzX3dhbGxldF9iZWZvcmUYAiABKAMSIgoaYmFsYW5jZV9j",
-            "aGlwc193YWxsZXRfYWZ0ZXIYAyABKAMSEQoJY2hpcHNfd2luGAQgASgDEh8K",
-            "F3RvdGFsX2NoaXBzX3dpbl9ieV9nYW1lGAUgASgDEhoKEnVwZGF0ZV9jaGlw",
-            "c19ib251cxgGIAEoCBIRCglyYXRpb193aW4YCCABKAISEAoIbGluZV93aW4Y",
-            "CSABKAMSFwoPdG90YWxfcmF0aW9fd2luGAogASgCEhYKDnRvdGFsX2xpbmVf",
-            "d2luGAsgASgDEhQKDGNoaXBfYmV0X2ZlZRgMIAEoAxIQCghjaGlwX2ZlZRgN",
-            "IAEoAxITCgtyYXRpb19ib251cxgOIAEoAhIZChFwZXJsX2dyZWVuX2ZvcmVz",
-            "dBgPIAEoBRIfChdwZXJsX2dyZWVuX2ZvcmVzdF9jaGlwcxgQIAEoAxInCh9w",
-            "ZXJsX2dyZWVuX2ZvcmVzdF9jaGlwc19jb2xsZWN0GBEgASgDIjIKCFNhdmVH",
-            "YW1lEhgKEGxhc3RfdXBkYXRlX3VuaXgYASABKAMSDAoEZGF0YRgCIAEoCSrP",
-            "IgoNU2lYaWFuZ1N5bWJvbBIfChtTSV9YSUFOR19TWU1CT0xfVU5TUEVDSUZJ",
-            "RUQQABIWChJTSV9YSUFOR19TWU1CT0xfMTAQARIVChFTSV9YSUFOR19TWU1C",
-            "T0xfShACEhUKEVNJX1hJQU5HX1NZTUJPTF9REAQSFQoRU0lfWElBTkdfU1lN",
-            "Qk9MX0sQCBIVChFTSV9YSUFOR19TWU1CT0xfQRAQEh8KG1NJX1hJQU5HX1NZ",
-            "TUJPTF9CTFVFX0RSQUdPThAgEh8KG1NJX1hJQU5HX1NZTUJPTF9XSElURV9U",
-            "SUdFUhBAEiMKHlNJX1hJQU5HX1NZTUJPTF9WRVJNSUxJT05fQklSRBCAARIc",
-            "ChdTSV9YSUFOR19TWU1CT0xfV0FSUklPUhCAAhIcChdTSV9YSUFOR19TWU1C",
-            "T0xfU0NBVFRFUhCABBIlCiBTSV9YSUFOR19TWU1CT0xfQk9OVVNfRFJBR09O",
-            "QkFMTBCBCBIkCh9TSV9YSUFOR19TWU1CT0xfQk9OVVNfTFVDS1lEUkFXEIII",
-            "EiMKHlNJX1hJQU5HX1NZTUJPTF9CT05VU19HT0xEUElDSxCDCBIjCh5TSV9Y",
-            "SUFOR19TWU1CT0xfQk9OVVNfUkFQSURQQVkQhAgSIgodU0lfWElBTkdfU1lN",
-            "Qk9MX0JPTlVTX0dPTERYMTAQhQgSIgodU0lfWElBTkdfU1lNQk9MX0JPTlVT",
-            "X0dPTERYMjAQhggSIgodU0lfWElBTkdfU1lNQk9MX0JPTlVTX0dPTERYMzAQ",
-            "hwgSIgodU0lfWElBTkdfU1lNQk9MX0JPTlVTX0dPTERYNTAQiAgSKgolU0lf",
-            "WElBTkdfU1lNQk9MX0RSQUdPTlBFQVJMX0xVQ0tNT05FWRCAChIsCidTSV9Y",
-            "SUFOR19TWU1CT0xfRFJBR09OUEVBUkxfR0VNX1JBTkRPTTEQgQoSLAonU0lf",
-            "WElBTkdfU1lNQk9MX0RSQUdPTlBFQVJMX0dFTV9SQU5ET00yEIIKEiwKJ1NJ",
-            "X1hJQU5HX1NZTUJPTF9EUkFHT05QRUFSTF9HRU1fUkFORE9NMxCDChIsCidT",
-            "SV9YSUFOR19TWU1CT0xfRFJBR09OUEVBUkxfR0VNX1JBTkRPTTQQhAoSLAon",
-            "U0lfWElBTkdfU1lNQk9MX0RSQUdPTlBFQVJMX0dFTV9SQU5ET001EIUKEikK",
-            "JFNJX1hJQU5HX1NZTUJPTF9EUkFHT05QRUFSTF9FWUVfQklSRBCQChIqCiVT",
-            "SV9YSUFOR19TWU1CT0xfRFJBR09OUEVBUkxfRVlFX1RJR0VSEJEKEiwKJ1NJ",
-            "X1hJQU5HX1NZTUJPTF9EUkFHT05QRUFSTF9FWUVfV0FSUklPUhCSChIrCiZT",
-            "SV9YSUFOR19TWU1CT0xfRFJBR09OUEVBUkxfRVlFX0RSQUdPThCTChIpCiRT",
-            "SV9YSUFOR19TWU1CT0xfRFJBR09OUEVBUkxfSlBfTUlOT1IQlAoSKQokU0lf",
-            "WElBTkdfU1lNQk9MX0RSQUdPTlBFQVJMX0pQX01BSk9SEJUKEigKI1NJX1hJ",
-            "QU5HX1NZTUJPTF9EUkFHT05QRUFSTF9KUF9NRUdBEJYKEikKJFNJX1hJQU5H",
-            "X1NZTUJPTF9EUkFHT05QRUFSTF9KUF9HUkFORBCXChIkCh9TSV9YSUFOR19T",
-            "WU1CT0xfTFVDS1lEUkFXX01JTk9SEIAMEiQKH1NJX1hJQU5HX1NZTUJPTF9M",
-            "VUNLWURSQVdfTUFKT1IQgQwSIwoeU0lfWElBTkdfU1lNQk9MX0xVQ0tZRFJB",
-            "V19NRUdBEIIMEiQKH1NJX1hJQU5HX1NZTUJPTF9MVUNLWURSQVdfR1JBTkQQ",
-            "gwwSJQogU0lfWElBTkdfU1lNQk9MX0xVQ0tZRFJBV19HT0xEXzEQhAwSJQog",
-            "U0lfWElBTkdfU1lNQk9MX0xVQ0tZRFJBV19HT0xEXzIQhQwSJQogU0lfWElB",
-            "TkdfU1lNQk9MX0xVQ0tZRFJBV19HT0xEXzMQhgwSJwoiU0lfWElBTkdfU1lN",
-            "Qk9MX0dPTERfUElDS19UUllBR0FJThCADhIkCh9TSV9YSUFOR19TWU1CT0xf",
-            "R09MRF9QSUNLX0dPTEQxEIEOEiQKH1NJX1hJQU5HX1NZTUJPTF9HT0xEX1BJ",
-            "Q0tfR09MRDIQgg4SJAofU0lfWElBTkdfU1lNQk9MX0dPTERfUElDS19HT0xE",
-            "MxCDDhIkCh9TSV9YSUFOR19TWU1CT0xfR09MRF9QSUNLX0dPTEQ0EIQOEiQK",
-            "H1NJX1hJQU5HX1NZTUJPTF9HT0xEX1BJQ0tfR09MRDUQhQ4SJwoiU0lfWElB",
-            "TkdfU1lNQk9MX0dPTERfUElDS19KUF9NSU5PUhCGDhInCiJTSV9YSUFOR19T",
-            "WU1CT0xfR09MRF9QSUNLX0pQX01BSk9SEIcOEiYKIVNJX1hJQU5HX1NZTUJP",
-            "TF9HT0xEX1BJQ0tfSlBfTUVHQRCIDhIhChxTSV9YSUFOR19TWU1CT0xfUkFQ",
-            "SURQQVlfRU5EEIAQEiAKG1NJX1hJQU5HX1NZTUJPTF9SQVBJRFBBWV9YMhCB",
-            "EBIgChtTSV9YSUFOR19TWU1CT0xfUkFQSURQQVlfWDMQghASIAobU0lfWElB",
-            "TkdfU1lNQk9MX1JBUElEUEFZX1g0EIMQEiYKIVNJX1hJQU5HX1NZTUJPTF9S",
-            "QVBJRFBBWV9MVUNLWUJPWBCEEBIxCixTSV9YSUFOR19TWU1CT0xfU0lYQU5H",
-            "Qk9OVVNfRFJBR09OUEVBUkxfR0FNRRCBEhIvCipTSV9YSUFOR19TWU1CT0xf",
-            "U0lYQU5HQk9OVVNfTFVDS1lEUkFXX0dBTUUQghISLgopU0lfWElBTkdfU1lN",
-            "Qk9MX1NJWEFOR0JPTlVTX0dPTERQSUNLX0dBTUUQgxISLgopU0lfWElBTkdf",
-            "U1lNQk9MX1NJWEFOR0JPTlVTX1JBUElEUEFZX0dBTUUQhBISHAoXU0lfWElB",
-            "TkdfU1lNQk9MX0dPUklMTEUQgSASHQoYU0lfWElBTkdfU1lNQk9MX0VMRVBI",
-            "QU5UEIIgEhsKFlNJX1hJQU5HX1NZTUJPTF9KQUdVQVIQgyASGgoVU0lfWElB",
-            "TkdfU1lNQk9MX1NOQUNLEIQgEhkKFFNJX1hJQU5HX1NZTUJPTF9KQU5FEIUg",
-            "EiAKG1NJX1hJQU5HX1NZTUJPTF9KQU5FX0ZBVEhFUhCGIBIcChdTSV9YSUFO",
-            "R19TWU1CT0xfQ0xBWVRPThCHIBIeChlTSV9YSUFOR19TWU1CT0xfRlJFRV9T",
-            "UElOEIggEhsKFlNJX1hJQU5HX1NZTUJPTF9UQVJaQU4QiSASHQoYU0lfWElB",
-            "TkdfU1lNQk9MX0xFVFRFUl9KEJAgEh0KGFNJX1hJQU5HX1NZTUJPTF9MRVRU",
-            "RVJfVRCRIBIdChhTSV9YSUFOR19TWU1CT0xfTEVUVEVSX04QkiASHQoYU0lf",
-            "WElBTkdfU1lNQk9MX0xFVFRFUl9HEJMgEh0KGFNJX1hJQU5HX1NZTUJPTF9M",
-            "RVRURVJfTBCUIBIdChhTSV9YSUFOR19TWU1CT0xfTEVUVEVSX0UQlSASHAoX",
-            "U0lfWElBTkdfU1lNQk9MX0RJQU1PTkQQliASJwoiU0lfWElBTkdfU1lNQk9M",
-            "X1RBUlpBTl9NT1JFX1RVUk5YMhCgIBInCiJTSV9YSUFOR19TWU1CT0xfVEFS",
-            "WkFOX01PUkVfVFVSTlgzEKEgEiQKH1NJX1hJQU5HX1NZTUJPTF9UQVJaQU5f",
-            "UkFORE9NXzEQoiASJAofU0lfWElBTkdfU1lNQk9MX1RBUlpBTl9SQU5ET01f",
-            "MhCjIBIkCh9TSV9YSUFOR19TWU1CT0xfVEFSWkFOX1JBTkRPTV8zEKQgEiQK",
-            "H1NJX1hJQU5HX1NZTUJPTF9UQVJaQU5fUkFORE9NXzQQpSASJAofU0lfWElB",
-            "TkdfU1lNQk9MX1RBUlpBTl9SQU5ET01fNRCmIBIlCiBTSV9YSUFOR19TWU1C",
-            "T0xfSlVJQ0VfU1RSQVdCRVJSWRCBIhIlCiBTSV9YSUFOR19TWU1CT0xfSlVJ",
-            "Q0VfV0FURVJNRUxPThCCIhIjCh5TSV9YSUFOR19TWU1CT0xfSlVJQ0VfUElO",
-            "QVBQTEUQgyISJQogU0lfWElBTkdfU1lNQk9MX0pVSUNFX01BTkdPU1RFRU4Q",
-            "hCISKAojU0lfWElBTkdfU1lNQk9MX0pVSUNFX1NUT05FX0RJQU1PTkQQhSIS",
-            "JgohU0lfWElBTkdfU1lNQk9MX0pVSUNFX1NUT05FX0dSRUVOEIYiEicKIlNJ",
-            "X1hJQU5HX1NZTUJPTF9KVUlDRV9TVE9ORV9WSU9MRVQQhyISJgohU0lfWElB",
-            "TkdfU1lNQk9MX0pVSUNFX1NDQVRURVJTX1gzEIgiEiYKIVNJX1hJQU5HX1NZ",
-            "TUJPTF9KVUlDRV9TQ0FUVEVSU19YNBCJIhImCiFTSV9YSUFOR19TWU1CT0xf",
-            "SlVJQ0VfU0NBVFRFUlNfWDUQkCISKwomU0lfWElBTkdfU1lNQk9MX0pVSUNF",
-            "X0ZSVUlUQkFTS0VUX1NQSU4QkSISLAonU0lfWElBTkdfU1lNQk9MX0pVSUNF",
-            "X0ZSVUlUQkFTS0VUX0dSQU5EEJIiEiwKJ1NJX1hJQU5HX1NZTUJPTF9KVUlD",
-            "RV9GUlVJVEJBU0tFVF9NQUpPUhCTIhIsCidTSV9YSUFOR19TWU1CT0xfSlVJ",
-            "Q0VfRlJVSVRCQVNLRVRfTUlOT1IQlCISKwomU0lfWElBTkdfU1lNQk9MX0pV",
-            "SUNFX0ZSVUlUQkFTS0VUX01JTkkQlSISLwoqU0lfWElBTkdfU1lNQk9MX0pV",
-            "SUNFX0ZSVUlUQkFTS0VUX1JBTkRPTV8xEKAiEi8KKlNJX1hJQU5HX1NZTUJP",
-            "TF9KVUlDRV9GUlVJVEJBU0tFVF9SQU5ET01fMhChIhIvCipTSV9YSUFOR19T",
-            "WU1CT0xfSlVJQ0VfRlJVSVRCQVNLRVRfUkFORE9NXzMQoiISLwoqU0lfWElB",
-            "TkdfU1lNQk9MX0pVSUNFX0ZSVUlUQkFTS0VUX1JBTkRPTV80EKMiEi8KKlNJ",
-            "X1hJQU5HX1NZTUJPTF9KVUlDRV9GUlVJVEJBU0tFVF9SQU5ET01fNRCkIhIv",
-            "CipTSV9YSUFOR19TWU1CT0xfSlVJQ0VfRlJVSVRCQVNLRVRfUkFORE9NXzYQ",
-            "pSISLwoqU0lfWElBTkdfU1lNQk9MX0pVSUNFX0ZSVUlUQkFTS0VUX1JBTkRP",
-            "TV83EKYiEjAKK1NJX1hJQU5HX1NZTUJPTF9KVUlDRV9GVUlUX1NFTEVDVF9G",
-            "UkVFX0dBTUUQpyISMQosU0lfWElBTkdfU1lNQk9MX0pVSUNFX0ZVSVRfU0VM",
-            "RUNUX0ZSVUlUX1JBSU4QqCISIAobU0lfWElBTkdfU1lNQk9MX1NVSVRfSEVB",
-            "UlRTEIAkEiIKHVNJX1hJQU5HX1NZTUJPTF9TVUlUX0RJQU1PTkRTEIEkEh8K",
-            "GlNJX1hJQU5HX1NZTUJPTF9TVUlUX0NMVUJTEIIkEiAKG1NJX1hJQU5HX1NZ",
-            "TUJPTF9TVUlUX1NQQURFUxCDJBIYChNTSV9YSUFOR19TWU1CT0xfU1VOEIQk",
-            "EiEKHFNJX1hJQU5HX1NZTUJPTF9FQUdMRV9HQVJVREEQhSQSHAoXU0lfWElB",
-            "TkdfU1lNQk9MX0FOVElRVUUQhiQSIgodU0lfWElBTkdfU1lNQk9MX0NIUklT",
-            "TUFTX0dJRlQQkCQSIwoeU0lfWElBTkdfU1lNQk9MX0NIUklTTUFTX0NBTkRZ",
-            "EJEkEiIKHVNJX1hJQU5HX1NZTUJPTF9DSFJJU01BU19SSU5HEJIkEhoKFFNJ",
-            "X1hJQU5HX1NZTUJPTF9XSUxEEP//AyqZBQoLU2lYaWFuZ0dhbWUSHQoZU0lf",
-            "WElBTkdfR0FNRV9VTlNQRUNJRklFRBAAEhgKFFNJX1hJQU5HX0dBTUVfTk9S",
-            "TUFMEAESFwoTU0lfWElBTkdfR0FNRV9CT05VUxACEh4KGlNJX1hJQU5HX0dB",
-            "TUVfRFJBR09OX1BFQVJMEAMSGgoWU0lfWElBTkdfR0FNRV9MVUNLRFJBVxAE",
-            "EhoKFlNJX1hJQU5HX0dBTUVfR09MRFBJQ0sQBRIaChZTSV9YSUFOR19HQU1F",
-            "X1JBUElEUEFZEAYSHQoZU0lfWElBTkdfR0FNRV9TSVhBTkdCT05VUxAHEioK",
-            "JlNJX1hJQU5HX0dBTUVfU0lYQU5HQk9OVVNfRFJBR09OX1BFQVJMEAgSJgoi",
-            "U0lfWElBTkdfR0FNRV9TSVhBTkdCT05VU19MVUNLRFJBVxAJEiYKIlNJX1hJ",
-            "QU5HX0dBTUVfU0lYQU5HQk9OVVNfR09MRFBJQ0sQChImCiJTSV9YSUFOR19H",
-            "QU1FX1NJWEFOR0JPTlVTX1JBUElEUEFZEAsSKAokU0lfWElBTkdfR0FNRV9U",
-            "QVJaQU5fSlVOR0xFX1RSRUFTVVJFEGUSIwofU0lfWElBTkdfR0FNRV9UQVJa",
-            "QU5fRlJFRVNQSU5YORBmEh8KGlNJX1hJQU5HX0dBTUVfSlVJQ0VfTk9STUFM",
-            "EMgBEiUKIFNJX1hJQU5HX0dBTUVfSlVJQ0VfRlJVSVRfQkFTS0VUEMkBEiMK",
-            "HlNJX1hJQU5HX0dBTUVfSlVJQ0VfRlJVSVRfUkFJThDKARIiCh1TSV9YSUFO",
-            "R19HQU1FX0pVSUNFX0ZSRUVfR0FNRRDLARIhChxTSV9YSUFOR19HQU1FX0lO",
-            "Q0FfRlJFRV9HQU1FEK0CKmgKBkJpZ1dpbhIXChNCSUdfV0lOX1VOU1BFQ0lG",
-            "SUVEEAASEAoMQklHX1dJTl9OSUNFEAUSEAoMQklHX1dJTl9IVUdFEAoSDwoL",
-            "QklHX1dJTl9CSUcQGRIQCgxCSUdfV0lOX01FR0EQMiqbAQoKV2luSmFja3Bv",
-            "dBIbChdXSU5fSkFDS1BPVF9VTlNQRUNJRklFRBAAEhUKEVdJTl9KQUNLUE9U",
-            "X01JTk9SEAoSFQoRV0lOX0pBQ0tQT1RfTUFKT1IQFBIUChBXSU5fSkFDS1BP",
-            "VF9NRUdBEB4SFgoRV0lOX0pBQ0tQT1RfR1JBTkQQlgESFAoQV0lOX0pBQ0tQ",
-            "T1RfTUlOSRABQjBaLmdpdGh1Yi5jb20vbmFrYW1hRnJhbWV3b3JrL2NncC1i",
-            "aW5nLW1vZHVsZS9hcGliBnByb3RvMw=="));
+            "ChBzbG90c19nYW1lLnByb3RvEgVwcm90bxoQY29sb3JfZ2FtZS5wcm90byKo",
+            "BgoIU2xvdERlc2sSIQoGbWF0cml4GAEgASgLMhEucHJvdG8uU2xvdE1hdHJp",
+            "eBIoCg1zcHJlYWRfbWF0cml4GAQgASgLMhEucHJvdG8uU2xvdE1hdHJpeBIg",
+            "CghwYXlsaW5lcxgFIAMoCzIOLnByb3RvLlBheWxpbmUSEQoJY2hpcHNfbWNi",
+            "GAYgASgDEi0KEW5leHRfc2l4aWFuZ19nYW1lGAcgASgOMhIucHJvdG8uU2lY",
+            "aWFuZ0dhbWUSMAoUY3VycmVudF9zaXhpYW5nX2dhbWUYZCABKA4yEi5wcm90",
+            "by5TaVhpYW5nR2FtZRIWCg5pc19maW5pc2hfZ2FtZRhlIAEoCBIbChNpc19p",
+            "bl9zaXhpYW5nX2JvbnVzGG4gASgIEicKDHNwaW5fc3ltYm9scxgIIAMoCzIR",
+            "LnByb3RvLlNwaW5TeW1ib2wSIQoGd2luX2pwGAkgASgOMhEucHJvdG8uV2lu",
+            "SmFja3BvdBIeCgdiaWdfd2luGAsgASgOMg0ucHJvdG8uQmlnV2luEiYKC2dh",
+            "bWVfcmV3YXJkGA4gASgLMhEucHJvdG8uR2FtZVJld2FyZBIwChJjb2xsZWN0",
+            "aW9uX3N5bWJvbHMYECADKAsyFC5wcm90by5Db2xsZWN0U3ltYm9sEg8KB3Rz",
+            "X3VuaXgYFSABKAMSGgoScmF0aW9fZnJ1aXRfYmFza2V0GBYgASgDEhUKDW51",
+            "bV9zcGluX2xlZnQYFyABKAMSEgoKYmV0X2xldmVscxgYIAMoAxIgCghpbmZv",
+            "X2JldBgZIAEoCzIOLnByb3RvLkluZm9CZXQSFQoNY2hpcHNfYnV5X2dlbRga",
+            "IAEoAxIoCgxzaXhpYW5nX2dlbXMYGyADKA4yEi5wcm90by5TaVhpYW5nR2Ft",
+            "ZRIsCg5sZXR0ZXJfc3ltYm9scxgcIAMoDjIULnByb3RvLlNpWGlhbmdTeW1i",
+            "b2wSLQoOd2luX2pwX2hpc3RvcnkYHSABKAsyFS5wcm90by5KYWNrcG90SGlz",
+            "dG9yeRImCgtnYW1lX2NvbmZpZxgeIAEoCzIRLnByb3RvLkdhbWVDb25maWci",
+            "eAoKR2FtZUNvbmZpZxIXCg9udW1fc2NhdHRlcl9zZXEYASABKAMSFQoNbnVt",
+            "X2ZyZWVfc3BpbhgCIAEoAxIQCghudW1fd2lsZBgDIAEoAxISCgpyYXRpb193",
+            "aWxkGAQgASgCEhQKDHJhdGlvX2Jhc2tldBgFIAEoAiJ0CgpTbG90TWF0cml4",
+            "EiMKBWxpc3RzGAEgAygOMhQucHJvdG8uU2lYaWFuZ1N5bWJvbBIMCgRyb3dz",
+            "GAIgASgFEgwKBGNvbHMYAyABKAUSJQoKc3Bpbl9saXN0cxgEIAMoCzIRLnBy",
+            "b3RvLlNwaW5TeW1ib2witgEKClNwaW5TeW1ib2wSJAoGc3ltYm9sGAEgASgO",
+            "MhQucHJvdG8uU2lYaWFuZ1N5bWJvbBILCgNjb2wYAiABKAUSCwoDcm93GAMg",
+            "ASgFEg0KBXJhdGlvGAQgASgCEg0KBWluZGV4GAUgASgFEiEKBndpbl9qcBgG",
+            "IAEoDjIRLnByb3RvLldpbkphY2twb3QSEgoKd2luX2Ftb3VudBgHIAEoAxIT",
+            "CgtyYXRpb19ib251cxgIIAEoAiJRCg1Db2xsZWN0U3ltYm9sEiQKBnN5bWJv",
+            "bBgBIAEoDjIULnByb3RvLlNpWGlhbmdTeW1ib2wSCwoDcXR5GAIgASgDEg0K",
+            "BXJhdGlvGAMgASgCInkKDUphY2twb3RSZXdhcmQSJgoLd2luX2phY2twb3QY",
+            "ASABKA4yES5wcm90by5XaW5KYWNrcG90Eg0KBXJhdGlvGAIgASgDEg0KBWNv",
+            "dW50GAMgASgDEg0KBWNoaXBzGAQgASgDEhMKC2NoaXBzX2FjY3VtGAUgASgD",
+            "IscBCg5KYWNrcG90SGlzdG9yeRIjCgVtaW5vchgBIAEoCzIULnByb3RvLkph",
+            "Y2twb3RSZXdhcmQSIwoFbWFqb3IYAiABKAsyFC5wcm90by5KYWNrcG90UmV3",
+            "YXJkEiIKBG1lZ2EYAyABKAsyFC5wcm90by5KYWNrcG90UmV3YXJkEiMKBWdy",
+            "YW5kGAQgASgLMhQucHJvdG8uSmFja3BvdFJld2FyZBIiCgRtaW5pGAUgASgL",
+            "MhQucHJvdG8uSmFja3BvdFJld2FyZCJ8CgdQYXlsaW5lEgoKAmlkGAEgASgF",
+            "EiQKBnN5bWJvbBgCIAEoDjIULnByb3RvLlNpWGlhbmdTeW1ib2wSEQoJbnVt",
+            "X29jY3VyGAMgASgFEgwKBHJhdGUYBCABKAESDQoFY2hpcHMYBSABKAMSDwoH",
+            "aW5kaWNlcxgGIAMoBSK0AwoKR2FtZVJld2FyZBIVCg11cGRhdGVfd2FsbGV0",
+            "GAEgASgIEiMKG2JhbGFuY2VfY2hpcHNfd2FsbGV0X2JlZm9yZRgCIAEoAxIi",
+            "ChpiYWxhbmNlX2NoaXBzX3dhbGxldF9hZnRlchgDIAEoAxIRCgljaGlwc193",
+            "aW4YBCABKAMSHwoXdG90YWxfY2hpcHNfd2luX2J5X2dhbWUYBSABKAMSGgoS",
+            "dXBkYXRlX2NoaXBzX2JvbnVzGAYgASgIEhEKCXJhdGlvX3dpbhgIIAEoAhIQ",
+            "CghsaW5lX3dpbhgJIAEoAxIXCg90b3RhbF9yYXRpb193aW4YCiABKAISFgoO",
+            "dG90YWxfbGluZV93aW4YCyABKAMSFAoMY2hpcF9iZXRfZmVlGAwgASgDEhAK",
+            "CGNoaXBfZmVlGA0gASgDEhMKC3JhdGlvX2JvbnVzGA4gASgCEhkKEXBlcmxf",
+            "Z3JlZW5fZm9yZXN0GA8gASgFEh8KF3BlcmxfZ3JlZW5fZm9yZXN0X2NoaXBz",
+            "GBAgASgDEicKH3BlcmxfZ3JlZW5fZm9yZXN0X2NoaXBzX2NvbGxlY3QYESAB",
+            "KAMiMgoIU2F2ZUdhbWUSGAoQbGFzdF91cGRhdGVfdW5peBgBIAEoAxIMCgRk",
+            "YXRhGAIgASgJKs8iCg1TaVhpYW5nU3ltYm9sEh8KG1NJX1hJQU5HX1NZTUJP",
+            "TF9VTlNQRUNJRklFRBAAEhYKElNJX1hJQU5HX1NZTUJPTF8xMBABEhUKEVNJ",
+            "X1hJQU5HX1NZTUJPTF9KEAISFQoRU0lfWElBTkdfU1lNQk9MX1EQBBIVChFT",
+            "SV9YSUFOR19TWU1CT0xfSxAIEhUKEVNJX1hJQU5HX1NZTUJPTF9BEBASHwob",
+            "U0lfWElBTkdfU1lNQk9MX0JMVUVfRFJBR09OECASHwobU0lfWElBTkdfU1lN",
+            "Qk9MX1dISVRFX1RJR0VSEEASIwoeU0lfWElBTkdfU1lNQk9MX1ZFUk1JTElP",
+            "Tl9CSVJEEIABEhwKF1NJX1hJQU5HX1NZTUJPTF9XQVJSSU9SEIACEhwKF1NJ",
+            "X1hJQU5HX1NZTUJPTF9TQ0FUVEVSEIAEEiUKIFNJX1hJQU5HX1NZTUJPTF9C",
+            "T05VU19EUkFHT05CQUxMEIEIEiQKH1NJX1hJQU5HX1NZTUJPTF9CT05VU19M",
+            "VUNLWURSQVcQgggSIwoeU0lfWElBTkdfU1lNQk9MX0JPTlVTX0dPTERQSUNL",
+            "EIMIEiMKHlNJX1hJQU5HX1NZTUJPTF9CT05VU19SQVBJRFBBWRCECBIiCh1T",
+            "SV9YSUFOR19TWU1CT0xfQk9OVVNfR09MRFgxMBCFCBIiCh1TSV9YSUFOR19T",
+            "WU1CT0xfQk9OVVNfR09MRFgyMBCGCBIiCh1TSV9YSUFOR19TWU1CT0xfQk9O",
+            "VVNfR09MRFgzMBCHCBIiCh1TSV9YSUFOR19TWU1CT0xfQk9OVVNfR09MRFg1",
+            "MBCICBIqCiVTSV9YSUFOR19TWU1CT0xfRFJBR09OUEVBUkxfTFVDS01PTkVZ",
+            "EIAKEiwKJ1NJX1hJQU5HX1NZTUJPTF9EUkFHT05QRUFSTF9HRU1fUkFORE9N",
+            "MRCBChIsCidTSV9YSUFOR19TWU1CT0xfRFJBR09OUEVBUkxfR0VNX1JBTkRP",
+            "TTIQggoSLAonU0lfWElBTkdfU1lNQk9MX0RSQUdPTlBFQVJMX0dFTV9SQU5E",
+            "T00zEIMKEiwKJ1NJX1hJQU5HX1NZTUJPTF9EUkFHT05QRUFSTF9HRU1fUkFO",
+            "RE9NNBCEChIsCidTSV9YSUFOR19TWU1CT0xfRFJBR09OUEVBUkxfR0VNX1JB",
+            "TkRPTTUQhQoSKQokU0lfWElBTkdfU1lNQk9MX0RSQUdPTlBFQVJMX0VZRV9C",
+            "SVJEEJAKEioKJVNJX1hJQU5HX1NZTUJPTF9EUkFHT05QRUFSTF9FWUVfVElH",
+            "RVIQkQoSLAonU0lfWElBTkdfU1lNQk9MX0RSQUdPTlBFQVJMX0VZRV9XQVJS",
+            "SU9SEJIKEisKJlNJX1hJQU5HX1NZTUJPTF9EUkFHT05QRUFSTF9FWUVfRFJB",
+            "R09OEJMKEikKJFNJX1hJQU5HX1NZTUJPTF9EUkFHT05QRUFSTF9KUF9NSU5P",
+            "UhCUChIpCiRTSV9YSUFOR19TWU1CT0xfRFJBR09OUEVBUkxfSlBfTUFKT1IQ",
+            "lQoSKAojU0lfWElBTkdfU1lNQk9MX0RSQUdPTlBFQVJMX0pQX01FR0EQlgoS",
+            "KQokU0lfWElBTkdfU1lNQk9MX0RSQUdPTlBFQVJMX0pQX0dSQU5EEJcKEiQK",
+            "H1NJX1hJQU5HX1NZTUJPTF9MVUNLWURSQVdfTUlOT1IQgAwSJAofU0lfWElB",
+            "TkdfU1lNQk9MX0xVQ0tZRFJBV19NQUpPUhCBDBIjCh5TSV9YSUFOR19TWU1C",
+            "T0xfTFVDS1lEUkFXX01FR0EQggwSJAofU0lfWElBTkdfU1lNQk9MX0xVQ0tZ",
+            "RFJBV19HUkFORBCDDBIlCiBTSV9YSUFOR19TWU1CT0xfTFVDS1lEUkFXX0dP",
+            "TERfMRCEDBIlCiBTSV9YSUFOR19TWU1CT0xfTFVDS1lEUkFXX0dPTERfMhCF",
+            "DBIlCiBTSV9YSUFOR19TWU1CT0xfTFVDS1lEUkFXX0dPTERfMxCGDBInCiJT",
+            "SV9YSUFOR19TWU1CT0xfR09MRF9QSUNLX1RSWUFHQUlOEIAOEiQKH1NJX1hJ",
+            "QU5HX1NZTUJPTF9HT0xEX1BJQ0tfR09MRDEQgQ4SJAofU0lfWElBTkdfU1lN",
+            "Qk9MX0dPTERfUElDS19HT0xEMhCCDhIkCh9TSV9YSUFOR19TWU1CT0xfR09M",
+            "RF9QSUNLX0dPTEQzEIMOEiQKH1NJX1hJQU5HX1NZTUJPTF9HT0xEX1BJQ0tf",
+            "R09MRDQQhA4SJAofU0lfWElBTkdfU1lNQk9MX0dPTERfUElDS19HT0xENRCF",
+            "DhInCiJTSV9YSUFOR19TWU1CT0xfR09MRF9QSUNLX0pQX01JTk9SEIYOEicK",
+            "IlNJX1hJQU5HX1NZTUJPTF9HT0xEX1BJQ0tfSlBfTUFKT1IQhw4SJgohU0lf",
+            "WElBTkdfU1lNQk9MX0dPTERfUElDS19KUF9NRUdBEIgOEiEKHFNJX1hJQU5H",
+            "X1NZTUJPTF9SQVBJRFBBWV9FTkQQgBASIAobU0lfWElBTkdfU1lNQk9MX1JB",
+            "UElEUEFZX1gyEIEQEiAKG1NJX1hJQU5HX1NZTUJPTF9SQVBJRFBBWV9YMxCC",
+            "EBIgChtTSV9YSUFOR19TWU1CT0xfUkFQSURQQVlfWDQQgxASJgohU0lfWElB",
+            "TkdfU1lNQk9MX1JBUElEUEFZX0xVQ0tZQk9YEIQQEjEKLFNJX1hJQU5HX1NZ",
+            "TUJPTF9TSVhBTkdCT05VU19EUkFHT05QRUFSTF9HQU1FEIESEi8KKlNJX1hJ",
+            "QU5HX1NZTUJPTF9TSVhBTkdCT05VU19MVUNLWURSQVdfR0FNRRCCEhIuCilT",
+            "SV9YSUFOR19TWU1CT0xfU0lYQU5HQk9OVVNfR09MRFBJQ0tfR0FNRRCDEhIu",
+            "CilTSV9YSUFOR19TWU1CT0xfU0lYQU5HQk9OVVNfUkFQSURQQVlfR0FNRRCE",
+            "EhIcChdTSV9YSUFOR19TWU1CT0xfR09SSUxMRRCBIBIdChhTSV9YSUFOR19T",
+            "WU1CT0xfRUxFUEhBTlQQgiASGwoWU0lfWElBTkdfU1lNQk9MX0pBR1VBUhCD",
+            "IBIaChVTSV9YSUFOR19TWU1CT0xfU05BQ0sQhCASGQoUU0lfWElBTkdfU1lN",
+            "Qk9MX0pBTkUQhSASIAobU0lfWElBTkdfU1lNQk9MX0pBTkVfRkFUSEVSEIYg",
+            "EhwKF1NJX1hJQU5HX1NZTUJPTF9DTEFZVE9OEIcgEh4KGVNJX1hJQU5HX1NZ",
+            "TUJPTF9GUkVFX1NQSU4QiCASGwoWU0lfWElBTkdfU1lNQk9MX1RBUlpBThCJ",
+            "IBIdChhTSV9YSUFOR19TWU1CT0xfTEVUVEVSX0oQkCASHQoYU0lfWElBTkdf",
+            "U1lNQk9MX0xFVFRFUl9VEJEgEh0KGFNJX1hJQU5HX1NZTUJPTF9MRVRURVJf",
+            "ThCSIBIdChhTSV9YSUFOR19TWU1CT0xfTEVUVEVSX0cQkyASHQoYU0lfWElB",
+            "TkdfU1lNQk9MX0xFVFRFUl9MEJQgEh0KGFNJX1hJQU5HX1NZTUJPTF9MRVRU",
+            "RVJfRRCVIBIcChdTSV9YSUFOR19TWU1CT0xfRElBTU9ORBCWIBInCiJTSV9Y",
+            "SUFOR19TWU1CT0xfVEFSWkFOX01PUkVfVFVSTlgyEKAgEicKIlNJX1hJQU5H",
+            "X1NZTUJPTF9UQVJaQU5fTU9SRV9UVVJOWDMQoSASJAofU0lfWElBTkdfU1lN",
+            "Qk9MX1RBUlpBTl9SQU5ET01fMRCiIBIkCh9TSV9YSUFOR19TWU1CT0xfVEFS",
+            "WkFOX1JBTkRPTV8yEKMgEiQKH1NJX1hJQU5HX1NZTUJPTF9UQVJaQU5fUkFO",
+            "RE9NXzMQpCASJAofU0lfWElBTkdfU1lNQk9MX1RBUlpBTl9SQU5ET01fNBCl",
+            "IBIkCh9TSV9YSUFOR19TWU1CT0xfVEFSWkFOX1JBTkRPTV81EKYgEiUKIFNJ",
+            "X1hJQU5HX1NZTUJPTF9KVUlDRV9TVFJBV0JFUlJZEIEiEiUKIFNJX1hJQU5H",
+            "X1NZTUJPTF9KVUlDRV9XQVRFUk1FTE9OEIIiEiMKHlNJX1hJQU5HX1NZTUJP",
+            "TF9KVUlDRV9QSU5BUFBMRRCDIhIlCiBTSV9YSUFOR19TWU1CT0xfSlVJQ0Vf",
+            "TUFOR09TVEVFThCEIhIoCiNTSV9YSUFOR19TWU1CT0xfSlVJQ0VfU1RPTkVf",
+            "RElBTU9ORBCFIhImCiFTSV9YSUFOR19TWU1CT0xfSlVJQ0VfU1RPTkVfR1JF",
+            "RU4QhiISJwoiU0lfWElBTkdfU1lNQk9MX0pVSUNFX1NUT05FX1ZJT0xFVBCH",
+            "IhImCiFTSV9YSUFOR19TWU1CT0xfSlVJQ0VfU0NBVFRFUlNfWDMQiCISJgoh",
+            "U0lfWElBTkdfU1lNQk9MX0pVSUNFX1NDQVRURVJTX1g0EIkiEiYKIVNJX1hJ",
+            "QU5HX1NZTUJPTF9KVUlDRV9TQ0FUVEVSU19YNRCQIhIrCiZTSV9YSUFOR19T",
+            "WU1CT0xfSlVJQ0VfRlJVSVRCQVNLRVRfU1BJThCRIhIsCidTSV9YSUFOR19T",
+            "WU1CT0xfSlVJQ0VfRlJVSVRCQVNLRVRfR1JBTkQQkiISLAonU0lfWElBTkdf",
+            "U1lNQk9MX0pVSUNFX0ZSVUlUQkFTS0VUX01BSk9SEJMiEiwKJ1NJX1hJQU5H",
+            "X1NZTUJPTF9KVUlDRV9GUlVJVEJBU0tFVF9NSU5PUhCUIhIrCiZTSV9YSUFO",
+            "R19TWU1CT0xfSlVJQ0VfRlJVSVRCQVNLRVRfTUlOSRCVIhIvCipTSV9YSUFO",
+            "R19TWU1CT0xfSlVJQ0VfRlJVSVRCQVNLRVRfUkFORE9NXzEQoCISLwoqU0lf",
+            "WElBTkdfU1lNQk9MX0pVSUNFX0ZSVUlUQkFTS0VUX1JBTkRPTV8yEKEiEi8K",
+            "KlNJX1hJQU5HX1NZTUJPTF9KVUlDRV9GUlVJVEJBU0tFVF9SQU5ET01fMxCi",
+            "IhIvCipTSV9YSUFOR19TWU1CT0xfSlVJQ0VfRlJVSVRCQVNLRVRfUkFORE9N",
+            "XzQQoyISLwoqU0lfWElBTkdfU1lNQk9MX0pVSUNFX0ZSVUlUQkFTS0VUX1JB",
+            "TkRPTV81EKQiEi8KKlNJX1hJQU5HX1NZTUJPTF9KVUlDRV9GUlVJVEJBU0tF",
+            "VF9SQU5ET01fNhClIhIvCipTSV9YSUFOR19TWU1CT0xfSlVJQ0VfRlJVSVRC",
+            "QVNLRVRfUkFORE9NXzcQpiISMAorU0lfWElBTkdfU1lNQk9MX0pVSUNFX0ZV",
+            "SVRfU0VMRUNUX0ZSRUVfR0FNRRCnIhIxCixTSV9YSUFOR19TWU1CT0xfSlVJ",
+            "Q0VfRlVJVF9TRUxFQ1RfRlJVSVRfUkFJThCoIhIgChtTSV9YSUFOR19TWU1C",
+            "T0xfU1VJVF9IRUFSVFMQgCQSIgodU0lfWElBTkdfU1lNQk9MX1NVSVRfRElB",
+            "TU9ORFMQgSQSHwoaU0lfWElBTkdfU1lNQk9MX1NVSVRfQ0xVQlMQgiQSIAob",
+            "U0lfWElBTkdfU1lNQk9MX1NVSVRfU1BBREVTEIMkEhgKE1NJX1hJQU5HX1NZ",
+            "TUJPTF9TVU4QhCQSIQocU0lfWElBTkdfU1lNQk9MX0VBR0xFX0dBUlVEQRCF",
+            "JBIcChdTSV9YSUFOR19TWU1CT0xfQU5USVFVRRCGJBIiCh1TSV9YSUFOR19T",
+            "WU1CT0xfQ0hSSVNNQVNfR0lGVBCQJBIjCh5TSV9YSUFOR19TWU1CT0xfQ0hS",
+            "SVNNQVNfQ0FORFkQkSQSIgodU0lfWElBTkdfU1lNQk9MX0NIUklTTUFTX1JJ",
+            "TkcQkiQSGgoUU0lfWElBTkdfU1lNQk9MX1dJTEQQ//8DKpkFCgtTaVhpYW5n",
+            "R2FtZRIdChlTSV9YSUFOR19HQU1FX1VOU1BFQ0lGSUVEEAASGAoUU0lfWElB",
+            "TkdfR0FNRV9OT1JNQUwQARIXChNTSV9YSUFOR19HQU1FX0JPTlVTEAISHgoa",
+            "U0lfWElBTkdfR0FNRV9EUkFHT05fUEVBUkwQAxIaChZTSV9YSUFOR19HQU1F",
+            "X0xVQ0tEUkFXEAQSGgoWU0lfWElBTkdfR0FNRV9HT0xEUElDSxAFEhoKFlNJ",
+            "X1hJQU5HX0dBTUVfUkFQSURQQVkQBhIdChlTSV9YSUFOR19HQU1FX1NJWEFO",
+            "R0JPTlVTEAcSKgomU0lfWElBTkdfR0FNRV9TSVhBTkdCT05VU19EUkFHT05f",
+            "UEVBUkwQCBImCiJTSV9YSUFOR19HQU1FX1NJWEFOR0JPTlVTX0xVQ0tEUkFX",
+            "EAkSJgoiU0lfWElBTkdfR0FNRV9TSVhBTkdCT05VU19HT0xEUElDSxAKEiYK",
+            "IlNJX1hJQU5HX0dBTUVfU0lYQU5HQk9OVVNfUkFQSURQQVkQCxIoCiRTSV9Y",
+            "SUFOR19HQU1FX1RBUlpBTl9KVU5HTEVfVFJFQVNVUkUQZRIjCh9TSV9YSUFO",
+            "R19HQU1FX1RBUlpBTl9GUkVFU1BJTlg5EGYSHwoaU0lfWElBTkdfR0FNRV9K",
+            "VUlDRV9OT1JNQUwQyAESJQogU0lfWElBTkdfR0FNRV9KVUlDRV9GUlVJVF9C",
+            "QVNLRVQQyQESIwoeU0lfWElBTkdfR0FNRV9KVUlDRV9GUlVJVF9SQUlOEMoB",
+            "EiIKHVNJX1hJQU5HX0dBTUVfSlVJQ0VfRlJFRV9HQU1FEMsBEiEKHFNJX1hJ",
+            "QU5HX0dBTUVfSU5DQV9GUkVFX0dBTUUQrQIqaAoGQmlnV2luEhcKE0JJR19X",
+            "SU5fVU5TUEVDSUZJRUQQABIQCgxCSUdfV0lOX05JQ0UQBRIQCgxCSUdfV0lO",
+            "X0hVR0UQChIPCgtCSUdfV0lOX0JJRxAZEhAKDEJJR19XSU5fTUVHQRAyKpsB",
+            "CgpXaW5KYWNrcG90EhsKF1dJTl9KQUNLUE9UX1VOU1BFQ0lGSUVEEAASFQoR",
+            "V0lOX0pBQ0tQT1RfTUlOT1IQChIVChFXSU5fSkFDS1BPVF9NQUpPUhAUEhQK",
+            "EFdJTl9KQUNLUE9UX01FR0EQHhIWChFXSU5fSkFDS1BPVF9HUkFORBCWARIU",
+            "ChBXSU5fSkFDS1BPVF9NSU5JEAFCKFomZ2l0aHViLmNvbS9uay1uaWdlcmlh",
+            "L2NncC1jb21tb24vcHJvdG9iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::Api.ColorGameReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Api.SiXiangSymbol), typeof(global::Api.SiXiangGame), typeof(global::Api.BigWin), typeof(global::Api.WinJackpot), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.SlotDesk), global::Api.SlotDesk.Parser, new[]{ "Matrix", "SpreadMatrix", "Paylines", "ChipsMcb", "NextSixiangGame", "CurrentSixiangGame", "IsFinishGame", "IsInSixiangBonus", "SpinSymbols", "WinJp", "BigWin", "GameReward", "CollectionSymbols", "TsUnix", "RatioFruitBasket", "NumSpinLeft", "BetLevels", "InfoBet", "ChipsBuyGem", "SixiangGems", "LetterSymbols", "WinJpHistory", "GameConfig" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.GameConfig), global::Api.GameConfig.Parser, new[]{ "NumScatterSeq", "NumFreeSpin", "NumWild", "RatioWild", "RatioBasket" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.SlotMatrix), global::Api.SlotMatrix.Parser, new[]{ "Lists", "Rows", "Cols", "SpinLists" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.SpinSymbol), global::Api.SpinSymbol.Parser, new[]{ "Symbol", "Col", "Row", "Ratio", "Index", "WinJp", "WinAmount", "RatioBonus" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.CollectSymbol), global::Api.CollectSymbol.Parser, new[]{ "Symbol", "Qty", "Ratio" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.JackpotReward), global::Api.JackpotReward.Parser, new[]{ "WinJackpot", "Ratio", "Count", "Chips", "ChipsAccum" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.JackpotHistory), global::Api.JackpotHistory.Parser, new[]{ "Minor", "Major", "Mega", "Grand", "Mini" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.Payline), global::Api.Payline.Parser, new[]{ "Id", "Symbol", "NumOccur", "Rate", "Chips", "Indices" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.GameReward), global::Api.GameReward.Parser, new[]{ "UpdateWallet", "BalanceChipsWalletBefore", "BalanceChipsWalletAfter", "ChipsWin", "TotalChipsWinByGame", "UpdateChipsBonus", "RatioWin", "LineWin", "TotalRatioWin", "TotalLineWin", "ChipBetFee", "ChipFee", "RatioBonus", "PerlGreenForest", "PerlGreenForestChips", "PerlGreenForestChipsCollect" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.SaveGame), global::Api.SaveGame.Parser, new[]{ "LastUpdateUnix", "Data" }, null, null, null, null)
+          new pbr::FileDescriptor[] { global::Proto.ColorGameReflection.Descriptor, },
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Proto.SiXiangSymbol), typeof(global::Proto.SiXiangGame), typeof(global::Proto.BigWin), typeof(global::Proto.WinJackpot), }, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Proto.SlotDesk), global::Proto.SlotDesk.Parser, new[]{ "Matrix", "SpreadMatrix", "Paylines", "ChipsMcb", "NextSixiangGame", "CurrentSixiangGame", "IsFinishGame", "IsInSixiangBonus", "SpinSymbols", "WinJp", "BigWin", "GameReward", "CollectionSymbols", "TsUnix", "RatioFruitBasket", "NumSpinLeft", "BetLevels", "InfoBet", "ChipsBuyGem", "SixiangGems", "LetterSymbols", "WinJpHistory", "GameConfig" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Proto.GameConfig), global::Proto.GameConfig.Parser, new[]{ "NumScatterSeq", "NumFreeSpin", "NumWild", "RatioWild", "RatioBasket" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Proto.SlotMatrix), global::Proto.SlotMatrix.Parser, new[]{ "Lists", "Rows", "Cols", "SpinLists" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Proto.SpinSymbol), global::Proto.SpinSymbol.Parser, new[]{ "Symbol", "Col", "Row", "Ratio", "Index", "WinJp", "WinAmount", "RatioBonus" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Proto.CollectSymbol), global::Proto.CollectSymbol.Parser, new[]{ "Symbol", "Qty", "Ratio" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Proto.JackpotReward), global::Proto.JackpotReward.Parser, new[]{ "WinJackpot", "Ratio", "Count", "Chips", "ChipsAccum" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Proto.JackpotHistory), global::Proto.JackpotHistory.Parser, new[]{ "Minor", "Major", "Mega", "Grand", "Mini" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Proto.Payline), global::Proto.Payline.Parser, new[]{ "Id", "Symbol", "NumOccur", "Rate", "Chips", "Indices" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Proto.GameReward), global::Proto.GameReward.Parser, new[]{ "UpdateWallet", "BalanceChipsWalletBefore", "BalanceChipsWalletAfter", "ChipsWin", "TotalChipsWinByGame", "UpdateChipsBonus", "RatioWin", "LineWin", "TotalRatioWin", "TotalLineWin", "ChipBetFee", "ChipFee", "RatioBonus", "PerlGreenForest", "PerlGreenForestChips", "PerlGreenForestChipsCollect" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Proto.SaveGame), global::Proto.SaveGame.Parser, new[]{ "LastUpdateUnix", "Data" }, null, null, null, null)
           }));
     }
     #endregion
@@ -443,7 +444,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.SlotsGameReflection.Descriptor.MessageTypes[0]; }
+      get { return global::Proto.SlotsGameReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -497,14 +498,14 @@ namespace Api {
 
     /// <summary>Field number for the "matrix" field.</summary>
     public const int MatrixFieldNumber = 1;
-    private global::Api.SlotMatrix matrix_;
+    private global::Proto.SlotMatrix matrix_;
     /// <summary>
     /// ma trận rowxcol ở dạng array 1 chiều,
     /// thể hiện các symbol hiện tại của game
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.SlotMatrix Matrix {
+    public global::Proto.SlotMatrix Matrix {
       get { return matrix_; }
       set {
         matrix_ = value;
@@ -513,14 +514,14 @@ namespace Api {
 
     /// <summary>Field number for the "spread_matrix" field.</summary>
     public const int SpreadMatrixFieldNumber = 4;
-    private global::Api.SlotMatrix spreadMatrix_;
+    private global::Proto.SlotMatrix spreadMatrix_;
     /// <summary>
     /// ma trận 5x3 ở dạng array 1 chiều,
     ///  thể hiện các symbol hiện tại của game, đã áp dụng rule thay thế wild
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.SlotMatrix SpreadMatrix {
+    public global::Proto.SlotMatrix SpreadMatrix {
       get { return spreadMatrix_; }
       set {
         spreadMatrix_ = value;
@@ -529,15 +530,15 @@ namespace Api {
 
     /// <summary>Field number for the "paylines" field.</summary>
     public const int PaylinesFieldNumber = 5;
-    private static readonly pb::FieldCodec<global::Api.Payline> _repeated_paylines_codec
-        = pb::FieldCodec.ForMessage(42, global::Api.Payline.Parser);
-    private readonly pbc::RepeatedField<global::Api.Payline> paylines_ = new pbc::RepeatedField<global::Api.Payline>();
+    private static readonly pb::FieldCodec<global::Proto.Payline> _repeated_paylines_codec
+        = pb::FieldCodec.ForMessage(42, global::Proto.Payline.Parser);
+    private readonly pbc::RepeatedField<global::Proto.Payline> paylines_ = new pbc::RepeatedField<global::Proto.Payline>();
     /// <summary>
     /// mảng chưa danh sách payline đã win.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Api.Payline> Paylines {
+    public pbc::RepeatedField<global::Proto.Payline> Paylines {
       get { return paylines_; }
     }
 
@@ -558,13 +559,13 @@ namespace Api {
 
     /// <summary>Field number for the "next_sixiang_game" field.</summary>
     public const int NextSixiangGameFieldNumber = 7;
-    private global::Api.SiXiangGame nextSixiangGame_ = global::Api.SiXiangGame.Unspecified;
+    private global::Proto.SiXiangGame nextSixiangGame_ = global::Proto.SiXiangGame.Unspecified;
     /// <summary>
     /// loại game kế tiếp user sẽ chơi
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.SiXiangGame NextSixiangGame {
+    public global::Proto.SiXiangGame NextSixiangGame {
       get { return nextSixiangGame_; }
       set {
         nextSixiangGame_ = value;
@@ -573,13 +574,13 @@ namespace Api {
 
     /// <summary>Field number for the "current_sixiang_game" field.</summary>
     public const int CurrentSixiangGameFieldNumber = 100;
-    private global::Api.SiXiangGame currentSixiangGame_ = global::Api.SiXiangGame.Unspecified;
+    private global::Proto.SiXiangGame currentSixiangGame_ = global::Proto.SiXiangGame.Unspecified;
     /// <summary>
     /// loại game hiện tại user đang chơi
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.SiXiangGame CurrentSixiangGame {
+    public global::Proto.SiXiangGame CurrentSixiangGame {
       get { return currentSixiangGame_; }
       set {
         currentSixiangGame_ = value;
@@ -622,27 +623,27 @@ namespace Api {
 
     /// <summary>Field number for the "spin_symbols" field.</summary>
     public const int SpinSymbolsFieldNumber = 8;
-    private static readonly pb::FieldCodec<global::Api.SpinSymbol> _repeated_spinSymbols_codec
-        = pb::FieldCodec.ForMessage(66, global::Api.SpinSymbol.Parser);
-    private readonly pbc::RepeatedField<global::Api.SpinSymbol> spinSymbols_ = new pbc::RepeatedField<global::Api.SpinSymbol>();
+    private static readonly pb::FieldCodec<global::Proto.SpinSymbol> _repeated_spinSymbols_codec
+        = pb::FieldCodec.ForMessage(66, global::Proto.SpinSymbol.Parser);
+    private readonly pbc::RepeatedField<global::Proto.SpinSymbol> spinSymbols_ = new pbc::RepeatedField<global::Proto.SpinSymbol>();
     /// <summary>
     /// các mảng symbol quay được ở các game đặc biệt.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Api.SpinSymbol> SpinSymbols {
+    public pbc::RepeatedField<global::Proto.SpinSymbol> SpinSymbols {
       get { return spinSymbols_; }
     }
 
     /// <summary>Field number for the "win_jp" field.</summary>
     public const int WinJpFieldNumber = 9;
-    private global::Api.WinJackpot winJp_ = global::Api.WinJackpot.Unspecified;
+    private global::Proto.WinJackpot winJp_ = global::Proto.WinJackpot.Unspecified;
     /// <summary>
     /// loại jackot đã win
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.WinJackpot WinJp {
+    public global::Proto.WinJackpot WinJp {
       get { return winJp_; }
       set {
         winJp_ = value;
@@ -651,13 +652,13 @@ namespace Api {
 
     /// <summary>Field number for the "big_win" field.</summary>
     public const int BigWinFieldNumber = 11;
-    private global::Api.BigWin bigWin_ = global::Api.BigWin.Unspecified;
+    private global::Proto.BigWin bigWin_ = global::Proto.BigWin.Unspecified;
     /// <summary>
     /// loại big win (mega, huge, big...)
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.BigWin BigWin {
+    public global::Proto.BigWin BigWin {
       get { return bigWin_; }
       set {
         bigWin_ = value;
@@ -666,7 +667,7 @@ namespace Api {
 
     /// <summary>Field number for the "game_reward" field.</summary>
     public const int GameRewardFieldNumber = 14;
-    private global::Api.GameReward gameReward_;
+    private global::Proto.GameReward gameReward_;
     /// <summary>
     /// tổng số chip thắng trong game
     /// int64 chips_win = 13;
@@ -678,7 +679,7 @@ namespace Api {
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.GameReward GameReward {
+    public global::Proto.GameReward GameReward {
       get { return gameReward_; }
       set {
         gameReward_ = value;
@@ -687,9 +688,9 @@ namespace Api {
 
     /// <summary>Field number for the "collection_symbols" field.</summary>
     public const int CollectionSymbolsFieldNumber = 16;
-    private static readonly pb::FieldCodec<global::Api.CollectSymbol> _repeated_collectionSymbols_codec
-        = pb::FieldCodec.ForMessage(130, global::Api.CollectSymbol.Parser);
-    private readonly pbc::RepeatedField<global::Api.CollectSymbol> collectionSymbols_ = new pbc::RepeatedField<global::Api.CollectSymbol>();
+    private static readonly pb::FieldCodec<global::Proto.CollectSymbol> _repeated_collectionSymbols_codec
+        = pb::FieldCodec.ForMessage(130, global::Proto.CollectSymbol.Parser);
+    private readonly pbc::RepeatedField<global::Proto.CollectSymbol> collectionSymbols_ = new pbc::RepeatedField<global::Proto.CollectSymbol>();
     /// <summary>
     /// int64 total_chips_win_by_game = 17;
     /// số chip trong wallet trước spin
@@ -698,7 +699,7 @@ namespace Api {
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Api.CollectSymbol> CollectionSymbols {
+    public pbc::RepeatedField<global::Proto.CollectSymbol> CollectionSymbols {
       get { return collectionSymbols_; }
     }
 
@@ -757,10 +758,10 @@ namespace Api {
 
     /// <summary>Field number for the "info_bet" field.</summary>
     public const int InfoBetFieldNumber = 25;
-    private global::Api.InfoBet infoBet_;
+    private global::Proto.InfoBet infoBet_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.InfoBet InfoBet {
+    public global::Proto.InfoBet InfoBet {
       get { return infoBet_; }
       set {
         infoBet_ = value;
@@ -781,9 +782,9 @@ namespace Api {
 
     /// <summary>Field number for the "sixiang_gems" field.</summary>
     public const int SixiangGemsFieldNumber = 27;
-    private static readonly pb::FieldCodec<global::Api.SiXiangGame> _repeated_sixiangGems_codec
-        = pb::FieldCodec.ForEnum(218, x => (int) x, x => (global::Api.SiXiangGame) x);
-    private readonly pbc::RepeatedField<global::Api.SiXiangGame> sixiangGems_ = new pbc::RepeatedField<global::Api.SiXiangGame>();
+    private static readonly pb::FieldCodec<global::Proto.SiXiangGame> _repeated_sixiangGems_codec
+        = pb::FieldCodec.ForEnum(218, x => (int) x, x => (global::Proto.SiXiangGame) x);
+    private readonly pbc::RepeatedField<global::Proto.SiXiangGame> sixiangGems_ = new pbc::RepeatedField<global::Proto.SiXiangGame>();
     /// <summary>
     /// số ngọc collect được để mở SI XIANG BONUS game
     /// symbol is
@@ -794,27 +795,27 @@ namespace Api {
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Api.SiXiangGame> SixiangGems {
+    public pbc::RepeatedField<global::Proto.SiXiangGame> SixiangGems {
       get { return sixiangGems_; }
     }
 
     /// <summary>Field number for the "letter_symbols" field.</summary>
     public const int LetterSymbolsFieldNumber = 28;
-    private static readonly pb::FieldCodec<global::Api.SiXiangSymbol> _repeated_letterSymbols_codec
-        = pb::FieldCodec.ForEnum(226, x => (int) x, x => (global::Api.SiXiangSymbol) x);
-    private readonly pbc::RepeatedField<global::Api.SiXiangSymbol> letterSymbols_ = new pbc::RepeatedField<global::Api.SiXiangSymbol>();
+    private static readonly pb::FieldCodec<global::Proto.SiXiangSymbol> _repeated_letterSymbols_codec
+        = pb::FieldCodec.ForEnum(226, x => (int) x, x => (global::Proto.SiXiangSymbol) x);
+    private readonly pbc::RepeatedField<global::Proto.SiXiangSymbol> letterSymbols_ = new pbc::RepeatedField<global::Proto.SiXiangSymbol>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Api.SiXiangSymbol> LetterSymbols {
+    public pbc::RepeatedField<global::Proto.SiXiangSymbol> LetterSymbols {
       get { return letterSymbols_; }
     }
 
     /// <summary>Field number for the "win_jp_history" field.</summary>
     public const int WinJpHistoryFieldNumber = 29;
-    private global::Api.JackpotHistory winJpHistory_;
+    private global::Proto.JackpotHistory winJpHistory_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.JackpotHistory WinJpHistory {
+    public global::Proto.JackpotHistory WinJpHistory {
       get { return winJpHistory_; }
       set {
         winJpHistory_ = value;
@@ -823,10 +824,10 @@ namespace Api {
 
     /// <summary>Field number for the "game_config" field.</summary>
     public const int GameConfigFieldNumber = 30;
-    private global::Api.GameConfig gameConfig_;
+    private global::Proto.GameConfig gameConfig_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.GameConfig GameConfig {
+    public global::Proto.GameConfig GameConfig {
       get { return gameConfig_; }
       set {
         gameConfig_ = value;
@@ -882,13 +883,13 @@ namespace Api {
       if (spreadMatrix_ != null) hash ^= SpreadMatrix.GetHashCode();
       hash ^= paylines_.GetHashCode();
       if (ChipsMcb != 0L) hash ^= ChipsMcb.GetHashCode();
-      if (NextSixiangGame != global::Api.SiXiangGame.Unspecified) hash ^= NextSixiangGame.GetHashCode();
-      if (CurrentSixiangGame != global::Api.SiXiangGame.Unspecified) hash ^= CurrentSixiangGame.GetHashCode();
+      if (NextSixiangGame != global::Proto.SiXiangGame.Unspecified) hash ^= NextSixiangGame.GetHashCode();
+      if (CurrentSixiangGame != global::Proto.SiXiangGame.Unspecified) hash ^= CurrentSixiangGame.GetHashCode();
       if (IsFinishGame != false) hash ^= IsFinishGame.GetHashCode();
       if (IsInSixiangBonus != false) hash ^= IsInSixiangBonus.GetHashCode();
       hash ^= spinSymbols_.GetHashCode();
-      if (WinJp != global::Api.WinJackpot.Unspecified) hash ^= WinJp.GetHashCode();
-      if (BigWin != global::Api.BigWin.Unspecified) hash ^= BigWin.GetHashCode();
+      if (WinJp != global::Proto.WinJackpot.Unspecified) hash ^= WinJp.GetHashCode();
+      if (BigWin != global::Proto.BigWin.Unspecified) hash ^= BigWin.GetHashCode();
       if (gameReward_ != null) hash ^= GameReward.GetHashCode();
       hash ^= collectionSymbols_.GetHashCode();
       if (TsUnix != 0L) hash ^= TsUnix.GetHashCode();
@@ -932,16 +933,16 @@ namespace Api {
         output.WriteRawTag(48);
         output.WriteInt64(ChipsMcb);
       }
-      if (NextSixiangGame != global::Api.SiXiangGame.Unspecified) {
+      if (NextSixiangGame != global::Proto.SiXiangGame.Unspecified) {
         output.WriteRawTag(56);
         output.WriteEnum((int) NextSixiangGame);
       }
       spinSymbols_.WriteTo(output, _repeated_spinSymbols_codec);
-      if (WinJp != global::Api.WinJackpot.Unspecified) {
+      if (WinJp != global::Proto.WinJackpot.Unspecified) {
         output.WriteRawTag(72);
         output.WriteEnum((int) WinJp);
       }
-      if (BigWin != global::Api.BigWin.Unspecified) {
+      if (BigWin != global::Proto.BigWin.Unspecified) {
         output.WriteRawTag(88);
         output.WriteEnum((int) BigWin);
       }
@@ -981,7 +982,7 @@ namespace Api {
         output.WriteRawTag(242, 1);
         output.WriteMessage(GameConfig);
       }
-      if (CurrentSixiangGame != global::Api.SiXiangGame.Unspecified) {
+      if (CurrentSixiangGame != global::Proto.SiXiangGame.Unspecified) {
         output.WriteRawTag(160, 6);
         output.WriteEnum((int) CurrentSixiangGame);
       }
@@ -1016,16 +1017,16 @@ namespace Api {
         output.WriteRawTag(48);
         output.WriteInt64(ChipsMcb);
       }
-      if (NextSixiangGame != global::Api.SiXiangGame.Unspecified) {
+      if (NextSixiangGame != global::Proto.SiXiangGame.Unspecified) {
         output.WriteRawTag(56);
         output.WriteEnum((int) NextSixiangGame);
       }
       spinSymbols_.WriteTo(ref output, _repeated_spinSymbols_codec);
-      if (WinJp != global::Api.WinJackpot.Unspecified) {
+      if (WinJp != global::Proto.WinJackpot.Unspecified) {
         output.WriteRawTag(72);
         output.WriteEnum((int) WinJp);
       }
-      if (BigWin != global::Api.BigWin.Unspecified) {
+      if (BigWin != global::Proto.BigWin.Unspecified) {
         output.WriteRawTag(88);
         output.WriteEnum((int) BigWin);
       }
@@ -1065,7 +1066,7 @@ namespace Api {
         output.WriteRawTag(242, 1);
         output.WriteMessage(GameConfig);
       }
-      if (CurrentSixiangGame != global::Api.SiXiangGame.Unspecified) {
+      if (CurrentSixiangGame != global::Proto.SiXiangGame.Unspecified) {
         output.WriteRawTag(160, 6);
         output.WriteEnum((int) CurrentSixiangGame);
       }
@@ -1097,10 +1098,10 @@ namespace Api {
       if (ChipsMcb != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(ChipsMcb);
       }
-      if (NextSixiangGame != global::Api.SiXiangGame.Unspecified) {
+      if (NextSixiangGame != global::Proto.SiXiangGame.Unspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) NextSixiangGame);
       }
-      if (CurrentSixiangGame != global::Api.SiXiangGame.Unspecified) {
+      if (CurrentSixiangGame != global::Proto.SiXiangGame.Unspecified) {
         size += 2 + pb::CodedOutputStream.ComputeEnumSize((int) CurrentSixiangGame);
       }
       if (IsFinishGame != false) {
@@ -1110,10 +1111,10 @@ namespace Api {
         size += 2 + 1;
       }
       size += spinSymbols_.CalculateSize(_repeated_spinSymbols_codec);
-      if (WinJp != global::Api.WinJackpot.Unspecified) {
+      if (WinJp != global::Proto.WinJackpot.Unspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) WinJp);
       }
-      if (BigWin != global::Api.BigWin.Unspecified) {
+      if (BigWin != global::Proto.BigWin.Unspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) BigWin);
       }
       if (gameReward_ != null) {
@@ -1158,13 +1159,13 @@ namespace Api {
       }
       if (other.matrix_ != null) {
         if (matrix_ == null) {
-          Matrix = new global::Api.SlotMatrix();
+          Matrix = new global::Proto.SlotMatrix();
         }
         Matrix.MergeFrom(other.Matrix);
       }
       if (other.spreadMatrix_ != null) {
         if (spreadMatrix_ == null) {
-          SpreadMatrix = new global::Api.SlotMatrix();
+          SpreadMatrix = new global::Proto.SlotMatrix();
         }
         SpreadMatrix.MergeFrom(other.SpreadMatrix);
       }
@@ -1172,10 +1173,10 @@ namespace Api {
       if (other.ChipsMcb != 0L) {
         ChipsMcb = other.ChipsMcb;
       }
-      if (other.NextSixiangGame != global::Api.SiXiangGame.Unspecified) {
+      if (other.NextSixiangGame != global::Proto.SiXiangGame.Unspecified) {
         NextSixiangGame = other.NextSixiangGame;
       }
-      if (other.CurrentSixiangGame != global::Api.SiXiangGame.Unspecified) {
+      if (other.CurrentSixiangGame != global::Proto.SiXiangGame.Unspecified) {
         CurrentSixiangGame = other.CurrentSixiangGame;
       }
       if (other.IsFinishGame != false) {
@@ -1185,15 +1186,15 @@ namespace Api {
         IsInSixiangBonus = other.IsInSixiangBonus;
       }
       spinSymbols_.Add(other.spinSymbols_);
-      if (other.WinJp != global::Api.WinJackpot.Unspecified) {
+      if (other.WinJp != global::Proto.WinJackpot.Unspecified) {
         WinJp = other.WinJp;
       }
-      if (other.BigWin != global::Api.BigWin.Unspecified) {
+      if (other.BigWin != global::Proto.BigWin.Unspecified) {
         BigWin = other.BigWin;
       }
       if (other.gameReward_ != null) {
         if (gameReward_ == null) {
-          GameReward = new global::Api.GameReward();
+          GameReward = new global::Proto.GameReward();
         }
         GameReward.MergeFrom(other.GameReward);
       }
@@ -1210,7 +1211,7 @@ namespace Api {
       betLevels_.Add(other.betLevels_);
       if (other.infoBet_ != null) {
         if (infoBet_ == null) {
-          InfoBet = new global::Api.InfoBet();
+          InfoBet = new global::Proto.InfoBet();
         }
         InfoBet.MergeFrom(other.InfoBet);
       }
@@ -1221,13 +1222,13 @@ namespace Api {
       letterSymbols_.Add(other.letterSymbols_);
       if (other.winJpHistory_ != null) {
         if (winJpHistory_ == null) {
-          WinJpHistory = new global::Api.JackpotHistory();
+          WinJpHistory = new global::Proto.JackpotHistory();
         }
         WinJpHistory.MergeFrom(other.WinJpHistory);
       }
       if (other.gameConfig_ != null) {
         if (gameConfig_ == null) {
-          GameConfig = new global::Api.GameConfig();
+          GameConfig = new global::Proto.GameConfig();
         }
         GameConfig.MergeFrom(other.GameConfig);
       }
@@ -1252,14 +1253,14 @@ namespace Api {
             break;
           case 10: {
             if (matrix_ == null) {
-              Matrix = new global::Api.SlotMatrix();
+              Matrix = new global::Proto.SlotMatrix();
             }
             input.ReadMessage(Matrix);
             break;
           }
           case 34: {
             if (spreadMatrix_ == null) {
-              SpreadMatrix = new global::Api.SlotMatrix();
+              SpreadMatrix = new global::Proto.SlotMatrix();
             }
             input.ReadMessage(SpreadMatrix);
             break;
@@ -1273,7 +1274,7 @@ namespace Api {
             break;
           }
           case 56: {
-            NextSixiangGame = (global::Api.SiXiangGame) input.ReadEnum();
+            NextSixiangGame = (global::Proto.SiXiangGame) input.ReadEnum();
             break;
           }
           case 66: {
@@ -1281,16 +1282,16 @@ namespace Api {
             break;
           }
           case 72: {
-            WinJp = (global::Api.WinJackpot) input.ReadEnum();
+            WinJp = (global::Proto.WinJackpot) input.ReadEnum();
             break;
           }
           case 88: {
-            BigWin = (global::Api.BigWin) input.ReadEnum();
+            BigWin = (global::Proto.BigWin) input.ReadEnum();
             break;
           }
           case 114: {
             if (gameReward_ == null) {
-              GameReward = new global::Api.GameReward();
+              GameReward = new global::Proto.GameReward();
             }
             input.ReadMessage(GameReward);
             break;
@@ -1318,7 +1319,7 @@ namespace Api {
           }
           case 202: {
             if (infoBet_ == null) {
-              InfoBet = new global::Api.InfoBet();
+              InfoBet = new global::Proto.InfoBet();
             }
             input.ReadMessage(InfoBet);
             break;
@@ -1339,20 +1340,20 @@ namespace Api {
           }
           case 234: {
             if (winJpHistory_ == null) {
-              WinJpHistory = new global::Api.JackpotHistory();
+              WinJpHistory = new global::Proto.JackpotHistory();
             }
             input.ReadMessage(WinJpHistory);
             break;
           }
           case 242: {
             if (gameConfig_ == null) {
-              GameConfig = new global::Api.GameConfig();
+              GameConfig = new global::Proto.GameConfig();
             }
             input.ReadMessage(GameConfig);
             break;
           }
           case 800: {
-            CurrentSixiangGame = (global::Api.SiXiangGame) input.ReadEnum();
+            CurrentSixiangGame = (global::Proto.SiXiangGame) input.ReadEnum();
             break;
           }
           case 808: {
@@ -1384,14 +1385,14 @@ namespace Api {
             break;
           case 10: {
             if (matrix_ == null) {
-              Matrix = new global::Api.SlotMatrix();
+              Matrix = new global::Proto.SlotMatrix();
             }
             input.ReadMessage(Matrix);
             break;
           }
           case 34: {
             if (spreadMatrix_ == null) {
-              SpreadMatrix = new global::Api.SlotMatrix();
+              SpreadMatrix = new global::Proto.SlotMatrix();
             }
             input.ReadMessage(SpreadMatrix);
             break;
@@ -1405,7 +1406,7 @@ namespace Api {
             break;
           }
           case 56: {
-            NextSixiangGame = (global::Api.SiXiangGame) input.ReadEnum();
+            NextSixiangGame = (global::Proto.SiXiangGame) input.ReadEnum();
             break;
           }
           case 66: {
@@ -1413,16 +1414,16 @@ namespace Api {
             break;
           }
           case 72: {
-            WinJp = (global::Api.WinJackpot) input.ReadEnum();
+            WinJp = (global::Proto.WinJackpot) input.ReadEnum();
             break;
           }
           case 88: {
-            BigWin = (global::Api.BigWin) input.ReadEnum();
+            BigWin = (global::Proto.BigWin) input.ReadEnum();
             break;
           }
           case 114: {
             if (gameReward_ == null) {
-              GameReward = new global::Api.GameReward();
+              GameReward = new global::Proto.GameReward();
             }
             input.ReadMessage(GameReward);
             break;
@@ -1450,7 +1451,7 @@ namespace Api {
           }
           case 202: {
             if (infoBet_ == null) {
-              InfoBet = new global::Api.InfoBet();
+              InfoBet = new global::Proto.InfoBet();
             }
             input.ReadMessage(InfoBet);
             break;
@@ -1471,20 +1472,20 @@ namespace Api {
           }
           case 234: {
             if (winJpHistory_ == null) {
-              WinJpHistory = new global::Api.JackpotHistory();
+              WinJpHistory = new global::Proto.JackpotHistory();
             }
             input.ReadMessage(WinJpHistory);
             break;
           }
           case 242: {
             if (gameConfig_ == null) {
-              GameConfig = new global::Api.GameConfig();
+              GameConfig = new global::Proto.GameConfig();
             }
             input.ReadMessage(GameConfig);
             break;
           }
           case 800: {
-            CurrentSixiangGame = (global::Api.SiXiangGame) input.ReadEnum();
+            CurrentSixiangGame = (global::Proto.SiXiangGame) input.ReadEnum();
             break;
           }
           case 808: {
@@ -1517,7 +1518,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.SlotsGameReflection.Descriptor.MessageTypes[1]; }
+      get { return global::Proto.SlotsGameReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1866,7 +1867,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.SlotsGameReflection.Descriptor.MessageTypes[2]; }
+      get { return global::Proto.SlotsGameReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1901,15 +1902,15 @@ namespace Api {
 
     /// <summary>Field number for the "lists" field.</summary>
     public const int ListsFieldNumber = 1;
-    private static readonly pb::FieldCodec<global::Api.SiXiangSymbol> _repeated_lists_codec
-        = pb::FieldCodec.ForEnum(10, x => (int) x, x => (global::Api.SiXiangSymbol) x);
-    private readonly pbc::RepeatedField<global::Api.SiXiangSymbol> lists_ = new pbc::RepeatedField<global::Api.SiXiangSymbol>();
+    private static readonly pb::FieldCodec<global::Proto.SiXiangSymbol> _repeated_lists_codec
+        = pb::FieldCodec.ForEnum(10, x => (int) x, x => (global::Proto.SiXiangSymbol) x);
+    private readonly pbc::RepeatedField<global::Proto.SiXiangSymbol> lists_ = new pbc::RepeatedField<global::Proto.SiXiangSymbol>();
     /// <summary>
     /// Mảng 2 chiều ở dạng list, rowxcol
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Api.SiXiangSymbol> Lists {
+    public pbc::RepeatedField<global::Proto.SiXiangSymbol> Lists {
       get { return lists_; }
     }
 
@@ -1945,12 +1946,12 @@ namespace Api {
 
     /// <summary>Field number for the "spin_lists" field.</summary>
     public const int SpinListsFieldNumber = 4;
-    private static readonly pb::FieldCodec<global::Api.SpinSymbol> _repeated_spinLists_codec
-        = pb::FieldCodec.ForMessage(34, global::Api.SpinSymbol.Parser);
-    private readonly pbc::RepeatedField<global::Api.SpinSymbol> spinLists_ = new pbc::RepeatedField<global::Api.SpinSymbol>();
+    private static readonly pb::FieldCodec<global::Proto.SpinSymbol> _repeated_spinLists_codec
+        = pb::FieldCodec.ForMessage(34, global::Proto.SpinSymbol.Parser);
+    private readonly pbc::RepeatedField<global::Proto.SpinSymbol> spinLists_ = new pbc::RepeatedField<global::Proto.SpinSymbol>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Api.SpinSymbol> SpinLists {
+    public pbc::RepeatedField<global::Proto.SpinSymbol> SpinLists {
       get { return spinLists_; }
     }
 
@@ -2169,7 +2170,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.SlotsGameReflection.Descriptor.MessageTypes[3]; }
+      get { return global::Proto.SlotsGameReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2208,10 +2209,10 @@ namespace Api {
 
     /// <summary>Field number for the "symbol" field.</summary>
     public const int SymbolFieldNumber = 1;
-    private global::Api.SiXiangSymbol symbol_ = global::Api.SiXiangSymbol.Unspecified;
+    private global::Proto.SiXiangSymbol symbol_ = global::Proto.SiXiangSymbol.Unspecified;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.SiXiangSymbol Symbol {
+    public global::Proto.SiXiangSymbol Symbol {
       get { return symbol_; }
       set {
         symbol_ = value;
@@ -2268,10 +2269,10 @@ namespace Api {
 
     /// <summary>Field number for the "win_jp" field.</summary>
     public const int WinJpFieldNumber = 6;
-    private global::Api.WinJackpot winJp_ = global::Api.WinJackpot.Unspecified;
+    private global::Proto.WinJackpot winJp_ = global::Proto.WinJackpot.Unspecified;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.WinJackpot WinJp {
+    public global::Proto.WinJackpot WinJp {
       get { return winJp_; }
       set {
         winJp_ = value;
@@ -2332,12 +2333,12 @@ namespace Api {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (Symbol != global::Api.SiXiangSymbol.Unspecified) hash ^= Symbol.GetHashCode();
+      if (Symbol != global::Proto.SiXiangSymbol.Unspecified) hash ^= Symbol.GetHashCode();
       if (Col != 0) hash ^= Col.GetHashCode();
       if (Row != 0) hash ^= Row.GetHashCode();
       if (Ratio != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Ratio);
       if (Index != 0) hash ^= Index.GetHashCode();
-      if (WinJp != global::Api.WinJackpot.Unspecified) hash ^= WinJp.GetHashCode();
+      if (WinJp != global::Proto.WinJackpot.Unspecified) hash ^= WinJp.GetHashCode();
       if (WinAmount != 0L) hash ^= WinAmount.GetHashCode();
       if (RatioBonus != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(RatioBonus);
       if (_unknownFields != null) {
@@ -2358,7 +2359,7 @@ namespace Api {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (Symbol != global::Api.SiXiangSymbol.Unspecified) {
+      if (Symbol != global::Proto.SiXiangSymbol.Unspecified) {
         output.WriteRawTag(8);
         output.WriteEnum((int) Symbol);
       }
@@ -2378,7 +2379,7 @@ namespace Api {
         output.WriteRawTag(40);
         output.WriteInt32(Index);
       }
-      if (WinJp != global::Api.WinJackpot.Unspecified) {
+      if (WinJp != global::Proto.WinJackpot.Unspecified) {
         output.WriteRawTag(48);
         output.WriteEnum((int) WinJp);
       }
@@ -2400,7 +2401,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Symbol != global::Api.SiXiangSymbol.Unspecified) {
+      if (Symbol != global::Proto.SiXiangSymbol.Unspecified) {
         output.WriteRawTag(8);
         output.WriteEnum((int) Symbol);
       }
@@ -2420,7 +2421,7 @@ namespace Api {
         output.WriteRawTag(40);
         output.WriteInt32(Index);
       }
-      if (WinJp != global::Api.WinJackpot.Unspecified) {
+      if (WinJp != global::Proto.WinJackpot.Unspecified) {
         output.WriteRawTag(48);
         output.WriteEnum((int) WinJp);
       }
@@ -2442,7 +2443,7 @@ namespace Api {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (Symbol != global::Api.SiXiangSymbol.Unspecified) {
+      if (Symbol != global::Proto.SiXiangSymbol.Unspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Symbol);
       }
       if (Col != 0) {
@@ -2457,7 +2458,7 @@ namespace Api {
       if (Index != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Index);
       }
-      if (WinJp != global::Api.WinJackpot.Unspecified) {
+      if (WinJp != global::Proto.WinJackpot.Unspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) WinJp);
       }
       if (WinAmount != 0L) {
@@ -2478,7 +2479,7 @@ namespace Api {
       if (other == null) {
         return;
       }
-      if (other.Symbol != global::Api.SiXiangSymbol.Unspecified) {
+      if (other.Symbol != global::Proto.SiXiangSymbol.Unspecified) {
         Symbol = other.Symbol;
       }
       if (other.Col != 0) {
@@ -2493,7 +2494,7 @@ namespace Api {
       if (other.Index != 0) {
         Index = other.Index;
       }
-      if (other.WinJp != global::Api.WinJackpot.Unspecified) {
+      if (other.WinJp != global::Proto.WinJackpot.Unspecified) {
         WinJp = other.WinJp;
       }
       if (other.WinAmount != 0L) {
@@ -2522,7 +2523,7 @@ namespace Api {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            Symbol = (global::Api.SiXiangSymbol) input.ReadEnum();
+            Symbol = (global::Proto.SiXiangSymbol) input.ReadEnum();
             break;
           }
           case 16: {
@@ -2542,7 +2543,7 @@ namespace Api {
             break;
           }
           case 48: {
-            WinJp = (global::Api.WinJackpot) input.ReadEnum();
+            WinJp = (global::Proto.WinJackpot) input.ReadEnum();
             break;
           }
           case 56: {
@@ -2573,7 +2574,7 @@ namespace Api {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            Symbol = (global::Api.SiXiangSymbol) input.ReadEnum();
+            Symbol = (global::Proto.SiXiangSymbol) input.ReadEnum();
             break;
           }
           case 16: {
@@ -2593,7 +2594,7 @@ namespace Api {
             break;
           }
           case 48: {
-            WinJp = (global::Api.WinJackpot) input.ReadEnum();
+            WinJp = (global::Proto.WinJackpot) input.ReadEnum();
             break;
           }
           case 56: {
@@ -2626,7 +2627,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.SlotsGameReflection.Descriptor.MessageTypes[4]; }
+      get { return global::Proto.SlotsGameReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2660,10 +2661,10 @@ namespace Api {
 
     /// <summary>Field number for the "symbol" field.</summary>
     public const int SymbolFieldNumber = 1;
-    private global::Api.SiXiangSymbol symbol_ = global::Api.SiXiangSymbol.Unspecified;
+    private global::Proto.SiXiangSymbol symbol_ = global::Proto.SiXiangSymbol.Unspecified;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.SiXiangSymbol Symbol {
+    public global::Proto.SiXiangSymbol Symbol {
       get { return symbol_; }
       set {
         symbol_ = value;
@@ -2722,7 +2723,7 @@ namespace Api {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (Symbol != global::Api.SiXiangSymbol.Unspecified) hash ^= Symbol.GetHashCode();
+      if (Symbol != global::Proto.SiXiangSymbol.Unspecified) hash ^= Symbol.GetHashCode();
       if (Qty != 0L) hash ^= Qty.GetHashCode();
       if (Ratio != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Ratio);
       if (_unknownFields != null) {
@@ -2743,7 +2744,7 @@ namespace Api {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (Symbol != global::Api.SiXiangSymbol.Unspecified) {
+      if (Symbol != global::Proto.SiXiangSymbol.Unspecified) {
         output.WriteRawTag(8);
         output.WriteEnum((int) Symbol);
       }
@@ -2765,7 +2766,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Symbol != global::Api.SiXiangSymbol.Unspecified) {
+      if (Symbol != global::Proto.SiXiangSymbol.Unspecified) {
         output.WriteRawTag(8);
         output.WriteEnum((int) Symbol);
       }
@@ -2787,7 +2788,7 @@ namespace Api {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (Symbol != global::Api.SiXiangSymbol.Unspecified) {
+      if (Symbol != global::Proto.SiXiangSymbol.Unspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Symbol);
       }
       if (Qty != 0L) {
@@ -2808,7 +2809,7 @@ namespace Api {
       if (other == null) {
         return;
       }
-      if (other.Symbol != global::Api.SiXiangSymbol.Unspecified) {
+      if (other.Symbol != global::Proto.SiXiangSymbol.Unspecified) {
         Symbol = other.Symbol;
       }
       if (other.Qty != 0L) {
@@ -2837,7 +2838,7 @@ namespace Api {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            Symbol = (global::Api.SiXiangSymbol) input.ReadEnum();
+            Symbol = (global::Proto.SiXiangSymbol) input.ReadEnum();
             break;
           }
           case 16: {
@@ -2868,7 +2869,7 @@ namespace Api {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            Symbol = (global::Api.SiXiangSymbol) input.ReadEnum();
+            Symbol = (global::Proto.SiXiangSymbol) input.ReadEnum();
             break;
           }
           case 16: {
@@ -2901,7 +2902,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.SlotsGameReflection.Descriptor.MessageTypes[5]; }
+      get { return global::Proto.SlotsGameReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2937,10 +2938,10 @@ namespace Api {
 
     /// <summary>Field number for the "win_jackpot" field.</summary>
     public const int WinJackpotFieldNumber = 1;
-    private global::Api.WinJackpot winJackpot_ = global::Api.WinJackpot.Unspecified;
+    private global::Proto.WinJackpot winJackpot_ = global::Proto.WinJackpot.Unspecified;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.WinJackpot WinJackpot {
+    public global::Proto.WinJackpot WinJackpot {
       get { return winJackpot_; }
       set {
         winJackpot_ = value;
@@ -3025,7 +3026,7 @@ namespace Api {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (WinJackpot != global::Api.WinJackpot.Unspecified) hash ^= WinJackpot.GetHashCode();
+      if (WinJackpot != global::Proto.WinJackpot.Unspecified) hash ^= WinJackpot.GetHashCode();
       if (Ratio != 0L) hash ^= Ratio.GetHashCode();
       if (Count != 0L) hash ^= Count.GetHashCode();
       if (Chips != 0L) hash ^= Chips.GetHashCode();
@@ -3048,7 +3049,7 @@ namespace Api {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (WinJackpot != global::Api.WinJackpot.Unspecified) {
+      if (WinJackpot != global::Proto.WinJackpot.Unspecified) {
         output.WriteRawTag(8);
         output.WriteEnum((int) WinJackpot);
       }
@@ -3078,7 +3079,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (WinJackpot != global::Api.WinJackpot.Unspecified) {
+      if (WinJackpot != global::Proto.WinJackpot.Unspecified) {
         output.WriteRawTag(8);
         output.WriteEnum((int) WinJackpot);
       }
@@ -3108,7 +3109,7 @@ namespace Api {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (WinJackpot != global::Api.WinJackpot.Unspecified) {
+      if (WinJackpot != global::Proto.WinJackpot.Unspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) WinJackpot);
       }
       if (Ratio != 0L) {
@@ -3135,7 +3136,7 @@ namespace Api {
       if (other == null) {
         return;
       }
-      if (other.WinJackpot != global::Api.WinJackpot.Unspecified) {
+      if (other.WinJackpot != global::Proto.WinJackpot.Unspecified) {
         WinJackpot = other.WinJackpot;
       }
       if (other.Ratio != 0L) {
@@ -3170,7 +3171,7 @@ namespace Api {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            WinJackpot = (global::Api.WinJackpot) input.ReadEnum();
+            WinJackpot = (global::Proto.WinJackpot) input.ReadEnum();
             break;
           }
           case 16: {
@@ -3209,7 +3210,7 @@ namespace Api {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            WinJackpot = (global::Api.WinJackpot) input.ReadEnum();
+            WinJackpot = (global::Proto.WinJackpot) input.ReadEnum();
             break;
           }
           case 16: {
@@ -3250,7 +3251,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.SlotsGameReflection.Descriptor.MessageTypes[6]; }
+      get { return global::Proto.SlotsGameReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3286,10 +3287,10 @@ namespace Api {
 
     /// <summary>Field number for the "minor" field.</summary>
     public const int MinorFieldNumber = 1;
-    private global::Api.JackpotReward minor_;
+    private global::Proto.JackpotReward minor_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.JackpotReward Minor {
+    public global::Proto.JackpotReward Minor {
       get { return minor_; }
       set {
         minor_ = value;
@@ -3298,10 +3299,10 @@ namespace Api {
 
     /// <summary>Field number for the "major" field.</summary>
     public const int MajorFieldNumber = 2;
-    private global::Api.JackpotReward major_;
+    private global::Proto.JackpotReward major_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.JackpotReward Major {
+    public global::Proto.JackpotReward Major {
       get { return major_; }
       set {
         major_ = value;
@@ -3310,10 +3311,10 @@ namespace Api {
 
     /// <summary>Field number for the "mega" field.</summary>
     public const int MegaFieldNumber = 3;
-    private global::Api.JackpotReward mega_;
+    private global::Proto.JackpotReward mega_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.JackpotReward Mega {
+    public global::Proto.JackpotReward Mega {
       get { return mega_; }
       set {
         mega_ = value;
@@ -3322,10 +3323,10 @@ namespace Api {
 
     /// <summary>Field number for the "grand" field.</summary>
     public const int GrandFieldNumber = 4;
-    private global::Api.JackpotReward grand_;
+    private global::Proto.JackpotReward grand_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.JackpotReward Grand {
+    public global::Proto.JackpotReward Grand {
       get { return grand_; }
       set {
         grand_ = value;
@@ -3334,10 +3335,10 @@ namespace Api {
 
     /// <summary>Field number for the "mini" field.</summary>
     public const int MiniFieldNumber = 5;
-    private global::Api.JackpotReward mini_;
+    private global::Proto.JackpotReward mini_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.JackpotReward Mini {
+    public global::Proto.JackpotReward Mini {
       get { return mini_; }
       set {
         mini_ = value;
@@ -3483,31 +3484,31 @@ namespace Api {
       }
       if (other.minor_ != null) {
         if (minor_ == null) {
-          Minor = new global::Api.JackpotReward();
+          Minor = new global::Proto.JackpotReward();
         }
         Minor.MergeFrom(other.Minor);
       }
       if (other.major_ != null) {
         if (major_ == null) {
-          Major = new global::Api.JackpotReward();
+          Major = new global::Proto.JackpotReward();
         }
         Major.MergeFrom(other.Major);
       }
       if (other.mega_ != null) {
         if (mega_ == null) {
-          Mega = new global::Api.JackpotReward();
+          Mega = new global::Proto.JackpotReward();
         }
         Mega.MergeFrom(other.Mega);
       }
       if (other.grand_ != null) {
         if (grand_ == null) {
-          Grand = new global::Api.JackpotReward();
+          Grand = new global::Proto.JackpotReward();
         }
         Grand.MergeFrom(other.Grand);
       }
       if (other.mini_ != null) {
         if (mini_ == null) {
-          Mini = new global::Api.JackpotReward();
+          Mini = new global::Proto.JackpotReward();
         }
         Mini.MergeFrom(other.Mini);
       }
@@ -3532,35 +3533,35 @@ namespace Api {
             break;
           case 10: {
             if (minor_ == null) {
-              Minor = new global::Api.JackpotReward();
+              Minor = new global::Proto.JackpotReward();
             }
             input.ReadMessage(Minor);
             break;
           }
           case 18: {
             if (major_ == null) {
-              Major = new global::Api.JackpotReward();
+              Major = new global::Proto.JackpotReward();
             }
             input.ReadMessage(Major);
             break;
           }
           case 26: {
             if (mega_ == null) {
-              Mega = new global::Api.JackpotReward();
+              Mega = new global::Proto.JackpotReward();
             }
             input.ReadMessage(Mega);
             break;
           }
           case 34: {
             if (grand_ == null) {
-              Grand = new global::Api.JackpotReward();
+              Grand = new global::Proto.JackpotReward();
             }
             input.ReadMessage(Grand);
             break;
           }
           case 42: {
             if (mini_ == null) {
-              Mini = new global::Api.JackpotReward();
+              Mini = new global::Proto.JackpotReward();
             }
             input.ReadMessage(Mini);
             break;
@@ -3586,35 +3587,35 @@ namespace Api {
             break;
           case 10: {
             if (minor_ == null) {
-              Minor = new global::Api.JackpotReward();
+              Minor = new global::Proto.JackpotReward();
             }
             input.ReadMessage(Minor);
             break;
           }
           case 18: {
             if (major_ == null) {
-              Major = new global::Api.JackpotReward();
+              Major = new global::Proto.JackpotReward();
             }
             input.ReadMessage(Major);
             break;
           }
           case 26: {
             if (mega_ == null) {
-              Mega = new global::Api.JackpotReward();
+              Mega = new global::Proto.JackpotReward();
             }
             input.ReadMessage(Mega);
             break;
           }
           case 34: {
             if (grand_ == null) {
-              Grand = new global::Api.JackpotReward();
+              Grand = new global::Proto.JackpotReward();
             }
             input.ReadMessage(Grand);
             break;
           }
           case 42: {
             if (mini_ == null) {
-              Mini = new global::Api.JackpotReward();
+              Mini = new global::Proto.JackpotReward();
             }
             input.ReadMessage(Mini);
             break;
@@ -3641,7 +3642,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.SlotsGameReflection.Descriptor.MessageTypes[7]; }
+      get { return global::Proto.SlotsGameReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3690,10 +3691,10 @@ namespace Api {
 
     /// <summary>Field number for the "symbol" field.</summary>
     public const int SymbolFieldNumber = 2;
-    private global::Api.SiXiangSymbol symbol_ = global::Api.SiXiangSymbol.Unspecified;
+    private global::Proto.SiXiangSymbol symbol_ = global::Proto.SiXiangSymbol.Unspecified;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.SiXiangSymbol Symbol {
+    public global::Proto.SiXiangSymbol Symbol {
       get { return symbol_; }
       set {
         symbol_ = value;
@@ -3779,7 +3780,7 @@ namespace Api {
     public override int GetHashCode() {
       int hash = 1;
       if (Id != 0) hash ^= Id.GetHashCode();
-      if (Symbol != global::Api.SiXiangSymbol.Unspecified) hash ^= Symbol.GetHashCode();
+      if (Symbol != global::Proto.SiXiangSymbol.Unspecified) hash ^= Symbol.GetHashCode();
       if (NumOccur != 0) hash ^= NumOccur.GetHashCode();
       if (Rate != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(Rate);
       if (Chips != 0L) hash ^= Chips.GetHashCode();
@@ -3806,7 +3807,7 @@ namespace Api {
         output.WriteRawTag(8);
         output.WriteInt32(Id);
       }
-      if (Symbol != global::Api.SiXiangSymbol.Unspecified) {
+      if (Symbol != global::Proto.SiXiangSymbol.Unspecified) {
         output.WriteRawTag(16);
         output.WriteEnum((int) Symbol);
       }
@@ -3837,7 +3838,7 @@ namespace Api {
         output.WriteRawTag(8);
         output.WriteInt32(Id);
       }
-      if (Symbol != global::Api.SiXiangSymbol.Unspecified) {
+      if (Symbol != global::Proto.SiXiangSymbol.Unspecified) {
         output.WriteRawTag(16);
         output.WriteEnum((int) Symbol);
       }
@@ -3867,7 +3868,7 @@ namespace Api {
       if (Id != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Id);
       }
-      if (Symbol != global::Api.SiXiangSymbol.Unspecified) {
+      if (Symbol != global::Proto.SiXiangSymbol.Unspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Symbol);
       }
       if (NumOccur != 0) {
@@ -3895,7 +3896,7 @@ namespace Api {
       if (other.Id != 0) {
         Id = other.Id;
       }
-      if (other.Symbol != global::Api.SiXiangSymbol.Unspecified) {
+      if (other.Symbol != global::Proto.SiXiangSymbol.Unspecified) {
         Symbol = other.Symbol;
       }
       if (other.NumOccur != 0) {
@@ -3932,7 +3933,7 @@ namespace Api {
             break;
           }
           case 16: {
-            Symbol = (global::Api.SiXiangSymbol) input.ReadEnum();
+            Symbol = (global::Proto.SiXiangSymbol) input.ReadEnum();
             break;
           }
           case 24: {
@@ -3976,7 +3977,7 @@ namespace Api {
             break;
           }
           case 16: {
-            Symbol = (global::Api.SiXiangSymbol) input.ReadEnum();
+            Symbol = (global::Proto.SiXiangSymbol) input.ReadEnum();
             break;
           }
           case 24: {
@@ -4018,7 +4019,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.SlotsGameReflection.Descriptor.MessageTypes[8]; }
+      get { return global::Proto.SlotsGameReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4797,7 +4798,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.SlotsGameReflection.Descriptor.MessageTypes[9]; }
+      get { return global::Proto.SlotsGameReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

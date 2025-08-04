@@ -10,7 +10,7 @@ using DG.Tweening;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Globals;
-using Api;
+using Proto;
 
 public class DragonPearlItem : MonoBehaviour
 {
