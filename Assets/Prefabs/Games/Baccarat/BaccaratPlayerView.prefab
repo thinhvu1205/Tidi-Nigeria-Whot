@@ -136,6 +136,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 8298562169597130234, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8707924144333828752, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
       propertyPath: m_HorizontalAlignment
       value: 1
@@ -253,11 +257,12 @@ MonoBehaviour:
   objExit: {fileID: 2890498139933696562}
   dealerIcon: {fileID: 0}
   bkgThanhBar: {fileID: 5027503585267973356}
-  lbChipWinLose: {fileID: 0}
+  lbChipWinLose: {fileID: 9118124777491513258}
   fontWin: {fileID: 0}
   fontLose: {fileID: 0}
   agLose: 0
   agWin: 0
+  agCurrent: 0
   isThisPlayer: 0
   chipJackpot: 0
   animResult: {fileID: 6144984275068270388}
@@ -272,3 +277,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a6d54a1328461485bb453552b0911b7a, type: 2}
   cards: []
   isArranging: 0
+--- !u!114 &9118124777491513258 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1831605988215129025, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
+  m_PrefabInstance: {fileID: 7485332079158967403}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
