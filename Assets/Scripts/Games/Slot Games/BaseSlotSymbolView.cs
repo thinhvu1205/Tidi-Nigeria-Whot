@@ -110,19 +110,16 @@ public class BaseSlotSymbolView : BaseGameView
     protected SpinType spinType = SpinType.NORMAL;
     protected SlotGameState gameState = SlotGameState.JOIN_GAME;
     protected WinType winType = WinType.NONE;
-    protected WinJackpotType winJackpotType = WinJackpotType.NONE;
 
     [Header("Game Data")]
     protected List<SlotSymbolColumn> listColumn = new();
     protected List<long> listBetLevel = new();
-    protected List<int> validBetLevels = new();
-    protected List<List<int>> finishView = new();
     protected List<Payline> listPayline = new();
     protected List<GameObject> listLine = new();
     protected List<SiXiangGame> listGem = new();
     protected List<SpinSymbol> listSpinSymbol = new();
     protected Queue<TweenCallback> tweenQueue = new();
-    protected bool isHoldingSpin = false, isInSixiangBonus;
+    protected bool isHoldingSpin = false, isInSixiangBonus = false;
     protected int autoSpinRemain = 0, freeSpinLeft = 0;
     protected float holdingSpinTime = 0;
     protected long currentBetLevel = 0, playerChip = 0, winAmount = 0, normalWinAmount = 0, lastWinAmount = 0, currentChipWin = 0, playerWalletAfter = 0, playerWallet = 0,
@@ -132,8 +129,7 @@ public class BaseSlotSymbolView : BaseGameView
     public bool IsSpinning { get; set; } = false;
     public int ScatterCount { get; set; } = 0;
 
-    protected bool isGrandJackpot = false, hasSetupStartView = false, isInFreeSpin = false, isChooseBonusGame = false;
-    protected virtual Vector2 RECT_SIZE => new(135f, 135f);
+    protected bool hasSetupStartView = false, isInFreeSpin = false, isChooseBonusGame = false;
     protected virtual float AUTO_SPIN_HOLD_DURATION => 1.3f;
 
 
@@ -144,11 +140,7 @@ public class BaseSlotSymbolView : BaseGameView
     protected virtual Dictionary<SiXiangSymbol, int> SymbolDictionary => new();
     protected virtual Dictionary<SiXiangGame, int> GemDictionary => new();
 
-    public event Action<OnUpdateTableEventArgs> OnUpdateTable;
-    public class OnUpdateTableEventArgs : EventArgs
-    {
-        public SlotDesk data;
-    }
+
 
     protected override void Awake()
     {
@@ -164,6 +156,10 @@ public class BaseSlotSymbolView : BaseGameView
     }
 
     #region API Handlers
+    public override void LoadInfoMatch(Match match)
+    {
+        Debug.Log("Match: " + match);
+    }
     public override void HandleUpdateTable(IMatchState matchState)
     {
         base.HandleUpdateTable(matchState);
@@ -182,7 +178,6 @@ public class BaseSlotSymbolView : BaseGameView
             _ => WinType.NONE,
         };
 
-        CheckBonusGame(data);
         UpdateColumnView(data);
         UpdateReward(data);
 
@@ -200,19 +195,11 @@ public class BaseSlotSymbolView : BaseGameView
             }
             else
             {
-                if (currentGame == SiXiangGame.Normal)
-                {
-                    UpdateJackpot(data);
-                    UpdateGem();
-                }
+
+                UpdateJackpot(data);
+                UpdateGem();
             }
         }
-
-        OnUpdateTable?.Invoke(new OnUpdateTableEventArgs
-        {
-            data = data
-        });
-
 
         if (!hasSetupStartView) hasSetupStartView = true;
     }
@@ -249,7 +236,7 @@ public class BaseSlotSymbolView : BaseGameView
             long updatedWallet = playerWallet - currentBetLevel;
             SetCurrentChipValue(updatedWallet);
             SetInfoSessionText($"Playing {listPaylineId.Count} lines. Good luck!");
-            UpdateStateWinUI(StateWin.LAST_WIN); // Last win
+            UpdateStateWinUI(StateWin.LAST_WIN);
             if (spinType == SpinType.AUTO)
             {
                 if (autoSpinRemain >= 0)
@@ -287,12 +274,6 @@ public class BaseSlotSymbolView : BaseGameView
     public virtual void OnStopSpin()
     {
         IsSpinning = false;
-        ///------------------CHECK SPREAD WILD--------------------///
-        if (CheckWild())
-        {
-            tweenQueue.Enqueue(() => ShowAnimationWild());
-            tweenQueue.Enqueue(() => ShowSpreadWild());
-        }
 
         ///------------------CHECK SHOW ALL LINE--------------------///
         if (listPayline.Count > 0)
@@ -356,8 +337,8 @@ public class BaseSlotSymbolView : BaseGameView
                         if (autoSpinRemain > 0 || isInFreeSpin)
                         {
                             HandleSpin();
-
                         }
+                        // Nếu hết auto spin thì set spinType về NORMAL
                         else
                         {
                             spinType = SpinType.NORMAL;
@@ -405,8 +386,13 @@ public class BaseSlotSymbolView : BaseGameView
             column.IsShowingThirdScatter = true;
         }
     }
+    protected bool CheckWinThirdScatter()
+    {
+        return currentGame == SiXiangGame.Normal && nextGame == SiXiangGame.Bonus && ScatterCount == 3;
+    }
 
     #region Win Effects
+
     protected void ShowAnimationWild()
     {
         Sequence sequence = DOTween.Sequence();
@@ -449,10 +435,10 @@ public class BaseSlotSymbolView : BaseGameView
             .AppendInterval(4f)
             .OnComplete(() =>
             {
-                // if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO)
-                // {
-                //     AnimateCoinsFly();
-                // }
+                if (spinType == SpinType.FREE_AUTO || spinType == SpinType.AUTO)
+                {
+                    AnimateCoinsFly();
+                }
                 SetLightAllItems();
                 NextTween();
             });
@@ -462,6 +448,7 @@ public class BaseSlotSymbolView : BaseGameView
     protected void ShowAllWinLines()
     {
         Debug.Log("ShOW ALL WIN LINES");
+        paylineIconContainer.gameObject.SetActive(false);
         if (spinType == SpinType.AUTO)
         {
             UpdateChipWinValue();
@@ -470,7 +457,6 @@ public class BaseSlotSymbolView : BaseGameView
         {
             UpdateTotalChipWinValue();
         }
-        paylineIconContainer.gameObject.SetActive(false);
         SetDarkAllItems();
         // Draw Line và lưu vào listLine
         foreach (Payline payline in listPayline)
@@ -518,7 +504,7 @@ public class BaseSlotSymbolView : BaseGameView
             });
     }
 
-    private void ShowSymbolOneByOne()
+    protected void ShowSymbolOneByOne()
     {
         if (spinType == SpinType.NORMAL)
         {
@@ -543,7 +529,6 @@ public class BaseSlotSymbolView : BaseGameView
                     {
                         if (sequence == null || !sequence.IsActive())
                         {
-                            Debug.Log("RETURN LUON KO SHOW GI NUA");
                             return;
                         }
                         else
@@ -730,7 +715,9 @@ public class BaseSlotSymbolView : BaseGameView
 
     protected void UpdateGem()
     {
-        foreach (Image image in listGemImage)
+        if (currentGame != SiXiangGame.Normal) return;
+
+            foreach (Image image in listGemImage)
         {
             image.color = Color.gray;
         }
@@ -803,7 +790,7 @@ public class BaseSlotSymbolView : BaseGameView
     }
     protected void UpdateJackpot(SlotDesk data)
     {
-        Debug.Log("UPDATE JACKPOT");
+        if (currentGame != SiXiangGame.Normal) return;
         JackpotHistory jackpotHistory = data?.WinJpHistory;
         if (jackpotHistory == null) return;
         long[] listDataJackpot = new long[]
@@ -1126,62 +1113,7 @@ public class BaseSlotSymbolView : BaseGameView
     }
     #endregion
 
-    #region Bonus Game
-    protected void CheckBonusGame(SlotDesk data)
-    {
-        currentGame = data.CurrentSixiangGame;
-        nextGame = data.NextSixiangGame;
-        isInSixiangBonus = data.IsInSixiangBonus;
-        if (nextGame == SiXiangGame.Normal) return;
-        SetCurrentChipValue(data.GameReward.BalanceChipsWalletAfter);
-        isChooseBonusGame = data.SixiangGems.Count == 4;
-        Dictionary<SiXiangGame, int> miniGameDictionary = new()
-        {
-            { SiXiangGame.DragonPearl, 0 },
-            { SiXiangGame.Goldpick, 1 },
-            { SiXiangGame.Rapidpay, 2 },
-            { SiXiangGame.Luckdraw, 3 },
-        };
-        Dictionary<SiXiangGame, int> bonusGameDictionary = new()
-        {
-            { SiXiangGame.SixangbonusDragonPearl, 0 },
-            { SiXiangGame.SixangbonusGoldpick, 1 },
-            { SiXiangGame.SixangbonusRapidpay, 2 },
-            { SiXiangGame.SixangbonusLuckdraw, 3 },
-        };
-
-        // Chọn miễn phí 1 trong 4 bonus game
-        if (currentGame == SiXiangGame.Sixangbonus)
-        {
-            if (nextGame== SiXiangGame.Sixangbonus)
-            {
-                ShowChooseBonusGame();
-            }
-            else if (bonusGameDictionary.TryGetValue(data.NextSixiangGame, out int bonusIndex))
-            {
-                OnSelectBonusGame(bonusIndex);
-            }
-            AnimateHideGemButtons();
-        }
-
-        // Mua 1 trong 4 bonus game
-        if (data.InfoBet.EmitNewgameEvent && miniGameDictionary.TryGetValue(currentGame, out int index))
-        {
-            OnSelectBonusGame(index);
-            AnimateHideGemButtons();
-        }
-
-    }
-    public virtual void OnSelectBonusGame(int index)
-    {
-
-    }
-
-    protected virtual void ShowChooseBonusGame()
-    {
-
-    }
-    #endregion
+    
 
     #region Helpers
     public void SetDarkAllItems(bool isBackgroundDark = true)
@@ -1217,6 +1149,7 @@ public class BaseSlotSymbolView : BaseGameView
             effectContainer.gameObject.SetActive(false);
             listLine.Clear();
             listPayline.Clear();
+            listSpinSymbol.Clear();
             SetLightAllItems();
             if (autoSpinRemain == 0)
             {
@@ -1411,7 +1344,6 @@ public class BaseSlotSymbolView : BaseGameView
     }
 
     #endregion
-    public Queue<TweenCallback> TweenQueue => tweenQueue;
     public List<SlotSymbolColumn> ListColumn => listColumn;
     public List<SpinSymbol> ListSpinSymbol => listSpinSymbol;
     public Transform InfoSessionBar => paylineInfoContainer;

@@ -22,8 +22,8 @@ public class SlotSymbolColumn : MonoBehaviour
     public List<int> FinishSymbolView { get; private set; } = new();
     public float speedThirdScatterAnimation = 0.05f;
     protected const float DEFAULT_SPIN_DURATION = 0.5f;
-    protected const float SPEED_NORMAL = 0.12f;
-    protected const float SPEED_AUTO = 0.08f;
+    protected const float SPEED_NORMAL = 0.10f;
+    protected const float SPEED_AUTO = 0.06f;
     protected BaseSlotSymbolView slotView;
 
     public float PositionOutScreen { get; private set; } = -408f;
@@ -86,7 +86,7 @@ public class SlotSymbolColumn : MonoBehaviour
 
     private IEnumerator SpinDuration()
     {
-        float delayBetweenColumns = slotView.GetSpinType() == SpinType.NORMAL ? 0.4f : 0.3f;
+        float delayBetweenColumns = slotView.GetSpinType() == SpinType.NORMAL ? 0.35f : 0.25f;
         float defaultSpinDuration = slotView.GetSpinType() == SpinType.NORMAL ? DEFAULT_SPIN_DURATION : DEFAULT_SPIN_DURATION * 0.75f;
         float duration = defaultSpinDuration + delayBetweenColumns * (columnIndex - 1);
 

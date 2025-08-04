@@ -50,7 +50,7 @@ public class SiXiangRapidPayView : MonoBehaviour
 
     }
 
-    private void SixiangView_OnUpdateTable(BaseSlotSymbolView.OnUpdateTableEventArgs e)
+    private void SixiangView_OnUpdateTable(SlotSixiangView.OnUpdateTableEventArgs e)
     {
         SlotDesk data = e.data;
         SpinSymbol item = data.SpinSymbols[0];

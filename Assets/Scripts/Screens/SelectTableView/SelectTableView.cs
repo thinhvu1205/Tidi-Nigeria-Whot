@@ -80,6 +80,9 @@ public class SelectTableView : BaseView
             case Constants.BACCARAT_GAME_ID:
                 titleText.text = "Baccarat";
                 break;
+            case Constants.CHINESE_POKER_GAME_ID:
+                titleText.text = "Chinese Poker";
+                break;
             default:
                 // titleText.text = "Select Table";
                 break;

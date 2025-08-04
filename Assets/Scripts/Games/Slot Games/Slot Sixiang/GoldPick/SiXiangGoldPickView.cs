@@ -171,7 +171,7 @@ public class SiXiangGoldPickView : MonoBehaviour
         }
     }
     
-    public void SixiangView_OnUpdateTable(BaseSlotSymbolView.OnUpdateTableEventArgs e)
+    public void SixiangView_OnUpdateTable(SlotSixiangView.OnUpdateTableEventArgs e)
     {
         SlotDesk data = e.data;
         SpinSymbol item = data.SpinSymbols[0];

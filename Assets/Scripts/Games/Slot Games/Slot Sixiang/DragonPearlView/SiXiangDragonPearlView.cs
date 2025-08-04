@@ -106,7 +106,7 @@ public class SiXiangDragonPearlView : MonoBehaviour
         }
     }
 
-    public void SixiangView_OnUpdateTable(BaseSlotSymbolView.OnUpdateTableEventArgs e)
+    public void SixiangView_OnUpdateTable(SlotSixiangView.OnUpdateTableEventArgs e)
     {
         SlotDesk data = e.data;
         listSpinSymbol = data.SpinSymbols.ToList();
@@ -120,8 +120,7 @@ public class SiXiangDragonPearlView : MonoBehaviour
 
     public void OnStopSpin()
     {
-        GameView.UpdateTotalChipWinValue();
-        GameView.UpdateDragonPearlFreeSpinLeft();
+
 
         Sequence mainSequence = DOTween.Sequence();
 
@@ -138,20 +137,21 @@ public class SiXiangDragonPearlView : MonoBehaviour
         }
 
         // Khi toàn bộ sequence hoàn tất, gọi NextTween
-        mainSequence.OnComplete(() =>
+        if (isFinishGame)
         {
-            if (isFinishGame)
+            mainSequence.AppendInterval(2.5f);
+            mainSequence.AppendCallback(() =>
             {
-                mainSequence.AppendInterval(0.5f);
-                Debug.Log("FINISH GAME");
                 GameView.OnFinishDragonPearl(isWinGrandJackpot);
-            }
-            else
+            });
+        }
+        else
+        {
+            mainSequence.AppendCallback(() =>
             {
-                Debug.Log("SPIN TIEP");
                 GameView.NextTween();
-            }
-        });
+            });
+        }
     }
 
     public void StartView6Gold()
@@ -160,7 +160,6 @@ public class SiXiangDragonPearlView : MonoBehaviour
         Debug.Log("START VIEW 6 GOLD");
         hasInitFirst6Gold = true;
         Reset();
-        listItemGold.Clear();
         List<SpinSymbol> listSpinSymbol = GameView.ListSpinSymbol;
         Sequence sequence = DOTween.Sequence();
         sequence.SetAutoKill(true);
@@ -185,7 +184,7 @@ public class SiXiangDragonPearlView : MonoBehaviour
                 .AppendInterval(i != listSpinSymbol.Count - 1 ? 0.1f : 0.9f);
         }
         sequence
-            .AppendInterval(1f)
+            .AppendInterval(0.4f)
             .OnComplete(() =>
             {
                 foreach (GameObject item in listItemGold)
@@ -212,6 +211,7 @@ public class SiXiangDragonPearlView : MonoBehaviour
                 item.Reset();
             });
         });
+        listItemGold.Clear();
         isWinGrandJackpot = false;
         isAutoPlay = true;
     }

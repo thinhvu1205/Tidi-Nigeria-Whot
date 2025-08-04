@@ -125,12 +125,12 @@ public class BaccaratView : BaseGameView
     private void LoadProfile()
     {
         currentPlayerView.id = User.userMain.userId;
-        currentPlayerView.setAg(long.Parse(User.userMain.accountChip));
+        currentPlayerView.setAg(User.userMain.accountChip);
         currentPlayerView.setName(User.userMain.displayName);
         currentPlayerView.avatar_id = User.userMain.avatarId;
         currentPlayerView.vipLevel = User.userMain.vipLevel;
         thisPlayer.Id = User.userMain.userId;
-        thisPlayer.Wallet = User.userMain.accountChip;
+        thisPlayer.Wallet = User.userMain.accountChip.ToString();
         thisPlayer.AvatarId = User.userMain.avatarId;
         thisPlayer.VipLevel = User.userMain.vipLevel;
         thisPlayer.UserName = User.userMain.displayName;

@@ -7197,7 +7197,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Confirm
+  m_text: Collect
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
   m_sharedMaterial: {fileID: 6795141060960944527, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
@@ -8447,7 +8447,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Confirm
+  m_text: Collect
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
   m_sharedMaterial: {fileID: 6795141060960944527, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
@@ -13227,6 +13227,18 @@ MonoBehaviour:
   effectPopup: 0
   effectPopupReverse: 0
   popupBackground: {fileID: 0}
+  listPlayerView: []
+  playerViewPrefab: {fileID: 0}
+  lbInfo: {fileID: 0}
+  invitePrefab: {fileID: 0}
+  inviteContainer: {fileID: 0}
+  playerContainer: {fileID: 0}
+  txtGameName: {fileID: 0}
+  m_HiddenPlayersTf: {fileID: 0}
+  agTable: 0
+  maxbet: 0
+  delayEvents: []
+  stateGame: 1
   animationSpecialWin: {fileID: 2131749852979346010}
   animationJackpotWin: {fileID: 7864831807772772807}
   animationBackgroundMoney: {fileID: 5509735563504968216}

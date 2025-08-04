@@ -71,6 +71,7 @@ public class DragonPearlItem : MonoBehaviour
                         {
                             dragonPearlView.itemGoldPool.Release(itemGold);
                         });
+                        
                     }).
                     AppendInterval(1f);
             }
@@ -90,6 +91,8 @@ public class DragonPearlItem : MonoBehaviour
                 .AppendInterval(0.33f)
                 .AppendCallback(() =>
                 {
+                    dragonPearlView.GameView.UpdateTotalChipWinValue();
+                    dragonPearlView.GameView.UpdateDragonPearlFreeSpinLeft();
                     textChipValue.fontMaterial = materialText[0];
                     textChipValue.gameObject.SetActive(true);
                     textChipValue.text = Utility.FormatMoney(WinAmount, true);
