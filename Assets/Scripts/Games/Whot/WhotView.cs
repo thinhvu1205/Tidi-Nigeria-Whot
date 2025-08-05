@@ -85,7 +85,7 @@ public class WhotView : BaseGameView
         Init();
     }
 
-    private void Update()
+    protected override void Update()
     {
         // Khi chạm vào màn hình thì gửi lên trạng thái active để server ko kick người chơi ra khỏi bàn
         if (Input.GetMouseButtonDown(0) || Input.touchCount > 0)

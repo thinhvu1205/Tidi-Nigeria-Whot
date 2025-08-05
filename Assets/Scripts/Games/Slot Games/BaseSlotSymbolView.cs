@@ -156,10 +156,6 @@ public class BaseSlotSymbolView : BaseGameView
     }
 
     #region API Handlers
-    public override void LoadInfoMatch(Match match)
-    {
-        Debug.Log("Match: " + match);
-    }
     public override void HandleUpdateTable(IMatchState matchState)
     {
         base.HandleUpdateTable(matchState);
