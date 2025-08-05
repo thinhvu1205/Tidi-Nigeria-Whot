@@ -1778,7 +1778,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9980662995010559}
   m_Layer: 5
-  m_Name: BankerCards
+  m_Name: Banker Cards
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5005,27 +5005,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14cff0e88ac664f70a02cddb4b6f0f54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectPopup: 1
+  effectPopup: 0
   effectPopupReverse: 0
   popupBackground: {fileID: 0}
+  textMatchInfo: {fileID: 0}
+  textGameName: {fileID: 0}
   listPlayerView:
   - {fileID: 7701240465582643105}
   - {fileID: 3987918311116982472}
   - {fileID: 2784133225402961677}
   - {fileID: 246433554282786556}
-  playerViewPrefab: {fileID: 0}
-  lbInfo: {fileID: 5804826658225476738}
   invitePrefab: {fileID: 8979014322673678433, guid: 448838f8c29fdaa42a42ce917796fbb0, type: 3}
   inviteContainer: {fileID: 2140578468799514391}
   playerContainer: {fileID: 2111872997021713629}
-  txtGameName: {fileID: 0}
-  m_HiddenPlayersTf: {fileID: 0}
-  agTable: 0
-  maxbet: 0
-  delayEvents:
-  - finish
-  - ltable
-  stateGame: 1
+  hiddenPlayerContainer: {fileID: 0}
   chipPref: {fileID: 8310258043520399836, guid: 8b62bf31efec5452f98ee7902bb9449f, type: 3}
   chipContainer: {fileID: 5375969710471230461}
   cardDeckB: {fileID: 1729079618517803771}
@@ -9994,7 +9987,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7550316864873654708}
   m_Layer: 5
-  m_Name: Button Bet Baccarat
+  m_Name: Button Bet Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

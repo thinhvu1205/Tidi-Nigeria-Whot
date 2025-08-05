@@ -1084,7 +1084,7 @@ GameObject:
   - component: {fileID: 1987247634008203717}
   - component: {fileID: 6352929101340067465}
   m_Layer: 5
-  m_Name: lbChip
+  m_Name: Text Chip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1719,12 +1719,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 923107843582243361}
         m_TargetAssemblyTypeName: SixiangChooseGameBonus, Assembly-CSharp
-        m_MethodName: onClickSelectGame
+        m_MethodName: OnClickSelectGame
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3607,7 +3607,7 @@ GameObject:
   - component: {fileID: 6921033515422535739}
   - component: {fileID: 3345249905796389848}
   m_Layer: 5
-  m_Name: BgItem
+  m_Name: Background Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3683,10 +3683,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43d3ba77f5a3e4350887ca0c4b27ccc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lbChipWin: {fileID: 6352929101340067465}
-  lbChipFSP: {fileID: 9134996937292324034}
-  BgItem: {fileID: 6921033515422535739}
-  SpineItem: {fileID: 4566345678367958848}
+  textChipValue: {fileID: 6352929101340067465}
+  textChipFSP: {fileID: 9134996937292324034}
+  imageBackground: {fileID: 6921033515422535739}
+  spine: {fileID: 4566345678367958848}
   materialText:
   - {fileID: 2100000, guid: a46a7ca2baf79884ba49a89effa43406, type: 2}
   - {fileID: 2100000, guid: 0745538ed83de4945ac1fbb020425b30, type: 2}
@@ -3700,7 +3700,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2729712533367693783}
   m_Layer: 5
-  m_Name: container
+  m_Name: Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4116,7 +4116,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 923107843582243361}
         m_TargetAssemblyTypeName: SixiangChooseGameBonus, Assembly-CSharp
-        m_MethodName: onClickSelectGame
+        m_MethodName: OnClickSelectGame
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5355,7 +5355,7 @@ GameObject:
   - component: {fileID: 7653645193269998272}
   - component: {fileID: 2412465845891656682}
   m_Layer: 5
-  m_Name: initGold
+  m_Name: Image Gold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5690,7 +5690,7 @@ GameObject:
   - component: {fileID: 8571261942296770171}
   - component: {fileID: 1051064743550939235}
   m_Layer: 5
-  m_Name: DragonPearlsView
+  m_Name: Dragon Pearls View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5730,7 +5730,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06043d081af92b24f9c948fdbb1c03d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  listBgItem:
+  listBackgroundItem:
   - {fileID: 21300000, guid: 37dff2b8127653747b422faf6b933961, type: 3}
   - {fileID: 21300000, guid: 5fa27438deb0eec4291b06d31a1344b9, type: 3}
   - {fileID: 21300000, guid: b2f84d39638c10a41985f937ad73b6a5, type: 3}
@@ -5746,11 +5746,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d5ad1aeb6b8837b4aa09c8f0cab2ac3b, type: 3}
   - {fileID: 21300000, guid: 392f6d691e2a61e40885c05c3a0c3bc9, type: 3}
   - {fileID: 21300000, guid: a08193110c5db554988273b6fbff5bff, type: 3}
-  itemContainer: {fileID: 7646084357970664726}
-  itemInitGold: {fileID: 3533989435799101791}
-  isFinish: 0
-  isDPSpin: 0
-  isBonusGame: 0
+  itemGoldPrefab: {fileID: 3533989435799101791}
+  itemPrefab: {fileID: 2406801492698323149}
+  itemContainer: {fileID: 8403773659093879825}
 --- !u!1 &3788202206932341996
 GameObject:
   m_ObjectHideFlags: 0
@@ -5840,12 +5838,12 @@ GameObject:
   - component: {fileID: 4316360898329186549}
   - component: {fileID: 4566345678367958848}
   m_Layer: 0
-  m_Name: spine
+  m_Name: Spine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2883574027075326337
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5893,11 +5891,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  skeletonDataAsset: {fileID: 0}
+  skeletonDataAsset: {fileID: 11400000, guid: a0d526b66fbf04144aca8c85dc7a8f98, type: 2}
   initialSkinName: default
   initialFlipX: 0
   initialFlipY: 0
-  startingAnimation: 
+  startingAnimation: animation
   startingLoop: 1
   timeScale: 1
   freeze: 0
@@ -6811,7 +6809,7 @@ GameObject:
   - component: {fileID: 6663608511061883301}
   - component: {fileID: 9134996937292324034}
   m_Layer: 5
-  m_Name: lbFSP
+  m_Name: Text FSP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7199,7 +7197,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: OK
+  m_text: Collect
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
   m_sharedMaterial: {fileID: 6795141060960944527, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
@@ -8219,7 +8217,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  skeletonDataAsset: {fileID: 0}
+  skeletonDataAsset: {fileID: 11400000, guid: 479e60b8224fe481185c221f3cb0d85e, type: 2}
   initialSkinName: default
   initialFlipX: 0
   initialFlipY: 0
@@ -8449,7 +8447,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Collect
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
   m_sharedMaterial: {fileID: 6795141060960944527, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
@@ -9402,7 +9400,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c60b558d050a3064e8b0ea302b6a5486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinebg: {fileID: 7168008539888612133}
   container: {fileID: 4552852195475658095}
 --- !u!1 &6599964485631753946
 GameObject:
@@ -10934,7 +10931,7 @@ GameObject:
   - component: {fileID: 8403773659093879825}
   - component: {fileID: 2580129019278309230}
   m_Layer: 5
-  m_Name: ItemContainer
+  m_Name: Item Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11995,7 +11992,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  skeletonDataAsset: {fileID: 0}
+  skeletonDataAsset: {fileID: 11400000, guid: 78848baa407110244826bbd18f7eed73, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
@@ -13029,12 +13026,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 923107843582243361}
         m_TargetAssemblyTypeName: SixiangChooseGameBonus, Assembly-CSharp
-        m_MethodName: onClickSelectGame
+        m_MethodName: OnClickSelectGame
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 5
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -13230,10 +13227,23 @@ MonoBehaviour:
   effectPopup: 0
   effectPopupReverse: 0
   popupBackground: {fileID: 0}
+  listPlayerView: []
+  playerViewPrefab: {fileID: 0}
+  lbInfo: {fileID: 0}
+  invitePrefab: {fileID: 0}
+  inviteContainer: {fileID: 0}
+  playerContainer: {fileID: 0}
+  txtGameName: {fileID: 0}
+  m_HiddenPlayersTf: {fileID: 0}
+  agTable: 0
+  maxbet: 0
+  delayEvents: []
+  stateGame: 1
   animationSpecialWin: {fileID: 2131749852979346010}
   animationJackpotWin: {fileID: 7864831807772772807}
   animationBackgroundMoney: {fileID: 5509735563504968216}
   animationBtnSpin: {fileID: 5790761887145093738}
+  animationBackground: {fileID: 9158675470543685110}
   rulePrefab: {fileID: 8509303910187848506, guid: b43ea45e2e34647c593aeaa3895de537, type: 3}
   coinPrefab: {fileID: 5775115196986566630, guid: a9c914c2a21b84cf9b137696d366c3e4, type: 3}
   linePrefab: {fileID: 8548897947965680954, guid: 0141132e8370a4b11b5689cdc18d9b49, type: 3}
@@ -13265,6 +13275,7 @@ MonoBehaviour:
   textSpecialWin: {fileID: 8854265393965220370}
   textUserChip: {fileID: 7294973043810666818}
   textChipWin: {fileID: 5950044912980530189}
+  textJackpotWin: {fileID: 3631711748389801137}
   listTextJackpot:
   - {fileID: 3735164621345382757}
   - {fileID: 9040228466994775819}
@@ -13287,11 +13298,14 @@ MonoBehaviour:
   coinParent: {fileID: 5061016822474984051}
   paylineIconContainer: {fileID: 8954741523360725864}
   paylineInfoContainer: {fileID: 4877833523199133939}
-  infoBar: {fileID: 6482916792140384412}
   buttonConfirmSpecialWin: {fileID: 4548516015508786001}
+  buttonConfirmJackpotWin: {fileID: 964096992036788507}
+  dragonPearlView: {fileID: 1051064743550939235}
   backgroundGoldPick: {fileID: 4978684170856986982}
+  animationGameName: {fileID: 7893618654073556926}
   animationAnimal: {fileID: 5029282601577538407}
   animationCutScene: {fileID: 1656969020563298756}
+  chooseGameBonus: {fileID: 923107843582243361}
 --- !u!114 &3614311997081481675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13618,12 +13632,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 923107843582243361}
         m_TargetAssemblyTypeName: SixiangChooseGameBonus, Assembly-CSharp
-        m_MethodName: onClickSelectGame
+        m_MethodName: OnClickSelectGame
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 4
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

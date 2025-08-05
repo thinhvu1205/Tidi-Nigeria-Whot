@@ -238,7 +238,6 @@ public class SlotSymbol : MonoBehaviour
 
     public void HideBackgroundWin()
     {
-        Debug.Log("HIDE BACKGROUND WIN");
         backgroundWin.gameObject.SetActive(false);
     }
 
@@ -262,7 +261,7 @@ public class SlotSymbol : MonoBehaviour
             SetSprite(Random.Range(0, 9));
         }
         Speed = 0.1f;
-        sprite.color = Color.white;
+        // sprite.color = Color.white;
         indexStop = -1;
         backgroundWin.gameObject.SetActive(false);
         spine.gameObject.SetActive(false);

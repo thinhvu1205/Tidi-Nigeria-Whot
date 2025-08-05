@@ -68,7 +68,7 @@ public class SelectTableView : BaseView
     #endregion
     private void UpdateVisuals()
     {
-        accountChip.text = User.userMain.accountChip;
+        accountChip.text = User.userMain.accountChip.ToString();
     }
     private void UpdateTitle()
     {
@@ -79,6 +79,9 @@ public class SelectTableView : BaseView
                 break;
             case Constants.BACCARAT_GAME_ID:
                 titleText.text = "Baccarat";
+                break;
+            case Constants.CHINESE_POKER_GAME_ID:
+                titleText.text = "Chinese Poker";
                 break;
             default:
                 // titleText.text = "Select Table";

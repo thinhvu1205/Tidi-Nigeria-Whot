@@ -497,6 +497,7 @@ public class NetworkManager : MonoBehaviour
         // _ClientC = new Client("http", "172.23.112.1", 57350, "defaultkey");
         _ClientC = new Client("http", "172.16.56.71", 57350, "defaultkey");
         // _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey");
+        // _ClientC = new Client("http", "103.226.250.195", 7350, "defaultkey");
         RestoreSession();
         string deviceId;
         if (PlayerPrefs.HasKey(DEVICE_ID)) deviceId = PlayerPrefs.GetString(DEVICE_ID);

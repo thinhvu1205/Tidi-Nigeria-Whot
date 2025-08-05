@@ -4,30 +4,38 @@ using UnityEngine;
 using UnityEngine.UI;
 using Spine.Unity;
 using DG.Tweening;
-
+using Proto;
+using Google.Protobuf;
+using SixiangSymbol = Proto.SiXiangSymbol;
 public class SixiangChooseGameBonus : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] Transform container;
+    private bool isInteractable = true;
 
-    [SerializeField]
-    SkeletonGraphic spinebg;
+    protected Dictionary<int, SiXiangSymbol> BonusGameDictionary => new()
+    {
+        { 0, SiXiangSymbol.SixangbonusDragonpearlGame }, // Dragon Pearl
+        { 1, SiXiangSymbol.SixangbonusGoldpickGame}, // Gold Pick
+        { 2, SiXiangSymbol.SixangbonusRapidpayGame }, // Rapid Pay
+        { 3, SiXiangSymbol.SixangbonusLuckydrawGame }, // Lucky Draw
+    };
 
-    [SerializeField]
-    Transform container;
-
-    private bool isSelected = false;
-
-    // Update is called once per frame
-
-    protected void OnEnable()
+    private void OnEnable()
     {
         container.localScale = Vector2.one;
+        isInteractable = true;
     }
-    public void onClickSelectGame(int index)
+    public void OnClickSelectGame(int index)
     {
-        // SocketSend.sendSelectMiniGame(Globals.ACTION_SLOT_SIXIANG.selectBonusGame, index.ToString());
+        if (!isInteractable) return;
+        InfoBet infoBet = new()
+        {
+            Id = (int)BonusGameDictionary[index],
+        };
+        DataSender.SendMatchState((long)OpCodeRequest.Spin, infoBet.ToByteArray());
+        isInteractable = false;
     }
-    public void onClose()
+    public void OnClose()
     {
         container.DOScale(new Vector2(0.8f, 0.8f), 0.3f).SetEase(Ease.InBack).OnComplete(() =>
         {
