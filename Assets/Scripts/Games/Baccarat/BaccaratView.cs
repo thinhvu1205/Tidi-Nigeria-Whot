@@ -17,7 +17,7 @@ using UnityEngine.UI;
 using GameState = Proto.GameState;
 using Utility = Globals.Utility;
 
-public class BaccaratView : BaseGameView
+public class BaccaratView : BaseDiceGameView
 {
      // ================== Prefabs & Containers ==================
     [Header("Prefabs & Containers")]
@@ -120,7 +120,7 @@ public class BaccaratView : BaseGameView
     public override void LoadInfoMatch(Match match)
     {
         base.LoadInfoMatch(match);
-        SetInfoBet(agTable);
+        SetInfoBet(MarkUnit);
     }
 
     private void LoadProfile()
@@ -322,8 +322,8 @@ public class BaccaratView : BaseGameView
     {
         base.HandleUpdateGameState(matchState);
         var updateGameState = UpdateGameState.Parser.ParseFrom(matchState.State);
-        stateGame = updateGameState.State;
-        if (stateGame != GameState.Play)
+        GameState = updateGameState.State;
+        if (GameState != GameState.Play)
         {
             buttonBetBaccarat.SetActive(false);
         }
@@ -661,7 +661,7 @@ public class BaccaratView : BaseGameView
             {
                 // break
                 listChipBets[i].interactable = true;
-                if (stateGame == GameState.Play && check && myChipBetColor >= i)
+                if (GameState == GameState.Play && check && myChipBetColor >= i)
                 {
                     listChipBets[i].transform.Find("Border").gameObject.SetActive(true);
                     betValue = listValueChipBets[i];
@@ -704,7 +704,7 @@ public class BaccaratView : BaseGameView
         {
             for (int i = 0; i < 5; i++)
             {
-                if (listMyBet[i] > 0 && listMyBet[i] <= agTable * 100)
+                if (listMyBet[i] > 0 && listMyBet[i] <= MarkUnit * 100)
                 {
                     checkBetDouble = true;
                     // SocketSend.sendBetBaccarat(listMyBet[i], getBetGate2(i + 1));
@@ -822,7 +822,7 @@ public class BaccaratView : BaseGameView
     public void OnClickBet(int betArea)
     {
         if (betValue <= 0) return;
-        if (stateGame != GameState.Play) return;
+        if (GameState != GameState.Play) return;
         
         // Create bet request
         BaccaratPlayerBet baccaratPlayerBet = new BaccaratPlayerBet
