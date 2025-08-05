@@ -9,10 +9,7 @@ import "game_common.proto";
 import "whot_game.proto";
 
 
-enum CardStatus {
-  STATUS_HOLD = 0;
-  STATUS_UNHOLD = 1;
-}
+
 
 enum CardSuit {
   SUIT_UNSPECIFIED = 0;

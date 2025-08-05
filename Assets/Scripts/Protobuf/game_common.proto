@@ -13,6 +13,12 @@ message Player {
   string avatar_id = 7;
   int64 sid = 8;
   int32 order = 9;
+  CardStatus card_status = 10;
+}
+
+enum CardStatus {
+  STATUS_HOLD = 0;
+  STATUS_UNHOLD = 1;
 }
 
 message Jackpot {
