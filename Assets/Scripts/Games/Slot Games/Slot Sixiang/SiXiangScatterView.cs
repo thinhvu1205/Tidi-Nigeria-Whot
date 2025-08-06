@@ -9,46 +9,25 @@ using System.Threading.Tasks;
 using System;
 using Newtonsoft.Json.Linq;
 using Globals;
+using Proto;
+using Google.Protobuf;
 
 public class SiXiangScatterView : MonoBehaviour
 {
-    // Start is called before the first frame update
-    public static SlotSixiangView instance;
-    [SerializeField]
-    GameObject nodeReel, spriteBg;
+    [SerializeField] private GameObject reel;
+    [SerializeField] private Transform spinContainer;
 
+    [SerializeField] private TextNumberControl textChipWin;
+    [SerializeField] TextMeshProUGUI[] listGoldValue;
 
+    [SerializeField] private Button buttonCollect, buttonSpin;
     [SerializeField]
-    GameObject nodeSpin;
+    SkeletonGraphic animationBackgroundWin, animationLight, animationBackground, animationButtonSpin, animationResultSpin;
 
-    [SerializeField]
-    TextNumberControl lbChipWins;
-    [SerializeField]
-    List<TextMeshProUGUI> lbGoldValue = new List<TextMeshProUGUI>();
-
-    [SerializeField]
-    Button btnCollect;
-
-    [SerializeField]
-    Button btnSpin;
-
-    [SerializeField]
-    SkeletonGraphic animBgWin, bgLight, animBG;
-
-    [SerializeField]
-    SkeletonGraphic animBtnSpin;
-
-    [SerializeField]
-    SkeletonGraphic animResultSpin;
-
-    [HideInInspector]
     private bool isPrepareStop = false;
-    public Task scatterTask;
-    [HideInInspector]
     private int typeResult = 5;
-    private long winAmount = 0, userAmount = 0;
+    private long winAmount = 0, currentBetLevel = 0;
     private bool isWaitForAutoSpin = true;
-    [HideInInspector]
     private enum RESULT_SPIN
     {
 
@@ -63,47 +42,48 @@ public class SiXiangScatterView : MonoBehaviour
     }
     [HideInInspector]
     SlotSixiangView gameView;
-    List<int> rateGold = new List<int> { 3, 6, 10, 15 };
 
 
     private void OnEnable()
     {
         isWaitForAutoSpin = true;
-        btnSpin.interactable = true;
-        bgLight.gameObject.SetActive(true);
-        bgLight.Initialize(true);
-        bgLight.AnimationState.SetAnimation(0, "light run", true);
-        animBtnSpin.Initialize(true);
-        animBtnSpin.AnimationState.SetAnimation(0, "spin_anim", true);
+        buttonSpin.interactable = true;
         DOTween.Sequence().AppendInterval(10).AppendCallback(() =>
         {
             if (isWaitForAutoSpin)
             {
-                onClickSpin("");
+                OnClickSpin();
             }
         });
     }
 
-    public void Show(SlotSixiangView SiXiangView)
+    public void SetInfo(SlotSixiangView slotSixiangView, long betValue)
     {
-        gameView = SiXiangView;
-        for (int i = 0; i < 4; i++)
+        gameView = slotSixiangView;
+        currentBetLevel = betValue;
+        int[] listRateGold = new int[] { 3, 6, 10, 15 };
+        for (int i = 0; i < listGoldValue.Length; i++)
         {
-            // lbGoldValue[i].text = Utility.FormatMoney2(rateGold[i] * SiXiangView.getBetValue(), true);
+            Debug.Log("SET GOLD : " + betValue);
+            listGoldValue[i].text = Utility.FormatMoney2(listRateGold[i] * betValue, true);  
         }
+
     }
-    public void onClickSpin(string minigameType)
+    
+    public void OnClickSpin()
     {
         // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.CLICK);
-        btnSpin.interactable = false;
-        animBtnSpin.Initialize(true);
-        animBtnSpin.AnimationState.SetAnimation(0, "spin normal", true);
-        animBG.Initialize(true);
-        animBG.AnimationState.SetAnimation(0, "spin", true);
-        // SocketSend.sendPackageMiniGame(Globals.ACTION_SLOT_SIXIANG.scatterSpin, minigameType);
         isWaitForAutoSpin = false;
+        buttonSpin.interactable = false;
+        Utility.PlayAnimation(animationButtonSpin, "spin normal", true);
+        Utility.PlayAnimation(animationBackground, "spin", true);
+        InfoBet infoBet = new()
+        {
+            Chips = currentBetLevel,
+        };
+        DataSender.SendMatchState((long)OpCodeRequest.Spin, infoBet.ToByteArray());
     }
-    public Task startSpin()
+    public void startSpin()
     {
         // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.SCATTER_SPIN);
         // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.SPIN_REEL);
@@ -112,28 +92,25 @@ public class SiXiangScatterView : MonoBehaviour
         int totalAngle = 4320 + deltaAngle;
         DOTween.To(() => startAngle, x => startAngle = x, totalAngle, 5.0f).OnUpdate(() =>
         {
-            nodeReel.transform.localEulerAngles = new Vector3(0, 0, startAngle);
+            reel.transform.localEulerAngles = new Vector3(0, 0, startAngle);
             if (startAngle > 3000 && isPrepareStop == false)
             {
                 prepareStop();
             }
         }).SetEase(Ease.InOutSine).OnComplete(() =>
         {
-            animBgWin.Initialize(true);
-            animBgWin.AnimationState.SetAnimation(0, "khung eat", true);
-            animBgWin.gameObject.SetActive(true);
-            bgLight.gameObject.SetActive(false);
-            animBG.AnimationState.SetAnimation(0, "normal", true);
+            animationBackgroundWin.Initialize(true);
+            animationBackgroundWin.AnimationState.SetAnimation(0, "khung eat", true);
+            animationBackgroundWin.gameObject.SetActive(true);
+            animationLight.gameObject.SetActive(false);
+            animationBackground.AnimationState.SetAnimation(0, "normal", true);
             // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.SCATTER_SYMBOL);
             preShowResult();
         });
-        scatterTask = new Task(() => { });
-        return scatterTask;
     }
     public async Task handleScatterSpin(JObject data)
     {
         int reward = (int)data["reward"];
-        userAmount = (long)data["userAmount"];
         winAmount = (int)data["winAmount"];
         switch (reward)
         {
@@ -162,19 +139,19 @@ public class SiXiangScatterView : MonoBehaviour
                 typeResult = 2; // x15
                 break;
         }
-        await startSpin();
+        // await startSpin();
     }
     private void prepareStop()
     {
         isPrepareStop = true;
-        nodeSpin.transform.DOLocalMoveY(-331, 1.0f).SetEase(Ease.InSine);
-        nodeSpin.transform.DOScale(new Vector3(1.5f, 1.5f, 1), 1.0f).SetEase(Ease.InSine);
+        spinContainer.transform.DOLocalMoveY(-331, 1.0f).SetEase(Ease.InSine);
+        spinContainer.transform.DOScale(new Vector3(1.5f, 1.5f, 1), 1.0f).SetEase(Ease.InSine);
 
     }
     private async void preShowResult()
     {
-        nodeSpin.transform.DOLocalMoveY(-39, 1.0f).SetEase(Ease.OutSine);
-        nodeSpin.transform.DOScale(new Vector3(1.0f, 1.0f, 1), 1.0f).SetEase(Ease.OutSine).SetId("nodeSpin");
+        spinContainer.transform.DOLocalMoveY(-39, 1.0f).SetEase(Ease.OutSine);
+        spinContainer.transform.DOScale(new Vector3(1.0f, 1.0f, 1), 1.0f).SetEase(Ease.OutSine).SetId("nodeSpin");
         Tween nodeSpinTween = DOTween.TweensById("nodeSpin")[0];
         await nodeSpinTween.AsyncWaitForCompletion();
         await Task.Delay(1000);
@@ -183,7 +160,7 @@ public class SiXiangScatterView : MonoBehaviour
     }
     private async Task showResultAnim()
     {
-        btnCollect.gameObject.SetActive(false);
+        buttonCollect.gameObject.SetActive(false);
         string pathSkeData = "";
         string animName = "";
         if (typeResult % 2 != 0)
@@ -216,17 +193,17 @@ public class SiXiangScatterView : MonoBehaviour
                         break;
                     }
             }
-            lbChipWins.gameObject.SetActive(false);
+            textChipWin.gameObject.SetActive(false);
 
         }
         else
         {
             animName = "eng";
             pathSkeData = "GameView/SiXiang/Spine/WinResult/skeleton_SkeletonData";
-            lbChipWins.gameObject.SetActive(true);
+            textChipWin.gameObject.SetActive(true);
             //Globals.Config.tweenNumberToNumber(lbChipWins, winAmount, 0, 2.0f);
             // AudioSource soundMoney = SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_START);
-            lbChipWins.SetValue(winAmount, true, 2.0f, "", () =>
+            textChipWin.SetValue(winAmount, true, 2.0f, "", () =>
             {
                 // soundMoney.Stop();
                 // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_END);
@@ -234,17 +211,17 @@ public class SiXiangScatterView : MonoBehaviour
 
         }
         // animResultSpin.skeletonDataAsset = UIManager.instance.loadSkeletonData(pathSkeData);
-        animResultSpin.Initialize(true);
-        animResultSpin.AnimationState.SetAnimation(0, animName, false);
-        animResultSpin.transform.parent.gameObject.SetActive(true);
-        await Task.Delay((int)animResultSpin.Skeleton.Data.FindAnimation(animName).Duration * 1000);
+        animationResultSpin.Initialize(true);
+        animationResultSpin.AnimationState.SetAnimation(0, animName, false);
+        animationResultSpin.transform.parent.gameObject.SetActive(true);
+        await Task.Delay((int)animationResultSpin.Skeleton.Data.FindAnimation(animName).Duration * 1000);
         if (typeResult % 2 != 0)
         {
             endView();
         }
         else
         {
-            btnCollect.gameObject.SetActive(true);
+            buttonCollect.gameObject.SetActive(true);
             // if (gameView.spinType == BaseSlotSymbolView.SPIN_TYPE.AUTO)
             // {
             //     DOTween.Sequence()
@@ -264,18 +241,16 @@ public class SiXiangScatterView : MonoBehaviour
     }
     private async void endView()
     {
-        animResultSpin.transform.parent.gameObject.SetActive(false);
+        animationResultSpin.transform.parent.gameObject.SetActive(false);
         // await gameView.showAnimCutScene();
 
-        scatterTask.Start();
         Destroy(gameObject);
-        nodeReel.transform.localEulerAngles = Vector3.zero;
+        reel.transform.localEulerAngles = Vector3.zero;
         if (typeResult == (int)RESULT_SPIN.COIN_1 || typeResult == (int)RESULT_SPIN.COIN_2 || typeResult == (int)RESULT_SPIN.COIN_4 || typeResult == (int)RESULT_SPIN.COIN_5)
         {
             JObject dataEnd = new JObject();
             dataEnd["winAmount"] = winAmount;
             // dataEnd["gameType"] = (int)SlotSixiangView.GAME_TYPE.SCATTER;
-            dataEnd["userAmount"] = userAmount;
             dataEnd["isSelectBonusGame"] = false;
             // await SlotSixiangView.Instance.endMinigame(dataEnd);
         }

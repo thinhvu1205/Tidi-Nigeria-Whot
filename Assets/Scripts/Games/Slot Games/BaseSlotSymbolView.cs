@@ -384,7 +384,7 @@ public class BaseSlotSymbolView : BaseGameView
     }
     protected bool CheckWinThirdScatter()
     {
-        return currentGame == SiXiangGame.Normal && nextGame == SiXiangGame.Bonus && ScatterCount == 3;
+        return currentGame == SiXiangGame.Normal && nextGame == SiXiangGame.Bonus;
     }
 
     #region Win Effects

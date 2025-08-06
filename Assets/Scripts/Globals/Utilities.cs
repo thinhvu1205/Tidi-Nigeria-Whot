@@ -503,9 +503,9 @@ namespace Globals
         #region Spine Animation
         public static void PlayAnimation(SkeletonGraphic skeletonGraphic, string animationName, bool loop)
         {
+            skeletonGraphic.gameObject.SetActive(true);
             if (skeletonGraphic != null && skeletonGraphic.AnimationState != null)
             {
-                skeletonGraphic.gameObject.SetActive(true);
                 skeletonGraphic.Initialize(true);
                 skeletonGraphic.AnimationState.SetAnimation(0, animationName, loop);
             }

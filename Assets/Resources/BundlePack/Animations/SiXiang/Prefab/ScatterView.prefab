@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6008903801564533563}
   - component: {fileID: 3988886627473958173}
   m_Layer: 5
-  m_Name: bg
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 8299977154092720327}
   - component: {fileID: 8688109290977148128}
   m_Layer: 5
-  m_Name: NodeResult
+  m_Name: Result Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -167,7 +167,7 @@ GameObject:
   - component: {fileID: 3839364095992636812}
   - component: {fileID: 4677411706917631001}
   m_Layer: 5
-  m_Name: btnCollect
+  m_Name: Button Collect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -275,7 +275,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7217536931001851243}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SiXiangScatterView, Assembly-CSharp
         m_MethodName: onClickCollect
         m_Mode: 1
@@ -365,7 +365,7 @@ GameObject:
   - component: {fileID: 1759756244945718564}
   - component: {fileID: 7376746253003325037}
   m_Layer: 0
-  m_Name: animBtnSpin
+  m_Name: Animation Button Spin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -459,8 +459,8 @@ MonoBehaviour:
   Type: 2
   ThisImg: {fileID: 0}
   ThisSG: {fileID: 1759756244945718564}
-  BundleLabel: assets,resources,gameview,sixiang,spine
-  AssetName: Assets/Resources/GameView/SiXiang/Spine/BgLuckySpin/skeleton_SkeletonData.asset
+  BundleLabel: assets--resources--gameview--sixiang--spine
+  AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/BgLuckySpin/skeleton_SkeletonData.asset
   AnimName: spin_anim
   SetNativeSize: 0
   m_OnEnableUE:
@@ -533,9 +533,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: GOLD
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7708e67653374c60af5f1595e949403, type: 2}
-  m_fixThaiVowel: 1
-  m_sharedMaterial: {fileID: 7800525795003925199, guid: b7708e67653374c60af5f1595e949403, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -614,7 +613,7 @@ GameObject:
   - component: {fileID: 8726956438597483164}
   - component: {fileID: 7889757605278269683}
   m_Layer: 0
-  m_Name: spineDragon
+  m_Name: Animation Dragon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -708,8 +707,8 @@ MonoBehaviour:
   Type: 2
   ThisImg: {fileID: 0}
   ThisSG: {fileID: 8726956438597483164}
-  BundleLabel: assets,resources,gameview,sixiang,spine
-  AssetName: Assets/Resources/GameView/SiXiang/Spine/BgLuckySpin/skeleton_SkeletonData.asset
+  BundleLabel: assets--resources--gameview--sixiang--spine
+  AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/BgLuckySpin/skeleton_SkeletonData.asset
   AnimName: dragon normal
   SetNativeSize: 0
   m_OnEnableUE:
@@ -872,7 +871,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7771928810744502643}
-  - component: {fileID: 7217536931001851243}
+  - component: {fileID: 4704520648679965196}
   m_Layer: 5
   m_Name: ScatterView
   m_TagString: Untagged
@@ -903,7 +902,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7217536931001851243
+--- !u!114 &4704520648679965196
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -912,25 +911,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1377143628958071187}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 806ecf6b1c0578e40b550fa7ff599f78, type: 3}
+  m_Script: {fileID: 11500000, guid: d97d402c73a4569479baff645aa68c8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeReel: {fileID: 7648114340037905567}
-  spriteBg: {fileID: 104815666856557488}
-  nodeSpin: {fileID: 5984568399048564161}
-  lbChipWins: {fileID: 2375097660894524585}
-  lbGoldValue:
+  reel: {fileID: 7648114340037905567}
+  spinContainer: {fileID: 4362681443631557932}
+  textChipWin: {fileID: 5164950606311706086}
+  listGoldValue:
   - {fileID: 2552787198411327759}
-  - {fileID: 1668663870281491388}
   - {fileID: 7781169903700178668}
+  - {fileID: 1668663870281491388}
   - {fileID: 1993801414240267900}
-  btnCollect: {fileID: 4677411706917631001}
-  btnSpin: {fileID: 1384719340983546629}
-  animBgWin: {fileID: 4822868448127043876}
-  bgLight: {fileID: 7650313766497291651}
-  animBG: {fileID: 8466558300535321508}
-  animBtnSpin: {fileID: 1759756244945718564}
-  animResultSpin: {fileID: 3393549597471328597}
+  buttonCollect: {fileID: 4677411706917631001}
+  buttonSpin: {fileID: 1384719340983546629}
+  animationBackgroundWin: {fileID: 8466558300535321508}
+  animationLight: {fileID: 7650313766497291651}
+  animationBackground: {fileID: 4822868448127043876}
+  animationButtonSpin: {fileID: 1759756244945718564}
+  animationResultSpin: {fileID: 3393549597471328597}
 --- !u!1 &1873056535478221518
 GameObject:
   m_ObjectHideFlags: 0
@@ -944,7 +942,7 @@ GameObject:
   - component: {fileID: 4822868448127043876}
   - component: {fileID: 5000179423871201078}
   m_Layer: 0
-  m_Name: spinBgWin
+  m_Name: Animation Background Win
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1038,8 +1036,8 @@ MonoBehaviour:
   Type: 2
   ThisImg: {fileID: 0}
   ThisSG: {fileID: 4822868448127043876}
-  BundleLabel: assets,resources,gameview,sixiang,spine
-  AssetName: Assets/Resources/GameView/SiXiang/Spine/BgLuckySpin/skeleton_SkeletonData.asset
+  BundleLabel: assets--resources--gameview--sixiang--spine
+  AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/BgLuckySpin/skeleton_SkeletonData.asset
   AnimName: khung eat
   SetNativeSize: 0
   m_OnEnableUE:
@@ -1296,7 +1294,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7217536931001851243}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SiXiangScatterView, Assembly-CSharp
         m_MethodName: onClickSpin
         m_Mode: 5
@@ -1429,7 +1427,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7217536931001851243}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SiXiangScatterView, Assembly-CSharp
         m_MethodName: onClickSpin
         m_Mode: 5
@@ -1562,7 +1560,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7217536931001851243}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SiXiangScatterView, Assembly-CSharp
         m_MethodName: onClickSpin
         m_Mode: 5
@@ -1695,7 +1693,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7217536931001851243}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SiXiangScatterView, Assembly-CSharp
         m_MethodName: onClickSpin
         m_Mode: 5
@@ -1785,7 +1783,7 @@ GameObject:
   - component: {fileID: 7650313766497291651}
   - component: {fileID: 3886271859001573604}
   m_Layer: 0
-  m_Name: bgLight
+  m_Name: Animation Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1879,8 +1877,8 @@ MonoBehaviour:
   Type: 2
   ThisImg: {fileID: 0}
   ThisSG: {fileID: 7650313766497291651}
-  BundleLabel: assets,resources,gameview,sixiang,spine
-  AssetName: Assets/Resources/GameView/SiXiang/Spine/BgLuckySpin/skeleton_SkeletonData.asset
+  BundleLabel: assets--resources--gameview--sixiang--spine
+  AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/BgLuckySpin/skeleton_SkeletonData.asset
   AnimName: light run
   SetNativeSize: 0
   m_OnEnableUE:
@@ -1953,9 +1951,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Rapid Pay
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7708e67653374c60af5f1595e949403, type: 2}
-  m_fixThaiVowel: 1
-  m_sharedMaterial: {fileID: 7800525795003925199, guid: b7708e67653374c60af5f1595e949403, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2142,7 +2139,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7217536931001851243}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SiXiangScatterView, Assembly-CSharp
         m_MethodName: onClickSpin
         m_Mode: 5
@@ -2166,7 +2163,7 @@ GameObject:
   - component: {fileID: 5691530968973521275}
   - component: {fileID: 3393549597471328597}
   m_Layer: 0
-  m_Name: animResultSpin
+  m_Name: Animation Result Spin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2263,7 +2260,7 @@ GameObject:
   - component: {fileID: 141226168206082587}
   - component: {fileID: 1668663870281491388}
   m_Layer: 5
-  m_Name: lbChip2
+  m_Name: Text Chip 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2319,7 +2316,6 @@ MonoBehaviour:
   m_text: 123.45
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
-  m_fixThaiVowel: 1
   m_sharedMaterial: {fileID: 2100000, guid: 0745538ed83de4945ac1fbb020425b30, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2507,7 +2503,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7217536931001851243}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SiXiangScatterView, Assembly-CSharp
         m_MethodName: onClickSpin
         m_Mode: 5
@@ -2531,7 +2527,7 @@ GameObject:
   - component: {fileID: 1879698739888052953}
   - component: {fileID: 3502803344701099614}
   m_Layer: 5
-  m_Name: arrow
+  m_Name: Image Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2661,9 +2657,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: GOLD
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7708e67653374c60af5f1595e949403, type: 2}
-  m_fixThaiVowel: 1
-  m_sharedMaterial: {fileID: 7800525795003925199, guid: b7708e67653374c60af5f1595e949403, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2805,9 +2800,8 @@ GameObject:
   - component: {fileID: 2493286376421195585}
   - component: {fileID: 8574389993076334065}
   - component: {fileID: 659949667801311842}
-  - component: {fileID: 6523192318304958966}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2860,10 +2854,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0E22\u0E37\u0E19\u0E22\u0E31\u0E19"
+  m_text: Collect
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7708e67653374c60af5f1595e949403, type: 2}
-  m_fixThaiVowel: 1
+  m_fontAsset: {fileID: 11400000, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
   m_sharedMaterial: {fileID: 7800525795003925199, guid: b7708e67653374c60af5f1595e949403, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2927,26 +2920,9 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &6523192318304958966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5598404560678170110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 489ab9b30bbc94ccbbfd360ae829d09f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 0
-  key: poker_confirm
-  sprites: []
-  animName: []
-  isUpper: 0
 --- !u!1 &5974643959590097937
 GameObject:
   m_ObjectHideFlags: 0
@@ -3014,9 +2990,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: GOLD PICK
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7708e67653374c60af5f1595e949403, type: 2}
-  m_fixThaiVowel: 1
-  m_sharedMaterial: {fileID: 7800525795003925199, guid: b7708e67653374c60af5f1595e949403, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3136,7 +3111,7 @@ GameObject:
   - component: {fileID: 5579285312558182201}
   - component: {fileID: 1384719340983546629}
   m_Layer: 5
-  m_Name: btnSpin
+  m_Name: Button Spin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3244,7 +3219,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7217536931001851243}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SiXiangScatterView, Assembly-CSharp
         m_MethodName: onClickSpin
         m_Mode: 5
@@ -3268,7 +3243,7 @@ GameObject:
   - component: {fileID: 1989237988120172520}
   - component: {fileID: 1993801414240267900}
   m_Layer: 5
-  m_Name: lbChip6
+  m_Name: Text Chip 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3324,7 +3299,6 @@ MonoBehaviour:
   m_text: 123.45
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
-  m_fixThaiVowel: 1
   m_sharedMaterial: {fileID: 2100000, guid: 0745538ed83de4945ac1fbb020425b30, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3468,7 +3442,7 @@ GameObject:
   - component: {fileID: 2025011405067317961}
   - component: {fileID: 7781169903700178668}
   m_Layer: 5
-  m_Name: lbChip0
+  m_Name: Text Chip 0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3524,7 +3498,6 @@ MonoBehaviour:
   m_text: 123.45
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
-  m_fixThaiVowel: 1
   m_sharedMaterial: {fileID: 2100000, guid: 0745538ed83de4945ac1fbb020425b30, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3604,7 +3577,7 @@ GameObject:
   - component: {fileID: 8466558300535321508}
   - component: {fileID: 3610033083309506864}
   m_Layer: 0
-  m_Name: SkeletonGraphic (skeleton)
+  m_Name: Animation Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3710,8 +3683,8 @@ MonoBehaviour:
   Type: 2
   ThisImg: {fileID: 0}
   ThisSG: {fileID: 8466558300535321508}
-  BundleLabel: assets,resources,gameview,sixiang,spine
-  AssetName: Assets/Resources/GameView/SiXiang/Spine/BgMiniGame/skeleton_SkeletonData.asset
+  BundleLabel: assets--resources--gameview--sixiang--spine
+  AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/BgMiniGame/skeleton_SkeletonData.asset
   AnimName: normal
   SetNativeSize: 0
   m_OnEnableUE:
@@ -3728,9 +3701,9 @@ GameObject:
   - component: {fileID: 1343817307319137268}
   - component: {fileID: 283910119658393147}
   - component: {fileID: 2856311871633193496}
-  - component: {fileID: 2375097660894524585}
+  - component: {fileID: 5164950606311706086}
   m_Layer: 5
-  m_Name: lbChipWins
+  m_Name: Text Chip Win
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3786,7 +3759,6 @@ MonoBehaviour:
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
-  m_fixThaiVowel: 1
   m_sharedMaterial: {fileID: 2100000, guid: 0745538ed83de4945ac1fbb020425b30, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3853,7 +3825,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &2375097660894524585
+--- !u!114 &5164950606311706086
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3862,10 +3834,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7184338068821001615}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4c13c01ecaf1794c99aebf92acde5a2, type: 3}
+  m_Script: {fileID: 11500000, guid: a7e6b981573a3402b8720694fe64578d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tmPro: {fileID: 2856311871633193496}
+  numberText: {fileID: 0}
   isFormatMoney: 0
   scale: 1
   FormatType: 0
@@ -3881,7 +3853,7 @@ GameObject:
   - component: {fileID: 8342085956766284240}
   - component: {fileID: 2552787198411327759}
   m_Layer: 5
-  m_Name: lbChip4
+  m_Name: Text Chip 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3937,7 +3909,6 @@ MonoBehaviour:
   m_text: 123.45
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
-  m_fixThaiVowel: 1
   m_sharedMaterial: {fileID: 2100000, guid: 0745538ed83de4945ac1fbb020425b30, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -4125,7 +4096,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7217536931001851243}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SiXiangScatterView, Assembly-CSharp
         m_MethodName: onClickSpin
         m_Mode: 5
@@ -4279,7 +4250,7 @@ GameObject:
   - component: {fileID: 8338998522735394578}
   - component: {fileID: 159346213487599053}
   m_Layer: 5
-  m_Name: bgSpin
+  m_Name: Background Spin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4413,9 +4384,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: GOLD
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7708e67653374c60af5f1595e949403, type: 2}
-  m_fixThaiVowel: 1
-  m_sharedMaterial: {fileID: 7800525795003925199, guid: b7708e67653374c60af5f1595e949403, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4548,9 +4518,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Lucky Draw
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7708e67653374c60af5f1595e949403, type: 2}
-  m_fixThaiVowel: 1
-  m_sharedMaterial: {fileID: 7800525795003925199, guid: b7708e67653374c60af5f1595e949403, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4737,7 +4706,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7217536931001851243}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SiXiangScatterView, Assembly-CSharp
         m_MethodName: onClickSpin
         m_Mode: 5
@@ -4816,9 +4785,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: DRAGONPEARL
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7708e67653374c60af5f1595e949403, type: 2}
-  m_fixThaiVowel: 1
-  m_sharedMaterial: {fileID: 7800525795003925199, guid: b7708e67653374c60af5f1595e949403, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4951,9 +4919,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: GOLD
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7708e67653374c60af5f1595e949403, type: 2}
-  m_fixThaiVowel: 1
-  m_sharedMaterial: {fileID: 7800525795003925199, guid: b7708e67653374c60af5f1595e949403, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

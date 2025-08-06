@@ -42,7 +42,7 @@ public class SlotSixiangView : BaseSlotSymbolView
 
     private const string SIXIANG_GAME_NAME = "sixiang";
     private const string SIXIANG_BACKGROUND_ANIMATION_PATH = "SiXiang/Spine/BgGame/skeleton_SkeletonData";
-
+    private const string SCATTER_PREFAB_PATH = "BundlePack/Animations/Sixiang/Prefab/ScatterView";
     private const string DRAGON_PEARL_GAME_NAME = "dragonpearl";
     private const string DRAGON_PEARL_BACKGROUND_ANIMATION_PATH = "SiXiang/Spine/DragonPearl/BgGame/skeleton_SkeletonData";
     private const string DRAGON_PEARL_ANIMAL_ANIMATION_PATH = "SiXiang/Spine/Animal/Dragon/skeleton_SkeletonData";
@@ -75,7 +75,6 @@ public class SlotSixiangView : BaseSlotSymbolView
     public override void HandleUpdateTable(IMatchState matchState)
     {
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
-
         Debug.Log("Slot : " + data.ToString());
         listSpinSymbol = data.Matrix.SpinLists.ToList();
         listGem = data.SixiangGems.ToList();
@@ -117,6 +116,7 @@ public class SlotSixiangView : BaseSlotSymbolView
         {
             data = data
         });
+                // ShowScatterView();
 
 
         if (!hasSetupStartView) hasSetupStartView = true;
@@ -159,8 +159,8 @@ public class SlotSixiangView : BaseSlotSymbolView
             ///------------------CHECK SPREAD WILD--------------------///
             if (CheckWild())
             {
-                tweenQueue.Enqueue(() => ShowAnimationWild());
-                tweenQueue.Enqueue(() => ShowSpreadWild());
+                // tweenQueue.Enqueue(() => ShowAnimationWild());
+                // tweenQueue.Enqueue(() => ShowSpreadWild());
             }
 
             ///------------------CHECK SHOW ALL LINE--------------------///
@@ -204,10 +204,24 @@ public class SlotSixiangView : BaseSlotSymbolView
             ///------------------CHECK SHOW WIN SCATTER--------------------///
             if (CheckWinThirdScatter())
             {
-                tweenQueue.Enqueue(() => ShowChooseBonusGame());
+                tweenQueue.Enqueue(() => ShowScatterView());
             }
             NextTween();
         }
+    }
+
+    private void ShowScatterView()
+    {
+        if (scatterView == null)
+        {
+            scatterView = Instantiate(UIManager.Instance.LoadPrefab(SCATTER_PREFAB_PATH), transform).GetComponent<SiXiangScatterView>();
+            scatterView.transform.SetSiblingIndex(animationCutScene.transform.GetSiblingIndex() - 1);
+        }
+        else
+        {
+            scatterView.gameObject.SetActive(true);
+        }
+        scatterView.SetInfo(this, currentBetLevel);
     }
 
     protected override void UpdateReward(SlotDesk data)
