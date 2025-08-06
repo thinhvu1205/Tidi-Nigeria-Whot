@@ -4,15 +4,38 @@ using UnityEngine;
 
 public class HongKongPokerButtonBetContainer : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void OnClickFold()
+    {
+
+    }
+
+    public void OnClickCall()
+    {
+
+    }
+
+    public void OnClickAllIn()
+    {
+
+    }
+
+    public void OnClickConfirm()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnClick1In2()
     {
-        
+
+    }
+
+    public void OnClick1In4()
+    {
+
+    }
+
+    public void OnClick1In8()
+    {
+
     }
 }
