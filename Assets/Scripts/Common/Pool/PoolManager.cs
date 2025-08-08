@@ -26,7 +26,11 @@ namespace Common.Pool
                     item.gameObject.SetActive(false);
                     item.transform.SetParent(parent);
                 },
-                actionOnDestroy: Object.Destroy,
+                actionOnDestroy: (item) =>
+                {
+                    Debug.Log("Pool destroyed item name :" + item.gameObject.name);
+                    Object.Destroy(item.gameObject);
+                },
                 collectionCheck: false,
                 defaultCapacity: defaultCapacity,
                 maxSize: maxSize
@@ -51,6 +55,14 @@ namespace Common.Pool
             {
                 pool.Release(obj);
             }
+        }
+        
+        /// <summary>
+        /// Clear all objects in the pool
+        /// </summary>
+        public void Clear()
+        {
+            pool.Clear();
         }
     }
 }

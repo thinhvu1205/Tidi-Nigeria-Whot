@@ -1,130 +1,121 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 using Games;
 using Games.Card;
 using Globals;
 using Proto;
 using TMPro;
 using UnityEngine;
-using GameState = Proto.GameState;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class BaseDiceGameView : BaseGameView
 {
-    [SerializeField] protected List<BasePlayerView> listPlayerView = new List<BasePlayerView>();
+    [SerializeField] protected List<Vector2> listPosView;
+    [SerializeField] protected BasePlayerView playerViewPrefab;
     [SerializeField] protected GameObject invitePrefab;
     [SerializeField] protected Transform inviteContainer, playerContainer, hiddenPlayerContainer;
 
-    protected List<Player> players = new();
-    protected Player thisPlayer = new();
-    protected List<CardModel> cardPool = new List<CardModel>();
-    protected List<CardModel> cardsOnTable = new List<CardModel>();
-    protected List<ChipBet> chipPool = new List<ChipBet>();
+    protected readonly Dictionary<string, BasePlayerView> userIdToView = new();
+    protected BasePlayerView thisPlayer = new BasePlayerView();
+    protected List<Player> players = new List<Player>();
+    protected List<Player> playingPlayers = new List<Player>();
     protected List<GameObject> listBtnInvite = new List<GameObject>();
-    public GameState GameState { get; protected set; } = GameState.Idle;
-
-
-
-    private int GetNextIndex()
+    
+    
+    protected virtual void UpdatePosUserTable(UpdateTable update)
     {
-        for (int i = 0; i < listPlayerView.Count; i++)
+        var localUserId = User.userMain.userId;
+        if (listPosView == null || listPosView.Count == 0 || playerViewPrefab == null || localUserId == "") return;
+        
+        // 1) Cập nhật danh sách playing players
+        if (update.PlayingPlayers.ToList().Count != 0)
         {
-            if (!listPlayerView[i].gameObject.activeSelf)
+            playingPlayers = update.PlayingPlayers.ToList();
+            Debug.Log($"Playing players updated: {string.Join(", ", playingPlayers.Select(p => p.UserName))}");
+        }
+        
+        // 2) Cập nhật danh sách players
+        players = update.Players.ToList();
+        
+        // 3) Xử lý players leave
+        foreach (var lp in update.LeavePlayers)
+        {
+            Debug.Log($"Player {lp.UserName} left the table");
+            if (userIdToView.TryGetValue(lp.Id, out var view))
             {
-                return i;
+                Destroy(view.gameObject);
+                userIdToView.Remove(lp.Id);
             }
         }
-        return -1;
+        
+        // 4) Xử lý players join
+        foreach (var jp in update.JoinPlayers)
+        {
+            Debug.Log($"Player {jp.UserName} joined the table");
+        }
+        
+        // 5) Tạo/update player views theo danh sách players mới
+        var localInPlayers = players.Exists(p => p.Id == localUserId);
+
+        // Gán vị trí 0 cho local player (nếu có)
+        int positionIndex = 0;
+        if (localInPlayers)
+        {
+            var local = players.Find(p => p.Id == localUserId);
+            CreatePlayerView(local, listPosView[0]);
+            positionIndex = 1;
+        }
+        else
+        {
+            // Nếu local không nằm trong players, giữ view local nếu đang có ở vị trí 0
+            if (userIdToView.TryGetValue(localUserId, out var localView))
+            {
+                SetAnchoredPosition(localView, listPosView[0]);
+                positionIndex = 1;
+            }
+        }
+
+        // Gán các vị trí tiếp theo theo thứ tự trong update.players, bỏ qua local
+        for (int i = 0; i < players.Count && positionIndex < listPosView.Count; i++)
+        {
+            var p = players[i];
+            if (p.Id == localUserId) continue;
+            CreatePlayerView(p, listPosView[positionIndex]);
+            positionIndex++;
+        }
+        
+        if (thisPlayer == userIdToView.GetValueOrDefault(localUserId)) return;
+        
+        // 6) Cập nhật thisPlayer và UI
+        thisPlayer = userIdToView.GetValueOrDefault(localUserId);
+        if (thisPlayer != null)
+        {
+            thisPlayer.setPosThanhBarThisPlayer();
+        }
+    }
+
+    private void CreatePlayerView(Player player, Vector2 anchoredPos)
+    {
+        if (!userIdToView.TryGetValue(player.Id, out var view) || view == null)
+        {
+            view = Instantiate(playerViewPrefab, playerContainer);
+            userIdToView[player.Id] = view;
+            view.gameObject.SetActive(true);
+        }
+
+        // Luôn cập nhật data và vị trí kể cả khi view đã tồn tại
+        view.SetData(player);
+        SetAnchoredPosition(view, anchoredPos);
     }
     
-    protected virtual void UpdateListPlayer(List<Player> data)
+    private void SetAnchoredPosition(BasePlayerView view, Vector2 anchoredPos)
     {
-        // oldData = data;
-        int lastIndex = listPlayerView.Count - 1;
-
-        for (int idx = 0; idx < listPlayerView.Count; idx++)
-        {
-
-            if (!listPlayerView[idx].gameObject.activeSelf )
-                continue;
-
-            bool isStillExist = false;
-            foreach (var p in data)
-            {
-                if (p.Id == listPlayerView[idx].id)
-                {
-                    isStillExist = true;
-                    break;
-                }
-            }
-
-            if (!isStillExist)
-                listPlayerView[idx].gameObject.SetActive(false);
-        }
-
-        BasePlayerView lastPlayer = listPlayerView[lastIndex];
-        if (lastPlayer.gameObject.activeSelf && lastPlayer ==null && data.Count <= lastIndex + 1)
-        {
-            lastPlayer.gameObject.SetActive(false);
-        }
-
-        foreach (var playerInfo in data)
-        {
-            if (playerInfo.Id == User.userMain.userId)
-                continue;
-
-            bool isExist = false;
-            foreach (var player in listPlayerView)
-            {
-                if (player.gameObject.activeSelf && player != null && player.id == playerInfo.Id)
-                {
-                    isExist = true;
-                    break;
-                }
-            }
-
-            if (!isExist)
-            {
-                UpdatePlayer(playerInfo, data.Count);
-            }
-        }
+        var rt = view.transform as RectTransform;
+        if (rt != null) rt.anchoredPosition = anchoredPos;
+        else view.transform.localPosition = new Vector3(anchoredPos.x, anchoredPos.y, 0f);
     }
     
-    private void UpdatePlayer(Player playerInfo, int totalPlayers)
-    {
-        int index = GetNextIndex();
-        Debug.Log($"UpdatePlayer at index {index}: {playerInfo.UserName}");
-
-        if (index != -1)
-        {
-            listPlayerView[index].gameObject.SetActive(true);
-        }
-
-        if (index == listPlayerView.Count - 1 || index == -1)
-        {
-            if (listPlayerView[index] == null)
-            {
-                index = listPlayerView.Count;
-                // Text label = lastSlot.GetChild(0).GetComponent<Text>();
-                // label.text = $"+{totalPlayers - bgPlayer.childCount}";
-                return;
-            }
-            else if (index == -1)
-            {
-                return;
-            }
-        }
-
-        // var playerNode = bgPlayer.GetChild(index);
-        // var playerCasino = playerNode.GetComponent<PlayerCasino>();
-        listPlayerView[index].SetData(playerInfo);
-        //
-        // Button avatarButton = playerNode.Find("avatar").GetComponent<Button>();
-        // if (avatarButton == null)
-        // {
-        //     avatarButton = playerNode.Find("avatar").gameObject.AddComponent<Button>();
-        // }
-        //
-        // avatarButton.onClick.RemoveAllListeners();
-        // avatarButton.onClick.AddListener(() => ProfileClick(playerCasino.id));
-    }
 }

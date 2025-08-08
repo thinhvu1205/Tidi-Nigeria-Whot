@@ -38,8 +38,8 @@ namespace Globals
     public enum PrefabType
     {
         WhotCard,
+        Card,
         ChipPlayerWhot,
-        BaccaratCard,
         ChipPlayerBaccarat,
     }
 

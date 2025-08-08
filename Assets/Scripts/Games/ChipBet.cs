@@ -8,15 +8,18 @@ namespace Games
 {
     public class ChipBet : MonoBehaviour, IPoolable
     {
-        [SerializeField]
-        List<Sprite> sprChips = new List<Sprite>();
+        [SerializeField] protected List<Sprite> sprChips = new List<Sprite>();
 
-        Image imgChip;
+        [SerializeField] protected Image imgChip;
     
         // Start is called before the first frame update
+       
         void Start()
         {
-        
+            if (imgChip == null)
+            {
+                imgChip = GetComponent<Image>();
+            }
         }
 
         // Update is called once per frame
@@ -27,7 +30,6 @@ namespace Games
     
         public void init(int value = 0, float scale = 1.0f)
         {
-            imgChip = GetComponent<Image>();
             if (value == 0)
             {
                 imgChip.sprite = getRandomSpr();

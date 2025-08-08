@@ -1757,6 +1757,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3852725038092166550}
   - component: {fileID: 7273879110189531178}
+  - component: {fileID: 1861776975674549212}
   m_Layer: 5
   m_Name: Table Small Road
   m_TagString: Untagged
@@ -1792,6 +1793,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1946112979175747217}
   m_CullTransparentMesh: 1
+--- !u!114 &1861776975674549212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1946112979175747217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2334db7477baef4f80588e60adb8f66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BaccaratAtlas: {fileID: 4343727234628468602, guid: e1a55931708fa444c8aa759b0a2ef8d9, type: 2}
+  tb_SmallRoad: {fileID: 1002101188263151608}
+  hisSmallRoad: {fileID: 9044201327771938028}
 --- !u!1 &1947061039711555123
 GameObject:
   m_ObjectHideFlags: 0
@@ -2878,9 +2894,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BaseView, Assembly-CSharp
-        m_MethodName: onClickClose
+      - m_Target: {fileID: 8726750514186210507}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2888,7 +2904,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &3679416994315121509
 GameObject:
@@ -6008,6 +6024,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6415309755941645765}
   - component: {fileID: 8471707426503874369}
+  - component: {fileID: 1030512792439703978}
   m_Layer: 5
   m_Name: Table Cock Road
   m_TagString: Untagged
@@ -6043,6 +6060,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8698547949763813487}
   m_CullTransparentMesh: 1
+--- !u!114 &1030512792439703978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8698547949763813487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57bfb19c57b469544b0a0c718f868a7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BaccaratAtlas: {fileID: 4343727234628468602, guid: e1a55931708fa444c8aa759b0a2ef8d9, type: 2}
+  tb_SmallRoad: {fileID: 1947061039711555123}
+  hisSmallRoad: {fileID: 2398979141642851293}
+  tb_CockRoad: {fileID: 1947061039711555123}
+  hisCockRoad: {fileID: 2398979141642851293}
 --- !u!1 &8726750514186210507
 GameObject:
   m_ObjectHideFlags: 0
@@ -6089,9 +6123,45 @@ MonoBehaviour:
   m_GameObject: {fileID: 8726750514186210507}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f53013236fa6d4a68839c73e89bdae76, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d87904f58f74c2083b64d89e179fb62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lb_his_banker_detail: {fileID: 2533459306461650306}
+  lb_his_player_detail: {fileID: 683215659890370280}
+  lb_his_tie_detail: {fileID: 6824142435162727216}
+  lb_his_bankerPair: {fileID: 3068952062420557533}
+  lb_his_playerPair: {fileID: 8984883556439511198}
+  layer1: {fileID: 4517401164950300097}
+  parentMinHisLayer1: {fileID: 9169582690171485044}
+  layer2: {fileID: 933064237171362196}
+  parentMinHisLayer2: {fileID: 4033199657279775593}
+  listDots:
+  - {fileID: 4492463078104915347}
+  - {fileID: 3148558841970018348}
+  - {fileID: 7712503892918707101}
+  - {fileID: 4959344417033451538}
+  - {fileID: 3679416994315121509}
+  - {fileID: 8145002028578515361}
+  - {fileID: 1611325009879748144}
+  - {fileID: 6804020381879488256}
+  - {fileID: 2050521879191169399}
+  listDots2:
+  - {fileID: 8772907821610752049}
+  - {fileID: 1981104185195301488}
+  - {fileID: 5609522211149256526}
+  - {fileID: 398082158598066331}
+  - {fileID: 7165268890715703881}
+  - {fileID: 4385065875508791728}
+  - {fileID: 7875795374954564447}
+  - {fileID: 3598556825659299011}
+  tableSmallRoad: {fileID: 1861776975674549212}
+  tableBigEyes: {fileID: 2089781205069615753}
+  tableCockRoad: {fileID: 1030512792439703978}
+  numWinB: 0
+  numWinP: 0
+  numWinT: 0
+  numWinBP: 0
+  numWinPP: 0
 --- !u!1 &8772907821610752049
 GameObject:
   m_ObjectHideFlags: 0
@@ -6252,6 +6322,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6166153305641912728}
   - component: {fileID: 5051272388576202563}
+  - component: {fileID: 2089781205069615753}
   m_Layer: 5
   m_Name: Table Big Eye
   m_TagString: Untagged
@@ -6287,6 +6358,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9112939031612695434}
   m_CullTransparentMesh: 1
+--- !u!114 &2089781205069615753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9112939031612695434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaf2774ffab1d7148aca7aeeb4daaa2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tb_BigEye: {fileID: 1897382332386782473}
+  hisBigEye: {fileID: 7217168496873374277}
+  BaccaratAtlas: {fileID: 4343727234628468602, guid: e1a55931708fa444c8aa759b0a2ef8d9, type: 2}
 --- !u!1 &9166617626595149135
 GameObject:
   m_ObjectHideFlags: 0

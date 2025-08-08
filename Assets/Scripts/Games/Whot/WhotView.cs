@@ -121,6 +121,13 @@ public class WhotView : BaseGameView
             whotPlayer.gameObject.SetActive(false);
         }
     }
+    
+    public override void OnDestroy()
+    {
+        // Clear all pools to ensure clean state
+        PoolService.Instance.ClearPool<WhotCardModel>(PrefabType.WhotCard);
+        PoolService.Instance.ClearPool<WhotChip>(PrefabType.ChipPlayerWhot);
+    }
 
     #region API Handlers
     public override void LoadInfoMatch(Match match)

@@ -258,8 +258,8 @@ MonoBehaviour:
   dealerIcon: {fileID: 0}
   bkgThanhBar: {fileID: 5027503585267973356}
   lbChipWinLose: {fileID: 9118124777491513258}
-  fontWin: {fileID: 0}
-  fontLose: {fileID: 0}
+  fontWin: {fileID: 11400000, guid: 50d24157e8531a84285ce80e6f5cc27e, type: 2}
+  fontLose: {fileID: 11400000, guid: d8226e79a3ad345148d6eb0e25b7d612, type: 2}
   agLose: 0
   agWin: 0
   agCurrent: 0

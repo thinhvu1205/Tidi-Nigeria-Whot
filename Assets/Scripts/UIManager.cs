@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Proto;
 using Cysharp.Threading.Tasks;
 using Globals;
@@ -10,6 +11,7 @@ using Spine.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.U2D;
+using GameState = Proto.GameState;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -87,6 +89,14 @@ public class UIManager : Singleton<UIManager>
         return avtDefault;
     }
 
+    public void DestroyAllChildren(Transform transform)
+    {
+        for (var i = transform.childCount - 1; i >= 0; i--)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+    }
+    
     #region Games
 
     public async UniTask HandleFindAndJoinMatch(int markUnit)
@@ -177,10 +187,13 @@ public class UIManager : Singleton<UIManager>
 
     public void HandleLeaveGame()
     {
-        gameView = null;
-        foreach (Transform item in parentGames)
+        if (gameView != null)
         {
-            Destroy(item.gameObject);
+            if (new GameState[] { GameState.Idle, GameState.Matching, GameState.Finish }.Contains(gameView.GameState))
+            {
+                NetworkManager.INSTANCE.LeaveMatch();
+                Destroy(gameView.gameObject);
+            }
         }
     }
     

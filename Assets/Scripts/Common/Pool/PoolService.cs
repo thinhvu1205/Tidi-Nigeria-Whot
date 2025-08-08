@@ -72,8 +72,43 @@ namespace Common.Pool
 
         public void Release<T>(Globals.PrefabType type, T item) where T : MonoBehaviour, IPoolable
         {
+            if (item == null) return;
+            
             var manager = poolMap[type] as PoolManager<T>;
-            manager?.Release(item);
+            if (manager != null)
+            {
+                manager.Release(item);
+            }
+            else
+            {
+                Debug.LogWarning($"Pool manager not found for type {type}, destroying item directly");
+                Destroy(item.gameObject);
+            }
+        }
+        
+        /// <summary>
+        /// Clear all pools for a specific type
+        /// </summary>
+        public void ClearPool<T>(Globals.PrefabType type) where T : MonoBehaviour, IPoolable
+        {
+            if (poolMap.ContainsKey(type))
+            {
+                if (poolMap[type] is PoolManager<T> manager)
+                {
+                    manager.Clear();
+                }
+                poolMap.Remove(type);
+                Debug.Log($"Cleared pool for type {type}");
+            }
+        }
+        
+        /// <summary>
+        /// Clear all pools (useful when switching games)
+        /// </summary>
+        public void ClearAllPools()
+        {
+            poolMap.Clear();
+            Debug.Log("All pools cleared");
         }
     }
 }

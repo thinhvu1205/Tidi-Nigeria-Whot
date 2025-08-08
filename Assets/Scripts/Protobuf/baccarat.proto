@@ -16,6 +16,26 @@ enum BaccaratBetCell {
   BACCARAT_BET_CELL_BACCARAT_CELL_BANKER_PAIR = 5;
 }
 
+enum TypeWinBaccarat {
+  TYPEWIN_BACCARAT_NONE = 0;
+
+  BANKER = 1;
+  PLAYER = 2;
+  TIE = 3;
+
+  PLAYER_P = 102;      // Player win + Banker pair
+  PLAYER_B = 12;       // Player win + Player pair
+  PLAYER_PB = 112;     // Player win + Both pair
+
+  BANKER_P = 101;      // Banker win + Banker pair
+  BANKER_B = 11;       // Banker win + Player pair
+  BANKER_PB = 111;     // Banker win + Both pair
+
+  TIE_P = 103;         // Tie + Banker pair
+  TIE_B = 13;          // Tie + Player pair
+  TIE_PB = 113;        // Tie + Both pair
+}
+
 enum BaccaratBetActionType {
   BACCARAT_BET_ACTION_TYPE_BACCARAT_BET_NORMAL_UNSPECIFIED = 0;
   BACCARAT_BET_ACTION_TYPE_BACCARAT_BET_REBET = 1;
@@ -82,7 +102,8 @@ message BaccaratUpdateDesk {
   BaccaratPlayerBet user_bet = 5;
   repeated BaccaratBetCellInfo desk_cells = 6;
   BaccaratSimpleHistory history = 7;
-  Error error = 8;
+  repeated TypeWinBaccarat detailed_history = 8;
+  Error error = 9;
 }
 
 enum BaccaratBetRejectedReason {

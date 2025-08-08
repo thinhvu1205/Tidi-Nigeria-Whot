@@ -15,6 +15,8 @@ public class BaseGameView : BaseView
     // public string soundBg = SOUND_GAME.IN_GAME_COMMON;
     [SerializeField] private TextMeshProUGUI textMatchInfo, textGameName;
     public int MarkUnit { get; private set; }
+    
+    public GameState GameState { get; protected set; } = GameState.Idle;
 
     public virtual void LoadInfoMatch(Match match)
     {
@@ -24,20 +26,21 @@ public class BaseGameView : BaseView
             textMatchInfo.text = $"ID {match.TableId}\nBet: {Utility.FormatMoney(MarkUnit)}";
         }
     }
+    
     public virtual void OnClickBack()
     {
         // SoundManager.instance.soundClick();
-        // var subView = Instantiate(UIManager.instance.loadPrefab("GameView/Objects/GroupMenu"), transform);
-        // subView.transform.localScale = Vector3.one;
+        var subView = Instantiate(UIManager.Instance.LoadPrefabPopup("GroupMenu"), transform);
+        subView.transform.localScale = Vector3.one;
     }
     
     public virtual void OpenRule()
     {
 
     }
-    
-    
 
+    #region Handle API
+    
     public virtual void HandleMatchFound(IMatchmakerMatched matchmakerMatched)
     {
         
@@ -94,11 +97,15 @@ public class BaseGameView : BaseView
 
     public virtual void HandleUpdateKickOffTheTable(IMatchState matchState)
     {
-        
+        if (UIManager.Instance.gameView == null) return;
+        Destroy(UIManager.Instance.gameView.gameObject);
+        UIManager.Instance.gameView = null;
     }
 
     public virtual void HandleFinish(IMatchState matchState)
     {
         
     }
+    
+    #endregion
 }

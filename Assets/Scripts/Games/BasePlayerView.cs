@@ -141,9 +141,9 @@ public class BasePlayerView : MonoBehaviour
         avatar_id = playerData.AvatarId;
         vipLevel = playerData.VipLevel;
         sid = playerData.Sid.ToString();
-
-        lbChipWinLose.text = playerData.Wallet;
-        if (avatar_id != "") {
+        setAg(long.Parse(wallet));
+        
+        if (string.IsNullOrEmpty(avatar_id)) {
             // avatar.setSpriteFrame(UIManager.Instance.avatarAtlas.getSpriteFrame(avatar_id));
         } else {
             avatar.setSpriteFrame(UIManager.Instance.getAvatarDefault());
