@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Globals;
+using Nakama;
+using Proto;
 using Spine.Unity;
 using TMPro;
 using UnityEngine;
@@ -26,7 +28,7 @@ public class RouletteView : BaseDiceGameView
     [SerializeField] private SkeletonGraphic animationResult, animationWinLose;
     [SerializeField] private RectTransform transformTabResult, transformButtonMenu, tableBet, tableSpin;
     [SerializeField] private RouletteHistory resultHistoryPrefab;
-    [SerializeField] private Transform resultHistoryParent, chipContainer, effectContainer;
+    [SerializeField] private Transform resultHistoryParent, resultHistoryPopupParent, chipContainer, effectContainer;
     private readonly Vector2[] listPositionBallEnd = new Vector2[]
     {
         new Vector2(-112, 152),
@@ -73,8 +75,9 @@ public class RouletteView : BaseDiceGameView
     public long TotalBetValue { get; private set; } = 0;
     private long currentBetValue;
     private RouletteOptionBet resultOption, selectedOption;
-    private List<BetData> listDataBet = new List<BetData>();
-    private List<BetData> listDataRebet = new List<BetData>();
+    private readonly List<BetData> listDataBet = new();
+    private readonly List<BetData> listDataRebet = new();
+    private readonly List<RouletteHistory> listResultHistory = new();
     private UnityEngine.Pool.ObjectPool<RouletteChip> chipPool;
 
     protected override void Awake()
@@ -92,6 +95,13 @@ public class RouletteView : BaseDiceGameView
             option.OnTriggerDown += RouletteOptionBet_OnTriggerDown;
             option.OnTriggerUp += RouletteOptionBet_OnTriggerUp;
         }
+    }
+
+    public override void HandleUpdateUserInTable(IMatchState matchState)
+    {
+        base.HandleUpdateUserInTable(matchState);
+        var updateTable = UpdateTable.Parser.ParseFrom(matchState.State);
+        UpdateListPlayer(updateTable.Players.ToList());
     }
 
     #region Events
@@ -174,6 +184,8 @@ public class RouletteView : BaseDiceGameView
         listDataRebet.Clear();
         listDataRebet.AddRange(listDataBet);
         listDataBet.Clear();
+
+
     }
 
     public void OnClickButtonBet(int index)
@@ -293,6 +305,35 @@ public class RouletteView : BaseDiceGameView
         }
         UpdateTotalDealValueUI();
         UpdateTotalBetUI(TotalBetValue + currentBetValue);
+    }
+
+    public void OnClickButtonHistory()
+    {
+        // playSound(SOUND_GAME.CLICK);
+        imagePopupHistory.gameObject.SetActive(true);
+        foreach (Transform child in resultHistoryPopupParent)
+        {
+            RouletteHistory history = child.GetComponent<RouletteHistory>();
+            history.Animation.gameObject.SetActive(false);
+        }
+        if (listResultHistory.Count != 0)
+        {
+            DOVirtual.DelayedCall(0.1f, () =>
+            {
+                RouletteHistory history = resultHistoryPopupParent.GetChild(0).GetComponent<RouletteHistory>();
+                Utility.PlayAnimation(history.Animation, "khung1", true);
+            });
+        }
+        else
+        {
+            textPercentBlack.text = $"0%";
+            textPercentRed.text = $"0%";
+        }
+    }
+
+    public void OnClickButtonCloseHistory()
+    {
+        imagePopupHistory.gameObject.SetActive(false);
     }
     #endregion
 
@@ -585,18 +626,23 @@ public class RouletteView : BaseDiceGameView
         };
 
         RouletteHistory resultHistory = Instantiate(resultHistoryPrefab, resultHistoryParent);
-
+        RouletteHistory resultHistoryInPopup = Instantiate(resultHistoryPrefab, resultHistoryPopupParent);
+        resultHistoryInPopup.transform.SetAsFirstSibling();
+        listResultHistory.Add(resultHistory);
         if (resultOption.IsRed)
         {
             resultHistory.Init(result, 1, false);
+            resultHistoryInPopup.Init(result, 1, false);
         }
         else if (resultOption.IsBlack)
         {
             resultHistory.Init(result, 2, false);
+            resultHistoryInPopup.Init(result, 2, false);
         }
         else
         {
             resultHistory.Init(result, 0, false);
+            resultHistoryInPopup.Init(result, 0, false);
         }
 
         for (int i = 0; i < resultHistoryParent.childCount; i++)
@@ -611,6 +657,14 @@ public class RouletteView : BaseDiceGameView
                 child.localScale = new Vector3(0.75f, 0.75f, 1f);
             }
         }
+
+                int nonZeroCount = listResultHistory.Count(history => history.Value != 0);
+        int x = listResultHistory.Count(history => history.Value != 0 && history.IsRed);
+        float percentRed = nonZeroCount > 0 ? (float)x / nonZeroCount : 0;
+        float percentBlack = nonZeroCount > 0 ? 100 - (percentRed * 100) : 0;
+
+        textPercentRed.text = $"{percentRed * 100:0}%";
+        textPercentBlack.text = $"{percentBlack:0}%";
     }
 
     #endregion

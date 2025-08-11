@@ -12,15 +12,22 @@ public class RouletteHistory : MonoBehaviour
     public Image ImageResult;
     public TextMeshProUGUI TextResult;
     public SkeletonGraphic Animation;
+    public int Value { get; private set; }
+    public bool IsRed { get; private set; } = false;
 
     public void Init(int result, int num, bool isActiveAnimation)
     {
+        Value = result;
         ImageResult.sprite = listBackgroundImage[num];
         ImageResult.SetNativeSize();
         TextResult.text = result.ToString();
         if (isActiveAnimation)
         {
             Utility.PlayAnimation(Animation, "khung1", true);
+        }
+        if (num == 1)
+        {
+            IsRed = true;
         }
     }
 }
