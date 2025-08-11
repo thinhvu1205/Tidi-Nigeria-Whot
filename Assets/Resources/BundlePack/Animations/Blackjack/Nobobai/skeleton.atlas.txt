@@ -1,0 +1,181 @@
+
+skeleton.png
+size: 762,762
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Blackjack05/Blackjack05_00000
+  rotate: false
+  xy: 2, 625
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00001
+  rotate: false
+  xy: 2, 488
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00002
+  rotate: false
+  xy: 154, 625
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00003
+  rotate: false
+  xy: 2, 351
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00004
+  rotate: false
+  xy: 154, 488
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00005
+  rotate: false
+  xy: 306, 625
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00006
+  rotate: false
+  xy: 2, 214
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00007
+  rotate: false
+  xy: 154, 351
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00008
+  rotate: false
+  xy: 306, 488
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00009
+  rotate: false
+  xy: 458, 625
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00010
+  rotate: false
+  xy: 2, 77
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00011
+  rotate: false
+  xy: 154, 214
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00012
+  rotate: false
+  xy: 306, 351
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00013
+  rotate: false
+  xy: 458, 488
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00014
+  rotate: false
+  xy: 610, 625
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00015
+  rotate: false
+  xy: 154, 77
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00016
+  rotate: false
+  xy: 306, 214
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00017
+  rotate: false
+  xy: 458, 351
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00018
+  rotate: false
+  xy: 610, 488
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00019
+  rotate: false
+  xy: 306, 77
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00020
+  rotate: false
+  xy: 458, 214
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00021
+  rotate: false
+  xy: 610, 351
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00022
+  rotate: false
+  xy: 458, 77
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00023
+  rotate: false
+  xy: 610, 214
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1
+Blackjack05/Blackjack05_00024
+  rotate: false
+  xy: 610, 77
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: -1

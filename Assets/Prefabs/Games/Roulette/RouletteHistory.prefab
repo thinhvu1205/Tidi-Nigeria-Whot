@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3123567559665638863}
   - component: {fileID: 8151646433576947487}
   m_Layer: 0
-  m_Name: New SkeletonGraphic
+  m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102,6 +102,7 @@ GameObject:
   - component: {fileID: 7912594325644719142}
   - component: {fileID: 5787666054656401711}
   - component: {fileID: 2424194495575270940}
+  - component: {fileID: 2476134146743129245}
   m_Layer: 5
   m_Name: RouletteHistory
   m_TagString: Untagged
@@ -168,6 +169,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2476134146743129245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5536202186237032065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bd3a7dee7a7f437897d40de5faf9b2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  listBackgroundImage:
+  - {fileID: 7291851308156195190, guid: fc278d6490f90ba4dbb16952ea05aab8, type: 3}
+  - {fileID: 5747889533200651394, guid: fd109f72874cab742b9cf37aa87306ab, type: 3}
+  - {fileID: 3061638597932137267, guid: e369db3ece82b5f4c887564915a3c4e5, type: 3}
+  ImageResult: {fileID: 2424194495575270940}
+  TextResult: {fileID: 7690371238503388358}
+  Animation: {fileID: 8151646433576947487}
 --- !u!1 &6556211444876067964
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,7 +200,7 @@ GameObject:
   - component: {fileID: 3086772823320651011}
   - component: {fileID: 7690371238503388358}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -235,8 +255,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 36
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1d1a7e03e0c924b6bb83eccf57537005, type: 2}
+  m_sharedMaterial: {fileID: -3778855014367556274, guid: 1d1a7e03e0c924b6bb83eccf57537005, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

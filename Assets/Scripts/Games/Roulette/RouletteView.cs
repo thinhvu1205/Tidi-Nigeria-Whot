@@ -1,19 +1,758 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using DG.Tweening;
+using Globals;
+using Nakama;
+using Proto;
 using Spine.Unity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RouletteView : BaseGameView
+public class RouletteView : BaseDiceGameView
 {
+    [SerializeField] private RouletteOptionBet[] listBetOptions;
+    [SerializeField] private RouletteButtonBet[] listBetButtons;
     [SerializeField] private Image imageSpin, imageBall, imagePopupHistory;
     [SerializeField]
+    private Image button1stDozenActive, button2ndDozenActive, button3rdDozenActive, button1To18Active,
+    button19To36Active, buttonRedActive, buttonBlackActive, buttonOddActive, buttonEvenActive, button1stLineActive, button2ndLineActive, button3rdLineActive;
+    [SerializeField]
     private TextMeshProUGUI textResult, textNumWin, textNumLose, textPercentRed, textPercentBlack,
-    textClearValue, textDealValue, textCoinValue, textMoney, textDeal;
+    textClearValue, textDealValue, textMoney, textDeal;
+    [SerializeField] private TextNumberControl textCoinValue;
     [SerializeField] private GameObject chipPrefab;
-    [SerializeField] private Button buttonDouble, buttonDeal, buttonClear, buttonHistory, buttonCloseHistory, buttonRebet;
+    [SerializeField] private Button buttonDouble, buttonDeal, buttonClear, buttonHistory, buttonCloseHistory, buttonRebet, buttonSpin;
     [SerializeField] private SkeletonGraphic animationResult, animationWinLose;
     [SerializeField] private RectTransform transformTabResult, transformButtonMenu, tableBet, tableSpin;
+    [SerializeField] private RouletteHistory resultHistoryPrefab;
+    [SerializeField] private Transform resultHistoryParent, resultHistoryPopupParent, chipContainer, effectContainer;
+    private readonly Vector2[] listPositionBallEnd = new Vector2[]
+    {
+        new Vector2(-112, 152),
+        new Vector2(-28, -200),
+        new Vector2(76, 179),
+        new Vector2(-165, 115),
+        new Vector2(8, 196),
+        new Vector2(102, -178),
+        new Vector2(176, 91),
+        new Vector2(-203, -15),
+        new Vector2(179, -104),
+        new Vector2(-151, -138),
+        new Vector2(133, -157),
+        new Vector2(199, -39),
+        new Vector2(-200, 50),
+        new Vector2(202, 28),
+        new Vector2(-93, -181),
+        new Vector2(-53, 189),
+        new Vector2(40, -202),
+        new Vector2(134, 145),
+        new Vector2(-186, -82),
+        new Vector2(-21, 193),
+        new Vector2(-61, -196),
+        new Vector2(47, 196),
+        new Vector2(-167, -112),
+        new Vector2(158, -132),
+        new Vector2(76, -194),
+        new Vector2(108, 165),
+        new Vector2(-141, 138),
+        new Vector2(191, 62),
+        new Vector2(-203, 17),
+        new Vector2(-198, -52),
+        new Vector2(188, -74),
+        new Vector2(-123, -165),
+        new Vector2(-91, 180),
+        new Vector2(7, -207),
+        new Vector2(160, 118),
+        new Vector2(-183, 83),
+        new Vector2(204, -10)
+    };
+    List<int> coefficients = new() { 1, 5, 10, 50, 100 };
 
+    private int result, currentBetIndex;
+    public long TotalBetValue { get; private set; } = 0;
+    private long currentBetValue;
+    private RouletteOptionBet resultOption, selectedOption;
+    private readonly List<BetData> listDataBet = new();
+    private readonly List<BetData> listDataRebet = new();
+    private readonly List<RouletteHistory> listResultHistory = new();
+    private UnityEngine.Pool.ObjectPool<RouletteChip> chipPool;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        InitPool();
+        InitButtonBet();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        foreach (var option in listBetOptions)
+        {
+            option.OnTriggerDown += RouletteOptionBet_OnTriggerDown;
+            option.OnTriggerUp += RouletteOptionBet_OnTriggerUp;
+        }
+    }
+
+    public override void HandleUpdateUserInTable(IMatchState matchState)
+    {
+        base.HandleUpdateUserInTable(matchState);
+        var updateTable = UpdateTable.Parser.ParseFrom(matchState.State);
+        // UpdateListPlayer(updateTable.Players.ToList());
+    }
+
+    #region Events
+    private void RouletteOptionBet_OnTriggerDown(int id)
+    {
+        if (Constants.HongKongPokerNumberDictionary.TryGetValue(id, out int[] values))
+        {
+            Debug.Log("ID PRESSED: " + id);
+            Debug.Log("Values: " + string.Join(", ", values));
+            foreach (RouletteOptionBet item in listBetOptions)
+            {
+                bool isSelected = item.Id == id;
+                bool isInValues = values.Contains(item.Id);
+
+                if (isSelected)
+                    selectedOption = item;
+
+                if (isSelected || isInValues)
+                    Utility.SetAlpha100(item.HighlightImage);
+            }
+        }
+    }
+
+    private void RouletteOptionBet_OnTriggerUp(int id)
+    {
+        Debug.Log("SELECTED BET: " + selectedOption.transform.position);
+
+        DOVirtual.DelayedCall(0.1f, () =>
+        {
+            foreach (RouletteOptionBet item in listBetOptions)
+            {
+                Utility.SetAlpha0(item.HighlightImage);
+            }
+        });
+        RouletteChip chip = chipPool.Get();
+        chip.transform.SetParent(selectedOption.transform);
+        chip.SetInfo(currentBetIndex, coefficients[currentBetIndex]);
+        selectedOption.AddChip(chip);
+
+        currentBetValue += coefficients[currentBetIndex];
+        UpdateTotalBetUI(TotalBetValue + currentBetValue);
+        UpdateTotalDealValueUI();
+
+        if (Constants.HongKongPokerNumberDictionary.TryGetValue(id, out int[] values))
+        {
+            listDataBet.Add(new BetData(id, currentBetIndex, values, coefficients[currentBetIndex]));
+        }
+    }
+    #endregion
+
+    #region Button Click
+    public void OnClickSpin()
+    {
+        result = UnityEngine.Random.Range(0, 37);
+        resultOption = listBetOptions.FirstOrDefault(option => option.Id == result);
+        buttonSpin.interactable = false;
+        // ClickButtonClear();
+        // playSound(SOUND_GAME.CLICK);
+        // for (int i = 0; i < listBetOptions.Count; i++)
+        // {
+        //     listBetOptions[i].buttonBetOption.interactable = false;
+        // }
+        buttonHistory.interactable = false;
+        tableBet.DOAnchorPosX(1280, 1)
+            .SetEase(Ease.InOutQuad)
+            .OnComplete(() =>
+            {
+                RotateSpinAndBall();
+            });
+        tableSpin.DOAnchorPosX(0, 1).SetEase(Ease.InOutQuad);
+        transformButtonMenu.DOAnchorPosX(240, 0.5f);
+        transformTabResult.DOAnchorPosX(-232, 0.75f).SetEase(Ease.InOutQuad);
+        // SocketSend.sendSpinRoulette();
+        // if (listDataBetForRebet.Count != 0)
+        // {
+        //     listDataBetForRebetTemp.Clear();
+        //     listDataBetForRebetTemp.AddRange(listDataBetForRebet);
+        //     listDataBetForRebet.Clear();
+        // }
+        listDataRebet.Clear();
+        listDataRebet.AddRange(listDataBet);
+        listDataBet.Clear();
+
+
+    }
+
+    public void OnClickButtonBet(int index)
+    {
+        currentBetIndex = index;
+        for (int i = 0; i < listBetButtons.Length; i++)
+        {
+            listBetButtons[i].SetSelected(i == index);
+        }
+    }
+
+    public void OnClickButtonDeal()
+    {
+        ShowTextNumDeal(); 
+
+        foreach (var betOption in listBetOptions)
+        {
+            int childCount = betOption.transform.childCount;
+
+            for (int i = childCount - 1; i >= 0; i--)
+            {
+                Transform child = betOption.transform.GetChild(i);
+                RouletteChip chip = child.GetComponent<RouletteChip>();
+                if (chip != null && !chip.IsDealt)
+                {
+                    chip.IsDealt = true;
+                }
+            }
+        }
+        TotalBetValue += currentBetValue;
+        currentBetValue = 0;
+        UpdateTotalDealValueUI();
+        UpdateTotalBetUI(TotalBetValue);
+    }
+
+    public void OnClickButtonClear()
+    {
+        foreach (RouletteOptionBet betOption in listBetOptions)
+        {
+            int childCount = betOption.transform.childCount;
+            if (childCount == 0) continue;
+            for (int i = childCount - 1; i >= 0; i--)
+            {
+                Transform child = betOption.transform.GetChild(i);
+                RouletteChip chip = child.GetComponent<RouletteChip>();
+                if (chip != null && !chip.IsDealt && chip.gameObject.activeSelf) // Chỉ xóa chip chưa deal
+                {
+                    betOption.RemoveChip(chip);
+                    ClearChip(child);
+                    BetData betData = listDataBet.FirstOrDefault(b => b.IdBet == betOption.Id);
+                    listDataBet.Remove(betData);
+
+                }
+            }
+        }
+        currentBetValue = 0;
+        UpdateTotalDealValueUI();
+        UpdateTotalBetUI(TotalBetValue);    
+    }
+
+    public void OnClickButtonRebet()
+    {
+        foreach (BetData data in listDataRebet)
+        {
+            RouletteOptionBet option = listBetOptions.FirstOrDefault(o => o.Id == data.IdBet);
+            if (option != null)
+            {
+                long totalAmount = data.BetAmount;
+                RouletteChip newChip = chipPool.Get();
+                newChip.transform.SetParent(option.transform, false);
+                newChip.SetInfo(data.BetType, totalAmount);
+                option.AddChip(newChip);
+
+                currentBetValue += totalAmount;
+                if (Constants.HongKongPokerNumberDictionary.TryGetValue(data.IdBet, out int[] values))
+                {
+                    listDataBet.Add(new BetData(data.IdBet, data.BetType, values, totalAmount));
+                }
+            }
+        }
+        UpdateTotalDealValueUI();
+        UpdateTotalBetUI(TotalBetValue + currentBetValue);
+    }
+
+    public void OnClickButtonDouble()
+    {
+        foreach (RouletteOptionBet option in listBetOptions)
+        {
+            if (option.Chips.Count == 0 || option.Chips.All(chip => chip.IsDealt)) continue;
+
+            long totalAmount = 0;
+            for (int i = option.Chips.Count - 1; i >= 0; i--)
+            {
+                RouletteChip chip = option.Chips[i];
+                if (chip != null && !chip.IsDealt)
+                {
+                    totalAmount += chip.Value;
+                    currentBetValue -= chip.Value;
+                    option.RemoveChip(chip);
+                    BetData betData = listDataBet.FirstOrDefault(b => b.IdBet == option.Id);
+                    listDataBet.Remove(betData);
+
+                }
+            }
+
+            // Spawn chip mới
+            RouletteChip newChip = chipPool.Get();
+            newChip.transform.SetParent(option.transform, false);
+            newChip.SetInfo(currentBetIndex, totalAmount * 2);
+            option.AddChip(newChip);
+
+            currentBetValue += totalAmount * 2;
+            if (Constants.HongKongPokerNumberDictionary.TryGetValue(option.Id, out int[] values))
+            {
+                listDataBet.Add(new BetData(option.Id, currentBetIndex, values, totalAmount * 2));
+            }
+        }
+        UpdateTotalDealValueUI();
+        UpdateTotalBetUI(TotalBetValue + currentBetValue);
+    }
+
+    public void OnClickButtonHistory()
+    {
+        // playSound(SOUND_GAME.CLICK);
+        imagePopupHistory.gameObject.SetActive(true);
+        foreach (Transform child in resultHistoryPopupParent)
+        {
+            RouletteHistory history = child.GetComponent<RouletteHistory>();
+            history.Animation.gameObject.SetActive(false);
+        }
+        if (listResultHistory.Count != 0)
+        {
+            DOVirtual.DelayedCall(0.1f, () =>
+            {
+                RouletteHistory history = resultHistoryPopupParent.GetChild(0).GetComponent<RouletteHistory>();
+                Utility.PlayAnimation(history.Animation, "khung1", true);
+            });
+        }
+        else
+        {
+            textPercentBlack.text = $"0%";
+            textPercentRed.text = $"0%";
+        }
+    }
+
+    public void OnClickButtonCloseHistory()
+    {
+        imagePopupHistory.gameObject.SetActive(false);
+    }
+    #endregion
+
+    #region Visuals
+    private void UpdateTotalBetUI(long value)
+    {
+        textCoinValue.SetValue(value);
+    }
+
+    private void UpdateTotalDealValueUI()
+    {
+        textDealValue.text = currentBetValue.ToString();
+        textClearValue.text = currentBetValue.ToString();
+
+        if (currentBetValue == 0)
+        {
+            buttonDeal.interactable = false;
+            buttonClear.interactable = false;
+            buttonDouble.interactable = false;
+        }
+        else
+        {
+            buttonDeal.interactable = true;
+            buttonClear.interactable = true;
+            buttonDouble.interactable = true;
+        }
+        buttonRebet.interactable = listDataRebet.Count > 0;
+    }
+
+    private void ClearChip(Transform chipTransform)
+    {
+        if (chipTransform.TryGetComponent<RouletteChip>(out var chip))
+        {
+            if (!chipTransform.gameObject.TryGetComponent<CanvasGroup>(out var canvasGroup))
+            {
+                canvasGroup = chipTransform.gameObject.AddComponent<CanvasGroup>();
+            }
+
+            chipTransform.DOScale(Vector3.one, 0.5f);
+            chipTransform.DOLocalMove(new Vector3(0, 32, 0), 0.5f);
+            canvasGroup.DOFade(0, 1f).OnComplete(() =>
+            {
+                canvasGroup.alpha = 1f;
+                chipPool.Release(chip);
+            });
+        }
+    }
+
+    private void ShowTextNumDeal()
+    {
+        textDeal.transform.localPosition = new Vector3(32, 0, 0);
+        textDeal.gameObject.SetActive(true);
+
+        textDeal.text = $"{-currentBetValue}";
+
+        textDeal.transform.DOLocalMoveY(140, 2f)
+            .SetEase(Ease.Linear)
+            .OnComplete(() => { textDeal.gameObject.SetActive(false); });
+    }
+    #endregion
+
+    #region Animation Ball
+    private void RotateSpinAndBall()
+    {
+        Vector2 spinCenter = imageSpin.rectTransform.localPosition;
+        Vector2 ballCenter = imageBall.rectTransform.localPosition;
+        float initialRadius = Vector2.Distance(ballCenter, spinCenter);
+        Vector3 startPosBall = new Vector3(296, 0, 0);
+        imageBall.transform.localPosition = startPosBall;
+        imageSpin.rectTransform.DORotate(new Vector3(0, 0, 100), 2f, RotateMode.FastBeyond360)
+            .SetEase(Ease.InOutQuad)
+            .OnComplete(() =>
+            {
+                imageBall.rectTransform
+                    .DORotate(new Vector3(0, 0, -720), 5f, RotateMode.FastBeyond360)
+                    .SetEase(Ease.Linear);
+                imageBall.rectTransform
+                    .DOLocalPath(GetCirclePath(spinCenter, initialRadius, 1080), 5f, PathType.CatmullRom)
+                    .SetEase(Ease.Linear)
+                    .OnComplete(() => { ReduceRadiusAndSpin(spinCenter, initialRadius, 2, 3f); });
+
+                imageSpin.rectTransform.DORotate(new Vector3(0, 0, -720), 5f, RotateMode.FastBeyond360)
+                    .SetEase(Ease.InQuad)
+                    .OnComplete(() =>
+                    {
+                        imageSpin.rectTransform.DORotate(new Vector3(0, 0, -1440), 7f, RotateMode.FastBeyond360)
+                            .SetEase(Ease.OutQuad)
+                            .OnComplete(() =>
+                            {
+                                Debug.Log("SpinDone");
+                                ShowResultAnimation();
+                            });
+                    });
+            });
+    }
+
+    private Vector3[] GetCirclePath(Vector2 center, float radius, float totalDegrees)
+    {
+        int segments = 100;
+        Vector3[] path = new Vector3[segments + 1];
+
+        for (int i = 0; i <= segments; i++)
+        {
+            float angle = Mathf.Deg2Rad * (i * (totalDegrees / segments));
+            float x = center.x + radius * Mathf.Cos(angle);
+            float y = center.y + radius * Mathf.Sin(angle);
+            path[i] = new Vector3(x, y, 0);
+        }
+
+        return path;
+    }
+
+    private void ReduceRadiusAndSpin(Vector2 center, float initialRadius, int numRounds, float duration)
+    {
+        float totalDegrees = 360f * numRounds;
+        float timeStep = duration / numRounds / 10;
+
+        DOTween.To(() => initialRadius, x => initialRadius = x, initialRadius * 0.5f, duration)
+            .SetEase(Ease.InOutQuad);
+
+        imageBall.rectTransform.DOLocalPath(GetShrinkingCirclePath(center, initialRadius, totalDegrees), duration,
+                PathType.CatmullRom)
+            .SetEase(Ease.Linear)
+            .OnComplete(() =>
+            {
+                Vector2 targetPos = listPositionBallEnd[result];
+                Vector2 direction = (targetPos - Vector2.zero).normalized;
+                Vector2 offsetPos = targetPos - direction * 50f;
+
+                imageBall.transform
+                    .DOLocalMove(new Vector3(offsetPos.x, offsetPos.y, 0), 0.5f)
+                    .SetEase(Ease.Linear)
+                    .OnComplete(() =>
+                    {
+                        imageBall.transform.SetParent(imageSpin.transform);
+                    });
+            });
+    }
+
+    private Vector3[] GetShrinkingCirclePath(Vector2 center, float initialRadius, float totalDegrees)
+    {
+        int segments = 100;
+        Vector3[] path = new Vector3[segments + 1];
+
+        for (int i = 0; i <= segments; i++)
+        {
+            float t = i / (float)segments;
+            float radius = Mathf.Lerp(initialRadius, initialRadius * 0.5f, t);
+            float angle = Mathf.Deg2Rad * (t * totalDegrees);
+            float x = center.x + radius * Mathf.Cos(angle);
+            float y = center.y + radius * Mathf.Sin(angle);
+            path[i] = new Vector3(x, y, 0);
+        }
+
+        return path;
+    }
+    #endregion
+
+    #region Animation Result
+    private void ShowResult()
+    {
+        DOVirtual.DelayedCall(4f, () =>
+        {
+            ShowAnimationResult();
+
+            // Delay tiếp 3s sau khi show animation mới restart game
+            DOVirtual.DelayedCall(1f, () =>
+            {
+                Reset();
+                // playSound(SOUND_GAME.THROW_CHIP);
+            });
+        });
+        HighlightWinningImage(resultOption.HighlightImage);
+        if (result == 0) return;
+        // Dozen
+        var dozenMap = new Dictionary<Func<RouletteOptionBet, bool>, Image>
+        {
+            { o => o.IsInFirstDozen, button1stDozenActive },
+            { o => o.IsInSecondDozen, button2ndDozenActive },
+            { o => true,               button3rdDozenActive } // fallback
+        };
+        HighlightByCondition(resultOption, dozenMap);
+
+        // Line
+        var lineMap = new Dictionary<Func<RouletteOptionBet, bool>, Image>
+        {
+            { o => o.IsInFirstLine, button1stLineActive },
+            { o => o.IsInSecondLine, button2ndLineActive },
+            { o => true, button3rdLineActive }
+        };
+        HighlightByCondition(resultOption, lineMap);
+
+        // 1-18 / 19-36
+        HighlightWinningImage(resultOption.IsIn1To18 ? button1To18Active : button19To36Active);
+
+        // Red / Black
+        HighlightWinningImage(resultOption.IsRed ? buttonRedActive : buttonBlackActive);
+
+        // Even / Odd
+        HighlightWinningImage(resultOption.IsEven ? buttonEvenActive : buttonOddActive);
+
+    }
+
+    private void ShowAnimationResult()
+    {
+        effectContainer.gameObject.SetActive(true);
+        string animationName = "win";
+        if (1 > 0)
+        {
+            animationName = "win";
+            textNumWin.gameObject.SetActive(true);
+            textNumLose.gameObject.SetActive(false);
+            textNumWin.text = $"+{Utility.FormatNumber(10000)}";
+            // playSound(SOUND_GAME.WIN);
+
+        }
+        else
+        {
+            animationName = "lose";
+            textNumWin.gameObject.SetActive(false);
+            textNumLose.transform.localPosition = new Vector3(108, 40, 0);
+            textNumLose.gameObject.SetActive(true);
+            textNumLose.transform.DOLocalMoveY(10, 0.5f);
+            textNumLose.text = $"-{Utility.FormatNumber(TotalBetValue)}";
+            // playSound(SOUND_GAME.LOSE);
+        }
+        Utility.PlayAnimation(animationWinLose, animationName, false);
+        animationWinLose.AnimationState.Complete += (entry) =>
+        {
+            effectContainer.gameObject.SetActive(false);
+        };
+    }
+
+    private void HighlightByCondition(RouletteOptionBet option, Dictionary<Func<RouletteOptionBet, bool>, Image> map)
+    {
+        foreach (var kv in map)
+        {
+            if (kv.Key(option))
+            {
+                HighlightWinningImage(kv.Value);
+                break;
+            }
+        }
+    }
+    private void HighlightWinningImage(Image image)
+    {
+        Debug.Log("HIGH LIGHT WINNING IMAGE!");
+        Utility.SetAlpha100(image);
+        Sequence sequence = DOTween.Sequence();
+
+        for (int i = 0; i < 4; i++)
+        {
+            sequence.AppendCallback(() => Utility.SetAlpha100(image));
+            sequence.AppendInterval(0.4f);
+            sequence.AppendCallback(() => Utility.SetAlpha0(image));
+            sequence.AppendInterval(0.4f);
+        }
+        sequence.OnComplete(() => Utility.SetAlpha0(image));
+    }
+
+    private void ShowResultAnimation()
+    {
+        animationResult.gameObject.SetActive(true);
+        string animationName = "green";
+        if (resultOption.IsRed)
+        {
+            animationName = "red";
+        }
+        else if (resultOption.IsBlack)
+        {
+            animationName = "black";
+        }
+        // playSound(SOUND_ROULETTE.showResult);
+        textResult.gameObject.SetActive(true);
+        textResult.text = $"{result}";
+        Utility.PlayAnimation(animationResult, animationName, false);
+        animationResult.AnimationState.Complete += (entry) =>
+        {
+            buttonHistory.interactable = true;
+            // listDataBet.Clear();
+            textResult.gameObject.SetActive(false);
+            tableBet.DOAnchorPosX(0, 1).SetEase(Ease.InOutQuad).OnComplete(() =>
+            {
+                ShowResult();
+                UpdateTotalDealValueUI();
+            });
+            tableSpin.DOAnchorPosX(-2400, 1f).SetEase(Ease.InOutQuad);
+            transformButtonMenu.DOAnchorPosX(60, 0.5f);
+            transformTabResult.DOAnchorPosX(-44, 0.75f).SetEase(Ease.InOutQuad);
+        };
+
+        RouletteHistory resultHistory = Instantiate(resultHistoryPrefab, resultHistoryParent);
+        RouletteHistory resultHistoryInPopup = Instantiate(resultHistoryPrefab, resultHistoryPopupParent);
+        resultHistoryInPopup.transform.SetAsFirstSibling();
+        listResultHistory.Add(resultHistory);
+        if (resultOption.IsRed)
+        {
+            resultHistory.Init(result, 1, false);
+            resultHistoryInPopup.Init(result, 1, false);
+        }
+        else if (resultOption.IsBlack)
+        {
+            resultHistory.Init(result, 2, false);
+            resultHistoryInPopup.Init(result, 2, false);
+        }
+        else
+        {
+            resultHistory.Init(result, 0, false);
+            resultHistoryInPopup.Init(result, 0, false);
+        }
+
+        for (int i = 0; i < resultHistoryParent.childCount; i++)
+        {
+            Transform child = resultHistoryParent.GetChild(i);
+            if (i == resultHistoryParent.childCount - 1)
+            {
+                child.localScale = Vector3.one;
+            }
+            else
+            {
+                child.localScale = new Vector3(0.75f, 0.75f, 1f);
+            }
+        }
+
+                int nonZeroCount = listResultHistory.Count(history => history.Value != 0);
+        int x = listResultHistory.Count(history => history.Value != 0 && history.IsRed);
+        float percentRed = nonZeroCount > 0 ? (float)x / nonZeroCount : 0;
+        float percentBlack = nonZeroCount > 0 ? 100 - (percentRed * 100) : 0;
+
+        textPercentRed.text = $"{percentRed * 100:0}%";
+        textPercentBlack.text = $"{percentBlack:0}%";
+    }
+
+    #endregion
+
+    #region Setups
+    private void InitPool()
+    {
+        chipPool = new UnityEngine.Pool.ObjectPool<RouletteChip>(
+            createFunc: () =>
+            {
+                var chip = Instantiate(chipPrefab, chipContainer);
+                chip.SetActive(false);
+                return chip.GetComponent<RouletteChip>();
+            },
+            actionOnGet: (chip) =>
+            {
+                chip.gameObject.SetActive(true);
+                chip.transform.localScale = Vector3.one;
+            },
+            actionOnRelease: (chip) =>
+            {
+                chip.gameObject.SetActive(false);
+            },
+            actionOnDestroy: (chip) =>
+            {
+                Destroy(chip);
+            },
+            defaultCapacity: 1,
+            maxSize: 100
+        );
+    }
+
+    private void InitButtonBet()
+    {
+        foreach (RouletteButtonBet button in listBetButtons)
+        {
+            button.SetInfo(coefficients[Array.IndexOf(listBetButtons, button)]);
+        }
+        currentBetIndex = 0;
+        buttonDeal.interactable = false;
+        buttonClear.interactable = false;
+        buttonDouble.interactable = false;
+        buttonRebet.interactable = false;
+        OnClickButtonBet(currentBetIndex);
+    }
+
+    private void Reset()
+    {
+        currentBetValue = 0;
+        TotalBetValue = 0;
+
+        listDataBet.Clear();
+        buttonSpin.interactable = true;
+        UpdateTotalDealValueUI();
+        UpdateTotalBetUI(TotalBetValue);
+        // Xóa chip
+        foreach (RouletteOptionBet betOption in listBetOptions)
+        {
+            int childCount = betOption.transform.childCount;
+            if (childCount == 0) continue;
+            for (int i = childCount - 1; i >= 0; i--)
+            {
+                Transform child = betOption.transform.GetChild(i);
+                RouletteChip chip = child.GetComponent<RouletteChip>();
+                if (chip != null && chip.gameObject.activeSelf)
+                {
+                    betOption.RemoveChip(chip);
+                    ClearChip(child);
+                }
+            }
+        }
+    }
+    #endregion
+
+    [Serializable]
+    private struct BetData
+    {
+        public int IdBet { get; set; }
+        public int BetType { get; set; }
+        public int[] NumArr { get; set; }
+        public long BetAmount { get; set; }
+
+        public BetData(int idBet, int betType, int[] numArr, long betAmount)
+        {
+            IdBet = idBet;
+            BetType = betType;
+            NumArr = numArr;
+            BetAmount = betAmount;
+        }
+    }
 }

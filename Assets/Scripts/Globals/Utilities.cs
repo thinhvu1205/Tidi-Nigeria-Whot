@@ -478,6 +478,20 @@ namespace Globals
 
             return lbCom;
         }
+
+        public static void SetAlpha0(Image image)
+        {
+            Color c = image.color;
+            c.a = 0f;
+            image.color = c;
+        }
+
+        public static void SetAlpha100(Image image)
+        {
+            Color c = image.color;
+            c.a = 1f;
+            image.color = c;
+        }
         #endregion
 
         #region Base64
@@ -503,9 +517,9 @@ namespace Globals
         #region Spine Animation
         public static void PlayAnimation(SkeletonGraphic skeletonGraphic, string animationName, bool loop)
         {
+            skeletonGraphic.gameObject.SetActive(true);
             if (skeletonGraphic != null && skeletonGraphic.AnimationState != null)
             {
-                skeletonGraphic.gameObject.SetActive(true);
                 skeletonGraphic.Initialize(true);
                 skeletonGraphic.AnimationState.SetAnimation(0, animationName, loop);
             }

@@ -89,6 +89,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a27983165f06944d095b7c37d6094cf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 1479907629906894052}
+  canvasGroup: {fileID: 2548302388816121341}
+  container: {fileID: 4316800068880665305}
+  chipImage: {fileID: 401188268230551930}
 --- !u!1 &4316800068880665305
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,7 +110,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2767509291480101143
 RectTransform:
   m_ObjectHideFlags: 0

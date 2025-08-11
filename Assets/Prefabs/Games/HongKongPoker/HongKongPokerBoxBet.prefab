@@ -90,6 +90,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d89a2fc3b9c78431c9477777eb68b151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  icon: {fileID: 5623250858261023141}
+  listSprite:
+  - {fileID: 21300000, guid: 8cd7e58d4e5df4cab9d99b93b3c20ce6, type: 3}
+  - {fileID: 21300000, guid: 608eff221afc14065bdc92beb8d4be2f, type: 3}
+  - {fileID: 21300000, guid: 2189df0197e904d19b9e44ee42767a48, type: 3}
+  - {fileID: 21300000, guid: 76d9c5ce224bb49238d84536dd33cec9, type: 3}
+  - {fileID: 21300000, guid: 63d439383eaca4190a507e5edb573314, type: 3}
+  textChip: {fileID: 6827116609078126138}
 --- !u!1 &2451679541253970766
 GameObject:
   m_ObjectHideFlags: 0
