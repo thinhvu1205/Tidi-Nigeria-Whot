@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Globals;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class RouletteOptionBet : MonoBehaviour
@@ -33,30 +35,50 @@ public class RouletteOptionBet : MonoBehaviour
     public bool IsInFirstDozen => id / 12 == 0;
     public bool IsInSecondDozen => id / 12 == 1;
     public bool IsInThirdDozen => id / 12 == 2;
-    public bool ÍsIn1To18 => id >= 0 && id <= 18;
-    public bool ÍsIn19To36 => id >= 19 && id <= 36;
+    public bool IsIn1To18 => id >= 0 && id <= 18;
+    public bool IsIn19To36 => id >= 19 && id <= 36;
     public bool IsInFirstLine => id % 3 == 0;
     public bool IsInSecondLine => id % 3 == 2;
     public bool IsInThirdLine => id % 3 == 1;
+    public Image HighlightImage => imageChoosing;
     private bool isHolding = false;
     private Coroutine turnOffCoroutine = null;
+    public List<RouletteChip> Chips { get; private set; } = new List<RouletteChip>();
+
+    public event Action<int> OnTriggerDown;
+    public event Action<int> OnTriggerUp;
 
     private void Awake()
     {
         imageChoosing = GetComponent<Image>();
+        imageChoosing.enabled = true;
+        Utility.SetAlpha0(imageChoosing);
         button = GetComponent<Button>();
+
+        EventTrigger trigger = button.gameObject.AddComponent<EventTrigger>();
+
+        // Pointer Down
+        EventTrigger.Entry downEntry = new()
+        {
+            eventID = EventTriggerType.PointerDown
+        };
+        downEntry.callback.AddListener((data) => TriggerDown());
+        trigger.triggers.Add(downEntry);
+
+        // Pointer Up
+        EventTrigger.Entry upEntry = new()
+        {
+            eventID = EventTriggerType.PointerUp
+        };
+        upEntry.callback.AddListener((data) => TriggerUp());
+        trigger.triggers.Add(upEntry);
     }
     private void Start()
     {
         // buttonBetOption.onClick.AddListener(ClickButtonBetOption);
     }
 
-    private void OnEnable()
-    {
-        imageChoosing.gameObject.SetActive(false);
-    }
-
-    public void OnTriggerUp()
+    public void TriggerUp()
     {
         // if (!RouLetteView.instance.isBetTime) return;
 
@@ -66,9 +88,10 @@ public class RouletteOptionBet : MonoBehaviour
         //     StopCoroutine(turnOffCoroutine);
         // }
         // turnOffCoroutine = StartCoroutine(TurnOffFlashEffect());
+        OnTriggerUp?.Invoke(id);
     }
 
-    public void OnTriggerDown()
+    public void TriggerDown()
     {
         // if (!RouLetteView.instance.isBetTime) return;
 
@@ -87,18 +110,18 @@ public class RouletteOptionBet : MonoBehaviour
         //             item.gameObject.SetActive(true);
         //     }
         // }
+        OnTriggerDown?.Invoke(id);
     }
 
-    private void ClickButtonBetOption()
-    {
-        // if (!RouLetteView.instance.isBetTime) return;
-        // if ((RouLetteView.instance.totalBetDeal + RouLetteView.instance.totalBetValue) >= RouLetteView.instance.agTable * 100)
-        // {
-        //     UIManager.instance.showToast($"Pinakamataas ng pagtaya: {RouLetteView.instance.agTable * 100}");
-        //     return;
-        // }
 
-        // RouLetteView.instance.ClickButtonSendBet(id);
+    public void AddChip(RouletteChip chip)
+    {
+        Chips.Add(chip);
+    }
+
+    public void RemoveChip(RouletteChip chip)
+    {
+        Chips.Remove(chip);
     }
 
     private IEnumerator TurnOffFlashEffect()

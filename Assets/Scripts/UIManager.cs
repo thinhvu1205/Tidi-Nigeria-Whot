@@ -147,7 +147,7 @@ public class UIManager : Singleton<UIManager>
                 gameView = Instantiate(LoadPrefabGame("HongKongPokerView"), parentGames).GetComponent<HongKongPokerView>();
                 break;
             case Constants.ROULETTE_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("BaccaratView"), parentGames).GetComponent<RouletteView>();
+                gameView = Instantiate(LoadPrefabGame("RouletteView"), parentGames).GetComponent<RouletteView>();
                 break;
             case Constants.NOEL_GAME_ID:
                 gameView = Instantiate(LoadPrefabGame("SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
@@ -173,6 +173,51 @@ public class UIManager : Singleton<UIManager>
                 break;
         }
         gameView?.LoadInfoMatch(labelMatch);
+    }
+    public void HandleOpenGame()
+    {
+        if (gameView != null)
+        {
+            Destroy(gameView.gameObject);
+        }
+        Debug.Log("CURRENT GAME: " + Config.currentGameId);
+        switch (Config.currentGameId)
+        {
+            case Constants.WHOT_GAME_ID:
+                gameView = Instantiate(LoadPrefabGame("WhotView"), parentGames).GetComponent<WhotView>();
+                break;
+            case Constants.BACCARAT_GAME_ID:
+                gameView = Instantiate(LoadPrefabGame("BaccaratView"), parentGames).GetComponent<BaccaratView>();
+                break;
+            case Constants.CHINESE_POKER_GAME_ID:
+                gameView = Instantiate(LoadPrefabGame("HongKongPokerView"), parentGames).GetComponent<HongKongPokerView>();
+                break;
+            case Constants.ROULETTE_GAME_ID:
+                gameView = Instantiate(LoadPrefabGame("RouletteView"), parentGames).GetComponent<RouletteView>();
+                break;
+            case Constants.NOEL_GAME_ID:
+                gameView = Instantiate(LoadPrefabGame("SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
+                // gameView = Instantiate(LoadPrefabGame("SlotFruitView"), parentGames).GetComponent<SlotFruitView>();
+                break;
+            case Constants.TARZAN_GAME_ID:
+                gameView = Instantiate(LoadPrefabGame("SlotTarzanView"), parentGames).GetComponent<SlotTarzanView>();
+                break;
+            case Constants.FRUIT_SLOT_GAME_ID:
+                gameView = Instantiate(LoadPrefabGame("SlotFruitView"), parentGames).GetComponent<SlotFruitView>();
+                break;
+            case Constants.INCA_GAME_ID:
+                gameView = Instantiate(LoadPrefabGame("SlotIncaView"), parentGames).GetComponent<SlotIncaView>();
+                break;
+            case Constants.SIXIANG_GAME_ID:
+                gameView = Instantiate(LoadPrefabGame("SlotSixiangView"), parentGames).GetComponent<SlotSixiangView>();
+                break;
+            case Constants.JUICY_GARDEN_GAME_ID:
+                gameView = Instantiate(LoadPrefabGame("SlotJuicyGardenView"), parentGames).GetComponent<SlotJuicyView>();
+                break;
+            default:
+                Debug.LogError("Unsupported game ID: " + Config.currentGameId);
+                break;
+        }
     }
 
     public void HandleLeaveGame()

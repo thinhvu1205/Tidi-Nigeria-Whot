@@ -220,11 +220,17 @@ MonoBehaviour:
   imgBorder: {fileID: 4334540538884254234}
   avtDefault: {fileID: 21300000, guid: e1091645270c645b891882d3983cbe49, type: 3}
   border:
-  - {fileID: 21300000, guid: d2566a95c47574156941008ede7ba00f, type: 3}
-  - {fileID: 21300000, guid: 405fef5663704425d8a275149509cbcd, type: 3}
-  - {fileID: 21300000, guid: 73153108b19b8481890d695fe04f2487, type: 3}
-  - {fileID: 21300000, guid: da2b1f64a93e445f1b723f5d4f92903c, type: 3}
-  - {fileID: 21300000, guid: 85dfd814eee4a434b9d750d574b46d65, type: 3}
+  - {fileID: 21300000, guid: 107dedb42d4724b3e86d3e67ac848b18, type: 3}
+  - {fileID: 21300000, guid: 4b4dafb8f6dea4638bb7fb524fc5a95d, type: 3}
+  - {fileID: 21300000, guid: 1b11945a8a9974984aba767350714934, type: 3}
+  - {fileID: 21300000, guid: b26d9f1c652984e14baa2149118bae22, type: 3}
+  - {fileID: 21300000, guid: e84b52b736dd24054b05a30d29d7e9a7, type: 3}
+  - {fileID: 21300000, guid: 90eabe668e038409e8a9c726956bb60b, type: 3}
+  - {fileID: 21300000, guid: a31790dcc2f7742cf89f87ae264b59b2, type: 3}
+  - {fileID: 21300000, guid: 26b91566bc1c644638d339c18b67a067, type: 3}
+  - {fileID: 21300000, guid: 79b3d07b792ef45b0bd0ab9c6e874b27, type: 3}
+  - {fileID: 21300000, guid: 3c011f8f19e904119bc663ef515c3931, type: 3}
+  - {fileID: 21300000, guid: 65bc64dc4b20e4d8789527c265291009, type: 3}
   namee: {fileID: 6189633921181236063}
   idAvt: 0
 --- !u!1 &7403832687064279132
@@ -396,7 +402,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 105, y: 105}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8126355363963483859
 CanvasRenderer:
@@ -426,9 +432,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d2566a95c47574156941008ede7ba00f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 107dedb42d4724b3e86d3e67ac848b18, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1

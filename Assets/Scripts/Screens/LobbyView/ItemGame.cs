@@ -40,7 +40,8 @@ public class ItemGame : MonoBehaviour
         }
         else
         {
-            _ = UIManager.Instance.HandleFindAndJoinMatch(0);
+            // _ = UIManager.Instance.HandleFindAndJoinMatch(0);
+            UIManager.Instance.HandleOpenGame();
         }
         // UIManager.getInstance().setBannerType(Constants.BANNER_SHOW_TYPE.CHOOSE_GAME, true);
     }
@@ -75,6 +76,7 @@ public class ItemGame : MonoBehaviour
                 Constants.BACCARAT_GAME_ID => "anim_iconGames/baccarat/skeleton_SkeletonData",
                 Constants.ROULETTE_GAME_ID => "anim_iconGames/roulette/skeleton_SkeletonData",
                 Constants.CHINESE_POKER_GAME_ID => "anim_iconGames/catte/skeleton_SkeletonData",
+                Constants.BLACKJACK_GAME_ID => "anim_iconGames/blackjack/skeleton_SkeletonData",
                 _ => ""
             };
         }

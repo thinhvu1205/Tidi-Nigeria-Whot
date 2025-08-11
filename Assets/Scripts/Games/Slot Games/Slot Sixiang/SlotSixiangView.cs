@@ -42,18 +42,18 @@ public class SlotSixiangView : BaseSlotSymbolView
 
     private const string SIXIANG_GAME_NAME = "sixiang";
     private const string SIXIANG_BACKGROUND_ANIMATION_PATH = "SiXiang/Spine/BgGame/skeleton_SkeletonData";
-    private const string SCATTER_PREFAB_PATH = "BundlePack/Animations/Sixiang/Prefab/ScatterView";
+    private const string SCATTER_PREFAB_PATH = "Sixiang/ScatterView";
     private const string DRAGON_PEARL_GAME_NAME = "dragonpearl";
     private const string DRAGON_PEARL_BACKGROUND_ANIMATION_PATH = "SiXiang/Spine/DragonPearl/BgGame/skeleton_SkeletonData";
     private const string DRAGON_PEARL_ANIMAL_ANIMATION_PATH = "SiXiang/Spine/Animal/Dragon/skeleton_SkeletonData";
-    private const string GOLD_PICK_PREFAB_PATH = "BundlePack/Animations/Sixiang/Prefab/GoldPickView";
+    private const string GOLD_PICK_PREFAB_PATH = "Sixiang/GoldPickView";
     private const string GOLD_PICK_ANIMAL_ANIMATION_PATH = "SiXiang/Spine/Animal/Tiger/skeleton_SkeletonData";
     private const string GOLD_PICK_ANIMAL_ANIMATION_NAME = "3";
-    private const string RAPID_PAY_PREFAB_PATH = "BundlePack/Animations/Sixiang/Prefab/RapidPayView";
+    private const string RAPID_PAY_PREFAB_PATH = "Sixiang/RapidPayView";
     private const string RAPID_PAY_ANIMAL_ANIMATION_PATH = "SiXiang/Spine/Animal/Phoenix/skeleton_SkeletonData";
     private const string LUCKY_DRAW_GAME_NAME = "luckydraw";
     private const string LUCKY_DRAW_BACKGROUND_ANIMATION_PATH = "SiXiang/Spine/LuckyDraw/BgGame/skeleton_SkeletonData";
-    private const string LUCKY_DRAW_PREFAB_PATH = "BundlePack/Animations/Sixiang/Prefab/LuckyDrawView";
+    private const string LUCKY_DRAW_PREFAB_PATH = "Sixiang/LuckyDrawView";
     private const string LUCKY_DRAW_ANIMAL_ANIMATION_PATH = "SiXiang/Spine/Animal/Turle/skeleton_SkeletonData";
     private const string MONEY_WIN_ANIMATION_PATH = "SiXiang/Spine/BigWinGoldPick/skeleton_SkeletonData";
     private const string WIN_JACKPOT_ANIMATION_PATH = "SiXiang/Spine/LuckyDraw/BigWin/skeleton_SkeletonData";
@@ -63,6 +63,7 @@ public class SlotSixiangView : BaseSlotSymbolView
     private SiXiangRapidPayView rapidPayView;
     private SiXiangGoldPickView goldPickView;
     private SiXiangLuckyDrawView luckyDrawView;
+    public Queue<TweenCallback> TweenQueue => tweenQueue;
 
     public class OnUpdateTableEventArgs : EventArgs
     {
@@ -108,7 +109,7 @@ public class SlotSixiangView : BaseSlotSymbolView
             {
 
                 UpdateJackpot(data);
-                UpdateGem();
+                // UpdateGem();
             }
         }
 
@@ -156,6 +157,7 @@ public class SlotSixiangView : BaseSlotSymbolView
         else
         {
             IsSpinning = false;
+            HideThirdScatter();
             ///------------------CHECK SPREAD WILD--------------------///
             if (CheckWild())
             {
@@ -172,18 +174,18 @@ public class SlotSixiangView : BaseSlotSymbolView
             ///------------------CHECK SHOW TYPE WIN--------------------///
             if (!isInFreeSpin)
             {
-                switch (winType)
-                {
-                    case WinType.BIG_WIN:
-                        tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.BIG_WIN, currentChipWin));
-                        break;
-                    case WinType.MEGA_WIN:
-                        tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.MEGA_WIN, currentChipWin));
-                        break;
-                    case WinType.HUGE_WIN:
-                        tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.HUGE_WIN, currentChipWin));
-                        break;
-                }
+                // switch (winType)
+                // {
+                //     case WinType.BIG_WIN:
+                //         tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.BIG_WIN, currentChipWin));
+                //         break;
+                //     case WinType.MEGA_WIN:
+                //         tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.MEGA_WIN, currentChipWin));
+                //         break;
+                //     case WinType.HUGE_WIN:
+                //         tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.HUGE_WIN, currentChipWin));
+                //         break;
+                // }
             }
 
             ///------------------CHECK SHOW ONE BY ONE--------------------//
@@ -204,6 +206,7 @@ public class SlotSixiangView : BaseSlotSymbolView
             ///------------------CHECK SHOW WIN SCATTER--------------------///
             if (CheckWinThirdScatter())
             {
+                tweenQueue.Enqueue(() => ShowAnimationCutScene());
                 tweenQueue.Enqueue(() => ShowScatterView());
             }
             NextTween();
@@ -214,7 +217,7 @@ public class SlotSixiangView : BaseSlotSymbolView
     {
         if (scatterView == null)
         {
-            scatterView = Instantiate(UIManager.Instance.LoadPrefab(SCATTER_PREFAB_PATH), transform).GetComponent<SiXiangScatterView>();
+            scatterView = Instantiate(UIManager.Instance.LoadPrefabGame(SCATTER_PREFAB_PATH), transform).GetComponent<SiXiangScatterView>();
             scatterView.transform.SetSiblingIndex(animationCutScene.transform.GetSiblingIndex() - 1);
         }
         else
@@ -348,10 +351,12 @@ public class SlotSixiangView : BaseSlotSymbolView
         Utility.PlayAnimation(animationCutScene, "animation", false);
         DOTween.Sequence().AppendInterval(1.7f).AppendCallback(() =>
         {
+            spinType = SpinType.NORMAL;
+            UpdateSpinButtonUI();
+            HideThirdScatter();
             if (isEndBonusGame)
             {
                 HideBackgroundGoldPick();
-                UpdateSpinButtonUI();
                 columnContainer.gameObject.SetActive(true);
                 paylineInfoContainer.gameObject.SetActive(true);
                 dragonPearlView.gameObject.SetActive(false);
@@ -391,7 +396,7 @@ public class SlotSixiangView : BaseSlotSymbolView
     }
 
     #region Dragon Pearl
-    private void ShowDragonPearlView()
+    public void ShowDragonPearlView()
     {
         Debug.Log("SHOW DRAGON PEARL VIEW");
         dragonPearlView.gameObject.SetActive(true);
@@ -564,11 +569,11 @@ public class SlotSixiangView : BaseSlotSymbolView
     #endregion
 
     #region Gold Pick
-    private void ShowGoldPickView()
+    public void ShowGoldPickView()
     {
         if (goldPickView == null)
         {
-            goldPickView = Instantiate(UIManager.Instance.LoadPrefab(GOLD_PICK_PREFAB_PATH), transform).GetComponent<SiXiangGoldPickView>();
+            goldPickView = Instantiate(UIManager.Instance.LoadPrefabGame(GOLD_PICK_PREFAB_PATH), transform).GetComponent<SiXiangGoldPickView>();
             goldPickView.transform.SetSiblingIndex(animationCutScene.transform.GetSiblingIndex() - 3);
         }
         else
@@ -586,11 +591,11 @@ public class SlotSixiangView : BaseSlotSymbolView
     #endregion
 
     #region Rapid Pay
-    private void ShowRapidPayView()
+    public void ShowRapidPayView()
     {
         if (rapidPayView == null)
         {
-            rapidPayView = Instantiate(UIManager.Instance.LoadPrefab(RAPID_PAY_PREFAB_PATH), transform).GetComponent<SiXiangRapidPayView>();
+            rapidPayView = Instantiate(UIManager.Instance.LoadPrefabGame(RAPID_PAY_PREFAB_PATH), transform).GetComponent<SiXiangRapidPayView>();
             rapidPayView.transform.SetSiblingIndex(animationCutScene.transform.GetSiblingIndex() - 2);
         }
         else
@@ -602,11 +607,11 @@ public class SlotSixiangView : BaseSlotSymbolView
     #endregion
     
     #region Lucky Draw
-    private void ShowLuckyDrawView()
+    public void ShowLuckyDrawView()
     {
         if (luckyDrawView == null)
         {
-            luckyDrawView = Instantiate(UIManager.Instance.LoadPrefab(LUCKY_DRAW_PREFAB_PATH), transform).GetComponent<SiXiangLuckyDrawView>();
+            luckyDrawView = Instantiate(UIManager.Instance.LoadPrefabGame(LUCKY_DRAW_PREFAB_PATH), transform).GetComponent<SiXiangLuckyDrawView>();
             luckyDrawView.transform.SetSiblingIndex(animationCutScene.transform.GetSiblingIndex() - 1);
         }
         else
@@ -631,6 +636,7 @@ public class SlotSixiangView : BaseSlotSymbolView
         UpdateTotalChipWinValue();
         tweenQueue.Enqueue(() =>
         {
+            Debug.Log("IS CHOOES BONUS GAME: " + isChooseBonusGame);
             if (isChooseBonusGame)
             {
                 ShowChooseBonusGame();

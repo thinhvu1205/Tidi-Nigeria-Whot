@@ -3134,7 +3134,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2473662458060046987
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5016,6 +5016,7 @@ MonoBehaviour:
   - {fileID: 2784133225402961677}
   - {fileID: 246433554282786556}
   invitePrefab: {fileID: 8979014322673678433, guid: 448838f8c29fdaa42a42ce917796fbb0, type: 3}
+  cardPrefab: {fileID: 0}
   inviteContainer: {fileID: 2140578468799514391}
   playerContainer: {fileID: 2111872997021713629}
   hiddenPlayerContainer: {fileID: 0}

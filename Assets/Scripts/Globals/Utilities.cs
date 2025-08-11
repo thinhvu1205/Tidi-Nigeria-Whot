@@ -478,6 +478,20 @@ namespace Globals
 
             return lbCom;
         }
+
+        public static void SetAlpha0(Image image)
+        {
+            Color c = image.color;
+            c.a = 0f;
+            image.color = c;
+        }
+
+        public static void SetAlpha100(Image image)
+        {
+            Color c = image.color;
+            c.a = 1f;
+            image.color = c;
+        }
         #endregion
 
         #region Base64

@@ -101,7 +101,9 @@ namespace Games.Card
         public void SetData(int value, int type)
         {
             data = new CardData(value, type);
-        
+            icon_large.gameObject.SetActive(true);
+            icon_small.gameObject.SetActive(true);
+            this.value.gameObject.SetActive(true);
             // Set color based on suit (red for hearts/diamonds, black for clubs/spades)
             Color textColor = (type == 1 || type == 2) ? new Color(211f/255f, 6f/255f, 25f/255f) : Color.black;
             this.value.color = textColor;
@@ -125,6 +127,9 @@ namespace Games.Card
         public void HideCardPusoy()
         {
             blueBg.gameObject.SetActive(true);
+            icon_large.gameObject.SetActive(false);
+            icon_small.gameObject.SetActive(false);
+            value.gameObject.SetActive(false);
         }
 
         /// <summary>

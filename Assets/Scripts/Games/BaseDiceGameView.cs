@@ -11,7 +11,7 @@ using GameState = Proto.GameState;
 public class BaseDiceGameView : BaseGameView
 {
     [SerializeField] protected List<BasePlayerView> listPlayerView = new List<BasePlayerView>();
-    [SerializeField] protected GameObject invitePrefab;
+    [SerializeField] protected GameObject invitePrefab, cardPrefab;
     [SerializeField] protected Transform inviteContainer, playerContainer, hiddenPlayerContainer;
 
     protected List<Player> players = new();

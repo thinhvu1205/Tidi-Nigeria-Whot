@@ -191,7 +191,7 @@ public class BaseSlotSymbolView : BaseGameView
             }
             else
             {
-
+                Debug.Log("VAO DAY DE");
                 UpdateJackpot(data);
                 UpdateGem();
             }
@@ -385,6 +385,11 @@ public class BaseSlotSymbolView : BaseGameView
     protected bool CheckWinThirdScatter()
     {
         return currentGame == SiXiangGame.Normal && nextGame == SiXiangGame.Bonus;
+    }
+
+    protected void HideThirdScatter()
+    {
+        listColumn[^1].HideThirdScatter();
     }
 
     #region Win Effects
@@ -711,9 +716,10 @@ public class BaseSlotSymbolView : BaseGameView
 
     protected void UpdateGem()
     {
+        Debug.Log("UPDATE GEM");
         if (currentGame != SiXiangGame.Normal) return;
 
-            foreach (Image image in listGemImage)
+        foreach (Image image in listGemImage)
         {
             image.color = Color.gray;
         }
