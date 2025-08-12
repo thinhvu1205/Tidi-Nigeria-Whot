@@ -12,11 +12,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.U2D;
 using GameState = Proto.GameState;
+using UnityEngine.Video;
+using UnityEngine.UI;
+using DG.Tweening;
 
 public class UIManager : Singleton<UIManager>
 {
     public SpriteAtlas avatarAtlas, cardAtlas;
     [SerializeField] Sprite avtDefault;
+  
     public LobbyView lobbyView;
     private Transform parentPopups, parentGames, parentBanners, parentLobby, parentLoading;
     [HideInInspector] public BaseGameView gameView;
@@ -107,7 +111,11 @@ public class UIManager : Singleton<UIManager>
         if (response.Matches.Count > 0)
         {
             var labelMatch = await DataSender.JoinMatch(response.Matches[0].MatchId);
-            if (labelMatch != null)
+            if (Config.currentGameId == Constants.SIXIANG_GAME_ID)
+            {
+                lobbyView.PlayVideoSiXiang(labelMatch);
+            }
+            else
             {
                 HandleOpenGame(labelMatch);
             }
@@ -184,51 +192,6 @@ public class UIManager : Singleton<UIManager>
         }
         gameView?.LoadInfoMatch(labelMatch);
     }
-    public void HandleOpenGame()
-    {
-        if (gameView != null)
-        {
-            Destroy(gameView.gameObject);
-        }
-        Debug.Log("CURRENT GAME: " + Config.currentGameId);
-        switch (Config.currentGameId)
-        {
-            case Constants.WHOT_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("WhotView"), parentGames).GetComponent<WhotView>();
-                break;
-            case Constants.BACCARAT_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("BaccaratView"), parentGames).GetComponent<BaccaratView>();
-                break;
-            case Constants.CHINESE_POKER_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("HongKongPokerView"), parentGames).GetComponent<HongKongPokerView>();
-                break;
-            case Constants.ROULETTE_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("RouletteView"), parentGames).GetComponent<RouletteView>();
-                break;
-            case Constants.NOEL_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("SlotNoelView"), parentGames).GetComponent<SlotNoelView>();
-                // gameView = Instantiate(LoadPrefabGame("SlotFruitView"), parentGames).GetComponent<SlotFruitView>();
-                break;
-            case Constants.TARZAN_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("SlotTarzanView"), parentGames).GetComponent<SlotTarzanView>();
-                break;
-            case Constants.FRUIT_SLOT_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("SlotFruitView"), parentGames).GetComponent<SlotFruitView>();
-                break;
-            case Constants.INCA_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("SlotIncaView"), parentGames).GetComponent<SlotIncaView>();
-                break;
-            case Constants.SIXIANG_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("SlotSixiangView"), parentGames).GetComponent<SlotSixiangView>();
-                break;
-            case Constants.JUICY_GARDEN_GAME_ID:
-                gameView = Instantiate(LoadPrefabGame("SlotJuicyGardenView"), parentGames).GetComponent<SlotJuicyView>();
-                break;
-            default:
-                Debug.LogError("Unsupported game ID: " + Config.currentGameId);
-                break;
-        }
-    }
 
     public void HandleLeaveGame()
     {
@@ -241,6 +204,8 @@ public class UIManager : Singleton<UIManager>
             }
         }
     }
+
+   
     
     #endregion
 

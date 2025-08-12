@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using TMPro;
 using UnityEngine;
 using GameState = Proto.GameState;
+using System.Linq;
 
 public class BaseGameView : BaseView
 {
@@ -18,8 +19,14 @@ public class BaseGameView : BaseView
     
     public GameState GameState { get; protected set; } = GameState.Idle;
 
+    protected override void OnDestroy()
+    {
+        SoundManager.Instance.StopAllCurrentEffect();
+    }
+
     public virtual void LoadInfoMatch(Match match)
     {
+        if (!Constants.SELECT_TABLE_GAMES_ID.Contains(Config.currentGameId)) return;
         MarkUnit = (int)match.Bet.MarkUnit;
         if (textMatchInfo != null)
         {

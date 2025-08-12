@@ -73,7 +73,7 @@ public class LuckyDrawItem : MonoBehaviour
                 }))
                 .AppendCallback(() =>
                 {
-                    // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.LUCKYDRAW_ITEM_NORMAL);
+                    SoundManager.Instance.PlayEffectFromPath(SoundSlot.LUCKYDRAW_ITEM_NORMAL);
                     DOTween.Sequence()
                         .Append(
                         transform.DOScale(new Vector2(1.1f, 1.1f), 0.1f).SetEase(Ease.OutBack).OnComplete(() =>
@@ -101,7 +101,7 @@ public class LuckyDrawItem : MonoBehaviour
                 .AppendInterval(timeDelayAnim / 2)
                 .AppendCallback(() =>
                 {
-                    // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.LUCKYDRAW_ITEM_JACKPOT);
+                    SoundManager.Instance.PlayEffectFromPath(SoundSlot.LUCKYDRAW_ITEM_JACKPOT);
                 })
                 .AppendInterval(timeDelayAnim)
                 .AppendCallback(() =>

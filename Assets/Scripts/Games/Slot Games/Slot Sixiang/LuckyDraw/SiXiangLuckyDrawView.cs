@@ -134,7 +134,7 @@ public class SiXiangLuckyDrawView : MonoBehaviour
     {
         if (canClick)
         {
-            // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.CLICK);
+            SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
             InfoBet infoBet = new() 
             {
                 Id = listItem.IndexOf(item)
@@ -182,20 +182,20 @@ public class SiXiangLuckyDrawView : MonoBehaviour
     {
         string soundPathStart = "";
         string soundPathEnd = "";
-        // if (jackpotType != 0)
-        // {
-        //     spineResult.skeletonDataAsset = UIManager.instance.loadSkeletonData("GameView/SiXiang/Spine/LuckyDraw/BigWin/skeleton_SkeletonData");
-        //     // soundPathStart = Globals.SOUND_SLOT_BASE.WIN_JACKPOT_START;
-        //     // soundPathEnd = Globals.SOUND_SLOT_BASE.WIN_JACKPOT_END;
-        // }
-        // else
-        // {
-        //     spineResult.skeletonDataAsset = UIManager.instance.loadSkeletonData("GameView/SiXiang/Spine/BigWinGoldPick/skeleton_SkeletonData");
-        //     // soundPathStart = Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_START;
-        //     // soundPathEnd = Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_END;
-        // }
+        if (jackpotType != JackpotType.NORMAL)
+        {
+            // spineResult.skeletonDataAsset = UIManager.instance.loadSkeletonData("GameView/SiXiang/Spine/LuckyDraw/BigWin/skeleton_SkeletonData");
+            soundPathStart = SoundSlot.WIN_JACKPOT_START;
+            soundPathEnd = SoundSlot.WIN_JACKPOT_END;
+        }
+        else
+        {
+            // spineResult.skeletonDataAsset = UIManager.instance.loadSkeletonData("GameView/SiXiang/Spine/BigWinGoldPick/skeleton_SkeletonData");
+            soundPathStart = SoundSlot.COUNGTING_MONEY_START;
+            soundPathEnd = SoundSlot.COUNGTING_MONEY_END;
+        }
         float duration = 0; 
-        // AudioSource soundCount = SoundManager.instance.playEffectFromPath(soundPathStart);
+        AudioSource soundCount = SoundManager.Instance.PlayEffectFromPath(soundPathStart);
        
         DOTween.Sequence()
             .AppendInterval(1f)
@@ -214,8 +214,8 @@ public class SiXiangLuckyDrawView : MonoBehaviour
                 }
                 textTotalWin.SetValue(winAmount, true, duration * 0.85f, "", () =>
                 {
-                    // soundCount.Stop();
-                    // SoundManager.instance.playEffectFromPath(soundPathEnd);
+                    soundCount.Stop();
+                    SoundManager.Instance.PlayEffectFromPath(soundPathEnd);
                 });
             })
             .AppendInterval(duration)
@@ -246,7 +246,7 @@ public class SiXiangLuckyDrawView : MonoBehaviour
     
     private void ShowEffectItemJackpot()
     {
-        // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.LUCKYDRAW_WIN_JACKPOT);
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.LUCKYDRAW_WIN_JACKPOT);
         listItem.ForEach(item =>
         {
             if (item.typeItem == jackpotType)

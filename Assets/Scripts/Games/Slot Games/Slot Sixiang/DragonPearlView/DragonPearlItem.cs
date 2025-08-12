@@ -86,7 +86,7 @@ public class DragonPearlItem : MonoBehaviour
                 .AppendCallback(() =>
                 {
                     Utility.PlayAnimationByPath(spine, GOLD_ANIMATION_PATH, "rung", false);
-                    // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.PEARL_Item_Normal);
+                    SoundManager.Instance.PlayEffectFromPath(SoundSlot.PEARL_Item_Normal);
                 })
                 .AppendInterval(0.33f)
                 .AppendCallback(() =>
@@ -105,25 +105,25 @@ public class DragonPearlItem : MonoBehaviour
         {
             textChipValue.gameObject.SetActive(false);
             imageBackground.enabled = true;
-            // string soundSymbol = Globals.SOUND_SLOT_BASE.PEARL_ITEM;
+            string soundSymbol = SoundSlot.PEARL_ITEM;
             string animationPath = "";
             switch (data.Symbol)
             {
                 case SiXiangSymbol.DragonpearlEyeBird:
                     animationPath = EYE_BIRD_ANIMATION_PATH;
-                    // soundSymbol = Globals.SOUND_SLOT_BASE.PEARL_Phoenix;
+                    soundSymbol = SoundSlot.PEARL_Phoenix;
                     break; // + thêm số lượt quay 
                 case SiXiangSymbol.DragonpearlEyeTiger:
                     animationPath = TIGER_EYE_ANIMATION_PATH;
-                    // soundSymbol = Globals.SOUND_SLOT_BASE.PEARL_Tiger;
+                    soundSymbol = SoundSlot.PEARL_Tiger;
                     break; // x2 giá trị ở tất cả các ô
                 case SiXiangSymbol.DragonpearlEyeWarrior:
                     animationPath = TURTLE_EYE_ANIMATION_PATH;
-                    // soundSymbol = Globals.SOUND_SLOT_BASE.PEARL_Turtle;
+                    soundSymbol = SoundSlot.PEARL_Turtle;
                     break; // rơi 3 ngọc bất kì
                 case SiXiangSymbol.DragonpearlEyeDragon:
                     animationPath = DRAGON_EYE_ANIMATION_PATH;
-                    // soundSymbol = Globals.SOUND_SLOT_BASE.PEARL_Dragon;
+                    soundSymbol = SoundSlot.PEARL_Dragon;
                     break; // rơi 1 ngọc jackpot
             }
             sequence
@@ -135,7 +135,7 @@ public class DragonPearlItem : MonoBehaviour
                 .AppendInterval(1f)
                 .AppendCallback(() =>
                 {
-                    // SoundManager.instance.playEffectFromPath(soundSymbol);
+                    SoundManager.Instance.PlayEffectFromPath(soundSymbol);
                 })
                 .AppendInterval(0.1f)
                 .AppendCallback(() =>
@@ -168,9 +168,6 @@ public class DragonPearlItem : MonoBehaviour
                                     });
                                 textChipFSP.DOFade(0, 0.5f).SetEase(Ease.InSine).SetId("fadeEffect");
                             });
-                        // if (dragonPearlView.isDPSpin)
-                        // {
-                        // }
                         break;
                     }
                 case SiXiangSymbol.DragonpearlEyeTiger:

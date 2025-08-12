@@ -25,6 +25,7 @@ public class SlotNoelView : BaseSlotView
         { SiXiangSymbol.Wild, 11 },
         { SiXiangSymbol.Scatter, 12 }
     };
+    protected override string SOUND_BACKGROUND_ANIMATION_PATH => SoundSlot.BG_NOEL;
     protected override void Awake()
     {
         base.Awake();

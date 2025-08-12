@@ -173,7 +173,7 @@ public class SiXiangDragonPearlView : MonoBehaviour
             GameObject itemGold = itemGoldPool.Get();
 
             listItemGold.Add(itemGold);
-            // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.PEARL_RUNITEM);
+            SoundManager.Instance.PlayEffectFromPath(SoundSlot.PEARL_RUNITEM);
             sequence
                 .AppendCallback(() =>
                 {

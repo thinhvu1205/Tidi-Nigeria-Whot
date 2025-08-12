@@ -1,4 +1,4 @@
-# This .gitignore file should be placed at the root of your Unity project directory
+s# This .gitignore file should be placed at the root of your Unity project directory
 # The original version comes from https://github.com/github/gitignore/blob/main/Unity.gitignore
 # It has been modified to allow Unity projects to be placed in subfolders of your Git repository.
 
@@ -75,3 +75,6 @@ crashlytics-build.properties
 **/[Aa]ssets/[Ss]treamingAssets/aa/*
 
 .DS_Store
+
+# Ignore toàn bộ file trong Assets/Scripts/Protobuf
+**/Assets/Scripts/Protobuf/*

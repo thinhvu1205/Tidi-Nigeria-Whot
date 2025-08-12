@@ -46,7 +46,7 @@ public class BaseView : MonoBehaviour
         Show();
     }
 
-    public virtual void OnDestroy()
+    protected virtual void OnDestroy()
     {
         //    if (isPopupOnTab)
         //    {

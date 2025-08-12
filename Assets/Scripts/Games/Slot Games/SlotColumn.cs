@@ -151,6 +151,7 @@ public class SlotColumn : MonoBehaviour
     public void OnColumnStop()
     {
         slotView.OnColumnStop(columnIndex);
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.COLUMN_STOP);
     }
 
     public void CheckThirdScatter()

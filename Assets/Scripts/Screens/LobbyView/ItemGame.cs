@@ -40,8 +40,8 @@ public class ItemGame : MonoBehaviour
         }
         else
         {
-            // _ = UIManager.Instance.HandleFindAndJoinMatch(0);
-            UIManager.Instance.HandleOpenGame();
+            _ = UIManager.Instance.HandleFindAndJoinMatch(0);
+            // UIManager.Instance.HandleOpenGame();
         }
         // UIManager.getInstance().setBannerType(Constants.BANNER_SHOW_TYPE.CHOOSE_GAME, true);
     }

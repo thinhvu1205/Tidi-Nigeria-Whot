@@ -114,7 +114,7 @@ namespace Screens.LoginView
                         Config.currentGameId = profile.PlayingMatch.Code;
                         UIManager.Instance.HandleOpenGame(labelMatch);
                     }
-            
+
                     // NetworkManager.INSTANCE.OnJoinMatch();
                 }
             }

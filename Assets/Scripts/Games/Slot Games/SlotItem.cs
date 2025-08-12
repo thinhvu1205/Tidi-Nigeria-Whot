@@ -113,7 +113,7 @@ public class SlotItem : MonoBehaviour
                     column.CheckThirdScatter();
 
                 }
-                // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT.STOP_SPIN);
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.STOP_SPIN);
             }
             else
             {

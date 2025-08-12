@@ -1,11 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Spine.Unity;
-using Newtonsoft.Json.Linq;
-using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Globals;
 using TMPro;
@@ -76,7 +72,7 @@ public class SiXiangRapidPayView : MonoBehaviour
                     multiplierBonus *= 4;
                     break;
             }
-            // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.RAPID_CHIP_FLY);
+            SoundManager.Instance.PlayEffectFromPath(SoundSlot.RAPID_CHIP_FLY);
         }
         DOTween.Sequence()
             .AppendInterval(1f)
@@ -136,13 +132,13 @@ public class SiXiangRapidPayView : MonoBehaviour
     {
         animationResult.transform.parent.gameObject.SetActive(true);
         Utility.PlayAnimation(animationResult, "eng", false); buttonCollect.gameObject.SetActive(false);
-        // AudioSource soundMoney = SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_START);
+        AudioSource soundMoney = SoundManager.Instance.PlayEffectFromPath(SoundSlot.COUNGTING_MONEY_START);
         float timeRun = 2f;
         textWinResult.SetValue(winAmount, true, timeRun, "", () =>
         {
             buttonCollect.gameObject.SetActive(true);
-            // soundMoney.Stop();
-            // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_END);
+            soundMoney.Stop();
+            SoundManager.Instance.PlayEffectFromPath(SoundSlot.COUNGTING_MONEY_END);
 
         });
     }

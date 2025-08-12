@@ -109,7 +109,7 @@ public class SlotSymbolColumn : MonoBehaviour
     }
     public virtual void OnColumnStop()
     {
-        // animationThirdScatter.gameObject.SetActive(false);
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.COLUMN_STOP);
         listSymbols.Sort((a, b) =>
         {
             return a.IndexSymbol - b.IndexSymbol;
@@ -129,10 +129,6 @@ public class SlotSymbolColumn : MonoBehaviour
             // slotView.activeAllSymbol();
             slotView.OnStopSpin();
         }
-    }
-    public void prepareStop()
-    {
- 
     }
 
     public void ShowAnimationWild()

@@ -106,7 +106,7 @@ public class SiXiangScatterView : MonoBehaviour
 
     public void OnClickSpin()
     {
-        // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.CLICK);
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
         isWaitForAutoSpin = false;
         buttonSpin.interactable = false;
         
@@ -121,8 +121,8 @@ public class SiXiangScatterView : MonoBehaviour
     {
         Utility.PlayAnimation(animationButtonSpin, "spin normal", true);
         Utility.PlayAnimation(animationBackground, "spin", true);
-        // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.SCATTER_SPIN);
-        // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.SPIN_REEL);
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.SCATTER_SPIN);
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.SPIN_REEL);
         float startAngle = 0;
         int deltaAngle = typeResult * 45;
         int totalAngle = 4320 + deltaAngle;
@@ -143,7 +143,7 @@ public class SiXiangScatterView : MonoBehaviour
                 Utility.PlayAnimation(animationBackground, "normal", true);
                 animationLight.gameObject.SetActive(false);
 
-                // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.SCATTER_SYMBOL);
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.SCATTER_SYMBOL);
                 PreShowResult();
             });
     }
@@ -178,7 +178,7 @@ public class SiXiangScatterView : MonoBehaviour
         bool isBonusGame = typeResult % 2 != 0;
         if (isBonusGame)
         {
-            // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.SHOW_ANIMAL);
+            SoundManager.Instance.PlayEffectFromPath(SoundSlot.SHOW_ANIMAL);
             switch (spinResult.Symbol)
             {
                 case SiXiangSymbol.BonusDragonball:
@@ -221,16 +221,15 @@ public class SiXiangScatterView : MonoBehaviour
             animationPath = "SiXiang/Spine/WinResult/skeleton_SkeletonData";
             textChipWin.gameObject.SetActive(true);
             //Globals.Config.tweenNumberToNumber(lbChipWins, winAmount, 0, 2.0f);
-            // AudioSource soundMoney = SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_START);
+            AudioSource soundMoney = SoundManager.Instance.PlayEffectFromPath(SoundSlot.COUNGTING_MONEY_START);
             textChipWin.SetValue(winAmount, true, 2.0f, "", () =>
             {
-                // soundMoney.Stop();
-                // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_END);
+                soundMoney.Stop();
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.COUNGTING_MONEY_END);
             });
 
         }
         Utility.PlayAnimationByPath(animationResultSpin, animationPath, animationName, false);
-        // await Task.Delay((int)animationResultSpin.Skeleton.Data.FindAnimation(animName).Duration * 1000);
         animationResultSpin.AnimationState.Complete += delegate
         {
             if (isBonusGame)
@@ -262,7 +261,6 @@ public class SiXiangScatterView : MonoBehaviour
     private void EndView()
     {
         resultContainer.gameObject.SetActive(false);
-        // await gameView.showAnimCutScene();
         gameView.ShowAnimationCutScene();
         Destroy(gameObject);
     }

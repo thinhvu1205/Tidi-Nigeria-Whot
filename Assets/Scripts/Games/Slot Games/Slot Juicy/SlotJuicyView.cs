@@ -24,6 +24,7 @@ public class SlotJuicyView : BaseSlotView
     [SerializeField] private Material grandJackpotMaterial, majorJackpotMaterial, minorJackpotMaterial, miniJackpotMaterial;
     [SerializeField] private Button bucketLeft, bucketRight;
     protected override Vector2 RECT_SIZE => new(140f, 135f);
+    protected override string SOUND_BACKGROUND_ANIMATION_PATH => SoundSlot.BG_JUICY_GARDEN;
     protected override string BIG_WIN_ANIMATION_PATH => "SlotSpine/JuicyGarden/big_megawinJuicy/skeleton_SkeletonData";
     protected override string MEGA_WIN_ANIMATION_PATH => "GameView/SlotSpine/JuicyGarden/big_megawinJuicy/skeleton_SkeletonData";
     protected override string FREE_SPIN_ANIMATION_PATH => "GameView/SlotSpine/JuicyGarden/AnimBox/skeleton_SkeletonData";
@@ -83,9 +84,6 @@ public class SlotJuicyView : BaseSlotView
         isChooseFreeGame = data.NextSixiangGame == SiXiangGame.JuiceFreeGame && data.CurrentSixiangGame == SiXiangGame.JuiceFruitBasket;
         isChooseFruitRain = data.NextSixiangGame == SiXiangGame.JuiceFruitRain && data.CurrentSixiangGame == SiXiangGame.JuiceFruitBasket;
         isChooseBasket = data.NextSixiangGame == SiXiangGame.JuiceFruitBasket && data.CurrentSixiangGame != SiXiangGame.JuiceFruitBasket;
-
-  
-        
 
         winType = data.BigWin switch
         {
@@ -442,6 +440,7 @@ public class SlotJuicyView : BaseSlotView
 
     private void ShowPopupChooseABucket()
     {
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.FREESPIN);
         effectContainer.gameObject.SetActive(true);
         popupChooseABucketAnimation.gameObject.SetActive(true);
         Utility.PlayAnimationByPath(popupChooseABucketAnimation, BACKGROUND_CHOOSE_A_BUCKET_ANIMATION_PATH, "thung", true);
@@ -449,6 +448,7 @@ public class SlotJuicyView : BaseSlotView
 
     private void ShowPopupResultPackage()
     {
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.FREESPIN);
         effectContainer.gameObject.SetActive(true);
         popupResultPackageAnimation.gameObject.SetActive(true);
         packageValueWinText.text = totalPackageValue.ToString();
@@ -704,6 +704,7 @@ public class SlotJuicyView : BaseSlotView
         allLinesList.Clear();
         lineOneByOneList.Clear();
         paylineList.Clear();
+        SetLightAllItems();
 
         SetInfoSessionText("Press SPIN to play");
         ScatterCount = 0;

@@ -122,7 +122,7 @@ public class WhotView : BaseGameView
         }
     }
     
-    public override void OnDestroy()
+    protected override void OnDestroy()
     {
         // Clear all pools to ensure clean state
         PoolService.Instance.ClearPool<WhotCardModel>(PrefabType.WhotCard);
