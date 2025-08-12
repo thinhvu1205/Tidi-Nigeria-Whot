@@ -81,7 +81,7 @@ public class BaseSlotView : BaseGameView
         new int[] {0, 2, 2, 2, 0},
     };
     protected virtual Vector2 RECT_SIZE => new(200, 170);
-
+    protected virtual string SOUND_BACKGROUND_ANIMATION_PATH => Sound.IN_GAME_COMMON;
     protected virtual float AUTO_SPIN_HOLD_DURATION => 1.3f;
     protected virtual int ThirdScatterIndex => 3;
     protected virtual string BIG_WIN_ANIMATION_PATH => "SlotSpine/Noel/big_megawinNoel/skeleton_SkeletonData";
@@ -127,11 +127,12 @@ public class BaseSlotView : BaseGameView
         Init();
         InitColumns();
         UpdateSpinButtonUI();
+        SoundManager.Instance.PlayMusicInGame(SOUND_BACKGROUND_ANIMATION_PATH);
     }
 
     protected override void Update()
     {
-        HandleHoldingSpin(); 
+        HandleHoldingSpin();
     }
 
     #region API Handlers
@@ -196,6 +197,7 @@ public class BaseSlotView : BaseGameView
         {
             column.StartSpin(spinType);
         }
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.WHEEL);
     }
 
     public virtual void OnStopSpin()
@@ -314,6 +316,7 @@ public class BaseSlotView : BaseGameView
     // thả nút spin
     public void OnTriggerUpSpinButton()
     {
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
         isHoldingSpin = false;
         if (holdingSpinTime < AUTO_SPIN_HOLD_DURATION)
         {
@@ -388,6 +391,8 @@ public class BaseSlotView : BaseGameView
         {
             return; 
         }
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
+
         currentBetLevel = betLevelList.Find(bet => bet > currentBetLevel);
         if (currentBetLevel == 0)
         {
@@ -403,6 +408,8 @@ public class BaseSlotView : BaseGameView
         {
             return; 
         }
+
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
         currentBetLevel = betLevelList.FindLast(bet => bet < currentBetLevel);
         if (currentBetLevel == 0)
         {
@@ -418,6 +425,8 @@ public class BaseSlotView : BaseGameView
         {
             return; 
         }
+
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
         currentBetLevel = betLevelList[^1];
         SetCurrentBetText(currentBetLevel);
         SetCurrentBetImage(currentBetLevel);
@@ -425,7 +434,7 @@ public class BaseSlotView : BaseGameView
 
     public void OnClickShopButton()
     {
-
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
     }
 
     public void OnClickMenuButton()
@@ -536,7 +545,7 @@ public class BaseSlotView : BaseGameView
                         return;
                     else
                     {
-                        // playSound(SOUND_SLOT.SHOW_LINE);
+                        SoundManager.Instance.PlayEffectFromPath(SoundSlot.SHOW_LINE);
                         SetDarkAllItems();
                         DrawRectangularAndConnectingLines(lineWinID, payline.NumOccur, colorLine);
                         ShowPaylinesInfo(index);
@@ -627,6 +636,7 @@ public class BaseSlotView : BaseGameView
         switch (winType)
         {
             case WinType.BIG_WIN:
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.BIG_WIN);
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
                 Utility.TweenNumberTo(bigWinText, totalChipWinByGame, 0, 2.0f);
@@ -636,6 +646,7 @@ public class BaseSlotView : BaseGameView
 
                 break;
             case WinType.MEGA_WIN:
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
                 Utility.TweenNumberTo(bigWinText, totalChipWinByGame, 0, 2.0f);
@@ -652,6 +663,7 @@ public class BaseSlotView : BaseGameView
                 Utility.PlayAnimationByPath(animationEffect, FIVE_OF_A_KIND_ANIMATION_PATH, FIVE_OF_A_KIND_ANIMATION_NAME, false);
                 break;
             case WinType.FREE_SPIN:
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.FREESPIN);
                 animationEffect.transform.localScale = Vector2.one;
                 animationEffect.transform.localPosition = Vector2.zero;
                 bigWinText.transform.parent.gameObject.SetActive(false);
@@ -671,6 +683,7 @@ public class BaseSlotView : BaseGameView
     {
         thirdScatterAnimation.gameObject.SetActive(true);
         thirdScatterAnimation.transform.localPosition = new Vector2(thirdScatterAnimation.transform.parent.InverseTransformPoint(slotColumnList[indexCol].transform.position).x, thirdScatterAnimation.transform.localPosition.y);
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.NEAR_FREESPIN_START);
     }
 
     private void HideThirdScatterColumn()

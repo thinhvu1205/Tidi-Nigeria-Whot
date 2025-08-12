@@ -83,10 +83,10 @@ public class RapidPayRow : MonoBehaviour
                     SkeletonGraphic spineItemCurrent = currentItemPick.GetComponentInChildren<SkeletonGraphic>();
                     Utility.PlayAnimation(spineItemCurrent, GetAnimationName(item.Symbol), false);
 
-                    // if (getAnimName(result).Equals("end"))
-                    //     SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.CLICK_ITEM_MISS);
-                    // else
-                    //     SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.RAPID_ITEM_WIN);
+                    if (GetAnimationName(item.Symbol).Equals("end"))
+                        SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK_ITEM_MISS);
+                    else
+                        SoundManager.Instance.PlayEffectFromPath(SoundSlot.RAPID_ITEM_WIN);
                 })
                 .AppendInterval(1f)
                 .AppendCallback(() =>

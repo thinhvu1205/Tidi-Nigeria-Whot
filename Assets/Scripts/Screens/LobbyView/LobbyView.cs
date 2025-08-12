@@ -7,15 +7,21 @@ using Globals;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
+using DG.Tweening;
 
 public class LobbyView : BaseView
 {
     [SerializeField] private TextMeshProUGUI displayNameText, userIdText, accountChip;
     [SerializeField] private Image allSlotGamesImage, allGamesImage;
     [SerializeField] private Transform bigGameIconParent, miniGameIconParent, slotGameIconParent, allGamesParent, slotGamesParent;
-    [SerializeField] private GameObject gameIconPrefab;
+    [SerializeField] private GameObject gameIconPrefab, videoBackground;
+    [SerializeField] private VideoPlayer videoPlayer;
+    [SerializeField] private VideoClip videoStartSiXiang;
     private List<Game> gameList = new();
-    
+    VideoPlayer.EventHandler videoStartedListener;
+    VideoPlayer.EventHandler videoEndedListener;
+
     protected override void Awake()
     {
         base.Awake();
@@ -23,6 +29,7 @@ public class LobbyView : BaseView
         _ = LoadGames();
         UpdateProfileData();
         UIManager.Instance.lobbyView = this;
+        SoundManager.Instance.PlayMusicLobby();
     }
 
     private async UniTask LoadGames()
@@ -36,11 +43,11 @@ public class LobbyView : BaseView
         }
         catch (Exception ex)
         {
-            Debug.Log("err load list game : "+ ex.Message);
+            Debug.Log("err load list game : " + ex.Message);
             // throw;
         }
     }
-    
+
     private void UpdateUIListGame()
     {
         foreach (Game game in gameList)
@@ -76,7 +83,7 @@ public class LobbyView : BaseView
             accountChip.text = User.userMain.accountChip.ToString();
         }
     }
-    
+
     #region Buttons
     public void OnClickAllGamesTab()
     {
@@ -102,4 +109,35 @@ public class LobbyView : BaseView
     public void OnClickFriend() => UIManager.Instance.OpenFriend();
     public void OnClickSetting() => UIManager.Instance.OpenSetting();
     #endregion
+    
+    public void PlayVideoSiXiang(Match labelMatch)
+    {
+        if (!videoPlayer.isPlaying)
+        {
+            videoPlayer.clip = videoStartSiXiang;
+            videoBackground.SetActive(false);
+            videoBackground.GetComponent<RawImage>().color = new Color32(255, 255, 225, 0);
+            videoPlayer.gameObject.SetActive(true);
+
+            videoPlayer.Play();
+            videoStartedListener = delegate
+            {
+                videoBackground.SetActive(true);
+                videoBackground.GetComponent<RawImage>().color = new Color32(255, 255, 225, 255);
+                videoPlayer.started -= videoStartedListener;
+            };
+            videoPlayer.started += videoStartedListener;
+
+            DOTween.Sequence().AppendInterval(1.5f).AppendCallback(() =>
+            {
+                UIManager.Instance.HandleOpenGame(labelMatch);
+            }).AppendInterval(1.1f).AppendCallback(() =>
+            {
+                videoBackground.SetActive(false);
+                videoPlayer.gameObject.SetActive(false);
+                videoPlayer.loopPointReached -= videoEndedListener;
+            });
+        }
+
+    }
 }

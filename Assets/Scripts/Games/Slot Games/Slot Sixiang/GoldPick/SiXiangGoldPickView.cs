@@ -192,7 +192,7 @@ public class SiXiangGoldPickView : MonoBehaviour
 
             if (coinAmount != 0)
             {
-                // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.CLICK_ITEM_WIN);
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK_ITEM_WIN);
                 TextMeshProUGUI textChipWin = currentItemComp.TextMoney;
                 textChipWin.gameObject.SetActive(true);
                 textChipWin.text = item.Symbol switch
@@ -209,7 +209,7 @@ public class SiXiangGoldPickView : MonoBehaviour
             }
             else
             {
-                // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.CLICK_ITEM_MISS);
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK_ITEM_MISS);
                 Utility.PlayAnimationByPath(spineItem, LUCKY_GOLD_NICE_TRY_ANIMATION_PATH, "eng", false);
             }
 
@@ -233,8 +233,7 @@ public class SiXiangGoldPickView : MonoBehaviour
     
     private void ShowAnimationResult(long totalWinAmount)
     {
-        // animResult.skeletonDataAsset = UIManager.instance.loadSkeletonData("GameView/SiXiang/Spine/BigWinGoldPick/skeleton_SkeletonData");
-        // AudioSource soundMoney = SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_START);
+        AudioSource soundMoney = SoundManager.Instance.PlayEffectFromPath(SoundSlot.COUNGTING_MONEY_START);
         animationResult.transform.parent.gameObject.SetActive(true);
 
         Utility.PlayAnimation(animationResult, "eng", false);
@@ -242,8 +241,8 @@ public class SiXiangGoldPickView : MonoBehaviour
         buttonConfirm.gameObject.SetActive(false);
         textTotalWin.SetValue(totalWinAmount, true, 2.0f, "", () =>
         {
-            // soundMoney.Stop();
-            // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_END);
+            soundMoney.Stop();
+            SoundManager.Instance.PlayEffectFromPath(SoundSlot.COUNGTING_MONEY_END);
         });
         DOTween.Sequence()
             .AppendInterval(2.0f);

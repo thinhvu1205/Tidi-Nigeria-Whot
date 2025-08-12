@@ -108,7 +108,7 @@ public class BaccaratView : BaseDiceGameView
         PoolService.Instance.Register(PrefabType.ChipPlayerBaccarat, chipContainer.transform , chipPref, 20, 30, 15);
     }
 
-    public override void OnDestroy()
+    protected override void OnDestroy()
     {
         // Clear all pools to ensure clean state
         PoolService.Instance.ClearPool<BaccaratChip>(PrefabType.ChipPlayerBaccarat);

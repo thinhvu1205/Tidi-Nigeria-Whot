@@ -162,6 +162,7 @@ public class SlotTarzanView : BaseSlotView
         new int[] {1,1,1,0,2},
         new int[] {1,1,1,1,0},
     };
+    protected override string SOUND_BACKGROUND_ANIMATION_PATH => SoundSlot.BG_TARZAN;
     protected override string BACKGROUND_FREE_SPIN_ANIMATION_PATH => "SlotSpine/Tarzan/PopupFreespin/skeleton_SkeletonData";
     protected override string BIG_WIN_ANIMATION_PATH => "SlotSpine/Tarzan/BigWin/skeleton_SkeletonData";
     protected override string MEGA_WIN_ANIMATION_PATH => "SlotSpine/Tarzan/BigWin/skeleton_SkeletonData";
@@ -474,6 +475,7 @@ public class SlotTarzanView : BaseSlotView
     #region Popups
     private void ShowPopupGetFreeSpin()
     {
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.FREESPIN);
         effectContainer.gameObject.SetActive(true);
         popupFreeSpin.gameObject.SetActive(true);
         popupFreeSpin.AnimationState.SetAnimation(0, "yahoo", true);
@@ -523,6 +525,7 @@ public class SlotTarzanView : BaseSlotView
 
     private void ShowPopupResultFreeSpin()
     {
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.FREESPIN);
         effectContainer.gameObject.SetActive(true);
         popupResultFreeSpin.gameObject.SetActive(true);
         Utility.PlayAnimation(popupResultFreeSpin, "wonderful", true);

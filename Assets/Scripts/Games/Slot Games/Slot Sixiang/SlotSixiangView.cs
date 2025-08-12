@@ -39,7 +39,7 @@ public class SlotSixiangView : BaseSlotSymbolView
         { SiXiangGame.Rapidpay, 2 },
         { SiXiangGame.Luckdraw, 3 },
     };
-
+    protected override string SOUND_BACKGROUND_ANIMATION_PATH => SoundSlot.BG_SIXIANG;
     private const string SIXIANG_GAME_NAME = "sixiang";
     private const string SIXIANG_BACKGROUND_ANIMATION_PATH = "SiXiang/Spine/BgGame/skeleton_SkeletonData";
     private const string SCATTER_PREFAB_PATH = "Sixiang/ScatterView";
@@ -109,7 +109,7 @@ public class SlotSixiangView : BaseSlotSymbolView
             {
 
                 UpdateJackpot(data);
-                // UpdateGem();
+                UpdateGem();
             }
         }
 
@@ -118,7 +118,6 @@ public class SlotSixiangView : BaseSlotSymbolView
             data = data
         });
                 // ShowScatterView();
-
 
         if (!hasSetupStartView) hasSetupStartView = true;
     }
@@ -130,9 +129,9 @@ public class SlotSixiangView : BaseSlotSymbolView
         {
             freeSpinLeft--;
             UpdateDragonPearlFreeSpinLeft();
-            
             UpdateGameState(SlotGameState.SPINNING);
             SetDarkAllItems();
+            SoundManager.Instance.PlayEffectFromPath(SoundSlot.SPIN_REEL);
             foreach (SlotSymbolColumn column in listColumn)
             {
                 column.SetRandomFinishView();
@@ -161,8 +160,8 @@ public class SlotSixiangView : BaseSlotSymbolView
             ///------------------CHECK SPREAD WILD--------------------///
             if (CheckWild())
             {
-                // tweenQueue.Enqueue(() => ShowAnimationWild());
-                // tweenQueue.Enqueue(() => ShowSpreadWild());
+                tweenQueue.Enqueue(() => ShowAnimationWild());
+                tweenQueue.Enqueue(() => ShowSpreadWild());
             }
 
             ///------------------CHECK SHOW ALL LINE--------------------///
@@ -174,18 +173,18 @@ public class SlotSixiangView : BaseSlotSymbolView
             ///------------------CHECK SHOW TYPE WIN--------------------///
             if (!isInFreeSpin)
             {
-                // switch (winType)
-                // {
-                //     case WinType.BIG_WIN:
-                //         tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.BIG_WIN, currentChipWin));
-                //         break;
-                //     case WinType.MEGA_WIN:
-                //         tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.MEGA_WIN, currentChipWin));
-                //         break;
-                //     case WinType.HUGE_WIN:
-                //         tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.HUGE_WIN, currentChipWin));
-                //         break;
-                // }
+                switch (winType)
+                {
+                    case WinType.BIG_WIN:
+                        tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.BIG_WIN, currentChipWin));
+                        break;
+                    case WinType.MEGA_WIN:
+                        tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.MEGA_WIN, currentChipWin));
+                        break;
+                    case WinType.HUGE_WIN:
+                        tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.HUGE_WIN, currentChipWin));
+                        break;
+                }
             }
 
             ///------------------CHECK SHOW ONE BY ONE--------------------//
@@ -206,6 +205,7 @@ public class SlotSixiangView : BaseSlotSymbolView
             ///------------------CHECK SHOW WIN SCATTER--------------------///
             if (CheckWinThirdScatter())
             {
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.SCATTER_WIN);
                 tweenQueue.Enqueue(() => ShowAnimationCutScene());
                 tweenQueue.Enqueue(() => ShowScatterView());
             }
@@ -291,6 +291,7 @@ public class SlotSixiangView : BaseSlotSymbolView
 
     private void OnSelectBonusGame(int index)
     {
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.SHOW_ANIMAL);
         foreach (Button button in listBuyGemButton)
         {
             button.interactable = false;
@@ -305,7 +306,6 @@ public class SlotSixiangView : BaseSlotSymbolView
         paylineInfoContainer.gameObject.SetActive(false);
         totalChipWinByGame = 0;
         string animationPath = "", animationName = "";
-        // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.SHOW_ANIMAL);
         tweenQueue.Enqueue(() => ShowAnimationCutScene());
 
         switch (index)
@@ -346,7 +346,7 @@ public class SlotSixiangView : BaseSlotSymbolView
 
     public void ShowAnimationCutScene(bool isEndBonusGame = false)
     {
-        // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.CUT_SCENE);
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.CUT_SCENE);
         animationCutScene.gameObject.SetActive(true);
         Utility.PlayAnimation(animationCutScene, "animation", false);
         DOTween.Sequence().AppendInterval(1.7f).AppendCallback(() =>
@@ -438,7 +438,7 @@ public class SlotSixiangView : BaseSlotSymbolView
 
     public void OnFinishDragonPearl(bool isWinGrandJackpot)
     {
-        // SoundManager.instance.playMusicInGame(Globals.SOUND_SLOT_BASE.BG_GAME);
+        SoundManager.Instance.PlayMusicInGame(SOUND_BACKGROUND_ANIMATION_PATH);
         SetLightAllItems();
         foreach (SlotSymbolColumn column in listColumn)
         {
@@ -500,11 +500,11 @@ public class SlotSixiangView : BaseSlotSymbolView
         textJackpotWin.transform.localPosition = new Vector2(0, -70);
         buttonConfirmJackpotWin.gameObject.SetActive(false);
         textJackpotWin.ResetValue();
-        // AudioSource soundMoney = SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.WIN_JACKPOT_START);
+        AudioSource soundJackpot = SoundManager.Instance.PlayEffectFromPath(SoundSlot.WIN_JACKPOT_START);
         textJackpotWin.SetValue(totalChipWinByGame, true, 4.0f, "", () =>
         {
-            // soundMoney.Stop();
-            // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.WIN_JACKPOT_END);
+            soundJackpot.Stop();
+            SoundManager.Instance.PlayEffectFromPath(SoundSlot.WIN_JACKPOT_END);
         });
         animationJackpotWin.AnimationState.Complete += delegate
         {
@@ -533,13 +533,12 @@ public class SlotSixiangView : BaseSlotSymbolView
                 textJackpotWin.transform.localPosition = new Vector2(0, -70);
                 buttonConfirmJackpotWin.gameObject.SetActive(false);
                 textJackpotWin.ResetValue();
-                // AudioSource soundMoney = SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.WIN_JACKPOT_START);
+                AudioSource soundMoney = SoundManager.Instance.PlayEffectFromPath(SoundSlot.COUNGTING_MONEY_START);
                 textJackpotWin.SetValue(winAmount, true, 2.0f, "", () =>
                 {
-                    // soundMoney.Stop();
-                    // SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.WIN_JACKPOT_END);
+                    soundMoney.Stop();
+                    SoundManager.Instance.PlayEffectFromPath(SoundSlot.COUNGTING_MONEY_END);
                 });
-                // AudioSource soundMoney = SoundManager.instance.playEffectFromPath(Globals.SOUND_SLOT_BASE.COUNGTING_MONEY_START);
 
                 animationJackpotWin.AnimationState.Complete += delegate
                 {

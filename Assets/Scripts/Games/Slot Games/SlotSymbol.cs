@@ -102,6 +102,10 @@ public class SlotSymbol : MonoBehaviour
             float moveSpeed = column.IsShowingThirdScatter ? SpeedShowingThirdScatter : Speed;
             float speedMove = (indexSymbol + 1 == indexStop) ? moveSpeed * 3 : moveSpeed;
             indexSymbol++;
+            if (id == 10 && indexSymbol == indexStop)
+            {
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.SCATTER_SYMBOL);
+            }
             DOTween.Sequence()
                 .Append(transform.DOBlendableLocalMoveBy(new Vector2(0, -column.StepMove), speedMove)
                 .SetEase(easing)).AppendCallback(() =>
@@ -116,13 +120,6 @@ public class SlotSymbol : MonoBehaviour
                         column.OnColumnStop();
                     }
                 });
-                if (indexSymbol == 3)
-                {
-                    DOTween.Sequence().AppendInterval(0.85f * speedMove).AppendCallback(() =>
-                    {
-                        column.prepareStop();
-                    });
-                }
         }
     }
 
