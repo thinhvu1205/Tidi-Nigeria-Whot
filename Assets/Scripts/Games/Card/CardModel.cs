@@ -124,7 +124,7 @@ namespace Games.Card
         /// <summary>
         /// Hides card (shows red background)
         /// </summary>
-        public void HideCardPusoy()
+        public void HideCard()
         {
             blueBg.gameObject.SetActive(true);
             icon_large.gameObject.SetActive(false);
@@ -135,9 +135,12 @@ namespace Games.Card
         /// <summary>
         /// Shows card (hides red background)
         /// </summary>
-        public void ShowCardPusoy()
+        public void ShowCard()
         {
             blueBg.gameObject.SetActive(false);
+            icon_large.gameObject.SetActive(true);
+            icon_small.gameObject.SetActive(true);
+            value.gameObject.SetActive(true);
         }
 
         /// <summary>
@@ -152,7 +155,7 @@ namespace Games.Card
         /// <summary>
         /// Animates hiding card with flip effect
         /// </summary>
-        public void HideCardAnimPusoy()
+        public void HideCardAnimation()
         {
             float cardScaleX = transform.localScale.x;
         
@@ -168,7 +171,7 @@ namespace Games.Card
         /// <summary>
         /// Animates showing card with flip effect
         /// </summary>
-        public void ShowCardAnimPusoy()
+        public void ShowCardAnimation()
         {
             Sequence sequence = DOTween.Sequence();
             sequence.Append(transform.DOScaleX(0, 0.1f))

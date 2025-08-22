@@ -41,6 +41,7 @@ namespace Globals
         Card,
         ChipPlayerWhot,
         ChipPlayerBaccarat,
+        ChipPlayerBlackjack,
     }
 
     public enum SpinType

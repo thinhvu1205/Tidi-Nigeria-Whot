@@ -194,7 +194,7 @@ public class BaccaratView : BaseDiceGameView
 
                     foreach (var infoBet in data.UserBet.Bets)
                     {
-                        playerView.setAg(playerView.agCurrent - infoBet.Chips);
+                        playerView.SetCurrentChip(playerView.CurrentChip - infoBet.Chips);
                         int i = (int)infoBet.Cell - 1;
                         BaccaratChip chip = PoolService.Instance.Get<BaccaratChip>(PrefabType.ChipPlayerBaccarat);
                         chipBetColorInx = listValueChipBets.IndexOf(infoBet.Chips);
@@ -251,7 +251,7 @@ public class BaccaratView : BaseDiceGameView
         }
         
         CardModel cardModel = PoolService.Instance.Get<CardModel>(PrefabType.Card);
-        cardModel.HideCardPusoy();
+        cardModel.HideCard();
         cardModel.transform.localPosition = dealCardPos;
         cardModel.transform.localScale = new Vector2(0.38f, 0.4f);
         cardModel.transform.localEulerAngles = new Vector3(0, 0, 64.48f);
@@ -276,8 +276,8 @@ public class BaccaratView : BaseDiceGameView
             seq.Join(cardModel.transform.DOLocalRotate(new Vector3(0, 0, 32), 0.2f));
             seq.AppendCallback(() =>
             {
-                listCardP[i].ShowCardPusoy();
-                cardModel.ShowCardPusoy();
+                listCardP[i].ShowCard();
+                cardModel.ShowCard();
             });
             seq.Append(cardModel.transform.DOLocalMove(listCardP[i].transform.localPosition, 0.2f));
             seq.Join(cardModel.transform.DOScaleX(0.38f, 0.2f));
@@ -310,8 +310,8 @@ public class BaccaratView : BaseDiceGameView
             seq.Join(cardModel.transform.DOLocalRotate(new Vector3(0, 0, 32), 0.2f));
             seq.AppendCallback(() =>
             {
-                listCardB[i].ShowCardPusoy();
-                cardModel.ShowCardPusoy();
+                listCardB[i].ShowCard();
+                cardModel.ShowCard();
             });
             seq.Append(cardModel.transform.DOLocalMove(listCardB[i].transform.localPosition, 0.2f));
             seq.Join(cardModel.transform.DOScaleX(0.38f, 0.2f));
@@ -376,7 +376,7 @@ public class BaccaratView : BaseDiceGameView
                     {
                         if (userIdToView.TryGetValue(player.Id, out var playerView))
                         {
-                            playerView.setTurn(true, updateGameState.CountDown);
+                            playerView.SetCurrentTurn(true, updateGameState.CountDown);
                         }
                     }
                 }
@@ -479,7 +479,7 @@ public class BaccaratView : BaseDiceGameView
                 int loseAmount = kvp.Value;
                 
                 if (userIdToView.TryGetValue(idPl, out var playerObj) && loseAmount < 0){
-                    playerObj.effectFlyMoney(loseAmount, 40);
+                    playerObj.AnimateFlyMoney(loseAmount, 40);
                     Debug.Log($"Player {idPl} lose amount: {loseAmount}");
                 }
             }
@@ -500,8 +500,8 @@ public class BaccaratView : BaseDiceGameView
                 Debug.Log($"Player ID: {playerId}, Balance Delta: {balanceUpdate.AmountChipAdd}");
 
                 if (!userIdToView.TryGetValue(playerId, out var playerObj) || balanceUpdate.AmountChipAdd <= 0) continue;
-                playerObj.effectFlyMoney(balanceUpdate.AmountChipAdd, 40);
-                playerObj.setAg(balanceUpdate.AmountChipCurrent);
+                playerObj.AnimateFlyMoney(balanceUpdate.AmountChipAdd, 40);
+                playerObj.SetCurrentChip(balanceUpdate.AmountChipCurrent);
             }
         });
         
@@ -772,7 +772,7 @@ public class BaccaratView : BaseDiceGameView
                 .AppendInterval(index * 0.3f)
                 .AppendCallback(() =>
                 {
-                    card.HideCardPusoy();
+                    card.HideCard();
                     card.gameObject.transform.DOLocalMove(new Vector2(-296, 301), 0.5f);
                     card.gameObject.transform.DOLocalRotate(new Vector3(0, 0, -64.48f), 0.5f);
                     card.gameObject.transform.DOScale(new Vector2(0.38f, 0.4f), 0.5f);
@@ -794,7 +794,7 @@ public class BaccaratView : BaseDiceGameView
                 .AppendInterval(index * 0.3f)
                 .AppendCallback(() =>
                 {
-                    card.HideCardPusoy();
+                    card.HideCard();
                     card.gameObject.transform.DOLocalMove(new Vector2(-296, 301), 0.5f);
                     card.gameObject.transform.DOLocalRotate(new Vector3(0, 0, -64.48f), 0.5f);
                     card.gameObject.transform.DOScale(new Vector2(0.38f, 0.4f), 0.5f);

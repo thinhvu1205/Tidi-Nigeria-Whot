@@ -293,6 +293,7 @@ public class WhotView : BaseGameView
         var data = UpdateDeal.Parser.ParseFrom(matchState.State);
         playAreaParent.gameObject.SetActive(true);
         List<WhotCard> presenceCard = data.PresenceCard.WhotCards.ToList();
+        Debug.Log("HandleUpdateDeal " + data);
 
         // Kết nối lại bàn cũ
         if (isRejoinTable)

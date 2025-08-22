@@ -257,7 +257,7 @@ public class HongKongPokerView : BaseDiceGameView
         bool isLeftTable = !(basePosition.x > 0);
 
         CardModel card = cardPool.Get();
-        card.HideCardPusoy();
+        card.HideCard();
 
         if (!isLeftTable)
         {
@@ -293,7 +293,7 @@ public class HongKongPokerView : BaseDiceGameView
                 // SoundManager.Instance.PlaySound("sound_cardFlipBJ");
                 // playSound(SOUND_GAME.CARD_FLIP_2);
                 card.SetData((int)pokerCard.Rank, (int)pokerCard.Suit);
-                card.ShowCardPusoy();
+                card.ShowCard();
             }
 
             card.transform.localRotation = Quaternion.Euler(0, 0, -90);
@@ -362,7 +362,7 @@ public class HongKongPokerView : BaseDiceGameView
         card.transform.DOLocalRotate(new Vector3(0, -15, 0), 0.15f)
             .OnComplete(() =>
             {
-                card.HideCardPusoy();
+                card.HideCard();
                 card.transform.localRotation = Quaternion.Euler(0, 15, 0);
                 card.transform.DOLocalRotate(Vector3.zero, 0.15f);
             });
@@ -473,7 +473,7 @@ public class HongKongPokerView : BaseDiceGameView
             {
                 if (card != null)
                 {
-                    card.HideCardPusoy();
+                    card.HideCard();
                     card.SetDark(true);
                 }
             })
@@ -497,7 +497,7 @@ public class HongKongPokerView : BaseDiceGameView
             {
                 if (card != null)
                 {
-                    card.ShowCardPusoy();
+                    card.ShowCard();
                     card.SetData((int)pokerCard.Rank, (int)pokerCard.Suit);
                 }
             })
