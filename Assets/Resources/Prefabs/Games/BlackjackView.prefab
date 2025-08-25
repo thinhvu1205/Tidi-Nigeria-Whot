@@ -6009,9 +6009,6 @@ MonoBehaviour:
   animationBlackjack: {fileID: 1044560110678180325}
   animationBust: {fileID: 8325849802533027279}
   animationWow: {fileID: 8388730818826777361}
-  animationWin: {fileID: 320942337972227738}
-  animationLose: {fileID: 151094963602898276}
-  animationPush: {fileID: 3662724044768256736}
   secondBoxBet: {fileID: 0}
   isSecondBox: 0
   listCardModel: []
@@ -10444,8 +10441,8 @@ MonoBehaviour:
   animationWinBlackjack: {fileID: 5566817048602639513}
   listBoxBetPosition:
   - {x: -1.5, y: -156}
-  - {x: -456, y: -55}
-  - {x: 423, y: 55}
+  - {x: -456, y: 64}
+  - {x: 495, y: 60}
   listChipBet:
   - {fileID: 4626449261381306634}
   - {fileID: 5867922655477382157}

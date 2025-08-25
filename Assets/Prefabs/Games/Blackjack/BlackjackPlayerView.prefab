@@ -437,9 +437,9 @@ MonoBehaviour:
   hitpot: {fileID: 0}
   pots: []
   listAnimationResult:
-  - {fileID: 11400000, guid: 4435b874fb7fe4f35bcac902623030e7, type: 2}
-  - {fileID: 11400000, guid: 6eef1015241d341f087605383b7af518, type: 2}
-  - {fileID: 11400000, guid: 131c3aa3e358043998495180893b3ba0, type: 2}
+  - {fileID: 11400000, guid: cef46e7eddc544078a835efdf23c2d81, type: 2}
+  - {fileID: 11400000, guid: d36053f61d50b4ad39502378f63fce19, type: 2}
+  - {fileID: 11400000, guid: cc401bc2eb280428fbcee065ea403e2a, type: 2}
   cards: []
   imageLight: {fileID: 7528250577804517735}
 --- !u!114 &4532966199990458366 stripped

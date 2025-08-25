@@ -37,23 +37,21 @@ public class BlackjackBoxBet : MonoBehaviour
     [SerializeField] private SkeletonGraphic animationBlackjack;
     [SerializeField] private SkeletonGraphic animationBust;
     [SerializeField] private SkeletonGraphic animationWow;
-    [SerializeField] private SkeletonGraphic animationWin;
-    [SerializeField] private SkeletonGraphic animationLose;
-    [SerializeField] private SkeletonGraphic animationPush;
     [SerializeField] private BlackjackBoxBet secondBoxBet;
     public Transform GetCardPosition => cardContainer;
     public BlackjackBoxBet SecondBoxBet => secondBoxBet;
     private BlackjackView gameView;
     public bool isSecondBox = false;
+    private int minScore = 0;
     [HideInInspector] public List<CardModel> listCardModel = new();
     private const float CARD_SPACING = 35f;
     private readonly List<Tween> highlightTweens = new List<Tween>();
     private float boxWidth;
-    private Vector2 boxPosition;
+    public Vector2 BoxPosition { get; private set; }
 
     private void Awake()
     {
-        boxPosition = transform.position;
+        BoxPosition = transform.position;
         boxWidth = GetComponent<RectTransform>().rect.width;
         if (!isSecondBox)
             Reset();
@@ -67,7 +65,7 @@ public class BlackjackBoxBet : MonoBehaviour
     {
         // ----- Hiện score text với scale animation -----
         textScore.gameObject.SetActive(true);
-
+        minScore = minPoint;
         float totalWidth = (listCardModel.Count - 1) * CARD_SPACING;
         float startX = -totalWidth / 2f;
 
@@ -156,38 +154,6 @@ public class BlackjackBoxBet : MonoBehaviour
             });
     }
 
-    public void ShowResult(int result)
-    {
-        effectContainer.gameObject.SetActive(true);
-        // imageState.gameObject.SetActive(true);
-        switch (result)
-        {
-            case 1: // Win
-                // imageState.sprite = listImageState[3]; // Win
-                animationWin.gameObject.SetActive(true);
-                break;
-            case -1: // Lose
-                // imageState.sprite = listImageState[4]; // Lose
-                animationLose.gameObject.SetActive(true);
-                break;
-            case 0: // Push
-                // imageState.sprite = listImageState[5]; // Push
-                animationPush.gameObject.SetActive(true);
-                break;
-            default:
-                break;
-        }
-        DOVirtual.DelayedCall(3f, () =>
-        {
-            effectContainer.gameObject.SetActive(false);
-            animationWin.gameObject.SetActive(false);
-            animationLose.gameObject.SetActive(false);
-            animationPush.gameObject.SetActive(false);
-            imageState.gameObject.SetActive(false);
-        });
-    }
-
-
     public void SetBetValue(int index, long value, long totalValue, bool isWaiting = false)
     {
         if (index < 0)
@@ -243,7 +209,6 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void SpreadCards()
     {
-        Debug.Log("COUNT: " + listCardModel.Count);
         float totalWidth = (listCardModel.Count - 1) * CARD_SPACING;
         float startX = -totalWidth / 2f;
         for (int i = 0; i < listCardModel.Count; i++)
@@ -299,7 +264,7 @@ public class BlackjackBoxBet : MonoBehaviour
         if (!secondBoxBet.TryGetComponent<CanvasGroup>(out var canvasGroup))
             canvasGroup = secondBoxBet.gameObject.AddComponent<CanvasGroup>();
         canvasGroup.alpha = 0f;
-
+        CardModel secondCard = listCardModel[1];
         Sequence seq = DOTween.Sequence();
         seq.Join(canvasGroup.DOFade(1f, 0.5f));
 
@@ -308,36 +273,39 @@ public class BlackjackBoxBet : MonoBehaviour
             case 0:
                 seq.JoinCallback(() =>
                 {
-                    transform.DOLocalMoveX(boxPosition.x - 40f - boxWidth, 0.5f);
-                    secondBoxBet.transform.DOLocalMoveX(2 * (boxPosition.x + 40f + boxWidth), 0.5f);
+                    transform.DOLocalMoveX(BoxPosition.x - 40f - boxWidth, 0.5f);
+                    secondBoxBet.transform.DOLocalMoveX(2 * (BoxPosition.x + 40f + boxWidth), 0.5f);
+                    secondCard.transform.DOLocalMoveX(2 * (BoxPosition.x + 40f + boxWidth - CARD_SPACING), 0.5f);
                 });
                 break;
             case 1:
-                seq.Join(secondBoxBet.transform.DOLocalMoveX(boxPosition.x + 40f + boxWidth, 0.5f));
+                seq.Join(secondBoxBet.transform.DOLocalMoveX(BoxPosition.x + 40f + boxWidth, 0.5f));
+                seq.Join(secondCard.transform.DOLocalMoveX(BoxPosition.x + 40f + boxWidth - CARD_SPACING, 0.5f));
                 break;
             case 2:
-                seq.Join(secondBoxBet.transform.DOLocalMoveX(boxPosition.x - 40f - boxWidth, 0.5f));
+                seq.Join(secondBoxBet.transform.DOLocalMoveX(BoxPosition.x - 40f - boxWidth, 0.5f));
+                seq.Join(secondCard.transform.DOLocalMoveX(BoxPosition.x - 40f - boxWidth + CARD_SPACING, 0.5f));
                 break;
         }
         SetupSecondBox();
+        ShowScore(minScore, minScore, minScore);
     }
 
     private void SetupSecondBox()
     {
         secondBoxBet.ResetSecondBox();
-        foreach (CardModel card in listCardModel)
-        {
-            CardModel cardModel = PoolService.Instance.Get<CardModel>(PrefabType.Card);
-            cardModel.SetData(card.GetRank(), card.GetSuit());
-            cardModel.transform.SetParent(secondBoxBet.GetCardPosition);
-            cardModel.transform.localPosition = Vector3.zero;
-            cardModel.transform.localScale = Vector3.one * 0.5f;
-            cardModel.gameObject.SetActive(true);
-            secondBoxBet.listCardModel.Add(cardModel);
-            secondBoxBet.SpreadCards();
-        }
+        CardModel secondCard = listCardModel[1];
+        CardModel cardModel = gameView.InitCard();
+        cardModel.SetData(secondCard.GetRank(), secondCard.GetSuit());
+        cardModel.transform.SetParent(secondBoxBet.GetCardPosition);
+        cardModel.transform.localPosition = Vector3.zero;
+        cardModel.transform.localScale = Vector3.one * 0.5f;
+        cardModel.gameObject.SetActive(true);
+        secondBoxBet.listCardModel.Add(cardModel);
+        secondBoxBet.SpreadCards();
+        
 
-        secondBoxBet.ShowScore(15, 5, 15);
+        secondBoxBet.ShowScore(minScore, minScore, minScore);
     }
 
     public void HideImageChip()
@@ -347,7 +315,6 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void Reset()
     {
-        Debug.Log("RESET BOX BET");
         listCardModel.Clear();
         imageState.gameObject.SetActive(false);
         imageScoreBox.gameObject.SetActive(false);
@@ -356,15 +323,12 @@ public class BlackjackBoxBet : MonoBehaviour
         animationWaiting.gameObject.SetActive(false);
         animationBlackjack.gameObject.SetActive(false);
         animationBust.gameObject.SetActive(false);
-        animationLose.gameObject.SetActive(false);
-        animationWin.gameObject.SetActive(false);
         animationWow.gameObject.SetActive(false);
         textTotalBet.gameObject.SetActive(false);
         textScore.gameObject.SetActive(false);
         textChipValue.gameObject.SetActive(false);
         effectContainer.gameObject.SetActive(false);
 
-        Debug.Log("BOX WIDTH: " + boxWidth);
         RectTransform rect = gameObject.transform as RectTransform;
         Vector2 size = rect.sizeDelta;
         size.x = boxWidth;
@@ -375,7 +339,7 @@ public class BlackjackBoxBet : MonoBehaviour
         {
             secondBoxBet.gameObject.SetActive(false);
             secondBoxBet.transform.position = transform.position;
-            secondBoxBet.transform.DOLocalMoveX(boxPosition.x, 0.5f);
+            secondBoxBet.transform.DOLocalMoveX(BoxPosition.x, 0.5f);
         }
 
         foreach (Transform child in cardContainer)
@@ -392,8 +356,6 @@ public class BlackjackBoxBet : MonoBehaviour
         animationWaiting.gameObject.SetActive(false);
         animationBlackjack.gameObject.SetActive(false);
         animationBust.gameObject.SetActive(false);
-        animationLose.gameObject.SetActive(false);
-        animationWin.gameObject.SetActive(false);
         animationWow.gameObject.SetActive(false);
         textTotalBet.gameObject.SetActive(false);
         effectContainer.gameObject.SetActive(false);

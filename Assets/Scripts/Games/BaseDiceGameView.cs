@@ -23,21 +23,23 @@ public class BaseDiceGameView : BaseGameView
     protected readonly Dictionary<string, BasePlayerView> userIdToView = new();
     protected BasePlayerView thisPlayer;
     protected List<Player> players = new List<Player>();
+    protected List<Player> rearrangedPlayers = new List<Player>();
     protected List<Player> playingPlayers = new List<Player>();
     protected List<GameObject> listBtnInvite = new List<GameObject>();
 
     public override void LoadInfoMatch(Match match)
     {
         base.LoadInfoMatch(match);
+        Debug.Log("LOAD INFO MATCH: " + match.ToString());
         if (!Constants.SELECT_TABLE_GAMES_ID.Contains(Config.currentGameId)) return;
-        MarkUnit = (int)match.Bet.MarkUnit;
+        MarkUnit = (int)match.MarkUnit;
         if (textMatchInfo != null)
         {
             textMatchInfo.text = $"ID {match.TableId}\nBet: {Utility.FormatMoney(MarkUnit)}";
         }
     }
 
-    protected virtual void UpdatePosUserTable(UpdateTable update)
+    protected virtual void UpdatePosUserTable(UpdateTable update, bool isRearrange = false)
     {
         var localUserId = User.userMain.userId;
         if (listPosView == null || listPosView.Count == 0 || playerViewPrefab == null || localUserId == "") return;
@@ -51,6 +53,28 @@ public class BaseDiceGameView : BaseGameView
 
         // 2) Cập nhật danh sách players
         players = update.Players.ToList();
+
+        // Sắp xếp lại sao cho local player luôn ở vị trí đầu tiên
+        if (isRearrange)
+        {
+            Debug.Log("REARRANGE PLAYER");
+            Player currentPlayer = players.Find((player) => player.Id == localUserId);
+            int startIndex = players.IndexOf(currentPlayer);
+
+            if (startIndex >= 0)
+            {
+                List<Player> reordered = new();
+
+                for (int i = 0; i < players.Count; i++)
+                {
+                    int index = (startIndex + i) % players.Count;
+                    reordered.Add(players[index]);
+                }
+                // players = reordered;
+                rearrangedPlayers = new(reordered);
+            }
+
+        }
 
         // 3) Xử lý players leave
         foreach (var lp in update.LeavePlayers)

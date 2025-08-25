@@ -60,6 +60,10 @@ public class BlackjackView : BaseDiceGameView
     [Header(" Animations ")]
     [SerializeField] private SkeletonGraphic animationWinBlackjack;
 
+    [Header(" Object Pool")]
+    protected UnityEngine.Pool.ObjectPool<CardModel> cardPool;
+    protected UnityEngine.Pool.ObjectPool<BlackjackChip> chipPool;
+
     [Header(" Lists ")]
     [SerializeField] private Vector2[] listBoxBetPosition;
     [SerializeField] private BlackjackChipBet[] listChipBet;
@@ -71,7 +75,7 @@ public class BlackjackView : BaseDiceGameView
     };
     private Coroutine countdownCoroutine;
     private BlackjackBoxBet currentPlayerBoxBet;
-    
+
 
     [Header(" Constants ")]
     protected readonly Dictionary<string, BlackjackBoxBet> userIdToBoxBetView = new();
@@ -79,20 +83,23 @@ public class BlackjackView : BaseDiceGameView
 
     private List<long> listValueChipBets = new();
     private List<Card> listBankerCard = new();
-    private List<Card> listCurrentPlayerCard = new();
-    private int currentChipIndex = 0, lastChipIndex = -1;
+    private int currentChipIndex = 0, lastChipIndex = -1, playerReceiveCardCount = 0;
     private BlackjackActionCode nextActionCode = BlackjackActionCode.BlackjackActionUnspecified; // 1: Split, 2: Double, 3: Hit, 4: Stand
     private long totalBetValue = 0, currentBetValue = 0, lastBetValue = 0;
-    private bool hasDealtCardsForPlayers = false, hasDealtCardsForBanker = false, isCurrentPlayerTurn = false, isRebet = false;
+    private bool hasDealtCardsForPlayers = false; // Check xem đã chia bài cho các player chưa
+    private bool hasDealtCardsForBanker = false; // Check xem đã chia bài cho banker chưa
+    private bool isCurrentPlayerTurn = false; // Check xem có phải lượt của người chơi hiện tại không
+    private bool isRebet = false; // Check xem có phải người chơi hiện tại đang rebet không
+    private bool isCurrentPlayerFinished = false; // Check xem người chơi hiện tại đã xong ván chưa (được Blackjack/Busted)
+    private bool isCountingDown;
 
     protected override void Awake()
     {
         base.Awake();
+        InitPool();
         insurance.SetInfo(this);
         phaseBet.gameObject.SetActive(false);
         phasePlay.gameObject.SetActive(false);
-        PoolService.Instance.Register(PrefabType.Card, cardContainer, cardPrefab, 8, 10, 6);
-        PoolService.Instance.Register(PrefabType.ChipPlayerBlackjack, chipContainer, chipPrefab, 20, 30, 15);
 
     }
 
@@ -121,18 +128,19 @@ public class BlackjackView : BaseDiceGameView
         base.HandleUpdateUserInTable(matchState);
         var updateTable = UpdateTable.Parser.ParseFrom(matchState.State);
         Debug.Log("HandleUpdateUserInTable " + updateTable);
-        UpdatePosUserTable(updateTable);
+        UpdatePosUserTable(updateTable, true);
     }
 
     public override void HandleUpdateTable(IMatchState matchState)
     {
         BlackjackUpdateDesk data = BlackjackUpdateDesk.Parser.ParseFrom(matchState.State);
         Debug.Log("Update table: " + data.ToString());
-
+        string playerId = data.Bet?.UserId;
+        string currentPlayerId = User.userMain.userId;
         // Khi có người chơi đặt cược thì tiến hành trừ tiền của người chơi đó
         if (data.Bet?.Balance?.AmountChipAdd != 0)
         {
-            if (data.Bet?.UserId != null && userIdToView.TryGetValue(data.Bet.UserId, out var playerView))
+            if (playerId != null && userIdToView.TryGetValue(playerId, out var playerView))
             {
                 playerView.AnimateFlyMoney(data.Bet.Balance.AmountChipAdd);
                 playerView.SetCurrentChip(data.Bet.Balance.AmountChipCurrent);
@@ -142,6 +150,21 @@ public class BlackjackView : BaseDiceGameView
                 {
                     OnClickButtonChip(lastChipIndex);
                     isRebet = false;
+                }
+
+                // Player Khác đặt cược
+                if (playerId != currentPlayerId)
+                {
+                    BlackjackChip chip = chipPool.Get();
+                    BlackjackBoxBet boxbet = userIdToBoxBetView.GetValueOrDefault(playerId);
+                    int chipIndex = GetChipIndex((int)data.Bet.Balance.AmoutChipBet);
+                    chip.transform.SetParent(playerView.GetAvatarTransform().parent, true);
+                    chip.SetInfo(chipIndex, playerView.GetAvatarPosition());
+                    chip.transform.localScale = Vector2.one * 0.8f;
+                    AnimateMoveChip(chip, boxbet.BoxPosition, () =>
+                    {
+                        boxbet.SetBetValue(chipIndex, data.Bet.Balance.AmoutChipBet, data.Bet.Balance.AmoutChipBet);
+                    });
                 }
             }
         }
@@ -158,7 +181,7 @@ public class BlackjackView : BaseDiceGameView
             {
                 view.SetCurrentTurn(true, 10);
             }
-            if (data.Actions != null)
+            if (data.Actions != null && !isCurrentPlayerFinished)
             {
                 buttonBetContainer.gameObject.SetActive(true);
                 List<BlackjackActionCode> actions = data.Actions.Actions.ToList();
@@ -172,7 +195,7 @@ public class BlackjackView : BaseDiceGameView
         }
 
         // Nhà cái có 1 lá Át, hiện popup bảo hiểm
-        if (data.IsInsuranceTurnEnter)
+        if (data.IsInsuranceTurnEnter && !isCurrentPlayerFinished)
         {
             insurance.Show();
         }
@@ -180,7 +203,7 @@ public class BlackjackView : BaseDiceGameView
         // Đặt cược bảo hiểm
         if (data.Bet != null && data.Bet.Insurance > 0)
         {
-            BlackjackChip chip = PoolService.Instance.Get<BlackjackChip>(PrefabType.ChipPlayerBlackjack);
+            BlackjackChip chip = chipPool.Get();
             chip.transform.SetParent(thisPlayer.transform, true);
             chip.SetInfo(5, thisPlayer.GetAvatarPosition(), data.Bet.Insurance);
             chip.transform.localScale = Vector2.one * 0.8f;
@@ -226,7 +249,7 @@ public class BlackjackView : BaseDiceGameView
                 else
                 {
                     Card newCard = data.NewCards[0];
-                    CardModel newCardModel = InitCard(dealCardContainer);
+                    CardModel newCardModel = InitCard();
                     BlackjackHand bankerHand = data.Hand.First;
                     newCardModel.SetData((int)newCard.Rank, (int)newCard.Suit);
                     newCardModel.transform.SetParent(bankerCardsContainer);
@@ -234,7 +257,7 @@ public class BlackjackView : BaseDiceGameView
                     bankerBoxBet.listCardModel.Add(newCardModel);
                     AnimateDealACard(newCardModel, bankerCardsContainer.position, true, null, bankerBoxBet.SpreadCards);
                     bankerBoxBet.ShowScore(bankerHand.Point, bankerHand.MinPoint, bankerHand.MaxPoint, bankerHand.Type);
-        
+
                 }
             }
         }
@@ -244,9 +267,9 @@ public class BlackjackView : BaseDiceGameView
             if (data.NewCards.Count > 0)
             {
                 BlackjackBoxBet boxBet = userIdToBoxBetView.GetValueOrDefault(data.UserId);
-                foreach(Card card in data.NewCards)
+                foreach (Card card in data.NewCards)
                 {
-                    CardModel cardModel = InitCard(dealCardContainer);
+                    CardModel cardModel = InitCard();
                     cardModel.SetData((int)card.Rank, (int)card.Suit);
                     cardModel.HideCard();
                     cardModel.transform.SetParent(boxBet.GetCardPosition);
@@ -256,9 +279,14 @@ public class BlackjackView : BaseDiceGameView
                 // Chia bài cho player
                 if (!hasDealtCardsForPlayers)
                 {
+                    playerReceiveCardCount++;
                     currentPlayerBoxBet.HideImageChip();
-                    StartCoroutine(DealCardsForPlayers());
-                    hasDealtCardsForPlayers = true;
+
+                    if (playerReceiveCardCount == playingPlayers.Count)
+                    {
+                        StartCoroutine(DealCardsForPlayers());
+                        hasDealtCardsForPlayers = true;
+                    }
                 }
                 else
                 {
@@ -267,25 +295,51 @@ public class BlackjackView : BaseDiceGameView
                     // newCardModel.SetData((int)newCard.Rank, (int)newCard.Suit);
                     // newCardModel.transform.SetParent(boxBet.GetCardPosition);
                     // newCardModel.HideCard();
-                    AnimateDealACard(newCardModel, boxBet.GetNewCardPosition(), true, null, () =>
+                    
+                    // Box bài 1
+                    if (data.HandN0 == BlackjackHandN0.BlackjackHand1St)
                     {
-                        boxBet.SpreadCards();
-                    });
+                        AnimateDealACard(newCardModel, boxBet.GetNewCardPosition(), true, null, () =>
+                        {
+                            boxBet.SpreadCards();
+                        });
+                    }
+                    // Box bài 2
+                    else
+                    {
+                        AnimateDealACard(newCardModel, boxBet.SecondBoxBet.GetNewCardPosition(), true, null, () =>
+                        {
+                            boxBet.SecondBoxBet.SpreadCards();
+                        });
+                    }
                 }
                 DOVirtual.DelayedCall(1.2f, () =>
                 {
-                    if (data.Hand.First != null)
+                    if (data.Hand.First != null && data.HandN0 == BlackjackHandN0.BlackjackHand1St)
                     {
                         boxBet.ShowScore(data.Hand.First.Point, data.Hand.First.MinPoint, data.Hand.First.MaxPoint, data.Hand.First.Type);
                     }
-                    else
+
+                    if (data.Hand.Second != null && data.HandN0 == BlackjackHandN0.BlackjackHand2Nd)
                     {
-                        boxBet.ShowScore(0, 0, 0);
+                        boxBet.SecondBoxBet.ShowScore(data.Hand.Second.Point, data.Hand.Second.MinPoint, data.Hand.Second.MaxPoint, data.Hand.Second.Type);
+                    }
+
+                    if (data.Hand.First.Type == BlackjackHandType.Blackjack || data.Hand.Second.Type == BlackjackHandType.Blackjack)
+                    {
+                        effectContainer.gameObject.SetActive(true);
+                        animationWinBlackjack.gameObject.SetActive(true);
+                        isCurrentPlayerFinished = true;
+                        animationWinBlackjack.AnimationState.Complete += delegate
+                        {
+                            effectContainer.gameObject.SetActive(false);
+                            animationWinBlackjack.gameObject.SetActive(false);
+                        };
                     }
                 });
-            
+
             }
-        }   
+        }
     }
 
     public override void HandleUpdateGameState(IMatchState matchState)
@@ -300,19 +354,20 @@ public class BlackjackView : BaseDiceGameView
                 Debug.Log("HandleUpdateGameState Matching " + data.ToString());
                 break;
             case GameState.Preparing:
-                if (data.CountDown == 12)
+                if (!isCountingDown)
                 {
+                    isCountingDown = true;
                     countdownContainer.SetActive(true);
                     phaseBet.gameObject.SetActive(true);
                     phasePlay.gameObject.SetActive(false);
                     ResetGame();
-                    StartCountDownBetTime();
+                    StartCountDownBetTime((int)data.CountDown);
                 }
                 Debug.Log("HandleUpdateGameState Preparing " + data.ToString());
                 break;
             case GameState.Play:
                 currentPlayerBoxBet.SetBetValue(currentChipIndex, currentBetValue, totalBetValue);
-                currentPlayerBoxBet.HideImageChip();
+                HideAllImageChip();
                 countdownContainer.SetActive(false);
                 phaseBet.gameObject.SetActive(false);
                 phasePlay.gameObject.SetActive(true);
@@ -351,9 +406,10 @@ public class BlackjackView : BaseDiceGameView
     {
         var data = BlackjackUpdateFinish.Parser.ParseFrom(matchState.State);
         Debug.Log("Update finish: " + data.ToString());
+        buttonBetContainer.gameObject.SetActive(false);
         DOVirtual.DelayedCall(2.5f, () =>
         {
-            foreach (Player player in players)
+            foreach (Player player in rearrangedPlayers)
             {
                 if (userIdToView.TryGetValue(player.Id, out var playerView))
                 {
@@ -364,8 +420,22 @@ public class BlackjackView : BaseDiceGameView
             {
                 if (userIdToBoxBetView.TryGetValue(result.UserId, out var boxBet))
                 {
-                    boxBet.ShowResult(result.First.IsWin);
                     boxBet.HideScore();
+                }
+                if (userIdToView.TryGetValue(result.UserId, out var playerView))
+                {
+                    if (result.First.IsWin == 1)
+                    {
+                        playerView.SetEffectWin("animation", false);
+                    }
+                    else if (result.First.IsWin == -1)
+                    {
+                        playerView.SetEffectLose("lose", false);
+                    }
+                    else
+                    {
+                        playerView.SetEffectDraw("animation", false);
+                    }
                 }
             }
             bankerBoxBet.HideScore();
@@ -380,11 +450,11 @@ public class BlackjackView : BaseDiceGameView
     }
     #endregion
 
-    private void StartCountDownBetTime()
+    private void StartCountDownBetTime(int time)
     {
         if (countdownCoroutine != null)
             StopCoroutine(countdownCoroutine);
-        countdownCoroutine = StartCoroutine(CountdownRoutine(12));
+        countdownCoroutine = StartCoroutine(CountdownRoutine(time));
     }
 
     private IEnumerator CountdownRoutine(int startTime)
@@ -424,11 +494,11 @@ public class BlackjackView : BaseDiceGameView
         BlackjackChipBet selectedChipBet = listChipBet[index];
         selectedChipBet.OnSelect();
 
-        BlackjackChip chip = PoolService.Instance.Get<BlackjackChip>(PrefabType.ChipPlayerBlackjack);
+        BlackjackChip chip = chipPool.Get();
         chip.transform.SetParent(selectedChipBet.transform.parent, true);
         chip.SetInfo(index, selectedChipBet.transform.localPosition);
         chip.transform.localScale = Vector2.one * 0.8f;
-        AnimateMoveChip(chip, () =>
+        AnimateMoveChip(chip, currentPlayerBoxBet.transform.position, () =>
         {
             currentPlayerBoxBet.SetBetValue(index, currentBetValue, totalBetValue + currentBetValue);
         });
@@ -458,7 +528,6 @@ public class BlackjackView : BaseDiceGameView
 
     public void OnClickButtonClear()
     {
-        Debug.Log("ON CLICK CLEAR");
         currentBetValue = 0;
         textDealValue.text = currentBetValue.ToString();
         textClearValue.text = currentBetValue.ToString();
@@ -467,7 +536,7 @@ public class BlackjackView : BaseDiceGameView
         buttonClear.SetActive(false);
         currentPlayerBoxBet.SetBetValue(lastChipIndex, totalBetValue, totalBetValue);
 
-        BlackjackChip chip = PoolService.Instance.Get<BlackjackChip>(PrefabType.ChipPlayerBlackjack);
+        BlackjackChip chip = chipPool.Get();
         chip.transform.SetParent(currentPlayerBoxBet.transform.parent, true);
         chip.SetInfo(currentChipIndex, currentPlayerBoxBet.transform.localPosition);
         chip.transform.localScale = Vector2.one * 0.8f;
@@ -514,8 +583,8 @@ public class BlackjackView : BaseDiceGameView
             buttonSplit.OnClickCheckBox();
             nextActionCode = BlackjackActionCode.BlackjackActionSplit;
         }
-        // BlackjackBoxBet boxBet = userIdToBoxBetView.GetValueOrDefault(User.userMain.userId);
-        // boxBet.SplitBoxBet(0);
+        BlackjackBoxBet boxBet = userIdToBoxBetView.GetValueOrDefault(User.userMain.userId);
+        boxBet.SplitBoxBet(0);
     }
 
     public void OnClickButtonDouble()
@@ -559,6 +628,8 @@ public class BlackjackView : BaseDiceGameView
             buttonStand.OnClickCheckBox();
             nextActionCode = BlackjackActionCode.BlackjackActionStay;
         }
+        buttonBetContainer.gameObject.SetActive(false);
+
     }
 
     private void HandleClickButtonAction(BlackjackActionCode code)
@@ -586,7 +657,7 @@ public class BlackjackView : BaseDiceGameView
             buttonSplit.ShowCheckBox();
             buttonStand.ShowCheckBox();
         }
-        
+
     }
 
     private void ResetAllButtonAction()
@@ -602,24 +673,17 @@ public class BlackjackView : BaseDiceGameView
     #region Cards
     private IEnumerator DealCardsForPlayers()
     {
-        int length = players.Count;
+        int length = rearrangedPlayers.Count;
         for (int i = 0; i < length * 2; i++)
         {
 
-            int indexInRound = i % length; // 0..playerCount và banker cuối cùng
+            int indexInRound = i % length; 
             int round = i / length; // vòng chia thứ mấy
-            Player player = players[indexInRound];
+            Player player = rearrangedPlayers[indexInRound];
             BlackjackBoxBet boxCard = userIdToBoxBetView.GetValueOrDefault(player.Id);
             CardModel cardModel = boxCard.listCardModel[round];
+            AnimateDealACard(cardModel, boxCard.GetCardPosition.position, true, boxCard, boxCard.SpreadCards);
 
-            if (player.Id == thisPlayer.id)
-            {
-                AnimateDealACard(cardModel, boxCard.GetCardPosition.position, true, boxCard, boxCard.SpreadCards);
-            }
-            else
-            {
-                AnimateDealACard(cardModel, boxCard.GetCardPosition.position, false, boxCard, boxCard.SpreadCards);
-            }
             yield return new WaitForSeconds(0.2f);
         }
     }
@@ -629,7 +693,7 @@ public class BlackjackView : BaseDiceGameView
         for (int i = 0; i < listBankerCard.Count; i++)
         {
             Card card = listBankerCard[i];
-            CardModel cardModel = InitCard(dealCardContainer);
+            CardModel cardModel = InitCard();
             cardModel.HideCard();
             // cardModel.transform.SetParent(dealCardContainer);
             cardModel.transform.SetParent(bankerCardsContainer);
@@ -710,7 +774,7 @@ public class BlackjackView : BaseDiceGameView
 
         // Gom cả player và banker vào chung một list để xử lý
         List<BlackjackBoxBet> allBoxBets = new List<BlackjackBoxBet>();
-        foreach (Player player in players)
+        foreach (Player player in rearrangedPlayers)
         {
             allBoxBets.Add(userIdToBoxBetView.GetValueOrDefault(player.Id));
             allBoxBets.Add(userIdToBoxBetView.GetValueOrDefault(player.Id).SecondBoxBet);
@@ -731,15 +795,15 @@ public class BlackjackView : BaseDiceGameView
                 // Callback để đổi mặt lá bài
                 seq.InsertCallback(startTime + DEAL_CARD_ANIMATION_TIME / 2f, () =>
                 {
-                    card.HideCard(); // bạn có thể check isFlipUp nếu muốn
+                    card.HideCard();
                 });
 
                 // Scale back
-                seq.Insert(startTime + DEAL_CARD_ANIMATION_TIME / 2f, 
+                seq.Insert(startTime + DEAL_CARD_ANIMATION_TIME / 2f,
                     card.transform.DOScale(0.5f, DEAL_CARD_ANIMATION_TIME / 2f).SetEase(Ease.InOutCubic));
 
                 // Rotate effect
-                seq.Insert(startTime, 
+                seq.Insert(startTime,
                     card.transform.DOLocalRotate(new Vector3(0, 10, 0), DEAL_CARD_ANIMATION_TIME / 5).SetEase(Ease.InOutCubic));
 
                 cardIndex++;
@@ -765,7 +829,7 @@ public class BlackjackView : BaseDiceGameView
                         .SetEase(Ease.OutCubic)
                         .OnComplete(() =>
                         {
-                            PoolService.Instance.Release(PrefabType.Card, card);
+                            cardPool.Release(card);
                         })
                 );
 
@@ -776,15 +840,15 @@ public class BlackjackView : BaseDiceGameView
                 cardIndex++;
             }
         }
-    
+
     }
     #endregion
 
     #region Chip Animations
-    private void AnimateMoveChip(BlackjackChip chip, Action callback = null)
+    private void AnimateMoveChip(BlackjackChip chip, Vector2 position, Action callback = null)
     {
         chip.transform
-            .DOMove(currentPlayerBoxBet.transform.position, 0.3f)
+            .DOMove(position, 0.3f)
             .SetEase(Ease.InSine)
             .OnComplete(() =>
             {
@@ -794,7 +858,7 @@ public class BlackjackView : BaseDiceGameView
                 // );
 
                 // chip.transform.DOLocalJump(randomPosition, 20, 1, 0.2f);
-                PoolService.Instance.Release(PrefabType.ChipPlayerBlackjack, chip);
+                chipPool.Release(chip);
                 callback?.Invoke();
             });
     }
@@ -820,9 +884,31 @@ public class BlackjackView : BaseDiceGameView
         canvasGroup.DOFade(0, 1f).OnComplete(() =>
         {
             canvasGroup.alpha = 1f;
-            PoolService.Instance.Release(PrefabType.ChipPlayerBlackjack, chip);
+            chipPool.Release(chip);
         });
 
+    }
+    #endregion
+
+    #region Helpers
+    private int GetChipIndex(int value)
+    {
+        for (int i = 0; i < listValueChipBets.Count; i++)
+        {
+            if (value <= listValueChipBets[i])
+            {
+                return i;
+            }
+        }
+        return 4;
+    }
+
+    private void HideAllImageChip()
+    {
+        foreach (var boxBet in userIdToBoxBetView.Values)
+        {
+            boxBet.HideImageChip();
+        }
     }
     #endregion
 
@@ -832,12 +918,14 @@ public class BlackjackView : BaseDiceGameView
     {
         base.CreatePlayerView(player, anchoredPos);
         string localUserId = User.userMain.userId;
-
+        Debug.Log("CREATE PLAYER VIEW: " + player.UserName);
         if (!userIdToBoxBetView.TryGetValue(player.Id, out var boxBetView) || boxBetView == null)
         {
+            Debug.Log("CREATE PLAYER BOXBET: " + player.UserName);
+            Debug.Log("INDEX OF PLAYER: " + rearrangedPlayers.IndexOf(player));
             boxBetView = Instantiate(boxBetPrefab, boxBetContainer).GetComponent<BlackjackBoxBet>();
             userIdToBoxBetView[player.Id] = boxBetView;
-            boxBetView.transform.localPosition = listBoxBetPosition[0];
+            boxBetView.transform.localPosition = listBoxBetPosition[rearrangedPlayers.IndexOf(player)];
             boxBetView.gameObject.SetActive(true);
         }
         if (userIdToBoxBetView.TryGetValue(localUserId, out BlackjackBoxBet boxBet))
@@ -846,10 +934,10 @@ public class BlackjackView : BaseDiceGameView
         }
     }
 
-    public CardModel InitCard(Transform initTransform)
+    public CardModel InitCard()
     {
-        CardModel cardModel = PoolService.Instance.Get<CardModel>(PrefabType.Card);
-        cardModel.transform.SetParent(initTransform);
+        CardModel cardModel = cardPool.Get();
+        cardModel.transform.SetParent(dealCardContainer);
         cardModel.transform.localPosition = Vector3.zero;
         cardModel.transform.localScale = Vector3.zero;
         cardModel.gameObject.SetActive(true);
@@ -865,16 +953,65 @@ public class BlackjackView : BaseDiceGameView
         }
     }
 
+    private void InitPool()
+    {
+        cardPool = new UnityEngine.Pool.ObjectPool<CardModel>(
+            createFunc: () =>
+            {
+                var card = Instantiate(cardPrefab, cardContainer).GetComponent<CardModel>();
+                card.gameObject.SetActive(false);
+                return card;
+            },
+            actionOnGet: (card) =>
+            {
+                card.gameObject.SetActive(true);
+                card.transform.localScale = Vector3.one;
+            },
+            actionOnRelease: (card) =>
+            {
+                card.gameObject.SetActive(false);
+            },
+            actionOnDestroy: (card) =>
+            {
+                Destroy(card.gameObject);
+            },
+            collectionCheck: false,
+            defaultCapacity: 20,
+            maxSize: 50
+        );
+        chipPool = new UnityEngine.Pool.ObjectPool<BlackjackChip>(
+            createFunc: () =>
+            {
+                var chip = Instantiate(chipPrefab, chipContainer).GetComponent<BlackjackChip>();
+                chip.gameObject.SetActive(false);
+                return chip;
+            },
+            actionOnGet: (chip) =>
+            {
+                chip.gameObject.SetActive(true);
+                chip.transform.localScale = Vector3.one;
+            },
+            actionOnRelease: (chip) =>
+            {
+                chip.gameObject.SetActive(false);
+            },
+            actionOnDestroy: (chip) =>
+            {
+                Destroy(chip.gameObject);
+            },
+            collectionCheck: false,
+            defaultCapacity: 20,
+            maxSize: 50
+        );
+    }
+
     private void ResetGame()
     {
-        Debug.Log("TOTAL BET VALUE: " + totalBetValue);
         lastBetValue = totalBetValue;
-        Debug.Log("LAST BET VALUE: " + lastBetValue);
-        currentBetValue = totalBetValue = 0;
+        currentBetValue = totalBetValue = playerReceiveCardCount = 0;
         currentChipIndex = -1;
-        hasDealtCardsForBanker = hasDealtCardsForPlayers = false;
+        hasDealtCardsForBanker = hasDealtCardsForPlayers = isCurrentPlayerFinished = isCountingDown = isRebet = false;
 
-        listCurrentPlayerCard.Clear();
         listBankerCard.Clear();
 
         buttonBetContainer.gameObject.SetActive(false);
@@ -885,7 +1022,7 @@ public class BlackjackView : BaseDiceGameView
         buttonRebet.SetActive(lastBetValue > 0);
 
         bankerBoxBet.Reset();
-        foreach (Player player in players)
+        foreach (Player player in rearrangedPlayers)
         {
             if (userIdToBoxBetView.TryGetValue(player.Id, out var boxBet))
             {
@@ -893,13 +1030,13 @@ public class BlackjackView : BaseDiceGameView
             }
         }
 
-        foreach (Transform child in chipContainer)
-        {
-            if (child.gameObject.activeSelf)
-            {
-                PoolService.Instance.Release(PrefabType.ChipPlayerBlackjack, child.GetComponent<BlackjackChip>());
-            }
-        }
+        // foreach (Transform child in chipContainer)
+        // {
+        //     if (child.gameObject.activeSelf)
+        //     {
+        //         chipPool.Release(child.GetComponent<BlackjackChip>());
+        //     }
+        // }
     }
 
     #endregion

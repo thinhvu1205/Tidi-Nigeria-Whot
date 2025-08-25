@@ -499,6 +499,11 @@ public class BasePlayerView : MonoBehaviour
         return avatar.transform.localPosition;
     }
 
+    public Transform GetAvatarTransform()
+    {
+        return avatar.transform;
+    }
+
     /// <summary>
     /// Sets avatar dark mode
     /// </summary>
@@ -533,13 +538,13 @@ public class BasePlayerView : MonoBehaviour
     /// Shows lose effect animation
     /// </summary>
     /// <param name="isLoop">Loop animation</param>
-    public virtual void SetEffectLose(bool isLoop = true)
+    public virtual void SetEffectLose(string animationName = "lose", bool isLoop = true)
     {
         animationResult.TrimRenderers();
         animationResult.gameObject.SetActive(true);
         animationResult.skeletonDataAsset = listAnimationResult[0];
         animationResult.Initialize(true);
-        animationResult.AnimationState.SetAnimation(0, "lose", isLoop);
+        animationResult.AnimationState.SetAnimation(0, animationName, isLoop);
 
         if (isLoop == false)
         {
@@ -554,12 +559,12 @@ public class BasePlayerView : MonoBehaviour
     /// Shows draw effect animation
     /// </summary>
     /// <param name="isLoop">Loop animation</param>
-    public void SetEffectDraw(bool isLoop = true)
+    public void SetEffectDraw(string animationName = "draw", bool isLoop = true)
     {
         animationResult.gameObject.SetActive(true);
         animationResult.skeletonDataAsset = listAnimationResult[1];
         animationResult.Initialize(true);
-        animationResult.AnimationState.SetAnimation(0, "draw", true);
+        animationResult.AnimationState.SetAnimation(0, animationName, true);
 
         if (isLoop == false)
         {
