@@ -190,6 +190,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 102f4975f2354126a211ce97488284ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &5027503585267973356 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2460225446784876679, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
+  m_PrefabInstance: {fileID: 7485332079158967403}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6144984275068270388 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3649713923496938335, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
@@ -238,18 +243,21 @@ MonoBehaviour:
   textMoney: {fileID: 2250109875554848507}
   textChipWinLise: {fileID: 9118124777491513258}
   avatar: {fileID: 2913844969902069225}
-  timeCounDown: {fileID: 7120929894371269473}
+  timeCountDown: {fileID: 7120929894371269473}
   hostIcon: {fileID: 6856401838814023754}
   exitIcon: {fileID: 2890498139933696562}
   dealerIcon: {fileID: 0}
-  backgroundBar: {fileID: 0}
+  backgroundBar: {fileID: 5027503585267973356}
   fontWin: {fileID: 11400000, guid: 50d24157e8531a84285ce80e6f5cc27e, type: 2}
   fontLose: {fileID: 11400000, guid: d8226e79a3ad345148d6eb0e25b7d612, type: 2}
   animationResult: {fileID: 6144984275068270388}
   aniAllIn: {fileID: 0}
   hitpot: {fileID: 0}
   pots: []
-  listAnimationResult: []
+  listAnimationResult:
+  - {fileID: 11400000, guid: 4435b874fb7fe4f35bcac902623030e7, type: 2}
+  - {fileID: 11400000, guid: 6eef1015241d341f087605383b7af518, type: 2}
+  - {fileID: 11400000, guid: 131c3aa3e358043998495180893b3ba0, type: 2}
   cards: []
 --- !u!114 &9118124777491513258 stripped
 MonoBehaviour:

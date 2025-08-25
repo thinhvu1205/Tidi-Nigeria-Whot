@@ -21,7 +21,7 @@ public class BaseDiceGameView : BaseGameView
     public int MarkUnit { get; private set; }
 
     protected readonly Dictionary<string, BasePlayerView> userIdToView = new();
-    protected BasePlayerView thisPlayer;
+    protected BasePlayerView thisPlayer = new();
     protected List<Player> players = new List<Player>();
     protected List<Player> rearrangedPlayers = new List<Player>();
     protected List<Player> playingPlayers = new List<Player>();
