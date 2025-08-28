@@ -14,8 +14,6 @@ using System.Linq;
 public class BaseGameView : BaseView
 {
     // public string soundBg = SOUND_GAME.IN_GAME_COMMON;
-    [SerializeField] private TextMeshProUGUI textMatchInfo, textGameName;
-    public int MarkUnit { get; private set; }
     
     public GameState GameState { get; protected set; } = GameState.Idle;
 
@@ -26,12 +24,7 @@ public class BaseGameView : BaseView
 
     public virtual void LoadInfoMatch(Match match)
     {
-        if (!Constants.SELECT_TABLE_GAMES_ID.Contains(Config.currentGameId)) return;
-        MarkUnit = (int)match.Bet.MarkUnit;
-        if (textMatchInfo != null)
-        {
-            textMatchInfo.text = $"ID {match.TableId}\nBet: {Utility.FormatMoney(MarkUnit)}";
-        }
+        
     }
     
     public virtual void OnClickBack()

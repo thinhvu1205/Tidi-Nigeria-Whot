@@ -13,33 +13,69 @@ using Vector3 = UnityEngine.Vector3;
 
 public class BaseDiceGameView : BaseGameView
 {
+    [SerializeField] private TextMeshProUGUI textMatchInfo, textGameName;
     [SerializeField] protected List<Vector2> listPosView;
     [SerializeField] protected BasePlayerView playerViewPrefab;
     [SerializeField] protected GameObject invitePrefab;
     [SerializeField] protected Transform inviteContainer, playerContainer, hiddenPlayerContainer;
+    public int MarkUnit { get; private set; }
 
     protected readonly Dictionary<string, BasePlayerView> userIdToView = new();
-    protected BasePlayerView thisPlayer = new BasePlayerView();
+    protected BasePlayerView thisPlayer = new();
     protected List<Player> players = new List<Player>();
+    protected List<Player> rearrangedPlayers = new List<Player>();
     protected List<Player> playingPlayers = new List<Player>();
     protected List<GameObject> listBtnInvite = new List<GameObject>();
-    
-    
-    protected virtual void UpdatePosUserTable(UpdateTable update)
+
+    public override void LoadInfoMatch(Match match)
+    {
+        base.LoadInfoMatch(match);
+        Debug.Log("LOAD INFO MATCH: " + match.ToString());
+        if (!Constants.SELECT_TABLE_GAMES_ID.Contains(Config.currentGameId)) return;
+        MarkUnit = (int)match.MarkUnit;
+        if (textMatchInfo != null)
+        {
+            textMatchInfo.text = $"ID {match.TableId}\nBet: {Utility.FormatMoney(MarkUnit)}";
+        }
+    }
+
+    protected virtual void UpdatePosUserTable(UpdateTable update, bool isRearrange = false)
     {
         var localUserId = User.userMain.userId;
         if (listPosView == null || listPosView.Count == 0 || playerViewPrefab == null || localUserId == "") return;
-        
+
         // 1) Cập nhật danh sách playing players
         if (update.PlayingPlayers.ToList().Count != 0)
         {
             playingPlayers = update.PlayingPlayers.ToList();
             Debug.Log($"Playing players updated: {string.Join(", ", playingPlayers.Select(p => p.UserName))}");
         }
-        
+
         // 2) Cập nhật danh sách players
         players = update.Players.ToList();
-        
+
+        // Sắp xếp lại sao cho local player luôn ở vị trí đầu tiên
+        if (isRearrange)
+        {
+            Debug.Log("REARRANGE PLAYER");
+            Player currentPlayer = players.Find((player) => player.Id == localUserId);
+            int startIndex = players.IndexOf(currentPlayer);
+
+            if (startIndex >= 0)
+            {
+                List<Player> reordered = new();
+
+                for (int i = 0; i < players.Count; i++)
+                {
+                    int index = (startIndex + i) % players.Count;
+                    reordered.Add(players[index]);
+                }
+                // players = reordered;
+                rearrangedPlayers = new(reordered);
+            }
+
+        }
+
         // 3) Xử lý players leave
         foreach (var lp in update.LeavePlayers)
         {
@@ -50,13 +86,13 @@ public class BaseDiceGameView : BaseGameView
                 userIdToView.Remove(lp.Id);
             }
         }
-        
+
         // 4) Xử lý players join
         foreach (var jp in update.JoinPlayers)
         {
             Debug.Log($"Player {jp.UserName} joined the table");
         }
-        
+
         // 5) Tạo/update player views theo danh sách players mới
         var localInPlayers = players.Exists(p => p.Id == localUserId);
 
@@ -86,9 +122,9 @@ public class BaseDiceGameView : BaseGameView
             CreatePlayerView(p, listPosView[positionIndex]);
             positionIndex++;
         }
-        
+
         if (thisPlayer == userIdToView.GetValueOrDefault(localUserId)) return;
-        
+
         // 6) Cập nhật thisPlayer và UI
         thisPlayer = userIdToView.GetValueOrDefault(localUserId);
         if (thisPlayer != null)
@@ -97,7 +133,7 @@ public class BaseDiceGameView : BaseGameView
         }
     }
 
-    private void CreatePlayerView(Player player, Vector2 anchoredPos)
+    protected virtual void CreatePlayerView(Player player, Vector2 anchoredPos)
     {
         if (!userIdToView.TryGetValue(player.Id, out var view) || view == null)
         {
@@ -110,7 +146,7 @@ public class BaseDiceGameView : BaseGameView
         view.SetData(player);
         SetAnchoredPosition(view, anchoredPos);
     }
-    
+
     private void SetAnchoredPosition(BasePlayerView view, Vector2 anchoredPos)
     {
         var rt = view.transform as RectTransform;

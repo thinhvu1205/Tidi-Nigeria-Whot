@@ -1,0 +1,67 @@
+{
+"skeleton": {
+	"hash": "VeT9M88PLqI4etgVpNO6sbUI01E",
+	"spine": "3.8.99",
+	"x": -90.5,
+	"y": -97,
+	"width": 181,
+	"height": 194,
+	"images": "./ima/",
+	"audio": "E:/Z.INDO/Diamond Casino/Domino QQ Club (Team N)/png/04_ingame/Blackjack/wow"
+},
+"bones": [
+	{ "name": "root" },
+	{ "name": "w", "parent": "root" },
+	{ "name": "bone", "parent": "w" }
+],
+"slots": [
+	{ "name": "round", "bone": "bone", "attachment": "round" },
+	{ "name": "w", "bone": "w", "attachment": "w" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"round": {
+				"round": { "width": 181, "height": 194 }
+			},
+			"w": {
+				"w": { "width": 106, "height": 49 }
+			}
+		}
+	}
+],
+"animations": {
+	"animation": {
+		"slots": {
+			"round": {
+				"color": [
+					{ "color": "ffffff00" },
+					{ "time": 0.2333, "color": "ffffffff" },
+					{ "time": 1.1667, "color": "ffffff24" }
+				]
+			}
+		},
+		"bones": {
+			"bone": {
+				"rotate": [
+					{},
+					{ "time": 1.1667, "angle": 120 }
+				],
+				"scale": [
+					{},
+					{ "time": 0.2333, "x": 1.4, "y": 1.4 },
+					{ "time": 1.1667 }
+				]
+			},
+			"w": {
+				"scale": [
+					{ "x": 0, "y": 0, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.2667, "x": 1.2, "y": 1.2, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.3333 }
+				]
+			}
+		}
+	}
+}
+}

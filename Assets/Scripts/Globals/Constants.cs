@@ -50,7 +50,8 @@ namespace Globals
         {
             WHOT_GAME_ID,
             BACCARAT_GAME_ID,
-            CHINESE_POKER_GAME_ID
+            CHINESE_POKER_GAME_ID,
+            BLACKJACK_GAME_ID
         };
 
         public static readonly Dictionary<WhotCardSuit, int> WhotSuitSortOrder = new()

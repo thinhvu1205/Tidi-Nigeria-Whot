@@ -12,73 +12,46 @@ using Avatar = Common.Objects.Avatar;
 
 public class BasePlayerView : MonoBehaviour
 {
-       [Header("=== UI COMPONENTS ===")]
     [Tooltip("Player name display")]
-    [SerializeField] public TextMeshProUGUI txtName, txtMoney;
-    
+    [SerializeField] public TextMeshProUGUI textName, textMoney, textChipWinLise;
     [Tooltip("Player avatar component")]
     [SerializeField] public Avatar avatar;
-    
     [Tooltip("Turn countdown timer")]
-    [SerializeField] Image timeCounDown;
-
-    [Header("=== GAME OBJECTS ===")]
+    [SerializeField] Image timeCountDown;
     [Tooltip("Host indicator, exit button, dealer icon, background bar")]
-    [SerializeField] GameObject objHost, objExit, dealerIcon, bkgThanhBar;
-    
-    [Tooltip("Chip win/lose display text")]
-    [SerializeField] TextMeshProUGUI lbChipWinLose;
+    [SerializeField] GameObject hostIcon, exitIcon, dealerIcon, backgroundBar;
+    [SerializeField] TMP_FontAsset fontWin, fontLose;
 
-    [Header("=== FONTS ===")]
-    [Tooltip("Font for positive money (green)")]
-    [SerializeField] TMP_FontAsset fontWin;
-    
-    [Tooltip("Font for negative money (red)")]
-    [SerializeField] TMP_FontAsset fontLose;
 
-    [Header("=== PLAYER DATA ===")]
     [Tooltip("Current turn time")]
-    float timeTurn = 0;
-    
+    private float timeTurn = 0;
+
     [Tooltip("Total win/lose amounts")]
-    public long agLose = 0, agWin = 0;
-    
-    [Tooltip("Current money amount")]
-    public long agCurrent = 0;
-    
-    [Tooltip("Is this the current player")]
-    public bool isThisPlayer = false;
-    
-    [Tooltip("Jackpot chip amount")]
-    public long chipJackpot = 0;
+    public long ChipLose { get; private set; } = 0;
+    public long ChipWin { get; private set; } = 0;
+    public long CurrentChip { get; private set; } = 0;
+    public bool IsCurrentPlayer { get; private set; } = false;
+
 
     [Header("=== ANIMATIONS ===")]
     [Tooltip("Spine animation for win/lose/draw effects")]
-    [SerializeField] public SkeletonGraphic animResult;
+    [SerializeField] public SkeletonGraphic animationResult;
 
     [Tooltip("All-in animation effect")]
-    [SerializeField] public GameObject aniAllIn;
+    [SerializeField] public GameObject aniAllIn, hitpot;
 
-    [Tooltip("Card display node")]
-    [SerializeField] public GameObject nodeCard;
-
-    [Tooltip("Lucky 9 animation")]
-    [SerializeField] public GameObject lucky9Ani;
-
-    [Tooltip("Hitpot indicator")]
-    [SerializeField] public GameObject hitpot;
 
     [Tooltip("Pot indicators list")]
     [SerializeField] public List<GameObject> pots;
 
     [Header("=== ANIMATION ASSETS ===")]
     [Tooltip("Animation assets: 0-lose, 1-draw, 2-win")]
-    [SerializeField] public List<SkeletonDataAsset> listAnimResult;
-    
+    [SerializeField] public List<SkeletonDataAsset> listAnimationResult;
+
     [Header("=== CARDS ===")]
     [Tooltip("Player's cards list")]
     [HideInInspector] public List<CardModel> cards = new List<CardModel>();
-    
+
     [Header("=== ANIMATION SEQUENCES ===")]
     [Tooltip("Flying text animation sequence")]
     private Sequence seqTextFly;
@@ -86,7 +59,7 @@ public class BasePlayerView : MonoBehaviour
     [Header("=== VIP SYSTEM ===")]
     [Tooltip("VIP item GameObject")]
     GameObject itemVip;
-    
+
     private string _id;
     public string id
     {
@@ -129,10 +102,6 @@ public class BasePlayerView : MonoBehaviour
         set => _sid = value;
     }
 
-
-    public bool isArranging = false;
-
-
     public void SetData(Player playerData)
     {
         id = playerData.Id;
@@ -141,30 +110,36 @@ public class BasePlayerView : MonoBehaviour
         avatar_id = playerData.AvatarId;
         vipLevel = playerData.VipLevel;
         sid = playerData.Sid.ToString();
-        setAg(long.Parse(wallet));
-        
-        if (string.IsNullOrEmpty(avatar_id)) {
+        SetCurrentChip(long.Parse(wallet));
+
+        if (string.IsNullOrEmpty(avatar_id))
+        {
             // avatar.setSpriteFrame(UIManager.Instance.avatarAtlas.getSpriteFrame(avatar_id));
-        } else {
+        }
+        else
+        {
             avatar.setSpriteFrame(UIManager.Instance.getAvatarDefault());
         }
 
-        if (vipLevel != 0) {
+        if (vipLevel != 0)
+        {
             avatar.setVip((int)vipLevel);
-        } else {
+        }
+        else
+        {
             avatar.setVip(0);
         }
         setName(user_name);
     }
-    
-    
+
+
     /// <summary>
     /// Sets player name with scrolling effect if too long
     /// </summary>
     /// <param name="namePl">Player name to display</param>
     public void setName(string namePl)
     {
-        txtName.text = namePl;
+        textName.text = namePl;
         // Config.EffectTextRunInMask(txtName);
     }
 
@@ -208,15 +183,15 @@ public class BasePlayerView : MonoBehaviour
                 isOnItemVip = false;
                 itemVip = Instantiate(UIManager.Instance.LoadPrefabGame("GameView/Objects/ItemVip"), transform);
             }
-            
+
             // Calculate position based on game type
             var vecPos = itemVip.transform.localPosition;
             var vecPosThis = transform.localPosition;
             var size = gameObject.GetComponent<RectTransform>().sizeDelta;
-            
+
             vecPos.x = vecPosThis.x > 0 ? 100 : -100;
             vecPos.y = -60;
-            
+
             // Position for different games
             // if (Config.currentGameId == (int)GAMEID.TONGITS_OLD || Config.currentGameId == (int)GAMEID.TONGITS_JOKER || Config.currentGameId == (int)GAMEID.TONGITS)
             // {
@@ -242,16 +217,16 @@ public class BasePlayerView : MonoBehaviour
             //     vecPos.x = vecPosThis.x > 0 ? 100 : -100;
             //     vecPos.y = -60;
             // }
-            
+
             // Activate and position VIP item
             itemVip.SetActive(true);
             itemVip.transform.localPosition = vecPos;
             updateItemVipFromSV(idVip);
             itemVip.transform.SetAsLastSibling();
-            
+
             // Setup button interaction
             Button btn = itemVip.GetComponent<Button>();
-            btn.interactable = (vip > 5) && isThisPlayer;
+            btn.interactable = (vip > 5) && IsCurrentPlayer;
             btn.onClick.RemoveAllListeners();
             btn.onClick.AddListener(() => { onClickSelectItemVip(vip); });
         }
@@ -298,7 +273,7 @@ public class BasePlayerView : MonoBehaviour
         var itemIdVip = idItem / 10;
         if (itemIdVip > 10) itemIdVip = 10;
         Debug.Log("itemIdVip  " + itemIdVip);
-        
+
         if (itemVip != null && itemIdVip >= 5)
         {
             GameObject animGO = itemVip.transform.Find("anim").gameObject;
@@ -321,13 +296,13 @@ public class BasePlayerView : MonoBehaviour
     /// <param name="vip">VIP level</param>
     void onClickSelectItemVip(int vip)
     {
-        if (itemVip != null && isThisPlayer)
+        if (itemVip != null && IsCurrentPlayer)
         {
             // Create VIP background if not exists
             if (BkgVip == null)
             {
                 BkgVip = Instantiate(UIManager.Instance.LoadPrefabGame("GameView/Objects/BkgItemVip"), UIManager.Instance.gameView.transform).transform;
-                
+
                 // Setup VIP item buttons
                 for (var i = 0; i < BkgVip.childCount; i++)
                 {
@@ -408,10 +383,10 @@ public class BasePlayerView : MonoBehaviour
     /// Sets player money with tween animation
     /// </summary>
     /// <param name="ag">New money amount</param>
-    public void setAg(long ag)
+    public void SetCurrentChip(long ag)
     {
-        Utility.TweenNumberTo(txtMoney, ag, agCurrent, 0.3f, false, false);
-        agCurrent = ag;
+        Utility.TweenNumberTo(textMoney, ag, CurrentChip, 0.3f, false, false);
+        CurrentChip = ag;
     }
 
     /// <summary>
@@ -438,7 +413,7 @@ public class BasePlayerView : MonoBehaviour
     /// </summary>
     public void setPosThanhBarThisPlayer()
     {
-        bkgThanhBar.transform.localPosition = new Vector2(120, -12);
+        backgroundBar.transform.localPosition = new Vector2(120, -12);
         // if (
         //     Globals.Config.currentGameId == (int)Globals.GAMEID.TONGITS_JOKER ||
         //     Globals.Config.currentGameId == (int)Globals.GAMEID.TONGITS ||
@@ -469,29 +444,29 @@ public class BasePlayerView : MonoBehaviour
     /// <param name="_timeTurn">Turn duration</param>
     /// <param name="_isMe">Is current player</param>
     /// <param name="timeVibrate">Vibration time before turn ends</param>
-    public virtual void setTurn(bool isTurn, float _timeTurn = 0f, bool _isMe = false, float timeVibrate = 5f)
+    public virtual void SetCurrentTurn(bool isTurn, float _timeTurn = 0f, bool _isMe = false, float timeVibrate = 5f)
     {
-        timeCounDown.gameObject.SetActive(isTurn);
+        timeCountDown.gameObject.SetActive(isTurn);
         if (isTurn)
         {
             StartCoroutine(fillAmountToZero());
         }
-        
+
         /// <summary>
         /// Coroutine to fill countdown timer
         /// </summary>
         IEnumerator fillAmountToZero()
         {
             timeTurn = _timeTurn;
-            timeCounDown.fillAmount = 1;
+            timeCountDown.fillAmount = 1;
             avatar.transform.DOScale(1.1f * Vector2.one, .1f).OnComplete(() => { avatar.transform.DOScale(Vector2.one, .1f); });
             float elapsedTime = 0;
-            while (timeCounDown.fillAmount > 0)
+            while (timeCountDown.fillAmount > 0)
             {
                 yield return new WaitForFixedUpdate();
-                timeCounDown.fillAmount -= Time.fixedDeltaTime / timeTurn;
+                timeCountDown.fillAmount -= Time.fixedDeltaTime / timeTurn;
                 elapsedTime += Time.fixedDeltaTime;
-                if (!timeCounDown.gameObject.activeSelf) yield break;
+                if (!timeCountDown.gameObject.activeSelf) yield break;
                 if (_isMe && (elapsedTime >= timeTurn - timeVibrate))
                 {
                     Config.Vibration();
@@ -505,18 +480,28 @@ public class BasePlayerView : MonoBehaviour
     /// Checks if it's player's turn
     /// </summary>
     /// <returns>True if player's turn</returns>
-    public bool getIsTurn()
+    public bool IsCurrentTurn()
     {
-        return timeCounDown.gameObject.activeInHierarchy;
+        return timeCountDown.gameObject.activeInHierarchy;
     }
 
     /// <summary>
     /// Gets avatar sprite
     /// </summary>
     /// <returns>Avatar sprite</returns>
-    public Sprite getAvatarSprite()
+    public Sprite GetAvatarSprite()
     {
         return avatar.image.sprite;
+    }
+
+    public Vector2 GetAvatarPosition()
+    {
+        return avatar.transform.localPosition;
+    }
+
+    public Transform GetAvatarTransform()
+    {
+        return avatar.transform;
     }
 
     /// <summary>
@@ -533,24 +518,18 @@ public class BasePlayerView : MonoBehaviour
     /// </summary>
     /// <param name="animName">Animation name (default: win)</param>
     /// <param name="isLoop">Loop animation</param>
-    public virtual void setEffectWin(string animName = "", bool isLoop = true)
+    public virtual void SetEffectWin(string animName = "win", bool isLoop = true)
     {
-        animResult.gameObject.SetActive(true);
-        animResult.skeletonDataAsset = listAnimResult[2];
-        animResult.Initialize(true);
-        if (animName == "")
+        animationResult.gameObject.SetActive(true);
+        animationResult.skeletonDataAsset = listAnimationResult[2];
+        animationResult.Initialize(true);
+
+        animationResult.AnimationState.SetAnimation(0, animName, isLoop);
+        if (!isLoop)
         {
-            animResult.AnimationState.SetAnimation(0, "win", isLoop);
-        }
-        else
-        {
-            animResult.AnimationState.SetAnimation(0, animName, isLoop);
-        }
-        if (isLoop == false)
-        {
-            animResult.AnimationState.Complete += delegate
+            animationResult.AnimationState.Complete += delegate
             {
-                animResult.gameObject.SetActive(false);
+                animationResult.gameObject.SetActive(false);
             };
         }
     }
@@ -559,19 +538,19 @@ public class BasePlayerView : MonoBehaviour
     /// Shows lose effect animation
     /// </summary>
     /// <param name="isLoop">Loop animation</param>
-    public virtual void setEffectLose(bool isLoop = true)
+    public virtual void SetEffectLose(string animationName = "lose", bool isLoop = true)
     {
-        animResult.TrimRenderers();
-        animResult.gameObject.SetActive(true);
-        animResult.skeletonDataAsset = listAnimResult[0];
-        animResult.Initialize(true);
-        animResult.AnimationState.SetAnimation(0, "lose", isLoop);
+        animationResult.TrimRenderers();
+        animationResult.gameObject.SetActive(true);
+        animationResult.skeletonDataAsset = listAnimationResult[0];
+        animationResult.Initialize(true);
+        animationResult.AnimationState.SetAnimation(0, animationName, isLoop);
 
         if (isLoop == false)
         {
-            animResult.AnimationState.Complete += delegate
+            animationResult.AnimationState.Complete += delegate
             {
-                animResult.gameObject.SetActive(false);
+                animationResult.gameObject.SetActive(false);
             };
         }
     }
@@ -580,18 +559,18 @@ public class BasePlayerView : MonoBehaviour
     /// Shows draw effect animation
     /// </summary>
     /// <param name="isLoop">Loop animation</param>
-    public void setEffectDraw(bool isLoop = true)
+    public void SetEffectDraw(string animationName = "draw", bool isLoop = true)
     {
-        animResult.gameObject.SetActive(true);
-        animResult.skeletonDataAsset = listAnimResult[1];
-        animResult.Initialize(true);
-        animResult.AnimationState.SetAnimation(0, "draw", true);
+        animationResult.gameObject.SetActive(true);
+        animationResult.skeletonDataAsset = listAnimationResult[1];
+        animationResult.Initialize(true);
+        animationResult.AnimationState.SetAnimation(0, animationName, true);
 
         if (isLoop == false)
         {
-            animResult.AnimationState.Complete += delegate
+            animationResult.AnimationState.Complete += delegate
             {
-                animResult.gameObject.SetActive(false);
+                animationResult.gameObject.SetActive(false);
             };
         }
     }
@@ -611,7 +590,7 @@ public class BasePlayerView : MonoBehaviour
     /// <param name="isHost">Is host</param>
     public void setHost(bool isHost)
     {
-        objHost.SetActive(isHost);
+        hostIcon.SetActive(isHost);
     }
 
     /// <summary>
@@ -620,7 +599,7 @@ public class BasePlayerView : MonoBehaviour
     /// <param name="isExit">Show exit</param>
     public void setExit(bool isExit)
     {
-        objExit.SetActive(isExit);
+        exitIcon.SetActive(isExit);
     }
 
     /// <summary>
@@ -628,25 +607,25 @@ public class BasePlayerView : MonoBehaviour
     /// </summary>
     /// <param name="mo">Money amount</param>
     /// <param name="fonzSize">Font size</param>
-    public void effectFlyMoney(long mo, int fonzSize = 50)
+    public void AnimateFlyMoney(long mo, int fonzSize = 50)
     {
         if (mo == 0) return;
-        
-        lbChipWinLose.fontSize = fonzSize;
+
+        textChipWinLise.fontSize = fonzSize;
         if (mo < 0)
         {
-            lbChipWinLose.font = fontLose;
-            lbChipWinLose.text = Utility.FormatMoney2(mo, true, true);
+            textChipWinLise.font = fontLose;
+            textChipWinLise.text = Utility.FormatMoney2(mo, true, true);
         }
         else
         {
-            lbChipWinLose.font = fontWin;
-            lbChipWinLose.text = "+" + Utility.FormatMoney2(mo, true, true);
+            textChipWinLise.font = fontWin;
+            textChipWinLise.text = "+" + Utility.FormatMoney2(mo, true, true);
         }
 
-        lbChipWinLose.transform.localPosition = Vector2.zero;
+        textChipWinLise.transform.localPosition = Vector2.zero;
         int height = 100;
-        
+
         // Game-specific height adjustments
         // if (Config.currentGameId == (int)Globals.GAMEID.SICBO && transform.localPosition.y > 280)
         // {
@@ -665,18 +644,18 @@ public class BasePlayerView : MonoBehaviour
         // {
         //     height = 35;
         // }
-        
-        lbChipWinLose.gameObject.SetActive(true);
+
+        textChipWinLise.gameObject.SetActive(true);
         if (seqTextFly != null)
         {
             seqTextFly.Kill();
         }
         seqTextFly = DOTween.Sequence()
-             .Append(lbChipWinLose.transform.DOLocalMove(new Vector2(0, height), 2.0f).SetEase(Ease.OutBack))
+             .Append(textChipWinLise.transform.DOLocalMove(new Vector2(0, height), 2.0f).SetEase(Ease.OutBack))
              .AppendInterval(1.0f)
              .AppendCallback(() =>
              {
-                 lbChipWinLose.gameObject.SetActive(false);
+                 textChipWinLise.gameObject.SetActive(false);
              });
     }
 
@@ -690,7 +669,7 @@ public class BasePlayerView : MonoBehaviour
     {
         dealerIcon.SetActive(isShow);
         if (!isShow) return;
-        
+
         float posx = isLeft == true ? -60 : 60;
         float posy = isUp == true ? 25 : -25;
         // if (Config.currentGameId == Constants.LUCKY9)
@@ -698,7 +677,7 @@ public class BasePlayerView : MonoBehaviour
         //     posx = isLeft == true ? -85 : 85;
         //     posy = isUp == true ? 50 : -50;
         // }
-        
+
         dealerIcon.transform.DOLocalMove(new Vector2(posx, posy), 0);
         dealerIcon.GetComponent<CanvasGroup>().alpha = 0;
         dealerIcon.transform.eulerAngles = new Vector3(0, 0, 90);
@@ -706,44 +685,6 @@ public class BasePlayerView : MonoBehaviour
         dealerIcon.transform.DOScale(Vector2.one, 0.6f).SetEase(Ease.OutCubic);
         dealerIcon.transform.DOLocalRotate(Vector3.zero, 0.6f).SetEase(Ease.OutCubic);
         dealerIcon.GetComponent<CanvasGroup>().DOFade(1, 0.6f);
-    }
-
-    /// <summary>
-    /// Shows flying money effect for Lucky 9 game
-    /// </summary>
-    /// <param name="mo">Money amount</param>
-    /// <param name="fonzSize">Font size</param>
-    /// <param name="height">Animation height</param>
-    /// <param name="durationMove">Move duration</param>
-    /// <param name="durationOnEnable">Display duration</param>
-    public void effectFlyMoneyLucky9(long mo, int fonzSize = 50, int height = 30, float durationMove = 1.5f, float durationOnEnable = 0f)
-    {
-        if (mo == 0) return;
-
-        lbChipWinLose.fontSize = fonzSize;
-        if (mo < 0)
-        {
-            lbChipWinLose.font = fontLose;
-            lbChipWinLose.text = Utility.FormatMoney2(mo, true, true);
-        }
-        else
-        {
-            lbChipWinLose.font = fontWin;
-            lbChipWinLose.text = "+" + Utility.FormatMoney2(mo, true, true);
-        }
-        lbChipWinLose.transform.localPosition = Vector2.zero;
-        lbChipWinLose.gameObject.SetActive(true);
-        if (seqTextFly != null)
-        {
-            seqTextFly.Kill();
-        }
-        seqTextFly = DOTween.Sequence()
-            .Append(lbChipWinLose.transform.DOLocalMove(new Vector2(0, height), durationMove).SetEase(Ease.OutBack))
-            .AppendInterval(durationOnEnable)
-            .AppendCallback(() =>
-            {
-                lbChipWinLose.gameObject.SetActive(false);
-            });
     }
 
     /// <summary>
@@ -766,5 +707,6 @@ public class BasePlayerView : MonoBehaviour
             pots[i].gameObject.SetActive(i < num);
         }
     }
+    
 
 }
