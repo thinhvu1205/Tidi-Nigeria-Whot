@@ -372,7 +372,7 @@ public class BaccaratView : BaseDiceGameView
 
                     SetDisplayBet();
                     SetStatusButtonsBet(!checkBeted, checkBeted);
-                    foreach (var player in playingPlayers)
+                    foreach (var player in players)
                     {
                         if (userIdToView.TryGetValue(player.Id, out var playerView))
                         {
