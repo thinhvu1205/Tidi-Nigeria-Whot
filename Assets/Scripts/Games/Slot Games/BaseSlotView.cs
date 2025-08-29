@@ -547,7 +547,7 @@ public class BaseSlotView : BaseGameView
                     {
                         SoundManager.Instance.PlayEffectFromPath(SoundSlot.SHOW_LINE);
                         SetDarkAllItems();
-                        DrawRectangularAndConnectingLines(lineWinID, payline.NumOccur, colorLine);
+                        DrawRectangularAndConnectingLines(lineWinID, payline.Indices[0] % 5, payline.NumOccur, colorLine);
                         ShowPaylinesInfo(index);
                     }
 
@@ -754,7 +754,7 @@ public class BaseSlotView : BaseGameView
         lineOneByOneList.Add(lineRect);
     }
 
-    private void DrawRectangularAndConnectingLines(int[] lineWinID, int matchedItemCount, Color colorLine)
+    private void DrawRectangularAndConnectingLines(int[] lineWinID, int startIndex, int matchedItemCount, Color colorLine)
     {
         // lineWinID: { 0, 1, 0, 1, 0 }
         List<Vector2> itemPositions = new();
@@ -771,7 +771,7 @@ public class BaseSlotView : BaseGameView
         }
 
         // Bước 2: Highlight các item thắng
-        for (int colIndex = 0; colIndex < matchedItemCount; colIndex++)
+        for (int colIndex = startIndex; colIndex < startIndex + matchedItemCount; colIndex++)
         {
             int itemIndex = lineWinID[colIndex];
             slotColumnList[colIndex].SetLightItemAtIndex(itemIndex);
@@ -780,22 +780,23 @@ public class BaseSlotView : BaseGameView
 
         // Bước 3: Vẽ line highlight
         List<Vector2> remainingLinePoints = new();
+        List<Vector2> startingLinePoints = new();
 
         for (int i = 0; i < itemPositions.Count; i++)
         {
             Vector2 currentPosition = itemPositions[i];
 
             // Vẽ hình vuông nếu còn trong số lượng item
-            if (i < matchedItemCount)
+            if (i >= startIndex && i < matchedItemCount + startIndex)
             {
                 DrawSquare(currentPosition, colorLine);
             }
 
             // Vẽ đường nối tiếp nếu cần
-            if (i < itemPositions.Count - 1)
+            if (i >= startIndex && i < itemPositions.Count - 1)
             {
                 Vector2 nextPos = itemPositions[i + 1];
-                if (Mathf.Abs(nextPos.y - currentPosition.y) > 50 && i < matchedItemCount - 1)
+                if (Mathf.Abs(nextPos.y - currentPosition.y) > 50 && i < startIndex + matchedItemCount - 1)
                 {
                     List<Vector2> listPos = new();
                     Vector2 firstIntersectPos = GetIntersectPoint(itemPositions[i], itemPositions[i + 1]);
@@ -807,15 +808,16 @@ public class BaseSlotView : BaseGameView
             }
 
             // Tính toán các điểm bắt đầu của line còn lại
-            if (i >= matchedItemCount)
+
+            if (i >= startIndex + matchedItemCount) // bắt đầu sau hình vuông cuối cùng
             {
-                if (remainingLinePoints.Count == 0)
+                if (remainingLinePoints.Count == 0 && i > 0)
                 {
                     Vector2 previousPos = itemPositions[i - 1];
                     Vector2 startPosLineRemain;
                     if (Mathf.Abs(previousPos.y - currentPosition.y) < 100)
                     {
-                        startPosLineRemain = new Vector2(itemPositions[i - 1].x + RECT_SIZE.x / 2, itemPositions[i - 1].y);
+                        startPosLineRemain = new Vector2(previousPos.x + RECT_SIZE.x / 2, previousPos.y);
                     }
                     else
                     {
@@ -828,12 +830,33 @@ public class BaseSlotView : BaseGameView
                         {
                             startPosLineRemain = isTwoItemSpace ? new Vector2(previousPos.x, previousPos.y - RECT_SIZE.y / 2) : new Vector2(previousPos.x + RECT_SIZE.x / 2, previousPos.y - RECT_SIZE.y / 2);
                         }
-
                     }
                     remainingLinePoints.Add(startPosLineRemain);
-
                 }
                 remainingLinePoints.Add(currentPosition);
+            }
+
+            // Nếu startIndex != 0
+            if (i < startIndex)
+            {
+                startingLinePoints.Add(currentPosition);
+                if (i == 0)
+                {
+                    Vector2 startPosition = new(startingLinePoints[0].x - 90, startingLinePoints[0].y);
+                    startingLinePoints.Insert(0, startPosition);
+                }
+            }
+
+            if (i == startIndex - 1)
+            {
+                List<Vector2> listPos = new();
+                Vector2 firstIntersectPos = itemPositions[i];
+                // Vector2 nextIntersectPos = GetIntersectPoint(itemPositions[i + 1], itemPositions[i]);
+                Vector2 nextIntersectPos = itemPositions[i + 1];
+                nextIntersectPos = new Vector2(nextIntersectPos.x - RECT_SIZE.x / 2, nextIntersectPos.y);
+                listPos.Add(firstIntersectPos);
+                listPos.Add(nextIntersectPos);
+                DrawLineBetween2Points(listPos, colorLine);
             }
         }
 
@@ -842,8 +865,11 @@ public class BaseSlotView : BaseGameView
         Vector2 endRemainingLine = new Vector2(lastPos.x + RECT_SIZE.x / 2, lastPos.y);
         remainingLinePoints.Add(endRemainingLine);
 
+ 
+
         // Vẽ line còn lại
         DrawLineBetween2Points(remainingLinePoints, colorLine);
+        DrawLineBetween2Points(startingLinePoints, colorLine);
 
     }
 

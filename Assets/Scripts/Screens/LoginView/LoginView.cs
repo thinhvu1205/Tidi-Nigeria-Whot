@@ -21,6 +21,7 @@ namespace Screens.LoginView
             base.Awake();
             loginView.SetActive(true);
             loginForm.SetActive(false);
+            SoundManager.Instance.PlayMusicLobby();
         }
 
         protected override void Start()
