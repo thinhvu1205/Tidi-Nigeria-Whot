@@ -9,7 +9,7 @@ public class SlotJuicyItem : SlotItem
     [SerializeField] private TextMeshProUGUI[] valuePackageTextList;
     public long[] ValuePackageList { get; set; } = new long[3];
     protected override float PositionResetY => base.PositionResetY - 5f;
-    protected override float IconScale => 1.02f;
+    protected override float IconScale => 1.01f;
     protected override string ICON_ANIMATION_PATH => "SlotSpine/JuicyGarden/SpineIcon/%id/skeleton_SkeletonData";
     protected override Vector2[] ItemPositionList => new Vector2[]
     {

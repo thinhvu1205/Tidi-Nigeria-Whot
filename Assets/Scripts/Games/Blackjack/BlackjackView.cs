@@ -161,7 +161,7 @@ public class BlackjackView : BaseDiceGameView
                     chip.transform.SetParent(playerView.GetAvatarTransform().parent, true);
                     chip.SetInfo(chipIndex, playerView.GetAvatarPosition());
                     chip.transform.localScale = Vector2.one * 0.8f;
-                    AnimateMoveChip(chip, boxbet.BoxPosition, () =>
+                    AnimateMoveChip(chip, boxbet.transform.position, () =>
                     {
                         boxbet.SetBetValue(chipIndex, data.Bet.Balance.AmoutChipBet, data.Bet.Balance.AmoutChipBet);
                     });
@@ -366,6 +366,7 @@ public class BlackjackView : BaseDiceGameView
                 Debug.Log("HandleUpdateGameState Preparing " + data.ToString());
                 break;
             case GameState.Play:
+                isCountingDown = false;
                 currentPlayerBoxBet.SetBetValue(currentChipIndex, currentBetValue, totalBetValue);
                 HideAllImageChip();
                 countdownContainer.SetActive(false);
@@ -466,7 +467,7 @@ public class BlackjackView : BaseDiceGameView
         while (timeLeft > 0)
         {
             timeLeft -= Time.deltaTime;
-            imageCountdown.fillAmount = timeLeft / startTime;
+            imageCountdown.fillAmount = timeLeft / 12;
             textCountdown.text = Mathf.CeilToInt(timeLeft).ToString();
             yield return null;
         }
@@ -677,7 +678,7 @@ public class BlackjackView : BaseDiceGameView
         for (int i = 0; i < length * 2; i++)
         {
 
-            int indexInRound = i % length; 
+            int indexInRound = i % length;
             int round = i / length; // vòng chia thứ mấy
             Player player = rearrangedPlayers[indexInRound];
             BlackjackBoxBet boxCard = userIdToBoxBetView.GetValueOrDefault(player.Id);
@@ -1010,7 +1011,7 @@ public class BlackjackView : BaseDiceGameView
         lastBetValue = totalBetValue;
         currentBetValue = totalBetValue = playerReceiveCardCount = 0;
         currentChipIndex = -1;
-        hasDealtCardsForBanker = hasDealtCardsForPlayers = isCurrentPlayerFinished = isCountingDown = isRebet = false;
+        hasDealtCardsForBanker = hasDealtCardsForPlayers = isCurrentPlayerFinished = isRebet = false;
 
         listBankerCard.Clear();
 

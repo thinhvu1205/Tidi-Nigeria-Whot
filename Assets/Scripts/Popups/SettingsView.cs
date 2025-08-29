@@ -51,7 +51,7 @@ public class SettingsView : BaseView
     {
 
     }
-    
+
     public void OnClickSound()
     {
         Config.isOpenSound = !Config.isOpenSound;
@@ -64,6 +64,7 @@ public class SettingsView : BaseView
         Config.isOpenMusic = !Config.isOpenMusic;
         toggleMusicImage.gameObject.SetActive(Config.isOpenMusic);
         Config.SaveConfigSettings();
+        SoundManager.Instance.PlayMusicLobby();
     }
 
     public void OnClickPrivacyPolicy()

@@ -29,7 +29,6 @@ public class LobbyView : BaseView
         _ = LoadGames();
         UpdateProfileData();
         UIManager.Instance.lobbyView = this;
-        SoundManager.Instance.PlayMusicLobby();
     }
 
     private async UniTask LoadGames()
