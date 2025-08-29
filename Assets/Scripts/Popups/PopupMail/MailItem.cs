@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Proto;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,29 +13,35 @@ public class MailItem : MonoBehaviour
     public class OnCheckboxClickedEventArgs : EventArgs
     {
         public bool isChecked;
+        public Notification notification;
     }
     [SerializeField] private Image checkboxImage;
-    [SerializeField] private TextMeshProUGUI senderNameText, contentText, dateText, timeText;
+    [SerializeField] private TextMeshProUGUI textTitle, textContent, textDate, textTime;
     private bool isChecked = false;
+    private Notification notification;
 
     private void Start()
     {
         checkboxImage.gameObject.SetActive(isChecked);
     }
 
-    public void SetData(string senderName, string content, string date, string time)
+    public void SetData(Notification notification)
     {
-        senderNameText.text = senderName;
-        contentText.text = content;
-        dateText.text = date;
-        timeText.text = time;
+        DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(notification.CreateTimeUnix).LocalDateTime;
+        this.notification = notification;
+        string datePart = dateTime.ToString("dd/MM");
+        string timePart = dateTime.ToString("HH:mm");
+        textTitle.text = notification.Title;
+        textContent.text = notification.Content;
+        textDate.text = datePart;
+        textTime.text = timePart;
     }
 
     public void OnClickCheckbox()
     {
         isChecked = !isChecked;
         checkboxImage.gameObject.SetActive(isChecked);
-        OnCheckboxClicked?.Invoke(this, new OnCheckboxClickedEventArgs { isChecked = isChecked });
+        OnCheckboxClicked?.Invoke(this, new OnCheckboxClickedEventArgs { isChecked = isChecked, notification = notification });
     }
 
     public void TickCheckbox()
@@ -48,4 +55,6 @@ public class MailItem : MonoBehaviour
         isChecked = false;
         checkboxImage.gameObject.SetActive(isChecked);
     }
+
+    public long GetNotificationId() => this.notification.Id;
 }

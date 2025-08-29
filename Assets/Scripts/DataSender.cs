@@ -12,44 +12,44 @@ using UnityEngine;
 public class DataSender
 {
     #region ApiNames
-        public const string LIST_GAME = "list_game";
-        public const string LIST_BET = "list_bet";
-        public const string CREATE_MATCH = "create_match";
-        public const string FIND_MATCH = "find_match";
-        public const string QUICK_MATCH = "quick_match";
-        public const string GET_PROFILE = "get_profile";
-        public const string UPDATE_PROFILE = "update_profile";
-        public const string UPDATE_AVATAR = "update_avatar";
-        public const string LINK_USERNAME = "link_username";
-        public const string CHANGE_PASS = "user_change_pass";
-        public const string PUSH_TO_BANK = "push_to_bank";
-        public const string WITH_DRAW = "with_draw";
-        public const string SEND_GIFT = "send_gift";
-        public const string WALLET_TRANSACTION = "wallet_transaction";
-        public const string LIST_CLAIMABLE_FREECHIPS = "list_claimable_freechip";
-        public const string CLAIM_FREECHIP = "claim_freechip";
-        public const string LIST_DEAL = "list_deal";
-        public const string GET_QUICKCHAT = "get_quickchat";
-        public const string UPDATE_QUICKCHAT = "update_quickchat";
-        public const string EXCHANGE_ADD = "exchange_add";
-        public const string EXCHANGE_CANCEL = "exchange_cancel";
-        public const string LIST_EXCHANGE_DEAL = "list_exchange_deal";
-        public const string LIST_EXCHANGE = "list_exchange";
-        public const string CAN_CLAIM_DAILY_REWARD = "canclaimdailyreward";
-        public const string CLAIM_DAILY_REWARD = "claimdailyreward";
-        public const string GIFT_CODE_CLAIM = "gift_code_claim";
-        public const string LIST_IN_APP_MESSAGE = "list_in_app_message";
-        public const string LIST_NOTIFICATION = "list_notification";
-        public const string READ_NOTIFICATION = "read_notification";
-        public const string DELETE_NOTIFICATION = "delete_notification";
-        public const string READ_ALL_NOTIFICATION = "read_all_notification";
-        public const string DELETE_ALL_NOTIFICATION = "delete_all_notification";
-        public const string LEADER_BOARD_INFO = "leaderboard_info";
-        public const string GET_JACKPOT = "jackpot";
-        public const string INFO_MATCH = "info_match";
+    public const string LIST_GAME = "list_game";
+    public const string LIST_BET = "list_bet";
+    public const string CREATE_MATCH = "create_match";
+    public const string FIND_MATCH = "find_match";
+    public const string QUICK_MATCH = "quick_match";
+    public const string GET_PROFILE = "get_profile";
+    public const string UPDATE_PROFILE = "update_profile";
+    public const string UPDATE_AVATAR = "update_avatar";
+    public const string LINK_USERNAME = "link_username";
+    public const string CHANGE_PASS = "user_change_pass";
+    public const string PUSH_TO_BANK = "push_to_bank";
+    public const string WITH_DRAW = "with_draw";
+    public const string SEND_GIFT = "send_gift";
+    public const string WALLET_TRANSACTION = "wallet_transaction";
+    public const string LIST_CLAIMABLE_FREECHIPS = "list_claimable_freechip";
+    public const string CLAIM_FREECHIP = "claim_freechip";
+    public const string LIST_DEAL = "list_deal";
+    public const string GET_QUICKCHAT = "get_quickchat";
+    public const string UPDATE_QUICKCHAT = "update_quickchat";
+    public const string EXCHANGE_ADD = "exchange_add";
+    public const string EXCHANGE_CANCEL = "exchange_cancel";
+    public const string LIST_EXCHANGE_DEAL = "list_exchange_deal";
+    public const string LIST_EXCHANGE = "list_exchange";
+    public const string CAN_CLAIM_DAILY_REWARD = "canclaimdailyreward";
+    public const string CLAIM_DAILY_REWARD = "claimdailyreward";
+    public const string GIFT_CODE_CLAIM = "gift_code_claim";
+    public const string LIST_IN_APP_MESSAGE = "list_in_app_message";
+    public const string LIST_NOTIFICATION = "list_notification";
+    public const string READ_NOTIFICATION = "read_notification";
+    public const string DELETE_NOTIFICATION = "delete_notification";
+    public const string READ_ALL_NOTIFICATION = "read_all_notification";
+    public const string DELETE_ALL_NOTIFICATION = "delete_all_notification";
+    public const string LEADER_BOARD_INFO = "leaderboard_info";
+    public const string GET_JACKPOT = "jackpot";
+    public const string INFO_MATCH = "info_match";
     #endregion
 
-    
+
     #region ConvertProtobuf
     private static T DecodeFromBase64<T>(string base64) where T : IMessage<T>, new()
     {
@@ -63,9 +63,9 @@ public class DataSender
         var parser = new JsonParser(JsonParser.Settings.Default.WithIgnoreUnknownFields(true));
         return parser.Parse<T>(json);
     }
-    
+
     #endregion
-    
+
     #region RPC
 
     #region Login
@@ -85,11 +85,6 @@ public class DataSender
     // }
     #endregion
 
-    public static async UniTask<Profile> GetProfile()
-    {
-        var response = await NetworkManager.INSTANCE.RPCSend(GET_PROFILE);
-        return DecodeFromJson<Profile>(response.Payload);
-    }
 
     public static async UniTask<GameListResponse> GetListGame()
     {
@@ -97,10 +92,58 @@ public class DataSender
         return DecodeFromJson<GameListResponse>(response.Payload);
     }
 
-    public static async UniTask<ListNotification> GetListNotification()
+    #region Notifications
+
+    public static async UniTask<ListNotification> GetListNotification(int limit = 100, TypeNotification type = TypeNotification.MailBox)
     {
+        NotificationRequest notificationRequest = new()
+        {
+            Limit = limit,
+            Type = type
+        };
         var response = await NetworkManager.INSTANCE.RPCSend(LIST_NOTIFICATION);
         return DecodeFromJson<ListNotification>(response.Payload);
+    }
+
+    public static async UniTask<Notification> ReadNotification()
+    {
+        Notification notification = new()
+        {
+            
+        };
+        var response = await NetworkManager.INSTANCE.RPCSend(READ_NOTIFICATION, notification);
+        return DecodeFromJson<Notification>(response.Payload);
+    }
+
+    public static async UniTask<Notification> ReadAllNotifications()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(READ_ALL_NOTIFICATION);
+        return DecodeFromJson<Notification>(response.Payload);
+    }
+
+    public static async UniTask<Notification> DeleteNotification(long notiId)
+    {
+        Notification notification = new()
+        {
+            Id = notiId
+        };
+        var response = await NetworkManager.INSTANCE.RPCSend(DELETE_NOTIFICATION, notification);
+        return DecodeFromJson<Notification>(response.Payload);
+    }
+
+    public static async UniTask<Notification> DeleteAllNotifications()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(DELETE_ALL_NOTIFICATION);
+        return DecodeFromJson<Notification>(response.Payload);
+    }
+    #endregion
+
+
+    #region Account
+    public static async UniTask<Profile> GetProfile()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(GET_PROFILE);
+        return DecodeFromJson<Profile>(response.Payload);
     }
 
     public static void ChangePassword(string oldPassword = "", string password = "")
@@ -122,24 +165,42 @@ public class DataSender
         };
         _ = NetworkManager.INSTANCE.RPCSend(LINK_USERNAME, data);
     }
+
+    public static void UpdateProfile(string username = "", string password = "")
+    {
+        Profile data = new()
+        {
+
+        };
+        _ = NetworkManager.INSTANCE.RPCSend(UPDATE_PROFILE, data);
+    }
+
+    public static void UpdateAvatar(string avatarId = "")
+    {
+        Profile data = new()
+        {
+            AvatarId = avatarId
+        };
+        _ = NetworkManager.INSTANCE.RPCSend(UPDATE_AVATAR, data);
+    }
     #endregion
+
 
     public static async UniTask<Bets> GetListBet(string gameCode)
     {
-        BetListRequest betListRequest = new(){Code = gameCode};
+        BetListRequest betListRequest = new() { Code = gameCode };
         var response = await NetworkManager.INSTANCE.RPCSend(LIST_BET, betListRequest);
         return DecodeFromJson<Bets>(response.Payload);
     }
-    
+
     // public static async UniTask<PlayerCountByBetResponse> GetPlayerCountByBet(string gameCode)
     // {
     //     BetListRequest betListRequest = new(){Code = gameCode};
     //     var response = await NetworkManager.INSTANCE.RPCSend(GET_PLAYER_COUNT_BY_BET, betListRequest);
     //     return DecodeFromJson<PlayerCountByBetResponse>(response.Payload);
     // }
-    
+
     #region Match
-    
     public static async UniTask<RpcFindMatchResponse> FindMatch(string gameCode, int markUnit, bool isCreateGame)
     {
         try
@@ -153,7 +214,7 @@ public class DataSender
             };
 
             var response = await NetworkManager.INSTANCE.RPCSend(FIND_MATCH, rpcFindMatchRequest);
-            
+
             if (string.IsNullOrEmpty(response.Payload) || response.Payload == "[]")
             {
                 Debug.Log("FindMatch response payload is empty");
@@ -213,12 +274,12 @@ public class DataSender
             return null;
         }
     }
-    
+
     public static async UniTask<RpcFindMatchResponse> QuickMatch(string gameCode)
     {
         try
         {
-            RpcCreateMatchRequest rpcFindMatchRequest = new() { GameCode = gameCode};
+            RpcCreateMatchRequest rpcFindMatchRequest = new() { GameCode = gameCode };
             var response = await NetworkManager.INSTANCE.RPCSend(QUICK_MATCH, rpcFindMatchRequest);
             Debug.Log("QuickMatch response: " + response.Payload);
             if (string.IsNullOrEmpty(response.Payload) || response.Payload == "[]")
@@ -235,9 +296,9 @@ public class DataSender
             return null;
         }
     }
-    
+
     public static void LeaveMatch() => NetworkManager.INSTANCE.LeaveMatch();
-    
+
     public static void SendMatchState(long opCode, byte[] data)
     {
         Debug.Log("SendMatchState opCode: " + opCode + ", data: " + BitConverter.ToString(data));
@@ -274,21 +335,21 @@ public class DataSender
         var response = await NetworkManager.INSTANCE.RPCSend(PUSH_TO_BANK, bank);
         return DecodeFromJson<Bank>(response.Payload);
     }
-    
+
     public static async UniTask<Bank> WithDraw(long amountChip = 0)
     {
         Bank bank = new Bank() { Chips = amountChip };
         var response = await NetworkManager.INSTANCE.RPCSend(WITH_DRAW, bank);
         return DecodeFromJson<Bank>(response.Payload);
     }
-    
-    public static async UniTask<FreeChip> SendGift(long amountChip = 0, string recipientId = "" )
+
+    public static async UniTask<FreeChip> SendGift(long amountChip = 0, string recipientId = "")
     {
-        Bank bank = new Bank() { ChipsInBank = amountChip, RecipientId = recipientId};
+        Bank bank = new Bank() { ChipsInBank = amountChip, RecipientId = recipientId };
         var response = await NetworkManager.INSTANCE.RPCSend(SEND_GIFT, bank);
         return DecodeFromJson<FreeChip>(response.Payload);
     }
-    
+
     // public class WalletTransaction
     // {
     //     [JsonProperty("transactions")]
@@ -297,15 +358,112 @@ public class DataSender
     //     public string Cusor { get; set; }
     // }
 
-    
-    public static async UniTask<WalletTransRequest> LoadTransactionHistory(long limit = 0, string metaAction = "bank_topup" )
+
+    public static async UniTask<WalletTransRequest> GetTransactionHistory(long limit = 0, string metaAction = "bank_topup")
     {
-       
+
         WalletTransRequest bank = new WalletTransRequest() { Limit = limit, MetaAction = metaAction };
         var response = await NetworkManager.INSTANCE.RPCSend(SEND_GIFT, bank);
         return DecodeFromJson<WalletTransRequest>(response.Payload);
     }
-        
+
+    public static async UniTask<ListFreeChip> GetListFreeChip()
+    {
+        FreeChipRequest freeChipRequest = new()
+        {
+
+        };
+        var response = await NetworkManager.INSTANCE.RPCSend(LIST_GAME, freeChipRequest);
+        return DecodeFromJson<ListFreeChip>(response.Payload);
+    }
+
+    public static async UniTask<FreeChip> ClaimFreeChip()
+    {
+        FreeChip freeChip = new FreeChip()
+        {
+
+        };
+        var response = await NetworkManager.INSTANCE.RPCSend(CLAIM_FREECHIP, freeChip);
+        return DecodeFromJson<FreeChip>(response.Payload);
+    }
+
+    public static async UniTask<QuickChatResponse> GetListQuickChat()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(GET_QUICKCHAT);
+        return DecodeFromJson<QuickChatResponse>(response.Payload);
+    }
+
+    public static async UniTask<QuickChatUpdateRequest> UpdateQuickChat()
+    {
+        QuickChatUpdateRequest quickChatUpdateRequest = new QuickChatUpdateRequest()
+        {
+
+        };
+        var response = await NetworkManager.INSTANCE.RPCSend(UPDATE_QUICKCHAT, quickChatUpdateRequest);
+        return DecodeFromJson<QuickChatUpdateRequest>(response.Payload);
+    }
+
+    public static async UniTask<ExchangeInfo> AddExchange()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(EXCHANGE_ADD);
+        return DecodeFromJson<ExchangeInfo>(response.Payload);
+    }
+
+    public static async UniTask<ExchangeInfo> CancelExchange()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(EXCHANGE_CANCEL);
+        return DecodeFromJson<ExchangeInfo>(response.Payload);
+    }
+
+    public static async UniTask<ExchangeDealInShop> GetListExchangeDeal()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(LIST_EXCHANGE_DEAL);
+        return DecodeFromJson<ExchangeDealInShop>(response.Payload);
+    }
+
+    public static async UniTask<ExchangeInfo> GetListExchange()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(LIST_EXCHANGE);
+        return DecodeFromJson<ExchangeInfo>(response.Payload);
+    }
+
+    public static async UniTask<ExchangeInfo> CanClaimDailyReward()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(CAN_CLAIM_DAILY_REWARD);
+        return DecodeFromJson<ExchangeInfo>(response.Payload);
+    }
+
+    public static async UniTask<DailyRewardTemplate> ClaimDailyReward()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(CLAIM_DAILY_REWARD);
+        return DecodeFromJson<DailyRewardTemplate>(response.Payload);
+    }
+
+    public static async UniTask<GiftCode> ClaimGiftCode()
+    {
+        GiftCode giftCode = new GiftCode()
+        {
+
+        };
+        var response = await NetworkManager.INSTANCE.RPCSend(GIFT_CODE_CLAIM, giftCode);
+        return DecodeFromJson<GiftCode>(response.Payload);
+    }
+
+    public static async UniTask<InAppMessageData> GetListInAppMessage()
+    {
+        InAppMessageRequest inAppMessageRequest = new()
+        {
+
+        };
+        var response = await NetworkManager.INSTANCE.RPCSend(LIST_IN_APP_MESSAGE, inAppMessageRequest);
+        return DecodeFromJson<InAppMessageData>(response.Payload);
+    }
+
+
+    #endregion
+    #endregion
+
+    #region Leaderboard
 
     #endregion
 }

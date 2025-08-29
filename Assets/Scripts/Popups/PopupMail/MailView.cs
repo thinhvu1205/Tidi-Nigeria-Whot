@@ -5,29 +5,33 @@ using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json.Linq;
 using System;
+using Cysharp.Threading.Tasks;
+using Proto;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class MailView : BaseView
 {
     [SerializeField] private GameObject mailItemPrefab;
     [SerializeField] private Transform mailItemParent;
     [SerializeField] private Image checkAllTickImage;
-    private List<JObject> listMailData = new();
+    [SerializeField] private Button checkAllButton;
+    private List<Notification> listNotification;
     private List<MailItem> listMailSelected = new();
     private List<MailItem> listMail = new();
-    private JArray mockArray = new();
     private bool isCheckAll = false;
 
     protected override void Start()
     {
         base.Start();
-        MockData();
-        LoadListMail();
+        _ = LoadListMail();
     }
 
     #region Event    
     private void MailItem_OnCheckboxClicked(object sender, MailItem.OnCheckboxClickedEventArgs e)
     {
         bool isChecked = e.isChecked;
+        Notification notification = e.notification;
         MailItem mailItem = sender as MailItem;
         if (isChecked)
         {
@@ -77,10 +81,29 @@ public class MailView : BaseView
 
     public void OnClickDelete()
     {
+        // Handle add button click
+        _ = HandleClickDelete();
+    }
+
+    public async Task HandleClickDelete()
+    {
         foreach (var mailItem in listMailSelected)
         {
             Destroy(mailItem.gameObject);
             listMail.Remove(mailItem);
+        }
+        if (isCheckAll)
+        {
+            await DataSender.DeleteAllNotifications();
+        }
+        else
+        {
+            foreach (MailItem mailItem in listMailSelected)
+            {
+                long notiId = mailItem.GetNotificationId();
+                await DataSender.DeleteNotification(notiId);
+            }
+
         }
         listMailSelected.Clear();
         isCheckAll = false;
@@ -89,41 +112,30 @@ public class MailView : BaseView
     #endregion
 
     #region Data
-    private void LoadListMail()
+    private async UniTask LoadListMail()
     {
         foreach (var mailItem in listMail)
         {
             Destroy(mailItem.gameObject);
         }
-        foreach (var mailData in mockArray)
+        try
         {
-            string senderName = mailData["senderName"].ToString();
-            string content = mailData["content"].ToString();
-            string date = mailData["date"].ToString();
-            GameObject mailItemObj = Instantiate(mailItemPrefab, mailItemParent);
-            MailItem mailItem = mailItemObj.GetComponent<MailItem>();
-            mailItem.SetData(senderName, content, date, "");
-            mailItem.OnCheckboxClicked += MailItem_OnCheckboxClicked;
-            listMail.Add(mailItem);
-        }
-    }
-
-    private void MockData()
-    {
-
-        for (int i = 0; i < 5; i++)
-        {
-            JObject mailItem = new JObject
+            ListNotification listNotification = await DataSender.GetListNotification();
+            this.listNotification = listNotification.Notifications.ToList();
+            checkAllButton.gameObject.SetActive(this.listNotification.Count > 0);
+            Debug.Log("GAME LIST: " + listNotification.ToString());
+            foreach (Notification notification in this.listNotification)
             {
-                ["senderName"] = $"Sender {i + 1}",
-                ["content"] = $"This is the content of mail #{i + 1}",
-                ["date"] = System.DateTime.Now.AddDays(-i).ToString("yyyy-MM-dd")
-            };
-
-            mockArray.Add(mailItem);
+                MailItem mailItem = Instantiate(mailItemPrefab, mailItemParent).GetComponent<MailItem>();
+                mailItem.SetData(notification);
+                mailItem.OnCheckboxClicked += MailItem_OnCheckboxClicked;
+                listMail.Add(mailItem);
+            }
         }
-
-        Debug.Log(mockArray.ToString());
+        catch (Exception ex)
+        {
+            Debug.Log("err load list noti : " + ex.Message);
+        }
     }
     #endregion
 }
