@@ -320,7 +320,10 @@ public class BlackjackBoxBet : MonoBehaviour
         imageScoreBox.gameObject.SetActive(false);
         imageChip.gameObject.SetActive(false);
         iconChip.gameObject.SetActive(false);
-        animationWaiting.gameObject.SetActive(false);
+        if (animationWaiting != null)
+        {
+            animationWaiting.gameObject.SetActive(false);
+        }
         animationBlackjack.gameObject.SetActive(false);
         animationBust.gameObject.SetActive(false);
         animationWow.gameObject.SetActive(false);

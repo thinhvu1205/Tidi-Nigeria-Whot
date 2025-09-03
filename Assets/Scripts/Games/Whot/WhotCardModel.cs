@@ -102,9 +102,9 @@ public class WhotCardModel : MonoBehaviour,IPoolable
         Sprite cardSprite;
         if (GetCardRank() == WhotCardRank.WhotRank20)
         {
-            return Resources.Load<Sprite>("BundlePack/Images/Games/Whot/Cut/Bai_Whot/Whot_0");
+            return BundleHandler.LoadSprite("BundlePack/Images/Games/Whot/Cut/Bai_Whot/Whot_0");
         }
-        cardSprite = Resources.Load<Sprite>("BundlePack/Images/Games/Whot/Cut/Bai_Whot/" + spriteName);
+        cardSprite = BundleHandler.LoadSprite("BundlePack/Images/Games/Whot/Cut/Bai_Whot/" + spriteName);
         if (cardSprite == null)
         {
             Debug.LogError($"Sprite not found: BundlePack/Images/Games/Whot/Cut/Bai_Whot/{spriteName}");

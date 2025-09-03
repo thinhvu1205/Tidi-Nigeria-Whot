@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5704093647970076448}
   - component: {fileID: 3573653190124726312}
   - component: {fileID: 8388730818826777361}
+  - component: {fileID: 1110629836217552860}
   m_Layer: 0
   m_Name: Animation Wow
   m_TagString: Untagged
@@ -107,6 +108,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &1110629836217552860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 15403468376694258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 8388730818826777361}
+  BundleLabel: assets--resources--bundlepack--animations--blackjack
+  AssetName: Assets/Resources/BundlePack/Animations/Blackjack/wow/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &33232455471040133
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,6 +307,7 @@ GameObject:
   - component: {fileID: 1617220688341911088}
   - component: {fileID: 8130861823874150521}
   - component: {fileID: 8325849802533027279}
+  - component: {fileID: 3462348617319209256}
   m_Layer: 0
   m_Name: Animation Bust
   m_TagString: Untagged
@@ -380,6 +404,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &3462348617319209256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 177824755692952447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 1
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 0}
+  BundleLabel: 
+  AssetName: 
+  AnimName: 
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &293939679840207473
 GameObject:
   m_ObjectHideFlags: 0
@@ -1447,97 +1493,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1 &849002675043634567
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4197501388373159305}
-  - component: {fileID: 3463868057979796789}
-  - component: {fileID: 4709021887617907026}
-  m_Layer: 0
-  m_Name: Animation Waiting
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &4197501388373159305
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 849002675043634567}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4837654049579022299}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -4, y: -95}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &3463868057979796789
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 849002675043634567}
-  m_CullTransparentMesh: 1
---- !u!114 &4709021887617907026
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 849002675043634567}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d85b887af7e6c3f45a2e2d2920d641bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: b66cf7a186d13054989b33a5c90044e4, type: 2}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  skeletonDataAsset: {fileID: 11400000, guid: bbb35b00b98a1447fb6b55f9634d0980, type: 2}
-  initialSkinName: 
-  initialFlipX: 0
-  initialFlipY: 0
-  startingAnimation: animation
-  startingLoop: 1
-  timeScale: 1
-  freeze: 0
-  updateWhenInvisible: 3
-  unscaledTime: 0
-  allowMultipleCanvasRenderers: 0
-  canvasRenderers: []
-  separatorSlotNames: []
-  enableSeparatorSlots: 0
-  separatorParts: []
-  updateSeparatorPartLocation: 1
-  meshGenerator:
-    settings:
-      useClipping: 1
-      zSpacing: 0
-      pmaVertexColors: 1
-      tintBlack: 0
-      canvasGroupTintBlack: 0
-      calculateTangents: 0
-      addNormals: 0
-      immutableTriangles: 0
 --- !u!1 &859867279739090356
 GameObject:
   m_ObjectHideFlags: 0
@@ -2577,6 +2532,7 @@ GameObject:
   - component: {fileID: 6040521561552256847}
   - component: {fileID: 5447523528614857418}
   - component: {fileID: 1044560110678180325}
+  - component: {fileID: 5601251274136255879}
   m_Layer: 0
   m_Name: Animation Blackjack
   m_TagString: Untagged
@@ -2673,6 +2629,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &5601251274136255879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373267315199304651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 1044560110678180325}
+  BundleLabel: assets--resources--bundlepack--animations--blackjack
+  AssetName: Assets/Resources/BundlePack/Animations/Blackjack/AniBlackJack2/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1455611203964382446
 GameObject:
   m_ObjectHideFlags: 0
@@ -2945,6 +2923,7 @@ GameObject:
   - component: {fileID: 3418946294933595137}
   - component: {fileID: 3246181396490008327}
   - component: {fileID: 5566817048602639513}
+  - component: {fileID: 1406004329063962006}
   m_Layer: 0
   m_Name: Animation Win Blackjack
   m_TagString: Untagged
@@ -3041,6 +3020,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &1406004329063962006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1794775889290719504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 5566817048602639513}
+  BundleLabel: assets--resources--bundlepack--animations--blackjack
+  AssetName: Assets/Resources/BundlePack/Animations/Blackjack/BlackJ/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1875617265557212091
 GameObject:
   m_ObjectHideFlags: 0
@@ -4016,6 +4017,7 @@ GameObject:
   - component: {fileID: 6423969852833195403}
   - component: {fileID: 5967411570620702120}
   - component: {fileID: 151094963602898276}
+  - component: {fileID: 3050831694542020026}
   m_Layer: 0
   m_Name: Animation Lose
   m_TagString: Untagged
@@ -4112,6 +4114,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &3050831694542020026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2552018882364197978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 1
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 0}
+  BundleLabel: 
+  AssetName: 
+  AnimName: 
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2629257813284906522
 GameObject:
   m_ObjectHideFlags: 0
@@ -6005,7 +6029,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 67839bad8287a47879579e24f33c8b95, type: 3}
   cardContainer: {fileID: 8383826423573262766}
   effectContainer: {fileID: 4837654049579022299}
-  animationWaiting: {fileID: 4709021887617907026}
+  animationWaiting: {fileID: 0}
   animationBlackjack: {fileID: 1044560110678180325}
   animationBust: {fileID: 8325849802533027279}
   animationWow: {fileID: 8388730818826777361}
@@ -8134,7 +8158,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4197501388373159305}
   - {fileID: 6040521561552256847}
   - {fileID: 1617220688341911088}
   - {fileID: 5704093647970076448}
@@ -8159,6 +8182,7 @@ GameObject:
   - component: {fileID: 251972658529638791}
   - component: {fileID: 6593613983502027658}
   - component: {fileID: 3662724044768256736}
+  - component: {fileID: 6490911191581508524}
   m_Layer: 0
   m_Name: Animation Push
   m_TagString: Untagged
@@ -8255,6 +8279,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &6490911191581508524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5029186073437369812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 1
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 0}
+  BundleLabel: 
+  AssetName: 
+  AnimName: 
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5030587398856702593
 GameObject:
   m_ObjectHideFlags: 0
@@ -9659,6 +9705,7 @@ GameObject:
   - component: {fileID: 2423308329160083009}
   - component: {fileID: 8492421483517108562}
   - component: {fileID: 320942337972227738}
+  - component: {fileID: 8482029622115043207}
   m_Layer: 0
   m_Name: Animation WIn
   m_TagString: Untagged
@@ -9755,6 +9802,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &8482029622115043207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5950781605739699333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 1
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 0}
+  BundleLabel: 
+  AssetName: 
+  AnimName: 
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5998890916979750932
 GameObject:
   m_ObjectHideFlags: 0

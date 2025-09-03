@@ -2918,6 +2918,7 @@ GameObject:
   - component: {fileID: 2159851284392183580}
   - component: {fileID: 4958814867974015596}
   - component: {fileID: 766740806829319899}
+  - component: {fileID: 7218560638347885916}
   m_Layer: 0
   m_Name: Animation Popup Result Free Spin
   m_TagString: Untagged
@@ -3008,6 +3009,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &7218560638347885916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 863268023278858954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 766740806829319899}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/JuicyGarden/EndGame/skeleton_SkeletonData.asset
+  AnimName: eng
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &922089903257244114
 GameObject:
   m_ObjectHideFlags: 0
@@ -5768,6 +5791,7 @@ GameObject:
   - component: {fileID: 4301718815729337684}
   - component: {fileID: 6112619516048382159}
   - component: {fileID: 8683948422273006773}
+  - component: {fileID: 3831117433932365816}
   m_Layer: 0
   m_Name: Animation
   m_TagString: Untagged
@@ -5848,6 +5872,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &3831117433932365816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3434722129351080910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 8683948422273006773}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/JuicyGarden/Shop/skeleton_SkeletonData.asset
+  AnimName: eng
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3497685162734564350
 GameObject:
   m_ObjectHideFlags: 0
@@ -7031,6 +7077,7 @@ GameObject:
   - component: {fileID: 3064511037962957950}
   - component: {fileID: 688847052659723446}
   - component: {fileID: 3956561583415061803}
+  - component: {fileID: 7810003024709302336}
   m_Layer: 0
   m_Name: Background Free Spin
   m_TagString: Untagged
@@ -7114,6 +7161,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &7810003024709302336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4636356606672234521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 3956561583415061803}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/JuicyGarden/FreeSpinNum/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4678761654308660090
 GameObject:
   m_ObjectHideFlags: 0
@@ -9312,6 +9381,7 @@ GameObject:
   - component: {fileID: 3566425068492816221}
   - component: {fileID: 9188126716998554555}
   - component: {fileID: 4584905681820692178}
+  - component: {fileID: 5525969448916850668}
   m_Layer: 0
   m_Name: Animation Free Spin
   m_TagString: Untagged
@@ -9394,6 +9464,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &5525969448916850668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6752003608366187879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 4584905681820692178}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/JuicyGarden/BgFreeSpin/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6857949519893825852
 GameObject:
   m_ObjectHideFlags: 0

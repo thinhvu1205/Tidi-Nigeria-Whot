@@ -3250,6 +3250,7 @@ MonoBehaviour:
   chipImage: {fileID: 3535089120510839500}
   spinButton: {fileID: 373597963432189089}
   stateWinImage: {fileID: 4291566119140487564}
+  betStateImage: {fileID: 0}
   stateWinSpriteList:
   - {fileID: 21300000, guid: 4488dbc0890532c4095f31afece833e7, type: 3}
   - {fileID: 21300000, guid: 3ee557e4d41a6204aba931d5804999d4, type: 3}
@@ -3268,6 +3269,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 39952797070775b4c8a657ac912e7321, type: 3}
   - {fileID: 21300000, guid: f90e0cb5025c59240a45d248234b7c28, type: 3}
   - {fileID: 21300000, guid: a2b424faaa0a6cd46bd2be54393c75f6, type: 3}
+  betStateSpriteList: []
   lineContainer: {fileID: 7917065115690788056}
   effectContainer: {fileID: 311832944860540957}
   paylineInfoContainer: {fileID: 9082131055446980074}
@@ -4069,6 +4071,7 @@ GameObject:
   - component: {fileID: 1206349190348637353}
   - component: {fileID: 6038024594921442733}
   - component: {fileID: 3613243026449806521}
+  - component: {fileID: 5893278138999036313}
   m_Layer: 0
   m_Name: Animation Free Spin
   m_TagString: Untagged
@@ -4149,6 +4152,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &5893278138999036313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5259905059461191114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 3613243026449806521}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/InCa/bgFreeSpin/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5564582711425483704
 GameObject:
   m_ObjectHideFlags: 0
@@ -4160,6 +4185,7 @@ GameObject:
   - component: {fileID: 421764623883673677}
   - component: {fileID: 5124856302203284740}
   - component: {fileID: 3912835863557955531}
+  - component: {fileID: 9151829847320226399}
   m_Layer: 0
   m_Name: Background Free Spin Number
   m_TagString: Untagged
@@ -4241,6 +4267,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &9151829847320226399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5564582711425483704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 3912835863557955531}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/InCa/freenum/bgrfreespin_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5624675228967533153
 GameObject:
   m_ObjectHideFlags: 0
@@ -5121,7 +5169,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 218.00002, y: -20}
-  m_SizeDelta: {x: 0, y: 40}
+  m_SizeDelta: {x: 218.00002, y: 40}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &7275891223319465665
 MonoBehaviour:

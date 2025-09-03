@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5966615430647750037}
   - component: {fileID: 334838423688387687}
   - component: {fileID: 757724651490848126}
+  - component: {fileID: 7603037614290248425}
   m_Layer: 0
   m_Name: 'Animation Wow '
   m_TagString: Untagged
@@ -91,6 +92,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &7603037614290248425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158793283129836578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 757724651490848126}
+  BundleLabel: assets--resources--bundlepack--animations--blackjack
+  AssetName: Assets/Resources/BundlePack/Animations/Blackjack/wow/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &981075444117841840
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,6 +201,7 @@ GameObject:
   - component: {fileID: 2411279602569532548}
   - component: {fileID: 3108665603595469880}
   - component: {fileID: 6516670405673779295}
+  - component: {fileID: 1748296990297016438}
   m_Layer: 0
   m_Name: Animation Waiting
   m_TagString: Untagged
@@ -258,6 +282,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &1748296990297016438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1224504312829883530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 6516670405673779295}
+  BundleLabel: assets--resources--bundlepack--animations--blackjack
+  AssetName: Assets/Resources/BundlePack/Animations/Blackjack/dot/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1231135778683412798
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,6 +315,7 @@ GameObject:
   - component: {fileID: 8452733262618298767}
   - component: {fileID: 1454528473820642650}
   - component: {fileID: 4733176727978034403}
+  - component: {fileID: 8001728898460710722}
   m_Layer: 0
   m_Name: Animation Bust
   m_TagString: Untagged
@@ -349,6 +396,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &8001728898460710722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1231135778683412798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 4733176727978034403}
+  BundleLabel: assets--resources--bundlepack--animations--blackjack
+  AssetName: Assets/Resources/BundlePack/Animations/Blackjack/Nobobai/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1259506143621752562
 GameObject:
   m_ObjectHideFlags: 0
@@ -1724,6 +1793,7 @@ GameObject:
   - component: {fileID: 7216360231409886118}
   - component: {fileID: 2314084665871371111}
   - component: {fileID: 8130936513689518594}
+  - component: {fileID: 7988911390710670446}
   m_Layer: 0
   m_Name: Animation Blackjack
   m_TagString: Untagged
@@ -1804,6 +1874,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &7988911390710670446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5705335782116300151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 8130936513689518594}
+  BundleLabel: assets--resources--bundlepack--animations--blackjack
+  AssetName: Assets/Resources/BundlePack/Animations/Blackjack/AniBlackJack2/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5922732609334534891
 GameObject:
   m_ObjectHideFlags: 0
@@ -2246,6 +2338,7 @@ GameObject:
   - component: {fileID: 4486362994966174465}
   - component: {fileID: 5341036438617967901}
   - component: {fileID: 6939404354728463077}
+  - component: {fileID: 249546966833234619}
   m_Layer: 0
   m_Name: Animation Waiting
   m_TagString: Untagged
@@ -2326,6 +2419,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &249546966833234619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6646127236114436305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 6939404354728463077}
+  BundleLabel: assets--resources--bundlepack--animations--blackjack
+  AssetName: Assets/Resources/BundlePack/Animations/Blackjack/dot/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6838205680698344332
 GameObject:
   m_ObjectHideFlags: 0
@@ -2412,6 +2527,7 @@ GameObject:
   - component: {fileID: 2917578306284077426}
   - component: {fileID: 7060070324125511691}
   - component: {fileID: 930141290798100269}
+  - component: {fileID: 8729416193805839363}
   m_Layer: 0
   m_Name: Animation Wow
   m_TagString: Untagged
@@ -2492,6 +2608,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &8729416193805839363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7538990699327598319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 930141290798100269}
+  BundleLabel: assets--resources--bundlepack--animations--blackjack
+  AssetName: Assets/Resources/BundlePack/Animations/Blackjack/wow/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8721380328856309841
 GameObject:
   m_ObjectHideFlags: 0
@@ -2503,6 +2641,7 @@ GameObject:
   - component: {fileID: 1246826137418826318}
   - component: {fileID: 2646156445234153562}
   - component: {fileID: 2852147911674215460}
+  - component: {fileID: 6410429861760294353}
   m_Layer: 0
   m_Name: Animation Bust
   m_TagString: Untagged
@@ -2583,6 +2722,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &6410429861760294353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8721380328856309841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 2852147911674215460}
+  BundleLabel: assets--resources--bundlepack--animations--blackjack
+  AssetName: Assets/Resources/BundlePack/Animations/Blackjack/Nobobai/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8789698262421486108
 GameObject:
   m_ObjectHideFlags: 0
@@ -2594,6 +2755,7 @@ GameObject:
   - component: {fileID: 3200098769666334745}
   - component: {fileID: 8054427201528960483}
   - component: {fileID: 8983168359537649443}
+  - component: {fileID: 1104605224481255121}
   m_Layer: 0
   m_Name: Animation Blackjack
   m_TagString: Untagged
@@ -2674,6 +2836,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &1104605224481255121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8789698262421486108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 8983168359537649443}
+  BundleLabel: assets--resources--bundlepack--animations--blackjack
+  AssetName: Assets/Resources/BundlePack/Animations/Blackjack/AniBlackJack2/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &9099010946009633433
 GameObject:
   m_ObjectHideFlags: 0

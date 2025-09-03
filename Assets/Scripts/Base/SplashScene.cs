@@ -14,6 +14,7 @@ public class SplashScene : MonoBehaviour
         // https://storage.googleapis.com/whot/AssetBundles
         string storedUrl = PlayerPrefs.GetString(BundleDownloader.STORED_BUNDLE_URL, "");
         // storedUrl = "D:/Unity projects/Tidi-Phil-Win777/Assets/AssetBundles";
+        storedUrl = "https://storage.googleapis.com/whot/AssetBundles";
         m_BundleBD.CheckAndDownloadAssets(storedUrl, 1f,
             () =>
             {

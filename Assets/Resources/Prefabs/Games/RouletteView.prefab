@@ -21060,10 +21060,9 @@ MonoBehaviour:
   popupBackground: {fileID: 0}
   textMatchInfo: {fileID: 0}
   textGameName: {fileID: 0}
-  listPlayerView:
-  - {fileID: 3283501720128123913}
+  listPosView: []
+  playerViewPrefab: {fileID: 0}
   invitePrefab: {fileID: 0}
-  cardPrefab: {fileID: 0}
   inviteContainer: {fileID: 0}
   playerContainer: {fileID: 0}
   hiddenPlayerContainer: {fileID: 0}
@@ -32962,6 +32961,7 @@ GameObject:
   - component: {fileID: 4165903391034317889}
   - component: {fileID: 840043152041630444}
   - component: {fileID: 8251492777761499891}
+  - component: {fileID: 1793286043404066433}
   m_Layer: 0
   m_Name: Animation Spin
   m_TagString: Untagged
@@ -33042,6 +33042,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &1793286043404066433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8012319340812654445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 1
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 0}
+  BundleLabel: 
+  AssetName: 
+  AnimName: 
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8046130248966790864
 GameObject:
   m_ObjectHideFlags: 0
@@ -37310,17 +37332,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18f080b5f805140ccbdf53d8f2cc02a5, type: 3}
---- !u!114 &3283501720128123913 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2218812309768852515, guid: 18f080b5f805140ccbdf53d8f2cc02a5, type: 3}
-  m_PrefabInstance: {fileID: 3700720159977611306}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c52bee05976604867a4e0bd98a50b434, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &5096080650001998092 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8494760011045257510, guid: 18f080b5f805140ccbdf53d8f2cc02a5, type: 3}

@@ -5813,6 +5813,7 @@ GameObject:
   - component: {fileID: 6412976098692179232}
   - component: {fileID: 2237491660787891850}
   - component: {fileID: 3335858701382114844}
+  - component: {fileID: 7694090091359046249}
   m_Layer: 0
   m_Name: Animation
   m_TagString: Untagged
@@ -5893,6 +5894,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &7694090091359046249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4111145778561063317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 3335858701382114844}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/Tarzan/btnbuy/skeleton_SkeletonData.asset
+  AnimName: eng
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4167121281744017099
 GameObject:
   m_ObjectHideFlags: 0
@@ -8249,6 +8272,7 @@ GameObject:
   - component: {fileID: 6316665822016204305}
   - component: {fileID: 2460634724444056234}
   - component: {fileID: 3296321818632863866}
+  - component: {fileID: 15067364185443464}
   m_Layer: 0
   m_Name: Popup Minigame
   m_TagString: Untagged
@@ -8332,6 +8356,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &15067364185443464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5417816985954383309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 3296321818632863866}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/Tarzan/MiniGame/PopupCongrat/skeleton_SkeletonData.asset
+  AnimName: Eng
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5476033780041056782
 GameObject:
   m_ObjectHideFlags: 0
@@ -12035,6 +12081,7 @@ GameObject:
   - component: {fileID: 4094469424957122696}
   - component: {fileID: 4445336806619736766}
   - component: {fileID: 6530629793801586374}
+  - component: {fileID: 3013242019595885121}
   m_Layer: 0
   m_Name: Background Leaf
   m_TagString: Untagged
@@ -12115,6 +12162,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &3013242019595885121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7750304158450625366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 6530629793801586374}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/Tarzan/bgLeaf/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7790903286073046930
 GameObject:
   m_ObjectHideFlags: 0

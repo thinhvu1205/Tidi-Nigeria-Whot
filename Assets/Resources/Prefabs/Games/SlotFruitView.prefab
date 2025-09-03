@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 920920294554977394}
   - component: {fileID: 8302143661010151640}
   - component: {fileID: 4021477229547053367}
+  - component: {fileID: 7663562480719126679}
   m_Layer: 0
   m_Name: Animation
   m_TagString: Untagged
@@ -91,6 +92,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &7663562480719126679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169694661618243864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 4021477229547053367}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/Fruit/Spine/btn_buy/skeleton_SkeletonData.asset
+  AnimName: eng
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &381321597911515058
 GameObject:
   m_ObjectHideFlags: 0
@@ -4799,6 +4822,7 @@ GameObject:
   - component: {fileID: 2765508814547307182}
   - component: {fileID: 7251994464516556775}
   - component: {fileID: 1582531832147326248}
+  - component: {fileID: 7602655188167905495}
   m_Layer: 0
   m_Name: Animation Free Spin Left
   m_TagString: Untagged
@@ -4880,6 +4904,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &7602655188167905495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7962990123395557723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 1582531832147326248}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/Fruit/Spine/FreeSpinNum/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8209994419651078010
 GameObject:
   m_ObjectHideFlags: 0

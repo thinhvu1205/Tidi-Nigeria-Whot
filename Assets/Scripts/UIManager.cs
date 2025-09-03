@@ -368,7 +368,7 @@ public class UIManager : Singleton<UIManager>
 
     public SkeletonDataAsset LoadSkeletonData(string name)
     {
-        return Resources.Load<SkeletonDataAsset>("BundlePack/Animations/" + name);
+        return BundleHandler.LoadSkeletonDataAsset("BundlePack/Animations/" + name);
 
     }
 

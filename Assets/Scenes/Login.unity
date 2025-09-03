@@ -270,6 +270,7 @@ GameObject:
   - component: {fileID: 178726263}
   - component: {fileID: 178726265}
   - component: {fileID: 178726264}
+  - component: {fileID: 178726266}
   m_Layer: 5
   m_Name: Animation
   m_TagString: Untagged
@@ -354,6 +355,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 178726262}
   m_CullTransparentMesh: 1
+--- !u!114 &178726266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 178726262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 178726264}
+  BundleLabel: assets--resources--bundlepack--animations--anim_icongames
+  AssetName: Assets/Resources/BundlePack/Animations/anim_IconGames/anim_login/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &232017076
 GameObject:
   m_ObjectHideFlags: 0

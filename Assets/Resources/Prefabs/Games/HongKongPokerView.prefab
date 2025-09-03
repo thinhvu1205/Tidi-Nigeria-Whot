@@ -4035,6 +4035,7 @@ GameObject:
   - component: {fileID: 8235586985794140578}
   - component: {fileID: 6719263753852607822}
   - component: {fileID: 571872180067805691}
+  - component: {fileID: 3093395400210854324}
   m_Layer: 0
   m_Name: Dealer
   m_TagString: Untagged
@@ -4117,6 +4118,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &3093395400210854324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3730526982511626401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 571872180067805691}
+  BundleLabel: assets--resources--bundlepack--animations--hongkongpoker
+  AssetName: Assets/Resources/BundlePack/Animations/HongKongPoker/dealer/skeleton_SkeletonData.asset
+  AnimName: normal
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3774355235465837961
 GameObject:
   m_ObjectHideFlags: 0
@@ -7771,6 +7794,7 @@ GameObject:
   - component: {fileID: 7379751206835745290}
   - component: {fileID: 6005185422355711331}
   - component: {fileID: 1307261718360868855}
+  - component: {fileID: 523660374577310720}
   m_Layer: 0
   m_Name: Animation Start Game
   m_TagString: Untagged
@@ -7859,6 +7883,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &523660374577310720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6286829474881955548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 1
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 0}
+  BundleLabel: 
+  AssetName: 
+  AnimName: 
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6297592779677416748
 GameObject:
   m_ObjectHideFlags: 0
