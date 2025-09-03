@@ -1,0 +1,79 @@
+ManifestFileVersion: 0
+CRC: 4145398179
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 32043c23d1999fc59b34d6d56734e618
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 1856002aaa865914a7f405d2095206fc
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 32043c23d1999fc59b34d6d56734e618
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials/ReplacementMaterial
+Assets:
+- Assets/Resources/BundlePack/Animations/HongKongPoker/2/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/HongKongPoker/StartGame/skeleton.png
+- Assets/Resources/BundlePack/Animations/HongKongPoker/StartGame/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/HongKongPoker/clock/clock.json
+- Assets/Resources/BundlePack/Animations/HongKongPoker/StartGame/skeleton.json
+- Assets/Resources/BundlePack/Animations/HongKongPoker/VS/skeleton.png
+- Assets/Resources/BundlePack/Animations/HongKongPoker/1/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/HongKongPoker/1/skeleton.png
+- Assets/Resources/BundlePack/Animations/HongKongPoker/1/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/HongKongPoker/clock/clock_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/HongKongPoker/Winning Card/skeleton.png
+- Assets/Resources/BundlePack/Animations/HongKongPoker/clock/clock_Material.mat
+- Assets/Resources/BundlePack/Animations/HongKongPoker/VS/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/HongKongPoker/Winning Card/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/HongKongPoker/clock/clock_Atlas.asset
+- Assets/Resources/BundlePack/Animations/HongKongPoker/VS/skeleton.json
+- Assets/Resources/BundlePack/Animations/HongKongPoker/Winning Card/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/HongKongPoker/VS/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/HongKongPoker/StartGame/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/HongKongPoker/StartGame/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/HongKongPoker/2/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/HongKongPoker/dealer/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/HongKongPoker/Winning Card/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/HongKongPoker/clock/clock.png
+- Assets/Resources/BundlePack/Animations/HongKongPoker/2/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/HongKongPoker/clock/clock.atlas.txt
+- Assets/Resources/BundlePack/Animations/HongKongPoker/VS/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/HongKongPoker/2/skeleton.json
+- Assets/Resources/BundlePack/Animations/HongKongPoker/dealer/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/HongKongPoker/StartGame/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/HongKongPoker/2/skeleton.png
+- Assets/Resources/BundlePack/Animations/HongKongPoker/dealer/skeleton.json
+- Assets/Resources/BundlePack/Animations/HongKongPoker/Winning Card/skeleton.json
+- Assets/Resources/BundlePack/Animations/HongKongPoker/dealer/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/HongKongPoker/Winning Card/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/HongKongPoker/dealer/skeleton.png
+- Assets/Resources/BundlePack/Animations/HongKongPoker/1/skeleton.json
+- Assets/Resources/BundlePack/Animations/HongKongPoker/2/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/HongKongPoker/VS/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/HongKongPoker/1/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/HongKongPoker/1/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/HongKongPoker/dealer/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/HongKongPoker/StartGame/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/HongKongPoker/Winning Card/skeleton_Material.mat
+Dependencies: []

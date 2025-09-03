@@ -1,0 +1,42 @@
+ManifestFileVersion: 0
+CRC: 2002321185
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4309369d61601d882666006ef98927fc
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 1856002aaa865914a7f405d2095206fc
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 4309369d61601d882666006ef98927fc
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials/ReplacementMaterial
+Assets:
+- Assets/Resources/BundlePack/Animations/Baccarat/Ani/skeleton.json
+- Assets/Resources/BundlePack/Animations/Baccarat/Ani/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/Baccarat/Ani/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Baccarat/Ani/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Baccarat/Ani/skeleton.png
+- Assets/Resources/BundlePack/Animations/Baccarat/Ani/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Baccarat/Ani/skeleton.atlas.txt
+Dependencies: []

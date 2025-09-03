@@ -1,0 +1,84 @@
+ManifestFileVersion: 0
+CRC: 379064683
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 142211473bb03e5259a842a0772dd048
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 1856002aaa865914a7f405d2095206fc
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 142211473bb03e5259a842a0772dd048
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials/ReplacementMaterial
+Assets:
+- Assets/Resources/BundlePack/Animations/Blackjack/AniBlackJack2/skeleton.json
+- Assets/Resources/BundlePack/Animations/Blackjack/AniBlackJack2/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Blackjack/wow/skeleton.json
+- Assets/Resources/BundlePack/Animations/Blackjack/Nobobai/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Blackjack/Push/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Blackjack/wow/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Blackjack/Push/skeleton.json
+- Assets/Resources/BundlePack/Animations/Blackjack/dot/skeleton.json
+- Assets/Resources/BundlePack/Animations/Blackjack/Lose/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Blackjack/win/skeleton.json
+- Assets/Resources/BundlePack/Animations/Blackjack/Lose/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Blackjack/AniBlackJack2/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Blackjack/wow/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Blackjack/BlackJ/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/Blackjack/dot/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Blackjack/Lose/skeleton.png
+- Assets/Resources/BundlePack/Animations/Blackjack/BlackJ/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Blackjack/wow/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Blackjack/dot/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Blackjack/dot/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Blackjack/BlackJ/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Blackjack/Lose/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Blackjack/BlackJ/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Blackjack/Nobobai/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Blackjack/BlackJ/skeleton.json
+- Assets/Resources/BundlePack/Animations/Blackjack/AniBlackJack2/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Blackjack/AniBlackJack2/skeleton.png
+- Assets/Resources/BundlePack/Animations/Blackjack/Nobobai/skeleton.png
+- Assets/Resources/BundlePack/Animations/Blackjack/win/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Blackjack/dot/skeleton.png
+- Assets/Resources/BundlePack/Animations/Blackjack/win/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Blackjack/Push/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Blackjack/BlackJ/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Blackjack/AniBlackJack2/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Blackjack/Nobobai/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Blackjack/dot/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Blackjack/Push/skeleton.png
+- Assets/Resources/BundlePack/Animations/Blackjack/win/skeleton.png
+- Assets/Resources/BundlePack/Animations/Blackjack/wow/skeleton.png
+- Assets/Resources/BundlePack/Animations/Blackjack/Push/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Blackjack/Nobobai/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Blackjack/Nobobai/skeleton.json
+- Assets/Resources/BundlePack/Animations/Blackjack/wow/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Blackjack/win/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Blackjack/BlackJ/skeleton.png
+- Assets/Resources/BundlePack/Animations/Blackjack/Lose/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Blackjack/win/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Blackjack/Lose/skeleton.json
+- Assets/Resources/BundlePack/Animations/Blackjack/Push/skeleton.atlas.txt
+Dependencies: []

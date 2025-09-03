@@ -1,0 +1,75 @@
+ManifestFileVersion: 0
+CRC: 854589490
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 6445bb8c7cb1b1008d88f7f7e6fd6e3b
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 1856002aaa865914a7f405d2095206fc
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 6445bb8c7cb1b1008d88f7f7e6fd6e3b
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials/ReplacementMaterial
+Assets:
+- Assets/Resources/BundlePack/Animations/Common/WinFull/skeleton.png
+- Assets/Resources/BundlePack/Animations/Common/lose/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Common/WinFull/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Common/win/skeleton.json
+- Assets/Resources/BundlePack/Animations/Common/WinFull/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Common/WinFull/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Common/lose/skeleton.json
+- Assets/Resources/BundlePack/Animations/Common/smoke/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Common/smoke/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Common/border/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Common/border/skeleton.png
+- Assets/Resources/BundlePack/Animations/Common/border/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Common/win/skeleton.png
+- Assets/Resources/BundlePack/Animations/Common/smoke/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/Common/win/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Common/draw/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Common/draw/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Common/win/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Common/draw/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Common/border/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/Common/lose/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Common/win/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Common/draw/skeleton.png
+- Assets/Resources/BundlePack/Animations/Common/draw/skeleton.json
+- Assets/Resources/BundlePack/Animations/Common/draw/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Common/lose/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Common/WinFull/skeleton.json
+- Assets/Resources/BundlePack/Animations/Common/lose/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Common/draw/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/Common/win/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/Common/WinFull/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Common/lose/skeleton.png
+- Assets/Resources/BundlePack/Animations/Common/border/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Common/border/skeleton.json
+- Assets/Resources/BundlePack/Animations/Common/border/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Common/smoke/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Common/smoke/skeleton.json
+- Assets/Resources/BundlePack/Animations/Common/win/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Common/smoke/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Common/smoke/skeleton.png
+Dependencies: []

@@ -5,14 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class SplashScene : MonoBehaviour
 {
-    //https://console.cloud.google.com/storage/browser/tongitswar;tab=objects?inv=1&invt=Abzosg&project=philippines-253209&prefix=&forceOnObjectsSortingFiltering=false
+    //https://console.cloud.google.com/storage/browser/whot
     [SerializeField] private BundleDownloader m_BundleBD;
 
     private void Awake()
     {
         Application.targetFrameRate = 60;
-        // "D:/Unity projects/Tidi-Phil-Win777/Assets/AssetBundles";
-        // https://storage.googleapis.com/tongitswar/AssetBundles;
+        // https://storage.googleapis.com/whot/AssetBundles
         string storedUrl = PlayerPrefs.GetString(BundleDownloader.STORED_BUNDLE_URL, "");
         // storedUrl = "D:/Unity projects/Tidi-Phil-Win777/Assets/AssetBundles";
         m_BundleBD.CheckAndDownloadAssets(storedUrl, 1f,
@@ -23,7 +22,7 @@ public class SplashScene : MonoBehaviour
             },
             () =>
             {
-                SceneManager.LoadScene("MainScene");
+                SceneManager.LoadScene("Login");
             });
 
         IEnumerator retry()
@@ -37,7 +36,7 @@ public class SplashScene : MonoBehaviour
                 },
                 () =>
                 {
-                    SceneManager.LoadScene("MainScene");
+                    SceneManager.LoadScene("Login");
                 });
         }
 

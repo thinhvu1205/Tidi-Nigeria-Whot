@@ -1,0 +1,63 @@
+ManifestFileVersion: 0
+CRC: 1670112255
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b145e51dbd0f4731844ace9ee394bf81
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 1856002aaa865914a7f405d2095206fc
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: b145e51dbd0f4731844ace9ee394bf81
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials/ReplacementMaterial
+Assets:
+- Assets/Resources/BundlePack/Animations/Whot/anim_Hold_on/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Whot/anim_Hold_on/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/Whot/anim_Hold_on/skeleton.json
+- Assets/Resources/BundlePack/Animations/Whot/anim_match_symbol/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Whot/anim_victory/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/Whot/light_bai/skeleton.json
+- Assets/Resources/BundlePack/Animations/Whot/anim_victory/skeleton.json
+- Assets/Resources/BundlePack/Animations/Whot/anim_match_symbol/skeleton.json
+- Assets/Resources/BundlePack/Animations/Whot/anim_match_symbol/skeleton.png
+- Assets/Resources/BundlePack/Animations/Whot/anim_victory/skeleton.png
+- Assets/Resources/BundlePack/Animations/Whot/anim_Hold_on/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Whot/light_bai/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Whot/anim_victory/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Whot/anim_Hold_on/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Whot/anim_victory/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Whot/light_bai/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Whot/anim_victory/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Whot/anim_match_symbol/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/Whot/anim_Hold_on/skeleton.png
+- Assets/Resources/BundlePack/Animations/Whot/anim_match_symbol/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Whot/light_bai/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Whot/light_bai/skeleton.png
+- Assets/Resources/BundlePack/Animations/Whot/light_bai/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Whot/anim_Hold_on/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Whot/anim_match_symbol/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Whot/light_bai/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/Whot/anim_victory/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Whot/anim_match_symbol/skeleton_Atlas.asset
+Dependencies: []

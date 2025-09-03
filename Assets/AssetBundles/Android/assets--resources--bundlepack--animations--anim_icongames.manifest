@@ -1,0 +1,250 @@
+ManifestFileVersion: 0
+CRC: 1350484180
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 523522c5d4cc248b91ee7fd476eac54a
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 90c628345643941ce560f051c308f160
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 523522c5d4cc248b91ee7fd476eac54a
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials/ReplacementMaterial
+Assets:
+- Assets/Resources/BundlePack/Animations/anim_IconGames/fruit_small/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/roulette/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sesku/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/roulette/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/shop/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sivbo/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/blackjack/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/tz_small/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/anim_login/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/icon_Blackjack/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sixiang_small/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/fruit_small/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/model/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/roulette/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/fruit_big/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/roulette/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/klaklouk/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sixiang_small/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/blackjack/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/inca_big/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/inca_small/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/tz_big/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_big/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/anim_login/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/noel_big/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/HK_Poker/hk.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/luckynumber/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/klaklouk/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/blackjack/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/logo/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/shop/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/noel_small/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/tz_small/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/shop/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/fruit_small/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_big/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/inca_small/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/tz_big/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sivbo/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/logo pro/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sixiang_small/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/tz_big/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/inca_big/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/bork/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/logo/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/blackjack/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/whot/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/logo/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/baccarat/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/catte/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_small/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sesku/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_big/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/logo pro/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/osphe/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/dragon/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/catte/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/bork/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/dragon/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sixiang_big/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_small/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/roulette/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/whot/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/fruit_small/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sesku/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/noel_big/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/klaklouk/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/dragon/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/HK_Poker/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/osphe/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sesku/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/tz_big/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/luckynumber/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/model/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/logo pro/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/catte/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/model/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/inca_small/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/shop/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/HK_Poker/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/noel_big/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_big/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/catte/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sesku/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/dragon/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/noel_big/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/whot/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/shop/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/catte/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/noel_small/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/baccarat/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sivbo/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/klaklouk/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/whot/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/logo pro/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sabsam/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/fruit_big/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/model/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/luckynumber/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_big/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sesku/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_small/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sixiang_big/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sixiang_small/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/noel_big/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/noel_big/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/blackjack/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/dragon/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sabsam/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sivbo/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sabsam/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/icon_Blackjack/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_big/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/baccarat/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/fruit_big/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/fruit_small/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/model/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/osphe/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/fruit_small/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/noel_small/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_small/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/icon_Blackjack/blacjack.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/whot/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/fruit_big/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/logo pro/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sixiang_big/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/blackjack/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/inca_big/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/inca_small/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/catte/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/tz_small/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/logo pro/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/noel_small/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/baccarat/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/roulette/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/HK_Poker/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/logo/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/whot/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sivbo/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/baccarat/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/noel_small/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/tz_big/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/tz_small/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/luckynumber/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/logo/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/osphe/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/inca_big/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/noel_big/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/roulette/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/anim_login/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/HK_Poker/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/HK_Poker/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sixiang_small/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/catte/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/bork/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/tz_big/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/osphe/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sixiang_small/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/luckynumber/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/inca_big/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/klaklouk/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sixiang_big/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/klaklouk/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/inca_small/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/noel_small/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/model/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/logo/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sixiang_big/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/logo/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/bork/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sabsam/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/inca_small/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sivbo/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/inca_big/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sabsam/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/HK_Poker/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/inca_small/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/fruit_small/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/anim_login/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/HK_Poker/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/baccarat/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/fruit_big/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/osphe/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/tz_small/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/baccarat/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/bork/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sabsam/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_small/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_small/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sixiang_small/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/osphe/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/blackjack/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/logo pro/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/fruit_big/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/bork/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/whot/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/shop/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/dragon/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_small/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sivbo/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sesku/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/tz_small/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/inca_big/skeleton.png
+- Assets/Resources/BundlePack/Animations/anim_IconGames/bork/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/noel_small/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/shop/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/klaklouk/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/anim_login/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/fruit_big/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_big/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/anim_IconGames/luckynumber/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sixiang_big/skeleton.json
+- Assets/Resources/BundlePack/Animations/anim_IconGames/luckynumber/skeleton_Atlas.asset
+Dependencies: []

@@ -1,0 +1,57 @@
+ManifestFileVersion: 0
+CRC: 3210056610
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: c55dd05313c70294da9b9084c2927ce4
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 1856002aaa865914a7f405d2095206fc
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: c55dd05313c70294da9b9084c2927ce4
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials
+Assets:
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/spine/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Roulette/btn_spin_anim/skeleton.png
+- Assets/Resources/BundlePack/Animations/Roulette/btn_spin_anim/skeleton.json
+- Assets/Resources/BundlePack/Animations/Roulette/btn_spin_anim/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/vongsang/skeleton.json
+- Assets/Resources/BundlePack/Animations/Roulette/btn_spin_anim/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/spine/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/vongsang/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/showso/spin.atlas.txt
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/vongsang/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/spine/skeleton.json
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/vongsang/skeleton.png
+- Assets/Resources/BundlePack/Animations/Roulette/btn_spin_anim/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Roulette/btn_spin_anim/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/showso/spin_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/spine/skeleton.png
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/vongsang/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/spine/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/spine/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/showso/spin.json
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/showso/spin.png
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/vongsang/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/showso/spin_Material.mat
+- Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/showso/spin_Atlas.asset
+Dependencies: []
