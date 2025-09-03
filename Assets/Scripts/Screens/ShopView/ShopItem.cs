@@ -1,18 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using Proto;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShopItem : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Image imageBestDeal, imageCoin, imageBackground;
+    [SerializeField] private TextMeshProUGUI textChip, textPercent, textPrice, textChipPerUnit;
+    [SerializeField] private Button buttonBuy;
+    [SerializeField] private List<Sprite> listSpriteCoin, listSpriteBackground;
 
-    // Update is called once per frame
-    void Update()
+    public void SetInfo(Deal deal, int index, bool isBestDeal)
     {
-        
+        imageBestDeal.gameObject.SetActive(isBestDeal);
+        imageCoin.sprite = listSpriteCoin[index];
+        imageBackground.sprite = isBestDeal ? listSpriteBackground[0] : listSpriteBackground[1];
+
+        textChip.text = deal.AmountChips.ToString();
+        textPercent.text = $"+{deal.Percent}%";
+        textPrice.text = deal.Price;
+        textChipPerUnit.text = $"1$ = ${deal.ChipPerUnit} Chips";
     }
 }

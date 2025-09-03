@@ -49,6 +49,7 @@ public class SlotSixiangView : BaseSlotSymbolView
     private const string GOLD_PICK_PREFAB_PATH = "Sixiang/GoldPickView";
     private const string GOLD_PICK_ANIMAL_ANIMATION_PATH = "SiXiang/Spine/Animal/Tiger/skeleton_SkeletonData";
     private const string GOLD_PICK_ANIMAL_ANIMATION_NAME = "3";
+    private const string RAPID_PAY_GAME_NAME = "rapidplay";
     private const string RAPID_PAY_PREFAB_PATH = "Sixiang/RapidPayView";
     private const string RAPID_PAY_ANIMAL_ANIMATION_PATH = "SiXiang/Spine/Animal/Phoenix/skeleton_SkeletonData";
     private const string LUCKY_DRAW_GAME_NAME = "luckydraw";
@@ -601,6 +602,7 @@ public class SlotSixiangView : BaseSlotSymbolView
         {
             rapidPayView.gameObject.SetActive(true);
         }
+        SetAnimationGameName(RAPID_PAY_GAME_NAME);
         rapidPayView.SetInfo(this);
     }
     #endregion

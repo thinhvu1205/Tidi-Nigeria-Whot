@@ -1,18 +1,60 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Cysharp.Threading.Tasks;
+using Globals;
+using Proto;
+using TMPro;
 using UnityEngine;
 
 public class ShopView : BaseView
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Transform listDealContainer;
+    [SerializeField] private GameObject shopItemPrefab;
+    [SerializeField] private TextMeshProUGUI textAccountChip;
+    private Deal bestDeal;
+    private List<Deal> listDeal;
+
+    protected override void Awake()
     {
-        
+        base.Awake();
+        UpdateProfileData();
+        _ = LoadListDealInShop();
+    }
+    private async UniTask LoadListDealInShop()
+    {
+        foreach (GameObject mailItem in listDealContainer)
+        {
+            Destroy(mailItem);
+        }
+        try
+        {
+            DealInShop listDeal = await DataSender.GetListDeal();
+            this.bestDeal = listDeal.Best;
+            this.listDeal = listDeal.Gcashes.ToList();
+            Debug.Log("CHIP ONLINE LIST: " + listDeal.ToString());
+            ShopItem bestDealInstance = Instantiate(shopItemPrefab, listDealContainer).GetComponent<ShopItem>();
+            bestDealInstance.SetInfo(bestDeal, 0, true);
+
+            for (int i = 1; i <= this.listDeal.Count; i++)
+            {
+                Deal deal = this.listDeal[i - 1];
+                ShopItem dealInstance = Instantiate(shopItemPrefab, listDealContainer).GetComponent<ShopItem>();
+                dealInstance.SetInfo(deal, i, false);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.Log("err load list noti : " + ex.Message);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateProfileData()
     {
-        
+        if (User.userMain != null)
+        {
+            textAccountChip.text = User.userMain.accountChip.ToString();
+        }
     }
 }
