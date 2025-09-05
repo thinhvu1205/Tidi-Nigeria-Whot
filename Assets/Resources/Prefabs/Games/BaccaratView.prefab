@@ -5894,6 +5894,7 @@ GameObject:
   - component: {fileID: 6665627154080986012}
   - component: {fileID: 4810987279230914269}
   - component: {fileID: 120156100269727724}
+  - component: {fileID: 7946865567055891256}
   m_Layer: 0
   m_Name: Animation Win
   m_TagString: Untagged
@@ -5957,7 +5958,7 @@ MonoBehaviour:
   initialFlipX: 0
   initialFlipY: 0
   startingAnimation: player
-  startingLoop: 1
+  startingLoop: 0
   timeScale: 1
   freeze: 0
   updateWhenInvisible: 3
@@ -5982,6 +5983,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &7946865567055891256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4110646339533066500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 120156100269727724}
+  BundleLabel: assets--resources--bundlepack--animations--baccarat
+  AssetName: Assets/Resources/BundlePack/Animations/Baccarat/Ani/skeleton_SkeletonData.asset
+  AnimName: player
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4137487991058121053
 GameObject:
   m_ObjectHideFlags: 0

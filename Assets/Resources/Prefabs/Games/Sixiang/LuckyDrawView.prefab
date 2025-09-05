@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8597111303239282189}
   - component: {fileID: 7829418189403220622}
   - component: {fileID: 7097943330643242821}
+  - component: {fileID: 3395908249502040430}
   m_Layer: 0
   m_Name: Spine
   m_TagString: Untagged
@@ -91,6 +92,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &3395908249502040430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 254137034375289034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 7097943330643242821}
+  BundleLabel: assets--resources--bundlepack--animations--sixiang--spine
+  AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/LuckyDraw/LuckyDrawItem/skeleton_SkeletonData.asset
+  AnimName: normal
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &620321384008239245
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,6 +190,7 @@ GameObject:
   - component: {fileID: 355743619805245617}
   - component: {fileID: 677640726571592521}
   - component: {fileID: 7414197268661521587}
+  - component: {fileID: 1252611625472496726}
   m_Layer: 0
   m_Name: Spine
   m_TagString: Untagged
@@ -247,6 +271,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &1252611625472496726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 620810885948718705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 7414197268661521587}
+  BundleLabel: assets--resources--bundlepack--animations--sixiang--spine
+  AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/LuckyDraw/LuckyDrawItem/skeleton_SkeletonData.asset
+  AnimName: normal
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1105167787852626245
 GameObject:
   m_ObjectHideFlags: 0
@@ -1278,6 +1324,7 @@ GameObject:
   - component: {fileID: 4760679199551900877}
   - component: {fileID: 4534996155045202256}
   - component: {fileID: 7188741452172887894}
+  - component: {fileID: 7917901744734751983}
   m_Layer: 0
   m_Name: Animation Result
   m_TagString: Untagged
@@ -1369,6 +1416,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &7917901744734751983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4622127882825522910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 1
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 0}
+  BundleLabel: 
+  AssetName: 
+  AnimName: 
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5576839290684460062
 GameObject:
   m_ObjectHideFlags: 0
@@ -1722,6 +1791,7 @@ GameObject:
   - component: {fileID: 1868737984178627244}
   - component: {fileID: 5264707532783523519}
   - component: {fileID: 8418276316889054661}
+  - component: {fileID: 2730462436848839}
   m_Layer: 0
   m_Name: Spine
   m_TagString: Untagged
@@ -1802,6 +1872,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &2730462436848839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6883180331175486075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 8418276316889054661}
+  BundleLabel: assets--resources--bundlepack--animations--sixiang--spine
+  AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/LuckyDraw/LuckyDrawItem/skeleton_SkeletonData.asset
+  AnimName: normal
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7076096180470612891
 GameObject:
   m_ObjectHideFlags: 0

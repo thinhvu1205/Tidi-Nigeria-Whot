@@ -408,6 +408,7 @@ GameObject:
   - component: {fileID: 8604025737321106902}
   - component: {fileID: 5494580032755042371}
   - component: {fileID: 2394997424107397160}
+  - component: {fileID: 7377783891236847058}
   m_Layer: 0
   m_Name: Animation Third Scatter
   m_TagString: Untagged
@@ -488,6 +489,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &7377783891236847058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611447134244314209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 2394997424107397160}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/NearFreeSpin/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &677796681642647116
 GameObject:
   m_ObjectHideFlags: 0
@@ -1568,7 +1591,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hello
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
   m_sharedMaterial: {fileID: 7800525795003925199, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
@@ -3804,7 +3827,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 190.5, y: -20}
-  m_SizeDelta: {x: 190.5, y: 40}
+  m_SizeDelta: {x: 0, y: 40}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &5134754113052124194
 MonoBehaviour:
@@ -4729,6 +4752,7 @@ GameObject:
   - component: {fileID: 4782021540895713788}
   - component: {fileID: 6677358233027069739}
   - component: {fileID: 3389501232227789230}
+  - component: {fileID: 6274569089656242909}
   m_Layer: 0
   m_Name: Animation
   m_TagString: Untagged
@@ -4811,6 +4835,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &6274569089656242909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7905430863992066178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 3389501232227789230}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/Fruit/Spine/BtnSpin/skeleton_SkeletonData.asset
+  AnimName: eng
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7962990123395557723
 GameObject:
   m_ObjectHideFlags: 0

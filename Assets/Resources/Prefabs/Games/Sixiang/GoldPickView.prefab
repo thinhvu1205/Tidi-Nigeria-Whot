@@ -374,6 +374,7 @@ GameObject:
   - component: {fileID: 1893223702706073734}
   - component: {fileID: 4804034054002034489}
   - component: {fileID: 5143188967132298871}
+  - component: {fileID: 5033730374661650980}
   m_Layer: 0
   m_Name: Animation Result
   m_TagString: Untagged
@@ -454,6 +455,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &5033730374661650980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3546415796273394499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 5143188967132298871}
+  BundleLabel: assets--resources--bundlepack--animations--sixiang--spine
+  AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/BigWinGoldPick/skeleton_SkeletonData.asset
+  AnimName: eng
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4609805913778541869
 GameObject:
   m_ObjectHideFlags: 0
@@ -465,6 +488,7 @@ GameObject:
   - component: {fileID: 4763087528715671992}
   - component: {fileID: 5778933754231359118}
   - component: {fileID: 2226452460311948147}
+  - component: {fileID: 715903701354291644}
   m_Layer: 0
   m_Name: Animation
   m_TagString: Untagged
@@ -545,6 +569,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &715903701354291644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4609805913778541869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 2226452460311948147}
+  BundleLabel: assets--resources--bundlepack--animations--sixiang--spine
+  AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/BigWinRapid/skeleton_SkeletonData.asset
+  AnimName: eng
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5006822856123199682
 GameObject:
   m_ObjectHideFlags: 0
@@ -1306,7 +1352,6 @@ MonoBehaviour:
   materialText:
   - {fileID: 2100000, guid: f6cf0f1dfefe66a4294e65d972a0fc11, type: 2}
   - {fileID: 2100000, guid: 0745538ed83de4945ac1fbb020425b30, type: 2}
-  isAutoPlay: 1
 --- !u!1 &8880854558007252015
 GameObject:
   m_ObjectHideFlags: 0

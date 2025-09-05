@@ -454,6 +454,7 @@ GameObject:
   - component: {fileID: 6213092800202697012}
   - component: {fileID: 8518007348310070861}
   - component: {fileID: 1342714797862832983}
+  - component: {fileID: 8031523658421974153}
   m_Layer: 0
   m_Name: Animation
   m_TagString: Untagged
@@ -534,6 +535,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &8031523658421974153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1329860754876132410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 1342714797862832983}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/Noel/ButtonShop/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1442912203047096485
 GameObject:
   m_ObjectHideFlags: 0
@@ -1535,14 +1558,21 @@ MonoBehaviour:
   bigWinText: {fileID: 6256031330978442396}
   chipWinText: {fileID: 9173029015259718568}
   currentChipText: {fileID: 4646947058936428919}
+  paylineText: {fileID: 0}
+  numLineLeftText: {fileID: 0}
+  numLineRightText: {fileID: 0}
   spinBackgroundImage: {fileID: 5537974223246595255}
   chipImage: {fileID: 1198696582295969551}
   spinButton: {fileID: 1514212456018740828}
+  stateWinImage: {fileID: 0}
+  betStateImage: {fileID: 0}
   stateWinSpriteList: []
   itemSpriteList: []
+  betStateSpriteList: []
   lineContainer: {fileID: 4704892954112796580}
   effectContainer: {fileID: 1122508663848200705}
   paylineInfoContainer: {fileID: 7836129176489903914}
+  paylineIconContainer: {fileID: 0}
   columnContainer: {fileID: 3368696217579900766}
   coinParent: {fileID: 4618529923875378522}
   rulePrefab: {fileID: 0}
@@ -1553,6 +1583,7 @@ MonoBehaviour:
   thirdScatterAnimation: {fileID: 8892932421253673928}
   buttonSpinAnimation: {fileID: 3374551606718470009}
   animationEffect: {fileID: 4903603793726484244}
+  backgroundFreeSpinLeftAnimation: {fileID: 0}
 --- !u!1 &3649586517760866002
 GameObject:
   m_ObjectHideFlags: 0
@@ -1790,7 +1821,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -19, y: 17}
-  m_SizeDelta: {x: 118.32, y: 30}
+  m_SizeDelta: {x: 166.28, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4065350410265347129
 CanvasRenderer:
@@ -1836,8 +1867,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Freespin left: 3'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 0}
-  m_sharedMaterial: {fileID: 2100000, guid: bfb96f7d0e52c834292468ebe82f8fad, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2451,6 +2482,7 @@ GameObject:
   - component: {fileID: 6899577210613394942}
   - component: {fileID: 7184835768931040929}
   - component: {fileID: 9150968336960541963}
+  - component: {fileID: 5611366919024239667}
   m_Layer: 0
   m_Name: animFreeSpinNum
   m_TagString: Untagged
@@ -2532,6 +2564,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &5611366919024239667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5014910068242102542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 1
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 0}
+  BundleLabel: 
+  AssetName: 
+  AnimName: 
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5162550165800356480
 GameObject:
   m_ObjectHideFlags: 0
@@ -4364,6 +4418,7 @@ GameObject:
   - component: {fileID: 6666329328416889151}
   - component: {fileID: 8077055203426680532}
   - component: {fileID: 1715151422785766790}
+  - component: {fileID: 7363315744000904342}
   m_Layer: 0
   m_Name: Animation Background
   m_TagString: Untagged
@@ -4444,6 +4499,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &7363315744000904342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7357128082161856830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 1715151422785766790}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/Noel/bg2/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7772896749931419250
 GameObject:
   m_ObjectHideFlags: 0

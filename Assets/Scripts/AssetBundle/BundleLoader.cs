@@ -164,8 +164,7 @@ public class LoaderEditor : Editor
                         thisBL.AddOnEnableCb(null);
                         return;
                     }
-                    SkeletonData thisSD = thisBL.ThisSG.SkeletonData;
-                    if (thisSD == null)
+                    if (thisBL.ThisSG.SkeletonDataAsset == null)
                     {
                         EditorGUILayout.HelpBox("No SkeletonData asset found!", MessageType.Warning);
                         EditorGUILayout.LabelField("Label", thisBL.BundleLabel);
@@ -176,6 +175,7 @@ public class LoaderEditor : Editor
                         thisBL.AddOnEnableCb(null);
                         return;
                     }
+                    SkeletonData thisSD = thisBL.ThisSG.SkeletonData;
                     thisBL.AssetName = AssetDatabase.GetAssetPath(thisBL.ThisSG.skeletonDataAsset);
                     string path = Path.GetDirectoryName(thisBL.AssetName);
                     do

@@ -459,9 +459,9 @@ MonoBehaviour:
   Type: 2
   ThisImg: {fileID: 0}
   ThisSG: {fileID: 1759756244945718564}
-  BundleLabel: assets--resources--gameview--sixiang--spine
+  BundleLabel: assets--resources--bundlepack--animations--sixiang--spine
   AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/BgLuckySpin/skeleton_SkeletonData.asset
-  AnimName: dragon normal
+  AnimName: spin_anim
   SetNativeSize: 0
   m_OnEnableUE:
     m_PersistentCalls:
@@ -707,7 +707,7 @@ MonoBehaviour:
   Type: 2
   ThisImg: {fileID: 0}
   ThisSG: {fileID: 8726956438597483164}
-  BundleLabel: assets--resources--gameview--sixiang--spine
+  BundleLabel: assets--resources--bundlepack--animations--sixiang--spine
   AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/BgLuckySpin/skeleton_SkeletonData.asset
   AnimName: dragon normal
   SetNativeSize: 0
@@ -1037,7 +1037,7 @@ MonoBehaviour:
   Type: 2
   ThisImg: {fileID: 0}
   ThisSG: {fileID: 4822868448127043876}
-  BundleLabel: assets--resources--gameview--sixiang--spine
+  BundleLabel: assets--resources--bundlepack--animations--sixiang--spine
   AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/BgLuckySpin/skeleton_SkeletonData.asset
   AnimName: khung eat
   SetNativeSize: 0
@@ -1878,7 +1878,7 @@ MonoBehaviour:
   Type: 2
   ThisImg: {fileID: 0}
   ThisSG: {fileID: 7650313766497291651}
-  BundleLabel: assets--resources--gameview--sixiang--spine
+  BundleLabel: assets--resources--bundlepack--animations--sixiang--spine
   AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/BgLuckySpin/skeleton_SkeletonData.asset
   AnimName: light run
   SetNativeSize: 0
@@ -2163,6 +2163,7 @@ GameObject:
   - component: {fileID: 1312732969078719157}
   - component: {fileID: 5691530968973521275}
   - component: {fileID: 3393549597471328597}
+  - component: {fileID: 68279037687741605}
   m_Layer: 0
   m_Name: Animation Result Spin
   m_TagString: Untagged
@@ -2249,6 +2250,28 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &68279037687741605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4532332930627530505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 3393549597471328597}
+  BundleLabel: assets--resources--bundlepack--animations--sixiang--spine
+  AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/WinResult/skeleton_SkeletonData.asset
+  AnimName: cam
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4728583076131725057
 GameObject:
   m_ObjectHideFlags: 0
@@ -3684,9 +3707,9 @@ MonoBehaviour:
   Type: 2
   ThisImg: {fileID: 0}
   ThisSG: {fileID: 8466558300535321508}
-  BundleLabel: assets--resources--gameview--sixiang--spine
+  BundleLabel: assets--resources--bundlepack--animations--sixiang--spine
   AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/BgMiniGame/skeleton_SkeletonData.asset
-  AnimName: spin
+  AnimName: normal
   SetNativeSize: 0
   m_OnEnableUE:
     m_PersistentCalls:

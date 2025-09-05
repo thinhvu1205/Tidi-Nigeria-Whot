@@ -172,6 +172,7 @@ public class SlotTarzanView : BaseSlotView
     protected override Vector2 RECT_SIZE => new Vector2(135, 135);
     private const string TARZAN_ANIMATION_NAME_1 = "du_day1";
     private const string TARZAN_ANIMATION_NAME_2 = "du_day";
+    private const string TARZAN_ANIMATION_PATH = "SlotSpine/Tarzan/Model/skeleton_SkeletonData";
     private const string CHARACTER_ANIMATION_PATH = "SlotSpine/Tarzan/JungleCharacter/%letter/skeleton_SkeletonData";
 
     public long CurrentBetLevel => currentBetLevel;
@@ -712,17 +713,18 @@ public class SlotTarzanView : BaseSlotView
     }
     private void ShowAnimationTarzan()
     {
+        Debug.Log("SHOW ANIM TARZAN");
         SetDarkAllItems();
-        tarzanAnimation.Skeleton.SetToSetupPose(); // Reset pose
-        tarzanAnimation.AnimationState.ClearTracks(); // Clear animation cũ
-        tarzanAnimation.AnimationState.SetEmptyAnimation(0, 0); 
+        // tarzanAnimation.Skeleton.SetToSetupPose(); // Reset pose
+        // tarzanAnimation.AnimationState.ClearTracks(); // Clear animation cũ
+        // tarzanAnimation.AnimationState.SetEmptyAnimation(0, 0); 
         tarzanAnimation.gameObject.SetActive(true);
         tarzanAnimation.transform.localPosition = new Vector2(0, 26f);
-        Utility.PlayAnimation(tarzanAnimation, TARZAN_ANIMATION_NAME_2, false);
+        Utility.PlayAnimationByPath(tarzanAnimation, TARZAN_ANIMATION_PATH, TARZAN_ANIMATION_NAME_2, false);
         tarzanAnimation.Initialize(true);
         tarzanAnimation.AnimationState.Complete += delegate
         {
-            Utility.PlayAnimation(tarzanAnimation, TARZAN_ANIMATION_NAME_1, false);
+            Utility.PlayAnimationByPath(tarzanAnimation, TARZAN_ANIMATION_PATH, TARZAN_ANIMATION_NAME_1, false);
             //tarzanAnimation.transform.localPosition = new Vector2(0, 259);
         };
         DOTween.Sequence()

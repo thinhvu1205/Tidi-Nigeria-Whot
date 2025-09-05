@@ -396,7 +396,7 @@ public class WhotPlayer : MonoBehaviour
             // GameObject chipInstance = Instantiate(chipPrefab, transform);
             WhotChip chipInstance = PoolService.Instance.Get<WhotChip>(PrefabType.ChipPlayerWhot);
             chipInstance.transform.position = GetPlayedCardParent().position;
-            chipInstance.transform.localScale = Vector3.one;
+            chipInstance.transform.localScale = Vector3.one * 0.5f;
             
             Sequence chipSequence = DOTween.Sequence();
             chipSequence

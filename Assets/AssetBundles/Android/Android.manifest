@@ -1,33 +1,33 @@
 ManifestFileVersion: 0
-CRC: 501508552
+CRC: 172827148
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: assets--resources--bundlepack--animations--anim_icongames
-      Dependencies: {}
-    Info_1:
-      Name: assets--resources--bundlepack--animations--baccarat
-      Dependencies: {}
-    Info_2:
-      Name: assets--resources--bundlepack--animations--blackjack
-      Dependencies: {}
-    Info_3:
-      Name: assets--resources--bundlepack--animations--common
-      Dependencies: {}
-    Info_4:
       Name: assets--resources--bundlepack--animations--hongkongpoker
       Dependencies: {}
-    Info_5:
-      Name: assets--resources--bundlepack--animations--kaeng
-      Dependencies: {}
-    Info_6:
-      Name: assets--resources--bundlepack--animations--roulette
-      Dependencies: {}
-    Info_7:
+    Info_1:
       Name: assets--resources--bundlepack--animations--sixiang--spine
       Dependencies: {}
-    Info_8:
+    Info_2:
+      Name: assets--resources--bundlepack--animations--roulette
+      Dependencies: {}
+    Info_3:
+      Name: assets--resources--bundlepack--animations--baccarat
+      Dependencies: {}
+    Info_4:
+      Name: assets--resources--bundlepack--animations--kaeng
+      Dependencies: {}
+    Info_5:
+      Name: assets--resources--bundlepack--animations--anim_icongames
+      Dependencies: {}
+    Info_6:
       Name: assets--resources--bundlepack--animations--slotspine
+      Dependencies: {}
+    Info_7:
+      Name: assets--resources--bundlepack--animations--blackjack
+      Dependencies: {}
+    Info_8:
+      Name: assets--resources--bundlepack--animations--common
       Dependencies: {}
     Info_9:
       Name: assets--resources--bundlepack--animations--whot

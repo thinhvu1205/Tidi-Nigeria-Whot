@@ -51,15 +51,21 @@ public class WhotView : BaseGameView
     private const float ANIMATION_TIME = 0.5f;
     private const float ANIMATION_WAIT_ROTATION_SPEED = 270f;
     private const string
+        MATCH_SYMBOL_ANIMATION_PATH = "Whot/anim_match_symbol/skeleton_SkeletonData",
         MATCH_SYMBOL_SQUARE_ANIMATION_NAME = "vuong",
         MATCH_SYMBOL_CROSS_ANIMATION_NAME = "thap",
         MATCH_SYMBOL_TRIANGLE_ANIMATION_NAME = "tamgiac",
         MATCH_SYMBOL_CIRCLE_ANIMATION_NAME = "tron",
         MATCH_SYMBOL_STAR_ANIMATION_NAME = "sao",
+        EFFECT_HOLD_ON_ANIMATION_PATH = "Whot/anim_Hold_on/skeleton_SkeletonData",
         EFFECT_HOLD_ON_ANIMATION_NAME = "hold",
+        EFFECT_GENERAL_MARKET_ANIMATION_PATH = "Whot/anim_Hold_on/skeleton_SkeletonData",
         EFFECT_GENERAL_MARKET_ANIMATION_NAME = "general",
+        LAST_CARD_EFFECT_ANIMATION_PATH = "Whot/light_bai/skeleton_SkeletonData",
         LAST_CARD_EFFECT_ANIMATION_NAME = "1",
+        LOSE_ANIMATION_PATH = "Whot/anim_victory/skeleton_SkeletonData",
         LOSE_ANIMATION_NAME = "better",
+        VICTORY_ANIMATION_PATH = "Whot/anim_victory/skeleton_SkeletonData",
         VICTORY_ANIMATION_NAME = "victory";
     private WhotCardModel callCardModel, callCardModelLast;
     private List<WhotPlayer> playersList;
@@ -144,7 +150,7 @@ public class WhotView : BaseGameView
     public override void HandleUpdateTable(IMatchState matchState)
     {
         var data = UpdateTable.Parser.ParseFrom(matchState.State);
-        Debug.Log(data.ToString());
+        Debug.Log("UPDATE TABLE: " + data.ToString());
         playersParent.gameObject.SetActive(true);
         gameState = data.GameState;
         List<Player> players = data.Players.ToList();
@@ -160,7 +166,7 @@ public class WhotView : BaseGameView
             (!(new GameState[] { GameState.Preparing, GameState.Idle, GameState.Matching }).Contains(gameState))
             && joinPlayers.Find((player) => player.Id == currentPlayerId) != null;
         if (isRejoinTable) hasDealtCards = true;
-
+        Debug.Log("IS REJOIN TABLE: " + isRejoinTable);
         // Order lại List Player sao cho currentPlayer luôn ở đầu
         if (startIndex >= 0)
         {
@@ -779,7 +785,7 @@ public class WhotView : BaseGameView
     private void AnimateGeneralMarket()
     {
         effectAnimationParent.gameObject.SetActive(true);
-        Utility.PlayAnimation(effectAnimation, EFFECT_GENERAL_MARKET_ANIMATION_NAME, false);
+        Utility.PlayAnimationByPath(effectAnimation, EFFECT_GENERAL_MARKET_ANIMATION_PATH, EFFECT_GENERAL_MARKET_ANIMATION_NAME, false);
         effectAnimation.AnimationState.Complete += delegate
         {
             effectAnimationParent.gameObject.SetActive(false);
@@ -789,7 +795,7 @@ public class WhotView : BaseGameView
     private void AnimateHoldOn()
     {
         effectAnimationParent.gameObject.SetActive(true);
-        Utility.PlayAnimation(effectAnimation, EFFECT_HOLD_ON_ANIMATION_NAME, false);
+        Utility.PlayAnimationByPath(effectAnimation, EFFECT_HOLD_ON_ANIMATION_PATH, EFFECT_HOLD_ON_ANIMATION_NAME, false);
         effectAnimation.AnimationState.Complete += delegate
         {
             effectAnimationParent.gameObject.SetActive(false);
@@ -819,7 +825,7 @@ public class WhotView : BaseGameView
     public void AnimateLastCardEffect()
     {
         lastCardAnimationParent.gameObject.SetActive(true);
-        Utility.PlayAnimation(lastCardAnimation, LAST_CARD_EFFECT_ANIMATION_NAME, false);
+        Utility.PlayAnimationByPath(lastCardAnimation, LAST_CARD_EFFECT_ANIMATION_PATH, LAST_CARD_EFFECT_ANIMATION_NAME, false);
         lastCardAnimation.AnimationState.Complete += delegate
         {
             lastCardAnimationParent.gameObject.SetActive(false);
@@ -845,7 +851,7 @@ public class WhotView : BaseGameView
                     _ => throw new ArgumentOutOfRangeException(nameof(suit), suit, null)
                 };
 
-                Utility.PlayAnimation(matchSymbolAnimation, animationName, false);
+                Utility.PlayAnimationByPath(matchSymbolAnimation, MATCH_SYMBOL_ANIMATION_PATH, animationName, false);
                 matchSymbolAnimation.AnimationState.Complete += delegate
                 {
                     matchSymbolAnimationParent.gameObject.SetActive(false);
@@ -964,7 +970,7 @@ public class WhotView : BaseGameView
         victoryImage.transform.localPosition = Vector3.zero;
         victoryImage.transform.localScale = Vector3.zero;
         victoryImage.transform.DOScale(Vector3.one, ANIMATION_TIME).SetEase(Ease.OutBack);
-        Utility.PlayAnimation(victoryAnimation, VICTORY_ANIMATION_NAME, false);
+        Utility.PlayAnimationByPath(victoryAnimation, VICTORY_ANIMATION_PATH, VICTORY_ANIMATION_NAME, false);
         victoryAnimation.AnimationState.Complete += delegate
         {
             victoryAnimationParent.gameObject.SetActive(false);
@@ -1006,7 +1012,7 @@ public class WhotView : BaseGameView
         betterLuckNextTimeText.transform.localPosition = Vector3.zero;
         betterLuckNextTimeText.transform.localScale = Vector3.zero;
         betterLuckNextTimeText.transform.DOScale(Vector3.one, ANIMATION_TIME).SetEase(Ease.OutBack);
-        Utility.PlayAnimation(betterLuckNextTimeAnimation, LOSE_ANIMATION_NAME, false);
+        Utility.PlayAnimationByPath(betterLuckNextTimeAnimation, LOSE_ANIMATION_PATH, LOSE_ANIMATION_NAME, false);
         betterLuckNextTimeAnimation.AnimationState.Complete += delegate
         {
             loseAnimationParent.gameObject.SetActive(false);

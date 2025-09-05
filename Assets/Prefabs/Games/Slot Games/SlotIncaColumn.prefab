@@ -160,6 +160,10 @@ PrefabInstance:
       propertyPath: placeholderSlotImageList.Array.size
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 4723641353161247590, guid: 598936617ddb24a3ebbf9d0bc6f3cb3e, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5669231897982549254, guid: 598936617ddb24a3ebbf9d0bc6f3cb3e, type: 3}
       propertyPath: spriteList.Array.size
       value: 13
@@ -219,6 +223,14 @@ PrefabInstance:
     - target: {fileID: 6745994599127439568, guid: 598936617ddb24a3ebbf9d0bc6f3cb3e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 165
+      objectReference: {fileID: 0}
+    - target: {fileID: 8055821582658476226, guid: 598936617ddb24a3ebbf9d0bc6f3cb3e, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8075336548540723445, guid: 598936617ddb24a3ebbf9d0bc6f3cb3e, type: 3}
+      propertyPath: m_Sprite
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 9061284310592908502, guid: 598936617ddb24a3ebbf9d0bc6f3cb3e, type: 3}
       propertyPath: m_SizeDelta.x

@@ -12,7 +12,6 @@ using Proto;
 using Nakama;
 using Spine.Unity;
 using TMPro;
-using UnityEditor.Playables;
 using UnityEngine;
 using UnityEngine.UI;
 using Color = UnityEngine.Color;
@@ -21,7 +20,7 @@ using Utility = Globals.Utility;
 
 public class BaccaratView : BaseDiceGameView
 {
-     // ================== Prefabs & Containers ==================
+    // ================== Prefabs & Containers ==================
     [Header("Prefabs & Containers")]
     [SerializeField] public BaccaratChip chipPref;
     [SerializeField] public GameObject chipContainer;
@@ -98,7 +97,8 @@ public class BaccaratView : BaseDiceGameView
     private bool checkBeted = false, checkBetDouble = false;
     private int indexCard = 0;
     private Sequence waitingTextSequence;
-    
+    private const string WIN_ANIMATION_PATH = "Baccarat/Ani/skeleton_SkeletonData";
+
     protected override void Awake()
     {
         base.Awake();
@@ -934,19 +934,19 @@ public class BaccaratView : BaseDiceGameView
         {
             ani_win.gameObject.SetActive(true);
             ani_win.Initialize(true);
-            ani_win.AnimationState.SetAnimation(0, "tie", false);
+            Utility.PlayAnimationByPath(ani_win, WIN_ANIMATION_PATH, "tie", false);
         }
         else if (hasPlayer)
         {
             ani_win.gameObject.SetActive(true);
             ani_win.Initialize(true);
-            ani_win.AnimationState.SetAnimation(0, "player", false);
+            Utility.PlayAnimationByPath(ani_win, WIN_ANIMATION_PATH, "player", false);
         }
         else if (hasBanker)
         {
             ani_win.gameObject.SetActive(true);
             ani_win.Initialize(true);
-            ani_win.AnimationState.SetAnimation(0, "banker", false);
+            Utility.PlayAnimationByPath(ani_win, WIN_ANIMATION_PATH, "banker", false);
         }
         else
         {

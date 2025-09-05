@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1350484180
+CRC: 3637404281
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 523522c5d4cc248b91ee7fd476eac54a
+    Hash: c05fc7cc65a24b4377d094223c6db4ad
   TypeTreeHash:
     serializedVersion: 2
     Hash: 90c628345643941ce560f051c308f160
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 523522c5d4cc248b91ee7fd476eac54a
+    Hash: c05fc7cc65a24b4377d094223c6db4ad
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -115,6 +115,7 @@ Assets:
 - Assets/Resources/BundlePack/Animations/anim_IconGames/shop/skeleton_Material-Additive.mat
 - Assets/Resources/BundlePack/Animations/anim_IconGames/HK_Poker/skeleton_Material-Additive.mat
 - Assets/Resources/BundlePack/Animations/anim_IconGames/noel_big/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/anim_IconGames/icon_Blackjack/skeleton_SkeletonData.asset
 - Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_big/skeleton_Material.mat
 - Assets/Resources/BundlePack/Animations/anim_IconGames/catte/skeleton_SkeletonData.asset
 - Assets/Resources/BundlePack/Animations/anim_IconGames/sesku/skeleton_Material-Additive.mat
@@ -221,6 +222,7 @@ Assets:
 - Assets/Resources/BundlePack/Animations/anim_IconGames/baccarat/skeleton_Atlas.asset
 - Assets/Resources/BundlePack/Animations/anim_IconGames/bork/skeleton.png
 - Assets/Resources/BundlePack/Animations/anim_IconGames/sabsam/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/anim_IconGames/sixiang_big/skeleton_Material-Additive.mat
 - Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_small/skeleton.atlas.txt
 - Assets/Resources/BundlePack/Animations/anim_IconGames/juicy_small/skeleton.png
 - Assets/Resources/BundlePack/Animations/anim_IconGames/sixiang_small/skeleton.json

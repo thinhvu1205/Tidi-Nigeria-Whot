@@ -14,6 +14,8 @@ public class RapidPayRow : MonoBehaviour
     [SerializeField] private int indexRow = 0;
     public List<Button> listButtonItem = new();
     private Button currentItemPick;
+    private const string ITEM_ANIMATION_PATH = "SiXiang/Spine/ItemPick/skeleton_SkeletonData";
+
     private readonly int[][] listResultIndex = new int[][]
     {
         new int[] { 0, 1 },
@@ -81,7 +83,7 @@ public class RapidPayRow : MonoBehaviour
                 .AppendCallback(() =>
                 {
                     SkeletonGraphic spineItemCurrent = currentItemPick.GetComponentInChildren<SkeletonGraphic>();
-                    Utility.PlayAnimation(spineItemCurrent, GetAnimationName(item.Symbol), false);
+                    Utility.PlayAnimationByPath(spineItemCurrent, ITEM_ANIMATION_PATH, GetAnimationName(item.Symbol), false);
 
                     if (GetAnimationName(item.Symbol).Equals("end"))
                         SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK_ITEM_MISS);
@@ -98,7 +100,7 @@ public class RapidPayRow : MonoBehaviour
                             SkeletonGraphic spineItemCurrent = listButtonItem[i].GetComponentInChildren<SkeletonGraphic>();
                             spineItemCurrent.color = Color.gray;
                             SiXiangSymbol symbol = matrix[listIndex[i]];
-                            Utility.PlayAnimation(spineItemCurrent, GetAnimationName(symbol), false);
+                            Utility.PlayAnimationByPath(spineItemCurrent, ITEM_ANIMATION_PATH, GetAnimationName(symbol), false);
                         }
                     }
                 });

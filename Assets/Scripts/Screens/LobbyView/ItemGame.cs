@@ -14,11 +14,12 @@ public class ItemGame : MonoBehaviour
     public void SetInfo(string gameID, bool isBigIcon)
     {
         this.isBigIcon = isBigIcon;
+        transform.localScale = Vector2.one;
         if (isBigIcon)
         {
             RectTransform rectTransform = GetComponent<RectTransform>();
             Vector2 size = rectTransform.sizeDelta;
-            size.x = 315f;
+            // size.x *= 1.5f;
             rectTransform.sizeDelta = size;
         }
         Utility.PlayAnimationByPath(skeletonGraphic, GetAnimationPath(gameID));

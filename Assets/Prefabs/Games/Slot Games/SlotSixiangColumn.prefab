@@ -132,32 +132,35 @@ PrefabInstance:
       addedObject: {fileID: 7854628918063971620}
     - targetCorrespondingSourceObject: {fileID: 1151161913817543969, guid: 478ea8023d85d4296a9f477e5062aecf, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 548673752703490374}
+      addedObject: {fileID: 6732673720595597334}
     - targetCorrespondingSourceObject: {fileID: 98279793560261525, guid: 478ea8023d85d4296a9f477e5062aecf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5400036461692167334}
     - targetCorrespondingSourceObject: {fileID: 3937259926653719553, guid: 478ea8023d85d4296a9f477e5062aecf, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5837841707539368133}
+      addedObject: {fileID: 8812409973458031647}
     - targetCorrespondingSourceObject: {fileID: 7546516901185994900, guid: 478ea8023d85d4296a9f477e5062aecf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4994339987173584849}
     - targetCorrespondingSourceObject: {fileID: 1645271537477152028, guid: 478ea8023d85d4296a9f477e5062aecf, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4437759460271545002}
+      addedObject: {fileID: 8149279837511044869}
     - targetCorrespondingSourceObject: {fileID: 9152133266682649571, guid: 478ea8023d85d4296a9f477e5062aecf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2016100925757870673}
     - targetCorrespondingSourceObject: {fileID: 653142743459971561, guid: 478ea8023d85d4296a9f477e5062aecf, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8365929771197489323}
+      addedObject: {fileID: 5642159829011878594}
+    - targetCorrespondingSourceObject: {fileID: 1899830869238307240, guid: 478ea8023d85d4296a9f477e5062aecf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 138829763261416562}
   m_SourcePrefab: {fileID: 100100000, guid: 478ea8023d85d4296a9f477e5062aecf, type: 3}
 --- !u!1 &447176123398816395 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3937259926653719553, guid: 478ea8023d85d4296a9f477e5062aecf, type: 3}
   m_PrefabInstance: {fileID: 3501343489624004234}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5837841707539368133
+--- !u!114 &8812409973458031647
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -169,12 +172,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 1
+  Type: 2
   ThisImg: {fileID: 0}
-  ThisSG: {fileID: 0}
-  BundleLabel: 
-  AssetName: 
-  AnimName: 
+  ThisSG: {fileID: 1043470788167201970}
+  BundleLabel: assets--resources--bundlepack--animations--sixiang--spine
+  AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/BgRectItem/skeleton_SkeletonData.asset
+  AnimName: animation
   SetNativeSize: 0
   m_OnEnableUE:
     m_PersistentCalls:
@@ -239,7 +242,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1645271537477152028, guid: 478ea8023d85d4296a9f477e5062aecf, type: 3}
   m_PrefabInstance: {fileID: 3501343489624004234}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4437759460271545002
+--- !u!114 &8149279837511044869
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -251,12 +254,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 1
+  Type: 2
   ThisImg: {fileID: 0}
-  ThisSG: {fileID: 0}
-  BundleLabel: 
-  AssetName: 
-  AnimName: 
+  ThisSG: {fileID: 8302343518121814126}
+  BundleLabel: assets--resources--bundlepack--animations--sixiang--spine
+  AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/BgRectItem/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
+  m_OnEnableUE:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!1 &3083500397637078818 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1899830869238307240, guid: 478ea8023d85d4296a9f477e5062aecf, type: 3}
+  m_PrefabInstance: {fileID: 3501343489624004234}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &138829763261416562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3083500397637078818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  ThisImg: {fileID: 0}
+  ThisSG: {fileID: 8005373897701183703}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/NearFreeSpin/skeleton_SkeletonData.asset
+  AnimName: animation
   SetNativeSize: 0
   m_OnEnableUE:
     m_PersistentCalls:
@@ -312,7 +342,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 653142743459971561, guid: 478ea8023d85d4296a9f477e5062aecf, type: 3}
   m_PrefabInstance: {fileID: 3501343489624004234}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8365929771197489323
+--- !u!114 &5642159829011878594
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -324,12 +354,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 1
+  Type: 2
   ThisImg: {fileID: 0}
-  ThisSG: {fileID: 0}
-  BundleLabel: 
-  AssetName: 
-  AnimName: 
+  ThisSG: {fileID: 776558271309140885}
+  BundleLabel: assets--resources--bundlepack--animations--sixiang--spine
+  AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/BgRectItem/skeleton_SkeletonData.asset
+  AnimName: animation
   SetNativeSize: 0
   m_OnEnableUE:
     m_PersistentCalls:
@@ -350,7 +380,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1151161913817543969, guid: 478ea8023d85d4296a9f477e5062aecf, type: 3}
   m_PrefabInstance: {fileID: 3501343489624004234}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &548673752703490374
+--- !u!114 &6732673720595597334
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -362,12 +392,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 1
+  Type: 2
   ThisImg: {fileID: 0}
-  ThisSG: {fileID: 0}
-  BundleLabel: 
-  AssetName: 
-  AnimName: 
+  ThisSG: {fileID: 4462753842998275186}
+  BundleLabel: assets--resources--bundlepack--animations--sixiang--spine
+  AssetName: Assets/Resources/BundlePack/Animations/SiXiang/Spine/BgRectItem/skeleton_SkeletonData.asset
+  AnimName: animation
   SetNativeSize: 0
   m_OnEnableUE:
     m_PersistentCalls:
@@ -572,7 +602,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6885872434801772125, guid: 478ea8023d85d4296a9f477e5062aecf, type: 3}
   m_PrefabInstance: {fileID: 3501343489624004234}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 3083500397637078818}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d85b887af7e6c3f45a2e2d2920d641bc, type: 3}

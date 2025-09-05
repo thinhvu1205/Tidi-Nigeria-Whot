@@ -518,9 +518,10 @@ namespace Globals
         public static void PlayAnimation(SkeletonGraphic skeletonGraphic, string animationName, bool loop)
         {
             skeletonGraphic.gameObject.SetActive(true);
+            skeletonGraphic.Initialize(true);
+            
             if (skeletonGraphic != null && skeletonGraphic.AnimationState != null)
             {
-                skeletonGraphic.Initialize(true);
                 skeletonGraphic.AnimationState.SetAnimation(0, animationName, loop);
             }
             else
