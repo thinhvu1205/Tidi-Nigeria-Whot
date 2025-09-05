@@ -1,7 +1,11 @@
+using System;
+using Proto;
+
 namespace Globals
 {
     public class User
     {
+        public static Action OnProfileUpdated;
         public User() { }
         public static User userMain = null;
         public static string AccessToken = "";
@@ -33,5 +37,10 @@ namespace Globals
         public bool isBanned;
         public string lastLoginUnix;
         public string userSid;
+
+        public void UpdateProfile()
+        {
+            OnProfileUpdated?.Invoke();
+        }
     }
 }

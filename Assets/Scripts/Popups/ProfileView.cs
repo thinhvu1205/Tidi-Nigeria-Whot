@@ -43,8 +43,14 @@ public class ProfileView : BaseView
     }
 
     #region Buttons
-    public void OnClickChangePassword() => UIManager.Instance.OpenChangePassword();
-    public void OnClickChangeName() => UIManager.Instance.OpenChangeName();
+    public void OnClickChangePassword() {
+        Hide();
+        UIManager.Instance.OpenChangePassword();
+    } 
+    public void OnClickChangeName() {
+        Hide();
+        UIManager.Instance.OpenChangeName();
+    } 
 
     #endregion
     

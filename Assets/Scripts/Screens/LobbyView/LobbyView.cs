@@ -30,6 +30,12 @@ public class LobbyView : BaseView
         UpdateProfileData();
         UIManager.Instance.lobbyView = this;
     }
+    protected override void Start()
+    {
+        base.Start();
+        User.OnProfileUpdated += UpdateProfileData;
+    }
+
 
     private async UniTask LoadGames()
     {
@@ -71,6 +77,12 @@ public class LobbyView : BaseView
             }
 
         }
+    }
+
+
+    private void User_OnProfileUpdated(object sender, EventArgs e)
+    {
+        UpdateProfileData();
     }
 
     public void UpdateProfileData()

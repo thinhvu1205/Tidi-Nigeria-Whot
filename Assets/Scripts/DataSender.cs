@@ -156,14 +156,15 @@ public class DataSender
         _ = NetworkManager.INSTANCE.RPCSend(CHANGE_PASS, data);
     }
 
-    public static void LinkUsername(string username = "", string password = "")
+    public static async UniTask<string> LinkUsername(string username = "", string password = "")
     {
         RegisterRequest data = new()
         {
             UserName = username,
             Password = password
         };
-        _ = NetworkManager.INSTANCE.RPCSend(LINK_USERNAME, data);
+        var response = await NetworkManager.INSTANCE.RPCSend(LINK_USERNAME, data);
+        return response.Payload;
     }
 
     public static void UpdateProfile(string username = "", string password = "")
@@ -181,7 +182,7 @@ public class DataSender
         {
             AvatarId = avatarId
         };
-        _ = NetworkManager.INSTANCE.RPCSend(UPDATE_AVATAR, data);
+        var response = NetworkManager.INSTANCE.RPCSend(UPDATE_AVATAR, data);
     }
     #endregion
 
@@ -226,7 +227,7 @@ public class DataSender
         catch (Exception ex)
         {
             Debug.LogError("FindMatch failed: " + ex.Message);
-            UIManager.Instance.OpenDialog("FindMatch failed : " + ex.Message, null, null);
+            UIManager.Instance.ShowConfirmDialog("FindMatch failed : " + ex.Message, null, null);
             return null;
         }
     }
@@ -254,7 +255,7 @@ public class DataSender
         catch (Exception ex)
         {
             Debug.LogError("CreateMatch failed : " + ex.Message);
-            UIManager.Instance.OpenDialog("CreateMatch failed : " + ex.Message, null, null);
+            UIManager.Instance.ShowConfirmDialog("CreateMatch failed : " + ex.Message, null, null);
             return null;
         }
     }
@@ -270,7 +271,7 @@ public class DataSender
         catch (Exception ex)
         {
             Debug.LogError("JoinMatch failed: " + ex.Message);
-            UIManager.Instance.OpenDialog("Lỗi khi vào trận : " + ex.Message, null, null);
+            UIManager.Instance.ShowConfirmDialog("Lỗi khi vào trận : " + ex.Message, null, null);
             return null;
         }
     }
@@ -292,7 +293,7 @@ public class DataSender
         catch (Exception ex)
         {
             Debug.LogError("QuickMatch failed: " + ex.Message);
-            UIManager.Instance.OpenDialog("Lỗi khi vào trận : " + ex.Message, null, null);
+            UIManager.Instance.ShowConfirmDialog("Lỗi khi vào trận : " + ex.Message, null, null);
             return null;
         }
     }

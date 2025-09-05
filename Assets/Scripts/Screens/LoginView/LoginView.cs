@@ -96,7 +96,7 @@ namespace Screens.LoginView
             UIManager.Instance.HideProgressing();
             // Global.AlertView.SetData(UIManager.Instance.GetText("login_error"));
             // Global.AlertView.isLoginFailed = true;
-            UIManager.Instance.OpenDialog("error login failed");
+            UIManager.Instance.ShowAlertDialog("Incorrect username or password");
         }
     
         private async UniTask OpenLobbyView()
@@ -139,7 +139,7 @@ namespace Screens.LoginView
                 userSid = profile.UserSid.ToString(),
                 vipLevel = profile.VipLevel
             };
-
+            User.userMain.UpdateProfile();
         }
     
         #region Buttons
