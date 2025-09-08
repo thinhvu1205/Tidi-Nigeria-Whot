@@ -49,7 +49,7 @@ public class SettingsView : BaseView
 
     public void OnClickQuitGame()
     {
-
+        Application.Quit();
     }
 
     public void OnClickSound()
@@ -74,7 +74,8 @@ public class SettingsView : BaseView
 
     public void OnClickFeedback()
     {
-
+        Hide();
+        UIManager.Instance.OpenFeedback();
     }
 
     public void OnClickDeleteAccount()

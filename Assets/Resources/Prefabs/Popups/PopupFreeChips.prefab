@@ -399,6 +399,8 @@ MonoBehaviour:
   effectPopup: 2
   effectPopupReverse: 3
   popupBackground: {fileID: 4627645879327562747}
+  freeChipItemPrefab: {fileID: 9008551268131802977, guid: 45a3ca8ea8ad7466bac5765534992149, type: 3}
+  freeChipItemContainer: {fileID: 2404849436493903128}
 --- !u!1 &2332535828408547098
 GameObject:
   m_ObjectHideFlags: 0

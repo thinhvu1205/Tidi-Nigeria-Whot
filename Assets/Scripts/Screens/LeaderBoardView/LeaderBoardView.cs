@@ -72,7 +72,6 @@ public class LeaderBoardView : BaseView
         recordList = apiLeaderboardRecordList.Records.ToList();
         recordList.Sort((record1, record2) => int.Parse(record1.Rank) - int.Parse(record2.Rank));
 
-        LeaderBoardRecord leaderBoardRecord = await leaderboardPresenter.LoadInfo(currentTabGameCode);
         recordList.Clear();
         foreach (var leaderboardItem in listLeaderboardItem)
         {
@@ -80,14 +79,10 @@ public class LeaderBoardView : BaseView
         }
         UpdateUIListRecord();
         
-        selectedTab = listLeaderboardTab[0];
-        selectedTab.SelectTab(true);
+        LeaderBoardRecord leaderBoardRecord = await leaderboardPresenter.LoadInfo(currentTabGameCode);
+        
 
-        topImage.gameObject.SetActive(true);
-        currentUserNameText.text = "MQ";
-        currentUserChipValueText.text = "9999999";
-        currentUserTopText.gameObject.SetActive(false);
-        topImage.sprite = topSprites[1];
+        
     }
 
     #endregion
@@ -112,6 +107,24 @@ public class LeaderBoardView : BaseView
             LeaderBoardItem leaderBoardItem = Instantiate(leaderBoardItemPrefab, leaderBoardItemParent).GetComponent<LeaderBoardItem>();
             leaderBoardItem.SetData(record.Rank, record.Username, record.Score);
             listLeaderboardItem.Add(leaderBoardItem);
+            if (record.Username == User.userProfile.DisplayName)
+            {
+                int rank = int.Parse(record.Rank);
+                if (rank > 3)
+                {
+                    topImage.gameObject.SetActive(false);
+                    currentUserTopText.gameObject.SetActive(true);
+                    currentUserTopText.text = record.Rank;
+                }
+                else
+                {
+                    topImage.gameObject.SetActive(true);
+                    currentUserTopText.gameObject.SetActive(false);
+                    topImage.sprite = topSprites[rank - 1];
+                }
+                currentUserNameText.text = record.Username;
+                currentUserChipValueText.text = record.Score;
+            }
         }
     }
     #endregion

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using System;
+using System.Threading.Tasks;
 public class BaseView : MonoBehaviour
 {
     enum EFFECT_POPUP
@@ -40,7 +41,7 @@ public class BaseView : MonoBehaviour
         // if (isAlawayTop)
         //     transform.SetAsLastSibling();
     }
-    
+
     protected virtual void OnEnable()
     {
         Show();
@@ -54,7 +55,7 @@ public class BaseView : MonoBehaviour
         //        //Globals.CURRENT_VIEW.setCurView(Globals.CURRENT_VIEW.GAMELIST_VIEW);
         //    }
     }
-    
+
     public virtual void OnClickCloseButton()
     {
         Hide();
@@ -199,5 +200,24 @@ public class BaseView : MonoBehaviour
                 transform.SetParent(null);
             }
         }
+    }
+    
+    public async Task OnSuccess(string message = "", bool isReloadProfile = false)
+    {
+        UIManager.Instance.HideProgressing();
+        if (!string.IsNullOrEmpty(message))
+        {
+            UIManager.Instance.ShowAlertDialog(message);
+        }
+        if (isReloadProfile)
+        { 
+            await UIManager.Instance.LoadProfileUser();
+        }
+    }
+
+    public void OnError(string message)
+    {
+        UIManager.Instance.HideProgressing();
+        UIManager.Instance.ShowAlertDialog(message);
     }
 }

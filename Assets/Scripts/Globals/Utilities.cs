@@ -443,6 +443,23 @@ namespace Globals
 
         //     return days + (dayNum < 2 ? " " + Config.getTextConfig("txt_day") : " " + Config.getTextConfig("txt_day")) + ", " + hours + ":" + minutes + ":" + seconds;
         // }
+        public static string ConvertUnixTimeToHHMM(int createTimeUnix)
+        {
+            DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(createTimeUnix).LocalDateTime;
+            return dateTime.ToString("HH:mm");
+        }
+        
+        public static string ConvertUnixTimeToHHMMSS(int createTimeUnix)
+        {
+            DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(createTimeUnix).LocalDateTime;
+            return dateTime.ToString("HH:mm:ss");
+        }
+
+        public static string ConvertUnixTimeToDDMM(int createTimeUnix)
+        {
+            DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(createTimeUnix).LocalDateTime;
+            return dateTime.ToString("dd/MM");
+        }
         #endregion
 
         #region Image

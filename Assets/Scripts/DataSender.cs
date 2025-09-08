@@ -381,12 +381,8 @@ public class DataSender
         return DecodeFromJson<ListFreeChip>(response.Payload);
     }
 
-    public static async UniTask<FreeChip> ClaimFreeChip()
+    public static async UniTask<FreeChip> ClaimFreeChip(FreeChip freeChip)
     {
-        FreeChip freeChip = new FreeChip()
-        {
-
-        };
         var response = await NetworkManager.INSTANCE.RPCSend(CLAIM_FREECHIP, freeChip);
         return DecodeFromJson<FreeChip>(response.Payload);
     }
