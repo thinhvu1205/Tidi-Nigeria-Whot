@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Proto;
 using Cysharp.Threading.Tasks;
+using Globals;
 using Google.Protobuf;
 using Nakama;
 using Newtonsoft.Json;
@@ -358,22 +359,16 @@ public class DataSender
         return DecodeFromJson<ListFreeChip>(response.Payload);
     }
     
-
-    // public class WalletTransaction
-    // {
-    //     [JsonProperty("transactions")]
-    //     public List<IApiWalletLedgerList> Transactions { get; set; }
-    //     [JsonProperty("cusor")]
-    //     public string Cusor { get; set; }
-    // }
-
-
-    public static async UniTask<WalletTransRequest> GetTransactionHistory(long limit = 0, string metaAction = "bank_topup")
+    public static async UniTask<Constants.WalletTransaction> GetTransactionHistory(long limit = 0, string metaAction = "bank_topup", string metaBankAction = "1")
     {
 
-        WalletTransRequest bank = new WalletTransRequest() { Limit = limit, MetaAction = metaAction };
-        var response = await NetworkManager.INSTANCE.RPCSend(SEND_GIFT, bank);
-        return DecodeFromJson<WalletTransRequest>(response.Payload);
+        WalletTransRequest bank = new WalletTransRequest() { 
+            Limit = limit, 
+            MetaAction = metaAction,
+            MetaBankAction = metaBankAction
+        };
+        var response = await NetworkManager.INSTANCE.RPCSend(WALLET_TRANSACTION, bank);
+        return JsonUtility.FromJson<Constants.WalletTransaction>(response.Payload);
     }
 
     public static async UniTask<ListFreeChip> GetListFreeChip()

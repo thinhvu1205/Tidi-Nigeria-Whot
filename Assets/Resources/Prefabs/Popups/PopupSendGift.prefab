@@ -5000,7 +5000,10 @@ MonoBehaviour:
   historyTab: {fileID: 5181270679911218006}
   selectedSendGiftTab: {fileID: 3327248184179140960}
   selectedHistoryTab: {fileID: 3915765859494253507}
-  textChip: {fileID: 8676140896918993973}
+  sendGiftBtn: {fileID: 979614532033021652}
+  currentChipTxt: {fileID: 8676140896918993973}
+  idFriendTxt: {fileID: 7713913389606996836}
+  amountChipTxt: {fileID: 2065713835498269026}
 --- !u!222 &2835167459305946291
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Cysharp.Threading.Tasks;
+using Globals;
 using Proto;
 using TMPro;
 using UnityEngine;
@@ -13,13 +14,22 @@ public class SendGiftView : BaseView
 {
     [SerializeField] private GameObject sendGiftTab, historyTab;
     [SerializeField] private GameObject selectedSendGiftTab, selectedHistoryTab;
-    [SerializeField] private TextMeshProUGUI textChip;
+    [SerializeField] private Button sendGiftBtn;
+    [SerializeField] private TextMeshProUGUI currentChipTxt;
+    [SerializeField] private TextMeshProUGUI idFriendTxt;
+    [SerializeField] private TextMeshProUGUI amountChipTxt;
+    
     protected override void OnEnable()
     {
         base.OnEnable();
+        sendGiftBtn.onClick.AddListener(() => _ = OnClickSendGift());
         OnClickSendGiftTab();
-        textChip.text = User.userMain.accountChip.ToString();
-
+        currentChipTxt.text = User.userProfile.AccountChip.ToString();
+    }
+    
+    private void OnDisable()
+    {
+        sendGiftBtn.onClick.RemoveAllListeners();
     }
 
     public void OnClickSendGiftTab()
@@ -36,28 +46,7 @@ public class SendGiftView : BaseView
         selectedHistoryTab.SetActive(true);
         sendGiftTab.SetActive(false);
         historyTab.SetActive(true);
-    }
-
-    protected override void OnEnable()
-    {
-        sendGiftBtn.onClick.AddListener(() => _ = OnClickSendGift());
-        tabSendGiftBtn.onClick.AddListener(() =>
-        {
-            historyGiftPanel.gameObject.SetActive(false);
-            sendGiftPanel.gameObject.SetActive(true);
-        });
-        tabHistoryGiftBtn.onClick.AddListener(() =>
-        {
-            historyGiftPanel.gameObject.SetActive(true);
-            sendGiftPanel.gameObject.SetActive(false);
-        });
-    }
-
-    private void OnDisable()
-    {
-        sendGiftBtn.onClick.RemoveAllListeners();
-        tabSendGiftBtn.onClick.RemoveAllListeners();
-        tabHistoryGiftBtn.onClick.RemoveAllListeners();
+        _ = LoadDataHistoryGift();
     }
 
     private async UniTask OnClickSendGift()
@@ -81,7 +70,7 @@ public class SendGiftView : BaseView
             }
             FreeChip freeChip =  await DataSender.SendGift(amount, recipientId);
             Debug.Log("Recieve Chip Successfull : " + freeChip);
-            SendGiftSuccessful();
+            _ = SendGiftSuccessful();
         }
         catch (Exception e)
         {
@@ -90,11 +79,31 @@ public class SendGiftView : BaseView
        
     }
 
-    private void SendGiftSuccessful()
+    private async UniTask LoadDataHistoryGift()
+    {
+        try
+        {
+            UIManager.Instance.ShowProgressing();
+            string metaBankActionStr = ((int)Constants.MetaBankAction.SendGift).ToString();
+            Constants.WalletTransaction walletTransaction =
+                await DataSender.GetTransactionHistory(20,
+                    metaBankAction: metaBankActionStr);
+            Debug.Log($"Receive data history {walletTransaction}");
+            UIManager.Instance.HideProgressing();
+        }
+        catch (Exception e)
+        {
+            UIManager.Instance.HideProgressing();
+            UIManager.Instance.ShowAlertDialog($"Error : {e.Message}");
+        }
+    }
+
+    private async UniTask SendGiftSuccessful()
     {
         idFriendTxt.text = "";
         amountChipTxt.text = "";
         UIManager.Instance.ShowAlertDialog("Send gift successfully!");
-        _ = UIManager.Instance.LoadProfileUser();
+        await UIManager.Instance.LoadProfileUser();
+        currentChipTxt.text = User.userProfile.AccountChip.ToString();
     }
 }

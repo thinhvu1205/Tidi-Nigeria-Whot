@@ -26,6 +26,38 @@ namespace Globals
         // public const string FRUIT_GAME_ID = "fruit";
         // public const string GAPLE_GAME_ID = "gaple";
 
+        
+        [System.Serializable]
+        public class WalletTransaction
+        {
+            public WalletLedgerItem[] transactions;
+            public string cusor;
+        }
+
+        [System.Serializable]
+        public class WalletLedgerItem
+        {
+            public string id;
+            public string user_id;
+            public string create_time;
+            public string update_time;
+
+            // changeset và metadata thường là object, bạn có thể map thành Dictionary
+            public Dictionary<string, string> changeset;
+            public Dictionary<string, string> metadata;
+        }
+        
+        public enum MetaBankAction
+        {
+            Unspecified = 0,
+            SendGift = 1,
+            RecvGift = 2,
+            RevertSendGift = 3,
+            PushToSafe = 4,
+            Withdraw = 5
+        }
+
+      
         public static readonly string[] SLOT_GAMES_ID = new string[]
         {
             FRUIT_SLOT_GAME_ID,
