@@ -41,30 +41,13 @@ public class ChangeNameView : BaseView
         {
             await DataSender.LinkUsername(username: userName, password: password);
             UIManager.Instance.ShowAlertDialog("Change name successful!", () => Hide());
-            Profile profile = await DataSender.GetProfile();
-            UpdateProfile(profile);
+            await UIManager.Instance.LoadProfileUser();
         }
         catch (Exception ex)
         {
-            UIManager.Instance.ShowAlertDialog(ex.Message);
-            Debug.LogError($"Error changing name: {ex.Message}");
+            UIManager.Instance.ShowAlertDialog("Error:" + ex.Message);
         }
     }
 
-    private void UpdateProfile(Profile profile)
-    {
-        Debug.Log("Profile: " + profile.ToString());
-        User.userMain = new()
-        {
-            userId = profile.UserId,
-            userName = profile.UserName,
-            displayName = profile.DisplayName,
-            avatarId = profile.AvatarId,
-            accountChip = profile.AccountChip,
-            bankChip = profile.BankChip.ToString(),
-            userSid = profile.UserSid.ToString(),
-            vipLevel = profile.VipLevel
-        };
-        User.userMain.UpdateProfile();
-    }
+
 }

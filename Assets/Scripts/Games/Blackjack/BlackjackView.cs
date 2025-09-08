@@ -137,7 +137,7 @@ public class BlackjackView : BaseDiceGameView
         BlackjackUpdateDesk data = BlackjackUpdateDesk.Parser.ParseFrom(matchState.State);
         Debug.Log("Update table: " + data.ToString());
         string playerId = data.Bet?.UserId;
-        string currentPlayerId = User.userMain.userId;
+        string currentPlayerId = User.userProfile.UserId;
         // Khi có người chơi đặt cược thì tiến hành trừ tiền của người chơi đó
         if (data.Bet?.Balance?.AmountChipAdd != 0)
         {
@@ -173,7 +173,7 @@ public class BlackjackView : BaseDiceGameView
         // Cập nhật các nút hành động
         if (data.IsNewTurn)
         {
-            isCurrentPlayerTurn = data.InTurn == User.userMain.userId;
+            isCurrentPlayerTurn = data.InTurn == User.userProfile.UserId;
             if (isCurrentPlayerTurn && nextActionCode != BlackjackActionCode.BlackjackActionUnspecified)
             {
                 HandleClickButtonAction(nextActionCode);
@@ -585,7 +585,7 @@ public class BlackjackView : BaseDiceGameView
             buttonSplit.OnClickCheckBox();
             nextActionCode = BlackjackActionCode.BlackjackActionSplit;
         }
-        BlackjackBoxBet boxBet = userIdToBoxBetView.GetValueOrDefault(User.userMain.userId);
+        BlackjackBoxBet boxBet = userIdToBoxBetView.GetValueOrDefault(User.userProfile.UserId);
         boxBet.SplitBoxBet(0);
     }
 
@@ -928,7 +928,7 @@ public class BlackjackView : BaseDiceGameView
     protected override void CreatePlayerView(Player player, Vector2 anchoredPos)
     {
         base.CreatePlayerView(player, anchoredPos);
-        string localUserId = User.userMain.userId;
+        string localUserId = User.userProfile.UserId;
         Debug.Log("CREATE PLAYER VIEW: " + player.UserName);
         if (!userIdToBoxBetView.TryGetValue(player.Id, out var boxBetView) || boxBetView == null)
         {

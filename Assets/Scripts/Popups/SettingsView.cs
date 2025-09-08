@@ -19,10 +19,10 @@ public class SettingsView : BaseView
 
     private void UpdateVisuals()
     {
-        if (User.userMain != null)
+        if (User.userProfile != null)
         {
-            displayNameText.text = User.userMain.displayName;
-            userIdText.text = "ID: " + User.userMain.userSid;
+            displayNameText.text = User.userProfile.DisplayName;
+            userIdText.text = "ID: " + User.userProfile.UserSid;
         }
         toggleSoundImage.gameObject.SetActive(Config.isOpenSound);
         toggleMusicImage.gameObject.SetActive(Config.isOpenMusic);

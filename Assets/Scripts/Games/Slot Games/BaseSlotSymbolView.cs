@@ -1359,7 +1359,7 @@ public class BaseSlotSymbolView : BaseGameView
     public Transform InfoSessionBar => paylineInfoContainer;
     public SpinType GetSpinType() => spinType;
     public long GetCurrentBetLevel() => currentBetLevel;
-    protected bool IsSpinnable() => listBetLevel.Count > 0 && User.userMain.accountChip > currentBetLevel;
+    protected bool IsSpinnable() => listBetLevel.Count > 0 && User.userProfile.AccountChip > currentBetLevel;
     protected bool IsButtonInteractable() => new SiXiangGame[] { SiXiangGame.Normal, SiXiangGame.DragonPearl, SiXiangGame.SixangbonusDragonPearl }.Contains(currentGame) || new SiXiangGame[] { SiXiangGame.DragonPearl, SiXiangGame.SixangbonusDragonPearl }.Contains(nextGame);
 }
 

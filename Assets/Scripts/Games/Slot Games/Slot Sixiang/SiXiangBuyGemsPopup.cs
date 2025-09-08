@@ -29,7 +29,7 @@ public class SiXiangBuyGemsPopup : BaseView
     public void OnClickConfirm()
     {
         // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.CLICK);
-        long playerBalance = User.userMain.accountChip;
+        long playerBalance = User.userProfile.AccountChip;
         if (playerBalance >= price)
         {
             InfoBet infoBet = new()
@@ -56,7 +56,7 @@ public class SiXiangBuyGemsPopup : BaseView
     public void SetInfo(int indexGem, long pricePearl, long bet)
     {
         // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.CLICK);
-        long accountChip = User.userMain.accountChip;
+        long accountChip = User.userProfile.AccountChip;
         bool isEnoughChip = accountChip >= pricePearl;
         price = pricePearl;
      

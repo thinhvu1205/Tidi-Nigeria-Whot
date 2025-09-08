@@ -103,16 +103,15 @@ namespace Screens.LoginView
         {
             try
             {
-                Profile profile = await DataSender.GetProfile();
-                UpdateProfile(profile);
+                await UIManager.Instance.LoadProfileUser();
                 SceneManager.LoadScene(Config.MAIN_SCENE);
-                if (profile.PlayingMatch.MatchId != "")
+                if (User.userProfile.PlayingMatch.MatchId != "")
                 {
-                    Debug.Log($"Joining match with ID: {profile.PlayingMatch.MatchId}");
-                    var labelMatch = await DataSender.JoinMatch(profile.PlayingMatch.MatchId);
+                    Debug.Log($"Joining match with ID: {User.userProfile.PlayingMatch.MatchId}");
+                    var labelMatch = await DataSender.JoinMatch(User.userProfile.PlayingMatch.MatchId);
                     if (labelMatch != null)
                     {
-                        Config.currentGameId = profile.PlayingMatch.Code;
+                        Config.currentGameId = User.userProfile.PlayingMatch.Code;
                         UIManager.Instance.HandleOpenGame(labelMatch);
                     }
 
@@ -121,27 +120,10 @@ namespace Screens.LoginView
             }
             catch (Exception e)
             {
-                Debug.LogError($"err : {e.Message}");
+                UIManager.Instance.ShowAlertDialog("Error: " + e.Message);
             }
         }
-
-        private void UpdateProfile(Profile profile)
-        {
-            Debug.Log("Profile: " + profile.ToString());
-            User.userMain = new()
-            {
-                userId = profile.UserId,
-                userName = profile.UserName,
-                displayName = profile.DisplayName,
-                avatarId = profile.AvatarId,
-                accountChip = profile.AccountChip,
-                bankChip = profile.BankChip.ToString(),
-                userSid = profile.UserSid.ToString(),
-                vipLevel = profile.VipLevel
-            };
-            User.userMain.UpdateProfile();
-        }
-    
+        
         #region Buttons
         public void OnClickButtonLoginWithID()
         {

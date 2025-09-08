@@ -352,6 +352,13 @@ public class DataSender
         return DecodeFromJson<FreeChip>(response.Payload);
     }
 
+    public static async UniTask<ListFreeChip> GetListClaimedFreeChips()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(LIST_CLAIMABLE_FREECHIPS);
+        return DecodeFromJson<ListFreeChip>(response.Payload);
+    }
+    
+
     // public class WalletTransaction
     // {
     //     [JsonProperty("transactions")]

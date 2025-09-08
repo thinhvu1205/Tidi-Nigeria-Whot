@@ -87,11 +87,11 @@ public class LobbyView : BaseView
 
     public void UpdateProfileData()
     {
-        if (User.userMain != null)
+        if (User.userProfile != null)
         {
-            displayNameText.text = User.userMain.displayName;
-            userIdText.text = "ID: " + User.userMain.userSid;
-            accountChip.text = User.userMain.accountChip.ToString();
+            displayNameText.text = User.userProfile.DisplayName;
+            userIdText.text = "ID: " + User.userProfile.UserSid;
+            accountChip.text = User.userProfile.AccountChip.ToString();
         }
     }
 

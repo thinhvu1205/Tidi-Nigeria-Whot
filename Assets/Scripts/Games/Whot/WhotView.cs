@@ -162,7 +162,7 @@ public class WhotView : BaseGameView
         List<Player> playingPlayers = data.PlayingPlayers.ToList();
         List<Player> joinPlayers = data.JoinPlayers.ToList();
         List<Player> leavePlayers = data.LeavePlayers.ToList();
-        string currentPlayerId = User.userMain.userId;
+        string currentPlayerId = User.userProfile.UserId;
         Player currentPlayer = players.Find((player) => player.Id == currentPlayerId);
         int startIndex = players.IndexOf(currentPlayer);
 
@@ -1351,7 +1351,7 @@ public class WhotView : BaseGameView
         {
             whotPlayer.gameObject.SetActive(false);
         }
-        string currentPlayerId = User.userMain.userId;
+        string currentPlayerId = User.userProfile.UserId;
         for (int i = 0; i < rearrangedPlayersList.Count; i++)
         {
             Player player = rearrangedPlayersList[i];

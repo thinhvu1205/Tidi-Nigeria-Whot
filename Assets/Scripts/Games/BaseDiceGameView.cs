@@ -41,7 +41,7 @@ public class BaseDiceGameView : BaseGameView
 
     protected virtual void UpdatePosUserTable(UpdateTable update, bool isRearrange = false)
     {
-        var localUserId = User.userMain.userId;
+        var localUserId = User.userProfile.UserId;
         if (listPosView == null || listPosView.Count == 0 || playerViewPrefab == null || localUserId == "") return;
 
         // 1) Cập nhật danh sách playing players

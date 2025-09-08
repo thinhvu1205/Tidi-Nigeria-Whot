@@ -7,38 +7,11 @@ namespace Globals
     {
         public static Action OnProfileUpdated;
         public User() { }
-        public static User userMain = null;
+        public static Profile userProfile;
         public static string AccessToken = "";
         public static string FacebookID;
-        public string userId;
-        public string userName;
-        public string displayName;
-        public string avatarUrl;
-        public string status;
-        public long accountChip;
-        public string bankChip;
-        public string refCode;
-        public string langTag;
-        public string linkGroup;
-        public string linkFanpageFb;
-        public string appConfig;
-        public string avatarId;
-        public bool registrable;
-        public long vipLevel;
-        public string lastOnlineTimeUnix;
-        public string createTimeUnix;
-        public string remainTimeInputRefCode;
-        public string deviceId;
-        public string lastDeviceId;
-        public string refGame;
-        public string currentIp;
-        public string vipPoint;
-        public bool isOnline;
-        public bool isBanned;
-        public string lastLoginUnix;
-        public string userSid;
 
-        public void UpdateProfile()
+        public static void UpdateProfile()
         {
             OnProfileUpdated?.Invoke();
         }

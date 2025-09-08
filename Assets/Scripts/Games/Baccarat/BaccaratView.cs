@@ -124,11 +124,11 @@ public class BaccaratView : BaseDiceGameView
 
     private void LoadProfile()
     {
-        thisPlayer.id = User.userMain.userId;
-        thisPlayer.wallet = User.userMain.accountChip.ToString();
-        thisPlayer.avatar_id = User.userMain.avatarId;
-        thisPlayer.vipLevel = User.userMain.vipLevel;
-        thisPlayer.user_name = User.userMain.displayName;
+        thisPlayer.id = User.userProfile.UserId;
+        thisPlayer.wallet = User.userProfile.AccountChip.ToString();
+        thisPlayer.avatar_id = User.userProfile.AvatarId;
+        thisPlayer.vipLevel = User.userProfile.VipLevel;
+        thisPlayer.user_name = User.userProfile.DisplayName;
     }
 
     #region Hander Api
@@ -183,7 +183,7 @@ public class BaccaratView : BaseDiceGameView
             {
                 if (userIdToView.TryGetValue(data.UserBet.UserId, out var playerView))
                 {
-                    if (data.UserBet.UserId == User.userMain.userId)
+                    if (data.UserBet.UserId == User.userProfile.UserId)
                     {
                         foreach (var infoBet in data.UserBet.Bets)
                         {

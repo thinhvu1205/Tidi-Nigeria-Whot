@@ -40,6 +40,13 @@ public class UIManager : Singleton<UIManager>
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Config.UpdateConfigSettings();
     }
+
+    public async UniTask LoadProfileUser()
+    {
+        Profile profile = await DataSender.GetProfile();
+        User.userProfile = profile;
+        User.UpdateProfile();
+    }
     
     public void OpenLoginScene()
     {

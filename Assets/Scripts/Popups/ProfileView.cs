@@ -19,12 +19,12 @@ public class ProfileView : BaseView
 
     private void UpdateProfileVisuals()
     {
-        if (User.userMain != null)
+        if (User.userProfile != null)
         {
-            nameText.text = User.userMain.displayName;
-            idText.text = "ID: " + User.userMain.userSid;
-            chipText.text = User.userMain.accountChip.ToString();
-            if (IsDefaultName(User.userMain.displayName))
+            nameText.text = User.userProfile.DisplayName;
+            idText.text = "ID: " + User.userProfile.UserSid;
+            chipText.text = User.userProfile.AccountChip.ToString();
+            if (IsDefaultName(User.userProfile.DisplayName))
             {
                 changeNameButton.gameObject.SetActive(true);
                 changePasswordButton.gameObject.SetActive(false);
