@@ -1,10 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Globals;
+using Nakama;
 using Newtonsoft.Json.Linq;
+using Proto;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static LeaderBoardTab;
 
 public class LeaderBoardView : BaseView
 {
@@ -18,46 +24,62 @@ public class LeaderBoardView : BaseView
 
     private List<LeaderBoardItem> listLeaderboardItem = new();
     private List<LeaderBoardTab> listLeaderboardTab = new();
-    private JArray mockArray = new();
-    private JArray mockArrayGame = new();
     private LeaderBoardTab selectedTab;
+    private LeaderboardPresenter leaderboardPresenter;
+    private List<Game> gameList = new();
+    private List<IApiLeaderboardRecord> recordList = new();
+    private string currentTabGameCode = "";
+
+    protected override void Awake()
+    {
+        base.Awake();
+        leaderboardPresenter = new LeaderboardPresenter();
+        leaderboardPresenter.Init(this);
+    }
 
     protected override void Start()
     {
         base.Start();
-        MockData();
-        LoadListLeaderBoard();
+        _ = LoadListGame();
+        _ = LoadListLeaderBoard();
     }
+    
+
 
     #region Data
-    private void LoadListLeaderBoard()
+    private async Task LoadListGame()
     {
+        gameList.Clear();
+        try
+        {
+            GameListResponse gameListResponse = await leaderboardPresenter.LoadGameList();
+            gameList = gameListResponse.Games.ToList();
+            UpdateUIListGame();
+            Debug.Log("GAME LIST: " + gameListResponse.ToString());
+        }
+        catch (Exception ex)
+        {
+            Debug.Log("err load list game : " + ex.Message);
+            // throw;
+        }
+    }
+
+    private async Task LoadListLeaderBoard()
+    {
+        Debug.Log("BAT DAU GOI GET LIST");
+
+        IApiLeaderboardRecordList apiLeaderboardRecordList = await leaderboardPresenter.LoadList(currentTabGameCode);
+        recordList = apiLeaderboardRecordList.Records.ToList();
+        recordList.Sort((record1, record2) => int.Parse(record1.Rank) - int.Parse(record2.Rank));
+
+        LeaderBoardRecord leaderBoardRecord = await leaderboardPresenter.LoadInfo(currentTabGameCode);
+        recordList.Clear();
         foreach (var leaderboardItem in listLeaderboardItem)
         {
             Destroy(leaderboardItem.gameObject);
         }
-        foreach (var leaderboardTab in listLeaderboardTab)
-        {
-            Destroy(leaderboardTab.gameObject);
-        }
-        foreach (var leaderboardData in mockArray)
-        {
-            string top = leaderboardData["top"].ToString();
-            string name = leaderboardData["name"].ToString();
-            GameObject leaderboardItemObj = Instantiate(leaderBoardItemPrefab, leaderBoardItemParent);
-            LeaderBoardItem leaderboardItem = leaderboardItemObj.GetComponent<LeaderBoardItem>();
-            leaderboardItem.SetData(top, name);
-        }
-
-        foreach (var leaderboardTabData in mockArrayGame)
-        {
-            string name = leaderboardTabData["name"].ToString();
-            GameObject leaderboardTabObj = Instantiate(leaderBoardTabPrefab, leaderBoardTabParent);
-            LeaderBoardTab leaderboardTab = leaderboardTabObj.GetComponent<LeaderBoardTab>();
-            leaderboardTab.SetData(name);
-            leaderboardTab.OnTabClicked += LeaderBoardTab_OnTabClicked;
-            listLeaderboardTab.Add(leaderboardTab);
-        }
+        UpdateUIListRecord();
+        
         selectedTab = listLeaderboardTab[0];
         selectedTab.SelectTab(true);
 
@@ -68,40 +90,42 @@ public class LeaderBoardView : BaseView
         topImage.sprite = topSprites[1];
     }
 
-    private void MockData()
+    #endregion
+
+    #region UI
+    private void UpdateUIListGame()
     {
-
-        for (int i = 0; i < 5; i++)
+        foreach (Game game in gameList)
         {
-            JObject leaderboardItem = new()
-            {
-                ["top"] = i + 1,
-                ["avatar"] = "",
-                ["name"] = "Minh Quan",
-            };
-
-            mockArray.Add(leaderboardItem);
+            LeaderBoardTab leaderBoardTab = Instantiate(leaderBoardTabPrefab, leaderBoardTabParent).GetComponent<LeaderBoardTab>();
+            leaderBoardTab.SetData(Constants.GameNameFromCode[game.Code], game.Code);
+            leaderBoardTab.OnTabClicked += LeaderBoardTab_OnTabClicked;
+            listLeaderboardTab.Add(leaderBoardTab);
         }
+        listLeaderboardTab[0].OnClickTab();
+    }
 
-        for (int i = 0; i < 10; i++)
+    private void UpdateUIListRecord()
+    {
+        foreach (IApiLeaderboardRecord record in recordList)
         {
-            JObject leaderboardTab = new()
-            {
-                ["name"] = "Game " + (i + 1),
-            };
-
-            mockArrayGame.Add(leaderboardTab);
+            LeaderBoardItem leaderBoardItem = Instantiate(leaderBoardItemPrefab, leaderBoardItemParent).GetComponent<LeaderBoardItem>();
+            leaderBoardItem.SetData(record.Rank, record.Username, record.Score);
+            listLeaderboardItem.Add(leaderBoardItem);
         }
-
-        Debug.Log(mockArray.ToString());
     }
     #endregion
 
     #region Event
 
-    private void LeaderBoardTab_OnTabClicked(object sender, EventArgs e)
+    private void LeaderBoardTab_OnTabClicked(object sender, OnTabClickedEventArgs e)
     {
         selectedTab = sender as LeaderBoardTab;
+        if (currentTabGameCode == e.gameCode)
+        {
+            return;
+        }
+        currentTabGameCode = e.gameCode;
         foreach (var leaderboardTab in listLeaderboardTab)
         {
             if (leaderboardTab == selectedTab)
@@ -113,6 +137,7 @@ public class LeaderBoardView : BaseView
                 leaderboardTab.SelectTab(false);
             }
         }
+        _ = LoadListLeaderBoard();
     }
         
     #endregion
