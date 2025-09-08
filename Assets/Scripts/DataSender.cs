@@ -44,7 +44,7 @@ public class DataSender
     public const string DELETE_NOTIFICATION = "delete_notification";
     public const string READ_ALL_NOTIFICATION = "read_all_notification";
     public const string DELETE_ALL_NOTIFICATION = "delete_all_notification";
-    public const string LEADER_BOARD_INFO = "leaderboard_info";
+    public const string LEADERBOARD_INFO = "leaderboard_info";
     public const string GET_JACKPOT = "jackpot";
     public const string INFO_MATCH = "info_match";
     #endregion
@@ -441,11 +441,11 @@ public class DataSender
         return DecodeFromJson<DailyRewardTemplate>(response.Payload);
     }
 
-    public static async UniTask<GiftCode> ClaimGiftCode()
+    public static async UniTask<GiftCode> ClaimGiftCode(string code)
     {
         GiftCode giftCode = new GiftCode()
         {
-
+            Code = code
         };
         var response = await NetworkManager.INSTANCE.RPCSend(GIFT_CODE_CLAIM, giftCode);
         return DecodeFromJson<GiftCode>(response.Payload);
@@ -466,6 +466,14 @@ public class DataSender
     #endregion
 
     #region Leaderboard
-
+    public static async UniTask<LeaderBoardRecord> GetLeaderBoardRecord(string gameCode)
+    {
+        LeaderBoardRecord leaderBoardRecord = new()
+        {
+            GameCode = gameCode
+        };
+        var response = await NetworkManager.INSTANCE.RPCSend(LEADERBOARD_INFO, leaderBoardRecord);
+        return DecodeFromJson<LeaderBoardRecord>(response.Payload);
+    }
     #endregion
 }

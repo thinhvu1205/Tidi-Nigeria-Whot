@@ -54,6 +54,21 @@ namespace Globals
             BLACKJACK_GAME_ID
         };
 
+        public static readonly Dictionary<string, string> GameNameFromCode = new()
+        {
+            { "whot-game", "Whot" },
+            { "roulette", "Roulette" },
+            { "fruit", "Slot Fruit" },
+            { "chinese-poker", "Hongkong Poker" },
+            { "baccarat", "Baccarat" },
+            { "sixiang", "Slot Sixiang" },
+            { "tarzan", "Slot Tarzan" },
+            { "juicygarden", "Slot Juicy Garden" },
+            { "blackjack", "Blackjack" },
+            { "inca", "Slot Inca" },
+            { "noel", "Slot Noel" },
+        };
+
         public static readonly Dictionary<WhotCardSuit, int> WhotSuitSortOrder = new()
         {
             { WhotCardSuit.WhotSuitCircle, 0 },

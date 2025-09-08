@@ -10,10 +10,11 @@ public class LeaderBoardItem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI nameText, topText, chipValueText;
     [SerializeField] private List<Sprite> topSprites = new();
 
-    public void SetData(string top, string name)
+    public void SetData(string top, string name, string score)
     {
         topText.text = top;
         nameText.text = name;
+        chipValueText.text = score;
         DisplayTopImage(int.Parse(top));
     }
 

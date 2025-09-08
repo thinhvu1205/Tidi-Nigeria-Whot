@@ -333,8 +333,16 @@ public class NetworkManager : MonoBehaviour
 
     #endregion
 
+    #region Leaderboard
+    public async UniTask<IApiLeaderboardRecordList> GetListLeaderboard(string leaderboardId, int limit = 100)
+    {
+        IApiLeaderboardRecordList leaderboardRecordList = await _ClientC.ListLeaderboardRecordsAsync(_SessionIS, leaderboardId, null, limit);
+        return leaderboardRecordList;
+    }
+    #endregion
+
     #region Socket
-    
+
     public async UniTask InitSocket(ISession session)
     {
         _SocketIS = _ClientC.NewSocket();
