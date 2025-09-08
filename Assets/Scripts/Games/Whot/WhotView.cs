@@ -88,7 +88,6 @@ public class WhotView : BaseGameView
     protected override void Awake()
     {
         base.Awake();
-        Init();
     }
 
     protected override void Update()
@@ -126,6 +125,12 @@ public class WhotView : BaseGameView
         {
             whotPlayer.gameObject.SetActive(false);
         }
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        Init();
     }
     
     protected override void OnDestroy()
@@ -1290,6 +1295,13 @@ public class WhotView : BaseGameView
         return whotCardModel;
     }
 
+    public void ResetAllPlayers()
+    {
+        foreach (WhotPlayer whotPlayer in playersList)
+        {
+            whotPlayer.Reset();
+        }
+    }
 
     private void PrepareNewGame()
     {
@@ -1313,7 +1325,7 @@ public class WhotView : BaseGameView
         foreach (Transform card in deckOfCardParent)
         {
             WhotCardModel whotCardModel = card.GetComponent<WhotCardModel>();
-            if ( whotCardModel != null)
+            if (whotCardModel != null)
             {
                 // Destroy(card.gameObject);
                 PoolService.Instance.Release(PrefabType.WhotCard, whotCardModel);
@@ -1323,7 +1335,7 @@ public class WhotView : BaseGameView
         {
             // Destroy(child.gameObject);
             WhotCardModel whotCardModel = child.GetComponent<WhotCardModel>();
-            if ( whotCardModel != null)
+            if (whotCardModel != null)
             {
                 // Destroy(card.gameObject);
                 PoolService.Instance.Release(PrefabType.WhotCard, whotCardModel);

@@ -255,6 +255,7 @@ public class UIManager : Singleton<UIManager>
         lotoView.transform.localScale = Vector3.one;
     }
 
+
     public void OpenExchange()
     {
         ExchangeView exchangeView = Instantiate(LoadPrefabLobby("ExchangeView"), parentLobby).GetComponent<ExchangeView>();
@@ -272,6 +273,24 @@ public class UIManager : Singleton<UIManager>
         LeaderBoardView leaderBoardView = Instantiate(LoadPrefabLobby("LeaderboardView"), parentLobby).GetComponent<LeaderBoardView>();
         leaderBoardView.transform.localScale = Vector3.one;
     }
+
+    public void OpenGiftCode()
+    {
+        GiftCodeView giftCodeView = Instantiate(LoadPrefabPopup("PopupGiftCode"), parentPopups).GetComponent<GiftCodeView>();
+        giftCodeView.transform.localScale = Vector3.one;
+    }
+
+    public void OpenSupport()
+    {
+        SupportView supportView = Instantiate(LoadPrefabPopup("PopupSupport"), parentPopups).GetComponent<SupportView>();
+        supportView.transform.localScale = Vector3.one;
+    }
+    public void OpenSendGift()
+    {
+        SendGiftView sendGiftView = Instantiate(LoadPrefabPopup("PopupSendGift"), parentPopups).GetComponent<SendGiftView>();
+        sendGiftView.transform.localScale = Vector3.one;
+    }
+
     public void OpenFreeChips()
     {
         FreeChipView freeChipView = Instantiate(LoadPrefabPopup("PopupFreechips"), parentPopups).GetComponent<FreeChipView>();

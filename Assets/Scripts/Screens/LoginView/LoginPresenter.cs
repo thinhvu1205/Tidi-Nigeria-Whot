@@ -41,7 +41,7 @@ namespace Screens.LoginView
             }
             catch (Exception err)
             {
-                loginView.OnLoginError();
+                loginView.OnLoginError(err.Message);
                 Debug.LogError($"Login guest error: {err}");
             }
         }
@@ -61,7 +61,7 @@ namespace Screens.LoginView
             }
             catch (Exception err)
             {
-                loginView.OnLoginError();
+                loginView.OnLoginError(err.Message);
                 Debug.LogError($"Login email error: {err}");
             }
         }
@@ -79,7 +79,7 @@ namespace Screens.LoginView
             }
             catch (Exception err)
             {
-                loginView.OnLoginError();
+                loginView.OnLoginError(err.Message);
                 Debug.LogError($"Login FB error: {err}");
             }
         }

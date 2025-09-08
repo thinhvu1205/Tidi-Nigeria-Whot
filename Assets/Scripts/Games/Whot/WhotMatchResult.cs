@@ -86,6 +86,7 @@ public class WhotMatchResult : MonoBehaviour
     public void OnClickPlayAgain()
     {
         gameObject.SetActive(false);
+        whotGame.ResetAllPlayers();
     }
 
     public void OnClickBetMoreNote()

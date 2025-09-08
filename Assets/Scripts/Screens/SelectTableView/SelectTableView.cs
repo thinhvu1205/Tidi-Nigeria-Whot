@@ -103,6 +103,12 @@ public class SelectTableView : BaseView
             Debug.Log("Bet item: " + betItemList[i].ToString());
             int index = i;
             // Instantiate bet item
+            if (betItemList[i].BetDisableType == BetDisableType.BelowMinVip
+                || betItemList[i].BetDisableType == BetDisableType.AboveMaxVip
+            )
+            {
+                continue;
+            }
             BetItem betItem = Instantiate(betItemPrefab, betItemParent).GetComponent<BetItem>();
             betItem.SetData(betItemList[index], index);
         }

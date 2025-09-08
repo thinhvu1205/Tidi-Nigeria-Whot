@@ -33,6 +33,7 @@ public class BlackjackView : BaseDiceGameView
     [SerializeField] private GameObject buttonDoubleBet;
     [SerializeField] private GameObject buttonDeal;
     [SerializeField] private GameObject buttonClear;
+    [SerializeField] private GameObject rulePrefab;
 
     [Header(" Buttons ")]
     [SerializeField] private BlackjackButtonAction buttonDouble;
@@ -630,7 +631,16 @@ public class BlackjackView : BaseDiceGameView
             nextActionCode = BlackjackActionCode.BlackjackActionStay;
         }
         buttonBetContainer.gameObject.SetActive(false);
+    }
 
+    public void OnClickMenuButton()
+    {
+        UIManager.Instance.OpenGroupMenu();
+    }
+
+    public override void OpenRule()
+    {
+        Instantiate(rulePrefab, transform);
     }
 
     private void HandleClickButtonAction(BlackjackActionCode code)

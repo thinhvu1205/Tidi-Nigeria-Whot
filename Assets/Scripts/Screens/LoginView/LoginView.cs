@@ -91,12 +91,12 @@ namespace Screens.LoginView
             _ = OpenLobbyView();
         }
     
-        public void OnLoginError()
+        public void OnLoginError(string message)
         {
             UIManager.Instance.HideProgressing();
             // Global.AlertView.SetData(UIManager.Instance.GetText("login_error"));
             // Global.AlertView.isLoginFailed = true;
-            UIManager.Instance.ShowAlertDialog("Incorrect username or password");
+            UIManager.Instance.ShowAlertDialog(message);
         }
     
         private async UniTask OpenLobbyView()

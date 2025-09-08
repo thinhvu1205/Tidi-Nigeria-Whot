@@ -146,14 +146,15 @@ public class DataSender
         return DecodeFromJson<Profile>(response.Payload);
     }
 
-    public static void ChangePassword(string oldPassword = "", string password = "")
+    public static async UniTask<string> ChangePassword(string oldPassword = "", string password = "")
     {
         ChangePasswordRequest data = new()
         {
             OldPassword = oldPassword,
             Password = password
         };
-        _ = NetworkManager.INSTANCE.RPCSend(CHANGE_PASS, data);
+        var response = await NetworkManager.INSTANCE.RPCSend(CHANGE_PASS, data);
+        return response.Payload;
     }
 
     public static async UniTask<string> LinkUsername(string username = "", string password = "")
@@ -271,7 +272,7 @@ public class DataSender
         catch (Exception ex)
         {
             Debug.LogError("JoinMatch failed: " + ex.Message);
-            UIManager.Instance.ShowConfirmDialog("Lỗi khi vào trận : " + ex.Message, null, null);
+            UIManager.Instance.ShowAlertDialog(ex.Message, null);
             return null;
         }
     }

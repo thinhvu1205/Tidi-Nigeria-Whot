@@ -119,6 +119,10 @@ public class LobbyView : BaseView
     public void OnClickChipOnline() => UIManager.Instance.OpenChipOnline();
     public void OnClickFriend() => UIManager.Instance.OpenFriend();
     public void OnClickSetting() => UIManager.Instance.OpenSetting();
+    public void OnClickGiftCode() => UIManager.Instance.OpenGiftCode();
+    public void OnClickBanner() => UIManager.Instance.OpenSetting();
+    public void OnClickSendGift() => UIManager.Instance.OpenSendGift();
+    public void OnClickSupport() => UIManager.Instance.OpenSupport();
     #endregion
     
     public void PlayVideoSiXiang(Match labelMatch)
