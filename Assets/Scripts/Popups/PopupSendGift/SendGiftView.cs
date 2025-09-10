@@ -14,6 +14,8 @@ public class SendGiftView : BaseView
 {
     [SerializeField] private GameObject sendGiftTab, historyTab;
     [SerializeField] private GameObject selectedSendGiftTab, selectedHistoryTab;
+    [SerializeField] private ItemHistoryGift itemHistoryGiftPrefab;
+    [SerializeField] private Transform historyItemContainer;
     [SerializeField] private Button sendGiftBtn;
     [SerializeField] private TextMeshProUGUI currentChipTxt;
     [SerializeField] private TextMeshProUGUI idFriendTxt;
@@ -89,6 +91,7 @@ public class SendGiftView : BaseView
                 await DataSender.GetTransactionHistory(20,
                     metaBankAction: metaBankActionStr);
             Debug.Log($"Receive data history {walletTransaction}");
+            LoadHistoryGiftSuccessful(walletTransaction);
             UIManager.Instance.HideProgressing();
         }
         catch (Exception e)
@@ -106,4 +109,14 @@ public class SendGiftView : BaseView
         await UIManager.Instance.LoadProfileUser();
         currentChipTxt.text = User.userProfile.AccountChip.ToString();
     }
+
+    private void LoadHistoryGiftSuccessful(Constants.WalletTransaction transaction)
+    {
+        foreach (var walletLedgerItem in transaction.transactions)
+        {
+            ItemHistoryGift itemHistoryGift = Instantiate(itemHistoryGiftPrefab, historyItemContainer);
+            itemHistoryGift.SetData(walletLedgerItem);
+        }
+    }
+    
 }

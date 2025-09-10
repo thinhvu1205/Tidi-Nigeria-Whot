@@ -361,14 +361,13 @@ public class DataSender
     
     public static async UniTask<Constants.WalletTransaction> GetTransactionHistory(long limit = 0, string metaAction = "bank_topup", string metaBankAction = "1")
     {
-
         WalletTransRequest bank = new WalletTransRequest() { 
             Limit = limit, 
             MetaAction = metaAction,
             MetaBankAction = metaBankAction
         };
         var response = await NetworkManager.INSTANCE.RPCSend(WALLET_TRANSACTION, bank);
-        return JsonUtility.FromJson<Constants.WalletTransaction>(response.Payload);
+        return JsonConvert.DeserializeObject<Constants.WalletTransaction>(response.Payload);
     }
 
     public static async UniTask<ListFreeChip> GetListFreeChip()
