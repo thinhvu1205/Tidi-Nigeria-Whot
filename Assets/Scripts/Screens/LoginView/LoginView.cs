@@ -103,8 +103,8 @@ namespace Screens.LoginView
         {
             try
             {
-                await UIManager.Instance.LoadProfileUser();
                 SceneManager.LoadScene(Config.MAIN_SCENE);
+                await UIManager.Instance.LoadProfileUser();
                 if (User.userProfile.PlayingMatch.MatchId != "")
                 {
                     Debug.Log($"Joining match with ID: {User.userProfile.PlayingMatch.MatchId}");
@@ -120,7 +120,8 @@ namespace Screens.LoginView
             }
             catch (Exception e)
             {
-                UIManager.Instance.ShowAlertDialog("Error: " + e.Message);
+                Debug.LogError(e.Message);
+                // UIManager.Instance.ShowAlertDialog("Error: " + e.Message);
             }
         }
         

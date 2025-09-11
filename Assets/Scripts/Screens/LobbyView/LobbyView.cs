@@ -9,9 +9,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using DG.Tweening;
+using Avatar = Common.Objects.Avatar;
 
 public class LobbyView : BaseView
 {
+    [SerializeField] private Avatar avatar;
     [SerializeField] private TextMeshProUGUI displayNameText, userIdText, accountChip;
     [SerializeField] private Image allSlotGamesImage, allGamesImage;
     [SerializeField] private Transform bigGameIconParent, miniGameIconParent, slotGameIconParent, allGamesParent, slotGamesParent;
@@ -27,13 +29,26 @@ public class LobbyView : BaseView
         base.Awake();
         OnClickAllGamesTab();
         _ = LoadGames();
-        UpdateProfileData();
         UIManager.Instance.lobbyView = this;
     }
     protected override void Start()
     {
         base.Start();
+        UpdateProfileData();
+        // User.OnProfileUpdated += UpdateProfileData;
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
         User.OnProfileUpdated += UpdateProfileData;
+
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        User.OnProfileUpdated -= UpdateProfileData;
     }
 
 
@@ -79,12 +94,6 @@ public class LobbyView : BaseView
         }
     }
 
-
-    private void User_OnProfileUpdated(object sender, EventArgs e)
-    {
-        UpdateProfileData();
-    }
-
     public void UpdateProfileData()
     {
         if (User.userProfile != null)
@@ -92,6 +101,7 @@ public class LobbyView : BaseView
             displayNameText.text = User.userProfile.DisplayName;
             userIdText.text = "ID: " + User.userProfile.UserSid;
             accountChip.text = User.userProfile.AccountChip.ToString();
+            avatar.LoadAvatar(User.userProfile.AvatarId);
         }
     }
 
@@ -120,7 +130,7 @@ public class LobbyView : BaseView
     public void OnClickFriend() => UIManager.Instance.OpenFriend();
     public void OnClickSetting() => UIManager.Instance.OpenSetting();
     public void OnClickGiftCode() => UIManager.Instance.OpenGiftCode();
-    public void OnClickBanner() => UIManager.Instance.OpenSetting();
+    public void OnClickBanner() => UIManager.Instance.OpenBanner();
     public void OnClickSendGift() => UIManager.Instance.OpenSendGift();
     public void OnClickSupport() => UIManager.Instance.OpenSupport();
     #endregion

@@ -1236,10 +1236,14 @@ public class WhotView : BaseGameView
 
     public void OnQuitMatch()
     {
-        if (new GameState[] { GameState.Idle, GameState.Matching, GameState.Finish }.Contains(gameState) || !GetCurrentPlayer().isPlaying)
+        if (new GameState[] { GameState.Idle, GameState.Matching, GameState.Finish, GameState.Reward }.Contains(gameState) || !GetCurrentPlayer().isPlaying)
         {
             NetworkManager.INSTANCE.LeaveMatch();
             Destroy(gameObject);
+        }
+        else
+        {
+            UIManager.Instance.ShowToast("You cannot leave while the match is in progress!");
         }
     }
 

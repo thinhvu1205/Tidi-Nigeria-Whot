@@ -15,11 +15,14 @@ using GameState = Proto.GameState;
 using UnityEngine.Video;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
+using Color = UnityEngine.Color;
 
 public class UIManager : Singleton<UIManager>
 {
     public SpriteAtlas avatarAtlas, cardAtlas;
-    [SerializeField] Sprite avtDefault;
+    [SerializeField] Sprite avtDefault, spriteToast;
+    [SerializeField] TMP_FontAsset fontLabelToast;
   
     public LobbyView lobbyView;
     private Transform parentPopups, parentGames, parentBanners, parentLobby, parentLoading;
@@ -95,7 +98,7 @@ public class UIManager : Singleton<UIManager>
         Progressing.Instance.gameObject.SetActive(false);
     }
     
-    public Sprite getAvatarDefault()
+    public Sprite GetAvatarDefault()
     {
         return avtDefault;
     }
@@ -238,6 +241,52 @@ public class UIManager : Singleton<UIManager>
         dialogView.ConfigCancelButton(false, "Cancel", null);
     }
 
+    public void ShowToast(string message, float timeShow = 2, Transform parent = null)
+    {
+        var compToast = Utility.CreateSprite(spriteToast);
+        compToast.transform.SetParent(parent != null ? parent : transform);
+        compToast.transform.SetAsLastSibling();
+        compToast.type = Image.Type.Sliced;
+        compToast.rectTransform.sizeDelta = new Vector2(400, 80);
+        compToast.rectTransform.localScale = Vector3.one;
+        compToast.transform.localPosition = new Vector2(0, -Screen.height / 4);
+
+
+        var label = Utility.CreateLabel(message, 30);
+        label.rectTransform.SetParent(compToast.rectTransform);
+        label.rectTransform.localScale = Vector3.one;
+        label.color = Color.white;
+        label.alignment = TextAlignmentOptions.Center;
+        label.enableWordWrapping = false;
+        label.font = fontLabelToast;
+
+        if (label.preferredWidth > compToast.rectTransform.sizeDelta.x)
+        {
+            compToast.rectTransform.sizeDelta = new Vector2(label.preferredWidth + 100, compToast.rectTransform.sizeDelta.y);
+        }
+
+        label.rectTransform.sizeDelta = new Vector2(390, 50);
+        label.transform.localPosition = new Vector2(0, 5);
+
+        if (gameView != null)
+        {
+            compToast.transform.eulerAngles = gameView.transform.eulerAngles;
+            if (gameView.transform.eulerAngles.z == 0)
+            {
+                compToast.rectTransform.anchoredPosition = new Vector3(0, -150);
+            }
+            else
+                compToast.rectTransform.anchoredPosition = new Vector3(0, 0, 0);
+        }
+
+
+        compToast.rectTransform.localScale = Vector3.zero;
+        DOTween.Sequence().Append(compToast.rectTransform.DOScale(1, .5f).SetEase(Ease.OutBack)).Append(compToast.rectTransform.DOScale(0, .5f).SetEase(Ease.InBack).SetDelay(timeShow)).AppendCallback(() =>
+        {
+            Destroy(compToast.gameObject);
+        }).SetAutoKill(true);
+    }
+
     public void OpenSelectTableView()
     {
         SelectTableView selectTableView = Instantiate(LoadPrefabLobby("SelectTableView"), parentGames).GetComponent<SelectTableView>();
@@ -365,6 +414,12 @@ public class UIManager : Singleton<UIManager>
     {
         GroupMenuView groupMenuView = Instantiate(LoadPrefabPopup("GroupMenu"), parentGames).GetComponent<GroupMenuView>();
         groupMenuView.transform.localScale = Vector3.one;
+    }
+
+    public void OpenBanner()
+    {
+        ListBannerView bannerView = Instantiate(LoadPrefabPopup("ListBannerView"), parentBanners).GetComponent<ListBannerView>();
+        bannerView.transform.localScale = Vector3.one;
     }
 
     public void OpenRule()

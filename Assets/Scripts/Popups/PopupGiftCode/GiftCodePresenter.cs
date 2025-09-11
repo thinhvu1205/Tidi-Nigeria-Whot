@@ -22,28 +22,28 @@ public class GiftCodePresenter
             var result = await DataSender.ClaimGiftCode(giftCode);
             switch (result.ErrCode) {
                 case (int)GiftCodeError.NotOpen:
-                    giftCodeView.OnSubmitFinished("Code not open!");
+                    _ = giftCodeView.OnSubmitFinished("Code not open!");
                     break;
                 case (int)GiftCodeError.HasClosed:
-                    giftCodeView.OnSubmitFinished("Code has closed!");
+                    _ = giftCodeView.OnSubmitFinished("Code has closed!");
                     break;
                 case (int)GiftCodeError.ReachMaxClaimed:
-                    giftCodeView.OnSubmitFinished("Code reach max claimed!");
+                    _ = giftCodeView.OnSubmitFinished("Code reach max claimed!");
                     break;
                 case (int)GiftCodeError.AlreadyClaimed:
-                    giftCodeView.OnSubmitFinished("Code already claimed!");
+                    _ = giftCodeView.OnSubmitFinished("Code already claimed!");
                     break;
                 case (int)GiftCodeError.LvVipNotMeetRequire:
-                    giftCodeView.OnSubmitFinished("Vip level not met require!");
+                    _ = giftCodeView.OnSubmitFinished("Vip level not met require!");
                     break;
                 default:
-                    giftCodeView.OnSubmitFinished(result.Message);
+                    _ = giftCodeView.OnSubmitFinished(result.Message);
                     break;
             }
         }
         catch (Exception)
         {
-            giftCodeView.OnSubmitFinished("Error when claim gift code!");
+            _ = giftCodeView.OnSubmitFinished("Error when claim gift code!");
             throw;
         }
     }

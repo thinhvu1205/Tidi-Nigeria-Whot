@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -23,10 +24,11 @@ public class GiftCodeView : BaseView
         _ = giftCodePresenter.OnSubmit(giftCode);
     }
 
-    public void OnSubmitFinished(string message)
+    public async Task OnSubmitFinished(string message)
     {
         giftCodeInputField.text = "";
         UIManager.Instance.HideProgressing();
         UIManager.Instance.ShowAlertDialog(message);
+        await UIManager.Instance.LoadProfileUser();
     }
 }

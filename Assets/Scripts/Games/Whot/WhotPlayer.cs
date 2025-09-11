@@ -9,18 +9,21 @@ using Globals;
 using System;
 using Common.Pool;
 using Games.Whot;
+using Avatar = Common.Objects.Avatar;
 
 public class WhotPlayer : MonoBehaviour
 {
-    [SerializeField] private Image avatarImage, countdownImage, lightImage, holdOnImage, suspensionImage, scoreImage;
+    [SerializeField] private Image countdownImage, lightImage, holdOnImage, suspensionImage, scoreImage;
     [SerializeField] private TextMeshProUGUI nameText, chipText, cardsLeftText, effectText, scoreText, plusText, chipAddText;
     [SerializeField] private GameObject lastCardNoti, effectNoti, cardsDisplay, cardPrefab;
     [SerializeField] private Transform remainingCardsParent;
     [SerializeField] private TMP_FontAsset chipWinFont, chipLoseFont;
+    [SerializeField] private Avatar avatar;
     [HideInInspector] public bool isCurrentPlayer = false;
     [HideInInspector] public bool isWinner = false;
     [HideInInspector] public bool isPlaying = true;
     public string Id { get; private set; } = string.Empty;
+    public string AvatarId { get; private set; } = string.Empty;
     public int CardsLeft { get; set; } = 0;
     private WhotView whotGame;
     private PlayerLayout playerLayout;
@@ -74,13 +77,14 @@ public class WhotPlayer : MonoBehaviour
 
     public void SetPlayerInfo(
         string playerId,
-        string avatarSprite,
+        string avatarId,
         string playerName,
         string chipAmount = "0"
     )
     {
-        this.Id = playerId;
-        // avatarImage.sprite = avatarSprite;
+        Id = playerId;
+        AvatarId = avatarId;
+        avatar.LoadAvatar(avatarId);
         nameText.text = playerName;
         // chipText.text = Utility.FormatMoney(Utility.ConvertStringToNumber(chipAmount), true);
         AnimateChipValue(long.Parse(chipAmount));
@@ -438,7 +442,7 @@ public class WhotPlayer : MonoBehaviour
     #region Getters and Setters
     public Image GetAvatarImage()
     {
-        return avatarImage;
+        return avatar.GetAvatar();
     }
 
     public string GetPlayerName()
@@ -461,7 +465,7 @@ public class WhotPlayer : MonoBehaviour
 
     public Transform GetPlayedCardParent()
     {
-        return avatarImage.transform;
+        return avatar.transform;
     }
     #endregion
 
