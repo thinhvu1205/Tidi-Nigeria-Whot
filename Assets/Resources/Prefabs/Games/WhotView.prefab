@@ -11490,6 +11490,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7685574218595862727}
     m_Modifications:
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3897063733063811495, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
       propertyPath: m_Name
       value: WhotPlayer
@@ -11667,6 +11687,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2426616378402454076}
     m_Modifications:
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3897063733063811495, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
       propertyPath: m_Name
       value: WhotPlayer (3)
@@ -11844,6 +11884,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7703758953536002777}
     m_Modifications:
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3897063733063811495, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
       propertyPath: m_Name
       value: WhotPlayer (2)
@@ -12021,6 +12081,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1686584219369130510}
     m_Modifications:
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757038739970000767, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3897063733063811495, guid: 310ef658f49d54b80bc45ea191d4c5cd, type: 3}
       propertyPath: m_Name
       value: WhotPlayer (1)

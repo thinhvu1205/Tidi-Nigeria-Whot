@@ -451,9 +451,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 517bbfab064504e0aaeabe2e91528fa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  avatarAtlas: {fileID: 0}
+  avatarAtlas: {fileID: 4343727234628468602, guid: 1cdcf1e04c9870a40b4c8ad8dd8368e9, type: 2}
   cardAtlas: {fileID: 0}
   avtDefault: {fileID: 0}
+  spriteToast: {fileID: 21300000, guid: 0ac2ba5b8d30247dd95425e72fcd5567, type: 3}
+  fontLabelToast: {fileID: 11400000, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
   lobbyView: {fileID: 0}
   gameView: {fileID: 0}
 --- !u!4 &422078963

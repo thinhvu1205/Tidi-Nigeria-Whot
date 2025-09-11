@@ -7,13 +7,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Color = UnityEngine.Color;
+using Avatar = Common.Objects.Avatar;
+
 public class WhotPlayerResultItem : MonoBehaviour
 {
-    [SerializeField] private Image backgroundWinImage, backgroundLoseImage, avatarImage, winnerImage;
+    [SerializeField] private Image backgroundWinImage, backgroundLoseImage, winnerImage;
     [SerializeField] private TextMeshProUGUI nameText, cashText, scoreText;
     [SerializeField] private GameObject cardLeftPrefab;
     [SerializeField] private Transform cardLeftParent;
     [SerializeField] private Color greenColor, blueColor, lightBlueColor, yellowColor;
+    [SerializeField] private Avatar avatar;
     private const float CARD_SCALE = 0.46f;
     private const float CARD_SPACING = CARD_SCALE / 2 * 100f;
     public void SetInfo(WhotPlayer player, string cash, List<WhotCard> remainingCards, string score, bool isVictory)
@@ -50,7 +53,8 @@ public class WhotPlayerResultItem : MonoBehaviour
                 SetTextColor(greenColor);
             }
         }
-        avatarImage.sprite = null;
+
+        avatar.LoadAvatar(player.AvatarId);
         winnerImage.gameObject.SetActive(player.isWinner);
         nameText.text = player.GetPlayerName();
         cashText.text = cash;

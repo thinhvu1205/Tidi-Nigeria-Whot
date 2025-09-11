@@ -216,9 +216,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 102f4975f2354126a211ce97488284ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 482160970948043802}
-  imgBorder: {fileID: 4334540538884254234}
-  avtDefault: {fileID: 21300000, guid: e1091645270c645b891882d3983cbe49, type: 3}
+  imageAvatar: {fileID: 482160970948043802}
+  imageBorder: {fileID: 4334540538884254234}
+  spriteAvatarDefault: {fileID: 21300000, guid: e1091645270c645b891882d3983cbe49, type: 3}
   border:
   - {fileID: 21300000, guid: 107dedb42d4724b3e86d3e67ac848b18, type: 3}
   - {fileID: 21300000, guid: 4b4dafb8f6dea4638bb7fb524fc5a95d, type: 3}
@@ -231,8 +231,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 79b3d07b792ef45b0bd0ab9c6e874b27, type: 3}
   - {fileID: 21300000, guid: 3c011f8f19e904119bc663ef515c3931, type: 3}
   - {fileID: 21300000, guid: 65bc64dc4b20e4d8789527c265291009, type: 3}
-  namee: {fileID: 6189633921181236063}
-  idAvt: 0
+  textName: {fileID: 6189633921181236063}
+  avatarIndex: 0
 --- !u!1 &7403832687064279132
 GameObject:
   m_ObjectHideFlags: 0

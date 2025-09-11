@@ -178,13 +178,24 @@ public class DataSender
         _ = NetworkManager.INSTANCE.RPCSend(UPDATE_PROFILE, data);
     }
 
-    public static void UpdateAvatar(string avatarId = "")
+    public static async UniTask<Profile> UpdateAvatar(string avatarId = "")
     {
         Profile data = new()
         {
             AvatarId = avatarId
         };
-        var response = NetworkManager.INSTANCE.RPCSend(UPDATE_AVATAR, data);
+        var response = await NetworkManager.INSTANCE.RPCSend(UPDATE_PROFILE, data);
+        return DecodeFromJson<Profile>(response.Payload);
+    }
+
+    public static async UniTask<Profile> UpdateConfig(string config)
+    {
+        Profile data = new()
+        {
+            AppConfig = config
+        };
+        var response = await NetworkManager.INSTANCE.RPCSend(UPDATE_PROFILE, data);
+        return DecodeFromJson<Profile>(response.Payload);
     }
     #endregion
 
@@ -449,11 +460,11 @@ public class DataSender
         return DecodeFromJson<GiftCode>(response.Payload);
     }
 
-    public static async UniTask<InAppMessageData> GetListInAppMessage()
+    public static async UniTask<InAppMessageData> GetListInAppMessage(TypeInAppMessage typeInAppMessage)
     {
         InAppMessageRequest inAppMessageRequest = new()
         {
-
+            Type = typeInAppMessage
         };
         var response = await NetworkManager.INSTANCE.RPCSend(LIST_IN_APP_MESSAGE, inAppMessageRequest);
         return DecodeFromJson<InAppMessageData>(response.Payload);

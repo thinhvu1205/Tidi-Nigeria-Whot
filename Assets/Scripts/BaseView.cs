@@ -214,6 +214,19 @@ public class BaseView : MonoBehaviour
             await UIManager.Instance.LoadProfileUser();
         }
     }
+    
+    public async Task ShowToast(string message = "", bool isReloadProfile = false)
+    {
+        UIManager.Instance.HideProgressing();
+        if (!string.IsNullOrEmpty(message))
+        {
+            UIManager.Instance.ShowToast(message, parent: transform);
+        }
+        if (isReloadProfile)
+        {
+            await UIManager.Instance.LoadProfileUser();
+        }
+    }
 
     public void OnError(string message)
     {

@@ -111,15 +111,15 @@ public class BasePlayerView : MonoBehaviour
         vipLevel = playerData.VipLevel;
         sid = playerData.Sid.ToString();
         SetCurrentChip(long.Parse(wallet));
-
-        if (string.IsNullOrEmpty(avatar_id))
-        {
-            // avatar.setSpriteFrame(UIManager.Instance.avatarAtlas.getSpriteFrame(avatar_id));
-        }
-        else
-        {
-            avatar.setSpriteFrame(UIManager.Instance.getAvatarDefault());
-        }
+        avatar.LoadAvatar(avatar_id);
+        // if (string.IsNullOrEmpty(avatar_id))
+        // {
+        //     // avatar.setSpriteFrame(UIManager.Instance.avatarAtlas.getSpriteFrame(avatar_id));
+        // }
+        // else
+        // {
+        //     avatar.SetSpriteFrame(UIManager.Instance.GetAvatarDefault());
+        // }
 
         if (vipLevel != 0)
         {
@@ -491,7 +491,7 @@ public class BasePlayerView : MonoBehaviour
     /// <returns>Avatar sprite</returns>
     public Sprite GetAvatarSprite()
     {
-        return avatar.image.sprite;
+        return avatar.imageAvatar.sprite;
     }
 
     public Vector2 GetAvatarPosition()

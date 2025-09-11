@@ -10,16 +10,12 @@ namespace Common.Objects
 {
     public class Avatar : MonoBehaviour
     {
-        [SerializeField] public Image image, imgBorder;
-
-        [SerializeField] public Sprite avtDefault;
-
-
+        [SerializeField] public Image imageAvatar, imageBorder;
+        [SerializeField] public Sprite spriteAvatarDefault;
         [SerializeField] public List<Sprite> border;
+        [SerializeField] public TextMeshProUGUI textName;
 
-        [SerializeField] public TextMeshProUGUI namee;
-
-        public int idAvt = 0;
+        public int avatarIndex = 0;
 
         //public bool isMe = false;
 
@@ -27,64 +23,77 @@ namespace Common.Objects
         {
         }
 
-        public async UniTask loadAvatar(int idAva, string fbName, string fbId, string name = "")
+        public Image GetAvatar() => imageAvatar;
+        public void SetAvatar(Sprite sprite) => imageAvatar.sprite = sprite;
+
+        public void LoadAvatar(string avatarIndex, string fbName = "", string fbId = "", string name = "")
         {
-            if (idAva > 0 && idAva <= UIManager.Instance.avatarAtlas.spriteCount)
+            if (string.IsNullOrEmpty(avatarIndex))
             {
-                setSpriteWithID(idAva);
+                SetSpriteFrame(spriteAvatarDefault);
             }
             else
             {
-                //http://graph.facebook.com/%fbID%/picture?type=square
-                //var avtLink = "http://graph.facebook.com/%fbID%/picture?type=square";// Globals.Config.avatar_fb == "" ? "http://graph.facebook.com/%fbID%/picture?type=square" : Globals.Config.avatar_fb;
-                var avtLink = Config.avatar_fb == ""
-                    ? "http://graph.facebook.com/%fbID%/picture?type=square"
-                    : Config.avatar_fb;
-                //avtLink = avtLink.Replace("%fbID%", fbId);
-                //avtLink = avtLink.Replace("%token%", Globals.User.userMain.AccessToken);
-                Debug.Log("loadAvatar fbId:" + fbId);
-                if (User.AccessToken == "" || (fbId != User.FacebookID))
+                int avaIndex = int.Parse(avatarIndex);
+                if (avaIndex > 0 && avaIndex <= UIManager.Instance.avatarAtlas.spriteCount)
                 {
-                    avtLink = avtLink.Replace("&access_token=%token%", "");
+                    SetSpriteWithIndex(avaIndex);
                 }
-
-                if (fbName.Contains("fb."))
-                {
-                    var idFb = fbName.Substring(3);
-
-                    avtLink = avtLink.Replace("%fbID%", idFb);
-                }
-                else if (fbId != "")
-                {
-                    avtLink = avtLink.Replace("%fbID%", fbId);
-                }
-
-                avtLink = avtLink.Replace("%token%", Globals.User.AccessToken);
-                Debug.Log("loadAvatar:" + avtLink);
-                if (image != null)
-                {
-                    image.sprite = await Config.GetRemoteSprite(avtLink);
-                    if (image.sprite == null) setSpriteWithID(1); //default
-                }
+                
             }
 
-            if (namee == null) return;
-            if (name.Equals(""))
-            {
-                namee.gameObject.SetActive(false);
-            }
-            else
-            {
-                namee.gameObject.SetActive(true);
-                namee.text = name;
-            }
+            // else
+            // {
+            //     //http://graph.facebook.com/%fbID%/picture?type=square
+            //     //var avtLink = "http://graph.facebook.com/%fbID%/picture?type=square";// Globals.Config.avatar_fb == "" ? "http://graph.facebook.com/%fbID%/picture?type=square" : Globals.Config.avatar_fb;
+            //     var avtLink = Config.avatar_fb == ""
+            //         ? "http://graph.facebook.com/%fbID%/picture?type=square"
+            //         : Config.avatar_fb;
+            //     //avtLink = avtLink.Replace("%fbID%", fbId);
+            //     //avtLink = avtLink.Replace("%token%", Globals.User.userMain.AccessToken);
+            //     Debug.Log("loadAvatar fbId:" + fbId);
+            //     if (User.AccessToken == "" || (fbId != User.FacebookID))
+            //     {
+            //         avtLink = avtLink.Replace("&access_token=%token%", "");
+            //     }
+
+                //     if (fbName.Contains("fb."))
+                //     {
+                //         var idFb = fbName.Substring(3);
+
+                //         avtLink = avtLink.Replace("%fbID%", idFb);
+                //     }
+                //     else if (fbId != "")
+                //     {
+                //         avtLink = avtLink.Replace("%fbID%", fbId);
+                //     }
+
+                //     avtLink = avtLink.Replace("%token%", Globals.User.AccessToken);
+                //     Debug.Log("loadAvatar:" + avtLink);
+                //     if (imageAvatar != null)
+                //     {
+                //         imageAvatar.sprite = await Config.GetRemoteSprite(avtLink);
+                //         if (imageAvatar.sprite == null) SetSpriteWithIndex(1); //default
+                //     }
+                // }
+
+                // if (textName == null) return;
+                // if (name.Equals(""))
+                // {
+                //     textName.gameObject.SetActive(false);
+                // }
+                // else
+                // {
+                //     textName.gameObject.SetActive(true);
+                //     textName.text = name;
+                // }
         }
 
         public async void loadAvatarAsync(int idAva, string fbName, string fbId = "")
         {
             if (idAva > 0 && idAva <= UIManager.Instance.avatarAtlas.spriteCount)
             {
-                setSpriteWithID(idAva);
+                SetSpriteWithIndex(idAva);
             }
             else
             {
@@ -119,10 +128,10 @@ namespace Common.Objects
                 }
 
                 Debug.Log("loadAvatarAsync avtLink  " + avtLink);
-                if (this != null && image != null)
+                if (this != null && imageAvatar != null)
                 {
-                    image.sprite = await Globals.Config.GetRemoteSprite(avtLink);
-                    if (image.sprite == null) setSpriteWithID(1); //default
+                    imageAvatar.sprite = await Globals.Config.GetRemoteSprite(avtLink);
+                    if (imageAvatar.sprite == null) SetSpriteWithIndex(1); //default
                 }
             }
         }
@@ -134,7 +143,7 @@ namespace Common.Objects
             //v3 = VIP 5 - 6
             //v4 = VIP 7 - 8
             //v5 = VIP 9 - 10
-            if (imgBorder == null) return;
+            if (imageBorder == null) return;
             var index = 0;
             if (vip <= 2)
             {
@@ -157,47 +166,48 @@ namespace Common.Objects
                 index = 4;
             }
 
-            imgBorder.sprite = border[index];
+            imageBorder.sprite = border[index];
         }
 
         public void setDefault()
         {
-            image.sprite = avtDefault;
+            imageAvatar.sprite = spriteAvatarDefault;
         }
 
-        public void setSpriteFrame(Sprite sprite)
+        public void SetSpriteFrame(Sprite sprite)
         {
-            image.sprite = sprite;
+            if (imageAvatar == null) return;
+            imageAvatar.sprite = sprite;
         }
 
         public void effectShowAvatar(Sprite sprite) //Keang
         {
-            image.sprite = sprite;
-            CanvasGroup cvGroupAvt = image.GetComponent<CanvasGroup>();
+            imageAvatar.sprite = sprite;
+            CanvasGroup cvGroupAvt = imageAvatar.GetComponent<CanvasGroup>();
             cvGroupAvt.alpha = 0;
             cvGroupAvt.DOFade(1, 1.0f);
         }
 
-        public void setSpriteWithID(int idAva)
+        public void SetSpriteWithIndex(int avatarIndex)
         {
-            var avaSp = UIManager.Instance.avatarAtlas.GetSprite("avatar_" + idAva);
-            if (avaSp == null)
-                avaSp = UIManager.Instance.getAvatarDefault();
-            setSpriteFrame(avaSp);
-            idAvt = idAva;
+            Sprite avatarSprite = UIManager.Instance.avatarAtlas.GetSprite("avatar_" + avatarIndex);
+            if (avatarSprite == null)
+                avatarSprite = UIManager.Instance.GetAvatarDefault();
+            SetSpriteFrame(avatarSprite);
+            this.avatarIndex = avatarIndex;
         }
 
         public void setDark(bool isDark)
         {
-            image.color = isDark ? Color.gray : Color.white;
+            imageAvatar.color = isDark ? Color.gray : Color.white;
         }
 
         public async UniTask setSpriteWithID2(int idAva)
         {
             Debug.Log("-=-= before yield");
             await UniTask.Yield(); // Chờ 1 frame hoặc move sang async context
-            setSpriteFrame(UIManager.Instance.avatarAtlas.GetSprite("avatar_" + idAva));
-            idAvt = idAva;
+            SetSpriteFrame(UIManager.Instance.avatarAtlas.GetSprite("avatar_" + idAva));
+            avatarIndex = idAva;
         }
 
         public async UniTask loadAvatarAsync2(int idAva, string fbName, string fbId = "")
@@ -238,10 +248,10 @@ namespace Common.Objects
                     avtLink = avtLink.Replace("%token%", Globals.User.AccessToken);
                 }
 
-                if (image != null)
+                if (imageAvatar != null)
                 {
-                    image.sprite = await Globals.Config.GetRemoteSprite(avtLink);
-                    if (image.sprite == null) await setSpriteWithID2(1); //default
+                    imageAvatar.sprite = await Globals.Config.GetRemoteSprite(avtLink);
+                    if (imageAvatar.sprite == null) await setSpriteWithID2(1); //default
                 }
             }
         }

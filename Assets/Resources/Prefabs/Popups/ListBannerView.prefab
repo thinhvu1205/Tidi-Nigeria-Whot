@@ -103,7 +103,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1074170000760038976}
+  - {fileID: 8612626860105447041}
   m_Father: {fileID: 6687157256213847723}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -139,7 +139,7 @@ RectTransform:
   m_GameObject: {fileID: 759026452916643892}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6687157256213847723}
@@ -177,9 +177,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 63c0dbbd0162e42818d4adfebda34568, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3c27e316e8f0542cdb128107347e0b4b, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -231,9 +231,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 7594287271262258200}
         m_TargetAssemblyTypeName: ListBannerView, Assembly-CSharp
-        m_MethodName: DoClickPrevious
+        m_MethodName: OnClickPrevious
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -271,7 +271,7 @@ RectTransform:
   m_GameObject: {fileID: 759026452965789676}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6687157256213847723}
@@ -309,9 +309,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 63c0dbbd0162e42818d4adfebda34568, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3c27e316e8f0542cdb128107347e0b4b, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -363,9 +363,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 7594287271262258200}
         m_TargetAssemblyTypeName: ListBannerView, Assembly-CSharp
-        m_MethodName: DoClickNext
+        m_MethodName: OnClickNext
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -836,7 +836,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -175, y: -100}
-  m_SizeDelta: {x: 59, y: 65}
+  m_SizeDelta: {x: 62, y: 62}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4011071582083047349
 CanvasRenderer:
@@ -922,8 +922,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BaseView, Assembly-CSharp
-        m_MethodName: onClickClose
-        m_Mode: 6
+        m_MethodName: OnClickCloseButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1004,6 +1004,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6687157256213847723}
   - component: {fileID: 6687157256213847725}
+  - component: {fileID: 7594287271262258200}
   m_Layer: 5
   m_Name: ListBannerView
   m_TagString: Untagged
@@ -1046,7 +1047,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6687157256213847722}
   m_CullTransparentMesh: 0
---- !u!1001 &8581636814702775638
+--- !u!114 &7594287271262258200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6687157256213847722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e991402a8a474e50bdd2963d58b95e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPopup: 1
+  effectPopupReverse: 1
+  popupBackground: {fileID: 0}
+  transformPagination: {fileID: 4225282207736840937}
+  dotPrefab: {fileID: 3755261913378191506}
+  transformBanner: {fileID: 2353794690121507868}
+  scrollRect: {fileID: 3180238364903983296}
+  buttonPrev: {fileID: 759026452916643894}
+  buttonNext: {fileID: 759026452965789678}
+--- !u!1001 &1042051858307898775
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1054,18 +1076,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2353794690121507868}
     m_Modifications:
-    - target: {fileID: 169878870231650278, guid: 3fee90ebafbc449f0803b6f8864442ce, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 8786574393286912785, guid: 3fee90ebafbc449f0803b6f8864442ce, type: 3}
       propertyPath: m_Name
       value: Banner
       objectReference: {fileID: 0}
-    - target: {fileID: 8786574393286912788, guid: 3fee90ebafbc449f0803b6f8864442ce, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 29d9ef8106bd240738cf4006b8d2593d, type: 3}
     - target: {fileID: 8786574393286912790, guid: 3fee90ebafbc449f0803b6f8864442ce, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1146,14 +1160,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8786574393286912791, guid: 3fee90ebafbc449f0803b6f8864442ce, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3fee90ebafbc449f0803b6f8864442ce, type: 3}
---- !u!224 &1074170000760038976 stripped
+--- !u!224 &8612626860105447041 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8786574393286912790, guid: 3fee90ebafbc449f0803b6f8864442ce, type: 3}
-  m_PrefabInstance: {fileID: 8581636814702775638}
+  m_PrefabInstance: {fileID: 1042051858307898775}
   m_PrefabAsset: {fileID: 0}

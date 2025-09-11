@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1104242147103396222}
   - component: {fileID: 7792614243295597459}
   m_Layer: 5
-  m_Name: mask
+  m_Name: Mask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 4532671093235030210}
   - component: {fileID: 3349262791099010956}
   m_Layer: 5
-  m_Name: bkg
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 2869247707961869606}
   - component: {fileID: 169878870231650278}
   m_Layer: 5
-  m_Name: btn_close
+  m_Name: Button Close
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -271,7 +271,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8786574393286912791}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BaseView, Assembly-CSharp
         m_MethodName: onClickClose
         m_Mode: 6
@@ -294,7 +294,7 @@ GameObject:
   - component: {fileID: 8786574393286912790}
   - component: {fileID: 8786574393286912789}
   - component: {fileID: 8786574393286912788}
-  - component: {fileID: 8786574393286912791}
+  - component: {fileID: 4590958662081095308}
   m_Layer: 5
   m_Name: Banner
   m_TagString: Untagged
@@ -361,7 +361,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8786574393286912791
+--- !u!114 &4590958662081095308
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -370,21 +370,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8786574393286912785}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38eedd35bdce04f1b8875c1260ba2bc2, type: 3}
+  m_Script: {fileID: 11500000, guid: 99ea1a123c8fe4b088f4557243c4c219, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effect_popup: 1
-  background: {fileID: 3349262791099010956}
-  time_run: 0.2
-  isPlayOnLoad: 0
-  isEasing: 1
-  isCloseReverse: 1
-  isAlawayTop: 0
-  isSetParentNull: 0
-  isPlaySoundOpen: 1
-  btnClose: {fileID: 6340412873509416660}
+  effectPopup: 1
+  effectPopupReverse: 1
+  popupBackground: {fileID: 7792614243295597459}
   imageBanner: {fileID: 8786574393956416302}
-  isBannerType9: 0
 --- !u!1 &8786574393956416296
 GameObject:
   m_ObjectHideFlags: 0
@@ -397,7 +389,7 @@ GameObject:
   - component: {fileID: 8786574393956416303}
   - component: {fileID: 8786574393956416302}
   m_Layer: 5
-  m_Name: Img
+  m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

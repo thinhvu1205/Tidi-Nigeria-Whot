@@ -20,11 +20,14 @@ public class MailView : BaseView
     private List<MailItem> listMailSelected = new();
     private List<MailItem> listMail = new();
     private bool isCheckAll = false;
+    private MailPresenter mailPresenter;
 
     protected override void Start()
     {
         base.Start();
         _ = LoadListMail();
+        mailPresenter = new MailPresenter();
+        mailPresenter.Init(this);
     }
 
     #region Event    
@@ -94,14 +97,14 @@ public class MailView : BaseView
         }
         if (isCheckAll)
         {
-            await DataSender.DeleteAllNotifications();
+            await mailPresenter.DeleteAllNotification();
         }
         else
         {
             foreach (MailItem mailItem in listMailSelected)
             {
                 long notiId = mailItem.GetNotificationId();
-                await DataSender.DeleteNotification(notiId);
+                await mailPresenter.DeleteNotification(notiId);
             }
 
         }
@@ -120,7 +123,7 @@ public class MailView : BaseView
         }
         try
         {
-            ListNotification listNotification = await DataSender.GetListNotification();
+            ListNotification listNotification = await mailPresenter.GetListNotification();
             this.listNotification = listNotification.Notifications.ToList();
             checkAllButton.gameObject.SetActive(this.listNotification.Count > 0);
             Debug.Log("GAME LIST: " + listNotification.ToString());
