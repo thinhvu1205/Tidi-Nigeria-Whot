@@ -31,20 +31,20 @@ namespace Globals
         public class WalletTransaction
         {
             public WalletLedgerItem[] transactions;
-            public string cusor;
+            public string cusor; 
         }
 
         [System.Serializable]
         public class WalletLedgerItem
         {
             public string id;
-            public string user_id;
-            public string create_time;
-            public string update_time;
-
-            // changeset và metadata thường là object, bạn có thể map thành Dictionary
-            public Dictionary<string, string> changeset;
-            public Dictionary<string, string> metadata;
+            public string userId; 
+            public long createdTime; 
+            public long updateTime; 
+    
+            // changeset và metadata
+            public Dictionary<string, long> changeset; 
+            public Dictionary<string, object> metadata; 
         }
         
         public enum MetaBankAction
