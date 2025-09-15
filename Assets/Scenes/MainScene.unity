@@ -5794,7 +5794,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2087277481093540520}
         m_TargetAssemblyTypeName: LobbyView, Assembly-CSharp
-        m_MethodName: OnClickChipOnline
+        m_MethodName: OnClickCheckInBonus
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

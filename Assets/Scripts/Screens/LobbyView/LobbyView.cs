@@ -30,6 +30,7 @@ public class LobbyView : BaseView
         OnClickAllGamesTab();
         _ = LoadGames();
         UIManager.Instance.lobbyView = this;
+
     }
     protected override void Start()
     {
@@ -42,7 +43,6 @@ public class LobbyView : BaseView
     {
         base.OnEnable();
         User.OnProfileUpdated += UpdateProfileData;
-
     }
 
     protected override void OnDestroy()
@@ -126,11 +126,11 @@ public class LobbyView : BaseView
     public void OnClickFreeChips() => UIManager.Instance.OpenFreeChips();
     public void OnClickShop() => UIManager.Instance.OpenShop();
     public void OnClickMail() => UIManager.Instance.OpenMail();
-    public void OnClickChipOnline() => UIManager.Instance.OpenChipOnline();
+    public void OnClickCheckInBonus() => UIManager.Instance.OpenCheckInBonus();
     public void OnClickFriend() => UIManager.Instance.OpenFriend();
     public void OnClickSetting() => UIManager.Instance.OpenSetting();
     public void OnClickGiftCode() => UIManager.Instance.OpenGiftCode();
-    public void OnClickBanner() => UIManager.Instance.OpenBanner();
+    public void OnClickBanner() => UIManager.Instance.OpenBanner(TypeInAppMessage.HotNews);
     public void OnClickSendGift() => UIManager.Instance.OpenSendGift();
     public void OnClickSupport() => UIManager.Instance.OpenSupport();
     #endregion

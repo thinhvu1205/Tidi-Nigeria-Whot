@@ -6,6 +6,7 @@ using Google.Protobuf;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 namespace Screens.LoginView
 {
@@ -114,8 +115,11 @@ namespace Screens.LoginView
                         Config.currentGameId = User.userProfile.PlayingMatch.Code;
                         UIManager.Instance.HandleOpenGame(labelMatch);
                     }
-
                     // NetworkManager.INSTANCE.OnJoinMatch();
+                }
+                else
+                {
+                    UIManager.Instance.OpenBanner(TypeInAppMessage.Banner, 0.6f);
                 }
             }
             catch (Exception e)

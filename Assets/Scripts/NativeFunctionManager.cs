@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Runtime.InteropServices;
 
 public static class NativeFunctionManager
 {
@@ -65,8 +66,8 @@ public static class NativeFunctionManager
         {
             currentActivity.Call("callNativeFunction", method, param);
         }
-#elif UNITY_IOS
-        _CallNativeFunctionIOS(method, param);
+// #elif UNITY_IOS
+//         _CallNativeFunctionIOS(method, param);
 #endif
 
         // If native calls back to Unity, handle via UnitySendMessage or delegate event system
@@ -76,9 +77,8 @@ public static class NativeFunctionManager
             // NativeCallbackHandler.OnCallbackReceived += callback;
         }
     }
-
-#if UNITY_IOS
-    [DllImport("__Internal")]
-    private static extern void _CallNativeFunctionIOS(string method, string param);
-#endif
+// #if UNITY_IOS
+//     [DllImport("__Internal")]
+//     private static extern void _CallNativeFunctionIOS(string method, string param);
+// #endif
 }

@@ -22,6 +22,18 @@ public class ShopView : BaseView
         UpdateProfileData();
         _ = LoadListDealInShop();
     }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        UIManager.Instance.OpenBanner(TypeInAppMessage.Banner);
+    }
+
+    public override void OnClickCloseButton()
+    {
+        base.OnClickCloseButton();
+        UIManager.Instance.OpenBanner(TypeInAppMessage.Banner);
+    }
     private async UniTask LoadListDealInShop()
     {
         foreach (GameObject mailItem in listDealContainer)

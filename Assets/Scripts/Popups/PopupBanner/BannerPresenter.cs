@@ -15,7 +15,7 @@ public class BannerPresenter
         bannerView = view;
     }
 
-    public async UniTask<InAppMessageData> GetBanner(TypeInAppMessage typeInAppMessage)
+    public async UniTask<ListInAppMessage> GetBanner(TypeInAppMessage typeInAppMessage)
     {
         var inAppMessageData = await DataSender.GetListInAppMessage(typeInAppMessage);
         return inAppMessageData;

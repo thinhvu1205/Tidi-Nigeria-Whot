@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DG.Tweening;
 using Globals;
@@ -50,66 +51,78 @@ public class ListBannerView : BaseView
         base.Awake();
         bannerPresenter = new BannerPresenter();
         bannerPresenter.Init(this);
-        _ = GetBannerData();
     }
 
-    public async Task GetBannerData()
+    public void SetBannerType(TypeInAppMessage type)
     {
-        InAppMessageData data = await bannerPresenter.GetBanner(typeInAppMessage: TypeInAppMessage.Banner);
-        Debug.Log("BANNER DATA: " + data.ToString());
-        // if (string.IsNullOrEmpty(data.Params["images"]))
-        // {
-        //     return;
-        // }
-        string[] imageUrls = "1;2;3".Split(";");
-        // string[] imageUrls = data.Params["images"].Split(";");
-        if (imageUrls.Length <= 1) {
-            buttonNext.gameObject.SetActive(false);
-            buttonPrev.gameObject.SetActive(false);
-        }
-        if (imageUrls.Length == 0) {
+        _ = GetBannerData(type);
+    }
+
+    public async Task GetBannerData(TypeInAppMessage type)
+    {
+        Debug.Log("TYPE: " + type);
+        ListInAppMessage response = await bannerPresenter.GetBanner(typeInAppMessage: type);
+        List<InAppMessage> listData = response.InAppMessages.ToList();
+        Sprite firstSprite = null, lastSprite = null;
+        InAppMessage firstBannerData = null, lastBannerData = null;
+
+        if (listData.Count == 0)
+        {
             Hide();
             return;
         }
-        Sprite firstS = null, lastS = null;
-        Debug.Log(imageUrls.Length);
-        for (int i = 0; i < imageUrls.Length; i++)
+        else if (listData.Count <= 1)
         {
-            string urlImg = imageUrls[i];
-            // Sprite spriteS = await Config.GetRemoteSprite(urlImg, true);
-            // if (spriteS == null) return;
-            RectTransform gameObject = Instantiate(transformBanner, scrollRect.content);
-            gameObject.name = i.ToString();
-            gameObject.gameObject.SetActive(true);
-            BannerView nodeBanner = gameObject.transform.GetChild(0).GetComponent<BannerView>();
-            nodeBanner.transform.localScale = Vector3.one;
-            // nodeBanner.SetInfo(dataBanner, false, () => { hide(); }, spriteS);
-            listBannerView.Add(nodeBanner);
-            if (listBannerView.Count == 1)
-            {
-                // firstS = spriteS;
-            }
-            GameObject dot = Instantiate(dotPrefab, transformPagination);
-            dot.SetActive(true);
-            Debug.Log("INIT A DOT");
+            buttonNext.gameObject.SetActive(false);
+            buttonPrev.gameObject.SetActive(false);
         }
+        foreach (InAppMessage data in listData)
+        {
+            if (CheckAppCondition(data.Data.Params["app"]) &&
+                CheckOSCondition(data.Data.Params["os"]) &&
+                CheckVersionCondition(data.Data.Params["version"])
+            )
+            {
+                string urlImg = data.Data.Params["images"];
+                Debug.Log("URL IMG: " + urlImg);
+                Sprite sprite = await Config.GetRemoteSprite(urlImg);
+                if (sprite == null) return;
+                RectTransform gameObject = Instantiate(transformBanner, scrollRect.content);
+                // gameObject.name = i.ToString();
+                gameObject.gameObject.SetActive(true);
+                BannerView nodeBanner = gameObject.transform.GetChild(0).GetComponent<BannerView>();
+                nodeBanner.transform.localScale = Vector3.one;
+                nodeBanner.SetInfo(data, sprite);
+                listBannerView.Add(nodeBanner);
+                if (listBannerView.Count == 1)
+                {
+                    firstSprite = sprite;
+                    firstBannerData = data;
+                }
+                lastSprite = sprite;
+                lastBannerData = data;
+                GameObject dot = Instantiate(dotPrefab, transformPagination);
+                dot.SetActive(true);
+            }
+        }
+        Debug.Log("BANNER DATA: " + listData.ToString());
 
         if (listBannerView.Count <= 0) return;
         if (listBannerView.Count > 1)
         {
             Transform cloneFirstTf = Instantiate(transformBanner, scrollRect.content);
             Transform cloneLastTf = Instantiate(transformBanner, scrollRect.content);
-            cloneFirstTf.gameObject.SetActive(true);
-            cloneLastTf.gameObject.SetActive(true);
+            cloneFirstTf.gameObject.SetActive(false);
+            cloneLastTf.gameObject.SetActive(false);
             cloneFirstTf.localScale = Vector3.one;
             cloneLastTf.localScale = Vector3.one;
             BannerView cloneFirstBV = cloneFirstTf.GetChild(0).GetComponent<BannerView>();
             cloneFirstBV.transform.localScale = Vector3.one;
-            // cloneFirstBV.setInfo(dataBannerFirst, false, () => { hide(); }, firstS);
+            cloneFirstBV.SetInfo(firstBannerData, firstSprite);
             cloneFirstTf.SetAsLastSibling();
             BannerView cloneLastBV = cloneLastTf.GetChild(0).GetComponent<BannerView>();
             cloneLastBV.transform.localScale = Vector3.one;
-            // cloneLastBV.setInfo(databannerLast, false, () => { hide(); }, lastS);
+            cloneLastBV.SetInfo(lastBannerData, lastSprite);
             cloneLastTf.SetAsFirstSibling();
             await Task.Yield();
             await Task.Yield();
@@ -117,6 +130,8 @@ public class ListBannerView : BaseView
             scrollRect.content.anchoredPosition -= new Vector2(transformBanner.rect.width, 0);
             listBannerView.Insert(0, cloneLastBV);
             listBannerView.Add(cloneFirstBV);
+            cloneFirstTf.gameObject.SetActive(true);
+            cloneLastTf.gameObject.SetActive(true);
             currentBanner = listBannerView[1];
         }
         else currentBanner = listBannerView[0];
@@ -152,7 +167,7 @@ public class ListBannerView : BaseView
         scrollRect.content.DOLocalMoveX(scrollRect.content.localPosition.x - transformBanner.rect.width, SWIPE_TIME)
             .OnComplete(() =>
             {
-                // _CheckOnEdge();
+                CheckOnEdge();
                 isClicking = false;
             });
         UpdatePaginationDots();
@@ -260,6 +275,32 @@ public class ListBannerView : BaseView
             currentBanner = listBannerView[1];
             scrollRect.content.anchoredPosition += new Vector2(countBanners * transformBanner.rect.width, 0);
         }
+    }
+
+    private bool CheckOSCondition(string os)
+    {
+        if (string.IsNullOrEmpty(os))
+            return true;
+
+        var osValue = int.Parse(os);
+
+        switch (osValue)
+        {
+            case 0: return true; // Cả iOS và Android
+            case 1: return Config.os == RuntimePlatform.IPhonePlayer; // Chỉ iOS
+            case 2: return Config.os == RuntimePlatform.Android; // Chỉ Android
+            default: return true;
+        }
+    }
+
+    private bool CheckAppCondition(string app)
+    {
+        return true;
+    }
+
+    private bool CheckVersionCondition(string version)
+    {
+        return true;
     }
     
 }

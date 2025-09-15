@@ -1240,6 +1240,7 @@ public class WhotView : BaseGameView
         {
             NetworkManager.INSTANCE.LeaveMatch();
             Destroy(gameObject);
+            UIManager.Instance.OpenBanner(TypeInAppMessage.Banner);
         }
         else
         {

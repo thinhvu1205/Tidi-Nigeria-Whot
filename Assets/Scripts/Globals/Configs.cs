@@ -26,6 +26,7 @@ namespace Globals
         public static string currentMatchId = "";
         public static string deviceId = SystemInfo.deviceUniqueIdentifier;
         public static string versionGame = Application.version;
+        public static RuntimePlatform os = Application.platform;
         public static string publisher = "diamond_domino_slots_" + versionGame.Replace('.', '_');
         public static string package_name = Application.identifier;
         public static string versionDevice = GetVersionDevice();
@@ -34,6 +35,8 @@ namespace Globals
         public static string brand = SystemInfo.deviceModel;
         public static bool isVibration = false;
         public static string currentUrlRule = "";
+        public static string chatTeleSupportLink = "";
+        public static string chatMessSupportLink = "";
 
         public static bool isOpenSound = true;
         public static bool isOpenMusic = true;

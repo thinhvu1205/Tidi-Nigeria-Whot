@@ -341,6 +341,50 @@ public class NetworkManager : MonoBehaviour
     }
     #endregion
 
+    #region Check In Bonus
+    public async UniTask<DailyRewardTemplate> GetDailyRewardTemplate()
+    {
+        var payload = "{}"; // Empty payload
+
+        var response = await _ClientC.RpcAsync(
+            session: _SessionIS,
+            id: "dailyrewardtemplate", // rpcIdDailyRewardTemplate
+            payload: payload
+        );
+
+        var template = JsonUtility.FromJson<DailyRewardTemplate>(response.Payload);
+        return template;
+    }
+    
+    public async UniTask<Reward> CheckCanClaimDailyReward()
+    {
+        var payload = "{}"; // Empty payload
+        
+        var response = await _ClientC.RpcAsync(
+            session: _SessionIS,
+            id: "canclaimdailyreward", // rpcIdCanClaimDailyReward
+            payload: payload
+        );
+        
+        var rewardInfo = JsonUtility.FromJson<Reward>(response.Payload);
+        return rewardInfo;
+    }
+
+    public async UniTask<Reward> ClaimDailyReward()
+    {
+        var payload = "{}"; // Empty payload
+
+        var response = await _ClientC.RpcAsync(
+            session: _SessionIS,
+            id: "claimdailyreward", // rpcIdClaimDailyReward
+            payload: payload
+        );
+
+        var rewardInfo = JsonUtility.FromJson<Reward>(response.Payload);
+        return rewardInfo;
+    }
+    #endregion
+
     #region Socket
 
     public async UniTask InitSocket(ISession session)

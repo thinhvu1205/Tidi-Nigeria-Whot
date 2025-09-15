@@ -496,6 +496,21 @@ namespace Globals
             return lbCom;
         }
 
+        public static Button CreateButton(Sprite sprite = null, string title = "")
+        {
+            if (sprite == null) return null;
+            var nodeButton = CreateSprite(sprite);
+            var btnCom = nodeButton.gameObject.AddComponent<Button>();
+            btnCom.interactable = true;
+            if (title != "")
+            {
+                var lbCom = CreateLabel(title, 25);
+                lbCom.rectTransform.SetParent(nodeButton.rectTransform);
+            }
+
+            return btnCom;
+        }
+
         public static void SetAlpha0(Image image)
         {
             Color c = image.color;

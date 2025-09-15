@@ -110,7 +110,7 @@ public class DataSender
     {
         Notification notification = new()
         {
-            
+
         };
         var response = await NetworkManager.INSTANCE.RPCSend(READ_NOTIFICATION, notification);
         return DecodeFromJson<Notification>(response.Payload);
@@ -369,12 +369,13 @@ public class DataSender
         var response = await NetworkManager.INSTANCE.RPCSend(LIST_CLAIMABLE_FREECHIPS);
         return DecodeFromJson<ListFreeChip>(response.Payload);
     }
-    
+
     public static async UniTask<Constants.WalletTransaction> GetTransactionHistory(long limit = 0, string metaAction = "bank_topup", string metaBankAction = "1")
     {
 
-        WalletTransRequest bank = new WalletTransRequest() { 
-            Limit = limit, 
+        WalletTransRequest bank = new WalletTransRequest()
+        {
+            Limit = limit,
             MetaAction = metaAction,
             MetaBankAction = metaBankAction
         };
@@ -460,14 +461,14 @@ public class DataSender
         return DecodeFromJson<GiftCode>(response.Payload);
     }
 
-    public static async UniTask<InAppMessageData> GetListInAppMessage(TypeInAppMessage typeInAppMessage)
+    public static async UniTask<ListInAppMessage> GetListInAppMessage(TypeInAppMessage typeInAppMessage)
     {
         InAppMessageRequest inAppMessageRequest = new()
         {
             Type = typeInAppMessage
         };
         var response = await NetworkManager.INSTANCE.RPCSend(LIST_IN_APP_MESSAGE, inAppMessageRequest);
-        return DecodeFromJson<InAppMessageData>(response.Payload);
+        return DecodeFromJson<ListInAppMessage>(response.Payload);
     }
 
 
@@ -484,5 +485,9 @@ public class DataSender
         var response = await NetworkManager.INSTANCE.RPCSend(LEADERBOARD_INFO, leaderBoardRecord);
         return DecodeFromJson<LeaderBoardRecord>(response.Payload);
     }
+    #endregion
+
+    #region Check In Bonus
+
     #endregion
 }

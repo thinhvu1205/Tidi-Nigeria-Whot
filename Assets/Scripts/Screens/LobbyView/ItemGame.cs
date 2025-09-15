@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Globals;
 using Spine.Unity;
 using UnityEngine;
@@ -38,6 +39,7 @@ public class ItemGame : MonoBehaviour
         if (Constants.SELECT_TABLE_GAMES_ID.Contains(gameID))
         {
             UIManager.Instance.OpenSelectTableView();
+            UIManager.Instance.OpenBanner(Proto.TypeInAppMessage.Banner);
         }
         else
         {

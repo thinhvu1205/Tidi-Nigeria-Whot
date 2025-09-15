@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Globals;
 using Nakama;
 using Newtonsoft.Json.Linq;
@@ -64,7 +65,7 @@ public class LeaderBoardView : BaseView
         }
     }
 
-    private async Task LoadListLeaderBoard()
+    private async UniTask LoadListLeaderBoard()
     {
         Debug.Log("BAT DAU GOI GET LIST");
 

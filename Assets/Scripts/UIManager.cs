@@ -17,6 +17,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 using Color = UnityEngine.Color;
+using Newtonsoft.Json;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -49,7 +50,10 @@ public class UIManager : Singleton<UIManager>
         Profile profile = await DataSender.GetProfile();
         User.userProfile = profile;
         User.UpdateProfile();
+        User.UpdateConfig();
     }
+
+
     
     public void OpenLoginScene()
     {
@@ -374,6 +378,12 @@ public class UIManager : Singleton<UIManager>
         chipOnlineView.transform.localScale = Vector3.one;
     }
 
+    public void OpenCheckInBonus()
+    {
+        CheckInBonusView checkInBonusView = Instantiate(LoadPrefabPopup("PopupCheckInBonus"), parentPopups).GetComponent<CheckInBonusView>();
+        checkInBonusView.transform.localScale = Vector3.one;
+    }
+
     public void OpenFeedback()
     {
         FeedbackView feedbackView = Instantiate(LoadPrefabPopup("PopupFeedback"), parentPopups).GetComponent<FeedbackView>();
@@ -416,10 +426,14 @@ public class UIManager : Singleton<UIManager>
         groupMenuView.transform.localScale = Vector3.one;
     }
 
-    public void OpenBanner()
+    public void OpenBanner(TypeInAppMessage type, float delay = 0.3f)
     {
-        ListBannerView bannerView = Instantiate(LoadPrefabPopup("ListBannerView"), parentBanners).GetComponent<ListBannerView>();
-        bannerView.transform.localScale = Vector3.one;
+        DOVirtual.DelayedCall(delay, () =>
+        {
+            ListBannerView bannerView = Instantiate(LoadPrefabPopup("ListBannerView"), parentBanners).GetComponent<ListBannerView>();
+            bannerView.SetBannerType(type);
+            bannerView.transform.localScale = Vector3.one;
+        });
     }
 
     public void OpenRule()
