@@ -36,6 +36,7 @@ public class DataSender
     public const string EXCHANGE_CANCEL = "exchange_cancel";
     public const string LIST_EXCHANGE_DEAL = "list_exchange_deal";
     public const string LIST_EXCHANGE = "list_exchange";
+    public const string DAILY_REWARD_TEMPLATE = "dailyrewardtemplate";
     public const string CAN_CLAIM_DAILY_REWARD = "canclaimdailyreward";
     public const string CLAIM_DAILY_REWARD = "claimdailyreward";
     public const string GIFT_CODE_CLAIM = "gift_code_claim";
@@ -489,6 +490,24 @@ public class DataSender
     #endregion
 
     #region Check In Bonus
+
+    public static async UniTask<DailyRewardTemplate> GetDailyRewardTemplate()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(DAILY_REWARD_TEMPLATE);
+        return DecodeFromJson<DailyRewardTemplate>(response.Payload);
+    }
+    
+    public static async UniTask<Reward> CheckCanClaimDailyReward()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(CAN_CLAIM_DAILY_REWARD);
+        return DecodeFromJson<Reward>(response.Payload);
+    }
+    
+    public static async UniTask<Reward> ClaimDailyReward(bool isClaimed)
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(CLAIM_DAILY_REWARD);
+        return DecodeFromJson<Reward>(response.Payload);
+    }
 
     #endregion
 }
