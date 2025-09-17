@@ -12,7 +12,7 @@ namespace Screens.LoginView
 {
     public class LoginView : BaseView
     {
-        [SerializeField] private GameObject loginView, loginForm;
+        [SerializeField] private GameObject loginView, loginForm, registerPopup;
         [SerializeField] private TMP_InputField idInputField, passwordInputField;
         private const string FIRST_LOGIN_KEY = "firstLogin";
         private LoginPresenter loginPresenter;
@@ -141,6 +141,12 @@ namespace Screens.LoginView
             UIManager.Instance.ShowProgressing();
             _ = loginPresenter.OnLoginGuest();
         }
+
+        public void OnClickButtonRegister()
+        {
+            registerPopup.SetActive(true);
+            // loginView.SetActive(false);
+        }
     
         private async UniTask HandleClickButtonPlayGuest()
         {
@@ -162,7 +168,7 @@ namespace Screens.LoginView
 
         public void OnClickButtonClose()
         {
-            loginForm.SetActive(false);
+            loginForm.GetComponent<BaseView>().Hide(false);
             loginView.SetActive(true);
         }
 

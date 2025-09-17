@@ -334,6 +334,12 @@ public class UIManager : Singleton<UIManager>
         leaderBoardView.transform.localScale = Vector3.one;
     }
 
+    public void OpenLuckyNumber()
+    {
+        LuckyNumberView leaderBoardView = Instantiate(LoadPrefabLobby("LuckyNumberView"), parentLobby).GetComponent<LuckyNumberView>();
+        leaderBoardView.transform.localScale = Vector3.one;
+    }
+
     public void OpenGiftCode()
     {
         GiftCodeView giftCodeView = Instantiate(LoadPrefabPopup("PopupGiftCode"), parentPopups).GetComponent<GiftCodeView>();

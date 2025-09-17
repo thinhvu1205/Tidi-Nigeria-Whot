@@ -10,7 +10,7 @@ public class SplashScene : MonoBehaviour
 
     private void Awake()
     {
-        Application.targetFrameRate = 60;
+        // Application.targetFrameRate = 60;
         // https://storage.googleapis.com/whot/AssetBundles
         string storedUrl = PlayerPrefs.GetString(BundleDownloader.STORED_BUNDLE_URL, "");
         // storedUrl = "D:/Unity projects/Tidi-Phil-Win777/Assets/AssetBundles";
