@@ -17,7 +17,11 @@ public class CheckInBonusPresenter
 
     public async UniTask<DailyRewardTemplate> GetDailyReward()
     {
-        DailyRewardTemplate dailyReward = await NetworkManager.INSTANCE.GetDailyRewardTemplate();
+        DailyRewardTemplate dailyReward = await DataSender.GetDailyRewardTemplate();
+        Reward reward =  await DataSender.CheckCanClaimDailyReward();
+        Debug.Log("reward " + reward);
+        // Reward reward1 =  await DataSender.ClaimDailyReward();
+        // Debug.Log("reward1 " + reward1);
         return dailyReward;
     }
 }
