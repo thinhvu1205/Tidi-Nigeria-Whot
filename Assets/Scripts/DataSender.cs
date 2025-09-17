@@ -5,6 +5,7 @@ using Proto;
 using Cysharp.Threading.Tasks;
 using Globals;
 using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using Nakama;
 using Newtonsoft.Json;
 using SimpleJSON;
@@ -440,19 +441,7 @@ public class DataSender
         var response = await NetworkManager.INSTANCE.RPCSend(LIST_EXCHANGE);
         return DecodeFromJson<ExchangeInfo>(response.Payload);
     }
-
-    public static async UniTask<ExchangeInfo> CanClaimDailyReward()
-    {
-        var response = await NetworkManager.INSTANCE.RPCSend(CAN_CLAIM_DAILY_REWARD);
-        return DecodeFromJson<ExchangeInfo>(response.Payload);
-    }
-
-    public static async UniTask<DailyRewardTemplate> ClaimDailyReward()
-    {
-        var response = await NetworkManager.INSTANCE.RPCSend(CLAIM_DAILY_REWARD);
-        return DecodeFromJson<DailyRewardTemplate>(response.Payload);
-    }
-
+    
     public static async UniTask<GiftCode> ClaimGiftCode(string code)
     {
         GiftCode giftCode = new GiftCode()
@@ -499,13 +488,17 @@ public class DataSender
     
     public static async UniTask<Reward> CheckCanClaimDailyReward()
     {
-        var response = await NetworkManager.INSTANCE.RPCSend(CAN_CLAIM_DAILY_REWARD);
+        var response = await NetworkManager.INSTANCE.RPCSend(CAN_CLAIM_DAILY_REWARD, new RequestReward{ 
+            DeviceId = Config.deviceId,
+        });
         return DecodeFromJson<Reward>(response.Payload);
     }
-    
-    public static async UniTask<Reward> ClaimDailyReward(bool isClaimed)
+
+    public static async UniTask<Reward> ClaimDailyReward()
     {
-        var response = await NetworkManager.INSTANCE.RPCSend(CLAIM_DAILY_REWARD);
+        var response = await NetworkManager.INSTANCE.RPCSend(CLAIM_DAILY_REWARD, new RequestReward{ 
+            DeviceId = Config.deviceId,
+        });
         return DecodeFromJson<Reward>(response.Payload);
     }
 

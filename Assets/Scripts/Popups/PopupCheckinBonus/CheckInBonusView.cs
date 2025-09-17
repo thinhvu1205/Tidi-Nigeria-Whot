@@ -42,7 +42,7 @@ public class CheckInBonusView : BaseView
     private async UniTask GetDailyReward()
     {
         DailyRewardTemplate dailyReward = await checkInBonusPresenter.GetDailyReward();
-        Debug.Log("DAILY REWARD: " + dailyReward.ToString());
+        Debug.Log("DAILY REWARD TEMPLATE : " + dailyReward.ToString());
         
     }
 
