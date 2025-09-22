@@ -195,7 +195,8 @@ message Reward {
   bool reach_max_streak = 13;
   int64 last_spin_number = 14;
   int64 last_online_unix = 15;
-  bool device_allowed = 16;
+  int64 last_login_unix = 16;
+  bool device_allowed = 17;
 }
 
 message RequestReward{
