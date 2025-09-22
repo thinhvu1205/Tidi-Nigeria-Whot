@@ -7,7 +7,7 @@ using UnityEngine;
 public class SlotIncaView : BaseSlotView
 {
     protected override Vector2 RECT_SIZE => new(163, 125f);
-    protected override string FREE_SPIN_ANIMATION_PATH => "SlotSpine/InCa/bgFreeSpin/skeleton_SkeletonData";
+    protected override string BACKGROUND_FREE_SPIN_ANIMATION_PATH => "SlotSpine/InCa/bgFreeSpin/skeleton_SkeletonData";
     protected override string BIG_WIN_ANIMATION_PATH => "SlotSpine/Common/Bigwin/skeleton_SkeletonData";
     protected override string MEGA_WIN_ANIMATION_PATH => "SlotSpine/Common/Bigwin/skeleton_SkeletonData";
     protected override string BIG_WIN_ANIMATION_NAME => "bigwin";

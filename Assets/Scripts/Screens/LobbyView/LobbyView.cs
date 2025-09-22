@@ -27,8 +27,9 @@ public class LobbyView : BaseView
     protected override void Awake()
     {
         base.Awake();
-        OnClickAllGamesTab();
+  
         _ = LoadGames();
+        OnClickAllGamesTab();
         UIManager.Instance.lobbyView = this;
 
     }
@@ -70,6 +71,14 @@ public class LobbyView : BaseView
 
     private void UpdateUIListGame()
     {
+        // foreach (Transform child in miniGameIconParent)
+        // {
+        //     Destroy(child.gameObject);
+        // }
+        // foreach (Transform child in bigGameIconParent)
+        // {
+        //     Destroy(child.gameObject);
+        // }
         foreach (Game game in gameList)
         {
             ItemGame itemGame = Instantiate(gameIconPrefab).GetComponent<ItemGame>();
@@ -100,7 +109,7 @@ public class LobbyView : BaseView
         {
             displayNameText.text = User.userProfile.DisplayName;
             userIdText.text = "ID: " + User.userProfile.UserSid;
-            accountChip.text = User.userProfile.AccountChip.ToString();
+            accountChip.text = Utility.FormatNumber(User.userProfile.AccountChip);
             avatar.LoadAvatar(User.userProfile.AvatarId);
         }
     }

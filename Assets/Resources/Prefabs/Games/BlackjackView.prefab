@@ -1125,7 +1125,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8685545222426058380}
         m_TargetAssemblyTypeName: BlackjackView, Assembly-CSharp
-        m_MethodName: OnClickButtonDouble
+        m_MethodName: OnClickButtonSplit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10460,7 +10460,7 @@ MonoBehaviour:
   listPosView:
   - {x: -143, y: -284}
   - {x: -564, y: -65}
-  - {x: 561, y: -71}
+  - {x: 564, y: -71}
   playerViewPrefab: {fileID: 1880677948094328609, guid: 1345f2dd03b794e11acef20a17df4eaf, type: 3}
   invitePrefab: {fileID: 0}
   inviteContainer: {fileID: 0}
@@ -13952,7 +13952,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 299740506484404853, guid: 1345f2dd03b794e11acef20a17df4eaf, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -79
+      value: -297
       objectReference: {fileID: 0}
     - target: {fileID: 299740506484404853, guid: 1345f2dd03b794e11acef20a17df4eaf, type: 3}
       propertyPath: m_AnchoredPosition.y

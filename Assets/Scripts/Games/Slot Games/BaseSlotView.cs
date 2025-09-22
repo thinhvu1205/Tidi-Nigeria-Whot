@@ -288,8 +288,9 @@ public class BaseSlotView : BaseGameView
 
     public virtual void CheckThirdScatter(int columnIndex)
     {
-        if (columnIndex == 4 || isInFreeSpin) return;
-        int nextColumnIndex = columnIndex + 1;
+        Debug.Log("COLUMN INDEX: " + columnIndex);
+        if (columnIndex == ThirdScatterIndex || isInFreeSpin) return;
+        // int nextColumnIndex = columnIndex + 1;
         if (ScatterCount == 2)
         {
             foreach (SlotColumn column in slotColumnList)
@@ -299,8 +300,8 @@ public class BaseSlotView : BaseGameView
                     column.ExtraTime += 2f;
                 }
             }
-            slotColumnList[nextColumnIndex].IsShowingThirdScatter = true;
-            ShowThirdScatterColumn(nextColumnIndex);
+            slotColumnList[ThirdScatterIndex].IsShowingThirdScatter = true;
+            ShowThirdScatterColumn(ThirdScatterIndex);
         }
     }
     #endregion
@@ -519,7 +520,7 @@ public class BaseSlotView : BaseGameView
         // Nếu Spin thường thì update currentChipWin, nếu Auto thường thì ko update vì đã update ở ShowAllWinLines
         if (spinType == SpinType.NORMAL)
         {
-            if (currentChipWin > lastChipWin)
+            if (currentChipWin > 0)
             {
                 UpdateChipWinValue();
                 AnimateCoinsFly();
@@ -609,6 +610,10 @@ public class BaseSlotView : BaseGameView
             SetCurrentChipValue(playerWalletAfter);
             UpdateChipWinValue();
         }
+        else
+        {
+            UpdateTotalChipWinValue();
+        }
         List<int> scatterColumnIds = new();
         slotColumnList.ForEach(arr =>
         {
@@ -639,9 +644,10 @@ public class BaseSlotView : BaseGameView
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.BIG_WIN);
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
-                Utility.TweenNumberTo(bigWinText, totalChipWinByGame, 0, 2.0f);
-                animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
-                animationEffect.transform.localPosition = new Vector2(0, -70);
+                Utility.TweenNumberToNumber(bigWinText, totalChipWinByGame, 0, 2.0f);
+                // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
+                animationEffect.transform.localScale = new Vector2(1f, 1f);
+                // animationEffect.transform.localPosition = new Vector2(0, -70);
                 Utility.PlayAnimationByPath(animationEffect, BIG_WIN_ANIMATION_PATH, BIG_WIN_ANIMATION_NAME, false);
 
                 break;
@@ -649,9 +655,10 @@ public class BaseSlotView : BaseGameView
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
-                Utility.TweenNumberTo(bigWinText, totalChipWinByGame, 0, 2.0f);
-                animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
-                animationEffect.transform.localPosition = new Vector2(0, -70);
+                Utility.TweenNumberToNumber(bigWinText, totalChipWinByGame, 0, 2.0f);
+                // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
+                animationEffect.transform.localScale = new Vector2(1f, 1f);
+                // animationEffect.transform.localPosition = new Vector2(0, -70);
                 Utility.PlayAnimationByPath(animationEffect, MEGA_WIN_ANIMATION_PATH, MEGA_WIN_ANIMATION_NAME, false);
                 break;
             case WinType.HUGE_WIN:
@@ -1005,7 +1012,7 @@ public class BaseSlotView : BaseGameView
     protected void SetBetStateImage(string text)
     {
         betStateImage.gameObject.SetActive(true);
-        betStateImage.sprite = text == "Maximun bet" ? betStateSpriteList[1] : betStateSpriteList[0];
+        betStateImage.sprite = text == "Max bet" ? betStateSpriteList[1] : betStateSpriteList[0];
     }
 
     protected void SetCurrentBetText(long betLevel)
@@ -1014,7 +1021,7 @@ public class BaseSlotView : BaseGameView
         betAmountText.text = Utility.FormatNumber(betLevel);
         if (betLevel == betLevelList[^1])
         {
-            SetBetStateText("Maximun bet");
+            SetBetStateText("Max bet");
         }
         else
         {
@@ -1028,7 +1035,7 @@ public class BaseSlotView : BaseGameView
         betAmountText.text = Utility.FormatNumber(betLevel);
         if (betLevel == betLevelList[^1])
         {
-            SetBetStateImage("Maximun bet");
+            SetBetStateImage("Max bet");
         }
         else
         {
@@ -1039,17 +1046,17 @@ public class BaseSlotView : BaseGameView
     protected void UpdateChipWinValue()
     {
         UpdateStateWinUI(StateWin.WIN);
-        Utility.TweenNumberTo(chipWinText, currentChipWin, lastChipWin, 0.5f, false);
+        Utility.TweenNumberToNumber(chipWinText, currentChipWin, lastChipWin, 0.5f, false);
     }
     protected void UpdateTotalChipWinValue()
     {
         UpdateStateWinUI(StateWin.TOTAL_WIN);
-        Utility.TweenNumberTo(chipWinText, totalChipWinByGame, lastTotalChipWinByGame, 0.5f, false);
+        Utility.TweenNumberToNumber(chipWinText, totalChipWinByGame, lastTotalChipWinByGame, 0.5f, false);
     }
 
     protected void SetCurrentChipValue(long value)
     {
-        Utility.TweenNumberTo(currentChipText, value, playerWallet, 0.5f, false);
+        Utility.TweenNumberToNumber(currentChipText, value, playerWallet, 0.5f, false);
         playerWallet = value;
     }
 

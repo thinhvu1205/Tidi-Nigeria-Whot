@@ -86,8 +86,8 @@ public class WhotPlayer : MonoBehaviour
         AvatarId = avatarId;
         avatar.LoadAvatar(avatarId);
         nameText.text = playerName;
-        // chipText.text = Utility.FormatMoney(Utility.ConvertStringToNumber(chipAmount), true);
-        AnimateChipValue(long.Parse(chipAmount));
+        // chipText.text = Utility.FormatNumber(Utility.ConvertStringToNumber(chipAmount));
+        AnimateChipValue(Utility.ConvertStringToLong(chipAmount));
     }
 
     public void SetWhotGame(WhotView whotGame)
@@ -117,6 +117,7 @@ public class WhotPlayer : MonoBehaviour
 
     #region Visuals
 
+    [ContextMenu("Show Remaining Cards")]
     public void AnimateShowRemainingCards(List<WhotCard> cards)
     {
         if (cards == null) return;
@@ -132,6 +133,7 @@ public class WhotPlayer : MonoBehaviour
         float startX = -totalWidth / 2f;
         for (int i = 0; i < cards.Count; i++)
         {
+            int index = i;
             WhotCard card = cards[i];
             WhotCardModel whotCardModel = PoolService.Instance.Get<WhotCardModel>(PrefabType.WhotCard);
             whotCardModel.transform.SetParent(remainingCardsParent);
@@ -150,35 +152,38 @@ public class WhotPlayer : MonoBehaviour
             switch (playerLayout.GetCurrentLayout())
             {
                 case PlayerLayout.EPlayerLayout.Left:
-                    targetPos = new Vector3(i * CARD_SPACING, 0f, 0f);
+                    targetPos = new Vector3(index * CARD_SPACING, 0f, 0f);
                     offset = new Vector3(-20f, 0f, 0f);
                     scoreImage.transform.localPosition = new Vector3(totalWidth + SCORE_IMAGE_OFFSET, 0f, 0f);
-                    whotCardModel.transform.SetSiblingIndex(i);
+                    // whotCardModel.transform.SetSiblingIndex(i);
+                    whotCardModel.transform.SetAsLastSibling();
                     break;
                 case PlayerLayout.EPlayerLayout.Top:
-                    targetPos = new Vector3(startX + i * CARD_SPACING, 0f, 0f);
+                    targetPos = new Vector3(startX + index * CARD_SPACING, 0f, 0f);
                     offset = new Vector3(-20f, 0f, 0f);
                     scoreImage.transform.localPosition = new Vector3(startX + totalWidth + SCORE_IMAGE_OFFSET, 0f, 0f);
-                    whotCardModel.transform.SetSiblingIndex(i);
+                    // whotCardModel.transform.SetSiblingIndex(i);
+                    whotCardModel.transform.SetAsLastSibling();
                     break;
                 case PlayerLayout.EPlayerLayout.Right:
-                    targetPos = new Vector3(2 * startX + i * CARD_SPACING, 0f, 0f); // giống Left & Top
+                    targetPos = new Vector3(2 * startX + index * CARD_SPACING, 0f, 0f); // giống Left & Top
                     offset = new Vector3(20f, 0f, 0f);
                     scoreImage.transform.localPosition = new Vector3(-totalWidth - SCORE_IMAGE_OFFSET, 0f, 0f);
-                    whotCardModel.transform.SetSiblingIndex(i); // thêm theo thứ tự chuẩn
-                    break;      
+                    // whotCardModel.transform.SetSiblingIndex(i); // thêm theo thứ tự chuẩn
+                    whotCardModel.transform.SetAsLastSibling(); // thêm theo thứ tự chuẩn
+                    break;
             }
 
             whotCardModel.transform.localPosition = targetPos + offset;
 
             // Animate move & fade
-            whotCardModel.transform.DOLocalMove(targetPos, ANIMATION_TIME).SetEase(Ease.OutCubic).SetDelay(i * 0.05f);
-            cardCanvasGroup.DOFade(1f, ANIMATION_TIME / 2).SetDelay(i * 0.1f);
+            whotCardModel.transform.DOLocalMove(targetPos, ANIMATION_TIME).SetEase(Ease.OutCubic).SetDelay(index * 0.05f);
+            cardCanvasGroup.DOFade(1f, ANIMATION_TIME / 2).SetDelay(index * 0.1f);
 
-            if (i == cards.Count - 1 && cards.Count > 0)
+            if (index == cards.Count - 1 && cards.Count > 0)
             {
                 scoreImage.gameObject.SetActive(true);
-                scoreCanvasGroup.DOFade(1f, ANIMATION_TIME / 2).SetDelay((i + 1) * 0.1f);
+                scoreCanvasGroup.DOFade(1f, ANIMATION_TIME / 2).SetDelay((index + 1) * 0.1f);
             }
         }
     }
@@ -397,6 +402,7 @@ public class WhotPlayer : MonoBehaviour
     {
         for (int i = 0; i < 5; i++)
         {
+            int index = i;
             // GameObject chipInstance = Instantiate(chipPrefab, transform);
             WhotChip chipInstance = PoolService.Instance.Get<WhotChip>(PrefabType.ChipPlayerWhot);
             chipInstance.transform.position = GetPlayedCardParent().position;
@@ -414,7 +420,7 @@ public class WhotPlayer : MonoBehaviour
                 {
                     // Destroy(chipInstance);
                     PoolService.Instance.Release(PrefabType.ChipPlayerWhot ,chipInstance);
-                    if (isLast)
+                    if (isLast && index == 4)
                     {
                         whotGame.AnimateAllPlayersAddChip();
                     }
@@ -423,7 +429,8 @@ public class WhotPlayer : MonoBehaviour
     }
     public void AnimateChipValue(long toNumber = 0)
     {
-        Utility.TweenNumberTo(chipText, toNumber, GetChipAmount(), 0.5f, false);
+        Debug.Log("ANIMATE CHIP VALUE");
+        Utility.TweenNumberToNumber(chipText, (int)toNumber, (int)GetChipAmount(), 0.5f, false);
     }
 
     private void SortRemainingCards(List<WhotCard> cards)

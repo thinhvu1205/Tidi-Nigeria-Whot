@@ -482,13 +482,14 @@ public class DataSender
 
     public static async UniTask<DailyRewardTemplate> GetDailyRewardTemplate()
     {
+
         var response = await NetworkManager.INSTANCE.RPCSend(DAILY_REWARD_TEMPLATE);
         return DecodeFromJson<DailyRewardTemplate>(response.Payload);
     }
     
     public static async UniTask<Reward> CheckCanClaimDailyReward()
     {
-        var response = await NetworkManager.INSTANCE.RPCSend(CAN_CLAIM_DAILY_REWARD, new RequestReward{ 
+        var response = await NetworkManager.INSTANCE.RPCSend(CAN_CLAIM_DAILY_REWARD, new RequestReward { 
             DeviceId = Config.deviceId,
         });
         return DecodeFromJson<Reward>(response.Payload);

@@ -230,7 +230,8 @@ namespace Globals
             DOTween.Sequence()
             .Append(lbText.transform.DOScale(biggerScale, timeRun * 0.45f))
             .AppendInterval(timeRun * 0.45f)
-            .Append(lbText.transform.DOScale(normalScale, timeRun * 0.1f));
+            .Append(lbText.transform.DOScale(normalScale, timeRun * 0.1f))
+            .OnComplete(() => lbText.transform.localScale = Vector2.one);
         }
         public static void TweenNumberToNumber(TextMeshProUGUI lbText, long toNumber, long startNumber = 0, float timeRun = 0.5f, bool isLowerCase = false)
         {
@@ -243,7 +244,9 @@ namespace Globals
             DOTween.Sequence()
             .Append(lbText.transform.DOScale(biggerScale, timeRun * 0.45f))
             .AppendInterval(timeRun * 0.45f)
-            .Append(lbText.transform.DOScale(normalScale, timeRun * 0.1f));
+            .Append(lbText.transform.DOScale(normalScale, timeRun * 0.1f))
+            .OnComplete(() => lbText.transform.localScale = Vector2.one);
+
         }
         public static void TweenNumberTo(TextMeshProUGUI lbText, long toNumber, long startNumber = 0, float timeRun = 0.3f)
         {
@@ -412,6 +415,28 @@ namespace Globals
             return float.Parse(strNum, CultureInfo.InvariantCulture);
         }
 
+        public static long ConvertStringToLong(string str)
+        {
+
+            var strNum = "";
+            for (var i = 0; i < str.Length; i++)
+            {
+                if (str[i] == '.')
+                {
+                    strNum += str[i];
+                }
+                else
+                {
+                    if (str[i] >= '0' && str[i] <= '9')
+                    {
+                        strNum += str[i];
+                    }
+                }
+            }
+
+            return long.Parse(strNum, CultureInfo.InvariantCulture);
+        }
+
         #endregion
 
         #region Convert Time
@@ -448,7 +473,7 @@ namespace Globals
             DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(createTimeUnix).LocalDateTime;
             return dateTime.ToString("HH:mm");
         }
-        
+
         public static string ConvertUnixTimeToHHMMSS(int createTimeUnix)
         {
             DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(createTimeUnix).LocalDateTime;
@@ -551,7 +576,7 @@ namespace Globals
         {
             skeletonGraphic.gameObject.SetActive(true);
             skeletonGraphic.Initialize(true);
-            
+
             if (skeletonGraphic != null && skeletonGraphic.AnimationState != null)
             {
                 skeletonGraphic.AnimationState.SetAnimation(0, animationName, loop);
@@ -577,4 +602,5 @@ namespace Globals
         }
         #endregion
     }
+    
 }
