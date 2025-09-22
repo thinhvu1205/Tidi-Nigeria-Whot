@@ -279,6 +279,7 @@ public class ListBannerView : BaseView
 
     private bool CheckOSCondition(string os)
     {
+        return true;
         if (string.IsNullOrEmpty(os))
             return true;
 

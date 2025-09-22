@@ -122,6 +122,7 @@ public class LobbyView : BaseView
         slotGamesParent.gameObject.SetActive(true);
     }
     public void OnClickProfile() => UIManager.Instance.OpenProfile();
+    public void OnClickLuckyNumber() => UIManager.Instance.OpenLuckyNumber();
     public void OnClickLeaderboard() => UIManager.Instance.OpenLeaderboard();
     public void OnClickFreeChips() => UIManager.Instance.OpenFreeChips();
     public void OnClickShop() => UIManager.Instance.OpenShop();

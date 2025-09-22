@@ -30,6 +30,7 @@ public class BlackjackBoxBet : MonoBehaviour
 
     [Header(" Transforms ")]
     [SerializeField] private Transform cardContainer;
+    [SerializeField] private Transform chipContainer;
     [SerializeField] private Transform effectContainer;
 
     [Header(" Spine Animations ")]
@@ -51,7 +52,7 @@ public class BlackjackBoxBet : MonoBehaviour
 
     private void Awake()
     {
-        BoxPosition = transform.position;
+        BoxPosition = transform.localPosition;
         boxWidth = GetComponent<RectTransform>().rect.width;
         if (!isSecondBox)
             Reset();
@@ -124,8 +125,8 @@ public class BlackjackBoxBet : MonoBehaviour
                 {
                     animationWow.gameObject.SetActive(false);
                 };
-                break;
 
+                break;
             case BlackjackHandType.Busted:
                 animationBust.gameObject.SetActive(true);
                 animationBust.AnimationState.SetAnimation(0, "animation", false);
@@ -164,15 +165,16 @@ public class BlackjackBoxBet : MonoBehaviour
             textTotalBet.gameObject.SetActive(false);
             return;
         }
-        imageChip.gameObject.SetActive(true);
+        if (!isSecondBox)
+        {
+            imageChip.gameObject.SetActive(true);
+            textChipValue.gameObject.SetActive(true);
+            textChipValue.text = Utility.FormatMoney(value, true);
+            imageChip.sprite = listImageChip[index];
+        }
         iconChip.gameObject.SetActive(true);
         textTotalBet.gameObject.SetActive(true);
-        textChipValue.gameObject.SetActive(true);
         textTotalBet.text = Utility.FormatMoney(totalValue, true);
-
-        textChipValue.text = Utility.FormatMoney(value, true);
-
-        imageChip.sprite = listImageChip[index];
 
         animationWaiting.gameObject.SetActive(isWaiting);
 
@@ -251,13 +253,23 @@ public class BlackjackBoxBet : MonoBehaviour
         }
     }
 
+    public void ShowAnimationWaiting()
+    {
+        animationWaiting.gameObject.SetActive(true);
+    }
+
+    public void HideAnimationWaiting()
+    {
+        animationWaiting.gameObject.SetActive(false);
+    }
+
     public void ShowAnimationBlackjack()
     {
         effectContainer.gameObject.SetActive(true);
         animationBlackjack.gameObject.SetActive(true);
     }
 
-    public void SplitBoxBet(int playerIndex)
+    public void SplitBoxBet(int playerIndex, BlackjackHand firstHand = null, BlackjackHand secondHand = null)
     {
         // Lấy component CanvasGroup để fade (nếu là UI)
         secondBoxBet.gameObject.SetActive(true);
@@ -268,44 +280,55 @@ public class BlackjackBoxBet : MonoBehaviour
         Sequence seq = DOTween.Sequence();
         seq.Join(canvasGroup.DOFade(1f, 0.5f));
 
+        secondCard.transform.SetParent(secondBoxBet.GetCardPosition);
         switch (playerIndex)
         {
             case 0:
                 seq.JoinCallback(() =>
                 {
-                    transform.DOLocalMoveX(BoxPosition.x - 40f - boxWidth, 0.5f);
-                    secondBoxBet.transform.DOLocalMoveX(2 * (BoxPosition.x + 40f + boxWidth), 0.5f);
-                    secondCard.transform.DOLocalMoveX(2 * (BoxPosition.x + 40f + boxWidth - CARD_SPACING), 0.5f);
+                    transform.DOLocalMoveX(BoxPosition.x - boxWidth, 0.5f);
+                    secondBoxBet.transform.DOLocalMoveX(2 * (BoxPosition.x + boxWidth), 0.5f);
+                    secondCard.transform.DOLocalMoveX(secondCard.transform.localPosition.x - CARD_SPACING, 0.5f);
                 });
                 break;
             case 1:
-                seq.Join(secondBoxBet.transform.DOLocalMoveX(BoxPosition.x + 40f + boxWidth, 0.5f));
-                seq.Join(secondCard.transform.DOLocalMoveX(BoxPosition.x + 40f + boxWidth - CARD_SPACING, 0.5f));
+                seq.JoinCallback(() =>
+                {
+                    secondBoxBet.transform.DOLocalMoveX(secondBoxBet.transform.localPosition.x + boxWidth, 0.5f);
+                    secondCard.transform.DOLocalMoveX(secondCard.transform.localPosition.x - CARD_SPACING, 0.5f);
+                });
                 break;
             case 2:
-                seq.Join(secondBoxBet.transform.DOLocalMoveX(BoxPosition.x - 40f - boxWidth, 0.5f));
-                seq.Join(secondCard.transform.DOLocalMoveX(BoxPosition.x - 40f - boxWidth + CARD_SPACING, 0.5f));
+                seq.JoinCallback(() =>
+                {
+                    secondBoxBet.transform.DOLocalMoveX(secondBoxBet.transform.localPosition.x - boxWidth, 0.5f);
+                    secondCard.transform.DOLocalMoveX(secondCard.transform.localPosition.x - CARD_SPACING, 0.5f);
+                });
                 break;
         }
-        SetupSecondBox();
-        ShowScore(minScore, minScore, minScore);
+        SetupSecondBox(secondHand);
+        listCardModel.Remove(secondCard);
+
+        if (firstHand == null) return;
+
+        ShowScore(firstHand.Point, firstHand.MinPoint, firstHand.MaxPoint);
     }
 
-    private void SetupSecondBox()
+    private void SetupSecondBox(BlackjackHand secondHand)
     {
         secondBoxBet.ResetSecondBox();
         CardModel secondCard = listCardModel[1];
-        CardModel cardModel = gameView.InitCard();
-        cardModel.SetData(secondCard.GetRank(), secondCard.GetSuit());
-        cardModel.transform.SetParent(secondBoxBet.GetCardPosition);
-        cardModel.transform.localPosition = Vector3.zero;
-        cardModel.transform.localScale = Vector3.one * 0.5f;
-        cardModel.gameObject.SetActive(true);
-        secondBoxBet.listCardModel.Add(cardModel);
+        // CardModel cardModel = gameView.InitCard();
+        // cardModel.SetData(secondCard.GetRank(), secondCard.GetSuit());
+        // cardModel.transform.SetParent(secondBoxBet.GetCardPosition);
+        // cardModel.transform.localPosition = Vector3.zero;
+        // cardModel.transform.localScale = Vector3.one * 0.5f;
+        // cardModel.gameObject.SetActive(true);
+        secondBoxBet.listCardModel.Add(secondCard);
         secondBoxBet.SpreadCards();
-        
 
-        secondBoxBet.ShowScore(minScore, minScore, minScore);
+        if (secondHand == null) return;
+        secondBoxBet.ShowScore(secondHand.Point, secondHand.MinPoint, secondHand.MaxPoint);
     }
 
     public void HideImageChip()
@@ -327,7 +350,7 @@ public class BlackjackBoxBet : MonoBehaviour
         animationBlackjack.gameObject.SetActive(false);
         animationBust.gameObject.SetActive(false);
         animationWow.gameObject.SetActive(false);
-        textTotalBet.gameObject.SetActive(false);
+        textTotalBet.gameObject.SetActive(false);   
         textScore.gameObject.SetActive(false);
         textChipValue.gameObject.SetActive(false);
         effectContainer.gameObject.SetActive(false);
@@ -336,8 +359,7 @@ public class BlackjackBoxBet : MonoBehaviour
         Vector2 size = rect.sizeDelta;
         size.x = boxWidth;
         rect.sizeDelta = size;
-        
-        // transform.po = boxPosition;
+        // transform.localPosition = BoxPosition;
         if (secondBoxBet != null)
         {
             secondBoxBet.gameObject.SetActive(false);

@@ -645,7 +645,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8759563341047821470
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1194,6 +1194,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 479e91b662dbb4e3e9faa6b55732d136, type: 3}
   - {fileID: 21300000, guid: 67839bad8287a47879579e24f33c8b95, type: 3}
   cardContainer: {fileID: 8029714684626307235}
+  chipContainer: {fileID: 8143520092699619999}
   effectContainer: {fileID: 6346944040648216278}
   animationWaiting: {fileID: 6516670405673779295}
   animationBlackjack: {fileID: 8983168359537649443}
@@ -1353,7 +1354,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4740678506397857877
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2054,6 +2055,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 479e91b662dbb4e3e9faa6b55732d136, type: 3}
   - {fileID: 21300000, guid: 67839bad8287a47879579e24f33c8b95, type: 3}
   cardContainer: {fileID: 2349241606101736822}
+  chipContainer: {fileID: 0}
   effectContainer: {fileID: 2618095400637577495}
   animationWaiting: {fileID: 6939404354728463077}
   animationBlackjack: {fileID: 8130936513689518594}
