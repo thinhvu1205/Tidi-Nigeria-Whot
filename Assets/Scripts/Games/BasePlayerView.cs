@@ -139,7 +139,12 @@ public class BasePlayerView : MonoBehaviour
     /// <param name="namePl">Player name to display</param>
     public void setName(string namePl)
     {
-        textName.text = namePl;
+        string nameText = namePl;
+        if (namePl.Length >= 10)
+        {
+            nameText = namePl.Substring(0, 13) + "..."; 
+        }
+        textName.text = nameText;
         // Config.EffectTextRunInMask(txtName);
     }
 

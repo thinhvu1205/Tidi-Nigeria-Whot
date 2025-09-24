@@ -27,12 +27,15 @@ namespace Globals
             Dictionary<string, string> dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(fixedJson);
 
             // Lấy giá trị
-            bool isOpenSound = bool.Parse(dict["sound"]);
-            bool isOpenMusic = bool.Parse(dict["music"]);
-            bool isVibration = bool.Parse(dict["vibration"]);
-            Config.isOpenMusic = isOpenMusic;
-            Config.isOpenSound = isOpenSound;
-            Config.isVibration = isVibration;
+            if (dict.TryGetValue("sound", out var soundStr))
+                Config.isOpenSound = bool.Parse(soundStr);
+
+            if (dict.TryGetValue("music", out var musicStr))
+                Config.isOpenMusic = bool.Parse(musicStr);
+
+            if (dict.TryGetValue("vibration", out var vibrationStr))
+                Config.isVibration = bool.Parse(vibrationStr);
+            
             Config.SaveConfigSettings();
         }
     }

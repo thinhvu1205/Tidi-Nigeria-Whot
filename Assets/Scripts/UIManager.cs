@@ -299,8 +299,15 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenCreateTableView()
     {
-        CreateTableView createTableView = Instantiate(LoadPrefabPopup("PopupCreateTable"), parentGames).GetComponent<CreateTableView>();
-        createTableView.transform.localScale = Vector3.one;
+        if (User.userProfile.VipLevel >= 2)
+        {
+            CreateTableView createTableView = Instantiate(LoadPrefabPopup("PopupCreateTable"), parentGames).GetComponent<CreateTableView>();
+            createTableView.transform.localScale = Vector3.one;
+        }
+        else
+        {
+            ShowConfirmDialog("You are not eligible to use this feature.");
+        }
     }
 
     public void OpenShop()
