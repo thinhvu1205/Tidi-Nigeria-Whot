@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Globals;
 using Proto;
 using TMPro;
@@ -101,6 +102,7 @@ public class CheckInBonusView : BaseView
 
     public void OnClickWeeklyTab()
     {
+        imageProgress.fillAmount = 0;
         selectedDailyTab.SetActive(false);
         selectedWeeklyTab.SetActive(true);
         dailyItemTab.SetActive(false);
@@ -115,12 +117,15 @@ public class CheckInBonusView : BaseView
         buttonClaimDailyChip.gameObject.SetActive(false);
     }
 
-    public async UniTask ReceiveDailyReward()
+    public void ReceiveDailyReward()
     {
         nextClaimableDailyItem.AnimateReceiveReward();
-        await UIManager.Instance.LoadProfileUser();
-        await GetClaimableDailyReward(false);
-        OnDailyRewardClaimed?.Invoke();
+        DOVirtual.DelayedCall(2f, async () =>
+        {
+            await UIManager.Instance.LoadProfileUser();
+            await GetClaimableDailyReward(false);
+            OnDailyRewardClaimed?.Invoke();
+        });
     }
 
     private void InitDailyItems(bool isFill)

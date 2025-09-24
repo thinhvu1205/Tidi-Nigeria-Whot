@@ -175,7 +175,7 @@ public class UIManager : Singleton<UIManager>
             case Constants.BACCARAT_GAME_ID:
                 gameView = Instantiate(LoadPrefabGame("BaccaratView"), parentGames).GetComponent<BaccaratView>();
                 break;
-            case Constants.CHINESE_POKER_GAME_ID:
+            case Constants.HONGKONG_POKER_GAME_ID:
                 gameView = Instantiate(LoadPrefabGame("HongKongPokerView"), parentGames).GetComponent<HongKongPokerView>();
                 break;
             case Constants.ROULETTE_GAME_ID:

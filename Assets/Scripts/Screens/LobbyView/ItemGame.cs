@@ -78,7 +78,7 @@ public class ItemGame : MonoBehaviour
                 Constants.INCA_GAME_ID => "anim_iconGames/inca_small/skeleton_SkeletonData",
                 Constants.BACCARAT_GAME_ID => "anim_iconGames/baccarat/skeleton_SkeletonData",
                 Constants.ROULETTE_GAME_ID => "anim_iconGames/roulette/skeleton_SkeletonData",
-                Constants.CHINESE_POKER_GAME_ID => "anim_iconGames/HK_Poker/skeleton_SkeletonData",
+                Constants.HONGKONG_POKER_GAME_ID => "anim_iconGames/HK_Poker/skeleton_SkeletonData",
                 Constants.BLACKJACK_GAME_ID => "anim_iconGames/blackjack/skeleton_SkeletonData",
                 _ => ""
             };

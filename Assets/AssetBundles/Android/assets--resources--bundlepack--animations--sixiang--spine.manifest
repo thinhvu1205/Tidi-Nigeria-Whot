@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2750867936
+CRC: 305346009
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: faef4fb5164962e058e74495abd75e02
+    Hash: cb1cdbbea5e60ebdceeba9165ae82d2f
   TypeTreeHash:
     serializedVersion: 2
     Hash: 90c628345643941ce560f051c308f160
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: faef4fb5164962e058e74495abd75e02
+    Hash: cb1cdbbea5e60ebdceeba9165ae82d2f
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -98,7 +98,6 @@ Assets:
 - Assets/Resources/BundlePack/Animations/SiXiang/Spine/BgDragon/skeleton.atlas.txt
 - Assets/Resources/BundlePack/Animations/SiXiang/Spine/DragonPearl/BachHo/skeleton.atlas.txt
 - Assets/Resources/BundlePack/Animations/SiXiang/Spine/DragonPearl/BachHo/skeleton.json
-- Assets/Resources/BundlePack/Animations/SiXiang/Spine/LuckyDraw/btnCollect.png
 - Assets/Resources/BundlePack/Animations/SiXiang/Spine/FourWin/skeleton_skeleton2.mat
 - Assets/Resources/BundlePack/Animations/SiXiang/Spine/RapidLight/skeleton_SkeletonData.asset
 - Assets/Resources/BundlePack/Animations/SiXiang/Spine/Buy/skeleton_Atlas.asset
@@ -216,6 +215,7 @@ Assets:
 - Assets/Resources/BundlePack/Animations/SiXiang/Spine/LuckyDraw/LuckyDrawItem/skeleton_SkeletonData.asset
 - Assets/Resources/BundlePack/Animations/SiXiang/Spine/BonusChooseGamePopup/skeleton.atlas.txt
 - Assets/Resources/BundlePack/Animations/SiXiang/Spine/DragonPearl/ThanhLong/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/SiXiang/Spine/LuckyDraw/btnCollect.png
 - Assets/Resources/BundlePack/Animations/SiXiang/Spine/Animal/Phoenix/skeleton.png
 - Assets/Resources/BundlePack/Animations/SiXiang/Spine/DragonPearl/HuyenVu/skeleton_Material.mat
 - Assets/Resources/BundlePack/Animations/SiXiang/Spine/BgRectItem/skeleton_Material.mat

@@ -573,7 +573,6 @@ GameObject:
   - component: {fileID: 5881260676401858430}
   - component: {fileID: 2944568805503454212}
   - component: {fileID: 7421139371151496870}
-  - component: {fileID: 3688940811692861316}
   m_Layer: 0
   m_Name: Ok Button
   m_TagString: Untagged
@@ -710,28 +709,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &3688940811692861316
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 185357756122164524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 2944568805503454212}
-  BundleLabel: assets--resources--bundlepack--animations--slotspine
-  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/Tarzan/ButtonConfirm/skeleton_SkeletonData.asset
-  AnimName: backtogame
-  SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &458568127980031625
 GameObject:
   m_ObjectHideFlags: 0
@@ -4094,7 +4071,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 123.95001, y: -20}
-  m_SizeDelta: {x: 0, y: 40}
+  m_SizeDelta: {x: 247.90002, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2464756070086839804
 MonoBehaviour:
@@ -4447,7 +4424,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 264, y: -25}
+  m_AnchoredPosition: {x: 262, y: -6}
   m_SizeDelta: {x: 35, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5132211493283582973
@@ -4478,9 +4455,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a397bf318b3e44870978ddcc2c0e8c15, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 07a0bfa6297ad4945b0b5baeec22f7bd, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -5821,7 +5798,6 @@ GameObject:
   - component: {fileID: 2231489801455454400}
   - component: {fileID: 4370610626577987530}
   - component: {fileID: 8659474388049173278}
-  - component: {fileID: 4527271124490375754}
   m_Layer: 0
   m_Name: Ok Button
   m_TagString: Untagged
@@ -5958,28 +5934,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4527271124490375754
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4054059971282468269}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 4370610626577987530}
-  BundleLabel: assets--resources--bundlepack--animations--slotspine
-  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/Tarzan/ButtonConfirm/skeleton_SkeletonData.asset
-  AnimName: backtogame
-  SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &4108824156046615911
 GameObject:
   m_ObjectHideFlags: 0
@@ -7380,12 +7334,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 1
+  Type: 2
   ThisImg: {fileID: 0}
-  ThisSG: {fileID: 0}
-  BundleLabel: 
-  AssetName: 
-  AnimName: 
+  ThisSG: {fileID: 6406834600020289498}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/Tarzan/MiniGame/cuaso/skeleton_SkeletonData.asset
+  AnimName: animation
   SetNativeSize: 0
   m_OnEnableUE:
     m_PersistentCalls:
@@ -7777,12 +7731,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 1
+  Type: 2
   ThisImg: {fileID: 0}
-  ThisSG: {fileID: 0}
-  BundleLabel: 
-  AssetName: 
-  AnimName: 
+  ThisSG: {fileID: 6024199431555017255}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/Tarzan/MiniGame/cuaso/skeleton_SkeletonData.asset
+  AnimName: animation
   SetNativeSize: 0
   m_OnEnableUE:
     m_PersistentCalls:
@@ -8428,7 +8382,6 @@ GameObject:
   - component: {fileID: 3340941014372449611}
   - component: {fileID: 268849545789175355}
   - component: {fileID: 1121584447605425664}
-  - component: {fileID: 6359635506599223057}
   m_Layer: 0
   m_Name: Ok Button
   m_TagString: Untagged
@@ -8565,28 +8518,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6359635506599223057
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5371112443583983919}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 268849545789175355}
-  BundleLabel: assets--resources--bundlepack--animations--slotspine
-  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/Tarzan/ButtonConfirm/skeleton_SkeletonData.asset
-  AnimName: start
-  SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &5417816985954383309
 GameObject:
   m_ObjectHideFlags: 0
@@ -12660,7 +12591,6 @@ GameObject:
   - component: {fileID: 8212017167838818724}
   - component: {fileID: 4249502978057676527}
   - component: {fileID: 5888439149209327542}
-  - component: {fileID: 9062798721954097483}
   m_Layer: 0
   m_Name: Ok Button
   m_TagString: Untagged
@@ -12797,28 +12727,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &9062798721954097483
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7855041963926360409}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 4249502978057676527}
-  BundleLabel: assets--resources--bundlepack--animations--slotspine
-  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/Tarzan/ButtonConfirm/skeleton_SkeletonData.asset
-  AnimName: backtogame
-  SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &7882128209734473052
 GameObject:
   m_ObjectHideFlags: 0
@@ -13638,7 +13546,6 @@ GameObject:
   - component: {fileID: 522526898365419747}
   - component: {fileID: 2573399948361790801}
   - component: {fileID: 6900454383272340192}
-  - component: {fileID: 8693241256944501109}
   m_Layer: 0
   m_Name: Ok Button
   m_TagString: Untagged
@@ -13775,28 +13682,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &8693241256944501109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8458698932645291559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 4249502978057676527}
-  BundleLabel: assets--resources--bundlepack--animations--slotspine
-  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/Tarzan/ButtonConfirm/skeleton_SkeletonData.asset
-  AnimName: start
-  SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &8683406145599977527
 GameObject:
   m_ObjectHideFlags: 0
@@ -15965,6 +15850,11 @@ MonoBehaviour:
   popupFreeSpin: {fileID: 3779777830285092761}
   popupResultFreeSpin: {fileID: 8465772378728603310}
   diamondAnimation: {fileID: 0}
+  buttonPopupResult: {fileID: 4249502978057676527}
+  buttonGetFreeSpin: {fileID: 2573399948361790801}
+  buttonPopupMinigame: {fileID: 268849545789175355}
+  buttonPopupResultMinigame: {fileID: 2944568805503454212}
+  buttonPopupResultFreeSpin: {fileID: 4370610626577987530}
   currentChipBonusText: {fileID: 2690206611642442897}
   chipRewardText: {fileID: 8783585133647390325}
   diamondNumberText: {fileID: 4655842825149194602}

@@ -13,19 +13,20 @@ using UnityEngine.UI;
 
 public class SlotTarzanView : BaseSlotView
 {
-    [SerializeField] SlotTarzanMiniGameView miniGameView;
+    [SerializeField] private SlotTarzanMiniGameView miniGameView;
     [SerializeField]
-    SkeletonGraphic tarzanAnimation, characterAnimation, lightBarAnimation, popupResult, popupMinigame,
-    popupResultMinigame, popupFreeSpin, popupResultFreeSpin, diamondAnimation;
+    private SkeletonGraphic tarzanAnimation, characterAnimation, lightBarAnimation, popupResult, popupMinigame,
+    popupResultMinigame, popupFreeSpin, popupResultFreeSpin, diamondAnimation, buttonPopupResult, buttonGetFreeSpin,
+    buttonPopupMinigame, buttonPopupResultMinigame, buttonPopupResultFreeSpin;
     [SerializeField]
-    TextMeshProUGUI currentChipBonusText, chipRewardText, diamondNumberText, diamondAmountText,
+    private TextMeshProUGUI currentChipBonusText, chipRewardText, diamondNumberText, diamondAmountText,
     freeSpinTurnText, freeSpinMultiplierText, resultFreeSpinRewardText, resultFreeSpinTurnText, resultFreeSpinMultiplierText, resultMinigameRewardText;
-    [SerializeField] Image progressChipBonus;
-    [SerializeField] Button getFreeSpinOKButton, getFreeSpinResultOKButton;
-    [SerializeField] Transform diamondPot, diamondContainer, letterContainer;
-    [SerializeField] GameObject diamondPrefab, letterPrefab;
-    [SerializeField] List<Image> characterList;
-    [SerializeField] List<Sprite> characterActiveList;
+    [SerializeField] private Image progressChipBonus;
+    [SerializeField] private Button getFreeSpinOKButton, getFreeSpinResultOKButton;
+    [SerializeField] private Transform diamondPot, diamondContainer, letterContainer;
+    [SerializeField] private GameObject diamondPrefab, letterPrefab;
+    [SerializeField] private List<Image> characterList;
+    [SerializeField] private List<Sprite> characterActiveList;
     protected override Dictionary<SiXiangSymbol, int> SymbolDictionary => new()
     {
         { SiXiangSymbol.K, 0 },
@@ -175,6 +176,7 @@ public class SlotTarzanView : BaseSlotView
     private const string TARZAN_ANIMATION_NAME_2 = "du_day";
     private const string TARZAN_ANIMATION_PATH = "SlotSpine/Tarzan/Model/skeleton_SkeletonData";
     private const string CHARACTER_ANIMATION_PATH = "SlotSpine/Tarzan/JungleCharacter/%letter/skeleton_SkeletonData";
+    private const string BUTTON_CONFIRM_ANIMATION_PATH = "SlotSpine/Tarzan/ButtonConfirm/skeleton_SkeletonData";
     protected override int ThirdScatterIndex => 4;
     public long CurrentBetLevel => currentBetLevel;
     private UnityEngine.Pool.ObjectPool<GameObject> diamondPool;
@@ -482,13 +484,13 @@ public class SlotTarzanView : BaseSlotView
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.FREESPIN);
         effectContainer.gameObject.SetActive(true);
         popupFreeSpin.gameObject.SetActive(true);
-        popupFreeSpin.AnimationState.SetAnimation(0, "yahoo", true);
+        Utility.PlayAnimation(popupFreeSpin, "yahoo", true);
         freeSpinTurnText.text = "9";
 
         popupFreeSpin.transform.localScale = new Vector2(0.25f, 0.25f);
         popupFreeSpin.transform.DOScale(new Vector2(1, 1f), 0.3f).SetEase(Ease.OutBack);
         getFreeSpinOKButton.gameObject.SetActive(false);
-
+        Utility.PlayAnimationByPath(buttonGetFreeSpin, BUTTON_CONFIRM_ANIMATION_PATH, "start", true);
         DOTween.Sequence()
             .AppendCallback(() =>
             {
@@ -536,6 +538,7 @@ public class SlotTarzanView : BaseSlotView
         resultFreeSpinTurnText.text = "9";
         resultFreeSpinMultiplierText.text = "x" + "10";
         Utility.TweenNumberToMoney(resultFreeSpinRewardText, totalChipWinByGame, 0, 1.0f, 10000);
+        Utility.PlayAnimationByPath(buttonPopupResultFreeSpin, BUTTON_CONFIRM_ANIMATION_PATH, "backtogame", true);
 
         popupResultFreeSpin.transform.localScale = new Vector2(0.25f, 0.25f);
         popupResultFreeSpin.transform.DOScale(new Vector2(1, 1f), 0.3f).SetEase(Ease.OutBack);
@@ -579,6 +582,8 @@ public class SlotTarzanView : BaseSlotView
         effectContainer.gameObject.SetActive(true);
         popupMinigame.gameObject.SetActive(true);
         Utility.PlayAnimation(popupMinigame, "Eng", true);
+        Utility.PlayAnimationByPath(buttonPopupMinigame, BUTTON_CONFIRM_ANIMATION_PATH, "start", true);
+
         popupMinigame.transform.localScale = new Vector2(0.5f, 0.5f);
         popupMinigame.transform.localPosition = Vector2.zero;
         popupMinigame.transform.DOScale(new Vector2(.4f, .4f), 0.3f).SetEase(Ease.OutBack);
@@ -602,6 +607,8 @@ public class SlotTarzanView : BaseSlotView
         popupResultMinigame.gameObject.SetActive(true);
         effectContainer.gameObject.SetActive(true);
         Utility.PlayAnimation(popupResultMinigame, "Eng", true);
+        Utility.PlayAnimationByPath(buttonPopupResultMinigame, BUTTON_CONFIRM_ANIMATION_PATH, "backtogame", true);
+
         popupResultMinigame.transform.localScale = new Vector2(.8f, .8f);
         popupResultMinigame.transform.DOScale(new Vector2(1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
 
