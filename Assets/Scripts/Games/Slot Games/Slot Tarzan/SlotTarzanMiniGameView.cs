@@ -62,14 +62,15 @@ public class SlotTarzanMiniGameView : BaseView
     {
         List<SpinSymbol> spinList = data.Matrix.SpinLists.ToList();
         PickLeft = (int)data.NumSpinLeft;
-        if (PickLeft <= 0)
-        {
-            PickLeft = 5;
-        }
+        // if (PickLeft <= 0)
+        // {
+        //     PickLeft = 5;
+        // }
         if (!isPicking)
         {
             pickLeftText.text = PickLeft.ToString();
         }
+        UpdateTotalWin((int)data.GameReward.TotalChipsWinByGame); 
         // List<JObject> listData = new List<JObject>();
         // JArray views = (JArray)dataBonus["view"];
         // foreach (JArray dataView in views)
@@ -91,6 +92,7 @@ public class SlotTarzanMiniGameView : BaseView
             {
                 if (!item.IsOpen)
                 {
+                    Debug.Log("OPEN ITEM INDEX: " + i);
                     item.ShowResult(spinSymbol.Symbol, spinSymbol.WinAmount);
                 }
 
@@ -116,8 +118,8 @@ public class SlotTarzanMiniGameView : BaseView
     }
     public void UpdateTotalWin(int value)
     {
-        Utility.TweenNumberFromK(totalWinText, totalWin + value, totalWin, 0.3f, true);
-        totalWin += value;
+        Utility.TweenNumberFromK(totalWinText, value, totalWin, 0.3f, true);
+        totalWin = value;
     }
     public void ShowPopupResult()
     {

@@ -324,6 +324,11 @@ public class BaseSlotView : BaseGameView
             // Nếu spintype đang là normal hoặc Free Normal thì bấm sẽ bắt đầu quay
             if (spinType == SpinType.NORMAL || spinType == SpinType.FREE_NORMAL)
             {
+                // Free Spin thì khi bắt đầu quay sẽ sang trạng thái AUTO luôn
+                if (spinType == SpinType.FREE_NORMAL)
+                {
+                    spinType = SpinType.FREE_AUTO;
+                }
                 switch (gameState)
                 {
                     case SlotGameState.PREPARE:
@@ -336,11 +341,6 @@ public class BaseSlotView : BaseGameView
                         break;
                 }
 
-                // Free Spin thì khi bắt đầu quay sẽ sang trạng thái AUTO luôn
-                if (spinType == SpinType.FREE_NORMAL)
-                {
-                    spinType = SpinType.FREE_AUTO;
-                }
             }
             // Nếu SpinType là Auto thì bấm sẽ stop và chuyển về Normal
             // Nếu SpinType là FreeAuto thì ko bấm dc
@@ -604,16 +604,16 @@ public class BaseSlotView : BaseGameView
     protected void ShowWinScatter()
     {
         // Nếu đang ko Free Spin (tính cả Fruit Rain) thì có hiệu ứng tiền bay và Update tiền thưởng ngay lập tức
-        if (!isInFreeSpin)
-        {
-            AnimateCoinsFly();
-            SetCurrentChipValue(playerWalletAfter);
-            UpdateChipWinValue();
-        }
-        else
-        {
-            UpdateTotalChipWinValue();
-        }
+        // if (!isInFreeSpin)
+        // {
+        //     AnimateCoinsFly();
+        //     SetCurrentChipValue(playerWalletAfter);
+        //     UpdateChipWinValue();
+        // }
+        // else
+        // {
+        //     UpdateTotalChipWinValue();
+        // }
         List<int> scatterColumnIds = new();
         slotColumnList.ForEach(arr =>
         {
@@ -940,7 +940,7 @@ public class BaseSlotView : BaseGameView
         buttonSpinAnimation.Initialize(true);
     }
 
-    protected void UpdateStateWinUI(StateWin stateWin)
+    protected virtual void UpdateStateWinUI(StateWin stateWin)
     {
         bool isUsingStateImage = stateWinImage.gameObject.activeSelf;
         switch (stateWin)
@@ -1067,17 +1067,18 @@ public class BaseSlotView : BaseGameView
         SetInfoSessionText("Press SPIN to play");
         SetCurrentBetText(currentBetLevel);
         SetCurrentBetImage(currentBetLevel);
-
         SetCurrentChipValue(data.GameReward.BalanceChipsWalletAfter);
+
         if (data.GameConfig != null)
         {
             freeSpinLeft = (int)data.GameConfig.NumFreeSpin;
             isLastFreeSpin = data.GameConfig.NumFreeSpin <= 0;
-            lastTotalChipWinByGame = totalChipWinByGame;
-            totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
         }
+        lastTotalChipWinByGame = totalChipWinByGame;
+        totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
         if (freeSpinLeft > 0)
         {
+            UpdateTotalChipWinValue();
             ShowBackGroundFreeSpin();
             spinType = SpinType.FREE_NORMAL;
             UpdateSpinButtonUI();
@@ -1292,6 +1293,7 @@ public class BaseSlotView : BaseGameView
                 chipWinText.text = "0";
                 freeSpinLeftText.text = "9";
                 hasGotFreeSpin = false;
+                isInFreeSpin = true;
 
             }
             Reset();

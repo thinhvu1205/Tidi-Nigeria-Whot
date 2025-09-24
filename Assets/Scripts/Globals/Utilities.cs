@@ -230,8 +230,8 @@ namespace Globals
             DOTween.Sequence()
             .Append(lbText.transform.DOScale(biggerScale, timeRun * 0.45f))
             .AppendInterval(timeRun * 0.45f)
-            .Append(lbText.transform.DOScale(normalScale, timeRun * 0.1f))
-            .OnComplete(() => lbText.transform.localScale = Vector2.one);
+            .Append(lbText.transform.DOScale(normalScale, timeRun * 0.1f));
+            // .OnComplete(() => lbText.transform.localScale = Vector2.one);
         }
         public static void TweenNumberToNumber(TextMeshProUGUI lbText, long toNumber, long startNumber = 0, float timeRun = 0.5f, bool isLowerCase = false)
         {
@@ -244,8 +244,8 @@ namespace Globals
             DOTween.Sequence()
             .Append(lbText.transform.DOScale(biggerScale, timeRun * 0.45f))
             .AppendInterval(timeRun * 0.45f)
-            .Append(lbText.transform.DOScale(normalScale, timeRun * 0.1f))
-            .OnComplete(() => lbText.transform.localScale = Vector2.one);
+            .Append(lbText.transform.DOScale(normalScale, timeRun * 0.1f));
+            // .OnComplete(() => lbText.transform.localScale = Vector2.one);
 
         }
         public static void TweenNumberTo(TextMeshProUGUI lbText, long toNumber, long startNumber = 0, float timeRun = 0.3f)
