@@ -83,6 +83,7 @@ public class BaseDiceGameView : BaseGameView
             if (userIdToView.TryGetValue(lp.Id, out var view))
             {
                 Destroy(view.gameObject);
+                RemovePlayerBoxBet(lp.Id);
                 userIdToView.Remove(lp.Id);
             }
         }
@@ -129,7 +130,7 @@ public class BaseDiceGameView : BaseGameView
         thisPlayer = userIdToView.GetValueOrDefault(localUserId);
         if (thisPlayer != null)
         {
-            thisPlayer.setPosThanhBarThisPlayer();
+            thisPlayer.SetPositionInfoThisPlayer();
         }
     }
 
@@ -152,6 +153,11 @@ public class BaseDiceGameView : BaseGameView
         var rt = view.transform as RectTransform;
         if (rt != null) rt.anchoredPosition = anchoredPos;
         else view.transform.localPosition = new Vector3(anchoredPos.x, anchoredPos.y, 0f);
+    }
+
+    protected virtual void RemovePlayerBoxBet(string leavePlayerId)
+    {
+
     }
     
 }

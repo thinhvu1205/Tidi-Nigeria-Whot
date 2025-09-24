@@ -218,7 +218,7 @@ MonoBehaviour:
   updateSeparatorPartLocation: 1
   meshGenerator:
     settings:
-      useClipping: 0
+      useClipping: 1
       zSpacing: 0
       pmaVertexColors: 1
       tintBlack: 0

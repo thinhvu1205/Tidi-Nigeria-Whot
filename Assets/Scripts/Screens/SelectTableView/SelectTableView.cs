@@ -68,7 +68,7 @@ public class SelectTableView : BaseView
     #endregion
     private void UpdateVisuals()
     {
-        accountChip.text = User.userProfile.AccountChip.ToString();
+        accountChip.text = Utility.FormatNumber(User.userProfile.AccountChip);
     }
     private void UpdateTitle()
     {

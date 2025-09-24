@@ -40,6 +40,9 @@ public class DataSender
     public const string DAILY_REWARD_TEMPLATE = "dailyrewardtemplate";
     public const string CAN_CLAIM_DAILY_REWARD = "canclaimdailyreward";
     public const string CLAIM_DAILY_REWARD = "claimdailyreward";
+    public const string WEEKLY_REWARD_TEMPLATE = "weekly_bonus_template";
+    public const string CAN_CLAIM_WEEKLY_REWARD = "can_claim_weekly_bonus";
+    public const string CLAIM_WEEKLY_REWARD = "claim_weekly_bonus";
     public const string GIFT_CODE_CLAIM = "gift_code_claim";
     public const string LIST_IN_APP_MESSAGE = "list_in_app_message";
     public const string LIST_NOTIFICATION = "list_notification";
@@ -441,7 +444,7 @@ public class DataSender
         var response = await NetworkManager.INSTANCE.RPCSend(LIST_EXCHANGE);
         return DecodeFromJson<ExchangeInfo>(response.Payload);
     }
-    
+
     public static async UniTask<GiftCode> ClaimGiftCode(string code)
     {
         GiftCode giftCode = new GiftCode()
@@ -485,10 +488,11 @@ public class DataSender
         var response = await NetworkManager.INSTANCE.RPCSend(DAILY_REWARD_TEMPLATE);
         return DecodeFromJson<DailyRewardTemplate>(response.Payload);
     }
-    
-    public static async UniTask<Reward> CheckCanClaimDailyReward()
+
+    public static async UniTask<Reward> GetClaimableDailyReward()
     {
-        var response = await NetworkManager.INSTANCE.RPCSend(CAN_CLAIM_DAILY_REWARD, new RequestReward{ 
+        var response = await NetworkManager.INSTANCE.RPCSend(CAN_CLAIM_DAILY_REWARD, new RequestReward
+        {
             DeviceId = Config.deviceId,
         });
         return DecodeFromJson<Reward>(response.Payload);
@@ -496,7 +500,32 @@ public class DataSender
 
     public static async UniTask<Reward> ClaimDailyReward()
     {
-        var response = await NetworkManager.INSTANCE.RPCSend(CLAIM_DAILY_REWARD, new RequestReward{ 
+        var response = await NetworkManager.INSTANCE.RPCSend(CLAIM_DAILY_REWARD, new RequestReward
+        {
+            DeviceId = Config.deviceId,
+        });
+        return DecodeFromJson<Reward>(response.Payload);
+    }
+
+    public static async UniTask<DailyRewardTemplate> GetWeeklyRewardTemplate()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(WEEKLY_REWARD_TEMPLATE);
+        return DecodeFromJson<DailyRewardTemplate>(response.Payload);
+    }
+    
+    public static async UniTask<Reward> GetClaimableWeeklyReward()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(CAN_CLAIM_DAILY_REWARD, new RequestReward
+        {
+            DeviceId = Config.deviceId,
+        });
+        return DecodeFromJson<Reward>(response.Payload);
+    }
+
+    public static async UniTask<Reward> ClaimWeeklyReward()
+    {
+        var response = await NetworkManager.INSTANCE.RPCSend(CLAIM_DAILY_REWARD, new RequestReward
+        {
             DeviceId = Config.deviceId,
         });
         return DecodeFromJson<Reward>(response.Payload);

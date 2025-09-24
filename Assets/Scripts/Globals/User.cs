@@ -21,21 +21,25 @@ namespace Globals
         public static void UpdateConfig()
         {
             string appConfig = userProfile.AppConfig;
+            if (string.IsNullOrEmpty(appConfig)) return;
             string fixedJson = "{" + appConfig + "}";
 
             // Parse thành dictionary
             Dictionary<string, string> dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(fixedJson);
 
             // Lấy giá trị
-            if (dict.TryGetValue("sound", out var soundStr))
-                Config.isOpenSound = bool.Parse(soundStr);
-
-            if (dict.TryGetValue("music", out var musicStr))
-                Config.isOpenMusic = bool.Parse(musicStr);
-
-            if (dict.TryGetValue("vibration", out var vibrationStr))
-                Config.isVibration = bool.Parse(vibrationStr);
-            
+            if (dict.TryGetValue("sound", out string sound))
+            {
+                Config.isOpenSound = bool.Parse(sound);
+            }
+            if (dict.TryGetValue("music", out string music))
+            {
+                Config.isOpenMusic = bool.Parse(music);
+            }
+            if (dict.TryGetValue("vibration", out string vibration))
+            {
+                Config.isVibration = bool.Parse(vibration);
+            }
             Config.SaveConfigSettings();
         }
     }

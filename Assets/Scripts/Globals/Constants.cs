@@ -106,8 +106,8 @@ namespace Globals
             { WhotCardSuit.WhotSuitCircle, 0 },
             { WhotCardSuit.WhotSuitTriangle, 1 },
             { WhotCardSuit.WhotSuitCross, 2 },
-            { WhotCardSuit.WhotSuitStar, 3 },
-            { WhotCardSuit.WhotSuitSquare, 4 },
+            { WhotCardSuit.WhotSuitSquare, 3 },
+            { WhotCardSuit.WhotSuitStar, 4 },
             { WhotCardSuit.WhotSuitUnspecified, 5 }, // Whot
         };
 

@@ -416,7 +416,7 @@ public class BasePlayerView : MonoBehaviour
     /// <summary>
     /// Sets position for current player's progress bar
     /// </summary>
-    public void setPosThanhBarThisPlayer()
+    public void SetPositionInfoThisPlayer()
     {
         backgroundBar.transform.localPosition = new Vector2(120, -12);
         // if (
@@ -440,6 +440,11 @@ public class BasePlayerView : MonoBehaviour
         // {
         //     bkgThanhBar.transform.localPosition = new Vector2(120, -12);
         // }
+    }
+
+    public void SetPositionInfoRightPlayer()
+    {
+        backgroundBar.transform.localPosition = new Vector2(-120, 0);
     }
 
     /// <summary>

@@ -54,8 +54,7 @@ public class ProfileView : BaseView
         {
             nameText.text = User.userProfile.DisplayName;
             idText.text = "ID: " + User.userProfile.UserSid;
-            chipText.text = User.userProfile.AccountChip.ToString();
-            avatar.LoadAvatar(User.userProfile.AvatarId);
+            chipText.text = Utility.FormatNumber(User.userProfile.AccountChip);
             if (IsDefaultName(User.userProfile.DisplayName))
             {
                 changeNameButton.gameObject.SetActive(true);
@@ -66,6 +65,7 @@ public class ProfileView : BaseView
                 changeNameButton.gameObject.SetActive(false);
                 changePasswordButton.gameObject.SetActive(true);
             }
+            avatar.LoadAvatar(User.userProfile.AvatarId);
         }
     }
 

@@ -17,10 +17,11 @@ public class SlotTarzanView : BaseSlotView
     [SerializeField]
     SkeletonGraphic tarzanAnimation, characterAnimation, lightBarAnimation, popupResult, popupMinigame,
     popupResultMinigame, popupFreeSpin, popupResultFreeSpin, diamondAnimation;
-    [SerializeField] TextMeshProUGUI currentChipBonusText, chipRewardText, diamondNumberText, diamondAmountText,
+    [SerializeField]
+    TextMeshProUGUI currentChipBonusText, chipRewardText, diamondNumberText, diamondAmountText,
     freeSpinTurnText, freeSpinMultiplierText, resultFreeSpinRewardText, resultFreeSpinTurnText, resultFreeSpinMultiplierText, resultMinigameRewardText;
     [SerializeField] Image progressChipBonus;
-    [SerializeField] Button getFreeSpinOKButton, getFreeSpinResultOKButton; 
+    [SerializeField] Button getFreeSpinOKButton, getFreeSpinResultOKButton;
     [SerializeField] Transform diamondPot, diamondContainer, letterContainer;
     [SerializeField] GameObject diamondPrefab, letterPrefab;
     [SerializeField] List<Image> characterList;
@@ -174,7 +175,7 @@ public class SlotTarzanView : BaseSlotView
     private const string TARZAN_ANIMATION_NAME_2 = "du_day";
     private const string TARZAN_ANIMATION_PATH = "SlotSpine/Tarzan/Model/skeleton_SkeletonData";
     private const string CHARACTER_ANIMATION_PATH = "SlotSpine/Tarzan/JungleCharacter/%letter/skeleton_SkeletonData";
-
+    protected override int ThirdScatterIndex => 4;
     public long CurrentBetLevel => currentBetLevel;
     private UnityEngine.Pool.ObjectPool<GameObject> diamondPool;
     private readonly List<int> diamondIndexList = new();
@@ -206,9 +207,9 @@ public class SlotTarzanView : BaseSlotView
             {
                 Destroy(diamond);
             },
-            defaultCapacity: 1,    
+            defaultCapacity: 1,
             maxSize: 30
-        );      
+        );
     }
     public override void HandleUpdateTable(IMatchState matchState)
     {
@@ -295,11 +296,11 @@ public class SlotTarzanView : BaseSlotView
             }
         }
 
+        lastTotalChipWinByGame = totalChipWinByGame;
+        totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
         if (data.GameConfig != null)
         {
             freeSpinLeft = (int)data.GameConfig.NumFreeSpin;
-            lastTotalChipWinByGame = totalChipWinByGame;
-            totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
         }
         else
         {
@@ -311,7 +312,7 @@ public class SlotTarzanView : BaseSlotView
             // Bấm Spin
             if (IsSpinning)
                 OnStartSpin();
-            if (isStartMiniGame)
+            if (data.CurrentSixiangGame == SiXiangGame.TarzanJungleTreasure)
             {
                 miniGameView.SetInfo(data);
             }
@@ -334,6 +335,8 @@ public class SlotTarzanView : BaseSlotView
             if (data.CurrentSixiangGame == SiXiangGame.TarzanFreespinx9)
             {
                 ShowBackGroundFreeSpin();
+                UpdateTotalChipWinValue();
+                UpdateStateWinUI(StateWin.TOTAL_WIN);
                 spinType = SpinType.FREE_NORMAL;
                 UpdateSpinButtonUI();
             }
@@ -349,7 +352,7 @@ public class SlotTarzanView : BaseSlotView
         {
             spinSymbolList.Add(spinSymbol.Symbol);
         }
-    
+
         // Update Reward
         lastChipWin = currentChipWin;
         currentChipWin = data.GameReward.ChipsWin;
@@ -385,7 +388,7 @@ public class SlotTarzanView : BaseSlotView
         {
             tweenQueue.Enqueue(() => ShowAnimationDiamond());
         }
-        
+
         ///------------------CHECK TARZAN WILD--------------------//
         if (isWinTarzan)
         {
@@ -536,7 +539,7 @@ public class SlotTarzanView : BaseSlotView
 
         popupResultFreeSpin.transform.localScale = new Vector2(0.25f, 0.25f);
         popupResultFreeSpin.transform.DOScale(new Vector2(1, 1f), 0.3f).SetEase(Ease.OutBack);
-        
+
         freeSpinMultiplierText.transform.DOScale(new Vector2(0.5f, 0.5f), 1.5f).SetEase(Ease.OutBack);
         if (spinType == SpinType.AUTO || spinType == SpinType.FREE_AUTO)
         {
@@ -551,7 +554,7 @@ public class SlotTarzanView : BaseSlotView
                 });
         }
     }
-    
+
     public void HidePopupResultFreeSpin()
     {
         popupResultFreeSpin.transform.DOScale(new Vector2(0.25f, 0.25f), 0.3f).SetEase(Ease.InBack).OnComplete(() =>
@@ -761,7 +764,7 @@ public class SlotTarzanView : BaseSlotView
     protected override void ShowBackGroundFreeSpin()
     {
         freeSpinLeftText.gameObject.SetActive(true);
-        freeSpinLeftText.text = freeSpinLeft.ToString();
+        freeSpinLeftText.text = freeSpinLeft == -1 ? "9" : freeSpinLeft.ToString();
     }
     #endregion
 
@@ -774,5 +777,33 @@ public class SlotTarzanView : BaseSlotView
             SpinType.AUTO => "stop",
             _ => "Spin"
         };
+    }
+    protected override void UpdateStateWinUI(StateWin stateWin)
+    {
+        bool isUsingStateImage = stateWinImage.gameObject.activeSelf;
+        stateWinImage.transform.localScale = Vector3.one;
+        switch (stateWin)
+        {
+            case StateWin.WIN when isUsingStateImage:
+                stateWinImage.sprite = stateWinSpriteList[0];
+                break;
+            case StateWin.WIN when !isUsingStateImage:
+                stateWinText.text = "Win";
+                break;
+            case StateWin.TOTAL_WIN when isUsingStateImage:
+                stateWinImage.sprite = stateWinSpriteList[1];
+                stateWinImage.transform.localScale = Vector3.one * 1.4f;
+                break;
+            case StateWin.TOTAL_WIN when !isUsingStateImage:
+                stateWinText.text = "Total Win";
+                break;
+            case StateWin.LAST_WIN when isUsingStateImage:
+                stateWinImage.transform.localScale = Vector3.one * 1.4f;
+                stateWinImage.sprite = stateWinSpriteList[2];
+                break;
+            case StateWin.LAST_WIN when !isUsingStateImage:
+                stateWinText.text = "Last Win";
+                break;
+        }
     }
 }

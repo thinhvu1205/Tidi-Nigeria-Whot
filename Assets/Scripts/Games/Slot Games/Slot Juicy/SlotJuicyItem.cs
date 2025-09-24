@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Globals;
 using TMPro;
 using UnityEngine;
@@ -74,7 +75,7 @@ public class SlotJuicyItem : SlotItem
             long value = ValuePackageList[i];
             TextMeshProUGUI textElement = valuePackageTextList[i];
 
-            if (value == 0)
+            if (value == 0 || (new int[] { 14, 15, 16 }).Contains(finishView[i]))
             {
                 textElement.gameObject.SetActive(false);
             }

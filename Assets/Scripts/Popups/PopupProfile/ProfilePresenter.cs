@@ -24,7 +24,7 @@ public class ProfilePresenter
         }
         catch (Exception)
         {
-            await profileView.ShowToast("Error when update avatar!");
+            // await profileView.ShowToast("Error when update avatar!");
             throw;
         }
     }

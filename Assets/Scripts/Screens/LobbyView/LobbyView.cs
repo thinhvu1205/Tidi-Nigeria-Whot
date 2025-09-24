@@ -10,25 +10,33 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 using DG.Tweening;
 using Avatar = Common.Objects.Avatar;
+using System.Collections;
 
 public class LobbyView : BaseView
 {
     [SerializeField] private Avatar avatar;
-    [SerializeField] private TextMeshProUGUI displayNameText, userIdText, accountChip;
+    [SerializeField] private TextMeshProUGUI displayNameText, userIdText, accountChip, textTimeLeftToClaimReward;
     [SerializeField] private Image allSlotGamesImage, allGamesImage;
     [SerializeField] private Transform bigGameIconParent, miniGameIconParent, slotGameIconParent, allGamesParent, slotGamesParent;
     [SerializeField] private GameObject gameIconPrefab, videoBackground;
     [SerializeField] private VideoPlayer videoPlayer;
     [SerializeField] private VideoClip videoStartSiXiang;
     private List<Game> gameList = new();
+    private LobbyPresenter lobbyPresenter;
+    private int timeLeftToClaimReward;
+
     VideoPlayer.EventHandler videoStartedListener;
     VideoPlayer.EventHandler videoEndedListener;
 
     protected override void Awake()
     {
         base.Awake();
-        OnClickAllGamesTab();
+        lobbyPresenter = new LobbyPresenter();
+        lobbyPresenter.Init(this);
+
         _ = LoadGames();
+        _ = GetClaimableReward();
+        OnClickAllGamesTab();
         UIManager.Instance.lobbyView = this;
 
     }
@@ -43,12 +51,20 @@ public class LobbyView : BaseView
     {
         base.OnEnable();
         User.OnProfileUpdated += UpdateProfileData;
+        CheckInBonusView.OnDailyRewardClaimed += CheckInBonusView_OnDailyRewardClaimed;
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
         User.OnProfileUpdated -= UpdateProfileData;
+        CheckInBonusView.OnDailyRewardClaimed -= CheckInBonusView_OnDailyRewardClaimed;
+    }
+
+
+    private void CheckInBonusView_OnDailyRewardClaimed()
+    {
+        _ = GetClaimableReward();
     }
 
 
@@ -56,7 +72,8 @@ public class LobbyView : BaseView
     {
         try
         {
-            GameListResponse gameListResponse = await DataSender.GetListGame();
+            GameListResponse gameListResponse = await lobbyPresenter.GetListGame();
+            UIManager.Instance.HideProgressing();
             gameList = gameListResponse.Games.ToList();
             UpdateUIListGame();
             Debug.Log("GAME LIST: " + gameListResponse.ToString());
@@ -68,8 +85,25 @@ public class LobbyView : BaseView
         }
     }
 
+    private async UniTask GetClaimableReward()
+    {
+        Reward reward = await lobbyPresenter.GetClaimableReward();
+        UIManager.Instance.HideProgressing();
+        if (reward == null) return;
+        timeLeftToClaimReward = (int)reward.NextClaimSec;
+        StartCoroutine(ClaimTimer());
+    }
+
     private void UpdateUIListGame()
     {
+        // foreach (Transform child in miniGameIconParent)
+        // {
+        //     Destroy(child.gameObject);
+        // }
+        // foreach (Transform child in bigGameIconParent)
+        // {
+        //     Destroy(child.gameObject);
+        // }
         foreach (Game game in gameList)
         {
             ItemGame itemGame = Instantiate(gameIconPrefab).GetComponent<ItemGame>();
@@ -100,8 +134,18 @@ public class LobbyView : BaseView
         {
             displayNameText.text = User.userProfile.DisplayName;
             userIdText.text = "ID: " + User.userProfile.UserSid;
-            accountChip.text = User.userProfile.AccountChip.ToString();
+            accountChip.text = Utility.FormatNumber(User.userProfile.AccountChip);
             avatar.LoadAvatar(User.userProfile.AvatarId);
+        }
+    }
+
+    private IEnumerator ClaimTimer()
+    {
+        while (timeLeftToClaimReward >= 0)
+        {
+            yield return new WaitForSeconds(1f);
+            textTimeLeftToClaimReward.text = Utility.ConvertTimeToString(timeLeftToClaimReward);
+            timeLeftToClaimReward -= 1;
         }
     }
 

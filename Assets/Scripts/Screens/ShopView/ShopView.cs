@@ -66,7 +66,7 @@ public class ShopView : BaseView
     {
         if (User.userProfile != null)
         {
-            textAccountChip.text = User.userProfile.AccountChip.ToString();
+            textAccountChip.text = Utility.FormatNumber(User.userProfile.AccountChip);
         }
     }
 }

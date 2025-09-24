@@ -6,28 +6,120 @@ using UnityEngine;
 
 public class CheckInBonusPresenter
 {
-    public static CheckInBonusPresenter Instance { get; private set; }
     private CheckInBonusView checkInBonusView;
 
     public void Init(CheckInBonusView view)
     {
-        Instance = this;
         checkInBonusView = view;
     }
 
     public async UniTask<DailyRewardTemplate> GetDailyReward()
     {
-        DailyRewardTemplate dailyReward = await DataSender.GetDailyRewardTemplate();
-        Reward reward =  await DataSender.CheckCanClaimDailyReward();
-        Debug.Log("reward " + reward);
-        if (reward.CanClaim && reward.DeviceAllowed)
+        UIManager.Instance.ShowProgressing();
+        try
         {
-            Reward reward1 =  await DataSender.ClaimDailyReward();
-            Debug.Log("reward1 " + reward1);
+            DailyRewardTemplate dailyReward = await DataSender.GetDailyRewardTemplate();
+            return dailyReward;
         }
-            
-       
-        return dailyReward;
+        catch (Exception e)
+        {
+            checkInBonusView.OnError("Error while getting reward!");
+            return null;
+        }
+    }
+
+
+    public async UniTask<Reward> GetClaimableDailyReward()
+    {
+        UIManager.Instance.ShowProgressing();
+        try
+        {
+            Reward reward = await DataSender.GetClaimableDailyReward();
+            Debug.Log("reward " + reward);
+            if (reward.CanClaim && reward.DeviceAllowed)
+            {
+                return reward;
+            }
+            return reward;
+        }
+        catch (Exception e)
+        {
+            checkInBonusView.OnError("Error while getting reward!");
+            return null;
+        }
+
+    }
+
+    public async UniTask<Reward> ClaimDailyReward()
+    {
+        Debug.Log("SEND CLAIM DAILY REWARD");
+        UIManager.Instance.ShowProgressing();
+        try
+        {
+            Reward reward = await DataSender.ClaimDailyReward();
+            await checkInBonusView.OnSuccess();
+            await checkInBonusView.ReceiveDailyReward();
+            return reward;
+        }
+        catch (Exception e)
+        {
+            checkInBonusView.OnError("Error while claim gift!");
+            return null;
+        }
+    }
+
+    public async UniTask<DailyRewardTemplate> GetWeeklyReward()
+    {
+        UIManager.Instance.ShowProgressing();
+        try
+        {
+            DailyRewardTemplate weeklyReward = await DataSender.GetWeeklyRewardTemplate();
+            return weeklyReward;
+        }
+        catch (Exception e)
+        {
+            checkInBonusView.OnError("Error while getting reward!");
+            return null;
+        }
+    }
+    
+    public async UniTask<Reward> GetClaimableWeeklyReward()
+    {
+        UIManager.Instance.ShowProgressing();
+        try
+        {
+            Reward reward = await DataSender.GetClaimableWeeklyReward();
+            Debug.Log("reward " + reward);
+            if (reward.CanClaim && reward.DeviceAllowed)
+            {
+                return reward;
+            }
+            return reward;
+        }
+        catch (Exception e)
+        {
+            checkInBonusView.OnError("Error while getting reward!");
+            return null;
+        }
+
+    }
+
+    public async UniTask<Reward> ClaimWeeklyReward()
+    {
+        Debug.Log("SEND CLAIM DAILY REWARD");
+        UIManager.Instance.ShowProgressing();
+        try
+        {
+            Reward reward = await DataSender.ClaimWeeklyReward();
+            await checkInBonusView.OnSuccess();
+            // checkInBonusView.ReceiveDailyReward();
+            return reward;
+        }
+        catch (Exception e)
+        {
+            checkInBonusView.OnError("Error while claim gift!");
+            return null;
+        }
     }
 }
 

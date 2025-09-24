@@ -508,6 +508,7 @@ public class WhotView : BaseGameView
     {
         var data = BalanceResult.Parser.ParseFrom(matchState.State);
         balanceUpdates = data.Updates.ToList();
+        Debug.Log("HANDLE UPDATE WALLET: " + data);
     }
 
     public override void HandleFinish(IMatchState matchState)
@@ -1048,6 +1049,7 @@ public class WhotView : BaseGameView
 
     public void AnimateAllPlayersAddChip()
     {
+        Debug.Log("ANIMATE ALL PLAYERS ADD CHIPS");
         Dictionary<string, BalanceResultData> playerResults = balanceUpdates
             .Where(r => !string.IsNullOrEmpty(r.UserId))
             .ToDictionary(
