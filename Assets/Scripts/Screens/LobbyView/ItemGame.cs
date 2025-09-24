@@ -36,6 +36,11 @@ public class ItemGame : MonoBehaviour
     private void OnClickItemGame(string gameID)
     {
         Config.currentGameId = gameID;
+        if (User.userProfile.VipLevel == 0)
+        {
+            _ = UIManager.Instance.HandleQuickMatch();
+            return;
+        }
         if (Constants.SELECT_TABLE_GAMES_ID.Contains(gameID))
         {
             UIManager.Instance.OpenSelectTableView();

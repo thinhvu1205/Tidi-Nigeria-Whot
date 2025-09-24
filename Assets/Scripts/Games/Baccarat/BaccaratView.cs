@@ -196,6 +196,7 @@ public class BaccaratView : BaseDiceGameView
                     {
                         playerView.SetCurrentChip(playerView.CurrentChip - infoBet.Chips);
                         int i = (int)infoBet.Cell - 1;
+                        listBet[i] += infoBet.Chips;
                         BaccaratChip chip = PoolService.Instance.Get<BaccaratChip>(PrefabType.ChipPlayerBaccarat);
                         chipBetColorInx = listValueChipBets.IndexOf(infoBet.Chips);
                         chip.init(1, 0.4f);
