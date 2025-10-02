@@ -138,8 +138,13 @@ public class UIManager : Singleton<UIManager>
 
     public async UniTask HandleQuickMatch()
     {
+        ShowProgressing();
         RpcFindMatchResponse response = await DataSender.QuickMatch(Config.currentGameId);
-        if (response == null) return;
+        if (response == null)
+        {
+            HideProgressing();
+            return;
+        }
         Debug.Log("Quick match response: " + response.ToString());
         var labelMatch = await DataSender.JoinMatch(response.Matches[0].MatchId);
         if (labelMatch != null)
@@ -162,6 +167,7 @@ public class UIManager : Singleton<UIManager>
     
     public void HandleOpenGame(Match labelMatch)
     {
+        HideProgressing();
         if (gameView != null)
         {
             Destroy(gameView.gameObject);
@@ -175,7 +181,7 @@ public class UIManager : Singleton<UIManager>
             case Constants.BACCARAT_GAME_ID:
                 gameView = Instantiate(LoadPrefabGame("BaccaratView"), parentGames).GetComponent<BaccaratView>();
                 break;
-            case Constants.HONGKONG_POKER_GAME_ID:
+            case Constants.HK_POKER_GAME_ID:
                 gameView = Instantiate(LoadPrefabGame("HongKongPokerView"), parentGames).GetComponent<HongKongPokerView>();
                 break;
             case Constants.ROULETTE_GAME_ID:
@@ -210,13 +216,13 @@ public class UIManager : Singleton<UIManager>
         gameView?.LoadInfoMatch(labelMatch);
     }
 
-    public void HandleLeaveGame()
+    public async UniTask HandleLeaveGame()
     {
         if (gameView != null)
         {
             if (new GameState[] { GameState.Idle, GameState.Matching, GameState.Finish }.Contains(gameView.GameState))
             {
-                NetworkManager.INSTANCE.LeaveMatch();
+                await DataSender.LeaveMatch();
                 Destroy(gameView.gameObject);
             }
         }

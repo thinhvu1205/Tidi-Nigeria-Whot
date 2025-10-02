@@ -310,13 +310,24 @@ public class DataSender
         }
         catch (Exception ex)
         {
-            Debug.LogError("QuickMatch failed: " + ex.Message);
-            UIManager.Instance.ShowConfirmDialog("Lỗi khi vào trận : " + ex.Message, null, null);
+            Error error = DecodeFromJson<Error>(ex.Message);
+            UIManager.Instance.ShowAlertDialog("Error : " + error.Error_);
             return null;
         }
     }
 
-    public static void LeaveMatch() => NetworkManager.INSTANCE.LeaveMatch();
+    public static async UniTask LeaveMatch()
+    {
+        try
+        {
+            await NetworkManager.INSTANCE.LeaveMatch();
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Error leave match : "+ e.Message);
+        }
+        
+    }
 
     public static void SendMatchState(long opCode, byte[] data)
     {
@@ -507,15 +518,15 @@ public class DataSender
         return DecodeFromJson<Reward>(response.Payload);
     }
 
-    public static async UniTask<DailyRewardTemplate> GetWeeklyRewardTemplate()
+    public static async UniTask<WeeklyBonusTemplate> GetWeeklyRewardTemplate()
     {
         var response = await NetworkManager.INSTANCE.RPCSend(WEEKLY_REWARD_TEMPLATE);
-        return DecodeFromJson<DailyRewardTemplate>(response.Payload);
+        return DecodeFromJson<WeeklyBonusTemplate>(response.Payload);
     }
     
     public static async UniTask<Reward> GetClaimableWeeklyReward()
     {
-        var response = await NetworkManager.INSTANCE.RPCSend(CAN_CLAIM_DAILY_REWARD, new RequestReward
+        var response = await NetworkManager.INSTANCE.RPCSend(CAN_CLAIM_WEEKLY_REWARD, new RequestReward
         {
             DeviceId = Config.deviceId,
         });
@@ -524,7 +535,7 @@ public class DataSender
 
     public static async UniTask<Reward> ClaimWeeklyReward()
     {
-        var response = await NetworkManager.INSTANCE.RPCSend(CLAIM_DAILY_REWARD, new RequestReward
+        var response = await NetworkManager.INSTANCE.RPCSend(CLAIM_WEEKLY_REWARD, new RequestReward
         {
             DeviceId = Config.deviceId,
         });

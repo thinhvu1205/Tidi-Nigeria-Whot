@@ -24,6 +24,12 @@ public class WhotMatchResult : MonoBehaviour
 
     private void OnEnable()
     {
+        if (User.userProfile.VipLevel == 0)
+        {
+            winMoreButton.gameObject.SetActive(false);
+            return;
+        }
+        winMoreButton.gameObject.SetActive(true);
         GetListBet().Forget();
     }
     
@@ -118,7 +124,14 @@ public class WhotMatchResult : MonoBehaviour
     private void SetWinMoreButtonListener()
     {
         winMoreButton.onClick.RemoveAllListeners();
-        winMoreButton.onClick.AddListener( () => _ = UIManager.Instance.HandleFindAndJoinMatch((int)higherMarkUnit));
+        winMoreButton.onClick.AddListener(() =>
+        {
+            UniTask.Void(async () =>
+            {
+                await DataSender.LeaveMatch();
+                await UIManager.Instance.HandleFindAndJoinMatch((int)higherMarkUnit);
+            });
+        });
     }
 
 

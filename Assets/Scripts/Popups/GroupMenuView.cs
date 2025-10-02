@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Globals;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,11 +25,12 @@ public class GroupMenuView : BaseView
 
     public void OnClickLeaveTable()
     {
-        UIManager.Instance.HandleLeaveGame();
-        UIManager.Instance.gameView = null;
-        _ = UIManager.Instance.LoadProfileUser();
-        SoundManager.Instance.PlayMusicLobby();
-        Hide();
+        UniTask.Void(async () =>
+        {
+           await UIManager.Instance.HandleLeaveGame();
+           await UIManager.Instance.LoadProfileUser();
+           Hide();
+        });
     }
 
     public void OnClickSettings()
