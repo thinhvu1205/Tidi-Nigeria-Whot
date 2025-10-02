@@ -75,15 +75,15 @@ public class SiXiangRapidPayView : MonoBehaviour
             SoundManager.Instance.PlayEffectFromPath(SoundSlot.RAPID_CHIP_FLY);
         }
         DOTween.Sequence()
-            .AppendInterval(1f)
+            .AppendInterval(1.3f)
             .AppendCallback(() =>
             {
                 textTotalBonus.text = "x" + multiplierBonus;
+                animationLight.gameObject.SetActive(false);
             })
             .AppendInterval(1.4f)
             .AppendCallback(() =>
             {
-                animationLight.gameObject.SetActive(false);
                 if (!data.IsFinishGame) NextRow();
                 else ShowResult();
             });
