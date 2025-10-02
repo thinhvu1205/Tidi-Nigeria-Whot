@@ -68,12 +68,12 @@ public class CheckInBonusPresenter
         }
     }
 
-    public async UniTask<DailyRewardTemplate> GetWeeklyReward()
+    public async UniTask<WeeklyBonusTemplate> GetWeeklyReward()
     {
         UIManager.Instance.ShowProgressing();
         try
         {
-            DailyRewardTemplate weeklyReward = await DataSender.GetWeeklyRewardTemplate();
+            WeeklyBonusTemplate weeklyReward = await DataSender.GetWeeklyRewardTemplate();
             return weeklyReward;
         }
         catch (Exception e)
@@ -90,10 +90,10 @@ public class CheckInBonusPresenter
         {
             Reward reward = await DataSender.GetClaimableWeeklyReward();
             Debug.Log("reward " + reward);
-            if (reward.CanClaim && reward.DeviceAllowed)
-            {
-                return reward;
-            }
+            // if (reward.CanClaim && reward.DeviceAllowed)
+            // {
+            //     return reward;
+            // }
             return reward;
         }
         catch (Exception e)

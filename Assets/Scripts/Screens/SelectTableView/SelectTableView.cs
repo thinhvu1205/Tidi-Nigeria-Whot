@@ -80,7 +80,7 @@ public class SelectTableView : BaseView
             case Constants.BACCARAT_GAME_ID:
                 titleText.text = "Baccarat";
                 break;
-            case Constants.CHINESE_POKER_GAME_ID:
+            case Constants.HK_POKER_GAME_ID:
                 titleText.text = "Chinese Poker";
                 break;
             case Constants.BLACKJACK_GAME_ID:

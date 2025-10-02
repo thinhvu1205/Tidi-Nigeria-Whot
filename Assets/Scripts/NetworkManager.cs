@@ -46,7 +46,7 @@ public class NetworkManager : MonoBehaviour
             Debug.Log("--Receive--/ " + apiName + "/ " + rpc.Payload);
             return rpc;
         }
-        catch (Exception e)
+        catch (ApiResponseException e)
         {
             Debug.LogError($"❌ RPC [{apiName}] failed: {e.Message}");
             throw;
@@ -119,8 +119,20 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    public void LeaveMatch() => _SocketIS.LeaveMatchAsync(_MatchId);
-    
+    public async UniTask LeaveMatch()
+    {
+        try
+        {
+            await _SocketIS.LeaveMatchAsync(_MatchId);
+        }
+        catch (ApiResponseException e)
+        {
+            Debug.LogError(e);
+            throw;
+        }
+        
+    }
+
     public void SendMatchState(long opCode, byte[] data) => _SocketIS.SendMatchStateAsync(_MatchId, opCode, data);
 
     #endregion
@@ -500,13 +512,11 @@ public class NetworkManager : MonoBehaviour
 
     public void PreConnect()
     {
-        // _ClientC = new Client("http", "103.226.250.195", 7353, "defaultkey");
         // _ClientC = new Client("http", "192.168.153.83", 57350, "defaultkey");
-        // _ClientC = new Client("http", "172.23.112.1", 57350, "defaultkey");
+        _ClientC = new Client("http", "172.23.112.1", 57350, "defaultkey");
         // _ClientC = new Client("http", "10.251.228.83", 57350, "defaultkey");
-        _ClientC = new Client("http", "172.16.56.71", 57350, "defaultkey");
+        // _ClientC = new Client("http", "172.16.56.71", 57350, "defaultkey");
         // _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey");
-        // _ClientC = new Client("http", "103.226.250.195", 7350, "defaultkey");
         RestoreSession();
         string deviceId;
         if (PlayerPrefs.HasKey(DEVICE_ID)) deviceId = PlayerPrefs.GetString(DEVICE_ID);

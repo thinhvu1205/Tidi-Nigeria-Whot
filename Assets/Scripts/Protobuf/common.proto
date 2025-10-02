@@ -476,9 +476,9 @@ message UserMeta {
       4; // Tổng gá trị user đã rút tính từ lúc tạo account
   int64 total_chips_send = 5; // Tổng gá trị user đã chuyển đi cho người khác
   int64 agPlay = 6; // Số chip user đang có trên người + Số chip đang có trong
-                    // free chip mà user chưa nhận
+  // free chip mà user chưa nhận
   int64 agBank = 7; //  Số chip user đang có trong Bank + Số chip đã chuyển đi
-                    //  cho người khác
+  //  cho người khác
   int64 total_chips_cashout_inday = 8; // Tổng số tiền user đã rút trong ngày
 }
 
@@ -520,4 +520,14 @@ message RulesLucky {
   int64 limit = 2;
   int64 offset = 3;
   int64 total = 4;
+}
+
+// Weekly Bonus messages
+message WeeklyRewardTemplate {
+  int64 vip_level = 1;
+  repeated int64 rewards = 2; // 7 days rewards
+}
+
+message WeeklyBonusTemplate {
+  repeated WeeklyRewardTemplate reward_templates = 1;
 }

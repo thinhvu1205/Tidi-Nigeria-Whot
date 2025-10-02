@@ -73,17 +73,19 @@ public class CheckInBonusView : BaseView
     private async UniTask GetWeeklyReward()
     {
         UIManager.Instance.ShowProgressing();
-        DailyRewardTemplate dailyReward = await checkInBonusPresenter.GetWeeklyReward();
+        WeeklyBonusTemplate dailyReward = await checkInBonusPresenter.GetWeeklyReward();
         UIManager.Instance.HideProgressing();
         // listRewardTemplate = dailyReward.RewardTemplates.ToList();
-        Debug.Log("WEEKLY REWARD TEMPLATE : " + dailyReward.ToString());
+        Debug.Log("WEEKLY Bonus TEMPLATE : " + dailyReward.ToString());
         // InitDailyItems();
+        await GetClaimableWeeklyReward();
     }
 
     private async UniTask GetClaimableWeeklyReward()
     {
         UIManager.Instance.ShowProgressing();
         Reward reward = await checkInBonusPresenter.GetClaimableWeeklyReward();
+        Debug.Log("WEEKLY Can Claim : " + reward.ToString());
         UIManager.Instance.HideProgressing();
         // nextReward = reward;
         // streak = (int)reward.Streak;
