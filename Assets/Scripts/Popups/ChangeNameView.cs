@@ -39,12 +39,15 @@ public class ChangeNameView : BaseView
 
         try
         {
+            UIManager.Instance.ShowProgressing();
             await DataSender.LinkUsername(username: userName, password: password);
             UIManager.Instance.ShowAlertDialog("Change name successful!", () => Hide());
             await UIManager.Instance.LoadProfileUser();
+            UIManager.Instance.HideProgressing();
         }
         catch (Exception ex)
         {
+            UIManager.Instance.HideProgressing();
             UIManager.Instance.ShowAlertDialog("Error:" + ex.Message);
         }
     }

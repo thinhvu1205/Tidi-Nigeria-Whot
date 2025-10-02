@@ -26,7 +26,7 @@ public class SlotTarzanView : BaseSlotView
     [SerializeField] private Transform diamondPot, diamondContainer, letterContainer;
     [SerializeField] private GameObject diamondPrefab, letterPrefab;
     [SerializeField] private List<Image> characterList;
-    [SerializeField] private List<Sprite> characterActiveList;
+    [SerializeField] private List<Sprite> characterActiveList, characterInactiveList;
     protected override Dictionary<SiXiangSymbol, int> SymbolDictionary => new()
     {
         { SiXiangSymbol.K, 0 },
@@ -168,6 +168,7 @@ public class SlotTarzanView : BaseSlotView
     protected override string BACKGROUND_FREE_SPIN_ANIMATION_PATH => "SlotSpine/Tarzan/PopupFreespin/skeleton_SkeletonData";
     protected override string BIG_WIN_ANIMATION_PATH => "SlotSpine/Tarzan/BigWin/skeleton_SkeletonData";
     protected override string MEGA_WIN_ANIMATION_PATH => "SlotSpine/Tarzan/BigWin/skeleton_SkeletonData";
+    protected override string HUGE_WIN_ANIMATION_PATH => "SlotSpine/Tarzan/BigWin/skeleton_SkeletonData";
     protected override string BIG_WIN_ANIMATION_NAME => "big";
     protected override string MEGA_WIN_ANIMATION_NAME => "mega";
     protected override string HUGE_WIN_ANIMATION_NAME => "huge";
@@ -182,7 +183,7 @@ public class SlotTarzanView : BaseSlotView
     private UnityEngine.Pool.ObjectPool<GameObject> diamondPool;
     private readonly List<int> diamondIndexList = new();
     private readonly List<SiXiangSymbol> spinSymbolList = new();
-    private int diamondCollect;
+    private int lastDiamondCollect, diamondCollect;
     private long updatedDiamondCollectAmount, diamondCollectChipAmount;
     private bool isWinTarzan, isInMiniGame, isStartMiniGame, isEndMiniGame;
 
@@ -219,6 +220,7 @@ public class SlotTarzanView : BaseSlotView
         Debug.Log("Slot : " + data.ToString());
         diamondIndexList.Clear();
         spinSymbolList.Clear();
+        lastDiamondCollect = diamondCollect;
         diamondCollect = data.GameReward.PerlGreenForest;
         diamondCollectChipAmount = updatedDiamondCollectAmount;
         updatedDiamondCollectAmount = data.GameReward.PerlGreenForestChipsCollect;
@@ -235,7 +237,6 @@ public class SlotTarzanView : BaseSlotView
         isStartMiniGame = data.NextSixiangGame == SiXiangGame.TarzanJungleTreasure && data.CurrentSixiangGame != SiXiangGame.TarzanJungleTreasure;
         isEndMiniGame = data.CurrentSixiangGame == SiXiangGame.TarzanJungleTreasure && data.NextSixiangGame == SiXiangGame.Normal;
         isInMiniGame = data.CurrentSixiangGame == SiXiangGame.TarzanJungleTreasure;
-        Debug.Log("IS END MINI GAME: " + isEndMiniGame);
         winType = data.BigWin switch
         {
             BigWin.Big => WinType.BIG_WIN,
@@ -243,6 +244,7 @@ public class SlotTarzanView : BaseSlotView
             _ => WinType.NONE,
         };
 
+        // Setup column view
         if (totalCol >= 5 && !isInMiniGame)
         {
             for (int col = 0; col < totalCol; col++)
@@ -298,8 +300,7 @@ public class SlotTarzanView : BaseSlotView
             }
         }
 
-        lastTotalChipWinByGame = totalChipWinByGame;
-        totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
+        // lastTotalChipWinByGame = totalChipWinByGame;
         if (data.GameConfig != null)
         {
             freeSpinLeft = (int)data.GameConfig.NumFreeSpin;
@@ -307,7 +308,6 @@ public class SlotTarzanView : BaseSlotView
         else
         {
             freeSpinLeft = (int)data.NumSpinLeft;
-            lastTotalChipWinByGame = 0;
         }
         if (hasSetupStartView)
         {
@@ -316,17 +316,32 @@ public class SlotTarzanView : BaseSlotView
                 OnStartSpin();
             if (data.CurrentSixiangGame == SiXiangGame.TarzanJungleTreasure)
             {
+                totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
                 miniGameView.SetInfo(data);
+            }
+            ///------------------CHECK END MINIGAME--------------------//
+      
+            if (data.CurrentSixiangGame == SiXiangGame.TarzanFreespinx9)
+            {
+                Debug.Log("Update total chip win by game: " + totalChipWinByGame);
+                if (data.GameReward.TotalChipsWinByGame > 0)
+                {
+                    lastTotalChipWinByGame = totalChipWinByGame;
+                    totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
+                }
             }
         }
         else
         {
+            // Lần đầu setup start view
             betLevelList = data.BetLevels.ToList();
             currentBetLevel = data.ChipsMcb;
             SetInfoSessionText("Press SPIN to play");
             SetCurrentBetText(currentBetLevel);
             UpdateDiamondPot();
             SetCurrentChipValue(data.GameReward.BalanceChipsWalletAfter);
+
+            // Lần đầu setup chữ JUNGLE
             foreach (SiXiangSymbol symbol in data.LetterSymbols)
             {
                 if (letterIndexMap.TryGetValue(symbol, out int index))
@@ -334,32 +349,49 @@ public class SlotTarzanView : BaseSlotView
                     characterList[index].sprite = characterActiveList[index];
                 }
             }
+
+            // Lần đầu setup Free spin
             if (data.CurrentSixiangGame == SiXiangGame.TarzanFreespinx9)
             {
+
+                totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
+                                Debug.Log("First setup total chip win by game: " + totalChipWinByGame);
                 ShowBackGroundFreeSpin();
                 UpdateTotalChipWinValue();
                 UpdateStateWinUI(StateWin.TOTAL_WIN);
                 spinType = SpinType.FREE_NORMAL;
                 UpdateSpinButtonUI();
             }
-            else if (data.CurrentSixiangGame == SiXiangGame.TarzanJungleTreasure)
+
+            // Lần đầu setup Mini game Jungle
+            if (data.CurrentSixiangGame == SiXiangGame.TarzanJungleTreasure)
             {
                 ShowMiniGame();
                 miniGameView.SetInfo(data);
             }
         }
 
-        // JUNGLE LETTERS
-        foreach (SpinSymbol spinSymbol in data.SpinSymbols)
+        if (isEndMiniGame)
         {
-            spinSymbolList.Add(spinSymbol.Symbol);
+            tweenQueue.Enqueue(() => ShowPopupResultMiniGame());
+            NextTween();
         }
+
+        if (lastDiamondCollect != 0 && diamondCollect == 0)
+        {
+            tweenQueue.Enqueue(() => ShowPopupDiamond());
+            NextTween();
+        }
+
+        // JUNGLE LETTERS
+            foreach (SpinSymbol spinSymbol in data.SpinSymbols)
+            {
+                spinSymbolList.Add(spinSymbol.Symbol);
+            }
 
         // Update Reward
         lastChipWin = currentChipWin;
         currentChipWin = data.GameReward.ChipsWin;
-        // totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
-        totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
         playerWalletAfter = data.GameReward.BalanceChipsWalletAfter;
         if (data.GameReward.UpdateWallet)
         {
@@ -370,6 +402,7 @@ public class SlotTarzanView : BaseSlotView
 
     public override void OnStopSpin()
     {
+        ShowPopupDiamond();
         IsSpinning = false;
         ///------------------CHECK SHOW CHARACTER--------------------//
 
@@ -403,7 +436,7 @@ public class SlotTarzanView : BaseSlotView
             tweenQueue.Enqueue(() => ShowWinScatter());
         }
 
-        ///------------------CHECK SHOW FREESPIN--------------------//
+        // ///------------------CHECK SHOW FREESPIN--------------------//
         if (hasGotFreeSpin)
         {
             tweenQueue.Enqueue(() => ShowPopupGetFreeSpin());
@@ -416,19 +449,7 @@ public class SlotTarzanView : BaseSlotView
             tweenQueue.Enqueue(() => ShowWinAnimation(WinType.FIVE_OF_A_KIND));
         }
 
-        ///------------------CHECK WIN MINIGAME--------------------//
-        if (isStartMiniGame)
-        {
-            Debug.Log("START MINIgAME");
-            tweenQueue.Enqueue(() => ShowPopupMinigame());
-        }
 
-        ///------------------CHECK END MINIGAME--------------------//
-        if (isEndMiniGame)
-        {
-            Debug.Log("IS END MINI GAME");
-            tweenQueue.Enqueue(() => ShowPopupResultMiniGame());
-        }
 
         ///------------------CHECK SHOW ALL LINE--------------------///
         if (paylineList.Count > 0)
@@ -473,6 +494,13 @@ public class SlotTarzanView : BaseSlotView
                 if (paylineList.Count == 1) tweenQueue.Enqueue(() => ShowWinLineOneByOne());
                 // if (!isInFreeSpin) listActionHandleSpin.Add(acShowAnimChipBay);
             }
+        }
+
+        ///------------------CHECK WIN MINIGAME--------------------//
+        if (isStartMiniGame)
+        {
+            Debug.Log("START MINIgAME");
+            tweenQueue.Enqueue(() => ShowPopupMinigame());
         }
 
         NextTween();
@@ -550,6 +578,8 @@ public class SlotTarzanView : BaseSlotView
                 .AppendInterval(10.0f)
                 .AppendCallback(() =>
                 {
+                    totalChipWinByGame = 0;
+                    lastTotalChipWinByGame = 0;
                     if (popupResultFreeSpin.gameObject.activeSelf)
                     {
                         HidePopupResultFreeSpin();
@@ -620,9 +650,34 @@ public class SlotTarzanView : BaseSlotView
     {
         popupResultMinigame.transform.DOScale(new Vector2(0.25f, 0.25f), 0.3f).SetEase(Ease.InBack).OnComplete(() =>
         {
+            DisableAllCharacters();
             popupResultMinigame.gameObject.SetActive(false);
             effectContainer.gameObject.SetActive(false);
             miniGameView.Hide();
+            NextTween();
+        });
+    }
+
+    private void ShowPopupDiamond()
+    {
+        popupResult.gameObject.SetActive(true);
+        effectContainer.gameObject.SetActive(true);
+        Utility.PlayAnimation(popupResult, "getgem", false);
+        Utility.PlayAnimationByPath(buttonPopupResult, BUTTON_CONFIRM_ANIMATION_PATH, "backtogame", true);
+
+        popupResult.transform.localScale = new Vector2(.8f, .8f);
+        popupResult.transform.DOScale(new Vector2(1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
+
+        chipRewardText.text = Utility.FormatMoney3(updatedDiamondCollectAmount, 10000);
+        SetCurrentChipValue(playerWalletAfter);
+    }
+
+     public void HidePopupDiamond()
+    {
+        popupResult.transform.DOScale(new Vector2(0.25f, 0.25f), 0.3f).SetEase(Ease.InBack).OnComplete(() =>
+        {
+            popupResult.gameObject.SetActive(false);
+            effectContainer.gameObject.SetActive(false);
             NextTween();
         });
     }
@@ -656,6 +711,14 @@ public class SlotTarzanView : BaseSlotView
                 NextTween();
             });
         letterAnimation.transform.DOScale(new Vector2(0.15f, 0.15f), 1.0f).SetDelay(1.0f).SetEase(Ease.OutCubic);
+    }
+
+    private void DisableAllCharacters()
+    {
+        for (int i = 0; i < characterList.Count; i++)
+        {
+            characterList[i].sprite = characterInactiveList[i];
+        }
     }
     private void ShowAnimationDiamond()
     {
@@ -772,6 +835,131 @@ public class SlotTarzanView : BaseSlotView
     {
         freeSpinLeftText.gameObject.SetActive(true);
         freeSpinLeftText.text = freeSpinLeft == -1 ? "9" : freeSpinLeft.ToString();
+    }
+
+    protected override void DrawRectangularAndConnectingLines(int[] lineWinID, int startIndex, int matchedItemCount, UnityEngine.Color colorLine)
+    {
+        // lineWinID: { 0, 1, 0, 1, 0 }
+        List<Vector2> itemPositions = new();
+
+        // Bước 1: Thu thập vị trí & id của các item trên line
+        for (int colIndex = 0; colIndex < lineWinID.Length; colIndex++)
+        {
+            // Lấy vị trí item theo world position
+            Vector2 worldPos = slotColumnList[colIndex].GetItemPositionAtIndex(lineWinID[colIndex]);
+
+            // Chuyển về local position trong container
+            Vector2 localPos = lineContainer.transform.InverseTransformPoint(worldPos);
+            itemPositions.Add(localPos);
+        }
+
+        // Bước 2: Highlight các item thắng
+        for (int colIndex = startIndex; colIndex < startIndex + matchedItemCount; colIndex++)
+        {
+            int itemIndex = lineWinID[colIndex];
+            slotColumnList[colIndex].SetLightItemAtIndex(itemIndex);
+            if (isWinTarzan)
+            {
+                slotColumnList[colIndex].SetAnimationWildForItemAtIndex(itemIndex);
+            }
+            else
+            {
+                slotColumnList[colIndex].SetAnimationForItemAtIndex(itemIndex);
+            }
+        }
+
+        // Bước 3: Vẽ line highlight
+        List<Vector2> remainingLinePoints = new();
+        List<Vector2> startingLinePoints = new();
+
+        for (int i = 0; i < itemPositions.Count; i++)
+        {
+            Vector2 currentPosition = itemPositions[i];
+
+            // Vẽ hình vuông nếu còn trong số lượng item
+            if (i >= startIndex && i < matchedItemCount + startIndex)
+            {
+                DrawSquare(currentPosition, colorLine);
+            }
+
+            // Vẽ đường nối tiếp nếu cần
+            if (i >= startIndex && i < itemPositions.Count - 1)
+            {
+                Vector2 nextPos = itemPositions[i + 1];
+                if (Mathf.Abs(nextPos.y - currentPosition.y) > 50 && i < startIndex + matchedItemCount - 1)
+                {
+                    List<Vector2> listPos = new();
+                    Vector2 firstIntersectPos = GetIntersectPoint(itemPositions[i], itemPositions[i + 1]);
+                    Vector2 nextIntersectPos = GetIntersectPoint(itemPositions[i + 1], itemPositions[i]);
+                    listPos.Add(firstIntersectPos);
+                    listPos.Add(nextIntersectPos);
+                    DrawLineBetween2Points(listPos, colorLine);
+                }
+            }
+
+            // Tính toán các điểm bắt đầu của line còn lại
+
+            if (i >= startIndex + matchedItemCount) // bắt đầu sau hình vuông cuối cùng
+            {
+                if (remainingLinePoints.Count == 0 && i > 0)
+                {
+                    Vector2 previousPos = itemPositions[i - 1];
+                    Vector2 startPosLineRemain;
+                    if (Mathf.Abs(previousPos.y - currentPosition.y) < 100)
+                    {
+                        startPosLineRemain = new Vector2(previousPos.x + RECT_SIZE.x / 2, previousPos.y);
+                    }
+                    else
+                    {
+                        bool isTwoItemSpace = Mathf.Abs(currentPosition.y - previousPos.y) > 200;
+                        if (previousPos.y < currentPosition.y)
+                        {
+                            startPosLineRemain = isTwoItemSpace ? new Vector2(previousPos.x, previousPos.y + RECT_SIZE.y / 2) : new Vector2(previousPos.x + RECT_SIZE.x / 2, previousPos.y + RECT_SIZE.y / 2);
+                        }
+                        else
+                        {
+                            startPosLineRemain = isTwoItemSpace ? new Vector2(previousPos.x, previousPos.y - RECT_SIZE.y / 2) : new Vector2(previousPos.x + RECT_SIZE.x / 2, previousPos.y - RECT_SIZE.y / 2);
+                        }
+                    }
+                    remainingLinePoints.Add(startPosLineRemain);
+                }
+                remainingLinePoints.Add(currentPosition);
+            }
+
+            // Nếu startIndex != 0
+            if (i < startIndex)
+            {
+                startingLinePoints.Add(currentPosition);
+                if (i == 0)
+                {
+                    Vector2 startPosition = new(startingLinePoints[0].x - 90, startingLinePoints[0].y);
+                    startingLinePoints.Insert(0, startPosition);
+                }
+            }
+
+            if (i == startIndex - 1)
+            {
+                List<Vector2> listPos = new();
+                Vector2 firstIntersectPos = itemPositions[i];
+                // Vector2 nextIntersectPos = GetIntersectPoint(itemPositions[i + 1], itemPositions[i]);
+                Vector2 nextIntersectPos = itemPositions[i + 1];
+                nextIntersectPos = new Vector2(nextIntersectPos.x - RECT_SIZE.x / 2, nextIntersectPos.y);
+                listPos.Add(firstIntersectPos);
+                listPos.Add(nextIntersectPos);
+                DrawLineBetween2Points(listPos, colorLine);
+            }
+        }
+
+        // Thêm đoạn line cuối từ icon cuối ra mép phải
+        Vector2 lastPos = itemPositions[^1];
+        Vector2 endRemainingLine = new Vector2(lastPos.x + RECT_SIZE.x / 2, lastPos.y);
+        remainingLinePoints.Add(endRemainingLine);
+
+ 
+
+        // Vẽ line còn lại
+        DrawLineBetween2Points(remainingLinePoints, colorLine);
+        DrawLineBetween2Points(startingLinePoints, colorLine);
     }
     #endregion
 

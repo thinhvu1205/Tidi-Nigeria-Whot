@@ -71,17 +71,23 @@ public class ListBannerView : BaseView
             Hide();
             return;
         }
-        else if (listData.Count <= 1)
+        else
+        {
+            transform.localScale = Vector3.one;
+        }
+        if (listData.Count == 1)
         {
             buttonNext.gameObject.SetActive(false);
             buttonPrev.gameObject.SetActive(false);
         }
         foreach (InAppMessage data in listData)
         {
-            if (CheckAppCondition(data.Data.Params["app"]) &&
-                CheckOSCondition(data.Data.Params["os"]) &&
-                CheckVersionCondition(data.Data.Params["version"])
-            )
+            if (true)
+            
+            // if (CheckAppCondition(data.Data.Params["app"]) &&
+            //     CheckOSCondition(data.Data.Params["os"]) &&
+            //     CheckVersionCondition(data.Data.Params["version"])
+            // )
             {
                 string urlImg = data.Data.Params["images"];
                 Debug.Log("URL IMG: " + urlImg);

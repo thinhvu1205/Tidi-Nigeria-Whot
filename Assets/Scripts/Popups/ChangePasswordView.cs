@@ -31,13 +31,15 @@ public class ChangePasswordView : BaseView
 
         try
         {
+            UIManager.Instance.ShowProgressing();
             await DataSender.ChangePassword(oldPassword: currentPassword, password: newPassword);
+            UIManager.Instance.HideProgressing();
             UIManager.Instance.ShowAlertDialog("Change password successful!", () => Hide());
         }
         catch (Exception ex)
         {
+            UIManager.Instance.HideProgressing();
             UIManager.Instance.ShowAlertDialog(ex.Message);
-            Debug.LogError($"Error changing password: {ex.Message}");
         }
     }
 }

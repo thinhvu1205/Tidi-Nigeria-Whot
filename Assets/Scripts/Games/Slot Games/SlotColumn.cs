@@ -119,6 +119,11 @@ public class SlotColumn : MonoBehaviour
         ResultItem.SetItemAnimation(itemIndex);
     }
 
+    public void SetAnimationWildForItemAtIndex(int itemIndex)
+    {
+        ResultItem.SetItemAnimation(itemIndex, true);
+    }
+
     public void ShowPackageValue()
     {
         foreach (SlotItem item in itemList)

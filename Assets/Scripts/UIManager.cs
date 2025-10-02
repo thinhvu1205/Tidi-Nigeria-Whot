@@ -301,13 +301,19 @@ public class UIManager : Singleton<UIManager>
     {
         if (User.userProfile.VipLevel >= 2)
         {
-            CreateTableView createTableView = Instantiate(LoadPrefabPopup("PopupCreateTable"), parentGames).GetComponent<CreateTableView>();
+            CreateTableView createTableView = Instantiate(LoadPrefabPopup("PopupCreateTable"), parentPopups).GetComponent<CreateTableView>();
             createTableView.transform.localScale = Vector3.one;
         }
         else
         {
-            ShowConfirmDialog("You are not eligible to use this feature.");
+            ShowAlertDialog("You are not eligible to use this feature.");
         }
+    }
+
+    public void OpenEnterPasswordView(out EnterPasswordView enterPasswordView)
+    {
+        enterPasswordView = Instantiate(LoadPrefabPopup("PopupEnterPassword"), parentPopups).GetComponent<EnterPasswordView>();
+        enterPasswordView.transform.localScale = Vector3.one;
     }
 
     public void OpenShop()
@@ -345,6 +351,12 @@ public class UIManager : Singleton<UIManager>
     {
         LuckyNumberView leaderBoardView = Instantiate(LoadPrefabLobby("LuckyNumberView"), parentLobby).GetComponent<LuckyNumberView>();
         leaderBoardView.transform.localScale = Vector3.one;
+    }
+
+    public void OpenChatWorld()
+    {
+        ChatWorldView chatWorldView = Instantiate(LoadPrefabLobby("ChatWorldView"), parentLobby).GetComponent<ChatWorldView>();
+        chatWorldView.transform.localScale = Vector3.one;
     }
 
     public void OpenGiftCode()
@@ -433,6 +445,12 @@ public class UIManager : Singleton<UIManager>
         friendsView.transform.localScale = Vector3.one;
     }
 
+    public void OpenChatInGame()
+    {
+        ChatInGameView chatInGameView = Instantiate(LoadPrefabPopup("PopupChatInGame"), parentPopups).GetComponent<ChatInGameView>();
+        chatInGameView.transform.localScale = Vector3.one;
+    }
+
     public void OpenGroupMenu()
     {
         GroupMenuView groupMenuView = Instantiate(LoadPrefabPopup("GroupMenu"), parentGames).GetComponent<GroupMenuView>();
@@ -445,7 +463,7 @@ public class UIManager : Singleton<UIManager>
         {
             ListBannerView bannerView = Instantiate(LoadPrefabPopup("ListBannerView"), parentBanners).GetComponent<ListBannerView>();
             bannerView.SetBannerType(type);
-            bannerView.transform.localScale = Vector3.one;
+            bannerView.transform.localScale = Vector3.zero;
         });
     }
 

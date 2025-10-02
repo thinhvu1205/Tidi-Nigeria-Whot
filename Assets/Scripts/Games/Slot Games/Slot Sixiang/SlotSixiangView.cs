@@ -90,7 +90,6 @@ public class SlotSixiangView : BaseSlotSymbolView
             _ => WinType.NONE,
         };
 
-        CheckBonusGame(data);
         UpdateColumnView(data);
         UpdateReward(data);
 
@@ -113,6 +112,7 @@ public class SlotSixiangView : BaseSlotSymbolView
                 UpdateGem();
             }
         }
+        CheckBonusGame(data);
 
         OnUpdateTable?.Invoke(new OnUpdateTableEventArgs
         {

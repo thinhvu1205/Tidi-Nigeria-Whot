@@ -25,7 +25,7 @@ public class SlotTarzanMiniGameView : BaseView
 
     private SlotTarzanView tarzanView;
     private SlotTarzanMinigameItem currentItemPick;
-    public int PickLeft { get; private set; } = 1;
+    public int PickLeft { get; private set; } = 5;
     private int totalWin = 0;
     public bool CanClick { get; set; } = true;
 
@@ -99,23 +99,7 @@ public class SlotTarzanMiniGameView : BaseView
             }
         }
     }
-    public void addPickTurn(SlotTarzanMinigameItem item, int value)
-    {
-        // TextMeshProUGUI lbValueEff = Instantiate(item.lbValue.gameObject, transform).GetComponent<TextMeshProUGUI>();
 
-        // lbValueEff.transform.localScale = Vector2.one;
-        // lbValueEff.transform.localPosition = transform.InverseTransformPoint(item.lbValue.transform.position);
-        // DOTween.Sequence()
-        //     .Append(lbValueEff.transform.DOLocalMove(lbPickLeft.transform.localPosition, 1.0f).SetEase(Ease.InBack))
-        //     .Join(lbValueEff.transform.DOScale(new Vector2(0.5f, 0.5f), 1.0f))
-        //     .AppendCallback(() =>
-        //     {
-        //         lbPickLeft.text = pickLeft.ToString();
-        //         lbPickLeft.transform.localScale = Vector2.zero;
-        //         lbPickLeft.transform.DOScale(Vector2.one, 0.3f).SetEase(Ease.OutBack);
-        //         Destroy(lbValueEff.gameObject);
-        //     });
-    }
     public void UpdateTotalWin(int value)
     {
         Utility.TweenNumberFromK(totalWinText, value, totalWin, 0.3f, true);

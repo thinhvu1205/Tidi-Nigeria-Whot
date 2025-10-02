@@ -23,7 +23,7 @@ public class CreateTableView : BaseView
     protected override void Awake()
     {
         base.Awake();
-        GetListBet().Forget();
+        _ = GetListBet();
     }
 
     public void OnClickCheckboxDoubleDecking()
@@ -81,12 +81,15 @@ public class CreateTableView : BaseView
             customData = "{\"is_double_decking\": true}";
         }
         _ = UIManager.Instance.HandleCreateMatch(passwordInputField.text, currentBetValue, customData);
+        Hide();
     }
 
     private async UniTask GetListBet()
     {
+        UIManager.Instance.ShowProgressing();
         Bets bets = await DataSender.GetListBet(Config.currentGameId);
-        betItemList = bets.Bets_.ToList();
+        UIManager.Instance.HideProgressing();
+        betItemList = bets.Bets_ .Where(bet => bet.Enable) .ToList();
         if (betItemList.Count > 0)
         {
             slider.minValue = (float)1 / betItemList.Count;

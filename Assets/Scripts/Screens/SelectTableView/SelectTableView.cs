@@ -27,10 +27,13 @@ public class SelectTableView : BaseView
     private List<Match> matchList = new();
     private int currentMarkUnitTab = 0;
     private SelectTableTab currentSelectTableTab;
+    private SelectTablePresenter selectTablePresenter;
 
     protected override void Awake()
     {
         base.Awake();
+        selectTablePresenter = new SelectTablePresenter();
+        selectTablePresenter.Init(this);
         UpdateVisuals();
         OnClickSelectBet();
         UpdateTitle();
@@ -44,7 +47,8 @@ public class SelectTableView : BaseView
     #region API Handlers
     private async UniTask GetListBet()
     {
-        Bets bets = await DataSender.GetListBet(Config.currentGameId);
+        Bets bets = await selectTablePresenter.GetListBet(Config.currentGameId);
+        UIManager.Instance.HideProgressing();
         betItemList = bets.Bets_.ToList();
         Debug.Log("List bet game whot : " + bets.ToString());
         LoadListBetItem();
@@ -54,7 +58,8 @@ public class SelectTableView : BaseView
     private async UniTask GetListTableByMarkUnit(int markUnit)
     {
         matchList.Clear();
-        RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, false);
+        RpcFindMatchResponse response = await selectTablePresenter.GetListTableByMarkUnit(Config.currentGameId, markUnit);
+        UIManager.Instance.HideProgressing();
         if (response == null)
         {
             LoadListTableItem();
@@ -103,12 +108,11 @@ public class SelectTableView : BaseView
             Debug.Log("Bet item: " + betItemList[i].ToString());
             int index = i;
             // Instantiate bet item
-            if (betItemList[i].BetDisableType == BetDisableType.BelowMinVip
-                || betItemList[i].BetDisableType == BetDisableType.AboveMaxVip
-            )
-            {
-                continue;
-            }
+            // if (betItemList[i].BetDisableType == BetDisableType.NotEnoughChip
+            // )
+            // {
+            //     continue;
+            // }
             BetItem betItem = Instantiate(betItemPrefab, betItemParent).GetComponent<BetItem>();
             betItem.SetData(betItemList[index], index);
         }
@@ -163,7 +167,8 @@ public class SelectTableView : BaseView
             Match match = matchList[i];
             // Instantiate table item
             TableItem tableItem = Instantiate(tableItemPrefab, tableItemParent).GetComponent<TableItem>();
-            tableItem.SetData(this, match.Size, match.MaxSize, match.MarkUnit, match.Name, match.TableId, match.Open, match.MatchId);
+            // tableItem.SetData(this, match.Size, match.MaxSize, match.MarkUnit, match.Name, match.TableId, match.Open, match.MatchId);
+            tableItem.SetData(match);
         }
     }
 
@@ -205,7 +210,7 @@ public class SelectTableView : BaseView
 
     public void OnClickReload()
     {
-        GetListTableByMarkUnit(currentMarkUnitTab).Forget();
+        _ = GetListTableByMarkUnit(currentMarkUnitTab);
     }
 
     public void OnClickNext()

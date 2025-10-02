@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Globals;
 using Newtonsoft.Json.Linq;
+using Proto;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,26 +17,42 @@ public class TableItem : MonoBehaviour
     [SerializeField] Button joinButton;
     [SerializeField] GameObject fullObject;
 
-    public void SetData(SelectTableView tableView, int countPlaying, int maxSize, float markUnit, string roomName, string roomId, bool isOpen, string matchId)
+    public void SetData(Match match)
     {
         for (var i = 0; i < playerSlotImageList.Count; i++)
         {
-            playerSlotImageList[i].sprite = i <= countPlaying - 1 ? slotIconList[1] : slotIconList[0];
-            playerSlotImageList[i].gameObject.SetActive(!(i >= maxSize));
+            playerSlotImageList[i].sprite = i <= match.Size - 1 ? slotIconList[1] : slotIconList[0];
+            playerSlotImageList[i].gameObject.SetActive(!(i >= match.MaxSize));
             playerSlotImageList[i].SetNativeSize();
         }
 
         // fullObject.SetActive(!isOpen);
-        joinButton.gameObject.SetActive(isOpen);
-        markUnitText.text = Utility.FormatMoney((int)markUnit, true);
-        tableNameText.text = roomName;
-        tableIDText.text = roomId;
+        joinButton.gameObject.SetActive(match.Open);
+        joinButton.gameObject.SetActive(true);
+        markUnitText.text = Utility.FormatMoney((int)match.MarkUnit, true);
+        tableNameText.text = match.Name;
+        tableIDText.text = match.TableId;
         joinButton.onClick.RemoveAllListeners();
-        joinButton.onClick.AddListener(() => _ = BtnJoinClicked(matchId));
+        joinButton.onClick.AddListener(() => _ = OnClickButtonJoin(match.MatchId, match.Open));
     }
 
-    private async UniTask BtnJoinClicked(string matchId)
+    private async UniTask OnClickButtonJoin(string matchId, bool isOpen, string password = "")
     {
+        if (isOpen)
+        {
+            await JoinMatch(matchId);
+        }
+        else
+        {
+            UIManager.Instance.OpenEnterPasswordView(out EnterPasswordView enterPasswordView);
+            enterPasswordView.SetPassword(password);
+            enterPasswordView.SetOnClickListener(() => JoinMatch(matchId));
+        }
+    }
+
+    private async UniTask JoinMatch(string matchId)
+    {
+        Debug.Log("TRY JOIN MATCH: " + matchId);
         var labelMatch = await DataSender.JoinMatch(matchId);
         if (labelMatch != null)
         {

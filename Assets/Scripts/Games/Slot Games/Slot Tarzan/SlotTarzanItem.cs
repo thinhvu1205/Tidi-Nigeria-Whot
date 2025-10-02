@@ -17,6 +17,7 @@ public class SlotTarzanItem : SlotItem
         new(0, -155),
     };
     private int wildAnimationCallCount = 0;
+    private List<int> listIdAnimal = new(){ 4, 5, 6, 7 };
 
     public override void SetFinishView()
     {
@@ -105,7 +106,7 @@ public class SlotTarzanItem : SlotItem
         targetSpine.gameObject.SetActive(true);
 
         string itemAnimationPath = ICON_ANIMATION_PATH.Replace("%id", itemIndex.ToString());
-        string animationName = isWild ? ICON_WILD_ANIMATION_NAME : ICON_ANIMATION_NAME;
+        string animationName = (isWild && listIdAnimal.IndexOf(itemIndex) != -1) ? ICON_WILD_ANIMATION_NAME : ICON_ANIMATION_NAME;
         Utility.PlayAnimationByPath(targetSpine, itemAnimationPath, animationName);
         targetSpine.AnimationState.Complete += delegate
         {
@@ -116,7 +117,6 @@ public class SlotTarzanItem : SlotItem
     
     public void TransformToWild()
     {
-        List<int> listIdAnimal = new(){ 4, 5, 6, 7 };
         for (int i = 0; i < finishView.Length; i++)
         {
             if (listIdAnimal.IndexOf(finishView[i]) != -1)

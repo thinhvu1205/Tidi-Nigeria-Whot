@@ -2416,6 +2416,13 @@ MonoBehaviour:
   buttonSpinAnimation: {fileID: 3389501232227789230}
   animationEffect: {fileID: 1506931754746827784}
   backgroundFreeSpinLeftAnimation: {fileID: 1582531832147326248}
+  playerWallet: 0
+  playerWalletAfter: 0
+  currentBetLevel: 0
+  lastChipWin: 0
+  currentChipWin: 0
+  totalChipWinByGame: 0
+  lastTotalChipWinByGame: 0
   spinButtonImage: {fileID: 2779897944672515650}
   spinButtonSprites:
   - {fileID: 21300000, guid: ae46745a8d14dfd4c83e4c0ac9f6ca2a, type: 3}
@@ -4347,7 +4354,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 190.5, y: -20}
-  m_SizeDelta: {x: 190.5, y: 40}
+  m_SizeDelta: {x: 0, y: 40}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &5134754113052124194
 MonoBehaviour:

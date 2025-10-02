@@ -8,6 +8,7 @@ using Globals;
 using Proto;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class CheckInBonusView : BaseView
@@ -100,25 +101,27 @@ public class CheckInBonusView : BaseView
         _ = GetClaimableDailyReward(true);
     }
 
-    public void OnClickWeeklyTab()
+    public void OnClickWeekly()
     {
+    Debug.Log("ClickWeeklyTab được gọi bởi: " + EventSystem.current.currentSelectedGameObject?.name);
         imageProgress.fillAmount = 0;
         selectedDailyTab.SetActive(false);
         selectedWeeklyTab.SetActive(true);
         dailyItemTab.SetActive(false);
         weeklyItemTab.SetActive(true);
-        _ = GetWeeklyReward();
+        // _ = GetWeeklyReward();
     }
 
     public void OnClickReceiveDailyReward()
     {
+        Debug.Log("BUTTON: " + buttonClaimDailyChip);
         UIManager.Instance.ShowProgressing();
         _ = checkInBonusPresenter.ClaimDailyReward();
-        buttonClaimDailyChip.gameObject.SetActive(false);
     }
 
     public void ReceiveDailyReward()
     {
+        buttonClaimDailyChip.gameObject.SetActive(false);
         nextClaimableDailyItem.AnimateReceiveReward();
         DOVirtual.DelayedCall(2f, async () =>
         {

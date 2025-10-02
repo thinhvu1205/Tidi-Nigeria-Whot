@@ -141,6 +141,21 @@ public class NetworkManager : MonoBehaviour
             throw;
         }
     }
+
+    public async UniTask RegisterEmail(string email, string password, string username)
+    {
+        try
+        {
+            var session = await _ClientC.AuthenticateEmailAsync("abc@gmail.com", password, username, create: true);
+            Debug.Log($"Authenticated successfully. User ID: {session.UserId}");
+            OnAuthenSuccess(session);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Authenticate failed: {e}");
+            throw;
+        }
+    }
     
     public async UniTask LoginEmail(string email, string password, string username)
     {

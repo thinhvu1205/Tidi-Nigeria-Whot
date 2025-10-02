@@ -10,6 +10,13 @@ public class RegisterView : BaseView
 {
     [SerializeField] private TMP_InputField userNameInputField, passwordInputField, reEnterPasswordInputField;
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        userNameInputField.text = "";
+        passwordInputField.text = "";
+        reEnterPasswordInputField.text = "";
+    }   
     public void OnSubmit()
     {
         HandleSubmit();
@@ -44,13 +51,12 @@ public class RegisterView : BaseView
 
         try
         {
-            await DataSender.LinkUsername(username: userName, password: password);
-            UIManager.Instance.ShowAlertDialog("Change name successful!", () => Hide());
-            await UIManager.Instance.LoadProfileUser();
+            await NetworkManager.INSTANCE.RegisterEmail("", password, userName);
+            UIManager.Instance.ShowAlertDialog("Register successful!", () => Hide());
         }
         catch (Exception ex)
         {
-            UIManager.Instance.ShowAlertDialog("Error:" + ex.Message);
+            UIManager.Instance.ShowAlertDialog(ex.Message);
         }
     }
 

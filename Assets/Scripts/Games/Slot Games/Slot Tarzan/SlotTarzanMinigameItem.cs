@@ -12,6 +12,7 @@ public class SlotTarzanMinigameItem : MonoBehaviour
     [SerializeField] private SkeletonGraphic scoreAnimation;
     [SerializeField] private TextMeshProUGUI valueText;
     private SlotTarzanMiniGameView miniGameView;
+    private string SCORE_ANIMATION_PATH => "SlotSpine/Tarzan/MiniGame/cuaso/skeleton_SkeletonData";
     public int Index { get; set; } = 0;
     public bool IsOpen { get; set; } = false;
 
@@ -20,7 +21,7 @@ public class SlotTarzanMinigameItem : MonoBehaviour
         IsOpen = true;
 
         scoreAnimation.gameObject.SetActive(true);
-        Utility.PlayAnimation(scoreAnimation, "animation", true);
+        Utility.PlayAnimationByPath(scoreAnimation, SCORE_ANIMATION_PATH, "animation", true);
         scoreAnimation.AnimationState.Complete += delegate
         {
             scoreAnimation.gameObject.SetActive(false);

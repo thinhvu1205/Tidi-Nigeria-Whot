@@ -114,7 +114,7 @@ public class BaseSlotView : BaseGameView
     protected List<GameObject> lineOneByOneList = new();
     protected Queue<TweenCallback> tweenQueue = new();
     protected List<Sequence> lineOneByOneSequenceList = new();
-    protected long playerWallet, playerWalletAfter, currentBetLevel, lastChipWin = 0, currentChipWin = 0, totalChipWinByGame = 0, lastTotalChipWinByGame = 0;
+    [SerializeField] protected long playerWallet, playerWalletAfter, currentBetLevel, lastChipWin = 0, currentChipWin = 0, totalChipWinByGame = 0, lastTotalChipWinByGame = 0;
     protected int totalLineWin = 0, freeSpinLeft = 0;
     public int ScatterCount { get; set; } = 0;
     public bool IsSpinning { get; set; } = false;
@@ -234,13 +234,12 @@ public class BaseSlotView : BaseGameView
             // Nếu đang quay thường hoặc quay auto mà đc freespin -> dừng lại
             tweenQueue.Enqueue(() => ShowWinAnimation(WinType.FREE_SPIN));
         }
-        
+
         ///------------------CHECK SHOW ALL LINE--------------------///
         if (paylineList.Count > 0)
         {
             tweenQueue.Enqueue(() => ShowAllWinLines());
         }
-
 
         ///------------------CHECK SHOW TYPE WIN--------------------///
         if (!isInFreeSpin)
@@ -257,6 +256,10 @@ public class BaseSlotView : BaseGameView
                     tweenQueue.Enqueue(() => ShowWinAnimation(WinType.HUGE_WIN));
                     break;
             }
+        }
+        else
+        {
+            ShowBackGroundFreeSpin();
         }
 
         ///------------------CHECK SHOW ONE BY ONE--------------------//
@@ -629,12 +632,18 @@ public class BaseSlotView : BaseGameView
         DOTween.Sequence().AppendInterval(3.5f).AppendCallback(() =>
         {
             SetLightAllItems();
+            if (paylineList.Count == 0 && currentChipWin > 0)
+            {
+                UpdateChipWinValue();
+                AnimateCoinsFly();
+            }
             NextTween();
         });
     }
 
     protected void ShowWinAnimation(WinType winType)
     {
+        float delay = 5.7f;
         effectContainer.gameObject.SetActive(true);
         animationEffect.gameObject.SetActive(true);
 
@@ -649,7 +658,7 @@ public class BaseSlotView : BaseGameView
                 animationEffect.transform.localScale = new Vector2(1f, 1f);
                 // animationEffect.transform.localPosition = new Vector2(0, -70);
                 Utility.PlayAnimationByPath(animationEffect, BIG_WIN_ANIMATION_PATH, BIG_WIN_ANIMATION_NAME, false);
-
+                delay = 4.5f;
                 break;
             case WinType.MEGA_WIN:
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
@@ -662,6 +671,14 @@ public class BaseSlotView : BaseGameView
                 Utility.PlayAnimationByPath(animationEffect, MEGA_WIN_ANIMATION_PATH, MEGA_WIN_ANIMATION_NAME, false);
                 break;
             case WinType.HUGE_WIN:
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
+                bigWinText.transform.parent.gameObject.SetActive(true);
+                bigWinText.gameObject.SetActive(true);
+                Utility.TweenNumberToNumber(bigWinText, totalChipWinByGame, 0, 2.0f);
+                // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
+                animationEffect.transform.localScale = new Vector2(1f, 1f);
+                // animationEffect.transform.localPosition = new Vector2(0, -70);
+                Utility.PlayAnimationByPath(animationEffect, HUGE_WIN_ANIMATION_PATH, HUGE_WIN_ANIMATION_NAME, false);
                 break;
             case WinType.FIVE_OF_A_KIND:
                 animationEffect.transform.localScale = Vector2.one;
@@ -677,10 +694,13 @@ public class BaseSlotView : BaseGameView
                 Utility.PlayAnimationByPath(animationEffect, FREE_SPIN_ANIMATION_PATH, FREE_SPIN_ANIMATION_NAME, false);
                 break;
         }
+        DOVirtual.DelayedCall(delay, () =>
+        {
+            bigWinText.transform.parent.gameObject.SetActive(false);
+        });
         animationEffect.AnimationState.Complete += delegate
         {
             effectContainer.gameObject.SetActive(false);
-            bigWinText.transform.parent.gameObject.SetActive(false);
             NextTween();
             effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
         };
@@ -742,7 +762,7 @@ public class BaseSlotView : BaseGameView
         lineController.DrawLine(positionList, colorLine);
     }
 
-    private void DrawLineBetween2Points(List<Vector2> listPos, Color colorLine)
+    protected void DrawLineBetween2Points(List<Vector2> listPos, Color colorLine)
     {
         GameObject line = linePool.Get();
         line.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
@@ -751,7 +771,7 @@ public class BaseSlotView : BaseGameView
         lineController.DrawLine(listPos, colorLine);
     }
 
-    private void DrawSquare(Vector2 startPos, Color colorLine)
+    protected void DrawSquare(Vector2 startPos, Color colorLine)
     {
         GameObject lineRect = linePool.Get();
         RectTransform rectTransform = lineRect.GetComponent<RectTransform>();
@@ -761,7 +781,7 @@ public class BaseSlotView : BaseGameView
         lineOneByOneList.Add(lineRect);
     }
 
-    private void DrawRectangularAndConnectingLines(int[] lineWinID, int startIndex, int matchedItemCount, Color colorLine)
+    protected virtual void DrawRectangularAndConnectingLines(int[] lineWinID, int startIndex, int matchedItemCount, Color colorLine)
     {
         // lineWinID: { 0, 1, 0, 1, 0 }
         List<Vector2> itemPositions = new();
@@ -1046,17 +1066,17 @@ public class BaseSlotView : BaseGameView
     protected void UpdateChipWinValue()
     {
         UpdateStateWinUI(StateWin.WIN);
-        Utility.TweenNumberToNumber(chipWinText, currentChipWin, lastChipWin, 0.5f, false);
+        Utility.TweenNumberToNumberScale1(chipWinText, currentChipWin, lastChipWin, 0.5f, false);
     }
     protected void UpdateTotalChipWinValue()
     {
         UpdateStateWinUI(StateWin.TOTAL_WIN);
-        Utility.TweenNumberToNumber(chipWinText, totalChipWinByGame, lastTotalChipWinByGame, 0.5f, false);
+        Utility.TweenNumberToNumberScale1(chipWinText, totalChipWinByGame, lastTotalChipWinByGame, 0.5f, false);
     }
 
     protected void SetCurrentChipValue(long value)
     {
-        Utility.TweenNumberToNumber(currentChipText, value, playerWallet, 0.5f, false);
+        Utility.TweenNumberToNumberScale1(currentChipText, value, playerWallet, 0.5f, false);
         playerWallet = value;
     }
 
@@ -1256,7 +1276,7 @@ public class BaseSlotView : BaseGameView
                 Destroy(line);
             },
             defaultCapacity: 1,     // số lượng khởi tạo
-            maxSize: 200             // tối đa object trong pool
+            maxSize: 400             // tối đa object trong pool
         );
     }
 

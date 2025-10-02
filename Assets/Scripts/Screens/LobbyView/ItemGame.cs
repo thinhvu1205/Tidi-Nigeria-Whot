@@ -23,7 +23,12 @@ public class ItemGame : MonoBehaviour
             // size.x *= 1.5f;
             rectTransform.sizeDelta = size;
         }
-        Utility.PlayAnimationByPath(skeletonGraphic, GetAnimationPath(gameID));
+        string animationName = "animation";
+        if (gameID == Constants.BACCARAT_GAME_ID || gameID == Constants.HONGKONG_POKER_GAME_ID)
+        {
+            animationName = "eng";
+        }
+        Utility.PlayAnimationByPath(skeletonGraphic, GetAnimationPath(gameID), animationName, true);
 
         Button button = GetComponent<Button>();
         button.onClick.RemoveAllListeners();

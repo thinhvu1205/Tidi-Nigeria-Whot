@@ -918,6 +918,13 @@ MonoBehaviour:
   buttonSpinAnimation: {fileID: 3866135749139871749}
   animationEffect: {fileID: 1028820593987077539}
   backgroundFreeSpinLeftAnimation: {fileID: 3956561583415061803}
+  playerWallet: 0
+  playerWalletAfter: 0
+  currentBetLevel: 0
+  lastChipWin: 0
+  currentChipWin: 0
+  totalChipWinByGame: 0
+  lastTotalChipWinByGame: 0
   holdPackageContainer: {fileID: 1256452457226197456}
   basketGetFreeGame: {fileID: 3394678786174720528}
   basketGetFruitRain: {fileID: 8074497799062514148}
@@ -1909,9 +1916,9 @@ RectTransform:
   - {fileID: 6630284172442106913}
   m_Father: {fileID: 478369271289660545}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -89, y: -50}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 629, y: 0}
   m_SizeDelta: {x: 160, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &478369271285582740

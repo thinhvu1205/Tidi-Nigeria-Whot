@@ -1172,6 +1172,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9157873322964924712}
     m_Modifications:
+    - target: {fileID: 3060947365215006466, guid: def4825d1417d4170bac6fbf953d5dda, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1407079150}
+    - target: {fileID: 3060947365215006466, guid: def4825d1417d4170bac6fbf953d5dda, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnSubmit
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060947365215006466, guid: def4825d1417d4170bac6fbf953d5dda, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: RegisterView, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 4402424798258239390, guid: def4825d1417d4170bac6fbf953d5dda, type: 3}
       propertyPath: m_Name
       value: PopupRegister
@@ -1275,6 +1287,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4402424798258239390, guid: def4825d1417d4170bac6fbf953d5dda, type: 3}
   m_PrefabInstance: {fileID: 1407079147}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1407079150 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1870734739480166373, guid: def4825d1417d4170bac6fbf953d5dda, type: 3}
+  m_PrefabInstance: {fileID: 1407079147}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407079149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d60484d25e3474da5e979e41b9d095, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1505643993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1622,7 +1645,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

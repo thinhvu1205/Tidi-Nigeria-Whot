@@ -18,7 +18,7 @@ public class LobbyView : BaseView
     [SerializeField] private TextMeshProUGUI displayNameText, userIdText, accountChip, textTimeLeftToClaimReward;
     [SerializeField] private Image allSlotGamesImage, allGamesImage;
     [SerializeField] private Transform bigGameIconParent, miniGameIconParent, slotGameIconParent, allGamesParent, slotGamesParent;
-    [SerializeField] private GameObject gameIconPrefab, videoBackground;
+    [SerializeField] private GameObject gameIconPrefab, videoBackground, redDotChipBonus;
     [SerializeField] private VideoPlayer videoPlayer;
     [SerializeField] private VideoClip videoStartSiXiang;
     private List<Game> gameList = new();
@@ -75,7 +75,7 @@ public class LobbyView : BaseView
             GameListResponse gameListResponse = await lobbyPresenter.GetListGame();
             UIManager.Instance.HideProgressing();
             gameList = gameListResponse.Games.ToList();
-            UpdateUIListGame();
+            DOVirtual.DelayedCall(0f, () => UpdateUIListGame());
             Debug.Log("GAME LIST: " + gameListResponse.ToString());
         }
         catch (Exception ex)
@@ -146,6 +146,14 @@ public class LobbyView : BaseView
             yield return new WaitForSeconds(1f);
             textTimeLeftToClaimReward.text = Utility.ConvertTimeToString(timeLeftToClaimReward);
             timeLeftToClaimReward -= 1;
+            if (timeLeftToClaimReward < 0)
+            {
+                redDotChipBonus.SetActive(true);
+            }
+            else
+            {
+                redDotChipBonus.SetActive(false);
+            }
         }
     }
 
@@ -173,6 +181,7 @@ public class LobbyView : BaseView
     public void OnClickMail() => UIManager.Instance.OpenMail();
     public void OnClickCheckInBonus() => UIManager.Instance.OpenCheckInBonus();
     public void OnClickFriend() => UIManager.Instance.OpenFriend();
+    public void OnClickChatWorld() => UIManager.Instance.OpenChatWorld();
     public void OnClickSetting() => UIManager.Instance.OpenSetting();
     public void OnClickGiftCode() => UIManager.Instance.OpenGiftCode();
     public void OnClickBanner() => UIManager.Instance.OpenBanner(TypeInAppMessage.HotNews);
