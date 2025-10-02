@@ -402,7 +402,6 @@ public class SlotTarzanView : BaseSlotView
 
     public override void OnStopSpin()
     {
-        ShowPopupDiamond();
         IsSpinning = false;
         ///------------------CHECK SHOW CHARACTER--------------------//
 
