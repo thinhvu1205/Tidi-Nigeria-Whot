@@ -1068,8 +1068,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 750.9081, y: -407.92404}
-  m_SizeDelta: {x: 274.2943, y: 82.4491}
+  m_AnchoredPosition: {x: 444.42, y: -254.82}
+  m_SizeDelta: {x: 165.14, y: 50.694}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3015204950993026855
 CanvasRenderer:
@@ -1086,7 +1086,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4985824995703226359}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -1152,7 +1152,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9109896455506415632}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2711910736564382282}
+        m_TargetAssemblyTypeName: ChatWorldView, Assembly-CSharp
+        m_MethodName: OnClickSendMessage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5190370613477391894
 GameObject:
   m_ObjectHideFlags: 0
@@ -1461,8 +1473,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 1.1469116, y: 60.860474}
-  m_SizeDelta: {x: -228.2823, y: 50.6961}
+  m_AnchoredPosition: {x: -91.50354, y: 60.860474}
+  m_SizeDelta: {x: -413.5832, y: 50.6961}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2553921753503056861
 CanvasRenderer:
@@ -2388,8 +2400,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 4
-  m_fontSizeBase: 4
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

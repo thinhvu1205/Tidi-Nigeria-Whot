@@ -24,7 +24,7 @@ public class ItemGame : MonoBehaviour
             rectTransform.sizeDelta = size;
         }
         string animationName = "animation";
-        if (gameID == Constants.BACCARAT_GAME_ID || gameID == Constants.HONGKONG_POKER_GAME_ID)
+        if (gameID == Constants.BACCARAT_GAME_ID || gameID == Constants.HK_POKER_GAME_ID)
         {
             animationName = "eng";
         }

@@ -10,6 +10,7 @@ using Google.Protobuf;
 using Nakama;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Nakama.TinyJson;
 
 public class NetworkManager : MonoBehaviour
 {
@@ -22,13 +23,14 @@ public class NetworkManager : MonoBehaviour
         AUTH_TOKEN_KEY = "authToken",
         REFRESH_TOKEN_KEY = "refreshToken",
         LOGIN_TYPE_KEY = "loginType",
-        USER_NAME_KEY = "UserName";
+        USER_NAME_KEY = "UserName",
+        WORLD_CHAT_ROOM_NAME = "world_chat";
 
     private IClient _ClientC;
     private ISession _SessionIS;
     private ISocket _SocketIS;
     private List<Action> _DataHandlerAs = new();
-    private string _MatchId;
+    private string _MatchId, worldChatChannelId;
     private readonly Queue<IMatchState> matchStateQueue = new Queue<IMatchState>();
     private readonly object queueLock = new object();
     private bool connected, isKickOff = false;
@@ -198,8 +200,9 @@ public class NetworkManager : MonoBehaviour
             throw;
         }
     }
-    
-    private void OnAuthenSuccess(ISession session) {
+
+    private void OnAuthenSuccess(ISession session)
+    {
         _SessionIS = session;
         StoreSession(session);
         _ = InitSocket(session);
@@ -331,6 +334,41 @@ public class NetworkManager : MonoBehaviour
             : null;
     }
 
+    #endregion
+
+    #region Real-time Chat
+    public async UniTask JoinWorldChat()
+    {
+        bool persistence = true;
+        bool hidden = false;
+        IChannel channel = await _SocketIS.JoinChatAsync(WORLD_CHAT_ROOM_NAME, ChannelType.Room, persistence, hidden);
+        worldChatChannelId = channel.Id;
+        Debug.Log("Now connected to channel id: " + worldChatChannelId);
+        ReceiveMessageWorldChat();
+    }
+
+    public async UniTask SendMessageWorldChat(string content)
+    {
+        var content2 = new Dictionary<string, string> {{"hello", "world"}}.ToJson();
+        Debug.Log("MESSAGE: " + content.ToString());
+        var sendAck = await _SocketIS.WriteChatMessageAsync(worldChatChannelId, content2);
+        Debug.Log("SEND MESSAGE TO WORLD CHAT: " + sendAck.ToString());
+    }
+
+    public void ReceiveMessageWorldChat()
+    {
+        _SocketIS.ReceivedChannelMessage += message =>
+        {
+            Debug.Log("Received: " + message);
+            Debug.Log("Message content: " + message.Content);
+        };
+
+    }
+
+    public async UniTask LeaveWorldChat()
+    {
+        await _SocketIS.LeaveChatAsync(WORLD_CHAT_ROOM_NAME);
+    }
     #endregion
 
     #region Friends
@@ -530,7 +568,7 @@ public class NetworkManager : MonoBehaviour
         // _ClientC = new Client("http", "192.168.153.83", 57350, "defaultkey");
         _ClientC = new Client("http", "172.23.112.1", 57350, "defaultkey");
         // _ClientC = new Client("http", "10.251.228.83", 57350, "defaultkey");
-        // _ClientC = new Client("http", "172.16.56.71", 57350, "defaultkey");
+        _ClientC = new Client("http", "172.16.56.71", 57350, "defaultkey");
         // _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey");
         RestoreSession();
         string deviceId;

@@ -24,7 +24,7 @@ public class LobbyView : BaseView
     private List<Game> gameList = new();
     private LobbyPresenter lobbyPresenter;
     private int timeLeftToClaimReward;
-
+    private bool canClaimCheckinBonus;
     VideoPlayer.EventHandler videoStartedListener;
     VideoPlayer.EventHandler videoEndedListener;
 
@@ -38,6 +38,7 @@ public class LobbyView : BaseView
         _ = GetClaimableReward();
         OnClickAllGamesTab();
         UIManager.Instance.lobbyView = this;
+        _ = NetworkManager.INSTANCE.JoinWorldChat();
 
     }
     protected override void Start()
@@ -51,18 +52,18 @@ public class LobbyView : BaseView
     {
         base.OnEnable();
         User.OnProfileUpdated += UpdateProfileData;
-        CheckInBonusView.OnDailyRewardClaimed += CheckInBonusView_OnDailyRewardClaimed;
+        CheckInBonusView.OnRewardClaimed += CheckInBonusView_OnRewardClaimed;
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
         User.OnProfileUpdated -= UpdateProfileData;
-        CheckInBonusView.OnDailyRewardClaimed -= CheckInBonusView_OnDailyRewardClaimed;
+        CheckInBonusView.OnRewardClaimed -= CheckInBonusView_OnRewardClaimed;
     }
 
 
-    private void CheckInBonusView_OnDailyRewardClaimed()
+    private void CheckInBonusView_OnRewardClaimed()
     {
         _ = GetClaimableReward();
     }
@@ -87,10 +88,20 @@ public class LobbyView : BaseView
 
     private async UniTask GetClaimableReward()
     {
-        Reward reward = await lobbyPresenter.GetClaimableReward();
+        (Reward reward, bool canClaim) = await lobbyPresenter.GetClaimableReward();
         UIManager.Instance.HideProgressing();
         if (reward == null) return;
         timeLeftToClaimReward = (int)reward.NextClaimSec;
+        canClaimCheckinBonus = canClaim;
+
+        if (canClaim)
+        {
+            redDotChipBonus.SetActive(true);
+        }
+        else
+        {
+            redDotChipBonus.SetActive(false);
+        }
         StartCoroutine(ClaimTimer());
     }
 
@@ -146,14 +157,18 @@ public class LobbyView : BaseView
             yield return new WaitForSeconds(1f);
             textTimeLeftToClaimReward.text = Utility.ConvertTimeToString(timeLeftToClaimReward);
             timeLeftToClaimReward -= 1;
-            if (timeLeftToClaimReward < 0)
+            if (!canClaimCheckinBonus)
             {
-                redDotChipBonus.SetActive(true);
+                if (timeLeftToClaimReward < 0)
+                {
+                    redDotChipBonus.SetActive(true);
+                }
+                else
+                {
+                    redDotChipBonus.SetActive(false);
+                }
             }
-            else
-            {
-                redDotChipBonus.SetActive(false);
-            }
+          
         }
     }
 

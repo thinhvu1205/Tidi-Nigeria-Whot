@@ -13,7 +13,7 @@ using UnityEngine.UI;
 
 public class CheckInBonusView : BaseView
 {
-    public static event Action OnDailyRewardClaimed;
+    public static event Action OnRewardClaimed;
     public enum RewardState
     {
         NOT_RECEIVE,
@@ -24,18 +24,21 @@ public class CheckInBonusView : BaseView
     [SerializeField] private CheckInBonusDailyItem dailyItemPrefab;
     [SerializeField] private CheckInBonusWeeklyItem weeklyItemPrefab, lastWeeklyItem;
     [SerializeField] private GameObject dailyItemTab, weeklyItemTab;
-    [SerializeField] private GameObject selectedDailyTab, selectedWeeklyTab;
+    [SerializeField] private GameObject selectedDailyTab, selectedWeeklyTab, redDotDaily, redDotWeekly;
     [SerializeField] private Transform weeklyItemParent, dailyItemParent;
     [SerializeField] private Image imageProgress, imageChipDaily;
     [SerializeField] private TextMeshProUGUI textClaimableDailyChip;
     [SerializeField] private Sprite[] listSpriteClaimableDailyChip;
     [SerializeField] private Button buttonClaimDailyChip;
     private CheckInBonusPresenter checkInBonusPresenter;
-    private List<RewardTemplate> listRewardTemplate = new();
+    private List<RewardTemplate> listDailyRewardTemplate = new();
+    private List<WeeklyRewardTemplate> listWeeklyRewardTemplate = new();
     private Reward nextReward;
     private CheckInBonusDailyItem nextClaimableDailyItem;
     private int VipLevel => (int)User.userProfile.VipLevel;
-    private int streak = 0;
+    private int dailyStreak = 0;
+    private int weeklyStreak = 0;
+    private bool canClaimWeeklyReward = false;
     [SerializeField] private float nextClaimSec, currentClaimSec;
 
     protected override void Awake()
@@ -50,6 +53,10 @@ public class CheckInBonusView : BaseView
         base.OnEnable();
         OnClickDailyTab();
         CheckInBonusDailyItem.OnButtonClicked += OnClickReceiveDailyReward;
+        CheckInBonusWeeklyItem.OnButtonClicked += OnClickReceiveWeeklyReward;
+        _ = GetClaimableDailyReward(true);
+        _ = GetClaimableWeeklyReward();
+
     }
 
     private async UniTask GetDailyReward(bool isFill)
@@ -57,7 +64,7 @@ public class CheckInBonusView : BaseView
         UIManager.Instance.ShowProgressing();
         DailyRewardTemplate dailyReward = await checkInBonusPresenter.GetDailyReward();
         UIManager.Instance.HideProgressing();
-        listRewardTemplate = dailyReward.RewardTemplates.ToList();
+        listDailyRewardTemplate = dailyReward.RewardTemplates.ToList();
         Debug.Log("DAILY REWARD TEMPLATE : " + dailyReward.ToString());
         InitDailyItems(isFill);
     }
@@ -68,19 +75,27 @@ public class CheckInBonusView : BaseView
         Reward reward = await checkInBonusPresenter.GetClaimableDailyReward();
         UIManager.Instance.HideProgressing();
         nextReward = reward;
-        streak = (int)reward.Streak;
+        dailyStreak = (int)reward.Streak;
+        if (reward.CanClaim)
+        {
+            redDotDaily.SetActive(true);
+        }
+        else
+        {
+            redDotDaily.SetActive(false);
+        }
         _ = GetDailyReward(isFill);
     }
 
     private async UniTask GetWeeklyReward()
     {
         UIManager.Instance.ShowProgressing();
-        WeeklyBonusTemplate dailyReward = await checkInBonusPresenter.GetWeeklyReward();
+        WeeklyBonusTemplate weeklyReward = await checkInBonusPresenter.GetWeeklyReward();
         UIManager.Instance.HideProgressing();
-        // listRewardTemplate = dailyReward.RewardTemplates.ToList();
-        Debug.Log("WEEKLY Bonus TEMPLATE : " + dailyReward.ToString());
-        // InitDailyItems();
-        await GetClaimableWeeklyReward();
+        listWeeklyRewardTemplate = weeklyReward.RewardTemplates.ToList();
+        Debug.Log("WEEKLY Bonus TEMPLATE : " + weeklyReward.ToString());
+        InitWeeklyItems();
+      
     }
 
     private async UniTask GetClaimableWeeklyReward()
@@ -89,9 +104,17 @@ public class CheckInBonusView : BaseView
         Reward reward = await checkInBonusPresenter.GetClaimableWeeklyReward();
         Debug.Log("WEEKLY Can Claim : " + reward.ToString());
         UIManager.Instance.HideProgressing();
-        // nextReward = reward;
-        // streak = (int)reward.Streak;
-        // _ = GetDailyReward();
+        canClaimWeeklyReward = reward.CanClaim;
+        weeklyStreak = (int)reward.Streak;
+        if (reward.CanClaim)
+        {
+            redDotWeekly.SetActive(true);
+        }
+        else
+        {
+            redDotWeekly.SetActive(false);
+        }
+        _ = GetWeeklyReward();
     }
 
     public void OnClickDailyTab()
@@ -100,25 +123,28 @@ public class CheckInBonusView : BaseView
         selectedWeeklyTab.SetActive(false);
         dailyItemTab.SetActive(true);
         weeklyItemTab.SetActive(false);
-        _ = GetClaimableDailyReward(true);
     }
 
     public void OnClickWeekly()
     {
-    Debug.Log("ClickWeeklyTab được gọi bởi: " + EventSystem.current.currentSelectedGameObject?.name);
         imageProgress.fillAmount = 0;
         selectedDailyTab.SetActive(false);
         selectedWeeklyTab.SetActive(true);
         dailyItemTab.SetActive(false);
         weeklyItemTab.SetActive(true);
-        // _ = GetWeeklyReward();
+        // _ = GetClaimableWeeklyReward();
     }
 
     public void OnClickReceiveDailyReward()
     {
-        Debug.Log("BUTTON: " + buttonClaimDailyChip);
         UIManager.Instance.ShowProgressing();
         _ = checkInBonusPresenter.ClaimDailyReward();
+    }
+
+    public void OnClickReceiveWeeklyReward()
+    {
+        UIManager.Instance.ShowProgressing();
+        _ = checkInBonusPresenter.ClaimWeeklyReward();
     }
 
     public void ReceiveDailyReward()
@@ -129,7 +155,17 @@ public class CheckInBonusView : BaseView
         {
             await UIManager.Instance.LoadProfileUser();
             await GetClaimableDailyReward(false);
-            OnDailyRewardClaimed?.Invoke();
+            OnRewardClaimed?.Invoke();
+        });
+    }
+
+    public void ReceiveWeeklyReward()
+    {
+        DOVirtual.DelayedCall(0.5f, async () =>
+        {
+            await UIManager.Instance.LoadProfileUser();
+            await GetClaimableWeeklyReward();
+            OnRewardClaimed?.Invoke();
         });
     }
 
@@ -139,22 +175,22 @@ public class CheckInBonusView : BaseView
         {
             Destroy(child.gameObject);
         }
-        for (int i = 0; i < listRewardTemplate.Count; i++)
+        for (int i = 0; i < listDailyRewardTemplate.Count; i++)
         {
             CheckInBonusDailyItem dailyItem = Instantiate(dailyItemPrefab, dailyItemParent);
-            RewardTemplate reward = listRewardTemplate[i];
+            RewardTemplate reward = listDailyRewardTemplate[i];
             RewardState state = RewardState.NOT_RECEIVE;
             dailyItem.HideAnimationLight();
-            if (streak == (int)reward.Streak)
+            if (dailyStreak == (int)reward.Streak)
             {
                 textClaimableDailyChip.text = Utility.FormatNumber(reward.BasicChips[VipLevel]);
-                imageChipDaily.sprite = listSpriteClaimableDailyChip[streak - 1];
+                imageChipDaily.sprite = listSpriteClaimableDailyChip[dailyStreak - 1];
                 nextClaimableDailyItem = dailyItem;
                 nextClaimSec = reward.OnlineSec;
                 currentClaimSec = reward.OnlineSec - nextReward.NextClaimSec;
                 if (isFill)
                 {
-                    StartCoroutine(AnimateFill((streak - 1 + currentClaimSec / nextClaimSec) / (float)listRewardTemplate.Count));
+                    StartCoroutine(AnimateFill((dailyStreak - 1 + currentClaimSec / nextClaimSec) / (float)listDailyRewardTemplate.Count));
                 }
                 if (nextReward.CanClaim && nextReward.DeviceAllowed)
                 {
@@ -168,7 +204,7 @@ public class CheckInBonusView : BaseView
                     nextClaimableDailyItem.HideAnimationLight();
                 }
             }
-            if (streak > i + 1)
+            if (dailyStreak > i + 1)
             {
                 state = RewardState.RECEIVED;
             }
@@ -177,9 +213,53 @@ public class CheckInBonusView : BaseView
         StartCoroutine(ClaimTimer());
     }
 
+    private void InitWeeklyItems()
+    {
+        foreach (Transform child in weeklyItemParent)
+        {
+            Destroy(child.gameObject);
+            lastWeeklyItem.gameObject.SetActive(false);
+        }
+        for (int i = 0; i < 7; i++)
+        {
+            CheckInBonusWeeklyItem weeklyItem;
+            if (i == 6)
+            {
+                weeklyItem = lastWeeklyItem;
+                weeklyItem.gameObject.SetActive(true);
+            }
+            else
+            {
+                weeklyItem = Instantiate(weeklyItemPrefab, weeklyItemParent);
+            }
+            WeeklyRewardTemplate reward = listWeeklyRewardTemplate[VipLevel];
+            RewardState state;
+            if (weeklyStreak > i + 1)
+            {
+                state = RewardState.RECEIVED;
+            }
+            else if (weeklyStreak < i + 1)
+            {
+                state = RewardState.NOT_RECEIVE;
+            }
+            else
+            {
+                if (canClaimWeeklyReward)
+                {
+                    state = RewardState.RECEIVABLE;
+                }
+                else
+                {
+                    state = RewardState.NOT_RECEIVE;
+                }
+            }
+            weeklyItem.SetInfo(i + 1, reward.Rewards[i], state);
+        }
+    }
+
     private IEnumerator AnimateFill(float amount)
     {
-        Debug.Log("AMOUNT: " + amount);
+        Debug.Log("Amount: " + amount);
         float elapsed = 0f;
 
         while (elapsed < 0.5f)
@@ -198,7 +278,7 @@ public class CheckInBonusView : BaseView
         {
             yield return new WaitForSeconds(1f);
             currentClaimSec += 1;
-            imageProgress.fillAmount = (float)(streak - 1 + currentClaimSec / nextClaimSec) / 6;
+            imageProgress.fillAmount = (float)(dailyStreak - 1 + currentClaimSec / nextClaimSec) / 6;
             if (currentClaimSec >= nextClaimSec)
             {
                 nextClaimableDailyItem.ShowAnimationLight();

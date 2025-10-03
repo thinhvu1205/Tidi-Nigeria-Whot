@@ -112,7 +112,7 @@ public class CheckInBonusPresenter
         {
             Reward reward = await DataSender.ClaimWeeklyReward();
             await checkInBonusView.OnSuccess();
-            // checkInBonusView.ReceiveDailyReward();
+            checkInBonusView.ReceiveWeeklyReward();
             return reward;
         }
         catch (Exception e)
