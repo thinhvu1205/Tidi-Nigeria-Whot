@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Globals;
+using Nakama;
+using Newtonsoft.Json.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -17,17 +20,16 @@ public class ChatWorldItem : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
     }
 
-    public void SetInfo(int index)
+    public void SetInfo(IApiChannelMessage message, bool isCurrentPlayer)
     {
-        textName.text = "Player123";
-        textTime.text = "12:34";
-        string text = "hello";
-        for (int i = 0; i < index; i++)
+        var payload = JsonUtility.FromJson<ChatPayload>(message.Content);
+        if (string.IsNullOrEmpty(payload.content))
         {
-            text += "hello hello hello hello hello hello hello hello hello hello hello";
+            Destroy(gameObject);
         }
-        textMessage.text = text;
-
+        textName.text = message.Username;
+        textTime.text = Utility.ConvertISOToHHMM(message.CreateTime);
+        textMessage.text = payload.content;
         float textWidth = textMessage.preferredWidth;
         float textHeight = textMessage.preferredHeight;
         rectTransform.sizeDelta = new Vector2(textWidth + PADDING_WIDTH, rectTransform.sizeDelta.y);
@@ -44,3 +46,5 @@ public class ChatWorldItem : MonoBehaviour
     }
 
 }
+
+

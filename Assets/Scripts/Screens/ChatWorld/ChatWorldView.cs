@@ -1,5 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using Globals;
+using Nakama;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,28 +16,51 @@ public class ChatWorldView : BaseView
     [SerializeField] private TextMeshProUGUI textAccountChip;
     [SerializeField] private ScrollRect scrollRect;
     private ChatWorldPresenter chatWorldPresenter;
+    private List<IApiChannelMessage> listMessage = new();
 
     protected override void Awake()
     {
         base.Awake();
-        Init();
         chatWorldPresenter = new ChatWorldPresenter();
         chatWorldPresenter.Init(this);
+        chatInputField.characterLimit = 200;
+        _ = GetHistory();
     }
 
-    private void Init()
+    protected override void OnEnable()
     {
-        StartCoroutine(WaitAndScrollToEnd());
-        chatInputField.characterLimit = 200;
+        base.OnEnable();
+        NetworkManager.INSTANCE.OnMessageWorldReceived += NetworkManager_OnMessageReceived;
+    }
+
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        NetworkManager.INSTANCE.OnMessageWorldReceived -= NetworkManager_OnMessageReceived;
+    }
+
+    private void InitMessageUI()
+    {
+
         foreach (Transform child in messageContentParent)
         {
             Destroy(child.gameObject);
         }
 
-        for (int i = 0; i < 10; i++)
+        foreach (IApiChannelMessage message in listMessage)
         {
-            Instantiate(messagePrefab, messageContentParent).SetInfo(i);
+            var payload = JsonUtility.FromJson<ChatPayload>(message.Content);
+            if (!string.IsNullOrEmpty(payload.content))
+            {
+                bool isCurrentPlayer = message.SenderId == User.userProfile.UserId;
+                ChatWorldItem chatWorldItem = Instantiate(messagePrefab, messageContentParent);
+                Debug.Log("MESSAGE CONTENT: " + message.CreateTime);
+                chatWorldItem.SetInfo(message, isCurrentPlayer);
+            }
         }
+        StartCoroutine(WaitAndScrollToEnd());
+
     }
 
     private IEnumerator WaitAndScrollToEnd()
@@ -41,7 +68,27 @@ public class ChatWorldView : BaseView
         yield return null; // chờ 1 frame
         scrollRect.verticalNormalizedPosition = 0f; // 0 = cuối, 1 = đầu
     }
-    
+
+
+    private async UniTask GetHistory()
+    {
+        listMessage = await chatWorldPresenter.GetWorldChatHistory();
+        Debug.Log("HISTORY RESULT: " + listMessage);
+        InitMessageUI();
+    }
+
+    private void NetworkManager_OnMessageReceived(IApiChannelMessage message)
+    {
+        var payload = JsonUtility.FromJson<ChatPayload>(message.Content);
+        if (!string.IsNullOrEmpty(payload.content))
+        {
+            bool isCurrentPlayer = message.SenderId == User.userProfile.UserId;
+            ChatWorldItem chatWorldItem = Instantiate(messagePrefab, messageContentParent);
+            Debug.Log("MESSAGE CONTENT: " + message.CreateTime);
+            chatWorldItem.SetInfo(message, isCurrentPlayer);
+        }
+    }
+
     public void OnClickSendMessage()
     {
         if (!string.IsNullOrEmpty(chatInputField.text))
@@ -51,4 +98,9 @@ public class ChatWorldView : BaseView
         }
     }
 
+}
+
+public struct ChatPayload
+{
+    public string content;
 }

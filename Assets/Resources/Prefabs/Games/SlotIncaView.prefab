@@ -3201,6 +3201,13 @@ MonoBehaviour:
   buttonSpinAnimation: {fileID: 914945699434185549}
   animationEffect: {fileID: 3986483228156673771}
   backgroundFreeSpinLeftAnimation: {fileID: 3912835863557955531}
+  playerWallet: 0
+  playerWalletAfter: 0
+  currentBetLevel: 0
+  lastChipWin: 0
+  currentChipWin: 0
+  totalChipWinByGame: 0
+  lastTotalChipWinByGame: 0
 --- !u!1 &4590942562560099281
 GameObject:
   m_ObjectHideFlags: 0
@@ -4276,7 +4283,7 @@ MonoBehaviour:
   initialSkinName: default
   initialFlipX: 0
   initialFlipY: 0
-  startingAnimation: spinHoldforAuto
+  startingAnimation: autospin
   startingLoop: 1
   timeScale: 1
   freeze: 0
@@ -4316,7 +4323,7 @@ MonoBehaviour:
   ThisSG: {fileID: 914945699434185549}
   BundleLabel: assets--resources--bundlepack--animations--slotspine
   AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/InCa/btnSpin/skeleton_SkeletonData.asset
-  AnimName: spinHoldforAuto
+  AnimName: stop
   SetNativeSize: 0
   m_OnEnableUE:
     m_PersistentCalls:
@@ -4395,7 +4402,7 @@ MonoBehaviour:
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
-  startingAnimation: bigwin
+  startingAnimation: megawin_cam
   startingLoop: 1
   timeScale: 1
   freeze: 0
@@ -4654,7 +4661,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2902828945437685368
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5454,7 +5461,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4898167606656112333
 RectTransform:
   m_ObjectHideFlags: 0

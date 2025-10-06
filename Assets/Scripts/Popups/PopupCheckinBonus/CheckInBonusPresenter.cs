@@ -19,6 +19,7 @@ public class CheckInBonusPresenter
         try
         {
             DailyRewardTemplate dailyReward = await DataSender.GetDailyRewardTemplate();
+            Debug.Log("DAILY ƯREWARD: " + dailyReward);
             return dailyReward;
         }
         catch (Exception e)

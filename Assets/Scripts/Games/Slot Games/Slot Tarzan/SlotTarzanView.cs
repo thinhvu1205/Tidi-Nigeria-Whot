@@ -499,6 +499,8 @@ public class SlotTarzanView : BaseSlotView
         if (isStartMiniGame)
         {
             Debug.Log("START MINIgAME");
+            spinType = SpinType.NORMAL;
+            UpdateGameState(SlotGameState.PREPARE);
             tweenQueue.Enqueue(() => ShowPopupMinigame());
         }
 

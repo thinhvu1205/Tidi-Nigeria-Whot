@@ -501,6 +501,12 @@ namespace Globals
             DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(createTimeUnix).LocalDateTime;
             return dateTime.ToString("dd/MM");
         }
+
+        public static string ConvertISOToHHMM(string time)
+        {
+            DateTime dt = DateTime.Parse(time, null, DateTimeStyles.RoundtripKind);
+            return dt.ToString("HH:mm");
+        }
         #endregion
 
         #region Image

@@ -11,20 +11,23 @@ using UnityEngine.Video;
 using DG.Tweening;
 using Avatar = Common.Objects.Avatar;
 using System.Collections;
+using UnityEngine.Pool;
 
 public class LobbyView : BaseView
 {
     [SerializeField] private Avatar avatar;
     [SerializeField] private TextMeshProUGUI displayNameText, userIdText, accountChip, textTimeLeftToClaimReward;
     [SerializeField] private Image allSlotGamesImage, allGamesImage;
-    [SerializeField] private Transform bigGameIconParent, miniGameIconParent, slotGameIconParent, allGamesParent, slotGamesParent;
-    [SerializeField] private GameObject gameIconPrefab, videoBackground, redDotChipBonus;
+    [SerializeField] private Transform bigGameIconParent, miniGameIconParent, slotGameIconParent, allGamesParent, slotGamesParent, textPreviewChatWorldParent;
+    [SerializeField] private GameObject gameIconPrefab, textPreviewChatWorldPrefab, videoBackground, redDotChipBonus, redDotFreeChip, redDotMail;
     [SerializeField] private VideoPlayer videoPlayer;
     [SerializeField] private VideoClip videoStartSiXiang;
     private List<Game> gameList = new();
+    private List<TextMeshProUGUI> listTextPreviewChatWorld = new();
     private LobbyPresenter lobbyPresenter;
     private int timeLeftToClaimReward;
-    private bool canClaimCheckinBonus;
+    private bool canClaimCheckinBonus, isDeviceAllowed;
+    private ObjectPool<TextMeshProUGUI> textPreviewChatWorldPool;
     VideoPlayer.EventHandler videoStartedListener;
     VideoPlayer.EventHandler videoEndedListener;
 
@@ -33,6 +36,7 @@ public class LobbyView : BaseView
         base.Awake();
         lobbyPresenter = new LobbyPresenter();
         lobbyPresenter.Init(this);
+        InitPool();
 
         _ = LoadGames();
         _ = GetClaimableReward();
@@ -41,6 +45,8 @@ public class LobbyView : BaseView
         _ = NetworkManager.INSTANCE.JoinWorldChat();
 
     }
+
+
     protected override void Start()
     {
         base.Start();
@@ -52,6 +58,7 @@ public class LobbyView : BaseView
     {
         base.OnEnable();
         User.OnProfileUpdated += UpdateProfileData;
+        NetworkManager.INSTANCE.OnMessageWorldReceived += NetworkManager_OnMessageReceived;
         CheckInBonusView.OnRewardClaimed += CheckInBonusView_OnRewardClaimed;
     }
 
@@ -59,6 +66,7 @@ public class LobbyView : BaseView
     {
         base.OnDestroy();
         User.OnProfileUpdated -= UpdateProfileData;
+        NetworkManager.INSTANCE.OnMessageWorldReceived -= NetworkManager_OnMessageReceived;
         CheckInBonusView.OnRewardClaimed -= CheckInBonusView_OnRewardClaimed;
     }
 
@@ -66,6 +74,23 @@ public class LobbyView : BaseView
     private void CheckInBonusView_OnRewardClaimed()
     {
         _ = GetClaimableReward();
+    }
+
+
+    private void NetworkManager_OnMessageReceived(Nakama.IApiChannelMessage message)
+    {
+        var payload = JsonUtility.FromJson<ChatPayload>(message.Content);
+        if (listTextPreviewChatWorld.Count >= 5)
+        {
+            textPreviewChatWorldPool.Release(listTextPreviewChatWorld[0]);
+            listTextPreviewChatWorld.RemoveAt(0);
+        }
+        if (!string.IsNullOrEmpty(payload.content))
+        {
+            TextMeshProUGUI textPreview = textPreviewChatWorldPool.Get();
+            textPreview.text = message.Username + ": " + payload.content;
+            listTextPreviewChatWorld.Add(textPreview);
+        }
     }
 
 
@@ -88,11 +113,12 @@ public class LobbyView : BaseView
 
     private async UniTask GetClaimableReward()
     {
-        (Reward reward, bool canClaim) = await lobbyPresenter.GetClaimableReward();
+        (Reward reward, bool canClaim, bool isDeviceAllowed) = await lobbyPresenter.GetClaimableReward();
         UIManager.Instance.HideProgressing();
         if (reward == null) return;
         timeLeftToClaimReward = (int)reward.NextClaimSec;
         canClaimCheckinBonus = canClaim;
+        this.isDeviceAllowed = isDeviceAllowed;
 
         if (canClaim)
         {
@@ -157,7 +183,7 @@ public class LobbyView : BaseView
             yield return new WaitForSeconds(1f);
             textTimeLeftToClaimReward.text = Utility.ConvertTimeToString(timeLeftToClaimReward);
             timeLeftToClaimReward -= 1;
-            if (!canClaimCheckinBonus)
+            if (!canClaimCheckinBonus && isDeviceAllowed)
             {
                 if (timeLeftToClaimReward < 0)
                 {
@@ -168,7 +194,7 @@ public class LobbyView : BaseView
                     redDotChipBonus.SetActive(false);
                 }
             }
-          
+
         }
     }
 
@@ -203,7 +229,7 @@ public class LobbyView : BaseView
     public void OnClickSendGift() => UIManager.Instance.OpenSendGift();
     public void OnClickSupport() => UIManager.Instance.OpenSupport();
     #endregion
-    
+
     public void PlayVideoSiXiang(Match labelMatch)
     {
         if (!videoPlayer.isPlaying)
@@ -233,5 +259,34 @@ public class LobbyView : BaseView
             });
         }
 
+    }
+    
+
+    private void InitPool()
+    {
+        textPreviewChatWorldPool = new ObjectPool<TextMeshProUGUI>(
+            createFunc: () =>
+            {
+                var text = Instantiate(textPreviewChatWorldPrefab, textPreviewChatWorldParent).GetComponent<TextMeshProUGUI>();
+                text.gameObject.SetActive(false); // bắt đầu ẩn
+                return text;
+            },
+            actionOnGet: (text) =>
+            {
+                text.gameObject.SetActive(true);
+                text.transform.localScale = Vector3.one;
+            },
+            actionOnRelease: (text) =>
+            {
+                text.gameObject.SetActive(false);
+            },
+            actionOnDestroy: (text) =>
+            {
+                Destroy(text.gameObject);
+            },
+            collectionCheck: false,  // không cần check trùng (cho nhanh)
+            defaultCapacity: 5,     // số lượng khởi tạo
+            maxSize: 10             // tối đa object trong pool
+        );
     }
 }

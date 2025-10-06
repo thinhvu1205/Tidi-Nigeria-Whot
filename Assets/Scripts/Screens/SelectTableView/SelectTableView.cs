@@ -42,8 +42,20 @@ public class SelectTableView : BaseView
     protected override void Start()
     {
         base.Start();
-
     }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        User.OnProfileUpdated += UpdateVisuals;
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        User.OnProfileUpdated -= UpdateVisuals;
+    }
+    
     #region API Handlers
     private async UniTask GetListBet()
     {
