@@ -71,7 +71,7 @@ public class SendGiftView : BaseView
                 return;
             }
             FreeChip freeChip =  await DataSender.SendGift(amount, recipientId);
-            Debug.Log("Recieve Chip Successfull : " + freeChip);
+            Debug.Log("Send Chip Successfully : " + freeChip);
             _ = SendGiftSuccessful();
         }
         catch (Exception e)

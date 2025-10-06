@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -24,11 +22,12 @@ public class GiftCodeView : BaseView
         _ = giftCodePresenter.OnSubmit(giftCode);
     }
 
-    public async Task OnSubmitFinished(string message)
+    public async UniTask OnSubmitFinished(string message, bool isError = false)
     {
         giftCodeInputField.text = "";
         UIManager.Instance.HideProgressing();
         UIManager.Instance.ShowAlertDialog(message);
+        if (isError) return;
         await UIManager.Instance.LoadProfileUser();
     }
 }

@@ -73,7 +73,7 @@ namespace Screens.LoginView
                             return;
                         }
                         UIManager.Instance.ShowProgressing();
-                        _ = loginPresenter.OnLoginEmail(userName, password);
+                        _ = loginPresenter.OnLoginWithId(userName, password);
                         break;
                     default:
                         Debug.LogWarning("Unknown login type, defaulting to guest login.");
@@ -177,7 +177,7 @@ namespace Screens.LoginView
             UIManager.Instance.ShowProgressing();
             string userName = idInputField.text;
             string password = passwordInputField.text;
-            _ = loginPresenter.OnLoginEmail(userName, password);
+            _ = loginPresenter.OnLoginWithId(userName, password);
         }
     
         public void OnLoginFbClick() {

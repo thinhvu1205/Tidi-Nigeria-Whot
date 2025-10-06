@@ -46,16 +46,16 @@ namespace Screens.LoginView
             }
         }
     
-        public async UniTask OnLoginEmail(string email, string pass)
+        public async UniTask OnLoginWithId(string userName, string pass)
         {
             Config.loginType = LoginType.NORMAL;
         
             try
             {
-                await NetworkManager.INSTANCE.LoginEmail("", pass, email);
+                await NetworkManager.INSTANCE.LoginWithId(userName, pass);
                 PlayerPrefs.SetInt(Config.TYPE_LOGIN_KEY, (int)LoginType.NORMAL);
                 PlayerPrefs.SetInt(Config.AUTO_LOGIN, 1);
-                PlayerPrefs.SetString("UserName", email);
+                PlayerPrefs.SetString("UserName", userName);
                 PlayerPrefs.SetString("PassWord", pass);
                 loginView.OnLoginSuccess();
             }
