@@ -51,7 +51,7 @@ public class RegisterView : BaseView
 
         try
         {
-            await NetworkManager.INSTANCE.RegisterEmail("", password, userName);
+            await NetworkManager.INSTANCE.CreateAccount(userName, password);
             UIManager.Instance.ShowAlertDialog("Register successful!", () => Hide());
         }
         catch (Exception ex)

@@ -64,7 +64,7 @@ public class DataSender
         return parser.ParseFrom(data);
     }
 
-    private static T DecodeFromJson<T>(string json) where T : IMessage<T>, new()
+    public static T DecodeFromJson<T>(string json) where T : IMessage<T>, new()
     {
         var parser = new JsonParser(JsonParser.Settings.Default.WithIgnoreUnknownFields(true));
         return parser.Parse<T>(json);
@@ -388,8 +388,6 @@ public class DataSender
 
     public static async UniTask<Constants.WalletTransaction> GetTransactionHistory(long limit = 0, string metaAction = "bank_topup", string metaBankAction = "1")
     {
-
-
         WalletTransRequest bank = new WalletTransRequest()
         {
             Limit = limit,

@@ -156,11 +156,12 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    public async UniTask RegisterEmail(string email, string password, string username)
+    public async UniTask CreateAccount(string username, string password)
     {
         try
         {
-            var session = await _ClientC.AuthenticateEmailAsync("abc@gmail.com", password, username, create: true);
+            var email = $"{username}@fake.local";
+            var session = await _ClientC.AuthenticateEmailAsync(email, password, username, create: true);
             Debug.Log($"Authenticated successfully. User ID: {session.UserId}");
             OnAuthenSuccess(session);
         }
@@ -171,10 +172,11 @@ public class NetworkManager : MonoBehaviour
         }
     }
     
-    public async UniTask LoginEmail(string email, string password, string username)
+    public async UniTask LoginWithId(string username, string password)
     {
         try
         {
+            var email = $"{username}@fake.local";
             var session = await _ClientC.AuthenticateEmailAsync(email, password, username, create: false);
             Debug.Log($"Authenticated successfully. User ID: {session.UserId}");
             OnAuthenSuccess(session);

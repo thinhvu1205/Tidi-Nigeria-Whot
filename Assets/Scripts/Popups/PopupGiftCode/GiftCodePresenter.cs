@@ -41,10 +41,10 @@ public class GiftCodePresenter
                     break;
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            _ = giftCodeView.OnSubmitFinished("Error when claim gift code!");
-            throw;
+            Error error = DataSender.DecodeFromJson<Error>(ex.Message);
+            _ = giftCodeView.OnSubmitFinished(error.Error_, true);
         }
     }
 }
