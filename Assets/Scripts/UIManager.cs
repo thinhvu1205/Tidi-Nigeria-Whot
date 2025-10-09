@@ -52,35 +52,32 @@ public class UIManager : Singleton<UIManager>
         User.UpdateProfile();
         User.UpdateConfig();
     }
-
-
     
-    public void OpenLoginScene()
+    public async UniTask LoadScene(string sceneName)
     {
         ShowProgressing();
-        // Global.GameView = null;
-
+        gameView = null;
         // Preload Scene (in Unity, use LoadSceneAsync)
-        StartCoroutine(PreloadAndLoadScene(Config.LOGIN_SCENE));
+        await PreloadAndLoadSceneAsync(sceneName);
     }
-
-    private IEnumerator PreloadAndLoadScene(string sceneName)
+    
+    private async UniTask PreloadAndLoadSceneAsync(string sceneName)
     {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+        var asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         if (asyncLoad != null)
         {
             asyncLoad.allowSceneActivation = false;
 
-            // Wait until the scene is loaded
             while (asyncLoad.progress < 0.9f)
             {
-                yield return null;
+                await UniTask.Yield();
             }
 
-            // Hide progress UI before activation (simulate preload complete)
-            HideProgressing();
+            if (sceneName == Config.MAIN_SCENE)
+            {
+                await LoadProfileUser();
+            }
 
-            // Activate the scene
             asyncLoad.allowSceneActivation = true;
         }
     }
