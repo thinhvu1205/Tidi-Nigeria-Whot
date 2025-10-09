@@ -28,7 +28,7 @@ public class LobbyPresenter
         }
     }
 
-    public async UniTask<(Reward, bool)> GetClaimableReward()
+    public async UniTask<(Reward, bool, bool)> GetClaimableReward()
     {
         UIManager.Instance.ShowProgressing();
         try
@@ -37,13 +37,14 @@ public class LobbyPresenter
             Reward weeklyReward = await DataSender.GetClaimableWeeklyReward();
             Debug.Log("daily reward: " + dailyReward);
             Debug.Log("weekly reward: " + weeklyReward);
-            bool canClaim = dailyReward.CanClaim || weeklyReward.CanClaim;
-            return (dailyReward, canClaim);
+            bool canClaim = (dailyReward.CanClaim && dailyReward.DeviceAllowed) || (weeklyReward.CanClaim && weeklyReward.DeviceAllowed);
+            bool isDeviceAllowed = dailyReward.DeviceAllowed && weeklyReward.DeviceAllowed;
+            return (dailyReward, canClaim, isDeviceAllowed);
         }
         catch (Exception e)
         {
             lobbyView.OnError("Error while getting reward!");
-            return (null, false);
+            return (null, false, false);
         }
     }
 }

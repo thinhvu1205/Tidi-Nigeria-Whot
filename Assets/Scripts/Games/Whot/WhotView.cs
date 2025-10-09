@@ -18,6 +18,7 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 using GameState = Proto.GameState;
 using PrefabType = Globals.PrefabType;
+using Cysharp.Threading.Tasks;
 
 public class WhotView : BaseGameView
 {
@@ -132,12 +133,14 @@ public class WhotView : BaseGameView
         base.OnEnable();
         Init();
     }
-    
+
     protected override void OnDestroy()
     {
         // Clear all pools to ensure clean state
         PoolService.Instance.ClearPool<WhotCardModel>(PrefabType.WhotCard);
         PoolService.Instance.ClearPool<WhotChip>(PrefabType.ChipPlayerWhot);
+        _ = UIManager.Instance.LoadProfileUser();
+
     }
 
     #region API Handlers
@@ -1240,8 +1243,11 @@ public class WhotView : BaseGameView
     {
         if (new GameState[] { GameState.Idle, GameState.Matching, GameState.Finish, GameState.Reward }.Contains(gameState) || !GetCurrentPlayer().isPlaying)
         {
-            NetworkManager.INSTANCE.LeaveMatch();
-            Destroy(gameObject);
+            UniTask.Void(async () =>
+            {
+                await NetworkManager.INSTANCE.LeaveMatch();
+                Destroy(gameObject);
+            });
             UIManager.Instance.OpenBanner(TypeInAppMessage.Banner);
         }
         else

@@ -38,7 +38,7 @@ public class CheckInBonusView : BaseView
     private int VipLevel => (int)User.userProfile.VipLevel;
     private int dailyStreak = 0;
     private int weeklyStreak = 0;
-    private bool canClaimWeeklyReward = false;
+    private bool canClaimDailyReward = false, canClaimWeeklyReward = false;
     [SerializeField] private float nextClaimSec, currentClaimSec;
 
     protected override void Awake()
@@ -65,7 +65,6 @@ public class CheckInBonusView : BaseView
         DailyRewardTemplate dailyReward = await checkInBonusPresenter.GetDailyReward();
         UIManager.Instance.HideProgressing();
         listDailyRewardTemplate = dailyReward.RewardTemplates.ToList();
-        Debug.Log("DAILY REWARD TEMPLATE : " + dailyReward.ToString());
         InitDailyItems(isFill);
     }
 
@@ -76,13 +75,15 @@ public class CheckInBonusView : BaseView
         UIManager.Instance.HideProgressing();
         nextReward = reward;
         dailyStreak = (int)reward.Streak;
-        if (reward.CanClaim)
+        if (reward.CanClaim && reward.DeviceAllowed)
         {
             redDotDaily.SetActive(true);
+            canClaimDailyReward = true;
         }
         else
         {
             redDotDaily.SetActive(false);
+            canClaimDailyReward = false;
         }
         _ = GetDailyReward(isFill);
     }
@@ -93,7 +94,6 @@ public class CheckInBonusView : BaseView
         WeeklyBonusTemplate weeklyReward = await checkInBonusPresenter.GetWeeklyReward();
         UIManager.Instance.HideProgressing();
         listWeeklyRewardTemplate = weeklyReward.RewardTemplates.ToList();
-        Debug.Log("WEEKLY Bonus TEMPLATE : " + weeklyReward.ToString());
         InitWeeklyItems();
       
     }
@@ -102,11 +102,10 @@ public class CheckInBonusView : BaseView
     {
         UIManager.Instance.ShowProgressing();
         Reward reward = await checkInBonusPresenter.GetClaimableWeeklyReward();
-        Debug.Log("WEEKLY Can Claim : " + reward.ToString());
         UIManager.Instance.HideProgressing();
         canClaimWeeklyReward = reward.CanClaim;
         weeklyStreak = (int)reward.Streak;
-        if (reward.CanClaim)
+        if (reward.CanClaim && reward.DeviceAllowed)
         {
             redDotWeekly.SetActive(true);
         }
@@ -137,12 +136,14 @@ public class CheckInBonusView : BaseView
 
     public void OnClickReceiveDailyReward()
     {
+        if (!canClaimDailyReward) return;
         UIManager.Instance.ShowProgressing();
         _ = checkInBonusPresenter.ClaimDailyReward();
     }
 
     public void OnClickReceiveWeeklyReward()
     {
+        if (!canClaimWeeklyReward) return;
         UIManager.Instance.ShowProgressing();
         _ = checkInBonusPresenter.ClaimWeeklyReward();
     }
@@ -192,7 +193,7 @@ public class CheckInBonusView : BaseView
                 {
                     StartCoroutine(AnimateFill((dailyStreak - 1 + currentClaimSec / nextClaimSec) / (float)listDailyRewardTemplate.Count));
                 }
-                if (nextReward.CanClaim && nextReward.DeviceAllowed)
+                if (nextReward.CanClaim&& nextReward.DeviceAllowed)
                 {
                     state = RewardState.RECEIVABLE;
                     buttonClaimDailyChip.gameObject.SetActive(true);
@@ -279,7 +280,7 @@ public class CheckInBonusView : BaseView
             yield return new WaitForSeconds(1f);
             currentClaimSec += 1;
             imageProgress.fillAmount = (float)(dailyStreak - 1 + currentClaimSec / nextClaimSec) / 6;
-            if (currentClaimSec >= nextClaimSec)
+            if (currentClaimSec >= nextClaimSec && nextReward.CanClaim && nextReward.DeviceAllowed)
             {
                 nextClaimableDailyItem.ShowAnimationLight();
                 buttonClaimDailyChip.gameObject.SetActive(true);

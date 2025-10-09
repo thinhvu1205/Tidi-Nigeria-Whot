@@ -59,7 +59,7 @@ public class SlotIncaView : BaseSlotView
         {
             SpinType.NORMAL => "spinHoldforAuto",
             SpinType.FREE_NORMAL or SpinType.FREE_AUTO => "freespin",
-            SpinType.AUTO => "stop",
+            SpinType.AUTO => "autospin",
             _ => "autospin"
         };
     }

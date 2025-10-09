@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Globals;
+using Nakama;
 using Proto;
 using UnityEngine;
 
@@ -11,6 +14,12 @@ public class ChatWorldPresenter
     public void Init(ChatWorldView view)
     {
         chatWorldView = view;
+    }
+
+    public async UniTask<List<IApiChannelMessage>> GetWorldChatHistory()
+    {
+        IApiChannelMessageList result = await NetworkManager.INSTANCE.GetWorldChatHistory();
+        return result.Messages.ToList();
     }
 
     public async UniTask SendMessage(string message)

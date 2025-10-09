@@ -41,7 +41,7 @@ namespace Screens.LoginView
             }
             catch (Exception err)
             {
-                loginView.OnLoginError(err.Message);
+                loginView.OnLoginError("Fail to connect to server");
                 Debug.LogError($"Login guest error: {err}");
             }
         }

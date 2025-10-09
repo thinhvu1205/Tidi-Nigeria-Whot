@@ -17,6 +17,8 @@ public class NetworkManager : MonoBehaviour
     #region Variables
 
     public static NetworkManager INSTANCE { get; private set; }
+    public Action<IApiChannelMessage> OnMessageWorldReceived;
+    public Action<IApiChannelMessage> OnMessageTableReceived;
 
     private const string SESSION = "session",
         DEVICE_ID = "deviceId",
@@ -32,7 +34,9 @@ public class NetworkManager : MonoBehaviour
     private List<Action> _DataHandlerAs = new();
     private string _MatchId, worldChatChannelId;
     private readonly Queue<IMatchState> matchStateQueue = new Queue<IMatchState>();
+    private readonly Queue<IApiChannelMessage> messageQueue = new Queue<IApiChannelMessage>();
     private readonly object queueLock = new object();
+    private readonly object messageQueueLock = new object();
     private bool connected, isKickOff = false;
     #endregion
 
@@ -338,7 +342,7 @@ public class NetworkManager : MonoBehaviour
 
     #endregion
 
-    #region Real-time Chat
+    #region World Chat
     public async UniTask JoinWorldChat()
     {
         bool persistence = true;
@@ -351,7 +355,7 @@ public class NetworkManager : MonoBehaviour
 
     public async UniTask SendMessageWorldChat(string content)
     {
-        var content2 = new Dictionary<string, string> {{"hello", "world"}}.ToJson();
+        var content2 = new Dictionary<string, string> {{"content", content}}.ToJson();
         Debug.Log("MESSAGE: " + content.ToString());
         var sendAck = await _SocketIS.WriteChatMessageAsync(worldChatChannelId, content2);
         Debug.Log("SEND MESSAGE TO WORLD CHAT: " + sendAck.ToString());
@@ -361,10 +365,21 @@ public class NetworkManager : MonoBehaviour
     {
         _SocketIS.ReceivedChannelMessage += message =>
         {
+            lock (messageQueueLock)
+            {
+                // Debug.Log("add state queue " + state);
+                messageQueue.Enqueue(message);
+            }
             Debug.Log("Received: " + message);
             Debug.Log("Message content: " + message.Content);
         };
 
+    }
+
+    public async UniTask<IApiChannelMessageList> GetWorldChatHistory()
+    {
+        var result = await _ClientC.ListChannelMessagesAsync(_SessionIS, worldChatChannelId, 10, true);
+        return result; 
     }
 
     public async UniTask LeaveWorldChat()
@@ -614,6 +629,17 @@ public class NetworkManager : MonoBehaviour
                 var state = matchStateQueue.Dequeue();
                 // Debug.Log("get state dequeue " + state);
                 GameManager.Instance.HandleMatchState(state);
+            }
+        }
+        lock (messageQueueLock)
+        {
+            while (messageQueue.Count > 0)
+            {
+                var message = messageQueue.Dequeue();
+                if (message.ChannelId == worldChatChannelId)
+                { 
+                    OnMessageWorldReceived?.Invoke(message);
+                }
             }
         }
     }

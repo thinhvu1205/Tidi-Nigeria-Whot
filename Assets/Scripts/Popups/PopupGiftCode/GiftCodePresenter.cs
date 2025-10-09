@@ -37,7 +37,7 @@ public class GiftCodePresenter
                     _ = giftCodeView.OnSubmitFinished("Vip level not met require!");
                     break;
                 default:
-                    _ = giftCodeView.OnSubmitFinished(result.Message);
+                    _ = giftCodeView.OnSubmitFinished("You have received " + result.Value + " chips!");
                     break;
             }
         }
