@@ -140,7 +140,6 @@ public class WhotView : BaseGameView
         PoolService.Instance.ClearPool<WhotCardModel>(PrefabType.WhotCard);
         PoolService.Instance.ClearPool<WhotChip>(PrefabType.ChipPlayerWhot);
         _ = UIManager.Instance.LoadProfileUser();
-
     }
 
     #region API Handlers

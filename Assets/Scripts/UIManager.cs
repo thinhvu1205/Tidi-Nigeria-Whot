@@ -114,7 +114,7 @@ public class UIManager : Singleton<UIManager>
     
     #region Games
 
-    public async UniTask HandleFindAndJoinMatch(int markUnit)
+    public async UniTask HandleFindAndJoinMatch(int markUnit, bool typeWinMore = false)
     {
         RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, true);
         if (response == null) return;
@@ -128,7 +128,7 @@ public class UIManager : Singleton<UIManager>
             }
             else
             {
-                HandleOpenGame(labelMatch);
+                HandleOpenGame(labelMatch, typeWinMore);
             }
         }
     }
@@ -162,11 +162,19 @@ public class UIManager : Singleton<UIManager>
         }
     }
     
-    public void HandleOpenGame(Match labelMatch)
+    public void HandleOpenGame(Match labelMatch, bool isTypeWinMore = false)
     {
         HideProgressing();
+        
         if (gameView != null)
         {
+            if (isTypeWinMore)
+            {
+                gameView.LoadInfoMatch(labelMatch);
+                WhotView whotView = gameView as WhotView;
+                whotView?.Init();
+                return;
+            };
             Destroy(gameView.gameObject);
         }
         Debug.Log("CURRENT GAME: " + Config.currentGameId);

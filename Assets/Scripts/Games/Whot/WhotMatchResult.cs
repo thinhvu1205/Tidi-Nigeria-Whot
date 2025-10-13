@@ -129,7 +129,7 @@ public class WhotMatchResult : MonoBehaviour
             UniTask.Void(async () =>
             {
                 await DataSender.LeaveMatch();
-                await UIManager.Instance.HandleFindAndJoinMatch((int)higherMarkUnit);
+                await UIManager.Instance.HandleFindAndJoinMatch((int)higherMarkUnit, true);
             });
         });
     }
