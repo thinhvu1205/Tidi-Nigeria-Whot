@@ -135,6 +135,10 @@ public class SiXiangDragonPearlView : MonoBehaviour
             Sequence itemSequence = dragonPearlItem.SetInfo(spinSymbol);
             mainSequence.Join(itemSequence);
         }
+        if (!IsWinBirdEye)
+        {
+            GameView.UpdateDragonPearlFreeSpinLeft();
+        }
 
         // Khi toàn bộ sequence hoàn tất, gọi NextTween
         if (isFinishGame)
@@ -199,6 +203,8 @@ public class SiXiangDragonPearlView : MonoBehaviour
                         dragonPearlItem.SetInfo(item);
                     }
                 }
+                GameView.UpdateDragonPearlFreeSpinLeft();
+
             });
     }
     
@@ -238,7 +244,7 @@ public class SiXiangDragonPearlView : MonoBehaviour
     {
         GameView.ListSpinSymbol.ForEach(item =>
         {
-            if (item.WinAmount > 0)
+            if (item.WinAmount > 0 && item.Symbol != SiXiangSymbol.DragonpearlEyeDragon)
             {
                 DragonPearlItem dragonPearlItem = listItem[item.Col][item.Row];
                 dragonPearlItem.SetInfo(item, true);

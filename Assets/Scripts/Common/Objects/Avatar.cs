@@ -39,7 +39,12 @@ namespace Common.Objects
                 {
                     SetSpriteWithIndex(avaIndex);
                 }
-                
+
+            }
+            int vipLevel = (int)User.userProfile.VipLevel;
+            if (vipLevel > 0)
+            {
+                imageBorder.sprite = border[vipLevel - 1];
             }
 
             // else
@@ -57,36 +62,36 @@ namespace Common.Objects
             //         avtLink = avtLink.Replace("&access_token=%token%", "");
             //     }
 
-                //     if (fbName.Contains("fb."))
-                //     {
-                //         var idFb = fbName.Substring(3);
+            //     if (fbName.Contains("fb."))
+            //     {
+            //         var idFb = fbName.Substring(3);
 
-                //         avtLink = avtLink.Replace("%fbID%", idFb);
-                //     }
-                //     else if (fbId != "")
-                //     {
-                //         avtLink = avtLink.Replace("%fbID%", fbId);
-                //     }
+            //         avtLink = avtLink.Replace("%fbID%", idFb);
+            //     }
+            //     else if (fbId != "")
+            //     {
+            //         avtLink = avtLink.Replace("%fbID%", fbId);
+            //     }
 
-                //     avtLink = avtLink.Replace("%token%", Globals.User.AccessToken);
-                //     Debug.Log("loadAvatar:" + avtLink);
-                //     if (imageAvatar != null)
-                //     {
-                //         imageAvatar.sprite = await Config.GetRemoteSprite(avtLink);
-                //         if (imageAvatar.sprite == null) SetSpriteWithIndex(1); //default
-                //     }
-                // }
+            //     avtLink = avtLink.Replace("%token%", Globals.User.AccessToken);
+            //     Debug.Log("loadAvatar:" + avtLink);
+            //     if (imageAvatar != null)
+            //     {
+            //         imageAvatar.sprite = await Config.GetRemoteSprite(avtLink);
+            //         if (imageAvatar.sprite == null) SetSpriteWithIndex(1); //default
+            //     }
+            // }
 
-                // if (textName == null) return;
-                // if (name.Equals(""))
-                // {
-                //     textName.gameObject.SetActive(false);
-                // }
-                // else
-                // {
-                //     textName.gameObject.SetActive(true);
-                //     textName.text = name;
-                // }
+            // if (textName == null) return;
+            // if (name.Equals(""))
+            // {
+            //     textName.gameObject.SetActive(false);
+            // }
+            // else
+            // {
+            //     textName.gameObject.SetActive(true);
+            //     textName.text = name;
+            // }
         }
 
         public async void loadAvatarAsync(int idAva, string fbName, string fbId = "")

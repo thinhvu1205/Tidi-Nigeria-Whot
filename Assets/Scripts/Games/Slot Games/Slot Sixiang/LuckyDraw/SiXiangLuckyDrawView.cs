@@ -153,7 +153,7 @@ public class SiXiangLuckyDrawView : MonoBehaviour
     
     private void OnPlayAuto()
     {
-        if (isAutoPlay)
+        if (isAutoPlay && listItemRemain != null && listItemRemain.Count > 0)
         {
             int randomIndex = Random.Range(0, listItemRemain.Count);
             OnClickItem(listItemRemain[randomIndex]);
@@ -180,6 +180,7 @@ public class SiXiangLuckyDrawView : MonoBehaviour
 
     public void ShowResult()
     {
+        int indexJackpot = GetIndexJackpot();
         string soundPathStart = "";
         string soundPathEnd = "";
         if (jackpotType != JackpotType.NORMAL)
@@ -212,7 +213,7 @@ public class SiXiangLuckyDrawView : MonoBehaviour
                     Utility.PlayAnimationByPath(animationResult, RESULT_WIN_NORMAL_ANIMATION_PATH, "eng", false);
                     duration = 3f;
                 }
-                textTotalWin.SetValue(winAmount, true, duration * 0.85f, "", () =>
+                textTotalWin.SetValue(gameView.GetListDataJackpot[indexJackpot], true, duration * 0.85f, "", () =>
                 {
                     soundCount.Stop();
                     SoundManager.Instance.PlayEffectFromPath(soundPathEnd);
@@ -280,5 +281,19 @@ public class SiXiangLuckyDrawView : MonoBehaviour
             _ => "eng",
         };
         return animationName;
+    }
+
+    private int GetIndexJackpot()
+    {
+        int indexJackpot;
+        indexJackpot = jackpotType switch
+        {
+            JackpotType.MINOR => 0,
+            JackpotType.MAJOR => 1,
+            JackpotType.MEGA => 2,
+            JackpotType.GRAND => 3,
+            _ => 0,
+        };
+        return indexJackpot;
     }
 }

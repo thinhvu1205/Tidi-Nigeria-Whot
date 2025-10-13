@@ -26,7 +26,7 @@ public class LobbyView : BaseView
     private List<TextMeshProUGUI> listTextPreviewChatWorld = new();
     private LobbyPresenter lobbyPresenter;
     private int timeLeftToClaimReward;
-    private bool canClaimCheckinBonus, isDeviceAllowed;
+    private bool canClaimCheckinBonus, isDeviceAllowed, hasReachedMaxStreak;
     private ObjectPool<TextMeshProUGUI> textPreviewChatWorldPool;
     VideoPlayer.EventHandler videoStartedListener;
     VideoPlayer.EventHandler videoEndedListener;
@@ -130,12 +130,13 @@ public class LobbyView : BaseView
 
     private async UniTask GetClaimableReward()
     {
-        (Reward reward, bool canClaim, bool isDeviceAllowed) = await lobbyPresenter.GetClaimableReward();
+        (Reward reward, bool canClaim, bool isDeviceAllowed, bool hasReachedMaxStreak) = await lobbyPresenter.GetClaimableReward();
         UIManager.Instance.HideProgressing();
         if (reward == null) return;
         timeLeftToClaimReward = (int)reward.NextClaimSec;
         canClaimCheckinBonus = canClaim;
         this.isDeviceAllowed = isDeviceAllowed;
+        this.hasReachedMaxStreak = hasReachedMaxStreak;
 
         if (canClaim)
         {
@@ -145,7 +146,10 @@ public class LobbyView : BaseView
         {
             redDotChipBonus.SetActive(false);
         }
-        StartCoroutine(ClaimTimer());
+        if (isDeviceAllowed && !hasReachedMaxStreak)
+        {
+            StartCoroutine(ClaimTimer());
+        }
     }
 
     private void UpdateUIListGame()
@@ -200,7 +204,7 @@ public class LobbyView : BaseView
             yield return new WaitForSeconds(1f);
             textTimeLeftToClaimReward.text = Utility.ConvertTimeToString(timeLeftToClaimReward);
             timeLeftToClaimReward -= 1;
-            if (!canClaimCheckinBonus && isDeviceAllowed)
+            if (!canClaimCheckinBonus && isDeviceAllowed && !hasReachedMaxStreak)
             {
                 if (timeLeftToClaimReward < 0)
                 {
@@ -244,7 +248,7 @@ public class LobbyView : BaseView
     public void OnClickGiftCode() => UIManager.Instance.OpenGiftCode();
     public void OnClickBanner() => UIManager.Instance.OpenBanner(TypeInAppMessage.HotNews);
     public void OnClickSendGift() => UIManager.Instance.OpenSendGift();
-    public void OnClickSupport() => UIManager.Instance.OpenSupport();
+    public void OnClickSupport() => UIManager.Instance.OpenExchange();
     #endregion
 
     public void PlayVideoSiXiang(Match labelMatch)

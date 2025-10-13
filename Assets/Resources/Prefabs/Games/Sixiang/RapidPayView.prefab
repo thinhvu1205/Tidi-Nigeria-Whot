@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6058068766833752215}
   - component: {fileID: 8359765778648651009}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 7298263847601890645}
   - component: {fileID: 302886548774077046}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -332,7 +332,7 @@ GameObject:
   - component: {fileID: 5588954727175387673}
   - component: {fileID: 1684649525305956014}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1009,7 +1009,7 @@ GameObject:
   - component: {fileID: 3922931189905844575}
   - component: {fileID: 2863786976517086473}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1230,7 +1230,7 @@ GameObject:
   - component: {fileID: 3418177764499719867}
   - component: {fileID: 1350074233968479037}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1351,7 +1351,7 @@ GameObject:
   - component: {fileID: 3428467602413339090}
   - component: {fileID: 2645021636674346780}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1472,7 +1472,7 @@ GameObject:
   - component: {fileID: 3532024021829300987}
   - component: {fileID: 6094582687420893276}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1983,7 +1983,7 @@ GameObject:
   - component: {fileID: 5305753259327028733}
   - component: {fileID: 1822942211572599199}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2104,7 +2104,7 @@ GameObject:
   - component: {fileID: 6976021202216807760}
   - component: {fileID: 8573785451308267520}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 18
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3252,7 +3252,7 @@ GameObject:
   - component: {fileID: 8428351197694645150}
   - component: {fileID: 6025550270632497470}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3373,7 +3373,7 @@ GameObject:
   - component: {fileID: 7162719931897350809}
   - component: {fileID: 4522353524218014305}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3703,15 +3703,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 0
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -3856,7 +3858,7 @@ GameObject:
   - component: {fileID: 4177949792229689419}
   - component: {fileID: 5981710048595894130}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 16
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4079,7 +4081,7 @@ GameObject:
   - component: {fileID: 2460865665088339274}
   - component: {fileID: 1897776662606420783}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4371,7 +4373,7 @@ GameObject:
   - component: {fileID: 5960667991761470848}
   - component: {fileID: 6493858367318617921}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4492,7 +4494,7 @@ GameObject:
   - component: {fileID: 7157464948877851}
   - component: {fileID: 4875431485970296955}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5316,7 +5318,7 @@ GameObject:
   - component: {fileID: 6208442848346536101}
   - component: {fileID: 6424545692862723698}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5437,7 +5439,7 @@ GameObject:
   - component: {fileID: 621387757470941107}
   - component: {fileID: 323197390078650977}
   m_Layer: 5
-  m_Name: ItemPick
+  m_Name: ItemPick 17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5558,7 +5560,7 @@ GameObject:
   - component: {fileID: 4183507426491942560}
   - component: {fileID: 7988808696661431524}
   m_Layer: 5
-  m_Name: Item Pick
+  m_Name: Item Pick 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5984,15 +5986,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -6309,15 +6313,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 0
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -6460,15 +6466,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 0
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0

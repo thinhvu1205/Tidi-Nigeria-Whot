@@ -15,6 +15,7 @@ public class ChatWorldView : BaseView
     [SerializeField] private TMP_InputField chatInputField;
     [SerializeField] private TextMeshProUGUI textAccountChip;
     [SerializeField] private ScrollRect scrollRect;
+    [SerializeField] private TextMeshProUGUI textChip;
     private ChatWorldPresenter chatWorldPresenter;
     private List<IApiChannelMessage> listMessage = new();
 
@@ -30,6 +31,7 @@ public class ChatWorldView : BaseView
     protected override void OnEnable()
     {
         base.OnEnable();
+        UpdateProfileData();
         NetworkManager.INSTANCE.OnMessageWorldReceived += NetworkManager_OnMessageReceived;
     }
 
@@ -95,6 +97,14 @@ public class ChatWorldView : BaseView
         {
             _ = chatWorldPresenter.SendMessage(chatInputField.text);
             chatInputField.text = "";
+        }
+    }
+
+      public void UpdateProfileData()
+    {
+        if (User.userProfile != null)
+        {
+            textChip.text = Utility.FormatNumber(User.userProfile.AccountChip);
         }
     }
 

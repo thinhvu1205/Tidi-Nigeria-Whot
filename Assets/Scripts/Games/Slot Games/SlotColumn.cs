@@ -192,6 +192,18 @@ public class SlotColumn : MonoBehaviour
         }
     }
 
+    public void SetRandomFinishView()
+    {
+        int[] symbolIdArray = new int[3];
+        for (int i = 0; i < 3; i++)
+        {
+            int randomValue = Random.Range(0, 9);
+            symbolIdArray[i] = randomValue;
+        }
+        SetStartView(symbolIdArray);
+
+    }
+
     public void SetRandomSprite()
     {
         defaultItem.SetRandomData();

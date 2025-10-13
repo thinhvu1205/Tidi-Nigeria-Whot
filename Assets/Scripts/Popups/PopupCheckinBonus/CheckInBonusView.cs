@@ -26,7 +26,7 @@ public class CheckInBonusView : BaseView
     [SerializeField] private GameObject dailyItemTab, weeklyItemTab;
     [SerializeField] private GameObject selectedDailyTab, selectedWeeklyTab, redDotDaily, redDotWeekly;
     [SerializeField] private Transform weeklyItemParent, dailyItemParent;
-    [SerializeField] private Image imageProgress, imageChipDaily;
+    [SerializeField] private Image imageProgress, imageChipDaily, imageBoxChip;
     [SerializeField] private TextMeshProUGUI textClaimableDailyChip;
     [SerializeField] private Sprite[] listSpriteClaimableDailyChip;
     [SerializeField] private Button buttonClaimDailyChip;
@@ -126,7 +126,6 @@ public class CheckInBonusView : BaseView
 
     public void OnClickWeekly()
     {
-        imageProgress.fillAmount = 0;
         selectedDailyTab.SetActive(false);
         selectedWeeklyTab.SetActive(true);
         dailyItemTab.SetActive(false);
@@ -211,7 +210,17 @@ public class CheckInBonusView : BaseView
             }
             dailyItem.SetInfo(reward, VipLevel, state);
         }
-        StartCoroutine(ClaimTimer());
+        if (nextReward.ReachMaxStreak)
+        {
+            imageProgress.fillAmount = 1;
+            buttonClaimDailyChip.gameObject.SetActive(false);
+            imageBoxChip.gameObject.SetActive(false);
+        }
+        else
+        {
+            imageBoxChip.gameObject.SetActive(true);
+            StartCoroutine(ClaimTimer());
+        }
     }
 
     private void InitWeeklyItems()

@@ -8,6 +8,7 @@ using Color = UnityEngine.Color;
 using Globals;
 using System.Linq;
 using DG.Tweening;
+using System;
 
 public class RapidPayRow : MonoBehaviour
 {
@@ -18,11 +19,11 @@ public class RapidPayRow : MonoBehaviour
 
     private readonly int[][] listResultIndex = new int[][]
     {
-        new int[] { 0, 1 },
-        new int[] { 5, 6, 7 },
-        new int[] { 10, 11, 12, 13 },
-        new int[] { 15, 16, 17, 18 },
-        new int[] { 20, 21, 22, 23, 24 }
+        new int[] { 1, 0 },
+        new int[] { 7, 6, 5 },
+        new int[] { 13, 12, 11, 10 },
+        new int[] { 18, 17, 16, 15 },
+        new int[] { 24, 23, 22, 21, 20 }
     };
 
     private void Awake()
@@ -53,11 +54,11 @@ public class RapidPayRow : MonoBehaviour
         {
             btn.interactable = false;
         });
-        Debug.Log("SEND BUTTON INDEX: " + listButtonItem.IndexOf(btn));
+        Debug.Log("SEND BUTTON INDEX: " + (listButtonItem.Count - 1 - listButtonItem.IndexOf(btn)));
         InfoBet infoBet = new()
         {
             ReqSpecGame = (int)SiXiangGame.Rapidpay,
-            Id = listButtonItem.IndexOf(btn)
+            Id = (listButtonItem.Count - 1 - listButtonItem.IndexOf(btn))
         };
         DataSender.SendMatchState((long)OpCodeRequest.Spin, infoBet.ToByteArray());
     }
@@ -77,12 +78,13 @@ public class RapidPayRow : MonoBehaviour
         {
             btn.interactable = false;
         });
-        if (currentItemPick != null)
+        int buttonIndex = Array.IndexOf(listIndex, item.Index);
+        if (item != null)
         {
             DOTween.Sequence()
                 .AppendCallback(() =>
                 {
-                    SkeletonGraphic spineItemCurrent = currentItemPick.GetComponentInChildren<SkeletonGraphic>();
+                    SkeletonGraphic spineItemCurrent = listButtonItem[buttonIndex].GetComponentInChildren<SkeletonGraphic>();
                     Utility.PlayAnimationByPath(spineItemCurrent, ITEM_ANIMATION_PATH, GetAnimationName(item.Symbol), false);
 
                     if (GetAnimationName(item.Symbol).Equals("end"))
@@ -95,7 +97,7 @@ public class RapidPayRow : MonoBehaviour
                 {
                     for (int i = 0; i < listButtonItem.Count; i++)
                     {
-                        if (listButtonItem[i] != currentItemPick)
+                        if (listButtonItem[i] != listButtonItem[buttonIndex])
                         {
                             SkeletonGraphic spineItemCurrent = listButtonItem[i].GetComponentInChildren<SkeletonGraphic>();
                             spineItemCurrent.color = Color.gray;
@@ -127,6 +129,7 @@ public class RapidPayRow : MonoBehaviour
             SkeletonGraphic spine = button.GetComponentInChildren<SkeletonGraphic>();
             spine.color = Color.white;
             spine.gameObject.SetActive(false);
+            Utility.PlayAnimationByPath(spine, ITEM_ANIMATION_PATH, "normal", true);
         }   
     }
 }

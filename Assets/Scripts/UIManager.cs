@@ -178,6 +178,7 @@ public class UIManager : Singleton<UIManager>
             Destroy(gameView.gameObject);
         }
         Debug.Log("CURRENT GAME: " + Config.currentGameId);
+        _ = NetworkManager.INSTANCE.LeaveWorldChat();
         switch (Config.currentGameId)
         {
             case Constants.WHOT_GAME_ID:
@@ -228,6 +229,7 @@ public class UIManager : Singleton<UIManager>
             if (Constants.SLOT_GAMES_ID.Contains(Config.currentGameId) || new GameState[] { GameState.Idle, GameState.Matching, GameState.Finish }.Contains(gameView.GameState))
             {
                 await DataSender.LeaveMatch();
+                await NetworkManager.INSTANCE.JoinWorldChat();
                 Destroy(gameView.gameObject);
                 await LoadProfileUser();
             }

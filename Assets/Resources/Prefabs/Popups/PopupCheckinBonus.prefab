@@ -5526,6 +5526,7 @@ MonoBehaviour:
   dailyItemParent: {fileID: 6224188725517170997}
   imageProgress: {fileID: 919480740808058262}
   imageChipDaily: {fileID: 660511284562456655}
+  imageBoxChip: {fileID: 8370657313463663937}
   textClaimableDailyChip: {fileID: 2096150019737108285}
   listSpriteClaimableDailyChip:
   - {fileID: 21300000, guid: 26337d7f442af4ed391c0eba1f47c725, type: 3}

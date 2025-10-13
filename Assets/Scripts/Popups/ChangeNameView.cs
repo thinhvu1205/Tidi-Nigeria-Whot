@@ -48,7 +48,7 @@ public class ChangeNameView : BaseView
         catch (Exception ex)
         {
             UIManager.Instance.HideProgressing();
-            UIManager.Instance.ShowAlertDialog("Error:" + ex.Message);
+            UIManager.Instance.ShowAlertDialog(ex.Message);
         }
     }
 

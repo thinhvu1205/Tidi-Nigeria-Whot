@@ -184,8 +184,8 @@ public class SlotTarzanView : BaseSlotView
     private readonly List<int> diamondIndexList = new();
     private readonly List<SiXiangSymbol> spinSymbolList = new();
     private int lastDiamondCollect, diamondCollect;
-    private long updatedDiamondCollectAmount, diamondCollectChipAmount;
-    private bool isWinTarzan, isInMiniGame, isStartMiniGame, isEndMiniGame;
+    private long updatedDiamondCollectAmount, diamondCollectChipAmount, diamondPotAmount;
+    private bool isWinTarzan, isInMiniGame, isStartMiniGame, isEndMiniGame, isWinDiamondPot;
 
     protected override void Awake()
     {
@@ -224,6 +224,7 @@ public class SlotTarzanView : BaseSlotView
         diamondCollect = data.GameReward.PerlGreenForest;
         diamondCollectChipAmount = updatedDiamondCollectAmount;
         updatedDiamondCollectAmount = data.GameReward.PerlGreenForestChipsCollect;
+        diamondPotAmount = data.GameReward.PerlGreenForestChips;
 
         List<SiXiangSymbol> listSymbols = data.Matrix.Lists.ToList();
         List<SiXiangSymbol> spreadListSymbols = data.SpreadMatrix?.Lists.ToList() ?? new();
@@ -237,6 +238,7 @@ public class SlotTarzanView : BaseSlotView
         isStartMiniGame = data.NextSixiangGame == SiXiangGame.TarzanJungleTreasure && data.CurrentSixiangGame != SiXiangGame.TarzanJungleTreasure;
         isEndMiniGame = data.CurrentSixiangGame == SiXiangGame.TarzanJungleTreasure && data.NextSixiangGame == SiXiangGame.Normal;
         isInMiniGame = data.CurrentSixiangGame == SiXiangGame.TarzanJungleTreasure;
+        isWinDiamondPot = data.GameReward.PerlGreenForestChips > 0;
         winType = data.BigWin switch
         {
             BigWin.Big => WinType.BIG_WIN,
@@ -366,6 +368,10 @@ public class SlotTarzanView : BaseSlotView
             // Lần đầu setup Mini game Jungle
             if (data.CurrentSixiangGame == SiXiangGame.TarzanJungleTreasure)
             {
+                foreach (SlotColumn column in slotColumnList)
+                {
+                    column.SetRandomFinishView();
+                }
                 ShowMiniGame();
                 miniGameView.SetInfo(data);
             }
@@ -377,11 +383,6 @@ public class SlotTarzanView : BaseSlotView
             NextTween();
         }
 
-        if (lastDiamondCollect != 0 && diamondCollect == 0)
-        {
-            tweenQueue.Enqueue(() => ShowPopupDiamond());
-            NextTween();
-        }
 
         // JUNGLE LETTERS
             foreach (SpinSymbol spinSymbol in data.SpinSymbols)
@@ -433,6 +434,12 @@ public class SlotTarzanView : BaseSlotView
         if (CheckWinScatter())
         {
             tweenQueue.Enqueue(() => ShowWinScatter());
+        }
+
+        if (isWinDiamondPot)
+        {
+            tweenQueue.Enqueue(() => ShowPopupDiamond());
+            NextTween();
         }
 
         // ///------------------CHECK SHOW FREESPIN--------------------//
@@ -654,7 +661,7 @@ public class SlotTarzanView : BaseSlotView
             DisableAllCharacters();
             popupResultMinigame.gameObject.SetActive(false);
             effectContainer.gameObject.SetActive(false);
-            miniGameView.Hide();
+            miniGameView.Hide(false);
             NextTween();
         });
     }
@@ -669,7 +676,7 @@ public class SlotTarzanView : BaseSlotView
         popupResult.transform.localScale = new Vector2(.8f, .8f);
         popupResult.transform.DOScale(new Vector2(1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
 
-        chipRewardText.text = Utility.FormatMoney3(updatedDiamondCollectAmount, 10000);
+        chipRewardText.text = Utility.FormatMoney3(diamondPotAmount, 10000);
         SetCurrentChipValue(playerWalletAfter);
     }
 

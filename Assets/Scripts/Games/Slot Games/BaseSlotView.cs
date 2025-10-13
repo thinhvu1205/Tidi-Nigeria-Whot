@@ -321,6 +321,7 @@ public class BaseSlotView : BaseGameView
     public void OnTriggerUpSpinButton()
     {
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
+        if (!hasSetupStartView) return;
         isHoldingSpin = false;
         if (holdingSpinTime < AUTO_SPIN_HOLD_DURATION)
         {
@@ -358,8 +359,8 @@ public class BaseSlotView : BaseGameView
                         break;
 
                 }
-                tweenQueue.Clear();
-                NextTween();
+                // tweenQueue.Clear();
+                // NextTween();
                 // spinType = SpinType.NORMAL;
             }
         }
@@ -427,13 +428,14 @@ public class BaseSlotView : BaseGameView
     {
         if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT)
         {
-            return; 
+            return;
         }
 
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
         currentBetLevel = betLevelList[^1];
         SetCurrentBetText(currentBetLevel);
         SetCurrentBetImage(currentBetLevel);
+        HandleSpin();
     }
 
     public void OnClickShopButton()
@@ -634,8 +636,16 @@ public class BaseSlotView : BaseGameView
             SetLightAllItems();
             if (paylineList.Count == 0 && currentChipWin > 0)
             {
-                UpdateChipWinValue();
-                AnimateCoinsFly();
+                Debug.Log("KO NEN IN CHO NAY");
+                if (isInFreeSpin)
+                {
+                    UpdateTotalChipWinValue();
+                }
+                else
+                {
+                    UpdateChipWinValue();
+                    AnimateCoinsFly();
+                }
             }
             NextTween();
         });
@@ -643,7 +653,7 @@ public class BaseSlotView : BaseGameView
 
     protected void ShowWinAnimation(WinType winType)
     {
-        float delay = 5.7f;
+        float delay = 5f;
         effectContainer.gameObject.SetActive(true);
         animationEffect.gameObject.SetActive(true);
 
@@ -668,7 +678,17 @@ public class BaseSlotView : BaseGameView
                 // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
                 animationEffect.transform.localScale = new Vector2(1f, 1f);
                 // animationEffect.transform.localPosition = new Vector2(0, -70);
-                Utility.PlayAnimationByPath(animationEffect, MEGA_WIN_ANIMATION_PATH, MEGA_WIN_ANIMATION_NAME, false);
+                Utility.PlayAnimationByPath(animationEffect, BIG_WIN_ANIMATION_PATH, BIG_WIN_ANIMATION_NAME, false);
+                DOVirtual.DelayedCall(1.2f, () =>
+                {
+                    Utility.PlayAnimationByPath(animationEffect, MEGA_WIN_ANIMATION_PATH, MEGA_WIN_ANIMATION_NAME, false);
+                    animationEffect.AnimationState.Complete += delegate
+                    {
+                        effectContainer.gameObject.SetActive(false);
+                        NextTween();
+                        effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
+                    };
+                });
                 break;
             case WinType.HUGE_WIN:
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
@@ -698,12 +718,16 @@ public class BaseSlotView : BaseGameView
         {
             bigWinText.transform.parent.gameObject.SetActive(false);
         });
-        animationEffect.AnimationState.Complete += delegate
+
+        if (winType != WinType.MEGA_WIN)
         {
-            effectContainer.gameObject.SetActive(false);
-            NextTween();
-            effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
-        };
+            animationEffect.AnimationState.Complete += delegate
+            {
+                effectContainer.gameObject.SetActive(false);
+                NextTween();
+                effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
+            };
+        }
     }
 
     private void ShowThirdScatterColumn(int indexCol)
