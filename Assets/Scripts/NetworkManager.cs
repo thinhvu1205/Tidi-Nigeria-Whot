@@ -475,7 +475,7 @@ public class NetworkManager : MonoBehaviour
 
                 UIManager.Instance.HideProgressing();
                 // Global.IsFreeChipLoaded = false;
-                UIManager.Instance.OpenLoginScene();
+                await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
             };
             RegisterEventSocket();
             await JoinWorldChat();
@@ -489,7 +489,7 @@ public class NetworkManager : MonoBehaviour
         {
             Debug.LogError($"connect failed: {e}");
             // Global.IsFreeChipLoaded = false;
-            UIManager.Instance.OpenLoginScene();
+            await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
         }
     }
 

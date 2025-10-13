@@ -1,0 +1,161 @@
+syntax = "proto3";
+
+package proto;
+import "auth.proto";
+
+option go_package = "github.com/nk-nigeria/cgp-common/proto";
+
+// Lottery ticket status
+enum LotteryTicketStatus {
+  LOTTERY_TICKET_STATUS_WAITING = 0;
+  LOTTERY_TICKET_STATUS_WIN = 1;
+  LOTTERY_TICKET_STATUS_LOSE = 2;
+}
+
+// Lottery draw status
+enum LotteryDrawStatus {
+  LOTTERY_DRAW_STATUS_UPCOMING = 0;
+  LOTTERY_DRAW_STATUS_CLOSED = 1;
+  LOTTERY_DRAW_STATUS_DRAWN = 2;
+}
+
+// Request to buy lottery ticket
+message BuyLotteryTicketRequest {
+  repeated int32 numbers = 1; // 6 numbers from 1-49
+  int64 draw_id = 2; // Which draw session to participate
+}
+
+// Response after buying ticket
+message BuyLotteryTicketResponse {
+  LotteryTicket ticket = 1;
+  Profile profile = 2; // Updated user profile with new balance
+}
+
+// Request to buy multiple tickets
+message BuyMultipleLotteryTicketsRequest {
+  repeated LotteryTicketInput tickets = 1;
+}
+
+message LotteryTicketInput {
+  repeated int32 numbers = 1; // 6 numbers from 1-49
+  int64 draw_id = 2;
+}
+
+// Response for multiple tickets
+message BuyMultipleLotteryTicketsResponse {
+  repeated LotteryTicket tickets = 1;
+  Profile profile = 2;
+}
+
+// Lottery ticket data
+message LotteryTicket {
+  int64 id = 1;
+  string user_id = 2;
+  string user_name = 3;
+  repeated int32 numbers = 4; // 6 numbers chosen
+  int64 draw_id = 5;
+  int64 purchase_price = 6;
+  LotteryTicketStatus status = 7;
+  int64 reward = 8; // Amount won
+  int32 matched_count = 9; // How many numbers matched
+  int64 purchase_time_unix = 10;
+  int64 draw_time_unix = 11;
+}
+
+// Lottery draw session
+message LotteryDraw {
+  int64 id = 1;
+  int64 draw_time_unix = 2; // When the draw will happen
+  int64 close_time_unix = 3; // When ticket sales close (30 min before draw)
+  LotteryDrawStatus status = 4;
+  repeated int32 winning_numbers = 5; // The 6 winning numbers
+  int64 prize_pool = 6; // Total prize pool for this draw
+  int64 total_tickets_sold = 7;
+  int64 total_ticket_sales = 8; // Total money from ticket sales
+  int64 actual_draw_time_unix = 9; // When draw actually happened
+  WinnerStats winner_stats = 10; // Statistics about winners
+}
+
+// Statistics about winners in a draw
+message WinnerStats {
+  int32 winners_6_match = 1;
+  int32 winners_5_match = 2;
+  int32 winners_4_match = 3;
+  int32 winners_3_match = 4;
+  int32 winners_2_match = 5;
+  int64 prize_6_match = 6; // Total prize for 6 match winners
+  int64 prize_5_match = 7;
+  int64 prize_4_match = 8;
+  int64 prize_3_match = 9;
+  int64 prize_2_match = 10; // Refund amount per ticket
+}
+
+// Request to get user's lottery history
+message GetLotteryHistoryRequest {
+  string user_id = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+  LotteryTicketStatus status = 4; // Filter by status (optional)
+}
+
+// Response with user's lottery tickets
+message GetLotteryHistoryResponse {
+  repeated LotteryTicket tickets = 1;
+  int64 total = 2;
+}
+
+// Request to get available draws
+message GetAvailableDrawsRequest {
+  int32 limit = 1; // How many upcoming draws to fetch
+}
+
+// Response with available draws
+message GetAvailableDrawsResponse {
+  repeated LotteryDraw draws = 1;
+}
+
+// Request to get draw results
+message GetDrawResultRequest {
+  int64 draw_id = 1;
+}
+
+// Response with draw results
+message GetDrawResultResponse {
+  LotteryDraw draw = 1;
+}
+
+// Request to get latest draw result
+message GetLatestDrawResultRequest {}
+
+// Response with latest draw result
+message GetLatestDrawResultResponse {
+  LotteryDraw draw = 1;
+  repeated LotteryTicket user_tickets = 2; // User's tickets for this draw (if any)
+}
+
+// Request to get quick pick numbers
+message QuickPickRequest {
+  int32 count = 1; // How many sets of numbers to generate (default 1)
+}
+
+// Response with quick pick numbers
+message QuickPickResponse {
+  repeated QuickPickNumbers number_sets = 1;
+}
+
+message QuickPickNumbers {
+  repeated int32 numbers = 1; // 6 random numbers
+}
+
+// Admin request to manually trigger draw
+message TriggerDrawRequest {
+  int64 draw_id = 1;
+}
+
+// Admin response
+message TriggerDrawResponse {
+  LotteryDraw draw = 1;
+  string message = 2;
+}
+
+

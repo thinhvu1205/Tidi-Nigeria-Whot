@@ -70,7 +70,7 @@ public class SettingsView : BaseView
         PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
         PlayerPrefs.DeleteKey("UserName");
         PlayerPrefs.DeleteKey("PassWord");
-        UIManager.Instance.OpenLoginScene();
+        await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
     }
 
     public void OnClickQuitGame()

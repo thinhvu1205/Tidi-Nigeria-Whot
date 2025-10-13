@@ -23,6 +23,7 @@ namespace Screens.LoginView
             loginView.SetActive(true);
             loginForm.SetActive(false);
             SoundManager.Instance.PlayMusicLobby();
+            UIManager.Instance.HideProgressing();
         }
 
         protected override void Start()
@@ -104,23 +105,7 @@ namespace Screens.LoginView
         {
             try
             {
-                SceneManager.LoadScene(Config.MAIN_SCENE);
-                await UIManager.Instance.LoadProfileUser();
-                if (User.userProfile.PlayingMatch.MatchId != "")
-                {
-                    Debug.Log($"Joining match with ID: {User.userProfile.PlayingMatch.MatchId}");
-                    var labelMatch = await DataSender.JoinMatch(User.userProfile.PlayingMatch.MatchId);
-                    if (labelMatch != null)
-                    {
-                        Config.currentGameId = User.userProfile.PlayingMatch.Code;
-                        UIManager.Instance.HandleOpenGame(labelMatch);
-                    }
-                    // NetworkManager.INSTANCE.OnJoinMatch();
-                }
-                else
-                {
-                    UIManager.Instance.OpenBanner(TypeInAppMessage.Banner, 0.6f);
-                }
+                await UIManager.Instance.LoadScene(Config.MAIN_SCENE);
             }
             catch (Exception e)
             {

@@ -42,7 +42,8 @@ public class LobbyView : BaseView
         _ = GetClaimableReward();
         OnClickAllGamesTab();
         UIManager.Instance.lobbyView = this;
-
+        _ = NetworkManager.INSTANCE.JoinWorldChat();
+        _ = CheckUserInGame();
     }
 
 
@@ -69,7 +70,24 @@ public class LobbyView : BaseView
         CheckInBonusView.OnRewardClaimed -= CheckInBonusView_OnRewardClaimed;
     }
 
-
+    private async UniTask CheckUserInGame()
+    {
+        if (User.userProfile.PlayingMatch.MatchId != "")
+        {
+            Debug.Log($"Joining match with ID: {User.userProfile.PlayingMatch.MatchId}");
+            var labelMatch = await DataSender.JoinMatch(User.userProfile.PlayingMatch.MatchId);
+            if (labelMatch != null)
+            {
+                Config.currentGameId = User.userProfile.PlayingMatch.Code;
+                UIManager.Instance.HandleOpenGame(labelMatch);
+            }
+        }
+        else
+        {
+            UIManager.Instance.OpenBanner(TypeInAppMessage.Banner, 0.6f);
+        }
+    }
+    
     private void CheckInBonusView_OnRewardClaimed()
     {
         _ = GetClaimableReward();

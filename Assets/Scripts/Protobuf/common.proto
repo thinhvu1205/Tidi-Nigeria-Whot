@@ -326,6 +326,7 @@ message ListNotification {
 enum TypeInAppMessage {
   HOT_NEWS = 0;
   BANNER = 1;
+  EVENT = 2;
 }
 
 enum InAppMessageAction {
