@@ -439,7 +439,13 @@ public class DataSender
 
     public static async UniTask<ExchangeInfo> AddExchange()
     {
-        var response = await NetworkManager.INSTANCE.RPCSend(EXCHANGE_ADD);
+        ExchangeInfo exchangeInfo = new ExchangeInfo()
+        {
+            IdDeal =  "id_best_exchange_deal_2",
+            CashId = "0129525",
+            CashType = "gcashes"
+        };
+        var response = await NetworkManager.INSTANCE.RPCSend(EXCHANGE_ADD, exchangeInfo);
         return DecodeFromJson<ExchangeInfo>(response.Payload);
     }
 
