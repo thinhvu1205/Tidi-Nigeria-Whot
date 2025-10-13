@@ -46,7 +46,7 @@ public class DragonPearlItem : MonoBehaviour
 
         Sequence sequence = DOTween.Sequence();
       
-        if (WinAmount > 0)
+        if (WinAmount > 0 && data.Symbol != SiXiangSymbol.DragonpearlEyeDragon)
         {
             if (isDouble)
             {
@@ -92,7 +92,6 @@ public class DragonPearlItem : MonoBehaviour
                 .AppendCallback(() =>
                 {
                     dragonPearlView.GameView.UpdateTotalChipWinValue();
-                    dragonPearlView.GameView.UpdateDragonPearlFreeSpinLeft();
                     textChipValue.fontMaterial = materialText[0];
                     textChipValue.gameObject.SetActive(true);
                     textChipValue.text = Utility.FormatMoney(WinAmount, true);
@@ -192,8 +191,8 @@ public class DragonPearlItem : MonoBehaviour
                     }
                 case SiXiangSymbol.DragonpearlEyeDragon:
                     {
-                        string jackpotShakeAnimationName = "rung_" + GetJackpotAnimationName(data.Symbol);
-                        string jackpotNormalAnimationName = "normal_" + GetJackpotAnimationName(data.Symbol);
+                        string jackpotShakeAnimationName = "rung_" + GetJackpotAnimationName(data.WinJp);
+                        string jackpotNormalAnimationName = "normal_" + GetJackpotAnimationName(data.WinJp);
 
                         sequence
                             .AppendInterval(2f)
@@ -209,15 +208,17 @@ public class DragonPearlItem : MonoBehaviour
                             {
                                 textChipValue.gameObject.SetActive(true);
                                 textChipValue.fontMaterial = materialText[1];
-                                textChipValue.text = data.Symbol switch
+                                textChipValue.text = data.WinJp switch
                                 {
-                                    SiXiangSymbol.DragonpearlJpMinor => "MINOR",
-                                    SiXiangSymbol.DragonpearlJpMajor => "MAJOR",
-                                    SiXiangSymbol.DragonpearlJpMega => "MEGA",
-                                    SiXiangSymbol.DragonpearlJpGrand => "GRAND",
+                                    WinJackpot.Minor => "MINOR",
+                                    WinJackpot.Major => "MAJOR",
+                                    WinJackpot.Mega => "MEGA",
+                                    WinJackpot.Grand => "GRAND",
                                     _ => ""
                                 };
                                 spine.AnimationState.SetAnimation(0, jackpotNormalAnimationName, true);
+                                dragonPearlView.GameView.UpdateTotalChipWinValue();
+                                dragonPearlView.GameView.UpdateDragonPearlFreeSpinLeft();
                             });
                         break;
                     }
@@ -226,14 +227,14 @@ public class DragonPearlItem : MonoBehaviour
         return sequence;
     }
     
-    private string GetJackpotAnimationName(SiXiangSymbol symbol)
+    private string GetJackpotAnimationName(WinJackpot winJackpot)
     {
-        string animationName = symbol switch
+        string animationName = winJackpot switch
         {
-            SiXiangSymbol.DragonpearlJpMinor => "xanh",
-            SiXiangSymbol.DragonpearlJpMajor => "bien",
-            SiXiangSymbol.DragonpearlJpMega => "tim",
-            SiXiangSymbol.DragonpearlJpGrand => "do",
+            WinJackpot.Minor => "xanh",
+            WinJackpot.Major => "bien",
+            WinJackpot.Mega => "tim",
+            WinJackpot.Grand => "do",
             _ => "",
         };
         return animationName;

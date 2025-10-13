@@ -116,7 +116,8 @@ public class BaseSlotSymbolView : BaseGameView
     protected List<SiXiangGame> listGem = new();
     protected List<SpinSymbol> listSpinSymbol = new();
     protected Queue<TweenCallback> tweenQueue = new();
-    protected bool isHoldingSpin = false, isInSixiangBonus = false;
+    protected bool isHoldingSpin = false, isInSixiangBonus = false, isClickMaxBet = false;
+    protected long[] listDataJackpot;
     protected int autoSpinRemain = 0, freeSpinLeft = 0;
     protected float holdingSpinTime = 0;
     protected long currentBetLevel = 0, playerChip = 0, winAmount = 0, normalWinAmount = 0, lastWinAmount = 0, currentChipWin = 0, playerWalletAfter = 0, playerWallet = 0,
@@ -193,6 +194,7 @@ public class BaseSlotSymbolView : BaseGameView
                 Debug.Log("VAO DAY DE");
                 UpdateJackpot(data);
                 UpdateGem();
+
             }
         }
 
@@ -201,6 +203,7 @@ public class BaseSlotSymbolView : BaseGameView
 
     protected void HandleSpin()
     {
+        Debug.Log("HANDLE SPIN");
         InfoBet infoBet = new()
         {
             Chips = currentBetLevel,
@@ -208,6 +211,7 @@ public class BaseSlotSymbolView : BaseGameView
         DataSender.SendMatchState((long)OpCodeRequest.Spin, infoBet.ToByteArray());
         UpdateGameState(SlotGameState.SPINNING);
         IsSpinning = true;
+        isClickMaxBet = false;
     }
 
     private void OnBetLevelChanged()
@@ -217,6 +221,11 @@ public class BaseSlotSymbolView : BaseGameView
             Chips = currentBetLevel,
         };
         DataSender.SendMatchState((long)OpCodeRequest.Bet, infoBet.ToByteArray());
+    }
+
+    protected void GetMatchResult()
+    {
+        DataSender.SendMatchState((long)OpCodeRequest.InfoTable, new byte[0]);
     }
 
     #endregion
@@ -416,7 +425,8 @@ public class BaseSlotSymbolView : BaseGameView
                 // {
                 //     AnimateCoinsFly();
                 // }
-                NextTween();
+                if (tweenQueue.Count > 0)
+                    NextTween();
             });
     }
 
@@ -437,10 +447,10 @@ public class BaseSlotSymbolView : BaseGameView
             .AppendInterval(4f)
             .OnComplete(() =>
             {
-                if (spinType == SpinType.FREE_AUTO || spinType == SpinType.AUTO)
-                {
-                    AnimateCoinsFly();
-                }
+                // if ((spinType == SpinType.FREE_AUTO || spinType == SpinType.AUTO) && currentChipWin > 0)
+                // {
+                //     AnimateCoinsFly();
+                // }
                 SetLightAllItems();
                 NextTween();
             });
@@ -630,6 +640,16 @@ public class BaseSlotSymbolView : BaseGameView
             }
             SoundManager.Instance.PlayEffectFromPath(SoundSlot.BIGWIN_END);
         });
+
+        DOTween.Sequence()
+            .AppendInterval(10.0f)
+            .AppendCallback(() =>
+            {
+                if (animationSpecialWin.gameObject.activeSelf)
+                {
+                    HideSpecialWinAnimation();
+                }
+            });
     }
 
     public void HideSpecialWinAnimation()
@@ -796,7 +816,7 @@ public class BaseSlotSymbolView : BaseGameView
         if (currentGame != SiXiangGame.Normal) return;
         JackpotHistory jackpotHistory = data?.WinJpHistory;
         if (jackpotHistory == null) return;
-        long[] listDataJackpot = new long[]
+        listDataJackpot = new long[]
         {
             jackpotHistory.Minor.Chips,
             jackpotHistory.Major.Chips,
@@ -920,6 +940,7 @@ public class BaseSlotSymbolView : BaseGameView
     #region Effects
     protected void AnimateCoinsFly(int totalCoins = 7, float timeInterval = 0.02f)
     {
+        Debug.Log("ANIMATE COINS FLY");
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.CHIP_REWARD);
         Sequence sequence = DOTween.Sequence();
         for (int i = 0; i < totalCoins; i++)
@@ -938,6 +959,8 @@ public class BaseSlotSymbolView : BaseGameView
         sequence.OnComplete(() =>
         {
             SetCurrentChipValue(playerWalletAfter);
+            if (tweenQueue.Count > 0)
+                NextTween();
         });
     }
     protected void AnimateCoinFly(Image coin, Transform from, Transform to)
@@ -973,7 +996,7 @@ public class BaseSlotSymbolView : BaseGameView
 
     public void OnTriggerUpSpinButton()
     {
-        if (!IsButtonInteractable()) return;
+        if (!IsButtonInteractable() || !hasSetupStartView) return;
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
         isHoldingSpin = false;
         if (holdingSpinTime < AUTO_SPIN_HOLD_DURATION)
@@ -1013,8 +1036,8 @@ public class BaseSlotSymbolView : BaseGameView
                         break;
 
                 }
-                tweenQueue.Clear();
-                NextTween();
+                // tweenQueue.Clear();
+                // NextTween();
                 // spinType = SpinType.NORMAL;
             }
         }
@@ -1098,6 +1121,7 @@ public class BaseSlotSymbolView : BaseGameView
         currentBetLevel = listBetLevel[^1];
         SetCurrentBetImage(currentBetLevel);
         OnBetLevelChanged();
+        isClickMaxBet = true;
     }
 
     public void OnClickBuyGem(int index)
@@ -1193,7 +1217,7 @@ public class BaseSlotSymbolView : BaseGameView
      
     }
 
-    protected void UpdateColumnView(SlotDesk data)
+    protected virtual void UpdateColumnView(SlotDesk data)
     {
         List<SiXiangSymbol> listSymbols = data.Matrix.Lists.ToList();
         int totalCol = data.Matrix.Cols;
@@ -1357,6 +1381,7 @@ public class BaseSlotSymbolView : BaseGameView
     public List<SlotSymbolColumn> ListColumn => listColumn;
     public List<SpinSymbol> ListSpinSymbol => listSpinSymbol;
     public Transform InfoSessionBar => paylineInfoContainer;
+    public long[] GetListDataJackpot => listDataJackpot;
     public SpinType GetSpinType() => spinType;
     public long GetCurrentBetLevel() => currentBetLevel;
     protected bool IsSpinnable() => listBetLevel.Count > 0 && User.userProfile.AccountChip > currentBetLevel;

@@ -77,6 +77,8 @@ public class SiXiangGoldPickView : MonoBehaviour
         gameView = sixiangView;
         gameView.OnUpdateTable += SixiangView_OnUpdateTable;
         gameView.UpdateTotalChipWinValue();
+        textRemainingPick.text = remainPick + " Remaining Picks";
+
     }
     
     private void AutoPlay()

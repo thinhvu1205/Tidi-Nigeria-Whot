@@ -430,15 +430,25 @@ public class DataSender
         return DecodeFromJson<QuickChatUpdateRequest>(response.Payload);
     }
 
-    public static async UniTask<ExchangeInfo> AddExchange()
+    public static async UniTask<ExchangeInfo> AddExchange(string cashId, string idDeal)
     {
-        var response = await NetworkManager.INSTANCE.RPCSend(EXCHANGE_ADD);
+        ExchangeInfo exchangeInfo = new ExchangeInfo()
+        {
+            CashId = cashId,
+            IdDeal = idDeal,
+            CashType = "wing"
+        };
+        var response = await NetworkManager.INSTANCE.RPCSend(EXCHANGE_ADD, exchangeInfo);
         return DecodeFromJson<ExchangeInfo>(response.Payload);
     }
 
     public static async UniTask<ExchangeInfo> CancelExchange()
     {
-        var response = await NetworkManager.INSTANCE.RPCSend(EXCHANGE_CANCEL);
+        ExchangeInfo exchangeInfo = new ExchangeInfo()
+        {
+            
+        };
+        var response = await NetworkManager.INSTANCE.RPCSend(EXCHANGE_CANCEL, exchangeInfo);
         return DecodeFromJson<ExchangeInfo>(response.Payload);
     }
 
@@ -448,10 +458,10 @@ public class DataSender
         return DecodeFromJson<ExchangeDealInShop>(response.Payload);
     }
 
-    public static async UniTask<ExchangeInfo> GetListExchange()
+    public static async UniTask<ListExchangeInfo> GetListExchange()
     {
         var response = await NetworkManager.INSTANCE.RPCSend(LIST_EXCHANGE);
-        return DecodeFromJson<ExchangeInfo>(response.Payload);
+        return DecodeFromJson<ListExchangeInfo>(response.Payload);
     }
 
     public static async UniTask<GiftCode> ClaimGiftCode(string code)

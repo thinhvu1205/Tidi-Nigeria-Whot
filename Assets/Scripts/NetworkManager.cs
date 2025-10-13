@@ -38,10 +38,11 @@ public class NetworkManager : MonoBehaviour
     private readonly object queueLock = new object();
     private readonly object messageQueueLock = new object();
     private bool connected, isKickOff = false;
+    public string CurrentRoomChatChannelId { get; private set; }
     #endregion
 
     #region RPC
-    
+
     public async UniTask<IApiRpc> RPCSend(string apiName, IMessage protoMessage = null)
     {
         try
@@ -355,9 +356,9 @@ public class NetworkManager : MonoBehaviour
 
     public async UniTask SendMessageWorldChat(string content)
     {
-        var content2 = new Dictionary<string, string> {{"content", content}}.ToJson();
+        var data = new Dictionary<string, string> {{"content", content}}.ToJson();
         Debug.Log("MESSAGE: " + content.ToString());
-        var sendAck = await _SocketIS.WriteChatMessageAsync(worldChatChannelId, content2);
+        var sendAck = await _SocketIS.WriteChatMessageAsync(worldChatChannelId, data);
         Debug.Log("SEND MESSAGE TO WORLD CHAT: " + sendAck.ToString());
     }
 
@@ -384,7 +385,31 @@ public class NetworkManager : MonoBehaviour
 
     public async UniTask LeaveWorldChat()
     {
-        await _SocketIS.LeaveChatAsync(WORLD_CHAT_ROOM_NAME);
+        await _SocketIS.LeaveChatAsync(worldChatChannelId);
+    }
+    #endregion
+
+    #region Ingame Chat
+    public async UniTask JoinRoomChat(string roomName)
+    {
+        bool persistence = false;
+        bool hidden = false;
+        IChannel channel = await _SocketIS.JoinChatAsync(roomName, ChannelType.Room, persistence, hidden);
+        Debug.Log("Now connected to room channel id: " + channel.Id);
+        CurrentRoomChatChannelId = channel.Id;
+    }
+
+    public async UniTask SendMessageRoomChat(string content)
+    {
+        var data = new Dictionary<string, string> {{"content", content}}.ToJson();
+        Debug.Log("MESSAGE: " + content.ToString());
+        var sendAck = await _SocketIS.WriteChatMessageAsync(CurrentRoomChatChannelId, data);
+    }
+
+    public async UniTask LeaveRoomChat()
+    {
+        await _SocketIS.LeaveChatAsync(CurrentRoomChatChannelId);
+        CurrentRoomChatChannelId = "";
     }
     #endregion
 
@@ -453,6 +478,8 @@ public class NetworkManager : MonoBehaviour
                 UIManager.Instance.OpenLoginScene();
             };
             RegisterEventSocket();
+            await JoinWorldChat();
+
             // InitSocketChat();
             // InitSocketNotifications();
             // InitSocketMatchData();
@@ -637,8 +664,12 @@ public class NetworkManager : MonoBehaviour
             {
                 var message = messageQueue.Dequeue();
                 if (message.ChannelId == worldChatChannelId)
-                { 
+                {
                     OnMessageWorldReceived?.Invoke(message);
+                }
+                else
+                {
+                    OnMessageTableReceived?.Invoke(message);
                 }
             }
         }

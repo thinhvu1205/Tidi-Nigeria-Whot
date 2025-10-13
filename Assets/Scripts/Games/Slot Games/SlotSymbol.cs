@@ -136,12 +136,21 @@ public class SlotSymbol : MonoBehaviour
             sprite.sprite = listSpriteBlur[id];
         }
 
-        if (id == 11 || id == 13)
+        if (id == 11 || id == 12)
         {
             sprite.color = Color.white;
         }
 
         sprite.SetNativeSize();
+    }
+
+    public void SetSprite(Sprite sprite)
+    {
+        id = -1;
+        spine.gameObject.SetActive(false);
+        this.sprite.sprite = sprite;
+        this.sprite.color = Color.white;
+        this.sprite.SetNativeSize();    
     }
 
     public void SetRandomSprite()

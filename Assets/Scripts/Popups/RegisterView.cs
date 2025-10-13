@@ -1,14 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Globals;
 using Proto;
+using Screens.LoginView;
 using TMPro;
 using UnityEngine;
 
 public class RegisterView : BaseView
 {
     [SerializeField] private TMP_InputField userNameInputField, passwordInputField, reEnterPasswordInputField;
+    [SerializeField] private LoginView loginView;
 
     protected override void OnEnable()
     {
@@ -16,7 +19,7 @@ public class RegisterView : BaseView
         userNameInputField.text = "";
         passwordInputField.text = "";
         reEnterPasswordInputField.text = "";
-    }   
+    }
     public void OnSubmit()
     {
         HandleSubmit();
@@ -52,13 +55,15 @@ public class RegisterView : BaseView
         try
         {
             await NetworkManager.INSTANCE.CreateAccount(userName, password);
-            UIManager.Instance.ShowAlertDialog("Register successful!", () => Hide());
+            UIManager.Instance.ShowAlertDialog("Register successful!", () =>
+            {
+                Hide(false);
+                loginView.OnRegisterSuccess(userName, password);
+            });
         }
         catch (Exception ex)
         {
             UIManager.Instance.ShowAlertDialog(ex.Message);
         }
     }
-
-
 }

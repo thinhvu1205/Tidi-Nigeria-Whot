@@ -67,7 +67,8 @@ public class WhotView : BaseGameView
         LOSE_ANIMATION_PATH = "Whot/anim_victory/skeleton_SkeletonData",
         LOSE_ANIMATION_NAME = "better",
         VICTORY_ANIMATION_PATH = "Whot/anim_victory/skeleton_SkeletonData",
-        VICTORY_ANIMATION_NAME = "victory";
+        VICTORY_ANIMATION_NAME = "victory",
+        CHAT_ROOM_NAME = "whot";
     private WhotCardModel callCardModel, callCardModelLast;
     private List<WhotPlayer> playersList;
     private List<Player> rearrangedPlayersList;
@@ -89,6 +90,7 @@ public class WhotView : BaseGameView
     protected override void Awake()
     {
         base.Awake();
+        _ = NetworkManager.INSTANCE.JoinRoomChat(CHAT_ROOM_NAME);
     }
 
     protected override void Update()
@@ -1218,8 +1220,9 @@ public class WhotView : BaseGameView
         DataSender.SendMatchState((long)OpCodeRequest.CallWhot, cardObject.ToByteArray());
     }
     #endregion
-    
+
     #region Getters
+    public string GetChatRoomName() => CHAT_ROOM_NAME;
     public Transform GetCallCardParent() => callCardParent;
     public Transform GetDeckOfCardParent() => deckOfCardParent;
     public WhotPlayer GetCurrentPlayer() => playersList.Find(player => player.isCurrentPlayer);
@@ -1246,6 +1249,8 @@ public class WhotView : BaseGameView
             UniTask.Void(async () =>
             {
                 await NetworkManager.INSTANCE.LeaveMatch();
+                await NetworkManager.INSTANCE.LeaveRoomChat();
+                await NetworkManager.INSTANCE.JoinWorldChat();
                 Destroy(gameObject);
             });
             UIManager.Instance.OpenBanner(TypeInAppMessage.Banner);
@@ -1254,6 +1259,11 @@ public class WhotView : BaseGameView
         {
             UIManager.Instance.ShowToast("You cannot leave while the match is in progress!");
         }
+    }
+
+    public void OnClickChat()
+    {
+        UIManager.Instance.OpenChatInGame();
     }
 
 

@@ -219,6 +219,11 @@ public class SlotSymbolColumn : MonoBehaviour
         HideAllSpine();
     }
 
+    public void SetDragonPearlItemAtIndex(int index, int spriteId)
+    {
+        FinishSymbolView[index] = spriteId;
+    }
+
     public void SetAnimationForItemAtIndex(int index)
     {
         SlotSymbol symbol = listSymbols[index + 1];

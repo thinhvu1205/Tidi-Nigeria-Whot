@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Globals;
+using Nakama;
 using TMPro;
 using UnityEngine;
 
@@ -20,32 +22,32 @@ public class ChatInGameItem : MonoBehaviour
         rectTransformOtherPlayer = imageBackgroundOtherPlayer.GetComponent<RectTransform>();
     }
 
-    public void SetInfo(ChatData data)
+    public void SetInfo(IApiChannelMessage message, bool isCurrentPlayer)
     {
         // Current player
         if (true)
         {
-            currentPlayer.gameObject.SetActive(true);
-            textTimeCurrentPlayer.text = "12:34";
-            string text = "hellohelohghfodjisojfiosdfjsdiofs fjsdifojsdfjis";
-            // for (int i = 0; i < index; i++)
-            // {
-            //     text += "hello hello hello hello hello hello hello hello hello hello hello";
-            // }
-            textMessageCurrentPlayer.text = text;
-
-            float textWidth = textMessageCurrentPlayer.preferredWidth;
-            float textHeight = textMessageCurrentPlayer.preferredHeight;
-            rectTransformCurrentPlayer.sizeDelta = new Vector2(textWidth + PADDING_WIDTH, rectTransformCurrentPlayer.sizeDelta.y);
+            var payload = JsonUtility.FromJson<ChatPayload>(message.Content);
+            if (string.IsNullOrEmpty(payload.content))
+            {
+                Destroy(gameObject);
+            }
+            textName.text = message.Username;
+            textTimeOtherPlayer.text = Utility.ConvertISOToHHMM(message.CreateTime);
+            textMessageOtherPlayer.text = payload.content;
+            float textWidth = textMessageOtherPlayer.preferredWidth;
+            float textHeight = textMessageOtherPlayer.preferredHeight;
+            rectTransformOtherPlayer.sizeDelta = new Vector2(textWidth + PADDING_WIDTH, rectTransformOtherPlayer.sizeDelta.y);
             if (textWidth + PADDING_WIDTH > MAX_WIDTH)
             {
-                rectTransformCurrentPlayer.sizeDelta = new Vector2(MAX_WIDTH, textHeight);
+                rectTransformOtherPlayer.sizeDelta = new Vector2(MAX_WIDTH, rectTransformOtherPlayer.sizeDelta.y);
                 // imageNarrow.position = new Vector2(imageNarrow.position.x, imageNarrow.position.y - 30f);
             }
-            else if (textWidth + 30 < 300)
-            {
-                rectTransformCurrentPlayer.sizeDelta = new Vector2(textWidth + PADDING_WIDTH, rectTransformCurrentPlayer.sizeDelta.y);
-            }
+            Debug.Log("TEXT HEIGHT:" + textHeight);
+            // else if (textWidth + 30 < 300)
+            // {
+            //     rectTransform.sizeDelta = new Vector2(textWidth + 30, rectTransform.sizeDelta.y);
+            // }
 
         }
     }

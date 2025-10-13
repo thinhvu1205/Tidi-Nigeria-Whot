@@ -25,12 +25,12 @@ public class GroupMenuView : BaseView
 
     public void OnClickLeaveTable()
     {
-        UIManager.Instance.gameView = null;
-        SoundManager.Instance.PlayMusicLobby();
         UniTask.Void(async () =>
         {
            await UIManager.Instance.HandleLeaveGame();
            await UIManager.Instance.LoadProfileUser();
+            UIManager.Instance.gameView = null;
+            SoundManager.Instance.PlayMusicLobby();
            Hide();
         });
     }

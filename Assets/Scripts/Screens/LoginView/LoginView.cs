@@ -179,6 +179,12 @@ namespace Screens.LoginView
             string password = passwordInputField.text;
             _ = loginPresenter.OnLoginWithId(userName, password);
         }
+
+        public void OnRegisterSuccess(string userName, string password)
+        {
+            UIManager.Instance.ShowProgressing();
+            _ = loginPresenter.OnLoginWithId(userName, password);
+        }
     
         public void OnLoginFbClick() {
             UIManager.Instance.ShowProgressing();

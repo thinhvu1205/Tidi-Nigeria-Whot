@@ -77,6 +77,11 @@ public class SlotSixiangView : BaseSlotSymbolView
     public override void HandleUpdateTable(IMatchState matchState)
     {
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
+
+        if (data.CurrentSixiangGame <= SiXiangGame.Sixangbonus && data.NextSixiangGame > SiXiangGame.Sixangbonus)
+        {
+            GetMatchResult();
+        }
         Debug.Log("Slot : " + data.ToString());
         listSpinSymbol = data.Matrix.SpinLists.ToList();
         listGem = data.SixiangGems.ToList();
@@ -110,6 +115,10 @@ public class SlotSixiangView : BaseSlotSymbolView
 
                 UpdateJackpot(data);
                 UpdateGem();
+                if (isClickMaxBet)
+                {
+                    HandleSpin();
+                }
             }
         }
         CheckBonusGame(data);
@@ -121,6 +130,47 @@ public class SlotSixiangView : BaseSlotSymbolView
                 // ShowScatterView();
 
         if (!hasSetupStartView) hasSetupStartView = true;
+    }
+
+    protected override void UpdateColumnView(SlotDesk data)
+    {
+        if (IsInDragonPearl())
+        {
+            foreach (SlotSymbolColumn column in listColumn)
+            {
+                column.SetRandomFinishView();
+            }
+            List<SpinSymbol> listSpinSymbol = data.SpinSymbols.ToList();
+            bool isEyeWarrior = listSpinSymbol.Any((spinSymbol) => spinSymbol.Symbol == SiXiangSymbol.DragonpearlEyeWarrior);
+            foreach (SpinSymbol spinSymbol in listSpinSymbol)
+            {
+                int col = spinSymbol.Col;
+                int row = spinSymbol.Row;
+                if (new SiXiangSymbol[]
+                    {
+                        SiXiangSymbol.DragonpearlGemRandom1,
+                        SiXiangSymbol.DragonpearlGemRandom2,
+                        SiXiangSymbol.DragonpearlGemRandom3,
+                        SiXiangSymbol.DragonpearlGemRandom4,
+                        SiXiangSymbol.DragonpearlGemRandom5,
+                    }.Contains(spinSymbol.Symbol)
+                )
+                {
+                    Debug.Log("DUOC GOLD");
+                    if (isEyeWarrior) continue;
+                    listColumn[col].SetDragonPearlItemAtIndex(row, 11);
+                }
+                else
+                {
+                    Debug.Log("DUOC LIXI");
+                    listColumn[col].SetDragonPearlItemAtIndex(row, 12);
+                }
+            }
+        }
+        else
+        {
+            base.UpdateColumnView(data);
+        }
     }
 
     protected override void OnStartSpin()
@@ -135,7 +185,7 @@ public class SlotSixiangView : BaseSlotSymbolView
             SoundManager.Instance.PlayEffectFromPath(SoundSlot.SPIN_REEL);
             foreach (SlotSymbolColumn column in listColumn)
             {
-                column.SetRandomFinishView();
+                // column.SetRandomFinishView();
                 column.StartSpin(spinType);
             }
         }
@@ -347,6 +397,7 @@ public class SlotSixiangView : BaseSlotSymbolView
 
     public void ShowAnimationCutScene(bool isEndBonusGame = false)
     {
+        Debug.Log("ANIMATION CUT SCENE");
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.CUT_SCENE);
         animationCutScene.gameObject.SetActive(true);
         Utility.PlayAnimation(animationCutScene, "animation", false);
@@ -364,10 +415,12 @@ public class SlotSixiangView : BaseSlotSymbolView
                 if (rapidPayView != null)
                 {
                     rapidPayView.gameObject.SetActive(false);
+                    Destroy(rapidPayView);
                 }
                 if (luckyDrawView != null)
                 {
                     luckyDrawView.gameObject.SetActive(false);
+                    Destroy(luckyDrawView);
                 }
             }
             else
@@ -469,26 +522,31 @@ public class SlotSixiangView : BaseSlotSymbolView
     private void ShowAnimationWinJackpot(WinJackpotType winJackpotType)
     {
         string animationName = "";
+        int indexJackpot = 0;
         switch (winJackpotType)
         {
             case WinJackpotType.JACKPOT_MINOR:
                 {
                     animationName = "minor";
+                    indexJackpot = 0;
                     break;
                 }
             case WinJackpotType.JACKPOT_MAJOR:
                 {
                     animationName = "major";
+                    indexJackpot = 1;
                     break;
                 }
             case WinJackpotType.JACKPOT_MEGA:
                 {
                     animationName = "mega";
+                    indexJackpot = 2;
                     break;
                 }
             case WinJackpotType.JACKPOT_GRAND:
                 {
                     animationName = "grand";
+                    indexJackpot = 3;
                     break;
                 }
         }
@@ -502,7 +560,7 @@ public class SlotSixiangView : BaseSlotSymbolView
         buttonConfirmJackpotWin.gameObject.SetActive(false);
         textJackpotWin.ResetValue();
         AudioSource soundJackpot = SoundManager.Instance.PlayEffectFromPath(SoundSlot.WIN_JACKPOT_START);
-        textJackpotWin.SetValue(totalChipWinByGame, true, 4.0f, "", () =>
+        textJackpotWin.SetValue(listDataJackpot[indexJackpot], true, 4.0f, "", () =>
         {
             soundJackpot.Stop();
             SoundManager.Instance.PlayEffectFromPath(SoundSlot.WIN_JACKPOT_END);
@@ -564,7 +622,8 @@ public class SlotSixiangView : BaseSlotSymbolView
 
     private bool IsInDragonPearl()
     {
-        return currentGame == SiXiangGame.DragonPearl || currentGame == SiXiangGame.SixangbonusDragonPearl || nextGame == SiXiangGame.SixangbonusDragonPearl || isInSixiangBonus;
+        // || isInSixiangBonus
+        return currentGame == SiXiangGame.DragonPearl || currentGame == SiXiangGame.SixangbonusDragonPearl || nextGame == SiXiangGame.SixangbonusDragonPearl;
     }
     #endregion
 
@@ -637,15 +696,22 @@ public class SlotSixiangView : BaseSlotSymbolView
         UpdateTotalChipWinValue();
         tweenQueue.Enqueue(() =>
         {
-            Debug.Log("IS CHOOES BONUS GAME: " + isChooseBonusGame);
-            if (isChooseBonusGame)
+            if (nextGame == SiXiangGame.Sixangbonus || nextGame == SiXiangGame.Normal)
             {
-                ShowChooseBonusGame();
-                isChooseBonusGame = false;
+                if (isChooseBonusGame)
+                {
+                    ShowChooseBonusGame();
+                    isChooseBonusGame = false;
+                }
+                else
+                {
+                    AnimateCoinsFly();
+                }
+
             }
             else
             {
-                AnimateCoinsFly();
+                NextTween();
             }
         });
         DOTween.Sequence()
@@ -675,7 +741,8 @@ public class SlotSixiangView : BaseSlotSymbolView
 
     private void SetWinType(long winAmount)
     {
-
+        Debug.Log("CURRENT BET LEVEL: " + currentBetLevel);
+        Debug.Log("WIN AMOUNT: " + winAmount);
         winType = WinType.NONE;
         // if (isGrandJackpot)
         // {
@@ -709,13 +776,13 @@ public class SlotSixiangView : BaseSlotSymbolView
         switch (gameName)
         {
             case SIXIANG_GAME_NAME:
-                Utility.PlayAnimationByPath(animationBackground, SIXIANG_BACKGROUND_ANIMATION_PATH, "animation", false);
+                Utility.PlayAnimationByPath(animationBackground, SIXIANG_BACKGROUND_ANIMATION_PATH, "animation", true);
                 break;
             case DRAGON_PEARL_GAME_NAME:
-                Utility.PlayAnimationByPath(animationBackground, DRAGON_PEARL_BACKGROUND_ANIMATION_PATH, "animation", false);
+                Utility.PlayAnimationByPath(animationBackground, DRAGON_PEARL_BACKGROUND_ANIMATION_PATH, "animation", true);
                 break;
             case LUCKY_DRAW_GAME_NAME:
-                Utility.PlayAnimationByPath(animationBackground, LUCKY_DRAW_BACKGROUND_ANIMATION_PATH, "animation", false);
+                Utility.PlayAnimationByPath(animationBackground, LUCKY_DRAW_BACKGROUND_ANIMATION_PATH, "animation", true);
                 break;
 
         }

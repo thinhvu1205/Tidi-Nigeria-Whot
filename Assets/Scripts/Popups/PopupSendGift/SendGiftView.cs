@@ -26,7 +26,7 @@ public class SendGiftView : BaseView
         base.OnEnable();
         sendGiftBtn.onClick.AddListener(() => _ = OnClickSendGift());
         OnClickSendGiftTab();
-        currentChipTxt.text = User.userProfile.AccountChip.ToString();
+        currentChipTxt.text = Utility.FormatNumber(User.userProfile.AccountChip);
     }
     
     private void OnDisable()
@@ -107,7 +107,7 @@ public class SendGiftView : BaseView
         amountChipTxt.text = "";
         UIManager.Instance.ShowAlertDialog("Send gift successfully!");
         await UIManager.Instance.LoadProfileUser();
-        currentChipTxt.text = User.userProfile.AccountChip.ToString();
+        currentChipTxt.text = Utility.FormatNumber(User.userProfile.AccountChip);
     }
 
     private void LoadHistoryGiftSuccessful(Constants.WalletTransaction transaction)

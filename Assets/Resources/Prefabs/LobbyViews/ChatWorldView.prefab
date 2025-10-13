@@ -831,6 +831,7 @@ MonoBehaviour:
   chatInputField: {fileID: 4313995312609646448}
   textAccountChip: {fileID: 7133346059710703626}
   scrollRect: {fileID: 4940337967123660915}
+  textChip: {fileID: 7133346059710703626}
 --- !u!1 &4529897271000410626
 GameObject:
   m_ObjectHideFlags: 0

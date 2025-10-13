@@ -19,8 +19,10 @@ public class SiXiangRapidPayView : MonoBehaviour
 
     private SlotSixiangView gameView;
     private RapidPayRow currentRow;
+    private AudioSource soundMoney;
     private int indexRow = 0, multiplierBonus = 1;
     private long winAmount = 0;
+    private bool canSkipAnimation = false;
 
     private void OnDisable()
     {
@@ -43,7 +45,10 @@ public class SiXiangRapidPayView : MonoBehaviour
             .SetEase(Ease.InSine);
         textTotalBonus.text = "x" + multiplierBonus;
         textWinAmount.SetValue(gameView.GetCurrentBetLevel() / 2, true, 0.5f);
-
+        foreach(RapidPayRow rapidPayRow in listRows)
+        {
+            rapidPayRow.Reset();
+        }
     }
 
     private void SixiangView_OnUpdateTable(SlotSixiangView.OnUpdateTableEventArgs e)
@@ -94,24 +99,24 @@ public class SiXiangRapidPayView : MonoBehaviour
         string name = "";
         name = index switch
         {
-            0 => "17",
-            1 => "18",
-            5 => "14",
+            0 => "18",
+            1 => "17",
+            5 => "16",
             6 => "15",
-            7 => "16",
-            10 => "10",
-            11 => "11",
-            12 => "12",
-            13 => "13",
-            15 => "6",
-            16 => "7",
-            17 => "8",
-            18 => "9",
-            20 => "1",
-            21 => "2",
+            7 => "14",
+            10 => "13",
+            11 => "12",
+            12 => "11",
+            13 => "10",
+            15 => "9",
+            16 => "8",
+            17 => "7",
+            18 => "6",
+            20 => "5",
+            21 => "4",
             22 => "3",
-            23 => "4",
-            24 => "5",
+            23 => "2",
+            24 => "1",
             _ => name
         };
         return name;
@@ -130,21 +135,31 @@ public class SiXiangRapidPayView : MonoBehaviour
 
     private void ShowResult()
     {
+        canSkipAnimation = true;
         animationResult.transform.parent.gameObject.SetActive(true);
         Utility.PlayAnimation(animationResult, "eng", false); buttonCollect.gameObject.SetActive(false);
-        AudioSource soundMoney = SoundManager.Instance.PlayEffectFromPath(SoundSlot.COUNGTING_MONEY_START);
+        soundMoney = SoundManager.Instance.PlayEffectFromPath(SoundSlot.COUNGTING_MONEY_START);
         float timeRun = 2f;
         textWinResult.SetValue(winAmount, true, timeRun, "", () =>
         {
-            buttonCollect.gameObject.SetActive(true);
-            soundMoney.Stop();
-            SoundManager.Instance.PlayEffectFromPath(SoundSlot.COUNGTING_MONEY_END);
-
+            OnAnimationResultFinish();
         });
+    }
+
+    private void OnAnimationResultFinish()
+    {
+        textWinResult.SetValue(winAmount, false);
+        buttonCollect.gameObject.SetActive(true);
+        if (soundMoney != null)
+        {
+            soundMoney.Stop();
+        }
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.COUNGTING_MONEY_END);
     }
 
     public void OnClickCollect()
     {
+        canSkipAnimation = false;
         animationResult.transform
             .DOScale(new Vector2(0.8f, 0.8f), 0.3f)
             .SetEase(Ease.InBack)

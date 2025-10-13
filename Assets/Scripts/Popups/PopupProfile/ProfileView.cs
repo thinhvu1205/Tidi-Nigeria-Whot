@@ -18,7 +18,10 @@ public class ProfileView : BaseView
     [SerializeField] private GameObject avatarPrefab;
     [SerializeField] private Transform avatarContainer;
     [SerializeField] private Avatar avatar;
+    [SerializeField] private Image[] listImageStar;
+    [SerializeField] private Sprite[] listSpriteStar; // 0: Full, 1: Half, 2: Empty
     private ProfilePresenter profilePresenter;
+    
 
     protected override void Awake()
     {
@@ -52,6 +55,7 @@ public class ProfileView : BaseView
     {
         if (User.userProfile != null)
         {
+            int vipLevel = (int)User.userProfile.VipLevel;
             nameText.text = User.userProfile.DisplayName;
             idText.text = "ID: " + User.userProfile.UserSid;
             chipText.text = Utility.FormatNumber(User.userProfile.AccountChip);
@@ -66,6 +70,7 @@ public class ProfileView : BaseView
                 changePasswordButton.gameObject.SetActive(true);
             }
             avatar.LoadAvatar(User.userProfile.AvatarId);
+            SetVipStars(vipLevel);
         }
     }
 
@@ -86,6 +91,31 @@ public class ProfileView : BaseView
         }
     }
 
+    private void SetVipStars(int vip)
+    {
+        // Mỗi cấp VIP = 0.5 sao
+        float starValue = vip * 0.5f;
+
+        for (int i = 0; i < listImageStar.Length; i++)
+        {
+            if (starValue >= i + 1)
+            {
+                // Sao đầy
+                listImageStar[i].sprite = listSpriteStar[0];
+            }
+            else if (starValue > i)
+            {
+                // Sao nửa
+                listImageStar[i].sprite = listSpriteStar[1];
+            }
+            else
+            {
+                // Sao trống
+                listImageStar[i].sprite = listSpriteStar[2];
+            }
+        }
+    }
+
     private async Task OnUpdateAvatar(string name)
     {
         // await ShowToast(name);
@@ -103,10 +133,17 @@ public class ProfileView : BaseView
         Hide();
         UIManager.Instance.OpenChangePassword();
     }
+
     public void OnClickChangeName()
     {
         Hide();
         UIManager.Instance.OpenChangeName();
+    }
+
+    public void OnClickSendGift()
+    {
+        Hide();
+        UIManager.Instance.OpenSendGift();
     }
 
    
