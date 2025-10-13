@@ -225,10 +225,11 @@ public class UIManager : Singleton<UIManager>
     {
         if (gameView != null)
         {
-            if (new GameState[] { GameState.Idle, GameState.Matching, GameState.Finish }.Contains(gameView.GameState))
+            if (Constants.SLOT_GAMES_ID.Contains(Config.currentGameId) || new GameState[] { GameState.Idle, GameState.Matching, GameState.Finish }.Contains(gameView.GameState))
             {
                 await DataSender.LeaveMatch();
                 Destroy(gameView.gameObject);
+                await LoadProfileUser();
             }
         }
     }

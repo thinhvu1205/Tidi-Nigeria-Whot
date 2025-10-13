@@ -53,6 +53,13 @@ public class DataSender
     public const string LEADERBOARD_INFO = "leaderboard_info";
     public const string GET_JACKPOT = "jackpot";
     public const string INFO_MATCH = "info_match";
+    public const string BUY_LOTTERY_TICKET = "buy_lottery_ticket";
+    public const string BUY_MULTIPLE_LOTTERY_TICKETS = "buy_multiple_lottery_tickets";
+    public const string GET_LOTTERY_HISTORY = "get_lottery_history";
+    public const string GET_AVAILABLE_DRAWS = "get_available_draws";
+    public const string GET_LATEST_DRAW_RESULT = "get_latest_draw_result";
+    public const string QUICK_PICK = "quick_pick";
+    public const string TRIGGER_DRAW = "trigger_draw";
     #endregion
 
 
@@ -541,4 +548,177 @@ public class DataSender
     }
 
     #endregion
+
+    #region Lottery
+
+/// <summary>
+/// Buy a single lottery ticket
+/// </summary>
+public static async UniTask<BuyLotteryTicketResponse> BuyLotteryTicket(List<int> numbers, long drawId)
+{
+    try
+    {
+        BuyLotteryTicketRequest request = new()
+        {
+            DrawId = drawId
+        };
+        request.Numbers.AddRange(numbers);
+        
+        var response = await NetworkManager.INSTANCE.RPCSend(BUY_LOTTERY_TICKET, request);
+        return DecodeFromJson<BuyLotteryTicketResponse>(response.Payload);
+    }
+    catch (Exception ex)
+    {
+        Debug.LogError("BuyLotteryTicket failed: " + ex.Message);
+        UIManager.Instance.ShowAlertDialog("Failed to buy lottery ticket: " + ex.Message, null);
+        return null;
+    }
+}
+
+/// <summary>
+/// Buy multiple lottery tickets at once
+/// </summary>
+public static async UniTask<BuyMultipleLotteryTicketsResponse> BuyMultipleLotteryTickets(List<LotteryTicketInput> tickets)
+{
+    try
+    {
+        BuyMultipleLotteryTicketsRequest request = new();
+        request.Tickets.AddRange(tickets);
+        
+        var response = await NetworkManager.INSTANCE.RPCSend(BUY_MULTIPLE_LOTTERY_TICKETS, request);
+        return DecodeFromJson<BuyMultipleLotteryTicketsResponse>(response.Payload);
+    }
+    catch (Exception ex)
+    {
+        Debug.LogError("BuyMultipleLotteryTickets failed: " + ex.Message);
+        UIManager.Instance.ShowAlertDialog("Failed to buy lottery tickets: " + ex.Message, null);
+        return null;
+    }
+}
+
+/// <summary>
+/// Get lottery ticket history for current user
+/// </summary>
+public static async UniTask<GetLotteryHistoryResponse> GetLotteryHistory(int limit = 20, int offset = 0, LotteryTicketStatus? status = null, string userId = null)
+{
+    try
+    {
+        GetLotteryHistoryRequest request = new()
+        {
+            Limit = limit,
+            Offset = offset
+        };
+        
+        if (!string.IsNullOrEmpty(userId))
+        {
+            request.UserId = userId;
+        }
+        
+        if (status.HasValue)
+        {
+            request.Status = status.Value;
+        }
+        
+        var response = await NetworkManager.INSTANCE.RPCSend(GET_LOTTERY_HISTORY, request);
+        return DecodeFromJson<GetLotteryHistoryResponse>(response.Payload);
+    }
+    catch (Exception ex)
+    {
+        Debug.LogError("GetLotteryHistory failed: " + ex.Message);
+        UIManager.Instance.ShowAlertDialog("Failed to get lottery history: " + ex.Message, null);
+        return null;
+    }
+}
+
+/// <summary>
+/// Get available lottery draws
+/// </summary>
+public static async UniTask<GetAvailableDrawsResponse> GetAvailableDraws(int limit = 2)
+{
+    try
+    {
+        GetAvailableDrawsRequest request = new()
+        {
+            Limit = limit
+        };
+        
+        var response = await NetworkManager.INSTANCE.RPCSend(GET_AVAILABLE_DRAWS, request);
+        return DecodeFromJson<GetAvailableDrawsResponse>(response.Payload);
+    }
+    catch (Exception ex)
+    {
+        Debug.LogError("GetAvailableDraws failed: " + ex.Message);
+        UIManager.Instance.ShowAlertDialog("Failed to get available draws: " + ex.Message, null);
+        return null;
+    }
+}
+
+/// <summary>
+/// Get latest draw result with user's tickets
+/// </summary>
+public static async UniTask<GetLatestDrawResultResponse> GetLatestDrawResult()
+{
+    try
+    {
+        GetLatestDrawResultRequest request = new();
+        
+        var response = await NetworkManager.INSTANCE.RPCSend(GET_LATEST_DRAW_RESULT, request);
+        return DecodeFromJson<GetLatestDrawResultResponse>(response.Payload);
+    }
+    catch (Exception ex)
+    {
+        Debug.LogError("GetLatestDrawResult failed: " + ex.Message);
+        UIManager.Instance.ShowAlertDialog("Failed to get latest draw result: " + ex.Message, null);
+        return null;
+    }
+}
+
+/// <summary>
+/// Generate random lottery numbers (Quick Pick)
+/// </summary>
+public static async UniTask<QuickPickResponse> QuickPick(int count = 1)
+{
+    try
+    {
+        QuickPickRequest request = new()
+        {
+            Count = count
+        };
+        
+        var response = await NetworkManager.INSTANCE.RPCSend(QUICK_PICK, request);
+        return DecodeFromJson<QuickPickResponse>(response.Payload);
+    }
+    catch (Exception ex)
+    {
+        Debug.LogError("QuickPick failed: " + ex.Message);
+        UIManager.Instance.ShowAlertDialog("Failed to generate quick pick numbers: " + ex.Message, null);
+        return null;
+    }
+}
+
+/// <summary>
+/// Trigger a lottery draw (Admin only)
+/// </summary>
+public static async UniTask<TriggerDrawResponse> TriggerDraw(long drawId)
+{
+    try
+    {
+        TriggerDrawRequest request = new()
+        {
+            DrawId = drawId
+        };
+        
+        var response = await NetworkManager.INSTANCE.RPCSend(TRIGGER_DRAW, request);
+        return DecodeFromJson<TriggerDrawResponse>(response.Payload);
+    }
+    catch (Exception ex)
+    {
+        Debug.LogError("TriggerDraw failed: " + ex.Message);
+        UIManager.Instance.ShowAlertDialog("Failed to trigger draw: " + ex.Message, null);
+        return null;
+    }
+}
+
+#endregion
+    
 }
