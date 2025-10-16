@@ -114,11 +114,11 @@ public class BaseSlotView : BaseGameView
     protected List<GameObject> lineOneByOneList = new();
     protected Queue<TweenCallback> tweenQueue = new();
     protected List<Sequence> lineOneByOneSequenceList = new();
-    [SerializeField] protected long playerWallet, playerWalletAfter, currentBetLevel, lastChipWin = 0, currentChipWin = 0, totalChipWinByGame = 0, lastTotalChipWinByGame = 0;
+    [SerializeField] protected long playerWallet, playerWalletAfter, lastBetLevel, currentBetLevel, lastChipWin = 0, currentChipWin = 0, totalChipWinByGame = 0, lastTotalChipWinByGame = 0;
     protected int totalLineWin = 0, freeSpinLeft = 0;
     public int ScatterCount { get; set; } = 0;
     public bool IsSpinning { get; set; } = false;
-    protected bool isHoldingSpin, hasGotFreeSpin, isInFreeSpin, isLastFreeSpin, hasSetupStartView = false;
+    protected bool isHoldingSpin, hasGotFreeSpin, isInFreeSpin, isLastFreeSpin, hasSetupStartView = false, isClickMaxBet = false, isGetMatchResult = false;
     protected float holdingSpinTime = 0;
 
     protected override void Awake()
@@ -127,6 +127,7 @@ public class BaseSlotView : BaseGameView
         Init();
         InitColumns();
         UpdateSpinButtonUI();
+        SetSpinAnimation(spinType);
         SoundManager.Instance.PlayMusicInGame(SOUND_BACKGROUND_ANIMATION_PATH);
     }
 
@@ -145,7 +146,7 @@ public class BaseSlotView : BaseGameView
             BigWin.Big => WinType.BIG_WIN,
             BigWin.Mega => WinType.MEGA_WIN,
             _ => WinType.NONE,
-        };       
+        };
         Debug.Log("Slot : " +data.ToString());
         if (!hasSetupStartView)
         {
@@ -153,19 +154,31 @@ public class BaseSlotView : BaseGameView
         }
         else
         {
-            if (!IsSpinning) return;
+            if (!IsSpinning || isGetMatchResult)
+            {
+                isGetMatchResult = false;
+                return;
+            }
             OnStartSpin();
         }
 
         UpdateColumnView(data);
         UpdateReward(data);
+        SetWinType(data.GameReward.ChipsWin);     
         if (!hasSetupStartView) hasSetupStartView = true;
+    }
+
+    protected void GetMatchResult()
+    {
+        isGetMatchResult = true;
+        DataSender.SendMatchState((long)OpCodeRequest.InfoTable, new byte[0]);
     }
     #endregion
 
     #region Spin Actions
     protected void HandleSpin()
     {
+        Debug.Log("HANDLE SPIN");
         InfoBet infoBet = new()
         {
             Chips = currentBetLevel,
@@ -173,6 +186,7 @@ public class BaseSlotView : BaseGameView
         DataSender.SendMatchState((long)OpCodeRequest.Spin, infoBet.ToByteArray());
         UpdateGameState(SlotGameState.SPINNING);
         IsSpinning = true;
+        isClickMaxBet = false;
     }
 
     protected void OnStartSpin()
@@ -369,7 +383,7 @@ public class BaseSlotView : BaseGameView
     protected void HandleHoldingSpin()
     {
         // Ko Auto thì mới hold dc
-        if (isHoldingSpin && spinType != SpinType.AUTO && spinType != SpinType.FREE_AUTO)
+        if (isHoldingSpin && spinType != SpinType.AUTO && spinType != SpinType.FREE_AUTO && gameState != SlotGameState.SHOWING_RESULT)
         {
             holdingSpinTime += Time.deltaTime;
             if (holdingSpinTime > AUTO_SPIN_HOLD_DURATION)
@@ -397,7 +411,7 @@ public class BaseSlotView : BaseGameView
             return; 
         }
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
-
+        lastBetLevel = currentBetLevel;
         currentBetLevel = betLevelList.Find(bet => bet > currentBetLevel);
         if (currentBetLevel == 0)
         {
@@ -415,6 +429,7 @@ public class BaseSlotView : BaseGameView
         }
 
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
+        lastBetLevel = currentBetLevel;
         currentBetLevel = betLevelList.FindLast(bet => bet < currentBetLevel);
         if (currentBetLevel == 0)
         {
@@ -432,10 +447,14 @@ public class BaseSlotView : BaseGameView
         }
 
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
+        lastBetLevel = currentBetLevel;
         currentBetLevel = betLevelList[^1];
         SetCurrentBetText(currentBetLevel);
         SetCurrentBetImage(currentBetLevel);
-        HandleSpin();
+        if (lastBetLevel == currentBetLevel && !isInFreeSpin)
+        {
+            HandleSpin();
+        }
     }
 
     public void OnClickShopButton()
@@ -636,7 +655,6 @@ public class BaseSlotView : BaseGameView
             SetLightAllItems();
             if (paylineList.Count == 0 && currentChipWin > 0)
             {
-                Debug.Log("KO NEN IN CHO NAY");
                 if (isInFreeSpin)
                 {
                     UpdateTotalChipWinValue();
@@ -651,7 +669,7 @@ public class BaseSlotView : BaseGameView
         });
     }
 
-    protected void ShowWinAnimation(WinType winType)
+    protected virtual void ShowWinAnimation(WinType winType)
     {
         float delay = 5f;
         effectContainer.gameObject.SetActive(true);
@@ -1346,6 +1364,25 @@ public class BaseSlotView : BaseGameView
             {
                 HandleSpin();
             }
+        }
+    }
+
+    protected void SetWinType(long winAmount)
+    {
+        Debug.Log("CURRENT BET LEVEL: " + currentBetLevel);
+        Debug.Log("WIN AMOUNT: " + winAmount);
+        winType = WinType.NONE;
+        // if (isGrandJackpot)
+        // {
+        //     winAmount = winAmount + validBetLevels[currentBetLevel] * jackpotLevel[3];
+        // }
+        if (winAmount > 50 * currentBetLevel)
+        {
+            winType = WinType.MEGA_WIN;
+        }
+        else if (winAmount > 20 * currentBetLevel)
+        {
+            winType = WinType.BIG_WIN;
         }
     }
 

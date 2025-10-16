@@ -26,7 +26,7 @@ namespace Common.Objects
         public Image GetAvatar() => imageAvatar;
         public void SetAvatar(Sprite sprite) => imageAvatar.sprite = sprite;
 
-        public void LoadAvatar(string avatarIndex, string fbName = "", string fbId = "", string name = "")
+        public void LoadAvatar(string avatarIndex, long vip = 0)
         {
             if (string.IsNullOrEmpty(avatarIndex))
             {
@@ -41,7 +41,8 @@ namespace Common.Objects
                 }
 
             }
-            int vipLevel = (int)User.userProfile.VipLevel;
+            int vipLevel = (int)vip;
+            Debug.Log("VIP LEVEL: " + vipLevel);
             if (vipLevel > 0)
             {
                 imageBorder.sprite = border[vipLevel - 1];

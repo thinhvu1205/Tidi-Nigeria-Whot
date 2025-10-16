@@ -54,10 +54,10 @@ public class WhotPlayerResultItem : MonoBehaviour
             }
         }
 
-        avatar.LoadAvatar(player.AvatarId);
+        avatar.LoadAvatar(player.AvatarId, player.VipLevel);
         winnerImage.gameObject.SetActive(player.isWinner);
         nameText.text = player.GetPlayerName();
-        cashText.text = cash;
+        cashText.text = int.Parse(cash) >= 0 ? "+" + cash : cash;
         scoreText.text = score;
 
         foreach (Transform child in cardLeftParent)

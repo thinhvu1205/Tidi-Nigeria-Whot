@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Globals;
 using Proto;
@@ -18,6 +19,7 @@ public class ExchangeView : BaseView
     [SerializeField] private Transform exchangeDealItemParent, exchangeHistoryItemParent;
     private ExchangePresenter exchangePresenter;
     private List<Deal> listDeal;
+    private List<ExchangeInfo> listExchangeHistory;
     private string selectedDealId;
 
     protected override void Awake()
@@ -28,8 +30,24 @@ public class ExchangeView : BaseView
 
         GetListExchangeDeal();
         GetListExchangeHistory();
-        textYourChip.text = "Your chips: " + Utility.FormatNumber(User.userProfile.AccountChip);
-        textAccountChip.text = Utility.FormatNumber(User.userProfile.AccountChip);
+
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        UpdateProfileData();
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        User.OnProfileUpdated += UpdateProfileData;
+    }
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        User.OnProfileUpdated -= UpdateProfileData;
     }
 
     public async void GetListExchangeDeal()
@@ -53,14 +71,14 @@ public class ExchangeView : BaseView
     {
         try
         {
-            ListExchangeInfo exchangeDealInShop = await exchangePresenter.GetListExchange();
+            ListExchangeInfo listExchangeInfo = await exchangePresenter.GetListExchange();
             UIManager.Instance.HideProgressing();
-            UpdateUIListExchangeDeal();
-            Debug.Log("DEAL LIST: " + listDeal.ToString());
+            listExchangeHistory = listExchangeInfo.ExchangeInfos.ToList();
+            UpdateUIListExchangeHistory();
         }
         catch (Exception ex)
         {
-            UIManager.Instance.ShowAlertDialog("Fail to get list deal");
+            UIManager.Instance.ShowAlertDialog("Fail to get list history exchange");
             // throw;
         }
     }
@@ -80,10 +98,55 @@ public class ExchangeView : BaseView
         }
     }
 
+    private void UpdateUIListExchangeHistory()
+    {
+        foreach (Transform child in exchangeHistoryItemParent)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (ExchangeInfo exchangeInfo in listExchangeHistory)
+        {
+            ExchangeHistoryItem exchangeHistoryItem = Instantiate(exchangeHistoryItemPrefab, exchangeHistoryItemParent);
+            exchangeHistoryItem.SetInfo(exchangeInfo);
+            exchangeHistoryItem.OnClickCancel += ExchangeHistoryItem_OnClickCancel;
+
+        }
+    }
+
+    private void ExchangeHistoryItem_OnClickCancel(string exchangeId)
+    {
+        UIManager.Instance.ShowConfirmDialog("Do you want to cancel this exchange?", async () =>
+        { 
+            try
+            {
+                UIManager.Instance.ShowProgressing();
+                await exchangePresenter.CancelExchange(exchangeId);
+                UIManager.Instance.HideProgressing();
+                UIManager.Instance.ShowAlertDialog("Request canceled successful!", () => GetListExchangeHistory());
+
+            }
+            catch (Exception ex)
+            {
+                UIManager.Instance.HideProgressing();
+                UIManager.Instance.ShowAlertDialog(ex.Message);
+            }
+        });
+        
+    }
+
     private void ExchangeDealItem_OnClicked(long chips, string dealId)
     {
         cashInputField.text = chips.ToString();
         selectedDealId = dealId;
+    }
+
+    public void UpdateProfileData()
+    {
+        if (User.userProfile != null)
+        {
+            textYourChip.text = "Your chips: " + Utility.FormatNumber(User.userProfile.AccountChip);
+            textAccountChip.text = Utility.FormatNumber(User.userProfile.AccountChip);
+        }
     }
 
     public async void HandleConfirm()
@@ -106,7 +169,11 @@ public class ExchangeView : BaseView
         {
             UIManager.Instance.ShowProgressing();
             await exchangePresenter.AddExchange(id, selectedDealId);
-            UIManager.Instance.ShowAlertDialog("Request exchange successful!", () => OnClickTabHistory());
+            UIManager.Instance.ShowAlertDialog("Request exchange successful!", () =>
+            {
+                GetListExchangeHistory();
+                OnClickTabHistory();
+            });
             await UIManager.Instance.LoadProfileUser();
             UIManager.Instance.HideProgressing();
         }

@@ -163,6 +163,7 @@ public class DragonPearlItem : MonoBehaviour
                                     {
                                         textChipFSP.transform.localPosition = Vector2.zero;
                                         textChipFSP.gameObject.SetActive(false);
+                                        dragonPearlView.GameView.DragonPearlFreeSpinLeft += 3;
                                         dragonPearlView.GameView.UpdateDragonPearlFreeSpinLeft(true);
                                     });
                                 textChipFSP.DOFade(0, 0.5f).SetEase(Ease.InSine).SetId("fadeEffect");
@@ -201,9 +202,9 @@ public class DragonPearlItem : MonoBehaviour
                                 Utility.PlayAnimationByPath(spine, GOLD_ANIMATION_PATH, jackpotShakeAnimationName, false);
                                 spine.transform.localScale = Vector2.one;
 
-
                             })
-                            .AppendInterval(spine.Skeleton.Data.FindAnimation(jackpotShakeAnimationName).Duration)
+                            .AppendInterval(1.3f)
+                            // .AppendInterval(spine.Skeleton.Data.FindAnimation(jackpotShakeAnimationName).Duration)
                             .AppendCallback(() =>
                             {
                                 textChipValue.gameObject.SetActive(true);

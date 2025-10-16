@@ -34,7 +34,7 @@ namespace Globals
         NORMAL = 0,
         PLAYNOW = 1,
     }
-    
+
     public enum PrefabType
     {
         WhotCard,
@@ -57,6 +57,16 @@ namespace Globals
         SPINNING,
         SHOWING_RESULT,
         JOIN_GAME
+    }
+
+    public enum MetaBankAction
+    {
+        Unspecified = 0,
+        SendGift = 1,
+        RecvGift = 2,
+        RevertSendGift = 3,
+        PushToSafe = 4,
+        Withdraw = 5
     }
 }
 

@@ -172,6 +172,7 @@ public class WhotPlayerHand : MonoBehaviour
     #region Events
     public void WhotGame_OnNextTurn(WhotView.OnNextTurnEventArg e)
     {
+        Debug.Log("LẼ RA PHẢI SÁNG BÀI LÊN");
         if (e.playerTurn == whotGame.GetCurrentPlayer().Id)
         {
             WhotCardModel callCardModel = e.CallCardModel;

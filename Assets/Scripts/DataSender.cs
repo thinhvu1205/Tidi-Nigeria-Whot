@@ -296,7 +296,7 @@ public class DataSender
         catch (Exception ex)
         {
             Debug.LogError("JoinMatch failed: " + ex.Message);
-            UIManager.Instance.ShowAlertDialog(ex.Message, null);
+            UIManager.Instance.ShowAlertDialog("HEHEHE" + ex.Message, null);
             return null;
         }
     }
@@ -318,7 +318,16 @@ public class DataSender
         catch (Exception ex)
         {
             Error error = DecodeFromJson<Error>(ex.Message);
-            UIManager.Instance.ShowAlertDialog("Error : " + error.Error_);
+            switch (error.Code)
+            {
+                case 103: // Not enough Chip
+                    UIManager.Instance.ShowConfirmDialog(error.Error_, () => UIManager.Instance.OpenShop(), null, "Get More Chips");
+                    break;
+                default:
+                    UIManager.Instance.ShowAlertDialog(error.Error_);
+                    break;
+
+            }
             return null;
         }
     }
@@ -443,17 +452,17 @@ public class DataSender
         {
             CashId = cashId,
             IdDeal = idDeal,
-            CashType = "wing"
+            CashType = "gcash"
         };
         var response = await NetworkManager.INSTANCE.RPCSend(EXCHANGE_ADD, exchangeInfo);
         return DecodeFromJson<ExchangeInfo>(response.Payload);
     }
 
-    public static async UniTask<ExchangeInfo> CancelExchange()
+    public static async UniTask<ExchangeInfo> CancelExchange(string exchangeId)
     {
         ExchangeInfo exchangeInfo = new ExchangeInfo()
         {
-            
+            Id = exchangeId
         };
         var response = await NetworkManager.INSTANCE.RPCSend(EXCHANGE_CANCEL, exchangeInfo);
         return DecodeFromJson<ExchangeInfo>(response.Payload);

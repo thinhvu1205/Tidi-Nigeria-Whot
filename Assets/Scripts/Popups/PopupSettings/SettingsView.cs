@@ -47,7 +47,7 @@ public class SettingsView : BaseView
         {
             displayNameText.text = User.userProfile.DisplayName;
             userIdText.text = "ID: " + User.userProfile.UserSid;
-            avatar.LoadAvatar(User.userProfile.AvatarId);
+            avatar.LoadAvatar(User.userProfile.AvatarId, User.userProfile.VipLevel);
 
         }
         toggleSoundImage.gameObject.SetActive(Config.isOpenSound);

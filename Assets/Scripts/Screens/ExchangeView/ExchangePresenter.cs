@@ -55,5 +55,18 @@ public class ExchangePresenter
             return null;
         }
     }
+
+    public async Task<ExchangeInfo> CancelExchange(string exchangeId)
+    {
+        try
+        {
+            ExchangeInfo exchangeInfo = await DataSender.CancelExchange(exchangeId);
+            return exchangeInfo;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
 }
 

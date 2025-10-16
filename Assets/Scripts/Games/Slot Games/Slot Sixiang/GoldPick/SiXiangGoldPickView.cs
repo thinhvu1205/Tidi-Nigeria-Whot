@@ -176,6 +176,7 @@ public class SiXiangGoldPickView : MonoBehaviour
     public void SixiangView_OnUpdateTable(SlotSixiangView.OnUpdateTableEventArgs e)
     {
         SlotDesk data = e.data;
+        if (data.SpinSymbols.Count == 0) return;
         SpinSymbol item = data.SpinSymbols[0];
 
         if (currentItemClick != null)
@@ -249,18 +250,17 @@ public class SiXiangGoldPickView : MonoBehaviour
         DOTween.Sequence()
             .AppendInterval(2.0f);
         buttonConfirm.gameObject.SetActive(true);
-        if (gameView.GetSpinType() == SpinType.AUTO)
-        {
-            DOTween.Sequence()
-                .AppendInterval(3.0f)
-                .AppendCallback(() =>
+   
+        DOTween.Sequence()
+            .AppendInterval(10.0f)
+            .AppendCallback(() =>
+            {
+                if (gameObject.activeSelf)
                 {
-                    if (gameObject.activeSelf)
-                    {
-                        OnClickCollect();
-                    }
-                }).SetId("autoEnd");
-        }
+                    OnClickCollect();
+                }
+            }).SetId("autoEnd");
+        
     }
     
     private GameObject CreateItemGold()

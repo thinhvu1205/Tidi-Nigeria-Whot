@@ -193,7 +193,7 @@ public class LobbyView : BaseView
             displayNameText.text = User.userProfile.DisplayName;
             userIdText.text = "ID: " + User.userProfile.UserSid;
             accountChip.text = Utility.FormatNumber(User.userProfile.AccountChip);
-            avatar.LoadAvatar(User.userProfile.AvatarId);
+            avatar.LoadAvatar(User.userProfile.AvatarId, User.userProfile.VipLevel);
         }
     }
 
@@ -249,6 +249,17 @@ public class LobbyView : BaseView
     public void OnClickBanner() => UIManager.Instance.OpenBanner(TypeInAppMessage.HotNews);
     public void OnClickSendGift() => UIManager.Instance.OpenSendGift();
     public void OnClickSupport() => UIManager.Instance.OpenExchange();
+    public void OnClickTimeScale()
+    {
+        if (Time.timeScale == 1)
+        {
+            Time.timeScale = 6;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+    }
     #endregion
 
     public void PlayVideoSiXiang(Match labelMatch)

@@ -88,8 +88,8 @@ public class BannerView : BaseView
 [Serializable]
 public struct Pos
 {
-    public int x;
-    public int y;
+    public float x;
+    public float y;
 }
 
 [Serializable]

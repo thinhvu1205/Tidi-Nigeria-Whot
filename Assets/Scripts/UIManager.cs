@@ -241,13 +241,13 @@ public class UIManager : Singleton<UIManager>
     #endregion
 
     #region Popups
-    public void ShowConfirmDialog(string content, Action confirmCallback = null, Action cancelCallback = null)
+    public void ShowConfirmDialog(string content, Action confirmCallback = null, Action cancelCallback = null, string textOk = "OK", string textCancel = "Cancel")
     {
         DialogView dialogView = Instantiate(LoadPrefabPopup("Dialog"), parentPopups).GetComponent<DialogView>();
         dialogView.transform.localScale = Vector3.one;
         dialogView.SetContent(content);
-        dialogView.ConfigConfirmButton(true, "OK", confirmCallback);
-        dialogView.ConfigCancelButton(true, "Cancel", cancelCallback);
+        dialogView.ConfigConfirmButton(true, textOk, confirmCallback);
+        dialogView.ConfigCancelButton(true, textCancel, cancelCallback);
     }
 
     public void ShowAlertDialog(string content, Action confirmCallback = null)

@@ -86,7 +86,7 @@ public class SendGiftView : BaseView
         try
         {
             UIManager.Instance.ShowProgressing();
-            string metaBankActionStr = ((int)Constants.MetaBankAction.SendGift).ToString();
+            string metaBankActionStr = ((int)MetaBankAction.SendGift).ToString();
             Constants.WalletTransaction walletTransaction =
                 await DataSender.GetTransactionHistory(20,
                     metaBankAction: metaBankActionStr);

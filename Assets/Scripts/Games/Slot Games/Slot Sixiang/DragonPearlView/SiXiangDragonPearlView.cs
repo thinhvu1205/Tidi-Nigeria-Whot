@@ -115,7 +115,7 @@ public class SiXiangDragonPearlView : MonoBehaviour
         IsWinWarriorEye = listSpinSymbol.Any(symbol => symbol.Symbol == SiXiangSymbol.DragonpearlEyeWarrior);
         IsWinTigerEye = listSpinSymbol.Any(symbol => symbol.Symbol == SiXiangSymbol.DragonpearlEyeTiger);
         IsWinBirdEye = listSpinSymbol.Any(symbol => symbol.Symbol == SiXiangSymbol.DragonpearlEyeBird);
-        isWinGrandJackpot = data.WinJp == WinJackpot.Grand;
+        isWinGrandJackpot = (int)data.WinJp == 100;
     }
 
     public void OnStopSpin()
@@ -135,14 +135,15 @@ public class SiXiangDragonPearlView : MonoBehaviour
             Sequence itemSequence = dragonPearlItem.SetInfo(spinSymbol);
             mainSequence.Join(itemSequence);
         }
-        if (!IsWinBirdEye)
-        {
-            GameView.UpdateDragonPearlFreeSpinLeft();
-        }
+        // if (!IsWinBirdEye)
+        // {
+        //     GameView.UpdateDragonPearlFreeSpinLeft();
+        // }
 
         // Khi toàn bộ sequence hoàn tất, gọi NextTween
         if (isFinishGame)
         {
+            Debug.Log("IS SHOW GRAND JACKPOT: " + isWinGrandJackpot);
             mainSequence.AppendInterval(2.5f);
             mainSequence.AppendCallback(() =>
             {

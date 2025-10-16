@@ -524,7 +524,7 @@ public class NetworkManager : MonoBehaviour
         {
             lock (queueLock)
             {
-                // Debug.Log("add state queue " + state);
+                Debug.Log("add state queue " + state);
                 matchStateQueue.Enqueue(state);
             }
         };
@@ -642,6 +642,48 @@ public class NetworkManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         PreConnect();
     }
+
+    // void OnApplicationPause(bool paused)
+    // {
+    //     if (paused)
+    //     {
+    //         if (_SocketIS != null && _SocketIS.IsConnected)
+    //         {
+    //             _SocketIS.CloseAsync(); // hoặc await socket.DisconnectAsync()
+    //         }
+    //     }
+    //     else
+    //     {
+    //         if (_SocketIS != null && !_SocketIS.IsConnected)
+    //         {
+    //             Debug.Log("[Nakama] App resumed -> reconnecting socket");
+    //             // _ = _SocketIS.ConnectAsync(_SessionIS, true);
+    //             _ = InitSocket(_SessionIS);
+
+    //         }
+    //     }
+    // }
+
+    // void OnApplicationPause(bool pause)
+    // {
+    //     if (pause)
+    //     {
+    //             if (_SocketIS != null && _SocketIS.IsConnected)
+    //             {
+    //             Debug.Log("[Nakama] App paused -> disconnecting socket");
+    //             _SocketIS.CloseAsync();
+
+    //         }
+    //     }
+    //     else
+    //     {
+    //         if (_SessionIS != null)
+    //         {
+    //             Debug.Log("[Nakama] App resumed -> reconnecting socket");
+    //             _ = InitSocket(_SessionIS);
+    //         }
+    //     }
+    // }
 
     private void Update()
     {

@@ -91,7 +91,7 @@ public class SlotJuicyView : BaseSlotView
             BigWin.Mega => WinType.MEGA_WIN,
             _ => WinType.NONE,
         };
-
+        SetWinType(data.GameReward.ChipsWin);     
 
         if (totalCol >= 5)
         {   
@@ -164,6 +164,10 @@ public class SlotJuicyView : BaseSlotView
             else
             {
                 UpdateJackpot();
+                if (isClickMaxBet)
+                {
+                    HandleSpin();
+                }
                 return;
             }
         }
@@ -350,10 +354,19 @@ public class SlotJuicyView : BaseSlotView
     {
         if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT)
         {
-            return; 
+            return;
         }
-        base.OnClickMaxBetButton();
+
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
+        lastBetLevel = currentBetLevel;
+        currentBetLevel = betLevelList[^1];
+        SetCurrentBetText(currentBetLevel);
+        SetCurrentBetImage(currentBetLevel);
         OnBetLevelChanged();
+        if (lastBetLevel == currentBetLevel)
+        {
+            isClickMaxBet = true;
+        }
     }
 
     public override void OnClickMinusBetButton()

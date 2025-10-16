@@ -7,7 +7,7 @@ using Globals;
 using Nakama;
 using Spine.Unity;
 using TMPro;
-using Unity.VisualScripting;
+using Color = UnityEngine.Color;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -186,6 +186,7 @@ public class SlotTarzanView : BaseSlotView
     private int lastDiamondCollect, diamondCollect;
     private long updatedDiamondCollectAmount, diamondCollectChipAmount, diamondPotAmount;
     private bool isWinTarzan, isInMiniGame, isStartMiniGame, isEndMiniGame, isWinDiamondPot;
+    private float multiFreeGame;
 
     protected override void Awake()
     {
@@ -225,11 +226,16 @@ public class SlotTarzanView : BaseSlotView
         diamondCollectChipAmount = updatedDiamondCollectAmount;
         updatedDiamondCollectAmount = data.GameReward.PerlGreenForestChipsCollect;
         diamondPotAmount = data.GameReward.PerlGreenForestChips;
-
+        multiFreeGame = data.GameReward.RatioBonus;
         List<SiXiangSymbol> listSymbols = data.Matrix.Lists.ToList();
         List<SiXiangSymbol> spreadListSymbols = data.SpreadMatrix?.Lists.ToList() ?? new();
 
         int totalCol = data.Matrix.Cols;
+        if (isGetMatchResult)
+        {
+            isGetMatchResult = false;
+            return;
+        }
 
         isInFreeSpin = data.CurrentSixiangGame == SiXiangGame.TarzanFreespinx9;
         hasGotFreeSpin = data.NextSixiangGame == SiXiangGame.TarzanFreespinx9 && data.CurrentSixiangGame != SiXiangGame.TarzanFreespinx9;
@@ -245,62 +251,64 @@ public class SlotTarzanView : BaseSlotView
             BigWin.Mega => WinType.MEGA_WIN,
             _ => WinType.NONE,
         };
+        SetWinType(data.GameReward.ChipsWin);     
+
 
         // Setup column view
-        if (totalCol >= 5 && !isInMiniGame)
-        {
-            for (int col = 0; col < totalCol; col++)
+            if (totalCol >= 5 && !isInMiniGame)
             {
-                SlotColumn column = slotColumnList[col];
-                int[] columnArray = new int[3];
-                int[] spreadColumnArray = new int[3];
-
-                for (int row = 0; row < 3; row++)
+                for (int col = 0; col < totalCol; col++)
                 {
-                    // Tính index theo layout ngang
-                    int index = row * 5 + col;
-                    SiXiangSymbol symbol = listSymbols[index];
-                    if (symbol == SiXiangSymbol.Diamond)
+                    SlotColumn column = slotColumnList[col];
+                    int[] columnArray = new int[3];
+                    int[] spreadColumnArray = new int[3];
+
+                    for (int row = 0; row < 3; row++)
                     {
-                        diamondIndexList.Add(index);
-                    }
-                    if (SymbolDictionary.TryGetValue(symbol, out int mappedValue))
-                    {
-                        columnArray[row] = mappedValue;
-                    }
-                    else
-                    {
-                        columnArray[row] = -1;
-                    }
-                    if (spreadListSymbols.Count > 0)
-                    {
-                        SiXiangSymbol spreadSymbol = spreadListSymbols[index];
-                        if (SymbolDictionary.TryGetValue(spreadSymbol, out int spreadValue))
+                        // Tính index theo layout ngang
+                        int index = row * 5 + col;
+                        SiXiangSymbol symbol = listSymbols[index];
+                        if (symbol == SiXiangSymbol.Diamond)
                         {
-                            spreadColumnArray[row] = spreadValue;
+                            diamondIndexList.Add(index);
+                        }
+                        if (SymbolDictionary.TryGetValue(symbol, out int mappedValue))
+                        {
+                            columnArray[row] = mappedValue;
                         }
                         else
                         {
-                            spreadColumnArray[row] = -1;
+                            columnArray[row] = -1;
+                        }
+                        if (spreadListSymbols.Count > 0)
+                        {
+                            SiXiangSymbol spreadSymbol = spreadListSymbols[index];
+                            if (SymbolDictionary.TryGetValue(spreadSymbol, out int spreadValue))
+                            {
+                                spreadColumnArray[row] = spreadValue;
+                            }
+                            else
+                            {
+                                spreadColumnArray[row] = -1;
+                            }
                         }
                     }
-                }
 
-                // Khi đã bấm Spin
-                if (hasSetupStartView)
-                {
-                    column.SetFinishView(columnArray);
-                    column.SetSpreadFinishView(spreadColumnArray);
-                    paylineList = data.Paylines.ToList();
+                    // Khi đã bấm Spin
+                    if (hasSetupStartView)
+                    {
+                        column.SetFinishView(columnArray);
+                        column.SetSpreadFinishView(spreadColumnArray);
+                        paylineList = data.Paylines.ToList();
 
-                }
-                // Khi lần đầu vào game -> Setup Views
-                else
-                {
-                    column.SetStartView(columnArray);
+                    }
+                    // Khi lần đầu vào game -> Setup Views
+                    else
+                    {
+                        column.SetStartView(columnArray);
+                    }
                 }
             }
-        }
 
         // lastTotalChipWinByGame = totalChipWinByGame;
         if (data.GameConfig != null)
@@ -325,7 +333,6 @@ public class SlotTarzanView : BaseSlotView
       
             if (data.CurrentSixiangGame == SiXiangGame.TarzanFreespinx9)
             {
-                Debug.Log("Update total chip win by game: " + totalChipWinByGame);
                 if (data.GameReward.TotalChipsWinByGame > 0)
                 {
                     lastTotalChipWinByGame = totalChipWinByGame;
@@ -357,7 +364,6 @@ public class SlotTarzanView : BaseSlotView
             {
 
                 totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
-                                Debug.Log("First setup total chip win by game: " + totalChipWinByGame);
                 ShowBackGroundFreeSpin();
                 UpdateTotalChipWinValue();
                 UpdateStateWinUI(StateWin.TOTAL_WIN);
@@ -379,6 +385,7 @@ public class SlotTarzanView : BaseSlotView
 
         if (isEndMiniGame)
         {
+            GetMatchResult();
             tweenQueue.Enqueue(() => ShowPopupResultMiniGame());
             NextTween();
         }
@@ -442,9 +449,19 @@ public class SlotTarzanView : BaseSlotView
             NextTween();
         }
 
+           ///------------------CHECK WIN MINIGAME--------------------//
+        if (isStartMiniGame)
+        {
+            Debug.Log("START MINIgAME");
+            spinType = SpinType.NORMAL;
+            UpdateGameState(SlotGameState.PREPARE);
+            tweenQueue.Enqueue(() => ShowPopupMinigame());
+        }
+
         // ///------------------CHECK SHOW FREESPIN--------------------//
         if (hasGotFreeSpin)
         {
+            GetMatchResult();
             tweenQueue.Enqueue(() => ShowPopupGetFreeSpin());
         }
 
@@ -471,7 +488,7 @@ public class SlotTarzanView : BaseSlotView
         }
 
         ///------------------CHECK SHOW TYPE WIN--------------------///
-        if (!isInFreeSpin)
+        if (!isInFreeSpin || isLastFreeSpin)
         {
             switch (winType)
             {
@@ -502,16 +519,77 @@ public class SlotTarzanView : BaseSlotView
             }
         }
 
-        ///------------------CHECK WIN MINIGAME--------------------//
-        if (isStartMiniGame)
-        {
-            Debug.Log("START MINIgAME");
-            spinType = SpinType.NORMAL;
-            UpdateGameState(SlotGameState.PREPARE);
-            tweenQueue.Enqueue(() => ShowPopupMinigame());
-        }
+     
 
         NextTween();
+    }
+
+    protected override void ShowWinAnimation(WinType winType)
+    {
+        float delay = 6.3f;
+        effectContainer.gameObject.SetActive(true);
+        animationEffect.gameObject.SetActive(true);
+
+        switch (winType)
+        {
+            case WinType.BIG_WIN:
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.BIG_WIN);
+                bigWinText.transform.parent.gameObject.SetActive(true);
+                bigWinText.gameObject.SetActive(true);
+                Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, 2.0f);
+                // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
+                animationEffect.transform.localScale = new Vector2(1f, 1f);
+                // animationEffect.transform.localPosition = new Vector2(0, -70);
+                Utility.PlayAnimationByPath(animationEffect, BIG_WIN_ANIMATION_PATH, BIG_WIN_ANIMATION_NAME, false);
+                delay = 5f;
+                break;
+            case WinType.MEGA_WIN:
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
+                bigWinText.transform.parent.gameObject.SetActive(true);
+                bigWinText.gameObject.SetActive(true);
+                Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, 2.0f);
+                // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
+                animationEffect.transform.localScale = new Vector2(1f, 1f);
+                // animationEffect.transform.localPosition = new Vector2(0, -70);
+                Utility.PlayAnimationByPath(animationEffect, MEGA_WIN_ANIMATION_PATH, MEGA_WIN_ANIMATION_NAME, false);
+                break;
+            case WinType.HUGE_WIN:
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
+                bigWinText.transform.parent.gameObject.SetActive(true);
+                bigWinText.gameObject.SetActive(true);
+                Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, 2.0f);
+                // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
+                animationEffect.transform.localScale = new Vector2(1f, 1f);
+                // animationEffect.transform.localPosition = new Vector2(0, -70);
+                Utility.PlayAnimationByPath(animationEffect, HUGE_WIN_ANIMATION_PATH, HUGE_WIN_ANIMATION_NAME, false);
+                break;
+            case WinType.FIVE_OF_A_KIND:
+                animationEffect.transform.localScale = Vector2.one;
+                animationEffect.transform.localPosition = Vector2.zero;
+                bigWinText.transform.parent.gameObject.SetActive(false);
+                Utility.PlayAnimationByPath(animationEffect, FIVE_OF_A_KIND_ANIMATION_PATH, FIVE_OF_A_KIND_ANIMATION_NAME, false);
+                break;
+            case WinType.FREE_SPIN:
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.FREESPIN);
+                animationEffect.transform.localScale = Vector2.one;
+                animationEffect.transform.localPosition = Vector2.zero;
+                bigWinText.transform.parent.gameObject.SetActive(false);
+                Utility.PlayAnimationByPath(animationEffect, FREE_SPIN_ANIMATION_PATH, FREE_SPIN_ANIMATION_NAME, false);
+                break;
+        }
+        DOVirtual.DelayedCall(delay, () =>
+        {
+            bigWinText.transform.parent.gameObject.SetActive(false);
+        });
+
+
+        animationEffect.AnimationState.Complete += delegate
+        {
+            effectContainer.gameObject.SetActive(false);
+            NextTween();
+            effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
+        };
+        
     }
 
     #region Popups
@@ -537,7 +615,7 @@ public class SlotTarzanView : BaseSlotView
             .SetLoops(30)
             .OnComplete(() =>
             {
-                freeSpinMultiplierText.text = "x" + 50;
+                freeSpinMultiplierText.text = "x" + multiFreeGame;
                 getFreeSpinOKButton.gameObject.SetActive(true);
             });
         freeSpinMultiplierText.transform.DOScale(new Vector2(0.5f, 0.5f), 1.5f).SetEase(Ease.OutBack);
@@ -572,7 +650,7 @@ public class SlotTarzanView : BaseSlotView
         popupResultFreeSpin.gameObject.SetActive(true);
         Utility.PlayAnimation(popupResultFreeSpin, "wonderful", true);
         resultFreeSpinTurnText.text = "9";
-        resultFreeSpinMultiplierText.text = "x" + "10";
+        resultFreeSpinMultiplierText.text = "x" + multiFreeGame;
         Utility.TweenNumberToMoney(resultFreeSpinRewardText, totalChipWinByGame, 0, 1.0f, 10000);
         Utility.PlayAnimationByPath(buttonPopupResultFreeSpin, BUTTON_CONFIRM_ANIMATION_PATH, "backtogame", true);
 
@@ -605,6 +683,7 @@ public class SlotTarzanView : BaseSlotView
             spinType = SpinType.NORMAL;
             UpdateGameState(SlotGameState.PREPARE);
             UpdateTotalChipWinValue();
+            isInFreeSpin = false;
             if (totalChipWinByGame > PaylineIdList.Count * currentBetLevel) winType = WinType.BIG_WIN;
             if (totalChipWinByGame > 50 * currentBetLevel) winType = WinType.MEGA_WIN;
             if (totalChipWinByGame > 0)
@@ -651,7 +730,6 @@ public class SlotTarzanView : BaseSlotView
         popupResultMinigame.transform.DOScale(new Vector2(1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
 
         resultMinigameRewardText.text = Utility.FormatMoney3(totalChipWinByGame, 10000);
-        SetCurrentChipValue(playerWalletAfter);
     }
 
     public void HidePopupResultMiniGame()
@@ -662,6 +740,10 @@ public class SlotTarzanView : BaseSlotView
             popupResultMinigame.gameObject.SetActive(false);
             effectContainer.gameObject.SetActive(false);
             miniGameView.Hide(false);
+            spinType = SpinType.NORMAL;
+            UpdateSpinButtonUI();
+            UpdateGameState(SlotGameState.PREPARE);
+            AnimateCoinsFly();
             NextTween();
         });
     }
@@ -677,15 +759,15 @@ public class SlotTarzanView : BaseSlotView
         popupResult.transform.DOScale(new Vector2(1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
 
         chipRewardText.text = Utility.FormatMoney3(diamondPotAmount, 10000);
-        SetCurrentChipValue(playerWalletAfter);
     }
 
-     public void HidePopupDiamond()
+    public void HidePopupDiamond()
     {
         popupResult.transform.DOScale(new Vector2(0.25f, 0.25f), 0.3f).SetEase(Ease.InBack).OnComplete(() =>
         {
             popupResult.gameObject.SetActive(false);
             effectContainer.gameObject.SetActive(false);
+            AnimateCoinsFly();
             NextTween();
         });
     }

@@ -47,15 +47,6 @@ namespace Globals
             public Dictionary<string, object> metadata; 
         }
         
-        public enum MetaBankAction
-        {
-            Unspecified = 0,
-            SendGift = 1,
-            RecvGift = 2,
-            RevertSendGift = 3,
-            PushToSafe = 4,
-            Withdraw = 5
-        }
 
       
         public static readonly string[] SLOT_GAMES_ID = new string[]
@@ -84,6 +75,14 @@ namespace Globals
             BACCARAT_GAME_ID,
             HK_POKER_GAME_ID,
             BLACKJACK_GAME_ID
+        };
+
+        public static readonly string[] JACKPOT_GAMES_ID = new string[]
+        {
+            // WHOT_GAME_ID,
+            // BACCARAT_GAME_ID,
+            // HK_POKER_GAME_ID,
+            // BLACKJACK_GAME_ID
         };
 
         public static readonly Dictionary<string, string> GameNameFromCode = new()

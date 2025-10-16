@@ -111,7 +111,7 @@ public class BasePlayerView : MonoBehaviour
         vipLevel = playerData.VipLevel;
         sid = playerData.Sid.ToString();
         SetCurrentChip(long.Parse(wallet));
-        avatar.LoadAvatar(avatar_id);
+        avatar.LoadAvatar(avatar_id, vipLevel);
         // if (string.IsNullOrEmpty(avatar_id))
         // {
         //     // avatar.setSpriteFrame(UIManager.Instance.avatarAtlas.getSpriteFrame(avatar_id));
@@ -140,9 +140,9 @@ public class BasePlayerView : MonoBehaviour
     public void setName(string namePl)
     {
         string nameText = namePl;
-        if (namePl.Length >= 10)
+        if (namePl.Length > 10)
         {
-            nameText = namePl.Substring(0, 13) + "..."; 
+            nameText = namePl.Substring(0, 10) + "..."; 
         }
         textName.text = nameText;
         // Config.EffectTextRunInMask(txtName);

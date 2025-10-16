@@ -24,6 +24,7 @@ public class WhotPlayer : MonoBehaviour
     [HideInInspector] public bool isPlaying = true;
     public string Id { get; private set; } = string.Empty;
     public string AvatarId { get; private set; } = string.Empty;
+    public long VipLevel { get; private set; } = 0;
     public int CardsLeft { get; set; } = 0;
     private WhotView whotGame;
     private PlayerLayout playerLayout;
@@ -79,12 +80,15 @@ public class WhotPlayer : MonoBehaviour
         string playerId,
         string avatarId,
         string playerName,
-        string chipAmount = "0"
+        string chipAmount = "0",
+        long vipLevel = 0
     )
     {
+        Debug.Log("PLAYER VIP LEVEL: " + vipLevel);
         Id = playerId;
         AvatarId = avatarId;
-        avatar.LoadAvatar(avatarId);
+        VipLevel = vipLevel;
+        avatar.LoadAvatar(avatarId, vipLevel);
         nameText.text = playerName;
         // chipText.text = Utility.FormatNumber(Utility.ConvertStringToNumber(chipAmount));
         AnimateChipValue(Utility.ConvertStringToLong(chipAmount));
@@ -383,7 +387,14 @@ public class WhotPlayer : MonoBehaviour
     public void AnimateAddChipText(long amount)
     {
         chipAddText.font = amount > 0 ? chipWinFont : chipLoseFont;
-        chipAddText.text = $"{amount}";
+        if (amount >= 0)
+        {
+            chipAddText.text = $"+{amount}";
+        }
+        else
+        {
+            chipAddText.text = $"{amount}";
+        }
 
         chipAddText.transform.localPosition = GetAvatarImage().transform.localPosition + new Vector3(-12f, 20f, 0f);
 

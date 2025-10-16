@@ -39,6 +39,12 @@ public class SlotTarzanMiniGameView : BaseView
         }
         tarzanView = (SlotTarzanView)UIManager.Instance.gameView;
     }
+
+    private void OnDisable()
+    {
+        ResetUI();
+    }
+
     public void OnClickItem(SlotTarzanMinigameItem item)
     {
         if (PickLeft > 0 && CanClick)
@@ -112,9 +118,13 @@ public class SlotTarzanMiniGameView : BaseView
     public void ResetUI()
     {
         totalWin = 0;
-        PickLeft = 0;
-        pickLeftText.text = "";
+        PickLeft = 5;
+        pickLeftText.text = "5";
         totalWinText.text = "0";
+        foreach (SlotTarzanMinigameItem item in itemList)
+        {
+            item.Reset();
+        }
         // itemList.ForEach(item =>
         // {
         //     item.Reset();

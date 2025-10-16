@@ -69,7 +69,7 @@ public class ProfileView : BaseView
                 changeNameButton.gameObject.SetActive(false);
                 changePasswordButton.gameObject.SetActive(true);
             }
-            avatar.LoadAvatar(User.userProfile.AvatarId);
+            avatar.LoadAvatar(User.userProfile.AvatarId, User.userProfile.VipLevel);
             SetVipStars(vipLevel);
         }
     }

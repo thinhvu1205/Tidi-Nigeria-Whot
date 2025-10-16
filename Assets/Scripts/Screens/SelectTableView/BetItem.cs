@@ -23,11 +23,12 @@ public class BetItem : MonoBehaviour
         gameObject.name = "" + dataItem.MarkUnit;
         betAmountText.text = Utility.FormatMoney((int)dataItem.MarkUnit, true);
         playerCountText.text = dataItem.CountPlaying.ToString();
+        betTitleText.text = Utility.FormatNumber(dataItem.AgJoin);
         if (dataItem.Enable)
         {
             backgroundImage.sprite = backgroundSpriteList[index % 4];
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => _ = UIManager.Instance.HandleFindAndJoinMatch((int) dataItem.MarkUnit));
+            button.onClick.AddListener(() => _ = UIManager.Instance.HandleFindAndJoinMatch((int)dataItem.MarkUnit));
         }
         else
         {

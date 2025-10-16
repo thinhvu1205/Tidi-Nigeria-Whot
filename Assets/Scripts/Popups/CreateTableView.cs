@@ -15,6 +15,7 @@ public class CreateTableView : BaseView
     [SerializeField] Button createButton, minusButton, plusButton, doubleDeckingCheckbox;
     [SerializeField] TextMeshProUGUI betValueText;
     [SerializeField] Image tickImage;
+    [SerializeField] GameObject doubleDecking;
     private List<Bet> betItemList = new();
 
     private int currentBetValue = 0;
@@ -24,6 +25,7 @@ public class CreateTableView : BaseView
     {
         base.Awake();
         _ = GetListBet();
+        doubleDecking.SetActive(Config.currentGameId == Constants.WHOT_GAME_ID);
     }
 
     public void OnClickCheckboxDoubleDecking()

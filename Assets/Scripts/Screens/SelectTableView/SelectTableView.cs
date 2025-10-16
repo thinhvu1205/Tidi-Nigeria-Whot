@@ -18,7 +18,7 @@ public class SelectTableView : BaseView
     [SerializeField] private Button selectBetButton, selectTableButton, quickStartButton, createTableButton,
     nextButton, prevButton, refreshButton, findTableButton;
     [SerializeField] private ScrollRect scrollRectTable, scrollRectBet;
-    [SerializeField] private GameObject tableItemPrefab, betItemPrefab, tabItemPrefab;
+    [SerializeField] private GameObject tableItemPrefab, betItemPrefab, tabItemPrefab, jackpot;
     [SerializeField] private Transform tableItemParent, betItemParent, tabItemParent;
     [SerializeField] private TextMeshProUGUI titleText, accountChip;
     [SerializeField] private TMP_InputField findTableInputField;
@@ -107,6 +107,7 @@ public class SelectTableView : BaseView
                 // titleText.text = "Select Table";
                 break;
         }
+        jackpot.SetActive(Constants.JACKPOT_GAMES_ID.Contains(Config.currentGameId));
     }
     private void LoadListBetItem()
     {
@@ -120,11 +121,11 @@ public class SelectTableView : BaseView
             Debug.Log("Bet item: " + betItemList[i].ToString());
             int index = i;
             // Instantiate bet item
-            // if (betItemList[i].BetDisableType == BetDisableType.NotEnoughChip
-            // )
-            // {
-            //     continue;
-            // }
+            if (betItemList[i].BetDisableType == BetDisableType.AboveMaxVip
+            )
+            {
+                continue;
+            }
             BetItem betItem = Instantiate(betItemPrefab, betItemParent).GetComponent<BetItem>();
             betItem.SetData(betItemList[index], index);
         }
@@ -142,7 +143,7 @@ public class SelectTableView : BaseView
         foreach (Bet bet in betItemList)
         {
             // Instantiate table tab item
-            if (!bet.Enable) continue;
+            if (!bet.Enable || bet.CountPlaying == 0) continue;
             TableTabItem tableTabItem = Instantiate(tabItemPrefab, tabItemParent).GetComponent<TableTabItem>();
             tableTabItem.SetData(bet.MarkUnit, true);
             tableTabItem.GetComponent<Button>().onClick.AddListener(async () =>

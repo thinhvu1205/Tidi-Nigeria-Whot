@@ -24,9 +24,10 @@ public class SiXiangRapidPayView : MonoBehaviour
     private long winAmount = 0;
     private bool canSkipAnimation = false;
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         gameView.OnUpdateTable -= SixiangView_OnUpdateTable;
+        DOTween.Kill("autoKillRapidPayResult");
     }
 
     public void SetInfo(SlotSixiangView slotSixiangView)
@@ -43,8 +44,17 @@ public class SiXiangRapidPayView : MonoBehaviour
         animationBackgroundRow.transform
             .DOLocalMoveY(animationBackgroundRow.transform.localPosition.y + 123 * indexRow - indexRow * 3.5f, 0.3f)
             .SetEase(Ease.InSine);
+            Debug.Log("IS BUNOS RAPID PAY: " + (gameView.GetCurrentGame() == SiXiangGame.SixangbonusRapidpay));
+        if (gameView.GetCurrentGame() == SiXiangGame.SixangbonusRapidpay)
+        {
+            textWinAmount.SetValue(gameView.GetCurrentBetLevel() * 2, true, 0.5f);
+            multiplierBonus = 4;
+        }
+        else
+        {
+            textWinAmount.SetValue(gameView.GetCurrentBetLevel() / 2, true, 0.5f);
+        }
         textTotalBonus.text = "x" + multiplierBonus;
-        textWinAmount.SetValue(gameView.GetCurrentBetLevel() / 2, true, 0.5f);
         foreach(RapidPayRow rapidPayRow in listRows)
         {
             rapidPayRow.Reset();
@@ -54,6 +64,7 @@ public class SiXiangRapidPayView : MonoBehaviour
     private void SixiangView_OnUpdateTable(SlotSixiangView.OnUpdateTableEventArgs e)
     {
         SlotDesk data = e.data;
+        if (data.SpinSymbols.Count == 0) return;
         SpinSymbol item = data.SpinSymbols[0];
 
         currentRow.SetResult(data);
@@ -89,6 +100,7 @@ public class SiXiangRapidPayView : MonoBehaviour
             .AppendInterval(1.4f)
             .AppendCallback(() =>
             {
+                textWinAmount.SetValue(winAmount, true, 0.5f);
                 if (!data.IsFinishGame) NextRow();
                 else ShowResult();
             });
@@ -124,7 +136,6 @@ public class SiXiangRapidPayView : MonoBehaviour
 
     private void NextRow()
     {
-        textWinAmount.SetValue(winAmount, true, 0.5f);
         animationBackgroundRow.transform
             .DOLocalMoveY(animationBackgroundRow.transform.localPosition.y + 123 - indexRow * 3.5f, 0.3f)
             .SetEase(Ease.InSine);
@@ -155,6 +166,14 @@ public class SiXiangRapidPayView : MonoBehaviour
             soundMoney.Stop();
         }
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.COUNGTING_MONEY_END);
+        DOTween.Sequence().SetId("autoKillRapidPayResult").AppendInterval(10.0f)
+            .AppendCallback(() =>
+            {
+                if (animationResult.gameObject.activeSelf)
+                {
+                    OnClickCollect();
+                }
+            });
     }
 
     public void OnClickCollect()

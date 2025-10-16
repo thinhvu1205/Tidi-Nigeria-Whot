@@ -72,12 +72,13 @@ public class SlotSixiangView : BaseSlotSymbolView
     }
 
     public event Action<OnUpdateTableEventArgs> OnUpdateTable;
+    public int DragonPearlFreeSpinLeft { get; set; } = 3;
 
 
     public override void HandleUpdateTable(IMatchState matchState)
     {
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
-
+        currentGame = data.CurrentSixiangGame;
         if (data.CurrentSixiangGame <= SiXiangGame.Sixangbonus && data.NextSixiangGame > SiXiangGame.Sixangbonus)
         {
             GetMatchResult();
@@ -121,13 +122,15 @@ public class SlotSixiangView : BaseSlotSymbolView
                 }
             }
         }
-        CheckBonusGame(data);
+            CheckBonusGame(data);
+
+ 
 
         OnUpdateTable?.Invoke(new OnUpdateTableEventArgs
         {
             data = data
         });
-                // ShowScatterView();
+        // ShowScatterView();
 
         if (!hasSetupStartView) hasSetupStartView = true;
     }
@@ -156,13 +159,11 @@ public class SlotSixiangView : BaseSlotSymbolView
                     }.Contains(spinSymbol.Symbol)
                 )
                 {
-                    Debug.Log("DUOC GOLD");
                     if (isEyeWarrior) continue;
                     listColumn[col].SetDragonPearlItemAtIndex(row, 11);
                 }
                 else
                 {
-                    Debug.Log("DUOC LIXI");
                     listColumn[col].SetDragonPearlItemAtIndex(row, 12);
                 }
             }
@@ -178,8 +179,8 @@ public class SlotSixiangView : BaseSlotSymbolView
         IsSpinning = true;
         if (IsInDragonPearl())
         {
-            freeSpinLeft--;
-            UpdateDragonPearlFreeSpinLeft();
+            Debug.Log("FREE SPIN LEFT: " + freeSpinLeft);
+            // DragonPearlFreeSpinLeft--;
             UpdateGameState(SlotGameState.SPINNING);
             SetDarkAllItems();
             SoundManager.Instance.PlayEffectFromPath(SoundSlot.SPIN_REEL);
@@ -197,10 +198,21 @@ public class SlotSixiangView : BaseSlotSymbolView
 
     public override void OnStopSpin()
     {
+        // tweenQueue.Enqueue(() =>
+        // {
+        // ShowSpecialWinAnimation(WinType.MEGA_WIN, 100000);
+
+        // });
         IsSpinning = false;
         if (IsInDragonPearl())
         {
             SetDarkAllItems();
+            if (!dragonPearlView.IsWinBirdEye)
+            {
+                DragonPearlFreeSpinLeft = freeSpinLeft;
+                UpdateDragonPearlFreeSpinLeft();
+
+            }
             tweenQueue.Enqueue(() => dragonPearlView.OnStopSpin());
             NextTween();
         }
@@ -222,7 +234,7 @@ public class SlotSixiangView : BaseSlotSymbolView
             }
 
             ///------------------CHECK SHOW TYPE WIN--------------------///
-            if (!isInFreeSpin)
+            if (spinType != SpinType.AUTO && spinType != SpinType.FREE_AUTO)
             {
                 switch (winType)
                 {
@@ -281,6 +293,7 @@ public class SlotSixiangView : BaseSlotSymbolView
     protected override void UpdateReward(SlotDesk data)
     {
         base.UpdateReward(data);
+            totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
         if (IsInDragonPearl())
         {
             isInFreeSpin = true;
@@ -321,7 +334,11 @@ public class SlotSixiangView : BaseSlotSymbolView
         {
             if (nextGame== SiXiangGame.Sixangbonus)
             {
-                ShowChooseBonusGame();
+                if (!isGetMatchResult)
+                {
+                    isGetMatchResult = false;
+                    ShowChooseBonusGame();
+                }
             }
             else if (bonusGameDictionary.TryGetValue(data.NextSixiangGame, out int bonusIndex))
             {
@@ -355,7 +372,7 @@ public class SlotSixiangView : BaseSlotSymbolView
         animationAnimal.transform.parent.gameObject.SetActive(true);
         animationAnimal.gameObject.SetActive(true);
         paylineInfoContainer.gameObject.SetActive(false);
-        totalChipWinByGame = 0;
+        // totalChipWinByGame = 0;
         string animationPath = "", animationName = "";
         tweenQueue.Enqueue(() => ShowAnimationCutScene());
 
@@ -471,7 +488,7 @@ public class SlotSixiangView : BaseSlotSymbolView
         }
         else
         {
-            string text = freeSpinLeft + " remaining spins";
+            string text = DragonPearlFreeSpinLeft + " remaining spins";
             SetInfoSessionText(text);
         }
     }
@@ -486,7 +503,8 @@ public class SlotSixiangView : BaseSlotSymbolView
         shadowText.DOFade(0, 1.0f).SetEase(Ease.OutSine);
         shadowText.transform.DOLocalMoveY(1.0f, shadowText.transform.localPosition.y + 50).SetEase(Ease.OutSine).OnComplete(() =>
         {
-            // shadowText.gameObject.SetActive(false);
+            string text = DragonPearlFreeSpinLeft + " remaining spins";
+            SetInfoSessionText(text);
         });
     }
 
@@ -499,6 +517,9 @@ public class SlotSixiangView : BaseSlotSymbolView
             column.UpdateStartViewUI();
         }
         spinType = SpinType.NORMAL;
+        UpdateGameState(SlotGameState.PREPARE);
+        DragonPearlFreeSpinLeft = 3;
+        SetInfoSessionText("Press SPIN to play");
         UpdateSpinButtonUI();
         if (isWinGrandJackpot)
         {
@@ -571,8 +592,24 @@ public class SlotSixiangView : BaseSlotSymbolView
             buttonConfirmJackpotWin.onClick.RemoveAllListeners();
             buttonConfirmJackpotWin.onClick.AddListener(() =>
             {
-                NextTween();
+                if (tweenQueue.Count > 0)
+                {
+                    NextTween();
+                }
             });
+            DOTween.Sequence()
+                .SetId("autoHideWinJackpot")
+                .AppendInterval(10.0f)
+                .AppendCallback(() =>
+                {
+                    if (animationJackpotWin.gameObject.activeSelf)
+                    {
+                        if (tweenQueue.Count > 0)
+                        {
+                            NextTween();
+                        }
+                    }
+                });
         };
     }
 
@@ -580,7 +617,7 @@ public class SlotSixiangView : BaseSlotSymbolView
     {
         Debug.Log("ANIMATE RESULT MONEY");
         effectContainer.gameObject.SetActive(true);
-
+        DOTween.Kill("autoHideWinJackpot");
         DOTween.Sequence()
             .AppendInterval(0.2f)
             .AppendCallback(() =>
@@ -604,20 +641,37 @@ public class SlotSixiangView : BaseSlotSymbolView
                     buttonConfirmJackpotWin.gameObject.SetActive(true);
                     buttonConfirmJackpotWin.onClick.AddListener(() =>
                     {
-                        animationJackpotWin.transform.parent.gameObject.SetActive(false);
-                        animationBackgroundMoney.gameObject.SetActive(false);
-                        animationJackpotWin.gameObject.SetActive(false);
-                        effectContainer.gameObject.SetActive(false);
-                        buttonConfirmJackpotWin.gameObject.SetActive(false);
-                        NextTween();
+                        HideAnimationResultMoney();
                     });
                 };
             });
-            // .AppendInterval(3f)
-            // .AppendCallback(() =>
-            // {
-               
-            // });
+
+            DOTween.Sequence()
+                .SetId("autoHideResultMoney")
+                .AppendInterval(10.0f)
+                .AppendCallback(() =>
+                {
+                  
+                        HideAnimationResultMoney();
+                    
+                });
+    }
+
+    private void HideAnimationResultMoney()
+    {
+        if (animationJackpotWin.gameObject.activeInHierarchy)
+        {
+            Debug.Log("HIDE ANIMATION ReSULT MONEY");
+            animationJackpotWin.transform.parent.gameObject.SetActive(false);
+            animationBackgroundMoney.gameObject.SetActive(false);
+            animationJackpotWin.gameObject.SetActive(false);
+            effectContainer.gameObject.SetActive(false);
+            buttonConfirmJackpotWin.gameObject.SetActive(false);
+            if (tweenQueue.Count > 0)
+            {
+                NextTween();
+            }
+        }
     }
 
     private bool IsInDragonPearl()
@@ -693,7 +747,32 @@ public class SlotSixiangView : BaseSlotSymbolView
         SetAnimationBackground(SIXIANG_GAME_NAME);
 
         SetWinType(totalChipWinByGame);
+        GetMatchResult();
         UpdateTotalChipWinValue();
+        UpdateGem();
+        InitColumns();
+
+        ResetToNormalState();
+
+        tweenQueue.Enqueue(() =>
+        {
+            switch (winType)
+            {
+                case WinType.BIG_WIN:
+                    ShowSpecialWinAnimation(WinType.BIG_WIN, totalChipWinByGame);
+                    break;
+                case WinType.MEGA_WIN:
+                    ShowSpecialWinAnimation(WinType.MEGA_WIN, totalChipWinByGame);
+                    break;
+                case WinType.HUGE_WIN:
+                    ShowSpecialWinAnimation(WinType.HUGE_WIN, totalChipWinByGame);
+                    break;
+                default:
+                    AnimateCoinsFly();
+                    break;
+            }
+
+        });
         tweenQueue.Enqueue(() =>
         {
             if (nextGame == SiXiangGame.Sixangbonus || nextGame == SiXiangGame.Normal)
@@ -714,40 +793,25 @@ public class SlotSixiangView : BaseSlotSymbolView
                 NextTween();
             }
         });
-        DOTween.Sequence()
-            .AppendCallback(() =>
-            {
-                switch (winType)
-                {
-                    case WinType.BIG_WIN:
-                        ShowSpecialWinAnimation(WinType.BIG_WIN, totalChipWinByGame);
-                        break;
-                    case WinType.MEGA_WIN:
-                        ShowSpecialWinAnimation(WinType.MEGA_WIN, totalChipWinByGame);
-                        break;
-                    case WinType.HUGE_WIN:
-                        ShowSpecialWinAnimation(WinType.HUGE_WIN, totalChipWinByGame);
-                        break;
-                    default:
-                        AnimateCoinsFly();
-                        break;
-                }
-
-            });
-        UpdateGem();
         // tweenQueue.Clear();
-        // NextTween();
+        if (tweenQueue.Count > 0)
+        {
+            NextTween();
+        }
+    }
+
+    private void ResetToNormalState()
+    {
+        spinType = SpinType.NORMAL;
+        UpdateGameState(SlotGameState.PREPARE);
+        autoSpinRemain = 0;
+        SetAutoSpinRemain();
+        UpdateSpinButtonUI();
     }
 
     private void SetWinType(long winAmount)
     {
-        Debug.Log("CURRENT BET LEVEL: " + currentBetLevel);
-        Debug.Log("WIN AMOUNT: " + winAmount);
         winType = WinType.NONE;
-        // if (isGrandJackpot)
-        // {
-        //     winAmount = winAmount + validBetLevels[currentBetLevel] * jackpotLevel[3];
-        // }
         if (winAmount > 50 * currentBetLevel)
         {
             winType = WinType.MEGA_WIN;

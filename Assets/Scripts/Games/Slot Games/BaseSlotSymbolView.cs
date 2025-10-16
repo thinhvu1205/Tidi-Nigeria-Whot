@@ -120,14 +120,14 @@ public class BaseSlotSymbolView : BaseGameView
     protected long[] listDataJackpot;
     protected int autoSpinRemain = 0, freeSpinLeft = 0;
     protected float holdingSpinTime = 0;
-    protected long currentBetLevel = 0, playerChip = 0, winAmount = 0, normalWinAmount = 0, lastWinAmount = 0, currentChipWin = 0, playerWalletAfter = 0, playerWallet = 0,
+    protected long lastBetLevel = 0, currentBetLevel = 0, playerChip = 0, winAmount = 0, normalWinAmount = 0, lastWinAmount = 0, currentChipWin = 0, playerWalletAfter = 0, playerWallet = 0,
     totalChipWinByGame = 0, gemPrice = 0;
     protected SiXiangGame currentGame = SiXiangGame.Normal, nextGame = SiXiangGame.Normal;
     protected List<Sequence> listSequenceSymbolOneByOne = new();
     public bool IsSpinning { get; set; } = false;
     public int ScatterCount { get; set; } = 0;
 
-    protected bool hasSetupStartView = false, isInFreeSpin = false, isChooseBonusGame = false;
+    protected bool hasSetupStartView = false, isInFreeSpin = false, isChooseBonusGame = false, isGetMatchResult = false;
     protected virtual float AUTO_SPIN_HOLD_DURATION => 1.3f;
 
 
@@ -225,6 +225,7 @@ public class BaseSlotSymbolView : BaseGameView
 
     protected void GetMatchResult()
     {
+        isGetMatchResult = true;
         DataSender.SendMatchState((long)OpCodeRequest.InfoTable, new byte[0]);
     }
 
@@ -621,11 +622,11 @@ public class BaseSlotSymbolView : BaseGameView
                 break;
             case WinType.MEGA_WIN:
                 Utility.PlayAnimation(animationSpecialWin, "megawin", false);
-                duration = 3.5f;
+                duration = 5f;
                 break;
             case WinType.HUGE_WIN:
                 Utility.PlayAnimation(animationSpecialWin, "hugewin", false);
-                duration = 5.5f;
+                duration = 4f;
                 break;
             default:
                 return;
@@ -642,10 +643,11 @@ public class BaseSlotSymbolView : BaseGameView
         });
 
         DOTween.Sequence()
+            .SetId("autoHideSpecialWin")
             .AppendInterval(10.0f)
             .AppendCallback(() =>
             {
-                if (animationSpecialWin.gameObject.activeSelf)
+                if (animationSpecialWin.gameObject.activeInHierarchy)
                 {
                     HideSpecialWinAnimation();
                 }
@@ -654,10 +656,14 @@ public class BaseSlotSymbolView : BaseGameView
 
     public void HideSpecialWinAnimation()
     {
+        DOTween.Kill("autoHideResultMoney");
         buttonConfirmSpecialWin.gameObject.SetActive(false);
         animationSpecialWin.gameObject.SetActive(false);
         effectContainer.gameObject.SetActive(false);
-        NextTween();
+        if (tweenQueue.Count > 0)
+        {
+            NextTween();
+        }
     }
     #endregion
 
@@ -813,7 +819,7 @@ public class BaseSlotSymbolView : BaseGameView
     }
     protected void UpdateJackpot(SlotDesk data)
     {
-        if (currentGame != SiXiangGame.Normal) return;
+        // if (currentGame != SiXiangGame.Normal) return;
         JackpotHistory jackpotHistory = data?.WinJpHistory;
         if (jackpotHistory == null) return;
         listDataJackpot = new long[]
@@ -1086,6 +1092,7 @@ public class BaseSlotSymbolView : BaseGameView
             return;
         }
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
+        lastBetLevel = currentBetLevel;
         currentBetLevel = listBetLevel.Find(bet => bet > currentBetLevel);
         if (currentBetLevel == 0)
         {
@@ -1102,6 +1109,7 @@ public class BaseSlotSymbolView : BaseGameView
             return;
         }
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
+        lastBetLevel = currentBetLevel;
         currentBetLevel = listBetLevel.FindLast(bet => bet < currentBetLevel);
         if (currentBetLevel == 0)
         {
@@ -1118,10 +1126,14 @@ public class BaseSlotSymbolView : BaseGameView
             return;
         }
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
+        lastBetLevel = currentBetLevel;
         currentBetLevel = listBetLevel[^1];
         SetCurrentBetImage(currentBetLevel);
         OnBetLevelChanged();
-        isClickMaxBet = true;
+        if (lastBetLevel == currentBetLevel)
+        {
+            isClickMaxBet = true;
+        }
     }
 
     public void OnClickBuyGem(int index)
@@ -1366,8 +1378,13 @@ public class BaseSlotSymbolView : BaseGameView
         );
     }
 
-    private void InitColumns()
+    protected void InitColumns()
     {
+        listColumn.Clear();
+        foreach (Transform child in columnContainer)
+        {
+            Destroy(child.gameObject);
+        }
         for (int i = 0; i < 5; i++)
         {
             SlotSymbolColumn column = Instantiate(columnPrefab, columnContainer).GetComponent<SlotSymbolColumn>();
@@ -1383,6 +1400,7 @@ public class BaseSlotSymbolView : BaseGameView
     public Transform InfoSessionBar => paylineInfoContainer;
     public long[] GetListDataJackpot => listDataJackpot;
     public SpinType GetSpinType() => spinType;
+    public SiXiangGame GetCurrentGame() => currentGame;
     public long GetCurrentBetLevel() => currentBetLevel;
     protected bool IsSpinnable() => listBetLevel.Count > 0 && User.userProfile.AccountChip > currentBetLevel;
     protected bool IsButtonInteractable() => new SiXiangGame[] { SiXiangGame.Normal, SiXiangGame.DragonPearl, SiXiangGame.SixangbonusDragonPearl }.Contains(currentGame) || new SiXiangGame[] { SiXiangGame.DragonPearl, SiXiangGame.SixangbonusDragonPearl }.Contains(nextGame);

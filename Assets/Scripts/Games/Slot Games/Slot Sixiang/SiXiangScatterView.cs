@@ -61,7 +61,7 @@ public class SiXiangScatterView : MonoBehaviour
         currentBetLevel = betValue;
         gameView.OnUpdateTable += SixiangView_OnUpdateTable;
 
-        int[] listRateGold = new int[] { 3, 6, 10, 15 };
+        int[] listRateGold = new int[] { 10, 30, 20, 50 };
         for (int i = 0; i < listGoldValue.Length; i++)
         {
             Debug.Log("SET GOLD : " + betValue);
@@ -261,7 +261,7 @@ public class SiXiangScatterView : MonoBehaviour
     private void EndView()
     {
         resultContainer.gameObject.SetActive(false);
-        gameView.ShowAnimationCutScene();
+        gameView.ShowAnimationCutScene(true);
         Destroy(gameObject);
     }
 }

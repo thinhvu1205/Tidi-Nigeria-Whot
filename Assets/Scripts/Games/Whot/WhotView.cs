@@ -102,12 +102,21 @@ public class WhotView : BaseGameView
         }
     }
 
+    private void OnApplicationPause(bool pause)
+    {
+        // User quay lại foreground của app
+        if (!pause)
+        {
+            Debug.Log("HI I'M BACk");
+        }
+    }
+
     public void Init()
     {
         DOTween.KillAll(true);
         // cardPool = new ObjectPool<WhotCard>(cardPrefab.GetComponent<WhotCard>(), 20, cardPoolParent);
-        PoolService.Instance.Register(PrefabType.WhotCard, cardPoolParent , whotCardModelPrefab, 20, 50, 15);
-        PoolService.Instance.Register(PrefabType.ChipPlayerWhot, chipPoolParent , chipPrefab, 15, 50, 10);
+        PoolService.Instance.Register(PrefabType.WhotCard, cardPoolParent, whotCardModelPrefab, 20, 50, 15);
+        PoolService.Instance.Register(PrefabType.ChipPlayerWhot, chipPoolParent, chipPrefab, 15, 50, 10);
         playersList = new();
         rearrangedPlayersList = new();
         dealCardsList = new();
@@ -206,7 +215,8 @@ public class WhotView : BaseGameView
                     player.Id,
                     player.AvatarId,
                     player.UserName,
-                    player.Wallet
+                    player.Wallet,
+                    player.VipLevel
                 );
                 whotPlayer.transform.localPosition = Vector3.zero;
                 whotPlayer.SetWhotGame(this);
@@ -254,7 +264,8 @@ public class WhotView : BaseGameView
                         player.Id,
                         player.AvatarId,
                         player.UserName,
-                        player.Wallet
+                        player.Wallet,
+                        player.VipLevel
                     );
                     whotPlayer.transform.localPosition = Vector3.zero;
                     whotPlayer.SetWhotGame(this);
@@ -406,6 +417,7 @@ public class WhotView : BaseGameView
     public override void HandleUpdateTurn(IMatchState matchState)
     {
         var data = UpdateTurn.Parser.ParseFrom(matchState.State);
+        Debug.Log("UPDATE TURN: " + data);
         if (data.UserId == GetCurrentPlayer().Id)
         {
             yourTurnTransform.gameObject.SetActive(true);
@@ -593,6 +605,7 @@ public class WhotView : BaseGameView
 
     public IEnumerator DealCards()
     {
+        Debug.Log("BẮT ĐẦU CHIA BÀI");
         int length = playersList.Count;
         int cardsPerPlayer = dealCardsList.Count;
         for (int i = 0; i < length * cardsPerPlayer; i++)
@@ -600,7 +613,7 @@ public class WhotView : BaseGameView
             int index = i % length;
             WhotPlayer player = playersList[index];
             if (!player.isPlaying) continue;
-            yield return new WaitForSeconds(1f / (length * cardsPerPlayer));
+            yield return new WaitForSecondsRealtime(0.7f / (length * cardsPerPlayer));
 
             WhotCardModel whotCardModel = InitCard(GetDeckOfCardParent());
             whotCardModel.SetFaceDown();
@@ -1384,7 +1397,8 @@ public class WhotView : BaseGameView
                 player.Id,
                 player.AvatarId,
                 player.UserName,
-                player.Wallet
+                player.Wallet,
+                player.VipLevel
             );
             whotPlayer.transform.localPosition = Vector3.zero;
             whotPlayer.SetWhotGame(this);
