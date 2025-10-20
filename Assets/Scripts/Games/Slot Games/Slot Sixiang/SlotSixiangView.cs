@@ -181,6 +181,12 @@ public class SlotSixiangView : BaseSlotSymbolView
         {
             Debug.Log("FREE SPIN LEFT: " + freeSpinLeft);
             // DragonPearlFreeSpinLeft--;
+                if (!dragonPearlView.IsWinBirdEye)
+            {
+                DragonPearlFreeSpinLeft = freeSpinLeft;
+                UpdateDragonPearlFreeSpinLeft();
+
+            }
             UpdateGameState(SlotGameState.SPINNING);
             SetDarkAllItems();
             SoundManager.Instance.PlayEffectFromPath(SoundSlot.SPIN_REEL);
@@ -207,12 +213,7 @@ public class SlotSixiangView : BaseSlotSymbolView
         if (IsInDragonPearl())
         {
             SetDarkAllItems();
-            if (!dragonPearlView.IsWinBirdEye)
-            {
-                DragonPearlFreeSpinLeft = freeSpinLeft;
-                UpdateDragonPearlFreeSpinLeft();
-
-            }
+        
             tweenQueue.Enqueue(() => dragonPearlView.OnStopSpin());
             NextTween();
         }
@@ -800,14 +801,6 @@ public class SlotSixiangView : BaseSlotSymbolView
         }
     }
 
-    private void ResetToNormalState()
-    {
-        spinType = SpinType.NORMAL;
-        UpdateGameState(SlotGameState.PREPARE);
-        autoSpinRemain = 0;
-        SetAutoSpinRemain();
-        UpdateSpinButtonUI();
-    }
 
     private void SetWinType(long winAmount)
     {

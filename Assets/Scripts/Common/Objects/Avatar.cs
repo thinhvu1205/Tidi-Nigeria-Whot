@@ -45,7 +45,7 @@ namespace Common.Objects
             Debug.Log("VIP LEVEL: " + vipLevel);
             if (vipLevel > 0)
             {
-                imageBorder.sprite = border[vipLevel - 1];
+                imageBorder.sprite = border[vipLevel];
             }
 
             // else

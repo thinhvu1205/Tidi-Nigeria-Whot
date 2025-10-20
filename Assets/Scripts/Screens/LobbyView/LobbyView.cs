@@ -253,7 +253,7 @@ public class LobbyView : BaseView
     {
         if (Time.timeScale == 1)
         {
-            Time.timeScale = 6;
+            Time.timeScale = 4;
         }
         else
         {

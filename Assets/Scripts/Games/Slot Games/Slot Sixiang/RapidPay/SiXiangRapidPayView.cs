@@ -6,6 +6,7 @@ using DG.Tweening;
 using Globals;
 using TMPro;
 using Proto;
+using System;
 
 
 public class SiXiangRapidPayView : MonoBehaviour
@@ -66,7 +67,7 @@ public class SiXiangRapidPayView : MonoBehaviour
         SlotDesk data = e.data;
         if (data.SpinSymbols.Count == 0) return;
         SpinSymbol item = data.SpinSymbols[0];
-
+        Debug.Log("CURRENT ROW: " + indexRow);
         currentRow.SetResult(data);
         winAmount = data.GameReward.TotalChipsWinByGame;
         int indexPick = item.Index;
@@ -91,13 +92,13 @@ public class SiXiangRapidPayView : MonoBehaviour
             SoundManager.Instance.PlayEffectFromPath(SoundSlot.RAPID_CHIP_FLY);
         }
         DOTween.Sequence()
-            .AppendInterval(1.3f)
+            .AppendInterval(1.2f)
             .AppendCallback(() =>
             {
                 textTotalBonus.text = "x" + multiplierBonus;
                 animationLight.gameObject.SetActive(false);
             })
-            .AppendInterval(1.4f)
+            .AppendInterval(0.5f)
             .AppendCallback(() =>
             {
                 textWinAmount.SetValue(winAmount, true, 0.5f);
@@ -108,6 +109,7 @@ public class SiXiangRapidPayView : MonoBehaviour
 
     private string GetAnimationLightName(int index)
     {
+        Debug.Log("ANIMATION LIGHT INDEX: " + index);
         string name = "";
         name = index switch
         {
@@ -136,6 +138,7 @@ public class SiXiangRapidPayView : MonoBehaviour
 
     private void NextRow()
     {
+        Debug.Log("NEXT ROW");
         animationBackgroundRow.transform
             .DOLocalMoveY(animationBackgroundRow.transform.localPosition.y + 123 - indexRow * 3.5f, 0.3f)
             .SetEase(Ease.InSine);

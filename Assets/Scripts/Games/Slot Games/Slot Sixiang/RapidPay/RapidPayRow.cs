@@ -69,6 +69,7 @@ public class RapidPayRow : MonoBehaviour
         {
             return;
         }
+        Debug.Log("SET RESULT");
         SpinSymbol item = data.SpinSymbols[0];
         List<SiXiangSymbol> matrix = data.Matrix.Lists.ToList();
         // int indexAnimOpen = 0;

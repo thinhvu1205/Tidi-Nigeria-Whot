@@ -74,7 +74,6 @@ public class WhotView : BaseGameView
     private List<Player> rearrangedPlayersList;
     private List<WhotCardModel> dealCardsList;
     private List<BalanceUpdate> balanceUpdates = new();
-    private ObjectPool<WhotCardModel> cardPool;
     // private List<WhotCard> chipPool;
     private GameState gameState = GameState.Preparing;
     private WhotCardEffect currentEffect = WhotCardEffect.EffectNone;
@@ -107,7 +106,7 @@ public class WhotView : BaseGameView
         // User quay lại foreground của app
         if (!pause)
         {
-            Debug.Log("HI I'M BACk");
+            
         }
     }
 
@@ -983,7 +982,7 @@ public class WhotView : BaseGameView
         victoryAnimationParent.gameObject.SetActive(true);
         playAreaParent.gameObject.SetActive(false);
         StopWaitAnimation();
-        foreach (WhotPlayer player in playersList)
+        foreach (WhotPlayer player in playersByPosition)
         {
             if (!player.isCurrentPlayer)
             {
@@ -1024,7 +1023,7 @@ public class WhotView : BaseGameView
         playAreaParent.gameObject.SetActive(false);
         StopWaitAnimation();
 
-        foreach (WhotPlayer player in playersList)
+        foreach (WhotPlayer player in playersByPosition)
         {
             if (!player.isCurrentPlayer)
             {

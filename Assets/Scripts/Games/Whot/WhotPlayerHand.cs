@@ -167,12 +167,42 @@ public class WhotPlayerHand : MonoBehaviour
         }
     }
 
+    public void HighlightPlayableCards(WhotCardModel callCardModel)
+    {
+        foreach (WhotCardModel card in cardsInHand)
+        {
+            bool isSelectable = false;
+
+            if (callCardModel.GetCardRank() == WhotCardRank.WhotRank2)
+            {
+                isSelectable = card.GetCardRank() == WhotCardRank.WhotRank2;
+            }
+            else if (callCardModel.GetCardRank() == WhotCardRank.WhotRank5)
+            {
+                isSelectable = card.GetCardRank() == WhotCardRank.WhotRank5;
+            }
+            else if (card.GetCardRank() == WhotCardRank.WhotRank20)
+            {
+                isSelectable = true;
+            }
+            else if (card.GetCardSuit() == callCardModel.GetCardSuit() || card.GetCardRank() == callCardModel.GetCardRank())
+            {
+                isSelectable = true;
+            }
+
+            card.SetSelectable(isSelectable);
+            if (isSelectable)
+                card.SetHighLight();
+            else
+                card.SetDark();
+        }
+    }
+
     #endregion
 
     #region Events
     public void WhotGame_OnNextTurn(WhotView.OnNextTurnEventArg e)
     {
-        Debug.Log("LẼ RA PHẢI SÁNG BÀI LÊN");
         if (e.playerTurn == whotGame.GetCurrentPlayer().Id)
         {
             WhotCardModel callCardModel = e.CallCardModel;

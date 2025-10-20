@@ -526,7 +526,7 @@ public class SlotTarzanView : BaseSlotView
 
     protected override void ShowWinAnimation(WinType winType)
     {
-        float delay = 6.3f;
+        float delay = 6.0f;
         effectContainer.gameObject.SetActive(true);
         animationEffect.gameObject.SetActive(true);
 
@@ -536,18 +536,18 @@ public class SlotTarzanView : BaseSlotView
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.BIG_WIN);
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
-                Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, 2.0f);
+                Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, delay - 1);
                 // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
                 animationEffect.transform.localScale = new Vector2(1f, 1f);
                 // animationEffect.transform.localPosition = new Vector2(0, -70);
                 Utility.PlayAnimationByPath(animationEffect, BIG_WIN_ANIMATION_PATH, BIG_WIN_ANIMATION_NAME, false);
-                delay = 5f;
+                delay = 4.7f;
                 break;
             case WinType.MEGA_WIN:
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
-                Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, 2.0f);
+                Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, delay - 1);
                 // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
                 animationEffect.transform.localScale = new Vector2(1f, 1f);
                 // animationEffect.transform.localPosition = new Vector2(0, -70);
@@ -557,7 +557,7 @@ public class SlotTarzanView : BaseSlotView
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
-                Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, 2.0f);
+                Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, delay - 1);
                 // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
                 animationEffect.transform.localScale = new Vector2(1f, 1f);
                 // animationEffect.transform.localPosition = new Vector2(0, -70);
@@ -577,10 +577,13 @@ public class SlotTarzanView : BaseSlotView
                 Utility.PlayAnimationByPath(animationEffect, FREE_SPIN_ANIMATION_PATH, FREE_SPIN_ANIMATION_NAME, false);
                 break;
         }
-        DOVirtual.DelayedCall(delay, () =>
+        if (new WinType[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(winType))
         {
-            bigWinText.transform.parent.gameObject.SetActive(false);
-        });
+            DOVirtual.DelayedCall(delay, () =>
+            {
+                bigWinText.transform.parent.gameObject.SetActive(false);
+            });
+        }
 
 
         animationEffect.AnimationState.Complete += delegate
