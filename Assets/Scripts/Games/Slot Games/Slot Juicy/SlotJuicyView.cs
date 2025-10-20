@@ -68,7 +68,7 @@ public class SlotJuicyView : BaseSlotView
     public override void HandleUpdateTable(IMatchState matchState)
     {
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
-                Debug.Log("Slot : " +data.ToString());
+        Debug.Log("Slot : " +data.ToString());
 
         // Update UI cho các item
         List<SiXiangSymbol> listSymbols = data.Matrix.Lists.ToList();
@@ -164,6 +164,11 @@ public class SlotJuicyView : BaseSlotView
             else
             {
                 UpdateJackpot();
+                
+                if (isChooseFreeGame || isChooseFruitRain)
+                {
+                    AnimateChooseBucket();
+                }
                 if (isClickMaxBet)
                 {
                     HandleSpin();
@@ -219,28 +224,11 @@ public class SlotJuicyView : BaseSlotView
             tweenQueue.Enqueue(() => ShowPopupChooseABucket());
         }
 
-        if (isChooseFreeGame || isChooseFruitRain)
-        {
-            AnimateChooseBucket();
-        }
         
         ///------------------CHECK FRUIT RAIN--------------------//
         if (isStartFruitRain)
         {
-            freeSpinLeft = 3;
-            ShowBackGroundFreeSpin();
-            CreateHolderPackageView();
-            tweenQueue.Enqueue(() => ShowPopupGetFruitRain());
-
-            // Fruit Rain sẽ autospin cho đến khi hết Fruit Rain
-            if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO)
-            {
-                spinType = SpinType.FREE_AUTO;
-            }
-            UpdateSpinButtonUI();
-            UpdateStateWinUI(StateWin.TOTAL_WIN);
-            chipWinText.text = "0";
-            NextTween();
+            SetupFruitRainGame();
             return;
         }
 
@@ -343,6 +331,24 @@ public class SlotJuicyView : BaseSlotView
 
     }
 
+    private void SetupFruitRainGame()
+    {
+        freeSpinLeft = 3;
+        ShowBackGroundFreeSpin();
+        CreateHolderPackageView();
+        tweenQueue.Enqueue(() => ShowPopupGetFruitRain());
+
+        // Fruit Rain sẽ autospin cho đến khi hết Fruit Rain
+        if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO)
+        {
+            spinType = SpinType.FREE_AUTO;
+        }
+        UpdateSpinButtonUI();
+        UpdateStateWinUI(StateWin.TOTAL_WIN);
+        chipWinText.text = "0";
+        NextTween();
+    }
+
     private void SetPackageValue(SlotColumn column, long[] packageValues)
     {
         column.SetPackageValue(packageValues);
@@ -352,7 +358,7 @@ public class SlotJuicyView : BaseSlotView
 
     public override void OnClickMaxBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || isClickMaxBet)
         {
             return;
         }
@@ -437,18 +443,17 @@ public class SlotJuicyView : BaseSlotView
         effectContainer.gameObject.SetActive(true);
         popupGetFruitRain.gameObject.SetActive(true);
         popupGetFruitRain.Show();
-        if (spinType == SpinType.AUTO || spinType == SpinType.FREE_AUTO)
-        {
-            DOTween.Sequence()
-                .AppendInterval(10.0f)
-                .AppendCallback(() =>
+ 
+        DOTween.Sequence()
+            .AppendInterval(10.0f)
+            .AppendCallback(() =>
+            {
+                if (popupGetFruitRain.gameObject.activeSelf)
                 {
-                    if (popupGetFruitRain.gameObject.activeSelf)
-                    {
-                        HidePopupGetFruitRain();
-                    }
-                });
-        }
+                    HidePopupGetFruitRain();
+                }
+            });
+        
     }
 
     private void ShowPopupChooseABucket()

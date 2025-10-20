@@ -75,18 +75,22 @@ public class BaseDiceGameView : BaseGameView
             }
 
         }
+        else
+        {
+            rearrangedPlayers = new(players);
+        }
 
         // 3) Xử lý players leave
-        foreach (var lp in update.LeavePlayers)
-        {
-            Debug.Log($"Player {lp.UserName} left the table");
-            if (userIdToView.TryGetValue(lp.Id, out var view))
+            foreach (var lp in update.LeavePlayers)
             {
-                Destroy(view.gameObject);
-                RemovePlayerBoxBet(lp.Id);
-                userIdToView.Remove(lp.Id);
+                Debug.Log($"Player {lp.UserName} left the table");
+                if (userIdToView.TryGetValue(lp.Id, out var view))
+                {
+                    Destroy(view.gameObject);
+                    RemovePlayerBoxBet(lp.Id);
+                    userIdToView.Remove(lp.Id);
+                }
             }
-        }
 
         // 4) Xử lý players join
         foreach (var jp in update.JoinPlayers)
@@ -116,9 +120,9 @@ public class BaseDiceGameView : BaseGameView
         }
 
         // Gán các vị trí tiếp theo theo thứ tự trong update.players, bỏ qua local
-        for (int i = 0; i < players.Count && positionIndex < listPosView.Count; i++)
+        for (int i = 0; i < rearrangedPlayers.Count && positionIndex < listPosView.Count; i++)
         {
-            var p = players[i];
+            var p = rearrangedPlayers[i];
             if (p.Id == localUserId) continue;
             CreatePlayerView(p, listPosView[positionIndex]);
             positionIndex++;

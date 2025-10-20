@@ -142,6 +142,7 @@ public class WhotPlayer : MonoBehaviour
             WhotCardModel whotCardModel = PoolService.Instance.Get<WhotCardModel>(PrefabType.WhotCard);
             whotCardModel.transform.SetParent(remainingCardsParent);
             whotCardModel.SetInfo(card.Suit, card.Rank);
+            Debug.Log("INIT REMAINING CARD: " + card.Rank + " - " + card.Suit + " for player " + nameText.text.ToString() );
             whotCardModel.SetSelectable(false);
             whotCardModel.transform.localScale = Vector3.one * CARD_SCALE;
 
@@ -205,15 +206,13 @@ public class WhotPlayer : MonoBehaviour
         {
             scoreImage.gameObject.SetActive(false);
         }
-        foreach (Transform child in remainingCardsParent)
+
+        for (int i = remainingCardsParent.childCount - 1; i >= 1; i--)
         {
-            WhotCardModel whotCardModel = child.GetComponent<WhotCardModel>();
-            if (whotCardModel != null)
-            {
-                // Destroy(child.gameObject);
-                PoolService.Instance.Release(PrefabType.WhotCard, whotCardModel);
-            }
+            Transform child = remainingCardsParent.GetChild(i);
+            DestroyImmediate(child.gameObject);
         }
+        
     }
 
     private void StartCountDown(int countdown)

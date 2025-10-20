@@ -486,6 +486,11 @@ public class BasePlayerView : MonoBehaviour
         }
     }
 
+    public virtual void HideCountDown()
+    {
+        timeCountDown.gameObject.SetActive(false);
+    }
+
     /// <summary>
     /// Checks if it's player's turn
     /// </summary>

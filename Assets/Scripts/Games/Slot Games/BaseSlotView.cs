@@ -216,18 +216,20 @@ public class BaseSlotView : BaseGameView
 
     public virtual void OnStopSpin()
     {
+        // ShowWinAnimation(WinType.MEGA_WIN);
         IsSpinning = false;
         if (isLastFreeSpin)
         {
-            if (totalChipWinByGame > PaylineIdList.Count * currentBetLevel) winType = WinType.BIG_WIN;
-            if (totalChipWinByGame > 50 * currentBetLevel) winType = WinType.MEGA_WIN;
-            if (totalChipWinByGame > 0)
+            // if (totalChipWinByGame > PaylineIdList.Count * currentBetLevel) winType = WinType.BIG_WIN;
+            // if (totalChipWinByGame > 50 * currentBetLevel) winType = WinType.MEGA_WIN;
+            if (winType == WinType.NONE && totalChipWinByGame > 0)
             {
                 AnimateCoinsFly();
             }
             isLastFreeSpin = false;
             spinType = SpinType.NORMAL;
             UpdateGameState(SlotGameState.PREPARE);
+            HideBackgroundFreeSpin();
         }
 
         ///------------------CHECK SHOW WIN SCATTER--------------------//
@@ -254,7 +256,6 @@ public class BaseSlotView : BaseGameView
         {
             tweenQueue.Enqueue(() => ShowAllWinLines());
         }
-
         ///------------------CHECK SHOW TYPE WIN--------------------///
         if (!isInFreeSpin)
         {
@@ -271,10 +272,11 @@ public class BaseSlotView : BaseGameView
                     break;
             }
         }
-        else
-        {
-            ShowBackGroundFreeSpin();
-        }
+
+        // else
+        // {
+        //     ShowBackGroundFreeSpin();
+        // }
 
         ///------------------CHECK SHOW ONE BY ONE--------------------//
         if (paylineList.Count > 0)
@@ -441,7 +443,7 @@ public class BaseSlotView : BaseGameView
 
     public virtual void OnClickMaxBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || isClickMaxBet)
         {
             return;
         }
@@ -453,6 +455,7 @@ public class BaseSlotView : BaseGameView
         SetCurrentBetImage(currentBetLevel);
         if (lastBetLevel == currentBetLevel && !isInFreeSpin)
         {
+            isClickMaxBet = true;
             HandleSpin();
         }
     }
@@ -525,7 +528,7 @@ public class BaseSlotView : BaseGameView
                 {
                     linePool.Release(line);
                 }
-                if (spinType == SpinType.AUTO)
+                if (spinType == SpinType.AUTO && winType == WinType.NONE)
                 {
                     AnimateCoinsFly();
                 }
@@ -671,7 +674,7 @@ public class BaseSlotView : BaseGameView
 
     protected virtual void ShowWinAnimation(WinType winType)
     {
-        float delay = 5f;
+        float delay = 5.5f;
         effectContainer.gameObject.SetActive(true);
         animationEffect.gameObject.SetActive(true);
 
@@ -681,18 +684,18 @@ public class BaseSlotView : BaseGameView
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.BIG_WIN);
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
-                Utility.TweenNumberToNumber(bigWinText, totalChipWinByGame, 0, 2.0f);
+                Utility.TweenNumberToNumber(bigWinText, totalChipWinByGame, 0, delay - 1);
                 // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
                 animationEffect.transform.localScale = new Vector2(1f, 1f);
                 // animationEffect.transform.localPosition = new Vector2(0, -70);
                 Utility.PlayAnimationByPath(animationEffect, BIG_WIN_ANIMATION_PATH, BIG_WIN_ANIMATION_NAME, false);
-                delay = 4.5f;
+                delay = 5f;
                 break;
             case WinType.MEGA_WIN:
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
-                Utility.TweenNumberToNumber(bigWinText, totalChipWinByGame, 0, 2.0f);
+                Utility.TweenNumberToNumber(bigWinText, totalChipWinByGame, 0, delay - 1);
                 // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
                 animationEffect.transform.localScale = new Vector2(1f, 1f);
                 // animationEffect.transform.localPosition = new Vector2(0, -70);
@@ -712,7 +715,7 @@ public class BaseSlotView : BaseGameView
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
-                Utility.TweenNumberToNumber(bigWinText, totalChipWinByGame, 0, 2.0f);
+                Utility.TweenNumberToNumber(bigWinText, totalChipWinByGame, 0, delay - 1);
                 // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
                 animationEffect.transform.localScale = new Vector2(1f, 1f);
                 // animationEffect.transform.localPosition = new Vector2(0, -70);
@@ -732,16 +735,21 @@ public class BaseSlotView : BaseGameView
                 Utility.PlayAnimationByPath(animationEffect, FREE_SPIN_ANIMATION_PATH, FREE_SPIN_ANIMATION_NAME, false);
                 break;
         }
-        DOVirtual.DelayedCall(delay, () =>
-        {
-            bigWinText.transform.parent.gameObject.SetActive(false);
-        });
+
 
         if (winType != WinType.MEGA_WIN)
         {
             animationEffect.AnimationState.Complete += delegate
             {
                 effectContainer.gameObject.SetActive(false);
+                if (new WinType[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(winType))
+                {
+                    DOVirtual.DelayedCall(delay, () =>
+                    {
+                        bigWinText.transform.parent.gameObject.SetActive(false);
+                        AnimateCoinsFly();
+                    });
+                }
                 NextTween();
                 effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
             };
@@ -1057,6 +1065,19 @@ public class BaseSlotView : BaseGameView
         }
 
         freeSpinLeftText.text = $"Freespin left: {freeSpinLeft}";
+    }
+
+    protected void HideBackgroundFreeSpin()
+    {
+         if (backgroundFreeSpinAnimation != null)
+        {
+            backgroundFreeSpinAnimation.gameObject.SetActive(false);
+        }
+
+        if (backgroundFreeSpinLeftAnimation != null)
+        {
+            backgroundFreeSpinLeftAnimation.gameObject.SetActive(false);
+        }
     }
 
     protected void SetInfoSessionText(string text)
@@ -1376,11 +1397,11 @@ public class BaseSlotView : BaseGameView
         // {
         //     winAmount = winAmount + validBetLevels[currentBetLevel] * jackpotLevel[3];
         // }
-        if (winAmount > 50 * currentBetLevel)
+        if (winAmount >= 50 * currentBetLevel)
         {
             winType = WinType.MEGA_WIN;
         }
-        else if (winAmount > 20 * currentBetLevel)
+        else if (winAmount >= 20 * currentBetLevel)
         {
             winType = WinType.BIG_WIN;
         }

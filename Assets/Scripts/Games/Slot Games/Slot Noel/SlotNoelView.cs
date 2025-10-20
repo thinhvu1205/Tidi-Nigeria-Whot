@@ -6,6 +6,8 @@ using Globals;
 using Nakama;
 using UnityEngine;
 using Color = UnityEngine.Color;
+using DG.Tweening;
+using UnityEngine.UI;
 
 public class SlotNoelView : BaseSlotView
 {
@@ -34,9 +36,9 @@ public class SlotNoelView : BaseSlotView
 
     public void Init()
     {
-   
+
     }
-    
+
     #region handle Match
 
     public override void HandleMatchFound(IMatchmakerMatched matchmakerMatched)
@@ -95,7 +97,7 @@ public class SlotNoelView : BaseSlotView
     }
 
     #endregion
-    
+
     protected override void SetSpinAnimation(SpinType type)
     {
         buttonSpinAnimation.startingAnimation = type switch
@@ -105,5 +107,83 @@ public class SlotNoelView : BaseSlotView
             SpinType.AUTO => "stop",
             _ => "autospin"
         };
+    }
+    
+    protected override void ShowWinAnimation(WinType winType)
+    {
+        float delay = 7f;
+        effectContainer.gameObject.SetActive(true);
+        animationEffect.gameObject.SetActive(true);
+
+        switch (winType)
+        {
+            case WinType.BIG_WIN:
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.BIG_WIN);
+                bigWinText.transform.parent.gameObject.SetActive(true);
+                bigWinText.gameObject.SetActive(true);
+                Utility.TweenNumberToNumber(bigWinText, totalChipWinByGame, 0, delay - 1);
+                // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
+                animationEffect.transform.localScale = new Vector2(1f, 1f);
+                // animationEffect.transform.localPosition = new Vector2(0, -70);
+                Utility.PlayAnimationByPath(animationEffect, BIG_WIN_ANIMATION_PATH, BIG_WIN_ANIMATION_NAME, false);
+                delay = 5.5f;
+                break;
+            case WinType.MEGA_WIN:
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
+                bigWinText.transform.parent.gameObject.SetActive(true);
+                bigWinText.gameObject.SetActive(true);
+                Utility.TweenNumberToNumber(bigWinText, totalChipWinByGame, 0, delay - 1);
+                // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
+                animationEffect.transform.localScale = new Vector2(1f, 1f);
+                // animationEffect.transform.localPosition = new Vector2(0, -70);
+                Utility.PlayAnimationByPath(animationEffect, MEGA_WIN_ANIMATION_PATH, MEGA_WIN_ANIMATION_NAME, false);
+                break;
+            case WinType.HUGE_WIN:
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
+                bigWinText.transform.parent.gameObject.SetActive(true);
+                bigWinText.gameObject.SetActive(true);
+                Utility.TweenNumberToNumber(bigWinText, totalChipWinByGame, 0, delay - 1);
+                // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
+                animationEffect.transform.localScale = new Vector2(1f, 1f);
+                // animationEffect.transform.localPosition = new Vector2(0, -70);
+                Utility.PlayAnimationByPath(animationEffect, HUGE_WIN_ANIMATION_PATH, HUGE_WIN_ANIMATION_NAME, false);
+                break;
+            case WinType.FIVE_OF_A_KIND:
+                animationEffect.transform.localScale = Vector2.one;
+                animationEffect.transform.localPosition = Vector2.zero;
+                bigWinText.transform.parent.gameObject.SetActive(false);
+                Utility.PlayAnimationByPath(animationEffect, FIVE_OF_A_KIND_ANIMATION_PATH, FIVE_OF_A_KIND_ANIMATION_NAME, false);
+                break;
+            case WinType.FREE_SPIN:
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.FREESPIN);
+                animationEffect.transform.localScale = Vector2.one;
+                animationEffect.transform.localPosition = Vector2.zero;
+                bigWinText.transform.parent.gameObject.SetActive(false);
+                Utility.PlayAnimationByPath(animationEffect, FREE_SPIN_ANIMATION_PATH, FREE_SPIN_ANIMATION_NAME, false);
+                break;
+        }
+        if (new WinType[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(winType))
+        {
+            DOVirtual.DelayedCall(delay, () =>
+            {
+                bigWinText.transform.parent.gameObject.SetActive(false);
+            });
+        }
+
+        animationEffect.AnimationState.Complete += delegate
+        {
+            effectContainer.gameObject.SetActive(false);
+            if (new WinType[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(winType))
+            {
+                DOVirtual.DelayedCall(delay, () =>
+                {
+                    bigWinText.transform.parent.gameObject.SetActive(false);
+                    AnimateCoinsFly();
+                });
+            }
+            NextTween();
+            effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
+        };
+        
     }
 }

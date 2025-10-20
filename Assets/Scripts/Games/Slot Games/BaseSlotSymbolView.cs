@@ -1121,7 +1121,7 @@ public class BaseSlotSymbolView : BaseGameView
 
     public virtual void OnClickMaxBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || currentGame != SiXiangGame.Normal)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || currentGame != SiXiangGame.Normal || isClickMaxBet)
         {
             return;
         }
@@ -1199,7 +1199,7 @@ public class BaseSlotSymbolView : BaseGameView
             SetLightAllItems();
             if (autoSpinRemain == 0)
             {
-                SetInfoSessionText("Press SPIN to play");
+                ResetToNormalState();
             }
             ScatterCount = 0;
         }
@@ -1227,6 +1227,17 @@ public class BaseSlotSymbolView : BaseGameView
             }
         }
      
+    }
+
+
+    protected void ResetToNormalState()
+    {
+        spinType = SpinType.NORMAL;
+        UpdateGameState(SlotGameState.PREPARE);
+        autoSpinRemain = 0;
+        SetInfoSessionText("Press SPIN to play");
+        SetAutoSpinRemain();
+        UpdateSpinButtonUI();
     }
 
     protected virtual void UpdateColumnView(SlotDesk data)

@@ -53,7 +53,7 @@ public class PlayerLayout : MonoBehaviour
                 SetOrder(info, 0);
                 SetOrder(cards, 1);
                 SetOrder(avatar, 2);
-                username.Translate(-84f, 0f, 0f);
+                username.Translate(-64f, 0f, 0f);
                 username.GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.BottomRight;
                 chip.Translate(54f, 0f, 0f);
                 effect.Translate(116f, 0f, 0f);

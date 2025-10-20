@@ -221,6 +221,8 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void SpreadCards()
     {
+                Debug.Log("SpreadCards: " + listCardModel.Count);
+
         float totalWidth = (listCardModel.Count - 1) * CARD_SPACING;
         float startX = -totalWidth / 2f;
         for (int i = 0; i < listCardModel.Count; i++)
@@ -284,12 +286,16 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void SplitBoxBet(BlackjackHand firstHand = null, BlackjackHand secondHand = null)
     {
+        Debug.Log("SPLIT BOX BET: " + listCardModel.Count);
         // Lấy component CanvasGroup để fade (nếu là UI)
         secondBoxBet.gameObject.SetActive(true);
         if (!secondBoxBet.TryGetComponent<CanvasGroup>(out var canvasGroup))
+        {
             canvasGroup = secondBoxBet.gameObject.AddComponent<CanvasGroup>();
-        canvasGroup.alpha = 0f;
-        CardModel secondCard = listCardModel[1];
+            canvasGroup.alpha = 0f;
+
+        }
+        CardModel secondCard = listCardModel[0];
         Sequence seq = DOTween.Sequence();
         seq.Join(canvasGroup.DOFade(1f, 0.5f));
 

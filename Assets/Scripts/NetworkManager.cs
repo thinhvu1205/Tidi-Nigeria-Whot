@@ -182,8 +182,8 @@ public class NetworkManager : MonoBehaviour
     {
         try
         {
-            var email = $"{username}@fake.local";
-            var session = await _ClientC.AuthenticateEmailAsync(email, password, username, create: false);
+            // var email = $"{username}@fake.local";
+            var session = await _ClientC.AuthenticateEmailAsync("", password, username, create: false);
             Debug.Log($"Authenticated successfully. User ID: {session.UserId}");
             OnAuthenSuccess(session);
         }
@@ -525,7 +525,7 @@ public class NetworkManager : MonoBehaviour
         {
             lock (queueLock)
             {
-                Debug.Log("add state queue " + state);
+                // Debug.Log("add state queue " + state);
                 matchStateQueue.Enqueue(state);
             }
         };
@@ -614,7 +614,7 @@ public class NetworkManager : MonoBehaviour
         _ClientC = new Client("http", "172.23.112.1", 57350, "defaultkey");
         // _ClientC = new Client("http", "10.251.228.83", 57350, "defaultkey");
         _ClientC = new Client("http", "172.16.56.71", 57350, "defaultkey");
-        // _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey");
+        _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey");
         RestoreSession();
         string deviceId;
         if (PlayerPrefs.HasKey(DEVICE_ID)) deviceId = PlayerPrefs.GetString(DEVICE_ID);

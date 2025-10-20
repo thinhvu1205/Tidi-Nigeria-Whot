@@ -18,7 +18,7 @@ public class BlackjackButtonAction : MonoBehaviour
     public void ShowCheckBox()
     {
         checkbox.gameObject.SetActive(true);
-        checkboxImage.gameObject.SetActive(false);
+        checkboxImage.gameObject.SetActive(isChecked);
     }
 
     public void HideCheckBox()

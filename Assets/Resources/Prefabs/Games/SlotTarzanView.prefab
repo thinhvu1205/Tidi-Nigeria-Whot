@@ -2436,7 +2436,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5060916836164810660
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6239,7 +6239,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5643153628255899913
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15979,6 +15979,7 @@ MonoBehaviour:
   backgroundFreeSpinLeftAnimation: {fileID: 8995716899788640741}
   playerWallet: 0
   playerWalletAfter: 0
+  lastBetLevel: 0
   currentBetLevel: 0
   lastChipWin: 0
   currentChipWin: 0
