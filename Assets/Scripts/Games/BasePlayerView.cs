@@ -142,7 +142,7 @@ public class BasePlayerView : MonoBehaviour
         string nameText = namePl;
         if (namePl.Length > 10)
         {
-            nameText = namePl.Substring(0, 10) + "..."; 
+            nameText = namePl.Substring(0, 7) + "..."; 
         }
         textName.text = nameText;
         // Config.EffectTextRunInMask(txtName);

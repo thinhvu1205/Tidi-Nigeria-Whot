@@ -24,7 +24,7 @@ namespace Screens.LoginView
         
             if (string.IsNullOrEmpty(deviceId))
             {
-                deviceId = SystemInfo.deviceUniqueIdentifier;
+                deviceId = Guid.NewGuid().ToString();
                 PlayerPrefs.SetString("deviceId", deviceId);
             }
             await StartLoginGuest(deviceId);
