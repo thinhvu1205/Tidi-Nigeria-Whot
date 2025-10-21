@@ -51,8 +51,8 @@ SpriteAtlas:
     - fd5e3be56506aa94cb9170a2d7b20257: 4805568382377912380
     - 36443bb66777b4a83ac0eaaaaee3066f: 21300000
     - a1dbd9c6234a6464cba154b5a2a8b7c1: 21300000
-    - c43ddaf67e79342bb983c4df086e0e97: 21300000
     - c6a37927a275341cdac01e6148ac08a6: 21300000
+    - da140497e0c1241f08e0f7dd945a32d1: -8246103488371625927
     - a0cbd4f711612c24b9f4c67dc3b1d2ab: 21300000
     - b7838bf7e8abf4629b6b58eb44cfa2ad: 21300000
     - 7cf3ab585048147eaa24eacc63c933a1: 21300000
@@ -94,8 +94,8 @@ SpriteAtlas:
   - {fileID: 4805568382377912380, guid: fd5e3be56506aa94cb9170a2d7b20257, type: 3}
   - {fileID: 21300000, guid: 36443bb66777b4a83ac0eaaaaee3066f, type: 3}
   - {fileID: 21300000, guid: a1dbd9c6234a6464cba154b5a2a8b7c1, type: 3}
-  - {fileID: 21300000, guid: c43ddaf67e79342bb983c4df086e0e97, type: 3}
   - {fileID: 21300000, guid: c6a37927a275341cdac01e6148ac08a6, type: 3}
+  - {fileID: -8246103488371625927, guid: da140497e0c1241f08e0f7dd945a32d1, type: 3}
   - {fileID: 21300000, guid: a0cbd4f711612c24b9f4c67dc3b1d2ab, type: 3}
   - {fileID: 21300000, guid: b7838bf7e8abf4629b6b58eb44cfa2ad, type: 3}
   - {fileID: 21300000, guid: 7cf3ab585048147eaa24eacc63c933a1, type: 3}
@@ -136,8 +136,8 @@ SpriteAtlas:
   - card_up_0
   - card_7
   - card_1
-  - card_back
   - card
+  - card_back_0
   - card_joker_red
   - card_12_bich
   - card_8

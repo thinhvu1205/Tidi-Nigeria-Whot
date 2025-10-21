@@ -46,6 +46,8 @@ public class BlackjackBoxBet : MonoBehaviour
     private const float CARD_SPACING = 35f;
     private readonly List<Tween> highlightTweens = new List<Tween>();
     private float boxWidth;
+    private long totalBet;
+    private int maxPoint;
     private int index;
     public Vector2 BoxPosition { get; private set; }
     public bool HasBet { get; set; } = false;
@@ -78,13 +80,14 @@ public class BlackjackBoxBet : MonoBehaviour
         imageScoreBox.transform.localScale = Vector3.zero; // bắt đầu nhỏ
         imageScoreBox.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack);
 
-
         if (minPoint != maxPoint && point != 21)
         {
             textScore.text = $"{minPoint}/{maxPoint}";
+            this.maxPoint = maxPoint;
         }
         else
         {
+            this.maxPoint = point;
             textScore.text = point.ToString();
         }
 
@@ -145,6 +148,11 @@ public class BlackjackBoxBet : MonoBehaviour
         }
     }
 
+    public void ShowHigherScore()
+    {
+        ShowScore(maxPoint);
+    }
+
     public void HideScore()
     {
         imageState.gameObject.SetActive(false);
@@ -158,6 +166,7 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void SetBetValue(int index, long value, long totalValue, bool isWaiting = false)
     {
+        totalBet = totalValue;
         if (index < 0)
         {
             imageChip.gameObject.SetActive(false);
@@ -191,7 +200,7 @@ public class BlackjackBoxBet : MonoBehaviour
         int newIndex = listCardModel.Count;
         Vector2 targetPos = new(startX + newIndex * CARD_SPACING, cardContainer.localPosition.y);
 
-        return transform.TransformPoint(targetPos);;
+        return transform.TransformPoint(targetPos); ;
     }
 
     public void UpdateContainerWidth()
@@ -221,8 +230,6 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void SpreadCards()
     {
-                Debug.Log("SpreadCards: " + listCardModel.Count);
-
         float totalWidth = (listCardModel.Count - 1) * CARD_SPACING;
         float startX = -totalWidth / 2f;
         for (int i = 0; i < listCardModel.Count; i++)
@@ -267,7 +274,6 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void ShowAnimationWaiting()
     {
-        Debug.Log("SHOW ANIM WAITING");
         effectContainer.gameObject.SetActive(true);
         animationWaiting.gameObject.SetActive(true);
     }
@@ -286,7 +292,6 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void SplitBoxBet(BlackjackHand firstHand = null, BlackjackHand secondHand = null)
     {
-        Debug.Log("SPLIT BOX BET: " + listCardModel.Count);
         // Lấy component CanvasGroup để fade (nếu là UI)
         secondBoxBet.gameObject.SetActive(true);
         if (!secondBoxBet.TryGetComponent<CanvasGroup>(out var canvasGroup))
@@ -295,7 +300,7 @@ public class BlackjackBoxBet : MonoBehaviour
             canvasGroup.alpha = 0f;
 
         }
-        CardModel secondCard = listCardModel[0];
+        CardModel secondCard = listCardModel[1];
         Sequence seq = DOTween.Sequence();
         seq.Join(canvasGroup.DOFade(1f, 0.5f));
 
@@ -303,11 +308,12 @@ public class BlackjackBoxBet : MonoBehaviour
         switch (index)
         {
             case 0:
-                seq.JoinCallback(() =>
+                seq.Append(transform.DOLocalMoveY(BoxPosition.y + 10f, 0.25f))
+                .AppendCallback(() =>
                 {
-                    transform.DOLocalMoveX(BoxPosition.x - boxWidth, 0.5f);
-                    secondBoxBet.transform.DOLocalMoveX(2 * (BoxPosition.x + boxWidth), 0.5f);
-                    secondCard.transform.DOLocalMoveX(secondCard.transform.localPosition.x - CARD_SPACING, 0.5f);
+                    transform.DOLocalMoveX(BoxPosition.x - boxWidth, 0.25f);
+                    secondBoxBet.transform.DOLocalMoveX(2 * (BoxPosition.x + boxWidth), 0.25f);
+                    secondCard.transform.DOLocalMoveX(secondCard.transform.localPosition.x - CARD_SPACING, 0.25f);
                 });
                 break;
             case 1:
@@ -326,6 +332,8 @@ public class BlackjackBoxBet : MonoBehaviour
                 });
                 break;
         }
+        textTotalBet.text = Utility.FormatMoney(totalBet / 2, true);
+
         SetupSecondBox(secondHand);
         listCardModel.Remove(secondCard);
 

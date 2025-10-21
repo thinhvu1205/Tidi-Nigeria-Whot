@@ -296,7 +296,7 @@ public class DataSender
         catch (Exception ex)
         {
             Debug.LogError("JoinMatch failed: " + ex.Message);
-            UIManager.Instance.ShowAlertDialog("HEHEHE" + ex.Message, null);
+            UIManager.Instance.ShowAlertDialog(ex.Message, null);
             return null;
         }
     }

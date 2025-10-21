@@ -79,7 +79,8 @@ public class SlotSixiangView : BaseSlotSymbolView
     {
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
         currentGame = data.CurrentSixiangGame;
-        if (data.CurrentSixiangGame <= SiXiangGame.Sixangbonus && data.NextSixiangGame > SiXiangGame.Sixangbonus)
+        if (data.CurrentSixiangGame <= SiXiangGame.Sixangbonus && data.NextSixiangGame > SiXiangGame.Sixangbonus
+            || data.CurrentSixiangGame <= SiXiangGame.Bonus && data.NextSixiangGame > SiXiangGame.Bonus)
         {
             GetMatchResult();
         }
@@ -87,14 +88,15 @@ public class SlotSixiangView : BaseSlotSymbolView
         listSpinSymbol = data.Matrix.SpinLists.ToList();
         listGem = data.SixiangGems.ToList();
         gemPrice = data.ChipsBuyGem;
-        winType = data.BigWin switch
-        {
-            BigWin.Nice => WinType.NICE_WIN,
-            BigWin.Huge => WinType.HUGE_WIN,
-            BigWin.Big => WinType.BIG_WIN,
-            BigWin.Mega => WinType.MEGA_WIN,
-            _ => WinType.NONE,
-        };
+        // winType = data.BigWin switch
+        // {
+        //     BigWin.Nice => WinType.NICE_WIN,
+        //     BigWin.Huge => WinType.HUGE_WIN,
+        //     BigWin.Big => WinType.BIG_WIN,
+        //     BigWin.Mega => WinType.MEGA_WIN,
+        //     _ => WinType.NONE,
+        // };
+        SetWinType(data.GameReward.ChipsWin);
 
         UpdateColumnView(data);
         UpdateReward(data);
@@ -104,6 +106,29 @@ public class SlotSixiangView : BaseSlotSymbolView
             SetupStartView(data);
             UpdateJackpot(data);
             UpdateGem();
+
+            // Khi đang chơi dở minigame -> kết nối lại
+            if (currentGame == SiXiangGame.DragonPearl || currentGame == SiXiangGame.SixangbonusDragonPearl)
+            {
+                ShowDragonPearlView();
+                UpdateDragonPearlFreeSpinLeft();
+            }
+            else if (currentGame == SiXiangGame.Goldpick || currentGame == SiXiangGame.SixangbonusGoldpick)
+            {
+                ShowGoldPickView();
+            }
+            else if (currentGame == SiXiangGame.Rapidpay || currentGame == SiXiangGame.SixangbonusRapidpay)
+            {
+                ShowRapidPayView();
+            }
+            else if (currentGame == SiXiangGame.Luckdraw || currentGame == SiXiangGame.SixangbonusLuckdraw)
+            {
+                ShowLuckyDrawView();
+            }
+            else if (currentGame == SiXiangGame.Sixangbonus)
+            {
+                ShowChooseBonusGame();
+            }
         }
         else
         {
@@ -122,9 +147,9 @@ public class SlotSixiangView : BaseSlotSymbolView
                 }
             }
         }
-            CheckBonusGame(data);
-
- 
+  
+        CheckBonusGame(data);        
+        
 
         OnUpdateTable?.Invoke(new OnUpdateTableEventArgs
         {
@@ -235,21 +260,22 @@ public class SlotSixiangView : BaseSlotSymbolView
             }
 
             ///------------------CHECK SHOW TYPE WIN--------------------///
-            if (spinType != SpinType.AUTO && spinType != SpinType.FREE_AUTO)
+            switch (winType)
             {
-                switch (winType)
-                {
-                    case WinType.BIG_WIN:
-                        tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.BIG_WIN, currentChipWin));
-                        break;
-                    case WinType.MEGA_WIN:
-                        tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.MEGA_WIN, currentChipWin));
-                        break;
-                    case WinType.HUGE_WIN:
-                        tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.HUGE_WIN, currentChipWin));
-                        break;
-                }
+                case WinType.NICE_WIN:
+                    tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.NICE_WIN, currentChipWin));
+                    break;
+                case WinType.BIG_WIN:
+                    tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.BIG_WIN, currentChipWin));
+                    break;
+                case WinType.MEGA_WIN:
+                    tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.MEGA_WIN, currentChipWin));
+                    break;
+                case WinType.HUGE_WIN:
+                    tweenQueue.Enqueue(() => ShowSpecialWinAnimation(WinType.HUGE_WIN, currentChipWin));
+                    break;
             }
+            
 
             ///------------------CHECK SHOW ONE BY ONE--------------------//
             if (listPayline.Count > 0)
@@ -439,6 +465,11 @@ public class SlotSixiangView : BaseSlotSymbolView
                 {
                     luckyDrawView.gameObject.SetActive(false);
                     Destroy(luckyDrawView);
+                }
+                if (scatterView != null)
+                {
+                    scatterView.gameObject.SetActive(false);
+                    Destroy(scatterView);
                 }
             }
             else
@@ -759,6 +790,9 @@ public class SlotSixiangView : BaseSlotSymbolView
         {
             switch (winType)
             {
+                case WinType.NICE_WIN:
+                    ShowSpecialWinAnimation(WinType.NICE_WIN, totalChipWinByGame);
+                    break;
                 case WinType.BIG_WIN:
                     ShowSpecialWinAnimation(WinType.BIG_WIN, totalChipWinByGame);
                     break;

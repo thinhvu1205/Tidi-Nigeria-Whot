@@ -225,6 +225,7 @@ public class BaseSlotSymbolView : BaseGameView
 
     protected void GetMatchResult()
     {
+        Debug.Log("GET MATCH RESULT");
         isGetMatchResult = true;
         DataSender.SendMatchState((long)OpCodeRequest.InfoTable, new byte[0]);
     }
@@ -660,10 +661,9 @@ public class BaseSlotSymbolView : BaseGameView
         buttonConfirmSpecialWin.gameObject.SetActive(false);
         animationSpecialWin.gameObject.SetActive(false);
         effectContainer.gameObject.SetActive(false);
-        if (tweenQueue.Count > 0)
-        {
+    
             NextTween();
-        }
+        
     }
     #endregion
 

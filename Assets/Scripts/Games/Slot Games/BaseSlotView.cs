@@ -1397,11 +1397,11 @@ public class BaseSlotView : BaseGameView
         // {
         //     winAmount = winAmount + validBetLevels[currentBetLevel] * jackpotLevel[3];
         // }
-        if (winAmount >= 50 * currentBetLevel)
+        if (winAmount > 50 * currentBetLevel)
         {
             winType = WinType.MEGA_WIN;
         }
-        else if (winAmount >= 20 * currentBetLevel)
+        else if (winAmount > 20 * currentBetLevel)
         {
             winType = WinType.BIG_WIN;
         }

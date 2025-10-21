@@ -390,7 +390,9 @@ public class BasePlayerView : MonoBehaviour
     /// <param name="ag">New money amount</param>
     public void SetCurrentChip(long ag)
     {
-        Utility.TweenNumberTo(textMoney, ag, CurrentChip, 0.3f, false, false);
+        // Utility.TweenNumberTo(textMoney, ag, CurrentChip, 0.3f, false, false);
+        Utility.TweenNumberToNumberScale1(textMoney, (int)ag, (int)CurrentChip, 0.5f, false);
+
         CurrentChip = ag;
     }
 

@@ -80,7 +80,12 @@ public class BaccaratView : BaseDiceGameView
     private List<int> listWinResult = new List<int>();
     private List<int> savePotLose = new List<int>();
     [HideInInspector] public List<TypeWinBaccarat> listSaveHistory = new List<TypeWinBaccarat>();
-
+    public override GameState[] AvailableLeaveStates => new GameState[]
+    {
+        GameState.Idle,
+        GameState.Matching,
+        GameState.Preparing,
+    };
     private long betValue = 0;
     private int chipBetColorInx = 0;
     private int myChipBetColor = 0;
