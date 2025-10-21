@@ -504,10 +504,10 @@ public class BlackjackView : BaseDiceGameView
         });
     }
 
-    public override void HandleUpdateKickOffTheTable(IMatchState matchState)
-    {
-        Destroy(gameObject);
-    }
+    // public override void HandleUpdateKickOffTheTable(IMatchState matchState)
+    // {
+    //     Destroy(gameObject);
+    // }
     #endregion
 
     private void StartCountDownBetTime(int time)

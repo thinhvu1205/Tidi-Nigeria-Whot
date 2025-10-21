@@ -222,10 +222,10 @@ public class HongKongPokerView : BaseDiceGameView
         Debug.Log("Update Wallet: " + data);
     }
 
-    public override void HandleUpdateKickOffTheTable(IMatchState matchState)
-    {
-        Destroy(gameObject);
-    }
+    // public override void HandleUpdateKickOffTheTable(IMatchState matchState)
+    // {
+    //     Destroy(gameObject);
+    // }
 
     #endregion
 

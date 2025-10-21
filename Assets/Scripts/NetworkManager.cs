@@ -409,6 +409,7 @@ public class NetworkManager : MonoBehaviour
 
     public async UniTask LeaveRoomChat()
     {
+        if(CurrentRoomChatChannelId == "") return;
         await _SocketIS.LeaveChatAsync(CurrentRoomChatChannelId);
         CurrentRoomChatChannelId = "";
     }

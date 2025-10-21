@@ -86,10 +86,10 @@ public class SlotNoelView : BaseSlotView
         base.HandleUpdateWallet(matchState);
     }
 
-    public override void HandleUpdateKickOffTheTable(IMatchState matchState)
-    {
-        base.HandleUpdateKickOffTheTable(matchState);
-    }
+    // public override void HandleUpdateKickOffTheTable(IMatchState matchState)
+    // {
+    //     base.HandleUpdateKickOffTheTable(matchState);
+    // }
 
     public override void HandleFinish(IMatchState matchState)
     {

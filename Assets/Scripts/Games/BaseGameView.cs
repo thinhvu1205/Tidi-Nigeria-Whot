@@ -10,6 +10,7 @@ using TMPro;
 using UnityEngine;
 using GameState = Proto.GameState;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 
 public class BaseGameView : BaseView
 {
@@ -95,11 +96,15 @@ public class BaseGameView : BaseView
         
     }
 
-    public virtual void HandleUpdateKickOffTheTable(IMatchState matchState)
+    public virtual async UniTask HandleUpdateKickOffTheTable(IMatchState matchState)
     {
+        Debug.Log("kick off the table base view " );
         if (UIManager.Instance.gameView == null) return;
         Destroy(UIManager.Instance.gameView.gameObject);
         UIManager.Instance.gameView = null;
+        await NetworkManager.INSTANCE.LeaveRoomChat();
+        await NetworkManager.INSTANCE.JoinWorldChat();
+        await UIManager.Instance.LoadProfileUser();
     }
 
     public virtual void HandleFinish(IMatchState matchState)
