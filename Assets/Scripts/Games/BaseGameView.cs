@@ -106,6 +106,16 @@ public class BaseGameView : BaseView
     {
         
     }
+
+    public virtual void HandleError(IMatchState matchState)
+    {
+        if(UIManager.Instance.gameView == null) return;
+        var error = Error.Parser.ParseFrom(matchState.State);
+        if (error is { ErrorType: ErrorType.CannotLeaveGame})
+        {
+            UIManager.Instance.ShowToast("You cannot leave while the match is in progress!", 2, transform);
+        }
+    }
     
     #endregion
 }

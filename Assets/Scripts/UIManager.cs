@@ -222,16 +222,13 @@ public class UIManager : Singleton<UIManager>
         gameView?.LoadInfoMatch(labelMatch);
     }
 
-    public async UniTask HandleLeaveGame()
+    public void HandleLeaveGame()
     {
         if (gameView != null)
         {
-            if (Constants.SLOT_GAMES_ID.Contains(Config.currentGameId) || new GameState[] { GameState.Idle, GameState.Matching, GameState.Finish }.Contains(gameView.GameState))
-            {
-                await DataSender.LeaveMatch();
-                await NetworkManager.INSTANCE.JoinWorldChat();
-                Destroy(gameView.gameObject);
-                await LoadProfileUser();
+            if (!Constants.SLOT_GAMES_ID.Contains(Config.currentGameId))
+            { 
+                DataSender.SendMatchState((long) OpCodeRequest.LeaveGame, Array.Empty<byte>());
             }
         }
     }

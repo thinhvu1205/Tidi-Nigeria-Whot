@@ -60,6 +60,9 @@ public class GameManager : Singleton<GameManager>
                 case (long)OpCodeUpdate.Finish:
                     UIManager.Instance.gameView.HandleFinish(matchState);
                     break; 
+                case (long)OpCodeUpdate.OpcodeError:
+                    UIManager.Instance.gameView.HandleError(matchState);
+                    break;
             }
         }
     }

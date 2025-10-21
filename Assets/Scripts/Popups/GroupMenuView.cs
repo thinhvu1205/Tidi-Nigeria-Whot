@@ -26,11 +26,8 @@ public class GroupMenuView : BaseView
     public void OnClickLeaveTable()
     {
         SoundManager.Instance.PlayMusicLobby();
-        UniTask.Void(async () =>
-        { 
-            await UIManager.Instance.HandleLeaveGame();
-            Hide();
-        });
+        UIManager.Instance.HandleLeaveGame();
+        Hide();
     }
 
     public void OnClickSettings()
