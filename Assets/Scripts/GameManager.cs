@@ -55,11 +55,14 @@ public class GameManager : Singleton<GameManager>
                     UIManager.Instance.gameView.HandleUpdateWallet(matchState);
                     break;
                 case (long)OpCodeUpdate.OpcodeKickOffTheTable:
-                    UIManager.Instance.gameView.HandleUpdateKickOffTheTable(matchState);
+                    _ = UIManager.Instance.gameView.HandleUpdateKickOffTheTable(matchState);
                     break;
                 case (long)OpCodeUpdate.Finish:
                     UIManager.Instance.gameView.HandleFinish(matchState);
                     break; 
+                case (long)OpCodeUpdate.OpcodeError:
+                    UIManager.Instance.gameView.HandleError(matchState);
+                    break;
             }
         }
     }

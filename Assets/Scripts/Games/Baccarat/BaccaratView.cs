@@ -415,11 +415,11 @@ public class BaccaratView : BaseDiceGameView
         }
     }
 
-    public override void HandleUpdateKickOffTheTable(IMatchState matchState)
-    {
-        base.HandleUpdateKickOffTheTable(matchState);
-        Debug.Log("HandleUpdateKickOffTheTable for baccarat "+ matchState.State.ToString());
-    }
+    // public override void HandleUpdateKickOffTheTable(IMatchState matchState)
+    // {
+    //     base.HandleUpdateKickOffTheTable(matchState);
+    //     Debug.Log("HandleUpdateKickOffTheTable for baccarat "+ matchState.State.ToString());
+    // }
 
     public override void HandleFinish(IMatchState matchState)
     {

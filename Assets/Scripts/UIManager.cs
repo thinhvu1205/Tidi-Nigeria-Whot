@@ -114,8 +114,9 @@ public class UIManager : Singleton<UIManager>
     
     #region Games
 
-    public async UniTask HandleFindAndJoinMatch(int markUnit, bool typeWinMore = false)
+    public async UniTask HandleFindAndJoinMatch(int markUnit)
     {
+
         RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, true);
         if (response == null) return;
         Debug.Log("Find match response: " + response.ToString());
@@ -128,7 +129,7 @@ public class UIManager : Singleton<UIManager>
             }
             else
             {
-                HandleOpenGame(labelMatch, typeWinMore);
+                HandleOpenGame(labelMatch);
             }
         }
     }
@@ -162,19 +163,18 @@ public class UIManager : Singleton<UIManager>
         }
     }
     
-    public void HandleOpenGame(Match labelMatch, bool isTypeWinMore = false)
+    public void HandleOpenGame(Match labelMatch)
     {
         HideProgressing();
         
         if (gameView != null)
         {
-            if (isTypeWinMore)
+            WhotView whotView = gameView as WhotView;
+            if (whotView != null && whotView.TypeWinMore)
             {
-                gameView.LoadInfoMatch(labelMatch);
-                WhotView whotView = gameView as WhotView;
-                whotView?.Init();
+                whotView.LoadInfoMatch(labelMatch);
                 return;
-            };
+            }
             Destroy(gameView.gameObject);
         }
         Debug.Log("CURRENT GAME: " + Config.currentGameId);
@@ -226,12 +226,18 @@ public class UIManager : Singleton<UIManager>
     {
         if (gameView != null)
         {
-            if (Constants.SLOT_GAMES_ID.Contains(Config.currentGameId) || new GameState[] { GameState.Idle, GameState.Matching, GameState.Finish }.Contains(gameView.GameState))
-            {
+            if (Constants.SLOT_GAMES_ID.Contains(Config.currentGameId))
+            { 
                 await DataSender.LeaveMatch();
+                await NetworkManager.INSTANCE.LeaveRoomChat();
                 await NetworkManager.INSTANCE.JoinWorldChat();
-                Destroy(gameView.gameObject);
                 await LoadProfileUser();
+                Destroy(gameView.gameObject);
+                SoundManager.Instance.PlayMusicLobby();
+            }
+            else
+            {
+                DataSender.SendMatchState((long) OpCodeRequest.LeaveGame, Array.Empty<byte>());
             }
         }
     }

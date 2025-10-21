@@ -30,7 +30,18 @@ public class TableItem : MonoBehaviour
         joinButton.gameObject.SetActive(match.Open);
         joinButton.gameObject.SetActive(true);
         markUnitText.text = Utility.FormatMoney((int)match.MarkUnit, true);
-        tableNameText.text = match.Name;
+        string listName = "";
+        foreach (SimpleProfile simpleProfile in match.Profiles)
+        {
+            name = simpleProfile.UserName;
+            if (name.Length > 10)
+            {
+                name = name.Substring(0, 7) + "...";
+            }
+            name += ","; 
+            listName += name;
+        }
+        tableNameText.text = listName;
         tableIDText.text = match.TableId;
         joinButton.onClick.RemoveAllListeners();
         joinButton.onClick.AddListener(() => _ = OnClickButtonJoin(match.MatchId, match.Open));

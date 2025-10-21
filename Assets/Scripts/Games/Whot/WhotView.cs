@@ -93,6 +93,8 @@ public class WhotView : BaseGameView
     private int totalCardsLeft = 54;
     private Action cbShowMatchRs = null;
     public float CurrentMarkUnit { get; private set; }
+    public float HigherMarkUnit { get; private set; }
+    public bool TypeWinMore = false;
     protected override void Awake()
     {
         base.Awake();
@@ -104,7 +106,7 @@ public class WhotView : BaseGameView
         // Khi chạm vào màn hình thì gửi lên trạng thái active để server ko kick người chơi ra khỏi bàn
         if (Input.GetMouseButtonDown(0) || Input.touchCount > 0)
         {
-            DataSender.SendMatchState((long)OpCodeRequest.OpcodeUserInteractCards, new byte[0]);
+            DataSender.SendMatchState((long)OpCodeRequest.OpcodeUserInteractCards, Array.Empty<byte>());
         }
     }
 
@@ -119,6 +121,8 @@ public class WhotView : BaseGameView
 
     public void Init()
     {
+        TypeWinMore = false;
+        _ = CalculateHigherBet();
         DOTween.KillAll(true);
         // cardPool = new ObjectPool<WhotCard>(cardPrefab.GetComponent<WhotCard>(), 20, cardPoolParent);
         PoolService.Instance.Register(PrefabType.WhotCard, cardPoolParent, whotCardModelPrefab, 20, 50, 15);
@@ -145,6 +149,20 @@ public class WhotView : BaseGameView
         }
     }
 
+    
+    private async UniTask CalculateHigherBet()
+    {
+        Bets bets = await DataSender.GetListBet(Config.currentGameId);
+        List<Bet> betItemList = bets.Bets_.ToList();
+
+        Bet higherBet = betItemList
+            .Where(b => b.Enable && b.MarkUnit > CurrentMarkUnit)
+            .OrderBy(b => b.MarkUnit)
+            .FirstOrDefault();
+
+        HigherMarkUnit = higherBet ?.MarkUnit ?? CurrentMarkUnit;
+    }
+    
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -173,6 +191,10 @@ public class WhotView : BaseGameView
     // Khi có người chơi join hoặc leave
     public override void HandleUpdateTable(IMatchState matchState)
     {
+        if (TypeWinMore)
+        {
+            Init();
+        }
         var data = UpdateTable.Parser.ParseFrom(matchState.State);
         Debug.Log("UPDATE TABLE: " + data.ToString());
         playersParent.gameObject.SetActive(true);
@@ -553,9 +575,15 @@ public class WhotView : BaseGameView
             });
     }
 
-    public override void HandleUpdateKickOffTheTable(IMatchState matchState)
+    public override async UniTask HandleUpdateKickOffTheTable(IMatchState matchState)
     {
-        Destroy(gameObject);
+        Debug.Log("kick off the table whot view " + TypeWinMore);
+        if (TypeWinMore)
+        {
+            await UIManager.Instance.HandleFindAndJoinMatch((int)HigherMarkUnit);
+            return;
+        }
+        await base.HandleUpdateKickOffTheTable(matchState);
     }
     #endregion
 
@@ -1269,21 +1297,7 @@ public class WhotView : BaseGameView
 
     public void OnQuitMatch()
     {
-        if (new GameState[] { GameState.Idle, GameState.Matching, GameState.Finish, GameState.Reward }.Contains(gameState) || !GetCurrentPlayer().isPlaying)
-        {
-            UniTask.Void(async () =>
-            {
-                await NetworkManager.INSTANCE.LeaveMatch();
-                await NetworkManager.INSTANCE.LeaveRoomChat();
-                await NetworkManager.INSTANCE.JoinWorldChat();
-                Destroy(gameObject);
-            });
-            UIManager.Instance.OpenBanner(TypeInAppMessage.Banner);
-        }
-        else
-        {
-            UIManager.Instance.ShowToast("You cannot leave while the match is in progress!", 2, transform);
-        }
+        _ = UIManager.Instance.HandleLeaveGame();
     }
 
     public void OnClickChat()

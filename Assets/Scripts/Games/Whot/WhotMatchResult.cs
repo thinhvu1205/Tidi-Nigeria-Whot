@@ -20,7 +20,6 @@ public class WhotMatchResult : MonoBehaviour
     private List<Bet> betItemList = new();
     private WhotView whotGame;
     private int timer = 10;
-    private float higherMarkUnit;
 
     private void OnEnable()
     {
@@ -30,7 +29,6 @@ public class WhotMatchResult : MonoBehaviour
             return;
         }
         winMoreButton.gameObject.SetActive(true);
-        GetListBet().Forget();
     }
     
     public void UpdateTimerCountdown(int countdown)
@@ -47,6 +45,8 @@ public class WhotMatchResult : MonoBehaviour
     public void SetInfo(WhotView whotGame, List<WhotPlayer> players, List<WhotPlayerResult> result, List<BalanceUpdate> balanceUpdates, bool isVictory)
     {
         this.whotGame = whotGame;
+        UpdateBetNoteText();
+        SetWinMoreButtonListener();
         backgroundWin.gameObject.SetActive(isVictory);
         backgroundLose.gameObject.SetActive(!isVictory);
         victoryImage.gameObject.SetActive(isVictory);
@@ -99,26 +99,11 @@ public class WhotMatchResult : MonoBehaviour
     {
         betMoreNote.SetActive(false);
     }
-
-    private async UniTask GetListBet()
-    {
-        Bets bets = await DataSender.GetListBet(Config.currentGameId);
-        betItemList = bets.Bets_.ToList();
-
-        Bet higherBet = betItemList
-            .Where(b => b.Enable && b.MarkUnit > whotGame.CurrentMarkUnit)
-            .OrderBy(b => b.MarkUnit)
-            .FirstOrDefault();
-
-        higherMarkUnit = higherBet != null ? higherBet.MarkUnit : whotGame.CurrentMarkUnit;
-        UpdateBetNoteText();
-        SetWinMoreButtonListener();
-    }
-
+    
     private void UpdateBetNoteText()
     {
         betMoreNote.SetActive(true);
-        betMoreNoteText.text = $"Bet more win more, click here to the higher bet ({higherMarkUnit}) games!";
+        betMoreNoteText.text = $"Bet more win more, click here to the higher bet ({whotGame.HigherMarkUnit}) games!";
     }
 
     private void SetWinMoreButtonListener()
@@ -128,8 +113,8 @@ public class WhotMatchResult : MonoBehaviour
         {
             UniTask.Void(async () =>
             {
-                await DataSender.LeaveMatch();
-                await UIManager.Instance.HandleFindAndJoinMatch((int)higherMarkUnit, true);
+                if (whotGame != null) whotGame.TypeWinMore = true;
+                await UIManager.Instance.HandleLeaveGame();
             });
         });
     }

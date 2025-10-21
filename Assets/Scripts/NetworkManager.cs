@@ -166,7 +166,8 @@ public class NetworkManager : MonoBehaviour
         try
         {
             var email = $"{username}@fake.local";
-            var session = await _ClientC.AuthenticateEmailAsync(email, password, username, create: true);
+            Dictionary<string, string> vars = new Dictionary<string, string> { { "device_id", Config.deviceId } };
+            var session = await _ClientC.AuthenticateEmailAsync(email, password, username, create: true,vars: vars);
             Debug.Log($"Authenticated successfully. User ID: {session.UserId}");
             OnAuthenSuccess(session);
         }
@@ -408,6 +409,7 @@ public class NetworkManager : MonoBehaviour
 
     public async UniTask LeaveRoomChat()
     {
+        if(CurrentRoomChatChannelId == "") return;
         await _SocketIS.LeaveChatAsync(CurrentRoomChatChannelId);
         CurrentRoomChatChannelId = "";
     }
