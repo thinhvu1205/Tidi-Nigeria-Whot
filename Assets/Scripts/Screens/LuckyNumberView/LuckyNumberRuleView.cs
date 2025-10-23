@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class LuckyNumberRuleView : BaseView
 {
-    
+    public override void OnClickCloseButton()
+    {
+        Hide(false);
+    }
 }

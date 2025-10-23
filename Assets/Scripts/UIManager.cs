@@ -229,7 +229,7 @@ public class UIManager : Singleton<UIManager>
             if (Constants.SLOT_GAMES_ID.Contains(Config.currentGameId))
             { 
                 await DataSender.LeaveMatch();
-                await NetworkManager.INSTANCE.LeaveRoomChat();
+                // await NetworkManager.INSTANCE.LeaveRoomChat();
                 await NetworkManager.INSTANCE.JoinWorldChat();
                 await LoadProfileUser();
                 Destroy(gameView.gameObject);

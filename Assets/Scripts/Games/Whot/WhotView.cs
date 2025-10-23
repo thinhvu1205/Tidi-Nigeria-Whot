@@ -42,6 +42,7 @@ public class WhotView : BaseGameView
     [SerializeField] private Image waitImage, victoryImage, deckHighlightImage;
     [SerializeField] WhotSuitPicker suitPicker;
     [SerializeField] private WhotMatchResult whotMatchResult;
+    
     public override GameState[] AvailableLeaveStates => new GameState[]
     {
         GameState.Idle,
