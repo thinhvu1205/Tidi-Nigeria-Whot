@@ -63,6 +63,20 @@ public class GameManager : Singleton<GameManager>
                 case (long)OpCodeUpdate.OpcodeError:
                     UIManager.Instance.gameView.HandleError(matchState);
                     break;
+                
+                // HK Poker OpCodes
+                case 20: // OPCODE_UPDATE_PLAYER_ACTION
+                    UIManager.Instance.gameView.HandleUpdatePlayerAction(matchState);
+                    break;
+                case 21: // OPCODE_UPDATE_NEW_ROUND
+                    UIManager.Instance.gameView.HandleUpdateNewRound(matchState);
+                    break;
+                case 22: // OPCODE_UPDATE_CARD_SWAP
+                    UIManager.Instance.gameView.HandleUpdateCardSwap(matchState);
+                    break;
+                case 23: // OPCODE_UPDATE_SHOWDOWN
+                    UIManager.Instance.gameView.HandleUpdateShowdown(matchState);
+                    break;
             }
         }
     }

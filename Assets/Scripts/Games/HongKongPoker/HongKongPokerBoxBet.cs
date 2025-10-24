@@ -1,5 +1,6 @@
 
 using Globals;
+using Proto;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +14,7 @@ public class HongKongPokerBoxBet : MonoBehaviour
     [SerializeField] TextMeshProUGUI textChip;
     public int Chip { get; private set; }
 
-    public void SetInfo(HongKongPokerView.BetStatus status, int index, int chipBet = 0)
+    public void SetInfo(HKPokerAction status, int index, int chipBet = 0)
     {
         Chip = chipBet;
         transform.localScale = index <= 4 ? Vector2.one : Vector2.one * -1;
@@ -34,23 +35,23 @@ public class HongKongPokerBoxBet : MonoBehaviour
         }
         switch (status)
         {
-            case HongKongPokerView.BetStatus.ALL_IN:
+            case HKPokerAction.HkActionAllIn:
                 icon.sprite = listSprite[0];
                 // SoundManager.instance.playEffectFromPath(SOUND_GAME.ALL_IN);
                 break;
-            case HongKongPokerView.BetStatus.RAISE:
+            case HKPokerAction.HkActionRaise:
                 icon.sprite = listSprite[1];
                 // SoundManager.instance.playEffectFromPath(SOUND_GAME.BET);
                 break;
-            case HongKongPokerView.BetStatus.CALL:
+            case HKPokerAction.HkActionBet:
                 icon.sprite = chipBet == 0 ? listSprite[3] : listSprite[2];
                 // SoundManager.instance.playEffectFromPath(SOUND_GAME.BET);
                 break;
-            case HongKongPokerView.BetStatus.CHECK:
+            case HKPokerAction.HkActionCheck:
                 GetComponent<Image>().enabled = false;
                 icon.sprite = listSprite[3];
                 break;
-            case HongKongPokerView.BetStatus.FOLD:
+            case HKPokerAction.HkActionFold:
                 GetComponent<Image>().enabled = false;
                 textChip.text = "";
                 icon.sprite = listSprite[4];
