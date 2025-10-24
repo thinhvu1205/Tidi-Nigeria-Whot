@@ -296,7 +296,7 @@ public class DataSender
         catch (Exception ex)
         {
             Debug.LogError("JoinMatch failed: " + ex.Message);
-            UIManager.Instance.ShowAlertDialog("HEHEHE" + ex.Message, null);
+            UIManager.Instance.ShowAlertDialog(ex.Message, null);
             return null;
         }
     }
@@ -589,7 +589,6 @@ public static async UniTask<BuyLotteryTicketResponse> BuyLotteryTicket(List<int>
     catch (Exception ex)
     {
         Debug.LogError("BuyLotteryTicket failed: " + ex.Message);
-        UIManager.Instance.ShowAlertDialog("Failed to buy lottery ticket: " + ex.Message, null);
         return null;
     }
 }
@@ -710,7 +709,6 @@ public static async UniTask<QuickPickResponse> QuickPick(int count = 1)
     catch (Exception ex)
     {
         Debug.LogError("QuickPick failed: " + ex.Message);
-        UIManager.Instance.ShowAlertDialog("Failed to generate quick pick numbers: " + ex.Message, null);
         return null;
     }
 }

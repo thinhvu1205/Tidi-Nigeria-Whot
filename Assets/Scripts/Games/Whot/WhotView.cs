@@ -42,6 +42,13 @@ public class WhotView : BaseGameView
     [SerializeField] private Image waitImage, victoryImage, deckHighlightImage;
     [SerializeField] WhotSuitPicker suitPicker;
     [SerializeField] private WhotMatchResult whotMatchResult;
+    
+    public override GameState[] AvailableLeaveStates => new GameState[]
+    {
+        GameState.Idle,
+        GameState.Matching,
+        GameState.Reward
+    };
     private readonly List<int[]> spawnOrders = new()
     {
         new int[] { 0 },                       // 1 player 
@@ -83,6 +90,7 @@ public class WhotView : BaseGameView
     private bool hasPreparedNewGame = false;
     private bool isAutoPlay = false;
     private bool isRejoinTable = false;
+    private bool isWinMoreTable = false;
     private int totalCardsLeft = 54;
     private Action cbShowMatchRs = null;
     public float CurrentMarkUnit { get; private set; }
@@ -219,10 +227,11 @@ public class WhotView : BaseGameView
             players = reordered;
             rearrangedPlayersList = new(reordered);
         }
-
+        Debug.Log("isWinMoreTable " + isWinMoreTable);
         // Khởi tạo List Player lần đầu
-        if (playersList.Count == 0)
+        if (playersList.Count == 0 || isWinMoreTable)
         {
+            isWinMoreTable = false;
             for (int i = 0; i < players.Count; i++)
             {
                 Debug.Log("Player count: " + players.Count);
@@ -1278,6 +1287,12 @@ public class WhotView : BaseGameView
         }
 
         return -1;
+    }
+
+    public void SetIsWinMoreTable(bool isWinMore)
+    {
+        Debug.Log("SetIsWinMoreTable");
+        isWinMoreTable = isWinMore;
     }
     #endregion
 

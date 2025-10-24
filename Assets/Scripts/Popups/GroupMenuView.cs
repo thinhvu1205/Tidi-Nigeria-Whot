@@ -26,8 +26,10 @@ public class GroupMenuView : BaseView
     public void OnClickLeaveTable()
     {
         UniTask.Void(async () =>
-        { 
+        {
+            UIManager.Instance.ShowProgressing();
             await UIManager.Instance.HandleLeaveGame();
+            UIManager.Instance.HideProgressing();
             Hide();
         });
     }

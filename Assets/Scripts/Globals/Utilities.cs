@@ -513,6 +513,44 @@ namespace Globals
             DateTime dt = DateTime.Parse(time, null, DateTimeStyles.RoundtripKind);
             return dt.ToString("HH:mm");
         }
+
+
+    private static DateTimeOffset ToDateTimeOffset(long unixSeconds, TimeZoneInfo tz = null)
+    {
+        var dtoUtc = DateTimeOffset.FromUnixTimeSeconds(unixSeconds); // UTC
+        if (tz == null) return dtoUtc.ToLocalTime(); // convert to system local
+        try
+        {
+            return TimeZoneInfo.ConvertTime(dtoUtc, tz);
+        }
+        catch
+        {
+            // Nếu timezone không hợp lệ, fallback về local
+            return dtoUtc.ToLocalTime();
+        }
+    }
+
+        // 1) Trả về tên thứ (Monday, Tuesday, ...)
+        public static string UnixToDayOfWeek(long unixSeconds, TimeZoneInfo tz = null)
+        {
+            var dt = ToDateTimeOffset(unixSeconds, tz).DateTime;
+            // "dddd" cho tên đầy đủ (English nếu CultureInfo.InvariantCulture)
+            return dt.ToString("dddd", CultureInfo.InvariantCulture);
+        }
+
+        // 2) Trả về ngày theo DD/MM/YYYY
+        public static string UnixToDate(long unixSeconds, TimeZoneInfo tz = null)
+        {
+            var dt = ToDateTimeOffset(unixSeconds, tz).DateTime;
+            return dt.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+        }
+
+        // 3) Trả về giờ theo HH:mm (24h)
+        public static string UnixToTime(long unixSeconds, TimeZoneInfo tz = null)
+        {
+            var dt = ToDateTimeOffset(unixSeconds, tz).DateTime;
+            return dt.ToString("HH:mm", CultureInfo.InvariantCulture);
+        }
         #endregion
 
         #region Image

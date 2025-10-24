@@ -84,12 +84,12 @@ public class WhotPlayer : MonoBehaviour
         long vipLevel = 0
     )
     {
-        Debug.Log("PLAYER VIP LEVEL: " + vipLevel);
         Id = playerId;
         AvatarId = avatarId;
         VipLevel = vipLevel;
         avatar.LoadAvatar(avatarId, vipLevel);
         nameText.text = playerName;
+        isCountingDown = false;
         // chipText.text = Utility.FormatNumber(Utility.ConvertStringToNumber(chipAmount));
         AnimateChipValue(Utility.ConvertStringToLong(chipAmount));
     }
@@ -439,7 +439,6 @@ public class WhotPlayer : MonoBehaviour
     }
     public void AnimateChipValue(long toNumber = 0)
     {
-        Debug.Log("ANIMATE CHIP VALUE");
         Utility.TweenNumberToNumber(chipText, (int)toNumber, (int)GetChipAmount(), 0.5f, false);
     }
 

@@ -681,6 +681,7 @@ public class BaseSlotView : BaseGameView
         switch (winType)
         {
             case WinType.BIG_WIN:
+                delay = 5f;
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.BIG_WIN);
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
@@ -689,7 +690,6 @@ public class BaseSlotView : BaseGameView
                 animationEffect.transform.localScale = new Vector2(1f, 1f);
                 // animationEffect.transform.localPosition = new Vector2(0, -70);
                 Utility.PlayAnimationByPath(animationEffect, BIG_WIN_ANIMATION_PATH, BIG_WIN_ANIMATION_NAME, false);
-                delay = 5f;
                 break;
             case WinType.MEGA_WIN:
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
@@ -1397,11 +1397,11 @@ public class BaseSlotView : BaseGameView
         // {
         //     winAmount = winAmount + validBetLevels[currentBetLevel] * jackpotLevel[3];
         // }
-        if (winAmount >= 50 * currentBetLevel)
+        if (winAmount > 50 * currentBetLevel)
         {
             winType = WinType.MEGA_WIN;
         }
-        else if (winAmount >= 20 * currentBetLevel)
+        else if (winAmount > 20 * currentBetLevel)
         {
             winType = WinType.BIG_WIN;
         }

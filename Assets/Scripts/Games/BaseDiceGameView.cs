@@ -41,6 +41,7 @@ public class BaseDiceGameView : BaseGameView
 
     protected virtual void UpdatePosUserTable(UpdateTable update, bool isRearrange = false)
     {
+        Debug.Log("UpdatePosUserTable: " + update.ToString());
         var localUserId = User.userProfile.UserId;
         if (listPosView == null || listPosView.Count == 0 || playerViewPrefab == null || localUserId == "") return;
 

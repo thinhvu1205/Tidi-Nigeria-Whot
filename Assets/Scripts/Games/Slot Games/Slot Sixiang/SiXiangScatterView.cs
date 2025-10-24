@@ -61,7 +61,7 @@ public class SiXiangScatterView : MonoBehaviour
         currentBetLevel = betValue;
         gameView.OnUpdateTable += SixiangView_OnUpdateTable;
 
-        int[] listRateGold = new int[] { 10, 30, 20, 50 };
+        int[] listRateGold = new int[] { 3, 10, 6, 15 };
         for (int i = 0; i < listGoldValue.Length; i++)
         {
             Debug.Log("SET GOLD : " + betValue);
@@ -72,6 +72,7 @@ public class SiXiangScatterView : MonoBehaviour
     public void SixiangView_OnUpdateTable(SlotSixiangView.OnUpdateTableEventArgs e)
     {
         SlotDesk data = e.data;
+        if (data.SpinSymbols.Count == 0) return;
         spinResult = data.SpinSymbols[0];
         winAmount = data.GameReward.TotalChipsWinByGame;
         switch (spinResult.Symbol)
@@ -262,6 +263,5 @@ public class SiXiangScatterView : MonoBehaviour
     {
         resultContainer.gameObject.SetActive(false);
         gameView.ShowAnimationCutScene(true);
-        Destroy(gameObject);
     }
 }

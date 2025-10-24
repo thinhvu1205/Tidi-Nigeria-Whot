@@ -111,13 +111,14 @@ public class SlotNoelView : BaseSlotView
     
     protected override void ShowWinAnimation(WinType winType)
     {
-        float delay = 7f;
+        float delay = 6f;
         effectContainer.gameObject.SetActive(true);
         animationEffect.gameObject.SetActive(true);
 
         switch (winType)
         {
             case WinType.BIG_WIN:
+                delay = 5f;
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.BIG_WIN);
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
@@ -126,7 +127,6 @@ public class SlotNoelView : BaseSlotView
                 animationEffect.transform.localScale = new Vector2(1f, 1f);
                 // animationEffect.transform.localPosition = new Vector2(0, -70);
                 Utility.PlayAnimationByPath(animationEffect, BIG_WIN_ANIMATION_PATH, BIG_WIN_ANIMATION_NAME, false);
-                delay = 5.5f;
                 break;
             case WinType.MEGA_WIN:
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);

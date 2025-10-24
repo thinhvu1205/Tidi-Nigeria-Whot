@@ -17,7 +17,9 @@ public class BaseGameView : BaseView
     // public string soundBg = SOUND_GAME.IN_GAME_COMMON;
     
     public GameState GameState { get; protected set; } = GameState.Idle;
-
+    public virtual GameState[] AvailableLeaveStates => new GameState[]{ GameState.Idle, GameState.Matching };
+    public virtual bool CanLeaveTable => AvailableLeaveStates.Contains(GameState) && !hasBet;
+    protected bool hasBet = false;
     protected override void OnDestroy()
     {
         SoundManager.Instance.StopAllCurrentEffect();
@@ -88,7 +90,8 @@ public class BaseGameView : BaseView
 
     public virtual void HandleUpdateGameState(IMatchState matchState)
     {
-        
+        UpdateGameState data = UpdateGameState.Parser.ParseFrom(matchState.State);
+        GameState = data.State;
     }
 
     public virtual void HandleUpdateWallet(IMatchState matchState)
