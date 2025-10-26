@@ -127,7 +127,7 @@ public class BaseSlotSymbolView : BaseGameView
     public bool IsSpinning { get; set; } = false;
     public int ScatterCount { get; set; } = 0;
 
-    protected bool hasSetupStartView = false, isInFreeSpin = false, isChooseBonusGame = false, isGetMatchResult = false;
+    protected bool hasSetupStartView = false, isInFreeSpin = false, isChooseBonusGame = false, isGetMatchResult = false, isCurrentlyAutoSpin = false;
     protected virtual float AUTO_SPIN_HOLD_DURATION => 1.3f;
 
 
@@ -204,6 +204,12 @@ public class BaseSlotSymbolView : BaseGameView
     protected void HandleSpin()
     {
         Debug.Log("HANDLE SPIN");
+        isClickMaxBet = false;
+        if (!hasSetupStartView) return;
+        if (!CheckEnoughBalance())
+        {
+            return;
+        }
         InfoBet infoBet = new()
         {
             Chips = currentBetLevel,
@@ -211,7 +217,6 @@ public class BaseSlotSymbolView : BaseGameView
         DataSender.SendMatchState((long)OpCodeRequest.Spin, infoBet.ToByteArray());
         UpdateGameState(SlotGameState.SPINNING);
         IsSpinning = true;
-        isClickMaxBet = false;
     }
 
     private void OnBetLevelChanged()
@@ -281,6 +286,7 @@ public class BaseSlotSymbolView : BaseGameView
     public virtual void OnStopSpin()
     {
         IsSpinning = false;
+        isCurrentlyAutoSpin = spinType == SpinType.AUTO;
 
         ///------------------CHECK SHOW ALL LINE--------------------///
         if (listPayline.Count > 0)
@@ -463,7 +469,9 @@ public class BaseSlotSymbolView : BaseGameView
     {
         Debug.Log("ShOW ALL WIN LINES");
         paylineIconContainer.gameObject.SetActive(false);
-        if (spinType == SpinType.AUTO)
+
+        Debug.Log("IS AUTO SPIN: " + isCurrentlyAutoSpin);
+        if (isCurrentlyAutoSpin)
         {
             UpdateChipWinValue();
         }
@@ -489,7 +497,7 @@ public class BaseSlotSymbolView : BaseGameView
 
         // Show Line từ listLine
         int totalLines = listLine.Count;
-        Sequence sequence = DOTween.Sequence().SetAutoKill(true);
+        Sequence sequence = DOTween.Sequence();
 
         // Hiện line lên, mỗi line cách nhau 0.1s
         for (int i = 0; i < totalLines; i++)
@@ -509,7 +517,7 @@ public class BaseSlotSymbolView : BaseGameView
                 {
                     linePool.Release(line);
                 }
-                if (spinType == SpinType.AUTO)
+                if (isCurrentlyAutoSpin && winType == WinType.NONE)
                 {
                     AnimateCoinsFly();
                 }
@@ -661,8 +669,8 @@ public class BaseSlotSymbolView : BaseGameView
         buttonConfirmSpecialWin.gameObject.SetActive(false);
         animationSpecialWin.gameObject.SetActive(false);
         effectContainer.gameObject.SetActive(false);
-    
-            NextTween();
+        AnimateCoinsFly();
+        NextTween();
         
     }
     #endregion
@@ -905,6 +913,7 @@ public class BaseSlotSymbolView : BaseGameView
 
     protected void UpdateChipWinValue()
     {
+        Debug.Log("UPDATE CHIP WIN VALUE: " + currentChipWin);
         UpdateStateWinUI(StateWin.WIN);
         textChipWin.SetValue(currentChipWin, true, 0.2f);
     }
@@ -1002,9 +1011,9 @@ public class BaseSlotSymbolView : BaseGameView
 
     public void OnTriggerUpSpinButton()
     {
+        isHoldingSpin = false;
         if (!IsButtonInteractable() || !hasSetupStartView) return;
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
-        isHoldingSpin = false;
         if (holdingSpinTime < AUTO_SPIN_HOLD_DURATION)
         {
             HideBoxAutoSpin();
@@ -1036,6 +1045,7 @@ public class BaseSlotSymbolView : BaseGameView
                 {
                     case SlotGameState.SPINNING:
                     case SlotGameState.SHOWING_RESULT:
+                        autoSpinRemain = 0;
                         textAutoRemain.gameObject.SetActive(false);
                         spinType = SpinType.NORMAL;
                         UpdateSpinButtonUI();
@@ -1182,6 +1192,19 @@ public class BaseSlotSymbolView : BaseGameView
             column.SetLightAllSymbols();
         }
     }
+
+    protected bool CheckEnoughBalance()
+    {
+        if (playerWallet < currentBetLevel && (spinType == SpinType.NORMAL || spinType == SpinType.AUTO))
+        {
+            ResetToNormalState();
+            HideBoxAutoSpin();
+            string message = "Not enough chips to spin.";
+            UIManager.Instance.ShowConfirmDialog(message, () => UIManager.Instance.OpenShop(), null, "Get More Chips");
+            return false;
+        }
+        return true;
+    }
     #endregion
 
 
@@ -1230,7 +1253,7 @@ public class BaseSlotSymbolView : BaseGameView
     }
 
 
-    protected void ResetToNormalState()
+    protected void ResetToNormalState(bool isEndBonusGame = false)
     {
         spinType = SpinType.NORMAL;
         UpdateGameState(SlotGameState.PREPARE);
@@ -1238,6 +1261,15 @@ public class BaseSlotSymbolView : BaseGameView
         SetInfoSessionText("Press SPIN to play");
         SetAutoSpinRemain();
         UpdateSpinButtonUI();
+        SetLightAllItems();
+
+        if (isEndBonusGame)
+        {
+            foreach (SlotSymbolColumn column in listColumn)
+            {
+                column.UpdateStartViewUI();
+            }
+        }
     }
 
     protected virtual void UpdateColumnView(SlotDesk data)

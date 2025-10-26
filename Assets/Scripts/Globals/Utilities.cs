@@ -61,44 +61,33 @@ namespace Globals
         public static string FormatMoney(float money, bool isK = false)
         {
             float absoluteValue = Mathf.Abs(money);
-            string input = absoluteValue.ToString(), floatPart = "", format = "";
-            int idNumberNextToDotFromTail = 0, integerValue = 0;
-            int aBillion = 1000000000, aMillion = 1000000, aThousand = 1000;
-            if (absoluteValue >= aBillion)
+            string format = "";
+            float value = 0f;
+
+            if (absoluteValue >= 1_000_000_000)
             {
                 format = "B";
-                integerValue = (int)(absoluteValue / aBillion);
-                idNumberNextToDotFromTail = absoluteValue.ToString().Length - 9;
+                value = absoluteValue / 1_000_000_000f;
             }
-            else if (absoluteValue >= aMillion)
+            else if (absoluteValue >= 1_000_000)
             {
                 format = "M";
-                integerValue = (int)(absoluteValue / aMillion);
-                idNumberNextToDotFromTail = absoluteValue.ToString().Length - 6;
+                value = absoluteValue / 1_000_000f;
+            }
+            else if (isK && absoluteValue >= 1_000)
+            {
+                format = "K";
+                value = absoluteValue / 1_000f;
             }
             else
             {
-                if (isK)
-                {
-                    if (absoluteValue >= aThousand)
-                    {
-                        format = "K";
-                        integerValue = (int)(absoluteValue / aThousand);
-                        idNumberNextToDotFromTail = absoluteValue.ToString().Length - 3;
-                    }
-                    else return FormatNumber(money);
-                }
-                else return FormatNumber(money);
+                return FormatNumber(money);
             }
-            bool foundNotZero = false;
-            for (int i = idNumberNextToDotFromTail + 2; i >= idNumberNextToDotFromTail; i--)
-            {
-                if (input[i] == '0' && !foundNotZero) continue;
-                floatPart = input[i] + floatPart;
-                foundNotZero = true;
-            }
-            if (floatPart.Length > 0) floatPart = "." + floatPart;
-            return (money < 0 ? "-" : "") + FormatNumber(integerValue) + floatPart + format;
+
+            // Làm tròn 1 chữ số thập phân nếu cần
+            string floatPart = value % 1 == 0 ? value.ToString("0") : value.ToString("0.#");
+
+            return (money < 0 ? "-" : "") + floatPart + format;
         }
 
         public static string FormatMoney2(int mo, bool isK = false)

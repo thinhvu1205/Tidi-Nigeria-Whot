@@ -171,6 +171,7 @@ public class SlotJuicyView : BaseSlotView
                 }
                 if (isClickMaxBet)
                 {
+                    
                     HandleSpin();
                 }
                 return;
@@ -358,7 +359,7 @@ public class SlotJuicyView : BaseSlotView
 
     public override void OnClickMaxBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || isClickMaxBet)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || isClickMaxBet || !hasSetupStartView)
         {
             return;
         }
@@ -372,12 +373,13 @@ public class SlotJuicyView : BaseSlotView
         if (lastBetLevel == currentBetLevel)
         {
             isClickMaxBet = true;
+            // HandleSpin();
         }
     }
 
     public override void OnClickMinusBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
         {
             return; 
         }
@@ -387,7 +389,7 @@ public class SlotJuicyView : BaseSlotView
 
     public override void OnClickPlusBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
         {
             return; 
         }
@@ -405,11 +407,16 @@ public class SlotJuicyView : BaseSlotView
 
     private void OnBetLevelChanged()
     {
-        InfoBet infoBet = new()
+         if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || isClickMaxBet)
         {
-            Chips = currentBetLevel,
-        };
-        DataSender.SendMatchState((long)OpCodeRequest.Bet, infoBet.ToByteArray());
+            return; 
+        }
+            InfoBet infoBet = new()
+            {
+                Chips = currentBetLevel,
+            };
+            DataSender.SendMatchState((long)OpCodeRequest.Bet, infoBet.ToByteArray()); 
+        
     }
     #endregion
 

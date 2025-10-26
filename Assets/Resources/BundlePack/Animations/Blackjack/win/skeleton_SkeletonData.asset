@@ -11,11 +11,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
   m_Name: skeleton_SkeletonData
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: spine-unity::Spine.Unity.SkeletonDataAsset
   atlasAssets:
-  - {fileID: 11400000, guid: 5cd79f56fe8c34132aba3311197381b0, type: 2}
+  - {fileID: 11400000, guid: f9fdfcc95c0e2409eb8b97e61c1382dd, type: 2}
   scale: 0.01
-  skeletonJSON: {fileID: 4900000, guid: 0d66095c95bb04b5490b2a1c106380d6, type: 3}
+  skeletonJSON: {fileID: 4900000, guid: 27d044fba0a9940f78d164a78ed5ae04, type: 3}
   isUpgradingBlendModeMaterials: 0
   blendModeMaterials:
     requiresBlendModeMaterials: 0

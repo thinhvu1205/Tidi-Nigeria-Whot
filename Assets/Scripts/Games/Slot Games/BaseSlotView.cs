@@ -179,6 +179,12 @@ public class BaseSlotView : BaseGameView
     protected void HandleSpin()
     {
         Debug.Log("HANDLE SPIN");
+        isClickMaxBet = false;
+        if (!hasSetupStartView) return;
+        if (!CheckEnoughBalance())
+        {
+            return;
+        }
         InfoBet infoBet = new()
         {
             Chips = currentBetLevel,
@@ -186,7 +192,6 @@ public class BaseSlotView : BaseGameView
         DataSender.SendMatchState((long)OpCodeRequest.Spin, infoBet.ToByteArray());
         UpdateGameState(SlotGameState.SPINNING);
         IsSpinning = true;
-        isClickMaxBet = false;
     }
 
     protected void OnStartSpin()
@@ -218,19 +223,7 @@ public class BaseSlotView : BaseGameView
     {
         // ShowWinAnimation(WinType.MEGA_WIN);
         IsSpinning = false;
-        if (isLastFreeSpin)
-        {
-            // if (totalChipWinByGame > PaylineIdList.Count * currentBetLevel) winType = WinType.BIG_WIN;
-            // if (totalChipWinByGame > 50 * currentBetLevel) winType = WinType.MEGA_WIN;
-            if (winType == WinType.NONE && totalChipWinByGame > 0)
-            {
-                AnimateCoinsFly();
-            }
-            isLastFreeSpin = false;
-            spinType = SpinType.NORMAL;
-            UpdateGameState(SlotGameState.PREPARE);
-            HideBackgroundFreeSpin();
-        }
+ 
 
         ///------------------CHECK SHOW WIN SCATTER--------------------//
         if (CheckWinScatter())
@@ -256,6 +249,25 @@ public class BaseSlotView : BaseGameView
         {
             tweenQueue.Enqueue(() => ShowAllWinLines());
         }
+
+        if (isLastFreeSpin)
+        {
+            // if (totalChipWinByGame > PaylineIdList.Count * currentBetLevel) winType = WinType.BIG_WIN;
+            // if (totalChipWinByGame > 50 * currentBetLevel) winType = WinType.MEGA_WIN;
+            if (winType == WinType.NONE && totalChipWinByGame > 0)
+            {
+                AnimateCoinsFly();
+            }
+            if (totalChipWinByGame > lastTotalChipWinByGame)
+            {
+                UpdateTotalChipWinValue();
+            }
+            isLastFreeSpin = false;
+            spinType = SpinType.NORMAL;
+            UpdateGameState(SlotGameState.PREPARE);
+            HideBackgroundFreeSpin();
+        }
+
         ///------------------CHECK SHOW TYPE WIN--------------------///
         if (!isInFreeSpin)
         {
@@ -292,6 +304,8 @@ public class BaseSlotView : BaseGameView
                 // if (!isInFreeSpin) listActionHandleSpin.Add(acShowAnimChipBay);
             }
         }
+
+
 
         NextTween();
     }
@@ -336,9 +350,9 @@ public class BaseSlotView : BaseGameView
     // thả nút spin
     public void OnTriggerUpSpinButton()
     {
-        SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
-        if (!hasSetupStartView) return;
         isHoldingSpin = false;
+        if (!hasSetupStartView) return;
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
         if (holdingSpinTime < AUTO_SPIN_HOLD_DURATION)
         {
             // Nếu spintype đang là normal hoặc Free Normal thì bấm sẽ bắt đầu quay
@@ -408,7 +422,7 @@ public class BaseSlotView : BaseGameView
 
     public virtual void OnClickPlusBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
         {
             return; 
         }
@@ -425,7 +439,7 @@ public class BaseSlotView : BaseGameView
 
     public virtual void OnClickMinusBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
         {
             return; 
         }
@@ -443,7 +457,7 @@ public class BaseSlotView : BaseGameView
 
     public virtual void OnClickMaxBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || isClickMaxBet)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || isClickMaxBet || !hasSetupStartView)
         {
             return;
         }
@@ -481,7 +495,8 @@ public class BaseSlotView : BaseGameView
     #region Win Effects
     protected void ShowAllWinLines()
     {
-        if (spinType == SpinType.AUTO)
+        bool isCurrentlyAutoSpin = spinType == SpinType.AUTO;
+        if (isCurrentlyAutoSpin)
         {
             UpdateChipWinValue();
         }
@@ -508,7 +523,7 @@ public class BaseSlotView : BaseGameView
 
         // Show Line từ listLine
         int totalLines = allLinesList.Count;
-        Sequence sequence = DOTween.Sequence().SetAutoKill(true); ;
+        Sequence sequence = DOTween.Sequence();
 
         // Hiện line lên, mỗi line cách nhau 0.1s
         for (int i = 0; i < totalLines; i++)
@@ -528,7 +543,7 @@ public class BaseSlotView : BaseGameView
                 {
                     linePool.Release(line);
                 }
-                if (spinType == SpinType.AUTO && winType == WinType.NONE)
+                if (isCurrentlyAutoSpin && winType == WinType.NONE)
                 {
                     AnimateCoinsFly();
                 }
@@ -744,11 +759,8 @@ public class BaseSlotView : BaseGameView
                 effectContainer.gameObject.SetActive(false);
                 if (new WinType[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(winType))
                 {
-                    DOVirtual.DelayedCall(delay, () =>
-                    {
-                        bigWinText.transform.parent.gameObject.SetActive(false);
-                        AnimateCoinsFly();
-                    });
+                    bigWinText.transform.parent.gameObject.SetActive(false);
+                    AnimateCoinsFly();
                 }
                 NextTween();
                 effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
@@ -1147,6 +1159,7 @@ public class BaseSlotView : BaseGameView
     {
         betLevelList = data.BetLevels.ToList();
         currentBetLevel = data.ChipsMcb;
+        lastBetLevel = currentBetLevel;
         SetInfoSessionText("Press SPIN to play");
         SetCurrentBetText(currentBetLevel);
         SetCurrentBetImage(currentBetLevel);
@@ -1245,6 +1258,7 @@ public class BaseSlotView : BaseGameView
     #region Effects
     protected void AnimateCoinsFly(int totalCoins = 5, float timeInterval = 0.05f)
     {
+        Debug.Log("AnimateCoinsFly");
         Sequence sequence = DOTween.Sequence();
         for (int i = 0; i < totalCoins; i++)
         {
@@ -1432,6 +1446,19 @@ public class BaseSlotView : BaseGameView
     {
         this.gameState = gameState;
         UpdateSpinButtonUI();
+    }
+
+    protected bool CheckEnoughBalance()
+    {
+        if (playerWallet < currentBetLevel && (spinType == SpinType.NORMAL || spinType == SpinType.AUTO))
+        {
+            spinType = SpinType.NORMAL;
+            UpdateSpinButtonUI();
+            string message = "Not enough chips to spin.";
+            UIManager.Instance.ShowConfirmDialog(message, () => UIManager.Instance.OpenShop(), null, "Get More Chips");
+            return false;
+        }
+        return true;
     }
 
     protected virtual void Reset()

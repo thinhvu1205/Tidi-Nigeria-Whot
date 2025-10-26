@@ -163,13 +163,13 @@ public class SiXiangLuckyDrawView : MonoBehaviour
 
     public void OnClickCollect()
     {
-        DOTween.Kill(SEQUENCE_ID_AUTOEND);
         if (tweenQueue.Count > 0)
         {
             NextTween();
         }
         else
         {
+            DOTween.Kill(SEQUENCE_ID_AUTOEND);
             animationResult.transform
                 .DOScale(new Vector2(0.8f, 0.8f), 0.3f)
                 .SetEase(Ease.InBack)
@@ -259,7 +259,6 @@ public class SiXiangLuckyDrawView : MonoBehaviour
         tweenQueue.Enqueue(() =>
         {
             DOTween.Sequence()
-                .AppendInterval(1f)
                 .AppendCallback(() =>
                 {
                     effectContainer.gameObject.SetActive(true);

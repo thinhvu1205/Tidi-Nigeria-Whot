@@ -1,6 +1,6 @@
 {
 "skeleton": {
-	"hash": "UbDZ/hEtOdXq/wHLh/09HD6EhBs",
+	"hash": "jG/ZavEqwQqY/L6CD3YJBBB7Tp4",
 	"spine": "3.8.99",
 	"x": -90.5,
 	"y": -97,
@@ -52,7 +52,7 @@
 	{ "name": "8", "bone": "10", "attachment": "1" },
 	{ "name": "12", "bone": "15", "attachment": "1" },
 	{ "name": "16", "bone": "20", "attachment": "1" },
-	{ "name": "w", "bone": "w", "attachment": "w" }
+	{ "name": "w", "bone": "w", "attachment": "w2" }
 ],
 "skins": [
 	{
@@ -110,7 +110,7 @@
 				"round": { "width": 181, "height": 194 }
 			},
 			"w": {
-				"w": { "width": 142, "height": 45 }
+				"w2": { "width": 88, "height": 50 }
 			}
 		}
 	}

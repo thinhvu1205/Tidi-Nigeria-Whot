@@ -235,10 +235,12 @@ public class BlackjackBoxBet : MonoBehaviour
     {
         float totalWidth = (listCardModel.Count - 1) * CARD_SPACING;
         float startX = -totalWidth / 2f;
+        float offsetY = isEnlarging ? 30f : 0f;
+
         for (int i = 0; i < listCardModel.Count; i++)
         {
             CardModel cardModel = listCardModel[i];
-            Vector2 targetPos = new Vector2(startX + i * CARD_SPACING, cardContainer.localPosition.y);
+            Vector2 targetPos = new Vector2(startX + i * CARD_SPACING, cardContainer.localPosition.y + offsetY);
             // cardModel.transform.localPosition = targetPos;
             cardModel.transform.SetSiblingIndex(i);
             // cardModel.transform.DOLocalMove(targetPos, 0.1f).OnComplete(UpdateContainerWidth);
@@ -248,7 +250,7 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void EnlargeCards()
     {
-        DOVirtual.DelayedCall(0.3f, () =>
+        DOVirtual.DelayedCall(0.6f, () =>
         {
             if (!isEnlarging)
             {
@@ -266,7 +268,7 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void ResetCards()
     {
-        DOVirtual.DelayedCall(0.3f, () =>
+        DOVirtual.DelayedCall(0.6f, () =>
         {
             if (isEnlarging)
             {
@@ -274,7 +276,7 @@ public class BlackjackBoxBet : MonoBehaviour
                 {
                     CardModel cardModel = transform.GetComponent<CardModel>();
                     cardModel.transform.DOScale(Vector3.one * 0.5f, 0.25f);
-                    // cardModel.transform.DOLocalMoveY(transform.localPosition.y - 30f, 0.25f);
+                    cardModel.transform.DOLocalMoveY(transform.localPosition.y - 30f, 0.25f);
                 }
             }
         });
@@ -353,7 +355,7 @@ public class BlackjackBoxBet : MonoBehaviour
                 //     secondBoxBet.transform.DOLocalMoveX(2 * (BoxPosition.x + boxWidth), 0.25f);
                 //     secondCard.transform.DOLocalMoveX(secondCard.transform.localPosition.x - CARD_SPACING, 0.25f);
                 // });
-                seq.Append(transform.DOLocalMoveY(transform.localPosition.y + 40f, 0.25f))
+                seq.Append(transform.DOLocalMoveY(transform.localPosition.y + 70f, 0.25f))
                     .Join(transform.DOLocalMoveX(BoxPosition.x - boxWidth, 0.25f))
                     .Join(secondBoxBet.transform.DOLocalMoveX(2 * (BoxPosition.x + boxWidth), 0.25f))
                     .Join(secondCard.transform.DOLocalMoveX(secondCard.transform.localPosition.x - CARD_SPACING, 0.25f));
