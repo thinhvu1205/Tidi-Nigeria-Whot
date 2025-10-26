@@ -125,5 +125,26 @@ public class BaseGameView : BaseView
         }
     }
     
+    // HK Poker specific handlers
+    public virtual void HandleUpdatePlayerAction(IMatchState matchState)
+    {
+        // Override in HongKongPokerView
+    }
+    
+    public virtual void HandleUpdateNewRound(IMatchState matchState)
+    {
+        // Override in HongKongPokerView
+    }
+    
+    public virtual void HandleUpdateCardSwap(IMatchState matchState)
+    {
+        // Override in HongKongPokerView
+    }
+    
+    public virtual void HandleUpdateShowdown(IMatchState matchState)
+    {
+        // Override in HongKongPokerView
+    }
+    
     #endregion
 }

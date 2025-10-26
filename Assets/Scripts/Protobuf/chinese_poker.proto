@@ -9,8 +9,6 @@ import "game_common.proto";
 import "whot_game.proto";
 
 
-
-
 enum CardSuit {
   SUIT_UNSPECIFIED = 0;
   SUIT_HEARTS = 1;

@@ -80,79 +80,40 @@ public class HongKongPokerView : BaseDiceGameView
     public override void LoadInfoMatch(Match match)
     {
         base.LoadInfoMatch(match);
-        Debug.Log("Match: " + match);
-
-        Card card1 = new()
-        {
-            Rank = CardRank.RankJ,
-            Suit = CardSuit.SuitHearts
-
-        };
-        DOTween.Sequence()
-            .AppendCallback(() => DealACard(card1, 0))
-            .AppendInterval(0.25f)
-            .AppendCallback(() => DealACard(card1, 0))
-            .AppendInterval(0.25f)
-            .AppendCallback(() => DealACard(card1, 0))
-            .AppendInterval(0.25f)
-            .AppendCallback(() => DealACard(card1, 1))
-            .AppendInterval(0.25f)
-            .AppendCallback(() => DealACard(card1, 1))
-            .AppendInterval(0.25f)
-            .AppendCallback(() => DealACard(card1, 2))
-            .AppendInterval(0.25f)
-            .AppendCallback(() => DealACard(card1, 2))
-            .AppendInterval(0.25f)
-            .AppendCallback(() => DealACard(card1, 3))
-            .AppendInterval(0.25f)
-            .AppendCallback(() => DealACard(card1, 3))
-            .AppendInterval(0.25f)
-            .AppendCallback(() =>
-            {
-                for (int i = 0; i < listPlayerCards[0].Count; i++)
-                {
-                    // player.vectorCardP1[i].setTextureWithCode(0);
-                    // player.vectorCardP1[i].setDark(true, this.spriteFrameMask);
-                    StartCoroutine(FoldDown(0, listPlayerCards[0][i], i * 0.1f));
-                }
-            })
-            .AppendInterval(1f)
-            .AppendCallback(() =>
-            {
-                ShowBoxBet(BetStatus.CALL, 0, 100);
-                PlayerGiveChipsToBoxbet(0);
-                FoldUp(0, listPlayerCards[0][^1], card1);
-            })
-            .AppendInterval(1f)
-            .AppendCallback(() =>
-            {
-                BoxBetGiveChipsToDealer(0);
-                ReturnAllCardsToDealer();
-            })
-            .AppendInterval(1f)
-            .AppendCallback(() =>
-            {
-                DealerGiveChipsToPlayer();
-                // listPlayerView[0].effectFlyMoney(100000);
-                // listPlayerView[0].setEffectWin();
-                pot.SetValue(4000);
-            });
-    
+        Debug.Log($"[HK Poker] Load Info Match: Table ID={match.TableId}, Mark Unit={match.MarkUnit}");
+        
+        // Initialize game state
+        gameState = GameState.Idle;
+        
+        // Clear previous game state
+        ClearAllCards();
+        pot.SetValue(0);
     }
 
     public override void HandleUpdateUserInTable(IMatchState matchState)
     {
         base.HandleUpdateUserInTable(matchState);
         var updateTable = UpdateTable.Parser.ParseFrom(matchState.State);
-        // UpdateListPlayer(updateTable.Players.ToList());
+        Debug.Log($"[HK Poker] Update User In Table: Players={updateTable.Players.Count}");
+        
+        // Update player positions (rearrange to put local player at index 0)
+        UpdatePosUserTable(updateTable, isRearrange: true);
     }
 
     public override void HandleUpdateTable(IMatchState matchState)
     {
         base.HandleUpdateTable(matchState);
         UpdateTable data = UpdateTable.Parser.ParseFrom(matchState.State);
-
-        Debug.Log("Update Table: " + data);
+        Debug.Log($"[HK Poker] Update Table: Players={data.Players.Count}, Join={data.JoinPlayers.Count}, Leave={data.LeavePlayers.Count}");
+        
+        // Update player list
+        UpdatePosUserTable(data);
+        
+        // Handle players leaving - clear their cards
+        foreach (var leavePlayer in data.LeavePlayers)
+        {
+            ClearPlayerCards(leavePlayer.Id);
+        }
     }
 
     public override void HandleUpdateDeal(IMatchState matchState)
@@ -226,6 +187,366 @@ public class HongKongPokerView : BaseDiceGameView
     // {
     //     Destroy(gameObject);
     // }
+
+    #region HK Poker Handlers
+
+    public override void HandleUpdatePlayerAction(IMatchState matchState)
+    {
+        base.HandleUpdatePlayerAction(matchState);
+        var data = HKUpdatePlayerAction.Parser.ParseFrom(matchState.State);
+        Debug.Log($"[HK Poker] Player Action: User={data.UserId}, Action={data.Action}, Amount={data.Amount}, Pot={data.NewPot}");
+        
+        // Get player index
+        int playerIndex = GetPlayerIndex(data.UserId);
+        if (playerIndex < 0) return;
+        
+        // Update pot display
+        pot.SetValue((int)data.NewPot);
+        
+        // Show action text on player
+        string actionText = GetActionText(data.Action);
+        ShowPlayerAction(playerIndex, data.Action, (int)data.Amount);
+        
+        // Animate chips to pot
+        if (data.Amount > 0)
+        {
+            PlayerGiveChipsToBoxbet(playerIndex);
+        }
+        
+        // Update betting state UI
+        if (data.BettingState != null)
+        {
+            UpdateBettingStateUI(data.BettingState);
+        }
+    }
+
+    public override void HandleUpdateNewRound(IMatchState matchState)
+    {
+        base.HandleUpdateNewRound(matchState);
+        var data = HKUpdateNewRound.Parser.ParseFrom(matchState.State);
+        Debug.Log($"[HK Poker] New Round: Round={data.Round}");
+        
+        // Clear previous round UI
+        ClearRoundUI();
+        
+        // Deal new cards
+        if (data.PlayerCards != null && data.PlayerCards.Count > 0)
+        {
+            foreach (var playerCards in data.PlayerCards)
+            {
+                int playerIndex = GetPlayerIndex(playerCards.UserId);
+                if (playerIndex < 0) continue;
+                
+                // Deal face-up cards
+                foreach (var card in playerCards.FaceUpCards)
+                {
+                    DealACard(card, playerIndex, 0.25f);
+                }
+            }
+        }
+        
+        // Update UI for new round
+        UpdateRoundUI(data.Round);
+        
+        // Highlight first bettor
+        if (!string.IsNullOrEmpty(data.FirstBettor))
+        {
+            int firstBettorIndex = GetPlayerIndex(data.FirstBettor);
+            HighlightPlayer(firstBettorIndex);
+        }
+    }
+
+    public override void HandleUpdateCardSwap(IMatchState matchState)
+    {
+        base.HandleUpdateCardSwap(matchState);
+        var data = HKUpdateCardSwap.Parser.ParseFrom(matchState.State);
+        Debug.Log($"[HK Poker] Card Swap: User={data.UserId}, Swapped={data.Swapped}");
+        
+        int playerIndex = GetPlayerIndex(data.UserId);
+        if (playerIndex < 0) return;
+        
+        if (data.Swapped)
+        {
+            // Show swap animation
+            ShowSwapAnimation(playerIndex, data.NewFaceUpCard);
+        }
+        else
+        {
+            // Show "Keep" text
+            // ShowPlayerAction(playerIndex, "KEEP", 0);
+        }
+    }
+
+    public override void HandleUpdateShowdown(IMatchState matchState)
+    {
+        base.HandleUpdateShowdown(matchState);
+        var data = HKUpdateShowdown.Parser.ParseFrom(matchState.State);
+        Debug.Log($"[HK Poker] Showdown: Winners={string.Join(", ", data.Winners)}");
+        
+        // Reveal all hands
+        if (data.HandResults != null)
+        {
+            foreach (var result in data.HandResults)
+            {
+                int playerIndex = GetPlayerIndex(result.UserId);
+                if (playerIndex < 0) continue;
+                
+                // Show all 5 cards
+                RevealPlayerHand(playerIndex, result.Cards.ToList());
+                
+                // Show hand rank
+                ShowHandRank(playerIndex, result.HandName);
+                
+                // Show winnings
+                if (result.Winnings > 0)
+                {
+                    ShowWinAnimation(playerIndex, (int)result.Winnings);
+                }
+            }
+        }
+        
+        // Distribute pot to winners
+        if (data.Winners != null && data.Winners.Count > 0)
+        {
+            DOTween.Sequence()
+                .AppendInterval(2f)
+                .AppendCallback(() =>
+                {
+                    foreach (var winnerId in data.Winners)
+                    {
+                        int winnerIndex = GetPlayerIndex(winnerId);
+                        if (winnerIndex >= 0)
+                        {
+                            DealerGiveChipsToPlayer(winnerIndex);
+                        }
+                    }
+                });
+        }
+    }
+
+    #endregion
+
+    #region Helper Methods for HK Poker
+
+    private int GetPlayerIndex(string userId)
+    {
+        // Map user ID to visual position index (0-4)
+        // rearrangedPlayers is ordered with local player at index 0
+        for (int i = 0; i < rearrangedPlayers.Count; i++)
+        {
+            if (rearrangedPlayers[i].Id == userId)
+            {
+                return i;
+            }
+        }
+        
+        // Fallback: check in userIdToView dictionary
+        if (userIdToView.ContainsKey(userId))
+        {
+            // Find index by checking position
+            var view = userIdToView[userId];
+            var viewPos = (view.transform as RectTransform)?.anchoredPosition ?? Vector2.zero;
+            
+            // Match with listPosView to get index
+            for (int i = 0; i < listPosView.Count; i++)
+            {
+                if (Vector2.Distance(viewPos, listPosView[i]) < 1f)
+                {
+                    return i;
+                }
+            }
+        }
+        
+        Debug.LogWarning($"[HK Poker] Player {userId} not found in rearrangedPlayers or userIdToView");
+        return -1;
+    }
+
+    private string GetActionText(HKPokerAction action)
+    {
+        return action switch
+        {
+            HKPokerAction.HkActionFold => "FOLD",
+            HKPokerAction.HkActionCheck => "CHECK",
+            HKPokerAction.HkActionCall => "CALL",
+            HKPokerAction.HkActionRaise => "RAISE",
+            HKPokerAction.HkActionBet => "BET",
+            HKPokerAction.HkActionAllIn => "ALL-IN",
+            _ => ""
+        };
+    }
+
+    private void ShowPlayerAction(int playerIndex, HKPokerAction action, int amount)
+    {
+        // TODO: Show action text above player
+        // Example: Show text with fade-in/fade-out animation
+        Debug.Log($"Player {playerIndex} action: {action} {(amount > 0 ? amount.ToString() : "")}");
+        
+        // Show in BoxBet if available
+        if (playerIndex >= 0 && playerIndex < listBoxBet.Count)
+        {
+            var boxBet = listBoxBet[playerIndex];
+            if (boxBet != null)
+            {
+                // Update box bet display with action
+                boxBet.SetInfo(action, playerIndex, amount);
+            }
+        }
+    }
+
+    private void UpdateBettingStateUI(HKBettingState bettingState)
+    {
+        // Update button container with current betting state
+        if (buttonBetContainer != null)
+        {
+            // Enable/disable buttons based on available actions
+            // Update min/max bet values
+            buttonBetContainer.SetValues(
+                (int)bettingState.CurrentBet,
+                (int)bettingState.MinRaise,
+                (int)bettingState.CurrentBet + (int)bettingState.MinRaise
+            );
+        }
+    }
+
+    private void ClearRoundUI()
+    {
+        // Clear previous round displays
+        Debug.Log("Clearing round UI");
+    }
+
+    private void UpdateRoundUI(HKPokerRound round)
+    {
+        // Update UI based on current round
+        Debug.Log($"Update round UI: {round}");
+        
+        // Show round indicator
+        // Enable/disable card swap button for Round 4
+        if (round == HKPokerRound.HkRound4Card)
+        {
+            buttonChangeCardContainer?.gameObject.SetActive(true);
+        }
+    }
+
+    private void HighlightPlayer(int playerIndex)
+    {
+        // Highlight current player turn
+        Debug.Log($"Highlight player {playerIndex}");
+    }
+
+    private void ShowSwapAnimation(int playerIndex, Card newFaceUpCard)
+    {
+        if (playerIndex < 0 || playerIndex >= listPlayerCards.Count) return;
+        
+        var playerCards = listPlayerCards[playerIndex];
+        if (playerCards.Count >= 4)
+        {
+            // Animate card flip/swap
+            var cardToSwap = playerCards[^1]; // Last card (4th card)
+            FoldUp(playerIndex, cardToSwap, newFaceUpCard);
+        }
+    }
+
+    private void RevealPlayerHand(int playerIndex, List<Card> cards)
+    {
+        if (playerIndex < 0 || playerIndex >= listPlayerCards.Count) return;
+        
+        // Show all 5 cards face-up
+        var playerCards = listPlayerCards[playerIndex];
+        for (int i = 0; i < cards.Count && i < playerCards.Count; i++)
+        {
+            playerCards[i].ShowCard();
+        }
+    }
+
+    private void ShowHandRank(int playerIndex, string handName)
+    {
+        // Show hand rank name above player's cards
+        Debug.Log($"Player {playerIndex} hand: {handName}");
+        // TODO: Show UI text with hand rank
+    }
+
+    private void ShowWinAnimation(int playerIndex, int winnings)
+    {
+        // Show win animation and amount
+        Debug.Log($"Player {playerIndex} wins: {winnings}");
+        
+        // Get player from rearrangedPlayers
+        if (playerIndex >= 0 && playerIndex < rearrangedPlayers.Count)
+        {
+            var player = rearrangedPlayers[playerIndex];
+            if (userIdToView.TryGetValue(player.Id, out var playerView))
+            {
+                // Play win effect on player view
+                // playerView.SetEffectWin();
+                // playerView.EffectFlyMoney(winnings);
+                
+                Debug.Log($"Win effect for {player.UserName}: {winnings} chips");
+            }
+        }
+    }
+
+    private void DealerGiveChipsToPlayer(int playerIndex)
+    {
+        // Animate chips from dealer to player
+        Debug.Log($"Dealer gives chips to player {playerIndex}");
+        // TODO: Implement chip animation from dealer to player
+    }
+    
+    private void ClearAllCards()
+    {
+        // Clear all cards from all players
+        for (int i = 0; i < listPlayerCards.Count; i++)
+        {
+            ClearPlayerCardsByIndex(i);
+        }
+        Debug.Log("[HK Poker] Cleared all cards");
+    }
+    
+    private void ClearPlayerCards(string userId)
+    {
+        // Clear cards for specific player
+        int playerIndex = GetPlayerIndex(userId);
+        if (playerIndex >= 0)
+        {
+            ClearPlayerCardsByIndex(playerIndex);
+            Debug.Log($"[HK Poker] Cleared cards for player {userId} at index {playerIndex}");
+        }
+    }
+    
+    private void ClearPlayerCardsByIndex(int playerIndex)
+    {
+        // Return cards to pool
+        if (playerIndex >= 0 && playerIndex < listPlayerCards.Count)
+        {
+            var cards = listPlayerCards[playerIndex];
+            foreach (var card in cards)
+            {
+                if (card != null)
+                {
+                    cardPool.Release(card);
+                }
+            }
+            cards.Clear();
+        }
+    }
+    
+    protected override void RemovePlayerBoxBet(string leavePlayerId)
+    {
+        // Remove box bet for leaving player
+        int playerIndex = GetPlayerIndex(leavePlayerId);
+        if (playerIndex >= 0 && playerIndex < listBoxBet.Count)
+        {
+            var boxBet = listBoxBet[playerIndex];
+            if (boxBet != null)
+            {
+                boxBetPool.Release(boxBet);
+                listBoxBet[playerIndex] = null;
+                Debug.Log($"[HK Poker] Removed box bet for player {leavePlayerId} at index {playerIndex}");
+            }
+        }
+    }
+
+    #endregion
 
     #endregion
 
@@ -373,7 +694,7 @@ public class HongKongPokerView : BaseDiceGameView
     #endregion
 
     #region Boxbet Actions
-    private void ShowBoxBet(BetStatus status, int index, int chip)
+    private void ShowBoxBet(HKPokerAction status, int index, int chip)
     {
         HongKongPokerBoxBet boxbet = boxBetPool.Get();
         listBoxBet[index] = boxbet;

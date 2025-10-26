@@ -1,0 +1,169 @@
+
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/nk-nigeria/cgp-common/proto";
+
+import "game_common.proto";
+import "chinese_poker.proto";
+
+// HK Poker specific messages
+
+// Player action in betting
+enum HKPokerAction {
+  HK_ACTION_NONE = 0;
+  HK_ACTION_FOLD = 1;
+  HK_ACTION_CHECK = 2;
+  HK_ACTION_CALL = 3;
+  HK_ACTION_RAISE = 4;
+  HK_ACTION_BET = 5;
+  HK_ACTION_ALL_IN = 6;
+}
+
+// Betting round
+enum HKPokerRound {
+  HK_ROUND_PRE_FLOP = 0;   // 2 cards (1 face down, 1 face up)
+  HK_ROUND_3_CARD = 1;     // 3 cards
+  HK_ROUND_4_CARD = 2;     // 4 cards (with card swap option)
+  HK_ROUND_5_CARD = 3;     // 5 cards (final betting)
+  HK_ROUND_SHOWDOWN = 4;   // Show cards and determine winner
+}
+
+// Hand ranking for HK Poker
+enum HKPokerHandRank {
+  HK_HIGH_CARD = 0;           // Mậu thầu
+  HK_ONE_PAIR = 1;            // Đôi
+  HK_TWO_PAIR = 2;            // Thú
+  HK_THREE_OF_A_KIND = 3;     // Sám
+  HK_STRAIGHT = 4;            // Sảnh
+  HK_FLUSH = 5;               // Thùng
+  HK_FULL_HOUSE = 6;          // Cù lũ
+  HK_FOUR_OF_A_KIND = 7;      // Tứ quý
+  HK_STRAIGHT_FLUSH = 8;      // Thùng phá sảnh (TPS)
+}
+
+// Player betting state
+message HKPlayerBettingState {
+  string user_id = 1;
+  int64 total_bet = 2;        // Total amount bet in this hand
+  int64 current_round_bet = 3; // Amount bet in current round
+  int64 stack = 4;            // Remaining chips
+  HKPokerAction action = 5;   // Last action taken
+  bool has_acted = 6;         // Whether player has acted in current round
+  bool is_folded = 7;         // Whether player has folded
+  bool is_all_in = 8;         // Whether player is all-in
+  bool can_swap = 9;          // Whether player can swap card (Round 4 only)
+  bool has_swapped = 10;      // Whether player has swapped card
+}
+
+// Betting state for the table
+message HKBettingState {
+  HKPokerRound round = 1;
+  int64 current_bet = 2;      // Current bet to call
+  int64 min_raise = 3;        // Minimum raise amount
+  string current_player = 4;  // UserId of player whose turn it is
+  int32 dealer_position = 5;  // Position of dealer button
+  string first_bettor = 6;    // First player to act in this round
+  repeated HKPlayerBettingState player_states = 7;
+  bool all_players_acted = 8;
+}
+
+// Pot information
+message HKPot {
+  int64 amount = 1;
+  repeated string eligible_players = 2;
+  int64 cap_amount = 3;       // Cap amount for side pots
+}
+
+// Pot manager state
+message HKPotInfo {
+  repeated HKPot pots = 1;
+  int64 total_pot = 2;
+}
+
+// Request to perform action
+message HKPlayerActionRequest {
+  HKPokerAction action = 1;
+  int64 amount = 2;           // Amount for bet/raise
+}
+
+// Request to swap card in Round 4
+message HKCardSwapRequest {
+  bool swap_card = 1;         // True to swap face-down card with 4th card
+}
+
+// Update for player action
+message HKUpdatePlayerAction {
+  string user_id = 1;
+  HKPokerAction action = 2;
+  int64 amount = 3;
+  int64 new_pot = 4;
+  HKBettingState betting_state = 5;
+}
+
+// Update for dealing cards in HK Poker
+message HKUpdateDeal {
+  repeated HKPlayerCards player_cards = 1;
+  string first_bettor = 2;
+  HKPokerRound round = 3;
+}
+
+// Player cards (face up and face down)
+message HKPlayerCards {
+  string user_id = 1;
+  repeated Card face_up_cards = 2;   // Visible cards
+  repeated Card face_down_cards = 3; // Hidden cards (only sent to owner)
+  repeated Card all_cards = 4;       // All 5 cards (for showdown)
+}
+
+// Update for card swap
+message HKUpdateCardSwap {
+  string user_id = 1;
+  bool swapped = 2;
+  Card new_face_up_card = 3;  // The card that became face up after swap
+}
+
+// Update for new betting round
+message HKUpdateNewRound {
+  HKPokerRound round = 1;
+  repeated HKPlayerCards player_cards = 2;
+  string first_bettor = 3;
+  HKBettingState betting_state = 4;
+}
+
+// Hand result for HK Poker
+message HKHandResult {
+  string user_id = 1;
+  HKPokerHandRank hand_rank = 2;
+  string hand_name = 3;
+  repeated Card cards = 4;
+  int64 winnings = 5;
+}
+
+// Update for showdown
+message HKUpdateShowdown {
+  repeated HKHandResult hand_results = 1;
+  HKPotInfo pot_info = 2;
+  repeated string winners = 3;
+}
+
+// Update for game state (extends UpdateGameState)
+message HKUpdateGameState {
+  GameState state = 1;
+  int64 count_down = 2;
+  HKBettingState betting_state = 3;
+  HKPotInfo pot_info = 4;
+  repeated HKPlayerCards player_cards = 5;
+  string current_player = 6;
+  HKPokerRound round = 7;
+}
+
+// Finish result for HK Poker
+message HKUpdateFinish {
+  repeated HKHandResult results = 1;
+  HKPotInfo pot_info = 2;
+  proto.Jackpot jackpot = 3;
+  proto.Jackpot jp_treasure = 4;
+}
+
