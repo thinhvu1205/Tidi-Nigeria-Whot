@@ -461,7 +461,7 @@ public class SlotSixiangView : BaseSlotSymbolView
             HideThirdScatter();
 
             // Từ minigame về lại game chính
-            if (isEndBonusGame)
+            if (isEndBonusGame && !isFromScatter)
             {
                 HideBackgroundGoldPick();
                 columnContainer.gameObject.SetActive(true);
