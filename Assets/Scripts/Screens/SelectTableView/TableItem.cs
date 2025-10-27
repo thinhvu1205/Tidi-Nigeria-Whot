@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Globals;
 using Newtonsoft.Json.Linq;
@@ -38,7 +39,10 @@ public class TableItem : MonoBehaviour
             {
                 name = name.Substring(0, 7) + "...";
             }
-            name += ","; 
+            if (simpleProfile != match.Profiles.ToList().Last())
+            {
+                name += ","; 
+            }
             listName += name;
         }
         tableNameText.text = listName;

@@ -487,7 +487,7 @@ MonoBehaviour:
   listAnimationResult:
   - {fileID: 11400000, guid: cef46e7eddc544078a835efdf23c2d81, type: 2}
   - {fileID: 11400000, guid: d36053f61d50b4ad39502378f63fce19, type: 2}
-  - {fileID: 11400000, guid: 131c3aa3e358043998495180893b3ba0, type: 2}
+  - {fileID: 11400000, guid: 4f6da64bb6d2f4a23b723d28c3eb5d50, type: 2}
   cards: []
 --- !u!114 &4532966199990458366 stripped
 MonoBehaviour:

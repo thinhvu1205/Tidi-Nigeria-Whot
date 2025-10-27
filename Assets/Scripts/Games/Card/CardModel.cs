@@ -1,5 +1,6 @@
 using Common.Pool;
 using DG.Tweening;
+using Globals;
 using Spine.Unity;
 using UnityEngine;
 using UnityEngine.U2D;
@@ -53,7 +54,7 @@ namespace Games.Card
 
         [Header("=== ANIMATIONS ===")]
         [Tooltip("Spine animation for sparkle effect")]
-        [SerializeField] public SkeletonGraphic animLapLanh;
+        [SerializeField] public SkeletonGraphic animationSparkle;
 
         [Header("=== CARD DATA ===")]
         [Tooltip("Card data containing rank and suit")]
@@ -248,15 +249,15 @@ namespace Games.Card
         /// <summary>
         /// Stops sparkle animation
         /// </summary>
-        public void StopLapLanh()
+        public void HideSparkleAnimation()
         {
-            animLapLanh.gameObject.SetActive(false);
+            animationSparkle.gameObject.SetActive(false);
         }
 
         /// <summary>
         /// Shows sparkle animation effect
         /// </summary>
-        public void ShowLapLanh()
+        public void ShowSparkleAnimation()
         {
             if (darkBg.gameObject.activeInHierarchy)
             {
@@ -268,16 +269,16 @@ namespace Games.Card
             {
                 tweenLapLanh.Kill();
             }
-        
             tweenLapLanh = DOTween.Sequence();
-            tweenLapLanh.AppendCallback(() => {
-                    animLapLanh.gameObject.SetActive(true);
-                    animLapLanh.AnimationState.SetAnimation(0, "animation", true);
-                })
-                .AppendInterval(1f)
-                .AppendCallback(() => {
-                    StopLapLanh();
-                });
+            tweenLapLanh.AppendCallback(() =>
+            {
+                Utility.PlayAnimation(animationSparkle, "animation", true);
+            });
+            // .AppendInterval(1f)
+            // .AppendCallback(() => {
+            //     HideSparkleAnimation();
+            //     SetBorder(true);
+            // });
             tweenLapLanh.Play();
         }
 
