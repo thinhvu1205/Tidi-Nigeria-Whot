@@ -71,8 +71,11 @@ public class SiXiangDragonPearlView : MonoBehaviour
 
     private void OnDisable()
     {
-        Reset();
-        GameView.OnUpdateTable -= SixiangView_OnUpdateTable;
+        if (gameObject.activeInHierarchy)
+        {
+            Reset();
+            GameView.OnUpdateTable -= SixiangView_OnUpdateTable;
+        }
     }
 
     public void SetInfo(SlotSixiangView slotSixiangView)
@@ -82,7 +85,6 @@ public class SiXiangDragonPearlView : MonoBehaviour
         GameView.OnUpdateTable += SixiangView_OnUpdateTable;
         GameView.UpdateTotalChipWinValue();
         GameView.SetDarkAllItems();
-        StartView6Gold();
     }
 
     private void InitItems()
@@ -116,6 +118,12 @@ public class SiXiangDragonPearlView : MonoBehaviour
         IsWinTigerEye = listSpinSymbol.Any(symbol => symbol.Symbol == SiXiangSymbol.DragonpearlEyeTiger);
         IsWinBirdEye = listSpinSymbol.Any(symbol => symbol.Symbol == SiXiangSymbol.DragonpearlEyeBird);
         isWinGrandJackpot = (int)data.WinJp == 100;
+        if (!hasInitFirst6Gold)
+        {
+            hasInitFirst6Gold = true;
+            StartView6Gold();
+
+        }
     }
 
     public void OnStopSpin()
@@ -161,9 +169,7 @@ public class SiXiangDragonPearlView : MonoBehaviour
 
     public void StartView6Gold()
     {
-        if (hasInitFirst6Gold) return;
         Debug.Log("START VIEW 6 GOLD");
-        hasInitFirst6Gold = true;
         Reset();
         List<SpinSymbol> listSpinSymbol = GameView.ListSpinSymbol;
         Sequence sequence = DOTween.Sequence();
@@ -176,8 +182,8 @@ public class SiXiangDragonPearlView : MonoBehaviour
             SpinSymbol data = listSpinSymbol[i];
             if (data.WinAmount <= 0) continue;
             GameObject itemGold = itemGoldPool.Get();
-
             listItemGold.Add(itemGold);
+            // itemGold.Sp
             SoundManager.Instance.PlayEffectFromPath(SoundSlot.PEARL_RUNITEM);
             sequence
                 .AppendCallback(() =>
@@ -194,7 +200,7 @@ public class SiXiangDragonPearlView : MonoBehaviour
             {
                 foreach (GameObject item in listItemGold)
                 {
-                    itemGoldPool.Release(item);
+                    DestroyImmediate(item);
                 }
                 foreach (SpinSymbol item in listSpinSymbol)
                 {

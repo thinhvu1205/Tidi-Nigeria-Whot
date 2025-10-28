@@ -145,9 +145,19 @@ public class UIManager : Singleton<UIManager>
         }
         Debug.Log("Quick match response: " + response.ToString());
         var labelMatch = await DataSender.JoinMatch(response.Matches[0].MatchId);
+        
         if (labelMatch != null)
         {
-            HandleOpenGame(labelMatch);
+            if (Config.currentGameId == Constants.SIXIANG_GAME_ID)
+            {
+                HideProgressing();
+                lobbyView.PlayVideoSiXiang(labelMatch);
+            }
+            else
+            {
+                HandleOpenGame(labelMatch);
+            }          
+            
         }
     }
     

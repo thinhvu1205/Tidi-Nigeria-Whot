@@ -72,12 +72,18 @@ public class SiXiangGoldPickView : MonoBehaviour
         gameView.OnUpdateTable -= SixiangView_OnUpdateTable;
     }
 
-    public void SetInfo(SlotSixiangView sixiangView)
+    private void OnDestroy()
+    {
+        DOTween.Kill("autoPlay");
+    }
+
+    public void SetInfo(SlotSixiangView sixiangView, int remainingPick)
     {
         gameView = sixiangView;
         gameView.OnUpdateTable += SixiangView_OnUpdateTable;
         gameView.UpdateTotalChipWinValue();
-        textRemainingPick.text = remainPick + " Remaining Picks";
+        if (remainingPick == 0) remainingPick = 20;
+        textRemainingPick.text = remainingPick + " Remaining Picks";
 
     }
     

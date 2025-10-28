@@ -162,24 +162,22 @@ public class SlotNoelView : BaseSlotView
                 Utility.PlayAnimationByPath(animationEffect, FREE_SPIN_ANIMATION_PATH, FREE_SPIN_ANIMATION_NAME, false);
                 break;
         }
-        if (new WinType[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(winType))
-        {
-            DOVirtual.DelayedCall(delay, () =>
-            {
-                bigWinText.transform.parent.gameObject.SetActive(false);
-            });
-        }
+        // if (new WinType[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(winType))
+        // {
+        //     DOVirtual.DelayedCall(delay, () =>
+        //     {
+        //         bigWinText.transform.parent.gameObject.SetActive(false);
+        //     });
+        // }
 
         animationEffect.AnimationState.Complete += delegate
         {
             effectContainer.gameObject.SetActive(false);
             if (new WinType[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(winType))
             {
-                DOVirtual.DelayedCall(delay, () =>
-                {
-                    bigWinText.transform.parent.gameObject.SetActive(false);
-                    AnimateCoinsFly();
-                });
+                Debug.Log("Win type: " + winType);
+                bigWinText.transform.parent.gameObject.SetActive(false);
+                AnimateCoinsFly();
             }
             NextTween();
             effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);

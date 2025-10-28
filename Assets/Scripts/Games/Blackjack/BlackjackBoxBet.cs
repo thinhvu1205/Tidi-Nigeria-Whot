@@ -9,6 +9,7 @@ using Spine.Unity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Color = UnityEngine.Color;
 
 public class BlackjackBoxBet : MonoBehaviour
 {
@@ -22,11 +23,13 @@ public class BlackjackBoxBet : MonoBehaviour
     [SerializeField] private Image imageChip;
     [SerializeField] private Image imageState;
     [SerializeField] private Image imageScoreBox;
+    [SerializeField] private Image imageAction;
 
     [Header(" List Sprite ")]
     [SerializeField] private Sprite[] listImageChip;
     [SerializeField] private Sprite[] listImageState; // 0: Blackjack, 1: Bust, 2: Double, 3: Hit, 4: Push, 5: Split, 6: Stand
     [SerializeField] private Sprite[] listImageScoreBox; // 0: Normal, 1: Bust, 2: Blackjack, 3: Blackjack Pro
+    [SerializeField] private Sprite[] listImageAction; // 0: Hit, 1: Stand, 2: Double, 3: Split
 
     [Header(" Transforms ")]
     [SerializeField] private Transform cardContainer;
@@ -42,6 +45,7 @@ public class BlackjackBoxBet : MonoBehaviour
     public Transform GetCardPosition => cardContainer;
     public BlackjackBoxBet SecondBoxBet => secondBoxBet;
     public bool isSecondBox = false;
+    public bool isBankerBox = false;
     [HideInInspector] public List<CardModel> listCardModel = new();
     private const float CARD_SPACING = 35f;
     private readonly List<Tween> highlightTweens = new List<Tween>();
@@ -49,14 +53,16 @@ public class BlackjackBoxBet : MonoBehaviour
     private long totalBet;
     private int maxPoint;
     private int index;
-    private bool isEnlarging = false;
+    public bool IsEnlarging { get; private set; } = false;
     public Vector2 BoxPosition { get; private set; }
+    private Vector2 ImageScoreBoxPosition;
     public bool HasBet { get; set; } = false;
     private Vector2 initialPosition;
 
     private void Awake()
     {
         BoxPosition = transform.localPosition;
+        ImageScoreBoxPosition = imageScoreBox.transform.localPosition;
         boxWidth = GetComponent<RectTransform>().rect.width;
         if (!isSecondBox)
             Reset();
@@ -75,7 +81,8 @@ public class BlackjackBoxBet : MonoBehaviour
         float startX = -totalWidth / 2f;
 
         int newIndex = listCardModel.Count;
-        Vector2 targetPos = new(startX + newIndex * CARD_SPACING, imageScoreBox.transform.localPosition.y);
+        float offsetY = IsEnlarging && !isBankerBox ? 60f : 0f;
+        Vector2 targetPos = new(startX + newIndex * CARD_SPACING, ImageScoreBoxPosition.y + offsetY);
         imageScoreBox.transform.localPosition = targetPos;
         imageScoreBox.gameObject.SetActive(true);
         imageScoreBox.transform.localScale = Vector3.zero; // bắt đầu nhỏ
@@ -119,12 +126,17 @@ public class BlackjackBoxBet : MonoBehaviour
                     animationBlackjack.gameObject.SetActive(false);
                     imageState.sprite = listImageState[0]; // Blackjack
                     imageState.gameObject.SetActive(true);
+                  
                 };
                 break;
 
             case BlackjackHandType._21P:
                 animationWow.gameObject.SetActive(true);
                 animationWow.AnimationState.SetAnimation(0, "animation", false);
+                foreach (var card in listCardModel)
+                {
+                    card.ShowSparkleAnimation();
+                }
 
                 animationWow.AnimationState.Complete += delegate
                 {
@@ -135,12 +147,16 @@ public class BlackjackBoxBet : MonoBehaviour
             case BlackjackHandType.Busted:
                 animationBust.gameObject.SetActive(true);
                 animationBust.AnimationState.SetAnimation(0, "animation", false);
+                foreach (var card in listCardModel)
+                {
+                    card.SetDark(true);
+                }
+                imageState.sprite = listImageState[1]; // Bust
+                imageState.gameObject.SetActive(true);
 
                 animationBust.AnimationState.Complete += delegate
                 {
                     animationBust.gameObject.SetActive(false);
-                    imageState.sprite = listImageState[1]; // Bust
-                    imageState.gameObject.SetActive(true);
                 };
                 break;
 
@@ -169,7 +185,7 @@ public class BlackjackBoxBet : MonoBehaviour
     {
         Debug.Log("SetBetValue: " + value);
         totalBet = totalValue;
-        if (index < 0)
+        if (index < 0 || totalValue <= 0)
         {
             imageChip.gameObject.SetActive(false);
             textTotalBet.text = Utility.FormatMoney(totalValue, true);
@@ -200,7 +216,7 @@ public class BlackjackBoxBet : MonoBehaviour
         float startX = -totalWidth / 2f;
 
         int newIndex = listCardModel.Count;
-        float offsetY = isEnlarging ? 30f : 0f;
+        float offsetY = IsEnlarging && !isBankerBox ? 30f : 0f;
         Vector2 targetPos = new(startX + newIndex * CARD_SPACING, cardContainer.localPosition.y  + offsetY);
 
         return transform.TransformPoint(targetPos); ;
@@ -235,47 +251,58 @@ public class BlackjackBoxBet : MonoBehaviour
     {
         float totalWidth = (listCardModel.Count - 1) * CARD_SPACING;
         float startX = -totalWidth / 2f;
+        float offsetY = IsEnlarging && !isBankerBox ? 30f : 0f;
+
         for (int i = 0; i < listCardModel.Count; i++)
         {
             CardModel cardModel = listCardModel[i];
-            Vector2 targetPos = new Vector2(startX + i * CARD_SPACING, cardContainer.localPosition.y);
+            Vector2 targetPos = new Vector2(startX + i * CARD_SPACING, cardContainer.localPosition.y + offsetY);
             // cardModel.transform.localPosition = targetPos;
             cardModel.transform.SetSiblingIndex(i);
             // cardModel.transform.DOLocalMove(targetPos, 0.1f).OnComplete(UpdateContainerWidth);
             cardModel.transform.DOLocalMove(targetPos, 0.1f);
         }
+
+        float scoreBoxoffsetY = IsEnlarging && !isBankerBox ? 60f : 0f;
+        Vector2 scoreBoxTargetPos = new(ImageScoreBoxPosition.x, ImageScoreBoxPosition.y + scoreBoxoffsetY);
+        imageScoreBox.transform.localPosition = scoreBoxTargetPos;
     }
 
     public void EnlargeCards()
     {
-        DOVirtual.DelayedCall(0.3f, () =>
+        DOVirtual.DelayedCall(0.6f, () =>
         {
-            if (!isEnlarging)
+            if (!IsEnlarging)
             {
-                isEnlarging = true;
-                foreach (Transform transform in cardContainer)
-                {
-                    CardModel cardModel = transform.GetComponent<CardModel>();
-                    cardModel.transform.DOScale(Vector3.one * 0.7f, 0.25f);
-                    cardModel.transform.DOLocalMoveY(transform.localPosition.y + 50f, 0.25f);
-                }
+                IsEnlarging = true;
+                cardContainer.transform.DOScale(Vector3.one * 1.3f, 0.25f);
+                SpreadCards();
+                // foreach (Transform transform in cardContainer)
+                // {
+                //     CardModel cardModel = transform.GetComponent<CardModel>();
+                //     cardModel.transform.DOScale(Vector3.one * 0.7f, 0.25f);
+                //     cardModel.transform.DOLocalMoveY(transform.localPosition.y + 50f, 0.25f);
+                // }
             }
 
         });
     }
 
-    public void ResetCards()
+    public void ShrinkCards()
     {
-        DOVirtual.DelayedCall(0.3f, () =>
+        DOVirtual.DelayedCall(0.6f, () =>
         {
-            if (isEnlarging)
+            if (IsEnlarging)
             {
-                foreach (Transform transform in cardContainer)
-                {
-                    CardModel cardModel = transform.GetComponent<CardModel>();
-                    cardModel.transform.DOScale(Vector3.one * 0.5f, 0.25f);
-                    // cardModel.transform.DOLocalMoveY(transform.localPosition.y - 30f, 0.25f);
-                }
+                IsEnlarging = false;
+                cardContainer.transform.DOScale(Vector3.one * 1, 0.25f);
+                SpreadCards();
+                // foreach (Transform transform in cardContainer)
+                // {
+                //     CardModel cardModel = transform.GetComponent<CardModel>();
+                //     cardModel.transform.DOScale(Vector3.one * 0.5f, 0.25f);
+                //     cardModel.transform.DOLocalMoveY(transform.localPosition.y - 30f, 0.25f);
+                // }
             }
         });
     }
@@ -328,6 +355,47 @@ public class BlackjackBoxBet : MonoBehaviour
         animationBlackjack.gameObject.SetActive(true);
     }
 
+    public void AnimateImageAction(BlackjackActionCode action)
+    {
+        imageAction.transform.DOKill();
+        Vector2 initialPos = imageAction.transform.localPosition;
+        imageAction.transform.localScale = Vector3.one * 1.1f;
+        imageAction.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        if (action == BlackjackActionCode.BlackjackActionHit)
+        {
+            imageAction.transform.localScale = Vector3.one * 0.85f;
+        }
+        int actionIndex = action switch
+        {
+            BlackjackActionCode.BlackjackActionHit => 0,
+            BlackjackActionCode.BlackjackActionStay => 1,
+            BlackjackActionCode.BlackjackActionDouble => 2,
+            BlackjackActionCode.BlackjackActionSplit => 3,
+            _ => -1
+        };
+        if (actionIndex == -1) return;
+        imageAction.sprite = listImageAction[actionIndex];
+        imageAction.gameObject.SetActive(true);
+        Sequence s = DOTween.Sequence();
+            s.Append(imageAction.transform.DOLocalRotate(new Vector3(0, 0, 30f), 0.35f)
+                    .SetEase(Ease.InOutSine))
+            .Append(imageAction.transform.DOLocalRotate(new Vector3(0, 0, -30f), 0.35f)
+                    .SetEase(Ease.InOutSine))
+            .SetLoops(-1);
+        // imageAction.transform
+        //     .DOBlendableRotateBy(new Vector3(0, 0, 30f), 0.35f)
+        //     .SetEase(Ease.InOutSine)
+        //     .SetLoops(-1, LoopType.Yoyo);   
+
+        imageAction.transform.DOMoveY(transform.position.y + 170f, 1f)
+            .SetEase(Ease.InOutSine)
+            .OnComplete(() =>
+            {
+                imageAction.transform.localPosition = initialPos;
+                imageAction.gameObject.SetActive(false);
+            });
+    }
+
     public void SplitBoxBet(BlackjackHand firstHand = null, BlackjackHand secondHand = null)
     {
         // Lấy component CanvasGroup để fade (nếu là UI)
@@ -353,7 +421,7 @@ public class BlackjackBoxBet : MonoBehaviour
                 //     secondBoxBet.transform.DOLocalMoveX(2 * (BoxPosition.x + boxWidth), 0.25f);
                 //     secondCard.transform.DOLocalMoveX(secondCard.transform.localPosition.x - CARD_SPACING, 0.25f);
                 // });
-                seq.Append(transform.DOLocalMoveY(transform.localPosition.y + 40f, 0.25f))
+                seq.Append(transform.DOLocalMoveY(transform.localPosition.y + 70f, 0.25f))
                     .Join(transform.DOLocalMoveX(BoxPosition.x - boxWidth, 0.25f))
                     .Join(secondBoxBet.transform.DOLocalMoveX(2 * (BoxPosition.x + boxWidth), 0.25f))
                     .Join(secondCard.transform.DOLocalMoveX(secondCard.transform.localPosition.x - CARD_SPACING, 0.25f));
@@ -361,7 +429,7 @@ public class BlackjackBoxBet : MonoBehaviour
             case 1:
                 seq.JoinCallback(() =>
                 {
-                    secondBoxBet.transform.DOLocalMoveX(secondBoxBet.transform.localPosition.x + boxWidth + CARD_SPACING, 0.5f);
+                    secondBoxBet.transform.DOLocalMoveX(secondBoxBet.transform.localPosition.x + boxWidth * 2 + CARD_SPACING, 0.5f);
                     secondCard.transform.DOLocalMoveX(secondCard.transform.localPosition.x - CARD_SPACING, 0.5f);
                 });
                 break;
@@ -369,7 +437,7 @@ public class BlackjackBoxBet : MonoBehaviour
                 seq.JoinCallback(() =>
                 {
                     transform.DOLocalMoveX(transform.localPosition.x - 1.4f * boxWidth, 0.5f);
-                    secondBoxBet.transform.DOLocalMoveX(BoxPosition.x + boxWidth + CARD_SPACING, 0.5f);
+                    secondBoxBet.transform.DOLocalMoveX(BoxPosition.x + boxWidth * 2 + CARD_SPACING, 0.5f);
                     secondCard.transform.DOLocalMoveX(secondCard.transform.localPosition.x - CARD_SPACING, 0.5f);
                 });
                 break;
@@ -399,10 +467,12 @@ public class BlackjackBoxBet : MonoBehaviour
         // cardModel.transform.localPosition = Vector3.zero;
         // cardModel.transform.localScale = Vector3.one * 0.5f;
         // cardModel.gameObject.SetActive(true);
+        secondBoxBet.listCardModel.Clear();
         secondBoxBet.listCardModel.Add(secondCard);
         secondBoxBet.SpreadCards();
 
         if (secondHand == null) return;
+        secondBoxBet.SetBetValue(0, totalBet, totalBet);
         secondBoxBet.ShowScore(secondHand.Point, secondHand.MinPoint, secondHand.MaxPoint);
     }
 

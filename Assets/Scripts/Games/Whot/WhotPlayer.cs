@@ -90,6 +90,8 @@ public class WhotPlayer : MonoBehaviour
         avatar.LoadAvatar(avatarId, vipLevel);
         nameText.text = playerName;
         isCountingDown = false;
+        countdownImage.gameObject.SetActive(false);
+        lightImage.gameObject.SetActive(false);
         // chipText.text = Utility.FormatNumber(Utility.ConvertStringToNumber(chipAmount));
         AnimateChipValue(Utility.ConvertStringToLong(chipAmount));
     }

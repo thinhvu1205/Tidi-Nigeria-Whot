@@ -64,7 +64,6 @@ public class SiXiangScatterView : MonoBehaviour
         int[] listRateGold = new int[] { 3, 10, 6, 15 };
         for (int i = 0; i < listGoldValue.Length; i++)
         {
-            Debug.Log("SET GOLD : " + betValue);
             listGoldValue[i].text = Utility.FormatMoney2(listRateGold[i] * betValue, true);
         }
     }
@@ -75,6 +74,7 @@ public class SiXiangScatterView : MonoBehaviour
         if (data.SpinSymbols.Count == 0) return;
         spinResult = data.SpinSymbols[0];
         winAmount = data.GameReward.TotalChipsWinByGame;
+        Debug.Log("SpinResult Symbol: " + spinResult.Symbol);
         switch (spinResult.Symbol)
         {
             case SiXiangSymbol.BonusDragonball:
@@ -110,7 +110,7 @@ public class SiXiangScatterView : MonoBehaviour
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
         isWaitForAutoSpin = false;
         buttonSpin.interactable = false;
-        
+
 
         InfoBet infoBet = new()
         {
@@ -118,6 +118,7 @@ public class SiXiangScatterView : MonoBehaviour
         };
         DataSender.SendMatchState((long)OpCodeRequest.Spin, infoBet.ToByteArray());
     }
+    
     public void StartSpin()
     {
         Utility.PlayAnimation(animationButtonSpin, "spin normal", true);
@@ -154,8 +155,8 @@ public class SiXiangScatterView : MonoBehaviour
         isPrepareStop = true;
         spinContainer.transform.DOLocalMoveY(-331, 1.0f).SetEase(Ease.InSine);
         spinContainer.transform.DOScale(new Vector3(1.5f, 1.5f, 1), 1.0f).SetEase(Ease.InSine);
-
     }
+
     private void PreShowResult()
     {
         DOTween.Sequence()
@@ -170,8 +171,11 @@ public class SiXiangScatterView : MonoBehaviour
                 ShowResultAnim();
             });
     }
+
     private void ShowResultAnim()
     {
+        Debug.Log("TypeResult: " + typeResult + " | WinAmount: " + winAmount);
+        Debug.Log("SpinResult Symbol: " + spinResult.Symbol);
         resultContainer.gameObject.SetActive(true);
         buttonCollect.gameObject.SetActive(false);
         string animationPath = "";
@@ -214,7 +218,7 @@ public class SiXiangScatterView : MonoBehaviour
                     }
             }
             textChipWin.gameObject.SetActive(false);
-
+            gameView.SetWinMiniGameFromScatter();
         }
         else
         {
@@ -228,6 +232,7 @@ public class SiXiangScatterView : MonoBehaviour
                 soundMoney.Stop();
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.COUNGTING_MONEY_END);
             });
+            gameView.SetWinChipFromScatter();
 
         }
         Utility.PlayAnimationByPath(animationResultSpin, animationPath, animationName, false);
@@ -262,6 +267,6 @@ public class SiXiangScatterView : MonoBehaviour
     private void EndView()
     {
         resultContainer.gameObject.SetActive(false);
-        gameView.ShowAnimationCutScene(true);
+        gameView.ShowAnimationCutScene(true, true);
     }
 }

@@ -31,14 +31,15 @@ public class WhotView : BaseDiceGameView
         public WhotCardEffect cardEffect;
     }
     [SerializeField] private GameObject whotPlayerPrefab;
-    [FormerlySerializedAs("whotCardPrefab")] [SerializeField] private WhotCardModel whotCardModelPrefab;
+    [FormerlySerializedAs("whotCardPrefab")] 
+    [SerializeField] private WhotCardModel whotCardModelPrefab;
     [SerializeField] private WhotChip chipPrefab;
     [SerializeField] private WhotPlayer[] playersByPosition;
     [SerializeField] private SkeletonGraphic betterLuckNextTimeAnimation, victoryAnimation, matchSymbolAnimation, effectAnimation, lastCardAnimation;
     [SerializeField] private Transform yourTurnTransform, suitPickerTransform, effectAnimationParent,
     victoryAnimationParent, loseAnimationParent, matchSymbolAnimationParent, lastCardAnimationParent, deckOfCardParent,
     callCardParent, playAreaParent, playersParent, countdownTransform, cardPoolParent, chipPoolParent;
-    [SerializeField] private TextMeshProUGUI betText, cardsLeftText, betterLuckNextTimeText, yourTurnText, countdownText;
+    [SerializeField] private TextMeshProUGUI betText, cardsLeftText, betterLuckNextTimeText, yourTurnText, countdownText, idText;
     [SerializeField] private Image waitImage, victoryImage, deckHighlightImage;
     [SerializeField] WhotSuitPicker suitPicker;
     [SerializeField] private WhotMatchResult whotMatchResult;
@@ -178,6 +179,7 @@ public class WhotView : BaseDiceGameView
         // Match data = JsonConvert.DeserializeObject<Match>(labelJson);
         CurrentMarkUnit = match.Bet.MarkUnit;
         betText.text = "Bet: " + CurrentMarkUnit;
+        idText.text = "ID: " + match.TableId;
     }
 
     // Khi có người chơi join hoặc leave

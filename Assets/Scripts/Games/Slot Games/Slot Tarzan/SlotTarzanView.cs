@@ -589,6 +589,7 @@ public class SlotTarzanView : BaseSlotView
         animationEffect.AnimationState.Complete += delegate
         {
             effectContainer.gameObject.SetActive(false);
+            AnimateCoinsFly();
             NextTween();
             effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
         };

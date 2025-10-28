@@ -270,6 +270,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3649713923496938335, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
+      propertyPath: startingLoop
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649713923496938335, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
+      propertyPath: skeletonDataAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 131c3aa3e358043998495180893b3ba0, type: 2}
     - target: {fileID: 3736813958378856226, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -479,9 +487,8 @@ MonoBehaviour:
   listAnimationResult:
   - {fileID: 11400000, guid: cef46e7eddc544078a835efdf23c2d81, type: 2}
   - {fileID: 11400000, guid: d36053f61d50b4ad39502378f63fce19, type: 2}
-  - {fileID: 11400000, guid: cc401bc2eb280428fbcee065ea403e2a, type: 2}
+  - {fileID: 11400000, guid: 4f6da64bb6d2f4a23b723d28c3eb5d50, type: 2}
   cards: []
-  imageLight: {fileID: 7528250577804517735}
 --- !u!114 &4532966199990458366 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1831605988215129025, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}

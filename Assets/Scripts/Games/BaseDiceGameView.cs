@@ -43,7 +43,10 @@ public class BaseDiceGameView : BaseGameView
     {
         base.LoadInfoMatch(match);
         Debug.Log("LOAD INFO MATCH: " + match.ToString());
+        Debug.Log("CURRENT GAME ID: " + Config.currentGameId);
+        Debug.Log("Current Game is Table Game: " + Constants.SELECT_TABLE_GAMES_ID.Contains(Config.currentGameId));
         if (!Constants.SELECT_TABLE_GAMES_ID.Contains(Config.currentGameId)) return;
+        Debug.Log("LOAD INFO TABLE GAME");
         MarkUnit = (int)match.MarkUnit;
         if (textMatchInfo != null)
         {

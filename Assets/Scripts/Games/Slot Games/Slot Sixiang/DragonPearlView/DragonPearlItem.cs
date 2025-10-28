@@ -141,6 +141,10 @@ public class DragonPearlItem : MonoBehaviour
                 {
                     Utility.PlayAnimationByPath(spine, animationPath, "animation", false);
                     spine.transform.localScale = new Vector2(0.9f, 0.9f);
+                    if (!dragonPearlView.IsWinBirdEye)
+                    {
+                        dragonPearlView.GameView.UpdateDragonPearlFreeSpinLeft();
+                    }
                     // Vector2 posSymbol = spine.transform.parent.InverseTransformPoint(SiXiangView.Instance.getPosSymbol((int)data["col"], (int)data["row"] + 1));
                     //  SpineItem.transform.localPosition = new Vector2(posSymbol.x + 2, posSymbol.y);
                 });
@@ -163,7 +167,7 @@ public class DragonPearlItem : MonoBehaviour
                                     {
                                         textChipFSP.transform.localPosition = Vector2.zero;
                                         textChipFSP.gameObject.SetActive(false);
-                                        dragonPearlView.GameView.DragonPearlFreeSpinLeft += 3;
+                                        // dragonPearlView.GameView.DragonPearlFreeSpinLeft += 3;
                                         dragonPearlView.GameView.UpdateDragonPearlFreeSpinLeft(true);
                                     });
                                 textChipFSP.DOFade(0, 0.5f).SetEase(Ease.InSine).SetId("fadeEffect");
@@ -187,6 +191,7 @@ public class DragonPearlItem : MonoBehaviour
                             .AppendCallback(() =>
                             {
                                 Utility.PlayAnimationByPath(spine, animationPath, "animation", false);
+
                             });
                         break;
                     }
@@ -219,7 +224,6 @@ public class DragonPearlItem : MonoBehaviour
                                 };
                                 spine.AnimationState.SetAnimation(0, jackpotNormalAnimationName, true);
                                 dragonPearlView.GameView.UpdateTotalChipWinValue();
-                                dragonPearlView.GameView.UpdateDragonPearlFreeSpinLeft();
                             });
                         break;
                     }
