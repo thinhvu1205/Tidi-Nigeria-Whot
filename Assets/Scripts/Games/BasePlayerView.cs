@@ -456,7 +456,7 @@ public class BasePlayerView : MonoBehaviour
     /// <param name="_timeTurn">Turn duration</param>
     /// <param name="_isMe">Is current player</param>
     /// <param name="timeVibrate">Vibration time before turn ends</param>
-    public virtual void SetCurrentTurn(bool isTurn, float _timeTurn = 0f, bool _isMe = false, float timeVibrate = 5f)
+    public virtual void SetCurrentTurn(bool isTurn, float _timeTurn = 0f, float _totalTimeTurn = 0, bool _isMe = false, float timeVibrate = 5f)
     {
         timeCountDown.gameObject.SetActive(isTurn);
         if (isTurn)
@@ -470,13 +470,13 @@ public class BasePlayerView : MonoBehaviour
         IEnumerator fillAmountToZero()
         {
             timeTurn = _timeTurn;
-            timeCountDown.fillAmount = 1;
+            timeCountDown.fillAmount = timeTurn / _totalTimeTurn;
             avatar.transform.DOScale(1.1f * Vector2.one, .1f).OnComplete(() => { avatar.transform.DOScale(Vector2.one, .1f); });
             float elapsedTime = 0;
             while (timeCountDown.fillAmount > 0)
             {
                 yield return new WaitForFixedUpdate();
-                timeCountDown.fillAmount -= Time.fixedDeltaTime / timeTurn;
+                timeCountDown.fillAmount -= Time.fixedDeltaTime / _totalTimeTurn;
                 elapsedTime += Time.fixedDeltaTime;
                 if (!timeCountDown.gameObject.activeSelf) yield break;
                 if (_isMe && (elapsedTime >= timeTurn - timeVibrate))

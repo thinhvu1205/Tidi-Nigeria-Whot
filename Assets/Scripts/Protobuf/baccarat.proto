@@ -104,6 +104,7 @@ message BaccaratUpdateDesk {
   BaccaratSimpleHistory history = 7;
   repeated TypeWinBaccarat detailed_history = 8;
   Error error = 9;
+  repeated BaccaratPlayerBet all_user_bets = 10;
 }
 
 enum BaccaratBetRejectedReason {

@@ -122,11 +122,7 @@ public class BlackjackView : BaseDiceGameView
 
     protected override void Update()
     {
-        // Khi chạm vào màn hình thì gửi lên trạng thái active để server ko kick người chơi ra khỏi bàn
-        if (Input.GetMouseButtonDown(0) || Input.touchCount > 0)
-        {
-            DataSender.SendMatchState((long)OpCodeRequest.OpcodeUserInteractCards, new byte[0]);
-        }
+        
     }
 
     #region API Handlers
@@ -227,7 +223,7 @@ public class BlackjackView : BaseDiceGameView
             }
             if (userIdToView.TryGetValue(data.InTurn, out var view))
             {
-                view.SetCurrentTurn(true, 10);
+                view.SetCurrentTurn(true, 10, 10);
             }
 
             // Cập nhật các nút hành động
