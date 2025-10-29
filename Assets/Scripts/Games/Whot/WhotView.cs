@@ -20,7 +20,7 @@ using GameState = Proto.GameState;
 using PrefabType = Globals.PrefabType;
 using Cysharp.Threading.Tasks;
 
-public class WhotView : BaseGameView
+public class WhotView : BaseDiceGameView
 {
     public event Action<OnNextTurnEventArg> OnNextTurn;
     public class OnNextTurnEventArg : EventArgs
@@ -102,16 +102,7 @@ public class WhotView : BaseGameView
         base.Awake();
         _ = NetworkManager.INSTANCE.JoinRoomChat(CHAT_ROOM_NAME);
     }
-
-    protected override void Update()
-    {
-        // Khi chạm vào màn hình thì gửi lên trạng thái active để server ko kick người chơi ra khỏi bàn
-        if (Input.GetMouseButtonDown(0) || Input.touchCount > 0)
-        {
-            DataSender.SendMatchState((long)OpCodeRequest.OpcodeUserInteractCards, Array.Empty<byte>());
-        }
-    }
-
+    
     private void OnApplicationPause(bool pause)
     {
         // User quay lại foreground của app

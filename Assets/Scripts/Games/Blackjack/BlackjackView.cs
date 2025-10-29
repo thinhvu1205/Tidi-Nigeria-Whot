@@ -272,7 +272,7 @@ public class BlackjackView : BaseDiceGameView
             }
             if (userIdToView.TryGetValue(data.InTurn, out var view))
             {
-                view.SetCurrentTurn(true, 10);
+                view.SetCurrentTurn(true, 10, 10);
             }
 
             // Cập nhật các nút hành động

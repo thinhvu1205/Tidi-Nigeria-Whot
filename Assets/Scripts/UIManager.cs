@@ -26,6 +26,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] TMP_FontAsset fontLabelToast;
   
     public LobbyView lobbyView;
+    public SelectTableView selectTableView;
     private Transform parentPopups, parentGames, parentBanners, parentLobby, parentLoading;
     [HideInInspector] public BaseGameView gameView;
     private const string POPUP_PARENT_TAG = "Parent Popups";
@@ -43,6 +44,16 @@ public class UIManager : Singleton<UIManager>
         Input.multiTouchEnabled = false;
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Config.UpdateConfigSettings();
+    }
+
+    public async UniTask ReloadTableView()
+    {
+        if (selectTableView != null)
+        {
+            ShowProgressing();
+            await selectTableView.GetListBet();
+            OpenBanner(TypeInAppMessage.Banner, 0.6f);
+        }
     }
 
     public async UniTask LoadProfileUser()
@@ -116,7 +127,7 @@ public class UIManager : Singleton<UIManager>
 
     public async UniTask HandleFindAndJoinMatch(int markUnit)
     {
-
+        ShowProgressing();
         RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, true);
         if (response == null) return;
         Debug.Log("Find match response: " + response.ToString());
@@ -163,6 +174,7 @@ public class UIManager : Singleton<UIManager>
     
     public async UniTask HandleCreateMatch(string passWord, int markUnit, string customData)
     {
+        ShowProgressing();
         RpcCreateMatchResponse response = await DataSender.CreateMatch(Config.currentGameId ,passWord, markUnit, customData);
         if (response == null) return;
         Debug.Log("Create match response: " + response.ToString());
@@ -323,7 +335,8 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenSelectTableView()
     {
-        SelectTableView selectTableView = Instantiate(LoadPrefabLobby("SelectTableView"), parentGames).GetComponent<SelectTableView>();
+        ShowProgressing();
+        selectTableView = Instantiate(LoadPrefabLobby("SelectTableView"), parentGames).GetComponent<SelectTableView>();
         selectTableView.transform.localScale = Vector3.one;
     }
 
@@ -364,13 +377,7 @@ public class UIManager : Singleton<UIManager>
         ExchangeView exchangeView = Instantiate(LoadPrefabLobby("ExchangeView"), parentLobby).GetComponent<ExchangeView>();
         exchangeView.transform.localScale = Vector3.one;
     }
-
-    public void OpenSelectTable()
-    {
-        SelectTableView selectTableView = Instantiate(LoadPrefabLobby("SelectTableView"), parentLobby).GetComponent<SelectTableView>();
-        selectTableView.transform.localScale = Vector3.one;
-    }
-
+    
     public void OpenLeaderboard()
     {
         LeaderBoardView leaderBoardView = Instantiate(LoadPrefabLobby("LeaderboardView"), parentLobby).GetComponent<LeaderBoardView>();

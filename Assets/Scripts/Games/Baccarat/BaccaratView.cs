@@ -21,8 +21,9 @@ using Utility = Globals.Utility;
 public class BaccaratView : BaseDiceGameView
 {
     // ================== Prefabs & Containers ==================
-    [Header("Prefabs & Containers")]
-    [SerializeField] public BaccaratChip chipPref;
+    [Header("Prefabs & Containers")] [SerializeField]
+    public BaccaratChip chipPref;
+
     [SerializeField] public GameObject chipContainer;
     [SerializeField] public GameObject cardDeckB;
     [SerializeField] public GameObject cardDeckP;
@@ -34,21 +35,22 @@ public class BaccaratView : BaseDiceGameView
     [SerializeField] public GameObject scorePlayer;
     [SerializeField] public GameObject scoreBanker;
     [SerializeField] public BaccaratHistory popupHistoryPrefab;
+
     [SerializeField] public Transform cardContainer;
+
     // ================== Cards ==================
-    [Header("Cards")]
-    [SerializeField] public List<CardModel> listCardB = new List<CardModel>();
+    [Header("Cards")] [SerializeField] public List<CardModel> listCardB = new List<CardModel>();
     [SerializeField] public List<CardModel> listCardP = new List<CardModel>();
 
     // ================== Buttons ==================
-    [Header("Buttons")]
-    [SerializeField] public Button btnDoubleBet;
+    [Header("Buttons")] [SerializeField] public Button btnDoubleBet;
     [SerializeField] public Button btnRebet;
-    [SerializeField] public List<Button> listChipBets = new List<Button>();
+    [SerializeField] public List<Button> listChipBets;
 
     // ================== Text Labels ==================
-    [Header("Text Labels")]
-    [SerializeField] public TextMeshProUGUI lbTimeBet;
+    [Header("Text Labels")] [SerializeField]
+    public TextMeshProUGUI lbTimeBet;
+
     [SerializeField] public TextMeshProUGUI lbScorePlayer;
     [SerializeField] public TextMeshProUGUI lbScoreBanker;
     [SerializeField] public List<TextMeshProUGUI> listBoxBet = new List<TextMeshProUGUI>();
@@ -61,12 +63,11 @@ public class BaccaratView : BaseDiceGameView
     [SerializeField] public TextMeshProUGUI lb_his_tie;
 
     // ================== Animations ==================
-    [Header("Animations")]
-    [SerializeField] public SkeletonGraphic ani_win;
+    [Header("Animations")] [SerializeField]
+    public SkeletonGraphic ani_win;
 
     // ================== Private Runtime Data ==================
-    [Header("Runtime Data")]
-    private BaccaratHistory popupHistory;
+    [Header("Runtime Data")] private BaccaratHistory popupHistory;
     private BaccaratSimpleHistory baccaratSimpleHistory;
     private BaccaratPlayerView playerViewBaccarat;
 
@@ -80,12 +81,14 @@ public class BaccaratView : BaseDiceGameView
     private List<int> listWinResult = new List<int>();
     private List<int> savePotLose = new List<int>();
     [HideInInspector] public List<TypeWinBaccarat> listSaveHistory = new List<TypeWinBaccarat>();
+
     public override GameState[] AvailableLeaveStates => new GameState[]
     {
         GameState.Idle,
         GameState.Matching,
         GameState.Preparing,
     };
+
     private long betValue = 0;
     private int chipBetColorInx = 0;
     private int myChipBetColor = 0;
@@ -103,17 +106,23 @@ public class BaccaratView : BaseDiceGameView
     private int indexCard = 0;
     private Sequence waitingTextSequence;
     private const string WIN_ANIMATION_PATH = "Baccarat/Ani/skeleton_SkeletonData";
-
+    private bool isNewGame = true;
+    
     protected override void Awake()
     {
         base.Awake();
         LoadProfile();
         buttonBetBaccarat.SetActive(false);
-        PoolService.Instance.Register(PrefabType.Card, cardContainer , listCardP[0], 8, 10, 6);
-        PoolService.Instance.Register(PrefabType.ChipPlayerBaccarat, chipContainer.transform , chipPref, 20, 30, 15);
+        PoolService.Instance.Register(PrefabType.Card, cardContainer, listCardP[0], 8, 10, 6);
+        PoolService.Instance.Register(PrefabType.ChipPlayerBaccarat, chipContainer.transform, chipPref, 20, 30, 15);
     }
 
-    protected override void OnDestroy()
+    protected override void Update()
+    {
+        
+    }
+
+protected override void OnDestroy()
     {
         // Clear all pools to ensure clean state
         PoolService.Instance.ClearPool<BaccaratChip>(PrefabType.ChipPlayerBaccarat);
@@ -184,7 +193,62 @@ public class BaccaratView : BaseDiceGameView
                 }
             }
 
-            if (data.IsUpdateUserBet)
+            // 🎯 NEW: Render ALL user bets (for late-join / reconnect)
+            if (data.AllUserBets != null && data.AllUserBets.Count > 0)
+            {
+                Debug.Log($"[AllUserBets] Rendering {data.AllUserBets.Count} user bets for sync");
+                
+                foreach (var userBet in data.AllUserBets)
+                {
+                    if (userIdToView.TryGetValue(userBet.UserId, out var playerView))
+                    {
+                        // Update my bet tracking
+                        if (userBet.UserId == User.userProfile.UserId)
+                        {
+                            foreach (var infoBet in userBet.Bets)
+                            {
+                                int i = (int)infoBet.Cell - 1;
+                                listMyBet[i] += infoBet.Chips;
+                            }
+                        }
+
+                        // Render chips for this user
+                        foreach (var infoBet in userBet.Bets)
+                        {
+                            int i = (int)infoBet.Cell - 1;
+                            listBet[i] += infoBet.Chips;
+                            
+                            BaccaratChip chip = PoolService.Instance.Get<BaccaratChip>(PrefabType.ChipPlayerBaccarat);
+                            chipBetColorInx = listValueChipBets.IndexOf(infoBet.Chips);
+                            chip.init(1, 0.4f);
+                            chip.SetInfo(userBet.UserId, i + 1, playerView.transform.localPosition, infoBet.Chips,
+                                chipBetColorInx);
+                            
+                            // Direct placement (no animation for sync)
+                            chip.transform.localPosition = listPot[i].transform.localPosition;
+                            Vector2 randomPosition = new Vector2(
+                                chip.transform.localPosition.x + UnityEngine.Random.Range(-30, 30),
+                                chip.transform.localPosition.y + UnityEngine.Random.Range(-8, 8)
+                            );
+                            chip.transform.localPosition = randomPosition;
+                            
+                            listChipInTable.Add(chip);
+                        }
+                    }
+                }
+                
+                // Update UI state
+                if (listMyBet.Any(bet => bet > 0))
+                {
+                    checkBeted = true;
+                    buttonBetBaccarat.SetActive(true);
+                }
+                SetStatusButtonsBet(!checkBeted, checkBeted);
+                SetDisplayBet();
+                UpdateStatePot();
+            }
+            // Handle single user bet (for real-time bet broadcast)
+            else if (data.IsUpdateUserBet)
             {
                 if (userIdToView.TryGetValue(data.UserBet.UserId, out var playerView))
                 {
@@ -245,7 +309,74 @@ public class BaccaratView : BaseDiceGameView
         var baccaratUpdateDeal = BaccaratUpdateDeal.Parser.ParseFrom(matchState.State);
         Debug.Log("HandleUpdateDeal " + baccaratUpdateDeal);
 
-        if (indexCard == 0 && baccaratUpdateDeal.IsPlayer)
+        // 🎯 Detect sync mode for late-join during REWARD
+        // Normal mode: Cards has exactly 1 card (real-time dealing)
+        // Sync mode: Cards is null/empty (sync message for late-join)
+        bool isSyncMode = (baccaratUpdateDeal.Cards == null || baccaratUpdateDeal.Cards.Count == 0) &&
+                          baccaratUpdateDeal.Hands != null && 
+                          (baccaratUpdateDeal.Hands.Player.Cards.Count > 0 || baccaratUpdateDeal.Hands.Banker.Cards.Count > 0);
+        
+        if (isSyncMode)
+        {
+            Debug.Log("[Sync Mode] Displaying all dealt cards without animation");
+            
+            // Disable betting UI
+            clock.SetActive(false);
+            buttonBetBaccarat.SetActive(false);
+            foreach (var btn in listPot)
+            {
+                btn.GetComponent<Button>().interactable = false;
+            }
+            SetStatusButtonsBet(!checkBeted, checkBeted);
+            
+            // Display all Player cards instantly
+            for (int i = 0; i < baccaratUpdateDeal.Hands.Player.Cards.Count && i < listCardP.Count; i++)
+            {
+                var card = baccaratUpdateDeal.Hands.Player.Cards[i];
+                listCardP[i].SetData((int)card.Rank, (int)card.Suit);
+                listCardP[i].ShowCard();
+                listCardP[i].gameObject.SetActive(true);
+            }
+            
+            // Display all Banker cards instantly
+            for (int i = 0; i < baccaratUpdateDeal.Hands.Banker.Cards.Count && i < listCardB.Count; i++)
+            {
+                var card = baccaratUpdateDeal.Hands.Banker.Cards[i];
+                listCardB[i].SetData((int)card.Rank, (int)card.Suit);
+                listCardB[i].ShowCard();
+                listCardB[i].gameObject.SetActive(true);
+            }
+            
+            // Update scores
+            if (baccaratUpdateDeal.Hands.Player.Cards.Count > 0)
+            {
+                lbScorePlayer.text = baccaratUpdateDeal.Hands.Player.Point.ToString();
+                scorePlayer.SetActive(true);
+            }
+            if (baccaratUpdateDeal.Hands.Banker.Cards.Count > 0)
+            {
+                lbScoreBanker.text = baccaratUpdateDeal.Hands.Banker.Point.ToString();
+                scoreBanker.SetActive(true);
+            }
+            
+            return; // Skip normal animation
+        }
+
+        // 🎲 Normal single card animation (real-time dealing)
+        // Calculate correct index based on which side this card is for
+        int currentIndex;
+        if (baccaratUpdateDeal.IsPlayer)
+        {
+            // Count how many Player cards are already visible
+            currentIndex = listCardP.Count(card => card.gameObject.activeSelf);
+        }
+        else
+        {
+            // Count how many Banker cards are already visible
+            currentIndex = listCardB.Count(card => card.gameObject.activeSelf);
+        }
+        
+        if (currentIndex == 0 && baccaratUpdateDeal.IsPlayer)
         {
             clock.SetActive(false);
             buttonBetBaccarat.SetActive(false);
@@ -266,9 +397,9 @@ public class BaccaratView : BaseDiceGameView
         if (baccaratUpdateDeal.IsPlayer)
         {
             cardModel.SetData((int)baccaratUpdateDeal.Cards[0].Rank, (int)baccaratUpdateDeal.Cards[0].Suit);
-            listCardP[indexCard].SetData((int)baccaratUpdateDeal.Cards[0].Rank, (int)baccaratUpdateDeal.Cards[0].Suit);
+            listCardP[currentIndex].SetData((int)baccaratUpdateDeal.Cards[0].Rank, (int)baccaratUpdateDeal.Cards[0].Suit);
 
-            int i = indexCard;
+            int i = currentIndex;
             if (i == 2)
             {
                 scorePlayer.SetActive(false);
@@ -300,9 +431,9 @@ public class BaccaratView : BaseDiceGameView
         else
         {
             cardModel.SetData((int)baccaratUpdateDeal.Cards[0].Rank, (int)baccaratUpdateDeal.Cards[0].Suit);
-            listCardB[indexCard].SetData((int)baccaratUpdateDeal.Cards[0].Rank, (int)baccaratUpdateDeal.Cards[0].Suit);
+            listCardB[currentIndex].SetData((int)baccaratUpdateDeal.Cards[0].Rank, (int)baccaratUpdateDeal.Cards[0].Suit);
 
-            int i = indexCard;
+            int i = currentIndex;
             if (i == 2)
             {
                 scoreBanker.SetActive(false);
@@ -330,7 +461,7 @@ public class BaccaratView : BaseDiceGameView
                 lbScoreBanker.text = baccaratUpdateDeal.Hands.Banker.Point.ToString();
                 scoreBanker.SetActive(true);
             });
-            indexCard++;
+            // indexCard++ removed - now using currentIndex calculated from active cards
         }
         
     }
@@ -353,13 +484,15 @@ public class BaccaratView : BaseDiceGameView
                 Debug.Log("HandleUpdateGameState Matching "+ updateGameState.ToString());
                 break;
             case GameState.Preparing:
+                isNewGame = true;
                 SetLoopLbWaiting();
                 Debug.Log("HandleUpdateGameState Preparing " + updateGameState.ToString());
                 break;
             case GameState.Play:
                 Debug.Log("HandleUpdateGameState Play " + updateGameState.ToString());
-                if (updateGameState.CountDown == 10)
+                if (isNewGame)
                 {
+                    isNewGame = false;
                     lb_waiting.gameObject.SetActive(false);
                     if (waitingTextSequence != null && waitingTextSequence.IsActive())
                     {
@@ -382,7 +515,7 @@ public class BaccaratView : BaseDiceGameView
                     {
                         if (userIdToView.TryGetValue(player.Id, out var playerView))
                         {
-                            playerView.SetCurrentTurn(true, updateGameState.CountDown);
+                            playerView.SetCurrentTurn(true, updateGameState.CountDown, 10);
                         }
                     }
                 }
@@ -390,6 +523,10 @@ public class BaccaratView : BaseDiceGameView
                 break;
             case GameState.Reward:
                 Debug.Log("HandleUpdateGameState Reward " + updateGameState.ToString());
+                foreach (var btnGate in listPot)
+                {
+                    btnGate.GetComponent<Button>().interactable = false;
+                }
                 break;
             case GameState.Finish:
                 Debug.Log("HandleUpdateGameState Finish " + updateGameState.ToString());
@@ -508,6 +645,10 @@ public class BaccaratView : BaseDiceGameView
                 if (!userIdToView.TryGetValue(playerId, out var playerObj) || balanceUpdate.AmountChipAdd <= 0) continue;
                 playerObj.AnimateFlyMoney(balanceUpdate.AmountChipAdd, 40);
                 playerObj.SetCurrentChip(balanceUpdate.AmountChipCurrent);
+                if (playerId == thisPlayer.id)
+                {
+                    thisPlayer.wallet = balanceUpdate.AmountChipCurrent.ToString();
+                }
             }
         });
         
@@ -717,7 +858,7 @@ public class BaccaratView : BaseDiceGameView
     
     private void SetInfoBet(int m)
     {
-        listValueChipBets = new List<long> { m, m * 5, m * 10, m * 50, m * 100 };
+        listValueChipBets = new List<long> { m, m * 5, m * 10, m * 20, m * 50 };
         for (int i = 0; i < 5; i++)
         {
             listChipBets[i].transform.GetComponentInChildren<TextMeshProUGUI>().text = Utility.FormatMoney(listValueChipBets[i], true);

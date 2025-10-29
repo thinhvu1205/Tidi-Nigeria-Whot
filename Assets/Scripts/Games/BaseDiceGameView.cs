@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,17 @@ public class BaseDiceGameView : BaseGameView
     protected List<Player> rearrangedPlayers = new List<Player>();
     protected List<Player> playingPlayers = new List<Player>();
     protected List<GameObject> listBtnInvite = new List<GameObject>();
+
+
+    protected override void Update()
+    {
+        base.Update();
+        if (Input.GetMouseButtonDown(0) || Input.touchCount > 0)
+        {
+            DataSender.SendMatchState((long)OpCodeRequest.OpcodeUserInteractCards, Array.Empty<byte>());
+        }
+    }
+
 
     public override void LoadInfoMatch(Match match)
     {

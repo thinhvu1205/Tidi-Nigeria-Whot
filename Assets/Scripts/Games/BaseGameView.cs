@@ -108,6 +108,7 @@ public class BaseGameView : BaseView
         await NetworkManager.INSTANCE.LeaveRoomChat();
         await NetworkManager.INSTANCE.JoinWorldChat();
         await UIManager.Instance.LoadProfileUser();
+        await UIManager.Instance.ReloadTableView();
     }
 
     public virtual void HandleFinish(IMatchState matchState)
