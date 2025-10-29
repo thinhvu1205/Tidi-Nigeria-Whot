@@ -10,6 +10,7 @@ public class BlackjackChipBet : MonoBehaviour
     public Image imageHighlight;
     public Image imageChip;
     public Button button;
+    public long value;
 
 
     public void OnSelect()
@@ -28,5 +29,22 @@ public class BlackjackChipBet : MonoBehaviour
     {
         textValue.text = value.ToString();
         imageHighlight.gameObject.SetActive(false);
+    }
+
+    public void SetEnable(bool isEnable)
+    {
+        Image image = GetComponent<Image>();
+        if (isEnable)
+        {
+            image.color = Color.white;
+            textValue.color = Color.white;
+            button.interactable = true;
+        }
+        else
+        {
+            image.color = Color.gray;
+            textValue.color = Color.gray;
+            button.interactable = false;
+        }
     }
 }

@@ -39,11 +39,12 @@ public class LobbyView : BaseView
         InitPool();
 
         _ = LoadGames();
-        _ = GetClaimableReward();
         OnClickAllGamesTab();
         UIManager.Instance.lobbyView = this;
-        _ = NetworkManager.INSTANCE.JoinWorldChat();
         _ = CheckUserInGame();
+        _ =  NetworkManager.INSTANCE.JoinWorldChat();
+        _ = GetClaimableReward();
+        _ = GetFreeChip();
     }
 
 
@@ -60,6 +61,7 @@ public class LobbyView : BaseView
         User.OnProfileUpdated += UpdateProfileData;
         NetworkManager.INSTANCE.OnMessageWorldReceived += NetworkManager_OnMessageReceived;
         CheckInBonusView.OnRewardClaimed += CheckInBonusView_OnRewardClaimed;
+        FreeChipView.OnClaimed += FreeChipView_OnClaimed;
     }
 
     protected override void OnDestroy()
@@ -68,6 +70,7 @@ public class LobbyView : BaseView
         User.OnProfileUpdated -= UpdateProfileData;
         NetworkManager.INSTANCE.OnMessageWorldReceived -= NetworkManager_OnMessageReceived;
         CheckInBonusView.OnRewardClaimed -= CheckInBonusView_OnRewardClaimed;
+        FreeChipView.OnClaimed -= FreeChipView_OnClaimed;
     }
 
     private async UniTask CheckUserInGame()
@@ -85,12 +88,19 @@ public class LobbyView : BaseView
         else
         {
             UIManager.Instance.OpenBanner(TypeInAppMessage.Banner, 0.6f);
+          
+
         }
     }
-    
+
     private void CheckInBonusView_OnRewardClaimed()
     {
         _ = GetClaimableReward();
+    }
+    
+    private void FreeChipView_OnClaimed()
+    {
+        _ = GetFreeChip();
     }
 
 
@@ -138,18 +148,20 @@ public class LobbyView : BaseView
         this.isDeviceAllowed = isDeviceAllowed;
         this.hasReachedMaxStreak = hasReachedMaxStreak;
 
-        if (canClaim)
-        {
-            redDotChipBonus.SetActive(true);
-        }
-        else
-        {
-            redDotChipBonus.SetActive(false);
-        }
+        redDotChipBonus.SetActive(canClaim);
+        Utility.AnimateRedDot(redDotChipBonus);
+
         if (isDeviceAllowed && !hasReachedMaxStreak)
         {
             StartCoroutine(ClaimTimer());
         }
+    }
+
+    private async UniTask GetFreeChip()
+    {
+        bool hasFreeChip = await lobbyPresenter.GetFreeChipList();
+        redDotFreeChip.SetActive(hasFreeChip);
+        Utility.AnimateRedDot(redDotFreeChip);
     }
 
     private void UpdateUIListGame()

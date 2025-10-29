@@ -160,6 +160,10 @@ PrefabInstance:
       propertyPath: m_HorizontalAlignment
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4824909067868688869, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 5584281192996958747, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -15
@@ -197,8 +201,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8707924144333828752, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
+      propertyPath: m_margin.x
+      value: 3.9094849
+      objectReference: {fileID: 0}
+    - target: {fileID: 8707924144333828752, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
       propertyPath: m_HorizontalAlignment
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8707924144333828752, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -121,14 +121,14 @@ public class BasePlayerView : MonoBehaviour
         //     avatar.SetSpriteFrame(UIManager.Instance.GetAvatarDefault());
         // }
 
-        if (vipLevel != 0)
-        {
-            avatar.setVip((int)vipLevel);
-        }
-        else
-        {
-            avatar.setVip(0);
-        }
+        // if (vipLevel != 0)
+        // {
+        //     avatar.setVip((int)vipLevel);
+        // }
+        // else
+        // {
+        //     avatar.setVip(0);
+        // }
         setName(user_name);
     }
 
@@ -391,7 +391,7 @@ public class BasePlayerView : MonoBehaviour
     public void SetCurrentChip(long ag)
     {
         // Utility.TweenNumberTo(textMoney, ag, CurrentChip, 0.3f, false, false);
-        Utility.TweenNumberToNumberScale1(textMoney, (int)ag, (int)CurrentChip, 0.5f, false);
+        Utility.TweenNumberToNumberScale1(textMoney, ag, (int)CurrentChip, 0.5f, false);
 
         CurrentChip = ag;
     }

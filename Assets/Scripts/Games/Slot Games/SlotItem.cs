@@ -43,7 +43,7 @@ public class SlotItem : MonoBehaviour
     {
         Speed = speed;
         SpeedBackSpin = backspinSpeed;
-        Sequence seq = DOTween.Sequence();
+        Sequence seq = DOTween.Sequence().SetLink(gameObject, LinkBehaviour.KillOnDestroy);;
         RectTransform rect = GetComponent<RectTransform>();
         Vector3 backPos = rect.localPosition + new Vector3(0, 30, 0);
         Vector3 initPos = rect.localPosition;

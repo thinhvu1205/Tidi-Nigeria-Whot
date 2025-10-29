@@ -20,6 +20,8 @@ public class SendGiftView : BaseView
     [SerializeField] private TextMeshProUGUI currentChipTxt;
     [SerializeField] private TextMeshProUGUI idFriendTxt;
     [SerializeField] private TextMeshProUGUI amountChipTxt;
+    [SerializeField] private TMP_InputField idInputField, amountChipInputField;
+    private bool isEditing = false;
     
     protected override void OnEnable()
     {
@@ -27,6 +29,7 @@ public class SendGiftView : BaseView
         sendGiftBtn.onClick.AddListener(() => _ = OnClickSendGift());
         OnClickSendGiftTab();
         currentChipTxt.text = Utility.FormatNumber(User.userProfile.AccountChip);
+        amountChipInputField.onValueChanged.AddListener(OnAmountChanged);
     }
     
     private void OnDisable()
@@ -51,33 +54,62 @@ public class SendGiftView : BaseView
         _ = LoadDataHistoryGift();
     }
 
+    private void OnAmountChanged(string input)
+    {
+        // if (isEditing) return; // tránh lặp vô hạn
+        // isEditing = true;
+
+        // // Xoá dấu phẩy cũ để parse lại
+        // if (long.TryParse(input, out long value))
+        // {
+        //     amountChipInputField.text = Utility.FormatNumber(value);
+        // }
+        // else
+        // {
+        //     // Nếu không parse được (ví dụ nhập ký tự lạ), giữ nguyên
+        //     amountChipInputField.text = input;
+        // }
+
+        // isEditing = false;
+    }
+
     private async UniTask OnClickSendGift()
     {
-        try
+        string recipientId = Regex.Replace(idInputField.text, @"\p{C}+", "").Trim();
+        
+        string cleanInput = Regex.Replace(amountChipInputField.text, @"\p{C}+", "").Trim();
+        
+        if (string.IsNullOrEmpty(cleanInput))
         {
-            string recipientId = Regex.Replace(idFriendTxt.text, @"\p{C}+", "").Trim();
-            
-            string cleanInput = Regex.Replace(amountChipTxt.text, @"\p{C}+", "").Trim();
-         
-            if (string.IsNullOrEmpty(cleanInput))
-            {
-                UIManager.Instance.ShowAlertDialog("Value of chip is empty.");
-                return;
-            }
+            UIManager.Instance.ShowAlertDialog("Value of chip is empty.");
+            return;
+        }
 
-            if (!long.TryParse(cleanInput, out long amount))
-            {
-                UIManager.Instance.ShowAlertDialog("Value of chip invalid.");
-                return;
-            }
-            FreeChip freeChip =  await DataSender.SendGift(amount, recipientId);
-            Debug.Log("Send Chip Successfully : " + freeChip);
-            _ = SendGiftSuccessful();
-        }
-        catch (Exception e)
+        if (!long.TryParse(cleanInput, out long amount))
         {
-            UIManager.Instance.ShowAlertDialog("Error : " + e.Message);
+            UIManager.Instance.ShowAlertDialog("Value of chip invalid.");
+            return;
         }
+
+        if (User.userProfile.AccountChip < amount * 103 / 100)
+        {
+            UIManager.Instance.ShowAlertDialog("You do not have enough chips.");
+            return;
+        }
+        
+        FreeChip freeChip = await DataSender.SendGift(amount, recipientId);
+        if (freeChip != null)
+        {
+            Debug.Log("Send Chip Successfully : " + freeChip);
+            idInputField.text = "";
+            amountChipInputField.text = "";
+            currentChipTxt.text = Utility.FormatNumber(User.userProfile.AccountChip);
+
+            await OnSuccess("Send gift successfully!", true);
+            OnClickHistoryTab();
+            
+        }
+  
        
     }
 
@@ -91,7 +123,7 @@ public class SendGiftView : BaseView
                 await DataSender.GetTransactionHistory(20,
                     metaBankAction: metaBankActionStr);
             Debug.Log($"Receive data history {walletTransaction}");
-            LoadHistoryGiftSuccessful(walletTransaction);
+            LoadHistoryGift(walletTransaction);
             UIManager.Instance.HideProgressing();
         }
         catch (Exception e)
@@ -103,15 +135,17 @@ public class SendGiftView : BaseView
 
     private async UniTask SendGiftSuccessful()
     {
-        idFriendTxt.text = "";
-        amountChipTxt.text = "";
-        UIManager.Instance.ShowAlertDialog("Send gift successfully!");
-        await UIManager.Instance.LoadProfileUser();
-        currentChipTxt.text = Utility.FormatNumber(User.userProfile.AccountChip);
+        
+        // UIManager.Instance.ShowAlertDialog("Send gift successfully!");
+        // await UIManager.Instance.LoadProfileUser();
     }
 
-    private void LoadHistoryGiftSuccessful(Constants.WalletTransaction transaction)
+    private void LoadHistoryGift(Constants.WalletTransaction transaction)
     {
+        foreach(Transform child in historyItemContainer)
+        {
+            DestroyImmediate(child.gameObject);
+        }
         foreach (var walletLedgerItem in transaction.transactions)
         {
             ItemHistoryGift itemHistoryGift = Instantiate(itemHistoryGiftPrefab, historyItemContainer);

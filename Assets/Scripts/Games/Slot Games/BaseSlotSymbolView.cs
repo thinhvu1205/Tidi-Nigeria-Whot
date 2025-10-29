@@ -205,7 +205,7 @@ public class BaseSlotSymbolView : BaseGameView
     {
         Debug.Log("HANDLE SPIN");
         isClickMaxBet = false;
-        if (!hasSetupStartView) return;
+        if (!hasSetupStartView || IsSpinning) return;
         if (!CheckEnoughBalance())
         {
             return;

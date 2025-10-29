@@ -67,7 +67,7 @@ public class SlotSixiangView : BaseSlotSymbolView
     public Queue<TweenCallback> TweenQueue => tweenQueue;
     [SerializeField] private SpinType lastSpinType = SpinType.NORMAL;
     [SerializeField] private int lastRemainingAutoSpin = 0;
-    private bool isFromScatter = false, winChipFromScatter = false, winMiniGameFromScatter = false;
+    private bool isWinScatter = false, isFromScatter = false, winChipFromScatter = false, winMiniGameFromScatter = false;
 
     public class OnUpdateTableEventArgs : EventArgs
     {
@@ -296,7 +296,7 @@ public class SlotSixiangView : BaseSlotSymbolView
             {
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.SCATTER_WIN);
                 tweenQueue.Enqueue(() => ShowAnimationCutScene());
-                tweenQueue.Enqueue(() => ShowScatterView());
+                isWinScatter = true;
             }
             NextTween();
         }
@@ -339,8 +339,8 @@ public class SlotSixiangView : BaseSlotSymbolView
         currentGame = data.CurrentSixiangGame;
         nextGame = data.NextSixiangGame;
         isInSixiangBonus = data.IsInSixiangBonus;
-        if (nextGame == SiXiangGame.Normal) return;
-        SetCurrentChipValue(data.GameReward.BalanceChipsWalletAfter);
+        // if (nextGame == SiXiangGame.Normal) return;
+        // SetCurrentChipValue(data.GameReward.BalanceChipsWalletAfter);
         isChooseBonusGame = data.SixiangGems.Count == 4;
         Dictionary<SiXiangGame, int> miniGameDictionary = new()
         {
@@ -460,6 +460,19 @@ public class SlotSixiangView : BaseSlotSymbolView
             UpdateSpinButtonUI();
             HideThirdScatter();
 
+            if (isEndBonusGame && isFromScatter)
+            {
+                if (scatterView != null)
+                {
+                    scatterView.gameObject.SetActive(false);
+                    Destroy(scatterView.gameObject);
+                }
+            }
+            if (isWinScatter)
+            {
+                isWinScatter = false;
+                ShowScatterView();
+            }
             // Từ minigame về lại game chính
             if (isEndBonusGame && !isFromScatter)
             {
@@ -477,11 +490,6 @@ public class SlotSixiangView : BaseSlotSymbolView
                     luckyDrawView.gameObject.SetActive(false);
                     Destroy(luckyDrawView.gameObject);
                 }
-                if (scatterView != null)
-                {
-                    scatterView.gameObject.SetActive(false);
-                    Destroy(scatterView.gameObject);
-                }
                 ResetGame();
 
             }
@@ -489,6 +497,8 @@ public class SlotSixiangView : BaseSlotSymbolView
             else
             {
                 // Show BonusGame view
+                autoSpinRemain = 0;
+                SetAutoSpinRemain();
                 HideAllGemButtons();
                 NextTween();
             }
@@ -804,7 +814,6 @@ public class SlotSixiangView : BaseSlotSymbolView
         // GetMatchResult();
         UpdateTotalChipWinValue();
         UpdateGem();
-        ResetToNormalState(true);
 
         if (winChipFromScatter)
         {
@@ -814,6 +823,10 @@ public class SlotSixiangView : BaseSlotSymbolView
             autoSpinRemain = lastRemainingAutoSpin;
             UpdateSpinButtonUI();
             SetAutoSpinRemain();
+            if (spinType == SpinType.NORMAL)
+            {
+                GetMatchResult();
+            }
         }
 
         if (!isFromScatter && winMiniGameFromScatter)
@@ -854,8 +867,8 @@ public class SlotSixiangView : BaseSlotSymbolView
 
             });
         }
-            
-        
+  
+
         tweenQueue.Enqueue(() =>
         {
             if (nextGame == SiXiangGame.Sixangbonus || nextGame == SiXiangGame.Normal)
@@ -876,10 +889,12 @@ public class SlotSixiangView : BaseSlotSymbolView
                 NextTween();
             }
         });
+
         if (tweenQueue.Count > 0)
         {
             NextTween();
         }
+
         // tweenQueue.Clear();
         if (autoSpinRemain > 0 && spinType == SpinType.AUTO)
         {
@@ -898,6 +913,7 @@ public class SlotSixiangView : BaseSlotSymbolView
         SetAnimationGameName(SIXIANG_GAME_NAME);
         SetAnimationBackground(SIXIANG_GAME_NAME);
         InitColumns();
+        ResetToNormalState(true);
 
        
     }

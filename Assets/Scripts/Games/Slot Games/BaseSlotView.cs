@@ -133,7 +133,12 @@ public class BaseSlotView : BaseGameView
 
     protected override void Update()
     {
+        if (IsSpinning) return;
         HandleHoldingSpin();
+    }
+
+    protected override void OnDestroy()
+    {
     }
 
     #region API Handlers
@@ -180,7 +185,7 @@ public class BaseSlotView : BaseGameView
     {
         Debug.Log("HANDLE SPIN");
         isClickMaxBet = false;
-        if (!hasSetupStartView) return;
+        if (!hasSetupStartView || IsSpinning) return;
         if (!CheckEnoughBalance())
         {
             return;
@@ -196,6 +201,7 @@ public class BaseSlotView : BaseGameView
 
     protected void OnStartSpin()
     {
+        Debug.Log("START SPIN");
         if (!isInFreeSpin)
         {
             // Nếu đang ko Free Spin thì trừ tiền
@@ -523,7 +529,7 @@ public class BaseSlotView : BaseGameView
 
         // Show Line từ listLine
         int totalLines = allLinesList.Count;
-        Sequence sequence = DOTween.Sequence();
+        Sequence sequence = DOTween.Sequence().SetLink(gameObject, LinkBehaviour.KillOnDestroy);;
 
         // Hiện line lên, mỗi line cách nhau 0.1s
         for (int i = 0; i < totalLines; i++)
@@ -562,7 +568,7 @@ public class BaseSlotView : BaseGameView
         // Nếu Spin thường thì update currentChipWin, nếu Auto thường thì ko update vì đã update ở ShowAllWinLines
         if (spinType == SpinType.NORMAL)
         {
-            if (currentChipWin > 0)
+            if (currentChipWin > 0 && !isLastFreeSpin)
             {
                 UpdateChipWinValue();
                 AnimateCoinsFly();
@@ -578,7 +584,7 @@ public class BaseSlotView : BaseGameView
             int[] lineWinID = GetPaylineWithID(payline.Id);
             ColorUtility.TryParseHtmlString(colorsList[payline.Id % colorsList.Length], out Color colorLine);
 
-            Sequence sequence = DOTween.Sequence();
+            Sequence sequence = DOTween.Sequence().SetLink(gameObject, LinkBehaviour.KillOnDestroy);;
             lineOneByOneSequenceList.Add(sequence);
             sequence
                 .AppendInterval(2.0f * index)
@@ -680,11 +686,14 @@ public class BaseSlotView : BaseGameView
                 else
                 {
                     UpdateChipWinValue();
-                    AnimateCoinsFly();
+                    if (!isLastFreeSpin)
+                    {
+                        AnimateCoinsFly();
+                    }
                 }
             }
             NextTween();
-        });
+        }).SetLink(gameObject, LinkBehaviour.KillOnDestroy);;
     }
 
     protected virtual void ShowWinAnimation(WinType winType)
@@ -696,7 +705,7 @@ public class BaseSlotView : BaseGameView
         switch (winType)
         {
             case WinType.BIG_WIN:
-                delay = 5f;
+                delay = 3f;
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.BIG_WIN);
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
@@ -707,6 +716,7 @@ public class BaseSlotView : BaseGameView
                 Utility.PlayAnimationByPath(animationEffect, BIG_WIN_ANIMATION_PATH, BIG_WIN_ANIMATION_NAME, false);
                 break;
             case WinType.MEGA_WIN:
+                delay = 5.5f;
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
@@ -714,13 +724,20 @@ public class BaseSlotView : BaseGameView
                 // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
                 animationEffect.transform.localScale = new Vector2(1f, 1f);
                 // animationEffect.transform.localPosition = new Vector2(0, -70);
+                Debug.Log("Show big win out of mega win");
                 Utility.PlayAnimationByPath(animationEffect, BIG_WIN_ANIMATION_PATH, BIG_WIN_ANIMATION_NAME, false);
                 DOVirtual.DelayedCall(1.2f, () =>
                 {
+                Debug.Log("Show mega win out of mega win");
                     Utility.PlayAnimationByPath(animationEffect, MEGA_WIN_ANIMATION_PATH, MEGA_WIN_ANIMATION_NAME, false);
                     animationEffect.AnimationState.Complete += delegate
                     {
                         effectContainer.gameObject.SetActive(false);
+                        if (new WinType[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(winType))
+                        {
+                            bigWinText.transform.parent.gameObject.SetActive(false);
+                            AnimateCoinsFly();
+                        }
                         NextTween();
                         effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
                     };
@@ -1259,7 +1276,7 @@ public class BaseSlotView : BaseGameView
     protected void AnimateCoinsFly(int totalCoins = 5, float timeInterval = 0.05f)
     {
         Debug.Log("AnimateCoinsFly");
-        Sequence sequence = DOTween.Sequence();
+        Sequence sequence = DOTween.Sequence().SetLink(gameObject, LinkBehaviour.KillOnDestroy);;
         for (int i = 0; i < totalCoins; i++)
         {
             int index = i;
@@ -1296,7 +1313,7 @@ public class BaseSlotView : BaseGameView
             .Append(coin.DOFade(0, .25f)).AppendCallback(() =>
             {
                 coinPool.Release(coin);
-            });
+            }).SetLink(gameObject, LinkBehaviour.KillOnDestroy);;
     }
     #endregion
 
@@ -1374,7 +1391,7 @@ public class BaseSlotView : BaseGameView
         if (tweenQueue.Count > 0)
         {
             TweenCallback nextTween = tweenQueue.Dequeue();
-            DOTween.Sequence().AppendCallback(nextTween);
+            DOTween.Sequence().AppendCallback(nextTween).SetLink(gameObject, LinkBehaviour.KillOnDestroy);;
         }
         // Hết tween = hết show win line
         else
@@ -1435,6 +1452,7 @@ public class BaseSlotView : BaseGameView
 
     protected void SetLightAllItems()
     {
+        Debug.Log("Set light all items");
         spinBackgroundImage.color = Color.white;
         foreach (SlotColumn column in slotColumnList)
         {

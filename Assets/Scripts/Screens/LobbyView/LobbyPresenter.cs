@@ -35,8 +35,6 @@ public class LobbyPresenter
         {
             Reward dailyReward = await DataSender.GetClaimableDailyReward();
             Reward weeklyReward = await DataSender.GetClaimableWeeklyReward();
-            Debug.Log("daily reward: " + dailyReward);
-            Debug.Log("weekly reward: " + weeklyReward);
             bool canClaim = (dailyReward.CanClaim && dailyReward.DeviceAllowed) || (weeklyReward.CanClaim && weeklyReward.DeviceAllowed);
             bool isDeviceAllowed = dailyReward.DeviceAllowed && weeklyReward.DeviceAllowed;
             bool hasReachedMaxStreak = dailyReward.ReachMaxStreak;
@@ -46,6 +44,22 @@ public class LobbyPresenter
         {
             lobbyView.OnError("Error while getting reward!");
             return (null, false, false, false);
+        }
+    }
+
+    public async UniTask<bool> GetFreeChipList()
+    {
+        UIManager.Instance.ShowProgressing();
+        try
+        {
+            ListFreeChip listFreeChip = await DataSender.GetListClaimedFreeChips();
+            bool hasFreeChip = listFreeChip.Freechips.Count > 0;
+            return hasFreeChip;
+        }
+        catch (Exception)
+        {
+            lobbyView.OnError("Fail to ger free chip list!");
+            return false;
         }
     }
 }

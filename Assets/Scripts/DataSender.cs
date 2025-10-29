@@ -391,9 +391,19 @@ public class DataSender
 
     public static async UniTask<FreeChip> SendGift(long amountChip = 0, string recipientId = "")
     {
-        Bank bank = new Bank() { ChipsInBank = amountChip, RecipientId = recipientId };
-        var response = await NetworkManager.INSTANCE.RPCSend(SEND_GIFT, bank);
-        return DecodeFromJson<FreeChip>(response.Payload);
+        try
+        {
+            Bank bank = new Bank() { ChipsInBank = amountChip, RecipientId = recipientId };
+            var response = await NetworkManager.INSTANCE.RPCSend(SEND_GIFT, bank);
+            return DecodeFromJson<FreeChip>(response.Payload);
+            
+        }
+        catch (Exception ex)
+        {
+            Error error = DecodeFromJson<Error>(ex.Message);
+            UIManager.Instance.ShowAlertDialog(error.Error_);
+            return null;
+        }
     }
 
     public static async UniTask<ListFreeChip> GetListClaimedFreeChips()

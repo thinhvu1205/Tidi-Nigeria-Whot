@@ -17,6 +17,7 @@ public class BannerView : BaseView
 
     public async void SetInfo(InAppMessage data, Sprite sprite)
     {
+        if (!gameObject.activeInHierarchy) return;
         bool isClose = data.Data.Params["isClose"] == "true" ? true : false;
         List<ButtonData> listButton = JsonConvert.DeserializeObject<List<ButtonData>>(data.Data.Params["listButton"]);
         if (listButton.Count > 0)

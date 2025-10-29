@@ -42,10 +42,10 @@ namespace Common.Objects
 
             }
             int vipLevel = (int)vip;
-            Debug.Log("VIP LEVEL: " + vipLevel);
+                imageBorder.sprite = border[vipLevel];
             if (vipLevel > 0)
             {
-                imageBorder.sprite = border[vipLevel];
+                Debug.Log("VIP LEVEL: " + vipLevel);
             }
 
             // else
