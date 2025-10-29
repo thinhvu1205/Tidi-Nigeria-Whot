@@ -57,7 +57,7 @@ public class SelectTableView : BaseView
     }
     
     #region API Handlers
-    private async UniTask GetListBet()
+    public async UniTask GetListBet()
     {
         Bets bets = await selectTablePresenter.GetListBet(Config.currentGameId);
         UIManager.Instance.HideProgressing();
@@ -121,7 +121,7 @@ public class SelectTableView : BaseView
             Debug.Log("Bet item: " + betItemList[i].ToString());
             int index = i;
             // Instantiate bet item
-            if (betItemList[i].BetDisableType == BetDisableType.AboveMaxVip
+            if (betItemList[i].BetDisableType == BetDisableType.AboveMaxVip || betItemList[i].BetDisableType == BetDisableType.BelowMinVip
             )
             {
                 continue;

@@ -45,7 +45,7 @@ public class BaccaratView : BaseDiceGameView
     // ================== Buttons ==================
     [Header("Buttons")] [SerializeField] public Button btnDoubleBet;
     [SerializeField] public Button btnRebet;
-    [SerializeField] public List<Button> listChipBets = new List<Button>();
+    [SerializeField] public List<Button> listChipBets;
 
     // ================== Text Labels ==================
     [Header("Text Labels")] [SerializeField]
@@ -523,6 +523,10 @@ protected override void OnDestroy()
                 break;
             case GameState.Reward:
                 Debug.Log("HandleUpdateGameState Reward " + updateGameState.ToString());
+                foreach (var btnGate in listPot)
+                {
+                    btnGate.GetComponent<Button>().interactable = false;
+                }
                 break;
             case GameState.Finish:
                 Debug.Log("HandleUpdateGameState Finish " + updateGameState.ToString());
@@ -641,6 +645,10 @@ protected override void OnDestroy()
                 if (!userIdToView.TryGetValue(playerId, out var playerObj) || balanceUpdate.AmountChipAdd <= 0) continue;
                 playerObj.AnimateFlyMoney(balanceUpdate.AmountChipAdd, 40);
                 playerObj.SetCurrentChip(balanceUpdate.AmountChipCurrent);
+                if (playerId == thisPlayer.id)
+                {
+                    thisPlayer.wallet = balanceUpdate.AmountChipCurrent.ToString();
+                }
             }
         });
         
@@ -850,7 +858,7 @@ protected override void OnDestroy()
     
     private void SetInfoBet(int m)
     {
-        listValueChipBets = new List<long> { m, m * 5, m * 10, m * 50, m * 100 };
+        listValueChipBets = new List<long> { m, m * 5, m * 10, m * 20, m * 50 };
         for (int i = 0; i < 5; i++)
         {
             listChipBets[i].transform.GetComponentInChildren<TextMeshProUGUI>().text = Utility.FormatMoney(listValueChipBets[i], true);
