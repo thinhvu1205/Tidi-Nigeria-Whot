@@ -188,7 +188,7 @@ public class HongKongPokerView : BaseDiceGameView
     //     Destroy(gameObject);
     // }
 
-    #region HK Poker Handlers
+    #region API Handlers
 
     public override void HandleUpdatePlayerAction(IMatchState matchState)
     {
@@ -326,7 +326,7 @@ public class HongKongPokerView : BaseDiceGameView
 
     #endregion
 
-    #region Helper Methods for HK Poker
+    #region Helper 
 
     private int GetPlayerIndex(string userId)
     {

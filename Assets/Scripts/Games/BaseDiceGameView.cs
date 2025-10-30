@@ -136,12 +136,26 @@ public class BaseDiceGameView : BaseGameView
         }
 
         // Gán các vị trí tiếp theo theo thứ tự trong update.players, bỏ qua local
-        for (int i = 0; i < rearrangedPlayers.Count && positionIndex < listPosView.Count; i++)
+        if (GameState == Proto.GameState.Play)
         {
-            var p = rearrangedPlayers[i];
-            if (p.Id == localUserId) continue;
-            CreatePlayerView(p, listPosView[positionIndex]);
-            positionIndex++;
+            for (int i = 0; i < players.Count && positionIndex < listPosView.Count; i++)
+            {
+                var p = players[i];
+                if (p.Id == localUserId || playingPlayers.Contains(p)) continue;
+                CreatePlayerView(p, listPosView[positionIndex]);
+                positionIndex++;
+            } 
+
+        }
+        else
+        {
+            for (int i = 0; i < rearrangedPlayers.Count && positionIndex < listPosView.Count; i++)
+            {
+                var p = rearrangedPlayers[i];
+                if (p.Id == localUserId) continue;
+                CreatePlayerView(p, listPosView[positionIndex]);
+                positionIndex++;
+            } 
         }
 
         if (thisPlayer == userIdToView.GetValueOrDefault(localUserId)) return;

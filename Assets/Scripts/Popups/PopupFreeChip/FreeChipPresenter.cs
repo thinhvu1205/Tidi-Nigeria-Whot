@@ -15,16 +15,18 @@ public class FreeChipPresenter
         freeChipView = view;
     }
 
-    public async UniTask<ListFreeChip> LoadRewardList()
+    public async UniTask<ListFreeChip> GetFreeChipList()
     {
+        UIManager.Instance.ShowProgressing();
         try
         {
             ListFreeChip listFreeChip = await DataSender.GetListClaimedFreeChips();
+            await freeChipView.OnSuccess();
             return listFreeChip;
         }
         catch (Exception)
         {
-
+            freeChipView.OnError("Fail to ger reward list!");
             return null;
         }
     }
@@ -33,12 +35,13 @@ public class FreeChipPresenter
     {
         try
         {
+            UIManager.Instance.ShowProgressing();
             var result = await DataSender.ClaimFreeChip(freeChip);
-            await freeChipView.OnSuccess();
+            await freeChipView.OnSuccess("You have received " + Utility.FormatNumber(result.Chips) + " chips!", true);
         }
         catch (Exception)
         {
-            freeChipView.OnError("Error when claim gift code!");
+            freeChipView.OnError("Fail to claim gift code!");
         }
     }
 }

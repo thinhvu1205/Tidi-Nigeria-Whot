@@ -243,7 +243,7 @@ namespace Globals
             DOTween.To(() => startNumber, x => startNumber = x, toNumber, timeRun).OnUpdate(() => { if (isLowerCase) lbText.text = FormatNumber(startNumber).ToLower(); else lbText.text = FormatNumber(startNumber); }).OnComplete(() =>
             {
             });
-            Vector2 normalScale = lbText.transform.localScale;
+            Vector2 normalScale = Vector2.one;
             Vector2 biggerScale = new Vector2(normalScale.x + 0.2f, normalScale.y + 0.2f);
             DOTween.Kill(lbText.transform);
             DOTween.Sequence()
@@ -656,6 +656,14 @@ namespace Globals
             }
         }
         #endregion
+
+        public static void AnimateRedDot(GameObject redDot, float scale = 1.3f)
+        {
+            redDot.transform.DOScale(Vector2.one * scale, 0.5f)
+                .SetLoops(-1, LoopType.Yoyo)     // lặp vô hạn, qua lại
+                .SetEase(Ease.InOutSine)         // smooth
+                .SetDelay(0.5f); 
+        }
     }
     
 }

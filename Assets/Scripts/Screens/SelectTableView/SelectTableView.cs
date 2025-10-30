@@ -98,7 +98,7 @@ public class SelectTableView : BaseView
                 titleText.text = "Baccarat";
                 break;
             case Constants.HK_POKER_GAME_ID:
-                titleText.text = "Chinese Poker";
+                titleText.text = "HongKong Poker";
                 break;
             case Constants.BLACKJACK_GAME_ID:
                 titleText.text = "Blackjack";
@@ -209,6 +209,7 @@ public class SelectTableView : BaseView
         selectTableButton.GetComponent<Image>().sprite = buttonSpriteList[0];
         currentSelectTableTab = SelectTableTab.TABLE;
         GetListTableByMarkUnit(currentMarkUnitTab).Forget();
+        LoadListTableItem();
     }
 
     public void OnClickQuickStart()

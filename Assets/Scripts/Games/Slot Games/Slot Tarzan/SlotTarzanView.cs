@@ -242,9 +242,14 @@ public class SlotTarzanView : BaseSlotView
         isLastFreeSpin = data.CurrentSixiangGame == SiXiangGame.TarzanFreespinx9 && data.NextSixiangGame == SiXiangGame.Normal;
         isWinTarzan = data.Matrix.Lists.ToList().Contains(SiXiangSymbol.Tarzan);
         isStartMiniGame = data.NextSixiangGame == SiXiangGame.TarzanJungleTreasure && data.CurrentSixiangGame != SiXiangGame.TarzanJungleTreasure;
-        isEndMiniGame = data.CurrentSixiangGame == SiXiangGame.TarzanJungleTreasure && data.NextSixiangGame == SiXiangGame.Normal;
+        isEndMiniGame = data.CurrentSixiangGame == SiXiangGame.TarzanJungleTreasure && (data.NextSixiangGame == SiXiangGame.Normal || data.NextSixiangGame == SiXiangGame.TarzanFreespinx9);
         isInMiniGame = data.CurrentSixiangGame == SiXiangGame.TarzanJungleTreasure;
         isWinDiamondPot = data.GameReward.PerlGreenForestChips > 0;
+        freeSpinLeft = (int)data.NumSpinLeft;
+        if (isInFreeSpin)
+        {
+            ShowBackGroundFreeSpin();
+        }
         winType = data.BigWin switch
         {
             BigWin.Big => WinType.BIG_WIN,
@@ -449,18 +454,12 @@ public class SlotTarzanView : BaseSlotView
             NextTween();
         }
 
-           ///------------------CHECK WIN MINIGAME--------------------//
-        if (isStartMiniGame)
-        {
-            Debug.Log("START MINIgAME");
-            spinType = SpinType.NORMAL;
-            UpdateGameState(SlotGameState.PREPARE);
-            tweenQueue.Enqueue(() => ShowPopupMinigame());
-        }
+
 
         // ///------------------CHECK SHOW FREESPIN--------------------//
         if (hasGotFreeSpin)
         {
+            Debug.Log("GET FREE SPIN");
             GetMatchResult();
             tweenQueue.Enqueue(() => ShowPopupGetFreeSpin());
         }
@@ -519,20 +518,22 @@ public class SlotTarzanView : BaseSlotView
             }
         }
 
-     
+        ///------------------CHECK WIN MINIGAME--------------------//
+
 
         NextTween();
     }
 
     protected override void ShowWinAnimation(WinType winType)
     {
-        float delay = 6.0f;
+        float delay = 5.4f;
         effectContainer.gameObject.SetActive(true);
         animationEffect.gameObject.SetActive(true);
 
         switch (winType)
         {
             case WinType.BIG_WIN:
+                delay = 4.7f;
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.BIG_WIN);
                 bigWinText.transform.parent.gameObject.SetActive(true);
                 bigWinText.gameObject.SetActive(true);
@@ -541,7 +542,6 @@ public class SlotTarzanView : BaseSlotView
                 animationEffect.transform.localScale = new Vector2(1f, 1f);
                 // animationEffect.transform.localPosition = new Vector2(0, -70);
                 Utility.PlayAnimationByPath(animationEffect, BIG_WIN_ANIMATION_PATH, BIG_WIN_ANIMATION_NAME, false);
-                delay = 4.7f;
                 break;
             case WinType.MEGA_WIN:
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
@@ -577,19 +577,16 @@ public class SlotTarzanView : BaseSlotView
                 Utility.PlayAnimationByPath(animationEffect, FREE_SPIN_ANIMATION_PATH, FREE_SPIN_ANIMATION_NAME, false);
                 break;
         }
-        if (new WinType[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(winType))
-        {
-            DOVirtual.DelayedCall(delay, () =>
-            {
-                bigWinText.transform.parent.gameObject.SetActive(false);
-            });
-        }
 
 
         animationEffect.AnimationState.Complete += delegate
         {
             effectContainer.gameObject.SetActive(false);
-            AnimateCoinsFly();
+            if (new WinType[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(winType))
+            {
+                bigWinText.transform.parent.gameObject.SetActive(false);
+                AnimateCoinsFly();
+            }
             NextTween();
             effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
         };
@@ -668,8 +665,8 @@ public class SlotTarzanView : BaseSlotView
                 .AppendInterval(10.0f)
                 .AppendCallback(() =>
                 {
-                    totalChipWinByGame = 0;
-                    lastTotalChipWinByGame = 0;
+                    // totalChipWinByGame = 0;
+                    // lastTotalChipWinByGame = 0;
                     if (popupResultFreeSpin.gameObject.activeSelf)
                     {
                         HidePopupResultFreeSpin();
@@ -689,8 +686,8 @@ public class SlotTarzanView : BaseSlotView
             UpdateTotalChipWinValue();
             isInFreeSpin = false;
             if (totalChipWinByGame > PaylineIdList.Count * currentBetLevel) winType = WinType.BIG_WIN;
-            if (totalChipWinByGame > 50 * currentBetLevel) winType = WinType.MEGA_WIN;
-            if (totalChipWinByGame > 0)
+            else if (totalChipWinByGame > 50 * currentBetLevel) winType = WinType.MEGA_WIN;
+            else if (totalChipWinByGame > 0)
             {
                 AnimateCoinsFly();
             }
@@ -725,15 +722,18 @@ public class SlotTarzanView : BaseSlotView
 
     private void ShowPopupResultMiniGame()
     {
-        popupResultMinigame.gameObject.SetActive(true);
-        effectContainer.gameObject.SetActive(true);
-        Utility.PlayAnimation(popupResultMinigame, "Eng", true);
-        Utility.PlayAnimationByPath(buttonPopupResultMinigame, BUTTON_CONFIRM_ANIMATION_PATH, "backtogame", true);
+        DOVirtual.DelayedCall(1.2f, () =>
+        {
+            popupResultMinigame.gameObject.SetActive(true);
+            effectContainer.gameObject.SetActive(true);
+            Utility.PlayAnimation(popupResultMinigame, "Eng", true);
+            Utility.PlayAnimationByPath(buttonPopupResultMinigame, BUTTON_CONFIRM_ANIMATION_PATH, "backtogame", true);
 
-        popupResultMinigame.transform.localScale = new Vector2(.8f, .8f);
-        popupResultMinigame.transform.DOScale(new Vector2(1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
+            popupResultMinigame.transform.localScale = new Vector2(.8f, .8f);
+            popupResultMinigame.transform.DOScale(new Vector2(1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
 
-        resultMinigameRewardText.text = Utility.FormatMoney3(totalChipWinByGame, 10000);
+            resultMinigameRewardText.text = Utility.FormatMoney3(totalChipWinByGame, 10000);
+        });
     }
 
     public void HidePopupResultMiniGame()
@@ -747,7 +747,13 @@ public class SlotTarzanView : BaseSlotView
             spinType = SpinType.NORMAL;
             UpdateSpinButtonUI();
             UpdateGameState(SlotGameState.PREPARE);
-            AnimateCoinsFly();
+            UpdateTotalChipWinValue();
+            if (totalChipWinByGame > PaylineIdList.Count * currentBetLevel) winType = WinType.BIG_WIN;
+            else if (totalChipWinByGame > 50 * currentBetLevel) winType = WinType.MEGA_WIN;
+            else if (totalChipWinByGame > 0)
+            {
+                AnimateCoinsFly();
+            }
             NextTween();
         });
     }
@@ -1093,6 +1099,32 @@ public class SlotTarzanView : BaseSlotView
             case StateWin.LAST_WIN when !isUsingStateImage:
                 stateWinText.text = "Last Win";
                 break;
+        }
+    }
+
+    protected override void Reset()
+    {
+        base.Reset();
+        if (isStartMiniGame)
+        {
+            isStartMiniGame = false;
+            Debug.Log("START MINIgAME");
+            spinType = SpinType.NORMAL;
+            UpdateGameState(SlotGameState.PREPARE);
+            tweenQueue.Enqueue(() => ShowPopupMinigame());
+            NextTween();
+        }
+    }
+
+    public void Speed()
+    {
+        if (Time.timeScale == 1)
+        {
+            Time.timeScale = 5;
+        }
+        else
+        {
+            Time.timeScale = 1;
         }
     }
 }

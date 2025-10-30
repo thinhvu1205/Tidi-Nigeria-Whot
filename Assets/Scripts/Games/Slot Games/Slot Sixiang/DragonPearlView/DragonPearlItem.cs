@@ -145,6 +145,12 @@ public class DragonPearlItem : MonoBehaviour
                     {
                         dragonPearlView.GameView.UpdateDragonPearlFreeSpinLeft();
                     }
+                    else
+                    {
+                        dragonPearlView.GameView.DragonPearlFreeSpinLeft += 1;
+                        dragonPearlView.GameView.UpdateVisualDragonPearlFreeSpinLeft();
+
+                    }
                     // Vector2 posSymbol = spine.transform.parent.InverseTransformPoint(SiXiangView.Instance.getPosSymbol((int)data["col"], (int)data["row"] + 1));
                     //  SpineItem.transform.localPosition = new Vector2(posSymbol.x + 2, posSymbol.y);
                 });
