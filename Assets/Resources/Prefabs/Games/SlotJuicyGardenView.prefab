@@ -922,6 +922,7 @@ MonoBehaviour:
   backgroundFreeSpinLeftAnimation: {fileID: 3956561583415061803}
   playerWallet: 0
   playerWalletAfter: 0
+  lastBetLevel: 0
   currentBetLevel: 0
   lastChipWin: 0
   currentChipWin: 0
@@ -3717,7 +3718,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -6684,12 +6685,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 1
+  Type: 2
   ThisImg: {fileID: 0}
-  ThisSG: {fileID: 0}
-  BundleLabel: 
-  AssetName: 
-  AnimName: 
+  ThisSG: {fileID: 5937598733453522959}
+  BundleLabel: assets--resources--bundlepack--animations--slotspine
+  AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/JuicyGarden/Jackpot/skeleton_SkeletonData.asset
+  AnimName: JP_mini
   SetNativeSize: 0
   m_OnEnableUE:
     m_PersistentCalls:

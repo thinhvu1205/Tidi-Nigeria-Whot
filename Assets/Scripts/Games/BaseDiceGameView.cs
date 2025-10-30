@@ -27,14 +27,15 @@ public class BaseDiceGameView : BaseGameView
     protected List<Player> rearrangedPlayers = new List<Player>();
     protected List<Player> playingPlayers = new List<Player>();
     protected List<GameObject> listBtnInvite = new List<GameObject>();
-
+    private float interactTimer = 0, interactCountdown = 5;
 
     protected override void Update()
     {
-        base.Update();
-        if (Input.GetMouseButtonDown(0) || Input.touchCount > 0)
+        interactTimer -= Time.unscaledDeltaTime;
+        if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && interactTimer <= 0)
         {
-            DataSender.SendMatchState((long)OpCodeRequest.OpcodeUserInteractCards, Array.Empty<byte>());
+            interactTimer = interactCountdown;
+            DataSender.SendMatchState((long)OpCodeRequest.OpcodeUserInteractCards, new byte[0]);
         }
     }
 

@@ -134,17 +134,6 @@ public class BlackjackView : BaseDiceGameView
             StopCoroutine(countdownCoroutine);
     }
 
-    protected override void Update()
-    {
-        // Khi chạm vào màn hình thì gửi lên trạng thái active để server ko kick người chơi ra khỏi bàn
-        interactTimer -= Time.unscaledDeltaTime;
-        if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && interactTimer <= 0)
-        {
-            interactTimer = interactCountdown;
-            DataSender.SendMatchState((long)OpCodeRequest.OpcodeUserInteractCards, new byte[0]);
-        }
-    }
-
     #region API Handlers
     public void RequestRejoinTable()
     { 

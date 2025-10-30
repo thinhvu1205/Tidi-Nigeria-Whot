@@ -250,10 +250,10 @@ public class SlotJuicyView : BaseSlotView
             totalPackageValue = 0;
             ShowTotalMoneyPackage();
             tweenQueue.Enqueue(() => ShowPackageResult());
-            if (winJackpot.HasValue)
-            {
-                tweenQueue.Enqueue(() => ShowJackpotAnimation());
-            }
+            // if (winJackpot.HasValue)
+            // {
+            //     tweenQueue.Enqueue(() => ShowJackpotAnimation());
+            // }
         }
         else
         {
@@ -498,6 +498,16 @@ public class SlotJuicyView : BaseSlotView
         Utility.PlayAnimationByPath(popupResultPackageAnimation, RESULT_BONUSGAME_ANIMPATH, "eng", true);
         popupResultPackageAnimation.transform.localScale = new Vector2(0.8f, 0.8f);
         popupResultPackageAnimation.transform.DOScale(new Vector2(1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
+
+        DOTween.Sequence()
+            .AppendInterval(10.0f)
+            .AppendCallback(() =>
+            {
+                if (popupResultPackageAnimation.gameObject.activeSelf)
+                {
+                    OnClickClosePopupResult();
+                }
+            });
     }
     #endregion
 

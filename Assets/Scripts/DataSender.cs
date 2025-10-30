@@ -406,7 +406,7 @@ public class DataSender
         }
     }
 
-    public static async UniTask<ListFreeChip> GetListClaimedFreeChips()
+    public static async UniTask<ListFreeChip> GetListClaimableFreeChips()
     {
         var response = await NetworkManager.INSTANCE.RPCSend(LIST_CLAIMABLE_FREECHIPS);
         return DecodeFromJson<ListFreeChip>(response.Payload);

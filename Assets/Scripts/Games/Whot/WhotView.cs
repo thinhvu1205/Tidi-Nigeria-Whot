@@ -116,7 +116,6 @@ public class WhotView : BaseDiceGameView
     {
         TypeWinMore = false;
         _ = CalculateHigherBet();
-        DOTween.KillAll(true);
         // cardPool = new ObjectPool<WhotCard>(cardPrefab.GetComponent<WhotCard>(), 20, cardPoolParent);
         PoolService.Instance.Register(PrefabType.WhotCard, cardPoolParent, whotCardModelPrefab, 20, 50, 15);
         PoolService.Instance.Register(PrefabType.ChipPlayerWhot, chipPoolParent, chipPrefab, 15, 50, 10);

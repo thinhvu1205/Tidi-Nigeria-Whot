@@ -96,6 +96,7 @@ public class BaseSlotView : BaseGameView
     protected virtual string FIVE_OF_A_KIND_ANIMATION_NAME => "animation";
     protected virtual string FREE_SPIN_ANIMATION_NAME => "eng";
     protected virtual string BACKGROUND_FREE_SPIN_ANIMATION_NAME => "animation";
+    public override bool CanLeaveTable => gameState != SlotGameState.SPINNING;
 
     [Header("Game State")]
     protected SpinType spinType = SpinType.NORMAL;
@@ -133,7 +134,7 @@ public class BaseSlotView : BaseGameView
 
     protected override void Update()
     {
-        if (IsSpinning) return;
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT) return;
         HandleHoldingSpin();
     }
 
@@ -501,6 +502,7 @@ public class BaseSlotView : BaseGameView
     #region Win Effects
     protected void ShowAllWinLines()
     {
+        if (gameObject == null) return;
         bool isCurrentlyAutoSpin = spinType == SpinType.AUTO;
         if (isCurrentlyAutoSpin)
         {
@@ -560,6 +562,7 @@ public class BaseSlotView : BaseGameView
 
     protected void ShowWinLineOneByOne()
     {
+        if (gameObject == null) return;
         // // Nếu đang FREE SPIN -> Update totalChipWinByGame 
         // if (spinType == SpinType.FREE_NORMAL || spinType == SpinType.FREE_AUTO)
         // {
@@ -1168,6 +1171,7 @@ public class BaseSlotView : BaseGameView
 
     protected void SetCurrentChipValue(long value)
     {
+        Debug.Log("CURRENT CHIP VALUE: " + value);
         Utility.TweenNumberToNumberScale1(currentChipText, value, playerWallet, 0.5f, false);
         playerWallet = value;
     }
@@ -1388,6 +1392,7 @@ public class BaseSlotView : BaseGameView
 
     protected virtual void NextTween()
     {
+        Debug.Log("Next tween");
         if (tweenQueue.Count > 0)
         {
             TweenCallback nextTween = tweenQueue.Dequeue();

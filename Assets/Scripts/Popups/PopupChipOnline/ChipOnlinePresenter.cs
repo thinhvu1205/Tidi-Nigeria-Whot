@@ -19,7 +19,7 @@ public class ChipOnlinePresenter
     {
         try
         {
-            ListFreeChip listFreeChip = await DataSender.GetListClaimedFreeChips();
+            ListFreeChip listFreeChip = await DataSender.GetListClaimableFreeChips();
             return listFreeChip;
         }
         catch (Exception)

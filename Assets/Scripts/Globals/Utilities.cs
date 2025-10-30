@@ -242,6 +242,8 @@ namespace Globals
         {
             DOTween.To(() => startNumber, x => startNumber = x, toNumber, timeRun).OnUpdate(() => { if (isLowerCase) lbText.text = FormatNumber(startNumber).ToLower(); else lbText.text = FormatNumber(startNumber); }).OnComplete(() =>
             {
+                if (isLowerCase) lbText.text = FormatNumber(toNumber).ToLower(); 
+                else lbText.text = FormatNumber(toNumber);
             });
             Vector2 normalScale = Vector2.one;
             Vector2 biggerScale = new Vector2(normalScale.x + 0.2f, normalScale.y + 0.2f);

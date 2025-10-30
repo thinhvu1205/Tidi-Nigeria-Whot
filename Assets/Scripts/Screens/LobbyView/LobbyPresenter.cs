@@ -52,7 +52,8 @@ public class LobbyPresenter
         UIManager.Instance.ShowProgressing();
         try
         {
-            ListFreeChip listFreeChip = await DataSender.GetListClaimedFreeChips();
+            ListFreeChip listFreeChip = await DataSender.GetListClaimableFreeChips();
+            await lobbyView.OnSuccess();
             bool hasFreeChip = listFreeChip.Freechips.Count > 0;
             return hasFreeChip;
         }

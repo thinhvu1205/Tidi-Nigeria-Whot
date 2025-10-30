@@ -20,7 +20,7 @@ public class FreeChipPresenter
         UIManager.Instance.ShowProgressing();
         try
         {
-            ListFreeChip listFreeChip = await DataSender.GetListClaimedFreeChips();
+            ListFreeChip listFreeChip = await DataSender.GetListClaimableFreeChips();
             await freeChipView.OnSuccess();
             return listFreeChip;
         }

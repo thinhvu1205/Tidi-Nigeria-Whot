@@ -24,7 +24,7 @@ public class UIManager : Singleton<UIManager>
     public SpriteAtlas avatarAtlas, cardAtlas;
     [SerializeField] Sprite avtDefault, spriteToast;
     [SerializeField] TMP_FontAsset fontLabelToast;
-  
+    public SelectTableView selectTableView;
     public LobbyView lobbyView;
     private Transform parentPopups, parentGames, parentBanners, parentLobby, parentLoading;
     [HideInInspector] public BaseGameView gameView;
@@ -116,7 +116,7 @@ public class UIManager : Singleton<UIManager>
 
     public async UniTask HandleFindAndJoinMatch(int markUnit)
     {
-
+        ShowProgressing();
         RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, true);
         if (response == null) return;
         Debug.Log("Find match response: " + response.ToString());
@@ -163,7 +163,9 @@ public class UIManager : Singleton<UIManager>
     
     public async UniTask HandleCreateMatch(string passWord, int markUnit, string customData)
     {
+        ShowProgressing();
         RpcCreateMatchResponse response = await DataSender.CreateMatch(Config.currentGameId ,passWord, markUnit, customData);
+        HideProgressing();
         if (response == null) return;
         Debug.Log("Create match response: " + response.ToString());
         var labelMatch = await DataSender.JoinMatch(response.MatchId);
@@ -237,13 +239,14 @@ public class UIManager : Singleton<UIManager>
         if (gameView != null)
         {
             if (Constants.SLOT_GAMES_ID.Contains(Config.currentGameId))
-            { 
+            {
                 await DataSender.LeaveMatch();
                 // await NetworkManager.INSTANCE.LeaveRoomChat();
                 await NetworkManager.INSTANCE.JoinWorldChat();
                 await LoadProfileUser();
                 Destroy(gameView.gameObject);
                 SoundManager.Instance.PlayMusicLobby();
+                
             }
             else
             {
@@ -323,7 +326,8 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenSelectTableView()
     {
-        SelectTableView selectTableView = Instantiate(LoadPrefabLobby("SelectTableView"), parentGames).GetComponent<SelectTableView>();
+        ShowProgressing();
+        selectTableView = Instantiate(LoadPrefabLobby("SelectTableView"), parentGames).GetComponent<SelectTableView>();
         selectTableView.transform.localScale = Vector3.one;
     }
 
@@ -550,5 +554,15 @@ public class UIManager : Singleton<UIManager>
     // {
     //     return Resources.Load<SkeletonDataAsset>(path);
     // }
+
+    public async UniTask ReloadTableView()
+    {
+        if (selectTableView != null)
+        {
+            ShowProgressing();
+            await selectTableView.GetListBet();
+            OpenBanner(TypeInAppMessage.Banner, 0.6f);
+        }
+    }
     #endregion
 }

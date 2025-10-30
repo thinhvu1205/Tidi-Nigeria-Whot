@@ -18,7 +18,7 @@ public class BaseGameView : BaseView
     
     public GameState GameState { get; protected set; } = GameState.Idle;
     public virtual GameState[] AvailableLeaveStates => new GameState[]{ GameState.Idle, GameState.Matching };
-    public virtual bool CanLeaveTable => AvailableLeaveStates.Contains(GameState) && !hasBet;
+    public virtual bool CanLeaveTable => true;
     protected bool hasBet = false;
     protected override void OnDestroy()
     {
