@@ -101,6 +101,8 @@ public class BasePlayerView : MonoBehaviour
         get => _sid;
         set => _sid = value;
     }
+    
+    private Coroutine countdownCoroutine;
 
     public void SetData(Player playerData)
     {
@@ -458,33 +460,56 @@ public class BasePlayerView : MonoBehaviour
     /// <param name="timeVibrate">Vibration time before turn ends</param>
     public virtual void SetCurrentTurn(bool isTurn, float _timeTurn = 0f, float _totalTimeTurn = 0, bool _isMe = false, float timeVibrate = 5f)
     {
+        // Tắt hoặc bật countdown UI
         timeCountDown.gameObject.SetActive(isTurn);
-        if (isTurn)
+
+        // Nếu có coroutine đang chạy thì dừng lại trước
+        if (countdownCoroutine != null)
         {
-            StartCoroutine(fillAmountToZero());
+            StopCoroutine(countdownCoroutine);
+            countdownCoroutine = null;
         }
 
-        /// <summary>
-        /// Coroutine to fill countdown timer
-        /// </summary>
-        IEnumerator fillAmountToZero()
+        // Nếu là lượt của người chơi → bắt đầu countdown mới
+        if (isTurn)
+        {
+            countdownCoroutine = StartCoroutine(FillAmountToZero());
+        }
+
+        // ------------------------------
+        // Coroutine fill countdown timer
+        IEnumerator FillAmountToZero()
         {
             timeTurn = _timeTurn;
             timeCountDown.fillAmount = timeTurn / _totalTimeTurn;
-            avatar.transform.DOScale(1.1f * Vector2.one, .1f).OnComplete(() => { avatar.transform.DOScale(Vector2.one, .1f); });
+
+            // Hiệu ứng scale nhỏ khi bắt đầu lượt
+            avatar.transform.DOScale(1.1f * Vector2.one, .1f)
+                .OnComplete(() => avatar.transform.DOScale(Vector2.one, .1f));
+
             float elapsedTime = 0;
+
             while (timeCountDown.fillAmount > 0)
             {
                 yield return new WaitForFixedUpdate();
+
                 timeCountDown.fillAmount -= Time.fixedDeltaTime / _totalTimeTurn;
                 elapsedTime += Time.fixedDeltaTime;
-                if (!timeCountDown.gameObject.activeSelf) yield break;
+
+                // Nếu countdown bị tắt giữa chừng thì dừng luôn
+                if (!timeCountDown.gameObject.activeSelf)
+                    yield break;
+
+                // Rung gần hết thời gian nếu là người chơi hiện tại
                 if (_isMe && (elapsedTime >= timeTurn - timeVibrate))
                 {
                     Config.Vibration();
-                    elapsedTime = -99;
+                    elapsedTime = -99; // để không rung nhiều lần
                 }
             }
+
+            // Khi kết thúc countdown, xóa coroutine handle
+            countdownCoroutine = null;
         }
     }
 

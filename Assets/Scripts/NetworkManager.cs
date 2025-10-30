@@ -456,6 +456,26 @@ public class NetworkManager : MonoBehaviour
     public async UniTask InitSocket(ISession session)
     {
         _SocketIS = _ClientC.NewSocket();
+        
+        _SocketIS.Closed += async () =>
+        {
+            UIManager.Instance.ShowProgressing();
+            Debug.Log("ondisconnect");
+
+            await UniTask.Delay(TimeSpan.FromSeconds(1));
+
+            if (isKickOff)
+            {
+                PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
+                isKickOff = false;
+            }
+
+            UIManager.Instance.HideProgressing();
+            // Global.IsFreeChipLoaded = false;
+            await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
+        };
+        RegisterEventSocket();
+
         try
         {
             await _SocketIS.ConnectAsync(session);
@@ -463,24 +483,7 @@ public class NetworkManager : MonoBehaviour
             UIManager.Instance.HideProgressing();
             Debug.Log("Socket connected");
 
-            _SocketIS.Closed += async () =>
-            {
-                UIManager.Instance.ShowProgressing();
-                Debug.Log("ondisconnect");
-
-                await UniTask.Delay(TimeSpan.FromSeconds(1));
-
-                if (isKickOff)
-                {
-                    PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
-                    isKickOff = false;
-                }
-
-                UIManager.Instance.HideProgressing();
-                // Global.IsFreeChipLoaded = false;
-                await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
-            };
-            RegisterEventSocket();
+            
             await JoinWorldChat();
 
             // InitSocketChat();
@@ -616,7 +619,7 @@ public class NetworkManager : MonoBehaviour
         _ClientC = new Client("http", "172.23.112.1", 57350, "defaultkey");
         // _ClientC = new Client("http", "10.251.228.83", 57350, "defaultkey");
         _ClientC = new Client("http", "172.16.56.36", 57350, "defaultkey");
-        _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey");
+        // _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey");
         RestoreSession();
         string deviceId;
         if (PlayerPrefs.HasKey(DEVICE_ID)) deviceId = PlayerPrefs.GetString(DEVICE_ID);
@@ -628,7 +631,7 @@ public class NetworkManager : MonoBehaviour
         }
         Debug.Log("DEVICE ID: " + deviceId);
         Config.deviceId = deviceId;
-        _SocketIS = _ClientC.NewSocket();
+        // _SocketIS = _ClientC.NewSocket();
     }
 
     #endregion

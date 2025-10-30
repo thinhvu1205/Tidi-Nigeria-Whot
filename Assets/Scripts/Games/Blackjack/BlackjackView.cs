@@ -345,7 +345,7 @@ public class BlackjackView : BaseDiceGameView
             chip.SetInfo(5, playerView.GetAvatarPosition(), data.Bet.Insurance);
             chip.transform.localScale = Vector2.one * 0.8f;
             AnimateMoveInsuranceChip(chip, listInsuranceChipPosition[GetPlayerIndexById(data.Bet.UserId)]);
-            thisPlayer.AnimateFlyMoney(-data.Bet.Insurance);
+            // thisPlayer.AnimateFlyMoney(-data.Bet.Insurance);
 
         }
 
@@ -590,6 +590,8 @@ public class BlackjackView : BaseDiceGameView
                     ResetGame();
                     StartCountDownBetTime((int)data.CountDown);
                 }
+                textCountdown.text = data.CountDown.ToString();
+                
                 ShowAllPlayersLoading();
                 Debug.Log("HandleUpdateGameState Preparing " + data.ToString());
                 break;
@@ -703,7 +705,6 @@ public class BlackjackView : BaseDiceGameView
         {
             timeLeft -= Time.deltaTime;
             imageCountdown.fillAmount = timeLeft / 12;
-            textCountdown.text = Mathf.CeilToInt(timeLeft).ToString();
             yield return null;
         }
         HideCountDown();
