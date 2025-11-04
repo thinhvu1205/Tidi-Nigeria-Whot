@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4495729286806728159
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5549,7 +5549,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2370605462541055953
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9261,7 +9261,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 103, y: -20}
-  m_SizeDelta: {x: 206, y: 40}
+  m_SizeDelta: {x: 0, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6768038577821889929
 MonoBehaviour:
@@ -9320,7 +9320,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4551255386604578980
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9791,7 +9791,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5026492390707524134
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10570,11 +10570,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  skeletonDataAsset: {fileID: 11400000, guid: b2b9cc7e906c8ac4bbdf943efc2d3016, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 89d70472dbfb7424684f3fac578aa8e4, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
-  startingAnimation: bigwin
+  startingAnimation: mega
   startingLoop: 1
   timeScale: 1
   freeze: 0

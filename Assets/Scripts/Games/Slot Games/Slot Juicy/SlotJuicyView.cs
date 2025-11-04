@@ -37,7 +37,7 @@ public class SlotJuicyView : BaseSlotView
     private WinJackpot? winJackpot;
     private JackpotHistory jackpotHistory;
     private long rateJackpotGrand = 0, rateJackpotMajor = 0, rateJackpotMinor = 0, rateJackpotMini = 0, jpGrandPlayer = 0, jpMajorPlayer = 0, totalPackageValue = 0;
-    private bool isStartFruitRain, isEndFruitRain, isChooseFreeGame, isChooseFruitRain, isEndFreeGame, isChooseBasket, isBetLevelChanged;
+    private bool isInFruitRain, isInJuiceFree, isStartFruitRain, isEndFruitRain, isChooseFreeGame, isChooseFruitRain, isEndFreeGame, isChooseBasket, isBetLevelChanged;
     protected override Dictionary<SiXiangSymbol, int> SymbolDictionary => new()
     {
         { SiXiangSymbol.K, 0 },
@@ -78,6 +78,8 @@ public class SlotJuicyView : BaseSlotView
         winJackpot = data.WinJp;
 
         isInFreeSpin = data.CurrentSixiangGame == SiXiangGame.JuiceFreeGame || data.CurrentSixiangGame == SiXiangGame.JuiceFruitRain;
+        isInFruitRain = data.CurrentSixiangGame == SiXiangGame.JuiceFruitRain;
+        isInJuiceFree = data.CurrentSixiangGame == SiXiangGame.JuiceFreeGame;
         isStartFruitRain = data.NextSixiangGame == SiXiangGame.JuiceFruitRain && data.CurrentSixiangGame != SiXiangGame.JuiceFruitRain;
         isEndFruitRain = data.CurrentSixiangGame == SiXiangGame.JuiceFruitRain && data.NextSixiangGame != SiXiangGame.JuiceFruitRain;
         isEndFreeGame = data.CurrentSixiangGame == SiXiangGame.JuiceFreeGame && data.NextSixiangGame != SiXiangGame.JuiceFreeGame;
@@ -208,6 +210,10 @@ public class SlotJuicyView : BaseSlotView
             }
             else if (data.CurrentSixiangGame == SiXiangGame.JuiceFruitBasket)
             {
+                foreach(SlotColumn column in slotColumnList)
+                {
+                    column.SetRandomFinishView();
+                }
                 ShowPopupChooseABucket();
             }
         }
@@ -227,16 +233,13 @@ public class SlotJuicyView : BaseSlotView
 
     public override void OnStopSpin()
     {
+        if (isInFreeSpin)
+        {
+            ShowBackGroundFreeSpin();
+        }
         IsSpinning = false;
         UpdateJackpot();
 
-
-        if (isChooseBasket)
-        {
-            tweenQueue.Enqueue(() => ShowPopupChooseABucket());
-        }
-
-        
         ///------------------CHECK FRUIT RAIN--------------------//
         if (isStartFruitRain)
         {
@@ -258,7 +261,7 @@ public class SlotJuicyView : BaseSlotView
         else
         {
             // Nếu đang là Fruit Rain thì giữ lại các item là giỏ
-            if (freeSpinLeft > 0)
+            if (freeSpinLeft > 0 && isInFruitRain)
             {
                 CreateHolderPackageView();
             }
@@ -298,8 +301,8 @@ public class SlotJuicyView : BaseSlotView
         if (CheckFiveOfAKind())
         {
             tweenQueue.Enqueue(() => ShowWinAnimation(WinType.FIVE_OF_A_KIND));
-        } 
-        
+        }
+
         ///------------------CHECK SHOW ALL LINE--------------------///
         if (paylineList.Count > 0)
         {
@@ -339,8 +342,106 @@ public class SlotJuicyView : BaseSlotView
             }
         }
 
-        NextTween();
+        if (isChooseBasket)
+        {
+            tweenQueue.Enqueue(() => ShowPopupChooseABucket());
+        }
 
+        NextTween();
+    }
+    
+    protected override void ShowWinAnimation(WinType winType)
+    {
+        effectContainer.gameObject.SetActive(true);
+        animationEffect.gameObject.SetActive(true);
+        bigWinText.gameObject.SetActive(false);
+        Sequence sequence = DOTween.Sequence();
+        switch (winType)
+        {
+            case WinType.BIG_WIN:
+                sequence.AppendInterval(1.2f)
+                    .AppendCallback(() =>
+                    {
+                        bigWinText.gameObject.SetActive(true);
+                        Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, 2.7f);
+                    })
+                    .AppendInterval(3.3f)
+                    .OnComplete(() =>
+                    {
+                        bigWinText.transform.gameObject.SetActive(false);
+                    });
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.BIG_WIN);
+                // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
+                animationEffect.transform.localScale = new Vector2(1f, 1f);
+                // animationEffect.transform.localPosition = new Vector2(0, -70);
+                Utility.PlayAnimationByPath(animationEffect, BIG_WIN_ANIMATION_PATH, BIG_WIN_ANIMATION_NAME, false);
+                break;
+            case WinType.MEGA_WIN:
+                sequence.AppendInterval(0.8f)
+                    .AppendCallback(() =>
+                    {
+                        bigWinText.gameObject.SetActive(true);
+                        Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, 5f);
+                    })
+                    .AppendInterval(5f)
+                    .AppendCallback(() =>
+                    {
+                        bigWinText.gameObject.SetActive(false);
+                    });
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
+                // Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, delay - 1);
+                // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
+                animationEffect.transform.localScale = new Vector2(1f, 1f);
+                // animationEffect.transform.localPosition = new Vector2(0, -70);
+                Utility.PlayAnimationByPath(animationEffect, MEGA_WIN_ANIMATION_PATH, MEGA_WIN_ANIMATION_NAME, false);
+                break;
+            case WinType.HUGE_WIN:
+                sequence.AppendInterval(0.5f)
+                    .AppendCallback(() =>
+                    {
+                        Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, 4.3f);
+                    })
+                    .AppendInterval(0.5f)
+                    .OnComplete(() =>
+                    {
+                        bigWinText.transform.parent.gameObject.SetActive(false);
+                    });
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
+                bigWinText.transform.parent.gameObject.SetActive(true);
+                bigWinText.gameObject.SetActive(true);
+                // Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, delay - 1);
+                // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
+                animationEffect.transform.localScale = new Vector2(1f, 1f);
+                // animationEffect.transform.localPosition = new Vector2(0, -70);
+                Utility.PlayAnimationByPath(animationEffect, HUGE_WIN_ANIMATION_PATH, HUGE_WIN_ANIMATION_NAME, false);
+                break;
+            case WinType.FIVE_OF_A_KIND:
+                animationEffect.transform.localScale = Vector2.one;
+                animationEffect.transform.localPosition = Vector2.zero;
+                bigWinText.transform.parent.gameObject.SetActive(false);
+                Utility.PlayAnimationByPath(animationEffect, FIVE_OF_A_KIND_ANIMATION_PATH, FIVE_OF_A_KIND_ANIMATION_NAME, false);
+                break;
+            case WinType.FREE_SPIN:
+                SoundManager.Instance.PlayEffectFromPath(SoundSlot.FREESPIN);
+                animationEffect.transform.localScale = Vector2.one;
+                animationEffect.transform.localPosition = Vector2.zero;
+                bigWinText.transform.parent.gameObject.SetActive(false);
+                Utility.PlayAnimationByPath(animationEffect, FREE_SPIN_ANIMATION_PATH, FREE_SPIN_ANIMATION_NAME, false);
+                break;
+        }
+
+
+        animationEffect.AnimationState.Complete += delegate
+        {
+            effectContainer.gameObject.SetActive(false);
+            animationEffect.gameObject.SetActive(false);
+            if (new WinType[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(winType))
+            {
+                AnimateCoinsFly();
+            }
+            NextTween();
+            effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
+        }; 
     }
 
     private void SetupFruitRainGame()
@@ -351,6 +452,20 @@ public class SlotJuicyView : BaseSlotView
         tweenQueue.Enqueue(() => ShowPopupGetFruitRain());
 
         // Fruit Rain sẽ autospin cho đến khi hết Fruit Rain
+        if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO)
+        {
+            spinType = SpinType.FREE_AUTO;
+        }
+        UpdateSpinButtonUI();
+        UpdateStateWinUI(StateWin.TOTAL_WIN);
+        chipWinText.text = "0";
+        NextTween();
+    }
+
+    private void SetupJuiceFreeGame()
+    {
+        freeSpinLeft = 3;
+        ShowBackGroundFreeSpin();
         if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO)
         {
             spinType = SpinType.FREE_AUTO;
@@ -486,6 +601,8 @@ public class SlotJuicyView : BaseSlotView
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.FREESPIN);
         effectContainer.gameObject.SetActive(true);
         popupChooseABucketAnimation.gameObject.SetActive(true);
+        bucketLeft.interactable = true;
+        bucketRight.interactable = true;
         Utility.PlayAnimationByPath(popupChooseABucketAnimation, BACKGROUND_CHOOSE_A_BUCKET_ANIMATION_PATH, "thung", true);
     }
 
@@ -563,13 +680,15 @@ public class SlotJuicyView : BaseSlotView
         {
             popupChooseABucketAnimation.gameObject.SetActive(false);
             effectContainer.gameObject.SetActive(false);
+            basketGetFreeGame.gameObject.SetActive(false);
+            basketGetFruitRain.gameObject.SetActive(false);
             if (isChooseFruitRain)
             {
                 SetupFruitRainGame();
             }
-            else
+            else if (isChooseFreeGame)
             {
-                NextTween();
+                SetupJuiceFreeGame();
             }
         };
     }
@@ -598,13 +717,13 @@ public class SlotJuicyView : BaseSlotView
                 int index = j;
                 if (resultItem.GetFinishView()[index] >= 13) //id phai la gio va dang trong freespin
                 {
-                    CreateHoldPackage(index * 5 + i, resultItem.ImageList[index].gameObject);
+                    CreateHoldPackage(index * 5 + i, resultItem.ImageList[index].gameObject, resultItem.GetFinishView()[index] > 13);
                 }
             }
         }
     }
 
-    public void CreateHoldPackage(int index, GameObject itemTemplate)
+    public void CreateHoldPackage(int index, GameObject itemTemplate, bool isJackpotPackage = false)
     {
         Transform itemContainer = holdPackageContainer.transform.GetChild(index);
         itemContainer.gameObject.SetActive(true);
@@ -612,7 +731,25 @@ public class SlotJuicyView : BaseSlotView
         GameObject itemPackage = Instantiate(itemTemplate, itemContainer);
 
         Vector2 posInWorld = itemTemplate.GetComponent<RectTransform>().position;
-        itemPackage.transform.localPosition = itemContainer.InverseTransformPoint(posInWorld);
+        // itemPackage.transform.localPosition = itemContainer.InverseTransformPoint(posInWorld);
+        float x = 0f;
+        float y = 0f;
+        // Y theo hàng
+        if (index < 5)
+            y = -15f;
+        else if (index > 9)
+            y = 15f;
+
+        // X theo cột
+        switch (index % 5)
+        {
+            case 0: x = 10f; break;
+            case 1: x = 5f;  break;
+            case 2: x = 0f;  break;
+            case 3: x = -5f;  break;
+            case 4: x = -10f; break;
+        }
+        itemPackage.transform.localPosition = new Vector2(x, isJackpotPackage ? y + 10 : y);
         itemPackage.transform.localScale = itemPackage.transform.localScale * new Vector2(0.95f, 0.95f);
         itemPackage.GetComponent<Image>().color = Color.white;
         itemPackage.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.white;

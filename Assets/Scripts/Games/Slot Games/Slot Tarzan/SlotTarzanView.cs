@@ -631,8 +631,7 @@ public class SlotTarzanView : BaseSlotView
             }
             NextTween();
             effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
-        };
-        
+        }; 
     }
 
     #region Popups

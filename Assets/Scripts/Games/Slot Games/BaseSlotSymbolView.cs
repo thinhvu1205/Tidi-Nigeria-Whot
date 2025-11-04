@@ -847,7 +847,7 @@ public class BaseSlotSymbolView : BaseGameView
     protected void SetAutoSpinRemain()
     {
         textAutoRemain.gameObject.SetActive(autoSpinRemain > 0);
-        if (autoSpinRemain > 100)
+        if (autoSpinRemain > 200)
         {
             textAutoRemain.text = Uri.UnescapeDataString("\u221E");
             textAutoRemain.fontSize = 60;

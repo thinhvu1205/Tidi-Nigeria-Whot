@@ -10,7 +10,7 @@ public class BlackjackButtonAction : MonoBehaviour
     [SerializeField] private Image checkbox;
     [SerializeField] private Image checkboxImage;
     public Button button;
-    private bool isChecked;
+    public bool isChecked;
 
     private void Awake()
     {

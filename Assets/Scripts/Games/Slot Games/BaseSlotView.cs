@@ -214,7 +214,6 @@ public class BaseSlotView : BaseGameView
         else
         {
             // Nếu đang Free Spin thì hiện Free Spin left
-            ShowBackGroundFreeSpin();
             // UpdateTotalChipWinValue();
         }
         UpdateGameState(SlotGameState.SPINNING);
@@ -228,6 +227,10 @@ public class BaseSlotView : BaseGameView
 
     public virtual void OnStopSpin()
     {
+        if (isInFreeSpin)
+        {
+            ShowBackGroundFreeSpin();
+        }
         // ShowWinAnimation(WinType.MEGA_WIN);
         IsSpinning = false;
  
@@ -1081,6 +1084,7 @@ public class BaseSlotView : BaseGameView
 
     protected virtual void ShowBackGroundFreeSpin()
     {
+        Debug.Log("ABCDEF");
         if (backgroundFreeSpinAnimation != null)
         {
             backgroundFreeSpinAnimation.gameObject.SetActive(true);
