@@ -89,17 +89,7 @@ public class HongKongPokerView : BaseDiceGameView
         ClearAllCards();
         pot.SetValue(0);
     }
-
-    public override void HandleUpdateUserInTable(IMatchState matchState)
-    {
-        base.HandleUpdateUserInTable(matchState);
-        var updateTable = UpdateTable.Parser.ParseFrom(matchState.State);
-        Debug.Log($"[HK Poker] Update User In Table: Players={updateTable.Players.Count}");
-        
-        // Update player positions (rearrange to put local player at index 0)
-        UpdatePosUserTable(updateTable, isRearrange: true);
-    }
-
+    
     public override void HandleUpdateTable(IMatchState matchState)
     {
         base.HandleUpdateTable(matchState);
@@ -167,7 +157,30 @@ public class HongKongPokerView : BaseDiceGameView
     {
         base.HandleUpdateTurn(matchState);
         var data = UpdateTurn.Parser.ParseFrom(matchState.State);
-        Debug.Log("Update Turn: " + data);
+        Debug.Log($"[HK Poker] Update Turn: User={data.UserId}, Countdown={data.Countdown}s");
+        
+        string myUserId = User.userProfile.UserId;
+        int currentPlayerIndex = GetPlayerIndex(data.UserId);
+        
+        // Highlight current player
+        if (currentPlayerIndex >= 0)
+        {
+            HighlightPlayer(currentPlayerIndex, data.Countdown);
+        }
+        
+        // Enable betting UI if it's my turn
+        if (data.UserId == myUserId)
+        {
+            // Need betting state - will be provided in HKUpdatePlayerAction or HKUpdateNewRound
+            // For now, just enable the UI
+            buttonBetContainer.gameObject.SetActive(true);
+            StartTurnTimer((int)data.Countdown);
+        }
+        else
+        {
+            // Not my turn - disable betting UI
+            buttonBetContainer.gameObject.SetActive(false);
+        }
     }
 
     public override void HandleFinish(IMatchState matchState)
@@ -176,20 +189,14 @@ public class HongKongPokerView : BaseDiceGameView
         var data = UpdateFinish.Parser.ParseFrom(matchState.State);
         Debug.Log("Update Finish: " + data);
     }
+    
     public override void HandleUpdateWallet(IMatchState matchState)
     {
         base.HandleUpdateWallet(matchState);
         var data = BalanceResult.Parser.ParseFrom(matchState.State);
         Debug.Log("Update Wallet: " + data);
     }
-
-    // public override void HandleUpdateKickOffTheTable(IMatchState matchState)
-    // {
-    //     Destroy(gameObject);
-    // }
-
-    #region API Handlers
-
+    
     public override void HandleUpdatePlayerAction(IMatchState matchState)
     {
         base.HandleUpdatePlayerAction(matchState);
@@ -224,12 +231,14 @@ public class HongKongPokerView : BaseDiceGameView
     {
         base.HandleUpdateNewRound(matchState);
         var data = HKUpdateNewRound.Parser.ParseFrom(matchState.State);
-        Debug.Log($"[HK Poker] New Round: Round={data.Round}");
+        Debug.Log($"[HK Poker] New Round: {data.Round}, First Bettor: {data.FirstBettor}");
+        
+        string myUserId = User.userProfile.UserId;
         
         // Clear previous round UI
         ClearRoundUI();
         
-        // Deal new cards
+        // ===== 1. DEAL CARDS =====
         if (data.PlayerCards != null && data.PlayerCards.Count > 0)
         {
             foreach (var playerCards in data.PlayerCards)
@@ -237,22 +246,63 @@ public class HongKongPokerView : BaseDiceGameView
                 int playerIndex = GetPlayerIndex(playerCards.UserId);
                 if (playerIndex < 0) continue;
                 
-                // Deal face-up cards
+                bool isMe = (playerCards.UserId == myUserId);
+                
+                // Deal face-up cards (visible to all)
                 foreach (var card in playerCards.FaceUpCards)
                 {
-                    DealACard(card, playerIndex, 0.25f);
+                    DealACard(card, playerIndex, delay: 0.25f, isFaceUp: true);
+                }
+                
+                // Deal face-down cards
+                if (isMe && playerCards.FaceDownCards != null && playerCards.FaceDownCards.Count > 0)
+                {
+                    // My cards - show actual cards
+                    foreach (var card in playerCards.FaceDownCards)
+                    {
+                        DealACard(card, playerIndex, delay: 0.3f, isFaceUp: false);
+                    }
+                }
+                else if (!isMe && playerCards.FaceDownCards != null && playerCards.FaceDownCards.Count > 0)
+                {
+                    // Other players - show card backs
+                    int faceDownCount = playerCards.FaceDownCards.Count;
+                    for (int i = 0; i < faceDownCount; i++)
+                    {
+                        ShowCardBack(playerIndex, delay: 0.3f);
+                    }
                 }
             }
         }
         
-        // Update UI for new round
+        // ===== 2. UPDATE BETTING STATE =====
+        if (data.BettingState != null)
+        {
+            UpdateBettingStateUI(data.BettingState);
+        }
+        
+        // ===== 3. HANDLE ROUND 1 SPECIAL (Auto bet 1/2 MCU) =====
+        if (data.Round == HKPokerRound.HkRoundPreFlop)
+        {
+            HandleRound1AutoBet(data);
+        }
+        
+        // ===== 4. UPDATE ROUND UI =====
         UpdateRoundUI(data.Round);
         
-        // Highlight first bettor
+        // ===== 5. HIGHLIGHT FIRST BETTOR =====
         if (!string.IsNullOrEmpty(data.FirstBettor))
         {
-            int firstBettorIndex = GetPlayerIndex(data.FirstBettor);
-            HighlightPlayer(firstBettorIndex);
+            // int firstBettorIndex = GetPlayerIndex(data.FirstBettor);
+            // HighlightPlayer(firstBettorIndex);
+        }
+        
+        // ===== 6. ENABLE BETTING UI IF MY TURN =====
+        if (data.BettingState != null && 
+            !string.IsNullOrEmpty(data.BettingState.CurrentPlayer) &&
+            data.BettingState.CurrentPlayer == myUserId)
+        {
+            EnableBettingUI(data.BettingState, data.Round);
         }
     }
 
@@ -395,15 +445,47 @@ public class HongKongPokerView : BaseDiceGameView
 
     private void UpdateBettingStateUI(HKBettingState bettingState)
     {
+        
+        // Update each player's betting info
+        foreach (var playerState in bettingState.PlayerStates)
+        {
+            int playerIndex = GetPlayerIndex(playerState.UserId);
+            if (playerIndex < 0) continue;
+            
+            // Update stack display
+            long stack = playerState.Stack;
+            UpdatePlayerStack(playerIndex, stack);
+            
+            // Update bets
+            if (!string.IsNullOrEmpty(playerState.TotalBet.ToString()))
+            {
+                long totalBet = long.Parse(playerState.TotalBet.ToString());
+                UpdatePlayerBet(playerIndex, totalBet);
+            }
+            
+            // Mark folded players
+            if (playerState.IsFolded)
+            {
+                MarkPlayerFolded(playerIndex);
+            }
+            
+            // Mark all-in players
+            if (playerState.IsAllIn)
+            {
+                MarkPlayerAllIn(playerIndex);
+            }
+        }
+        
         // Update button container with current betting state
         if (buttonBetContainer != null)
         {
-            // Enable/disable buttons based on available actions
-            // Update min/max bet values
+            long currentBet = bettingState.CurrentBet;
+            long minRaise = bettingState.MinRaise;
+            
             buttonBetContainer.SetValues(
-                (int)bettingState.CurrentBet,
-                (int)bettingState.MinRaise,
-                (int)bettingState.CurrentBet + (int)bettingState.MinRaise
+                (int)currentBet,
+                (int)minRaise,
+                (int)(currentBet + minRaise)
             );
         }
     }
@@ -427,10 +509,167 @@ public class HongKongPokerView : BaseDiceGameView
         }
     }
 
-    private void HighlightPlayer(int playerIndex)
+    private void HighlightPlayer(int playerIndex, long timeTurn)
     {
         // Highlight current player turn
         Debug.Log($"Highlight player {playerIndex}");
+        
+        // TODO: Add visual highlight (glow effect, border, etc.)
+        // Example: 
+        if (playerIndex >= 0 && playerIndex < rearrangedPlayers.Count)
+        {
+            var player = rearrangedPlayers[playerIndex];
+            if (userIdToView.TryGetValue(player.Id, out var view))
+            {
+                view.SetCurrentTurn(true, timeTurn, 10);
+            }
+        }
+    }
+    
+    private void HandleRound1AutoBet(HKUpdateNewRound data)
+    {
+        // Show auto bet animation for second player in round 1
+        if (data.BettingState == null) return;
+        
+        string firstBettor = data.FirstBettor;
+        
+        foreach (var playerState in data.BettingState.PlayerStates)
+        {
+            // Skip first bettor
+            if (playerState.UserId == firstBettor) continue;
+            
+            // Check if player has auto bet (currentRoundBet > 0)
+            if (!string.IsNullOrEmpty(playerState.CurrentRoundBet.ToString()))
+            {
+                long autoBet = long.Parse(playerState.CurrentRoundBet.ToString());
+                if (autoBet > 0)
+                {
+                    int playerIndex = GetPlayerIndex(playerState.UserId);
+                    if (playerIndex >= 0)
+                    {
+                        // Show auto bet animation
+                        ShowBoxBet(HKPokerAction.HkActionBet, playerIndex, (int)autoBet);
+                        
+                        // Animate chips to box bet
+                        DOTween.Sequence()
+                            .AppendInterval(0.5f)
+                            .AppendCallback(() => PlayerGiveChipsToBoxbet(playerIndex));
+                        
+                        Debug.Log($"[HK Poker] Player {playerState.UserId} auto bet {autoBet} (1/2 mark unit)");
+                    }
+                }
+            }
+        }
+    }
+    
+    private void EnableBettingUI(HKBettingState bettingState, HKPokerRound round)
+    {
+        string myUserId = User.userProfile.UserId;
+        var myPlayerState = bettingState.PlayerStates.FirstOrDefault(p => p.UserId == myUserId);
+        if (myPlayerState == null) return;
+        
+        bool isFirstBettor = (myUserId == bettingState.FirstBettor);
+        bool isRound1 = (round == HKPokerRound.HkRoundPreFlop);
+        long currentBet = bettingState.CurrentBet;
+        long myRoundBet = !string.IsNullOrEmpty(myPlayerState.CurrentRoundBet.ToString()) 
+            ? myPlayerState.CurrentRoundBet 
+            : 0;
+        long myStack = myPlayerState.Stack;
+        long minRaise = bettingState.MinRaise;
+        
+        // Show betting UI
+        buttonBetContainer.gameObject.SetActive(true);
+        
+        // ⚠️ ROUND 1, FIRST BETTOR: Chỉ BET/FOLD (KHÔNG CHECK)
+        if (isRound1 && isFirstBettor && currentBet == 0)
+        {
+            Debug.Log("[HK Poker] First bettor round 1 - only BET or FOLD");
+            
+            // Setup bet values
+            buttonBetContainer.SetValues(
+                (int)minRaise,      // Min bet = mark unit
+                (int)minRaise,      // Min raise
+                (int)myStack        // Max
+            );
+            
+            // Enable BET and FOLD only
+            // TODO: Enable/disable specific buttons
+            // foldButton.enabled = true;
+            // betButton.enabled = true;
+            // checkButton.enabled = false;  // ❌ NO CHECK for first bettor round 1
+        }
+        else
+        {
+            // Normal betting UI
+            buttonBetContainer.SetValues(
+                (int)currentBet,
+                (int)minRaise,
+                (int)(currentBet + minRaise)
+            );
+        }
+        
+        // Start turn timer
+        StartTurnTimer(10); // 10 seconds
+    }
+    
+    private void StartTurnTimer(int seconds)
+    {
+        // Start countdown timer
+        Debug.Log($"[HK Poker] Start turn timer: {seconds}s");
+        
+        // TODO: Implement visual timer
+        // Example:
+        // StopAllCoroutines();
+        // StartCoroutine(TurnTimerCountdown(seconds));
+    }
+    
+    private void UpdatePlayerStack(int playerIndex, long stack)
+    {
+        // Update player's stack display
+        if (playerIndex >= 0 && playerIndex < rearrangedPlayers.Count)
+        {
+            var player = rearrangedPlayers[playerIndex];
+            if (userIdToView.TryGetValue(player.Id, out var view))
+            {
+                // Update stack text on player view
+                // view.SetStack(stack);
+                Debug.Log($"Player {playerIndex} stack: {stack}");
+            }
+        }
+    }
+    
+    private void UpdatePlayerBet(int playerIndex, long bet)
+    {
+        // Update player's bet display
+        Debug.Log($"Player {playerIndex} bet: {bet}");
+        
+        // Update box bet if exists
+        if (playerIndex >= 0 && playerIndex < listBoxBet.Count && listBoxBet[playerIndex] != null)
+        {
+            // Update box bet chip value
+            // listBoxBet[playerIndex].UpdateChip((int)bet);
+        }
+    }
+    
+    private void MarkPlayerFolded(int playerIndex)
+    {
+        // Mark player as folded (grayed out, etc.)
+        Debug.Log($"Player {playerIndex} FOLDED");
+        
+        // TODO: Visual feedback
+        // - Gray out cards
+        // - Show "FOLD" text
+        // - Disable player highlight
+    }
+    
+    private void MarkPlayerAllIn(int playerIndex)
+    {
+        // Mark player as all-in
+        Debug.Log($"Player {playerIndex} ALL-IN");
+        
+        // TODO: Visual feedback
+        // - Show "ALL-IN" badge
+        // - Special highlight color
     }
 
     private void ShowSwapAnimation(int playerIndex, Card newFaceUpCard)
@@ -547,9 +786,7 @@ public class HongKongPokerView : BaseDiceGameView
     }
 
     #endregion
-
-    #endregion
-
+    
     #region Button
     public void OnClickSwap()
     {
@@ -569,7 +806,66 @@ public class HongKongPokerView : BaseDiceGameView
     #endregion
 
     #region Card Actions
-    private void DealACard(Card pokerCard, int playerIndex, float delay = 0f, bool isAnimate = true)
+    
+    private void ShowCardBack(int playerIndex, float delay = 0f)
+    {
+        // Show card back (face-down card for other players)
+        List<CardModel> playerCards = listPlayerCards[playerIndex];
+        Vector2 basePosition = listCardPosition[playerIndex];
+        Vector2 targetPosition;
+
+        bool isLeftTable = !(basePosition.x > 0);
+
+        CardModel card = cardPool.Get();
+        card.HideCard(); // Keep it as card back
+
+        if (!isLeftTable)
+        {
+            card.transform.SetSiblingIndex(20);
+        }
+
+        // Calculate position
+        float cardWidth = card.GetComponent<RectTransform>().rect.width;
+        float offset = cardWidth / 2 * 0.38f * playerCards.Count;
+
+        if (isLeftTable)
+        {
+            targetPosition = new Vector2(basePosition.x + offset, basePosition.y);
+            if (playerCards.Count > 0)
+            {
+                card.transform.SetSiblingIndex(playerCards[^1].transform.GetSiblingIndex() + 1);
+            }
+        }
+        else
+        {
+            targetPosition = new Vector2(basePosition.x - offset, basePosition.y);
+            if (playerCards.Count > 0)
+            {
+                card.transform.SetSiblingIndex(playerCards[^1].transform.GetSiblingIndex() - 1);
+            }
+        }
+
+        // Animate from dealer to player
+        card.transform.localRotation = Quaternion.Euler(0, 0, -90);
+        card.transform.localScale = new Vector3(0, 0.45f, 1);
+
+        card.transform
+            .DOLocalMove(targetPosition, 0.7f)
+            .SetEase(Ease.OutCubic)
+            .SetDelay(playerIndex * 0.1f + delay);
+        card.transform
+            .DOLocalRotate(Vector3.zero, 0.6f)
+            .SetEase(Ease.OutCubic)
+            .SetDelay(playerIndex * 0.1f + delay);
+        card.transform
+            .DOScale(new Vector3(0.45f, 0.45f, 1), 0.6f)
+            .SetEase(Ease.OutCubic)
+            .SetDelay(playerIndex * 0.1f + delay);
+
+        playerCards.Add(card);
+    }
+    
+    private void DealACard(Card pokerCard, int playerIndex, float delay = 0f, bool isFaceUp = true, bool isAnimate = true)
     {
         List<CardModel> playerCards = listPlayerCards[playerIndex];
         Vector2 basePosition = listCardPosition[playerIndex];
@@ -609,12 +905,19 @@ public class HongKongPokerView : BaseDiceGameView
         // Bài di chuyển từ dealer về tay player
         if (isAnimate)
         {
-            if (pokerCard.Rank != CardRank.RankUnspecified && pokerCard.Suit != CardSuit.SuitUnspecified)
+            if (isFaceUp && pokerCard.Rank != CardRank.RankUnspecified && pokerCard.Suit != CardSuit.SuitUnspecified)
             {
+                // Face-up card - show it
                 // SoundManager.Instance.PlaySound("sound_cardFlipBJ");
                 // playSound(SOUND_GAME.CARD_FLIP_2);
                 card.SetData((int)pokerCard.Rank, (int)pokerCard.Suit);
                 card.ShowCard();
+            }
+            else if (!isFaceUp)
+            {
+                // Face-down card - set data but keep hidden for my view
+                card.SetData((int)pokerCard.Rank, (int)pokerCard.Suit);
+                // Will show later when needed
             }
 
             card.transform.localRotation = Quaternion.Euler(0, 0, -90);
@@ -637,6 +940,10 @@ public class HongKongPokerView : BaseDiceGameView
         {
             card.SetData((int)pokerCard.Rank, (int)pokerCard.Suit);
             card.transform.localPosition = targetPosition;
+            if (isFaceUp)
+            {
+                card.ShowCard();
+            }
         }
         playerCards.Add(card);
     }
