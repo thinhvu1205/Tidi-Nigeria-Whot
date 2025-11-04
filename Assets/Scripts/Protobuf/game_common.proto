@@ -86,6 +86,9 @@ enum OpCodeRequest {
   OPCODE_REQUEST_COMBINE_CARDS = 15;
   OPCODE_REQUEST_SHOW_CARDS = 16;  
   OPCODE_REQUEST_DECLARE_CARDS = 17;
+  // HK Poker OpCodes
+  OPCODE_REQUEST_PLAYER_ACTION = 18;  // HK Poker betting action
+  OPCODE_REQUEST_CARD_SWAP = 19;      // HK Poker card swap (Round 4)
 }
 
 
@@ -113,6 +116,12 @@ enum OpCodeUpdate {
   OPCODE_PLAYER_CHANGE = 17;
   OPCODE_RESPONSE_TIP_INGAME = 18;
   OPCODE_RESPONSE_SYNC_TABLE = 19;
+  // HK Poker OpCodes
+  OPCODE_UPDATE_PLAYER_ACTION = 20;   // Player betting action update
+  OPCODE_UPDATE_NEW_ROUND = 21;       // New betting round
+  OPCODE_UPDATE_CARD_SWAP = 22;       // Card swap result
+  OPCODE_UPDATE_SHOWDOWN = 23;        // Showdown results
+  OPCODE_UPDATE_BETTING_STATE = 24;   // Betting state update (optional)
 }
 
 message UpdateTable {
