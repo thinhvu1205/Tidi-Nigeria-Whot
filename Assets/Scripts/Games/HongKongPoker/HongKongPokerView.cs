@@ -4,6 +4,7 @@ using System.Linq;
 using DG.Tweening;
 using Games.Card;
 using Globals;
+using Google.Protobuf;
 using Nakama;
 using Proto;
 using Spine.Unity;
@@ -592,20 +593,71 @@ public class HongKongPokerView : BaseDiceGameView
                 (int)myStack        // Max
             );
             
-            // Enable BET and FOLD only
-            // TODO: Enable/disable specific buttons
-            // foldButton.enabled = true;
-            // betButton.enabled = true;
-            // checkButton.enabled = false;  // ❌ NO CHECK for first bettor round 1
+            // Enable BET and FOLD only (NO CHECK)
+            // buttonBetContainer.SetButtonsEnabled(
+            //     fold: true,
+            //     check: false,     // ❌ NO CHECK for first bettor round 1
+            //     call: false,
+            //     bet: true,
+            //     raise: false,
+            //     allIn: true
+            // );
         }
-        else
+        else if (currentBet == 0)
         {
-            // Normal betting UI
+            // No bet yet - can CHECK or BET
+            buttonBetContainer.SetValues(
+                (int)minRaise,
+                (int)minRaise,
+                (int)myStack
+            );
+            
+            // buttonBetContainer.SetButtonsEnabled(
+            //     fold: true,
+            //     check: true,      // ✅ Can check
+            //     call: false,
+            //     bet: true,
+            //     raise: false,
+            //     allIn: true
+            // );
+        }
+        else if (currentBet > myRoundBet)
+        {
+            // There's a bet - can CALL/RAISE/FOLD
+            long amountToCall = currentBet - myRoundBet;
+            
             buttonBetContainer.SetValues(
                 (int)currentBet,
                 (int)minRaise,
                 (int)(currentBet + minRaise)
             );
+            
+            // buttonBetContainer.SetButtonsEnabled(
+            //     fold: true,
+            //     check: false,
+            //     call: true,       // ✅ Can call
+            //     bet: false,
+            //     raise: myStack > amountToCall,  // Can raise if enough chips
+            //     allIn: true
+            // );
+        }
+        else
+        {
+            // Already matched bet - can CHECK
+            buttonBetContainer.SetValues(
+                (int)currentBet,
+                (int)minRaise,
+                (int)(currentBet + minRaise)
+            );
+            
+            // buttonBetContainer.SetButtonsEnabled(
+            //     fold: true,
+            //     check: true,      // ✅ Can check
+            //     call: false,
+            //     bet: false,
+            //     raise: true,
+            //     allIn: true
+            // );
         }
         
         // Start turn timer
@@ -787,20 +839,126 @@ public class HongKongPokerView : BaseDiceGameView
 
     #endregion
     
-    #region Button
+    #region Button Actions
+    
+    // Card swap buttons (Round 4)
     public void OnClickSwap()
     {
-
+        Debug.Log("[HK Poker] Player chose to SWAP card");
+        
+        // Send card swap request to server
+        SendCardSwapRequest(true);
+        
+        // Hide swap UI
+        if (buttonChangeCardContainer != null)
+        {
+            buttonChangeCardContainer.gameObject.SetActive(false);
+        }
     }
 
-    public void OnClickCancel()
+    public void OnClickKeepCard()
     {
-
+        Debug.Log("[HK Poker] Player chose to KEEP card");
+        
+        // Send card swap request to server
+        SendCardSwapRequest(false);
+        
+        // Hide swap UI
+        if (buttonChangeCardContainer != null)
+        {
+            buttonChangeCardContainer.gameObject.SetActive(false);
+        }
+    }
+    
+    // Betting buttons - delegate to button container or handle here
+    public void OnClickFold()
+    {
+        Debug.Log("[HK Poker] Player FOLD");
+        SendPlayerAction(Proto.HKPokerAction.HkActionFold, 0);
+        DisableBettingUI();
+    }
+    
+    public void OnClickCheck()
+    {
+        Debug.Log("[HK Poker] Player CHECK");
+        SendPlayerAction(Proto.HKPokerAction.HkActionCheck, 0);
+        DisableBettingUI();
+    }
+    
+    public void OnClickCall()
+    {
+        Debug.Log("[HK Poker] Player CALL");
+        SendPlayerAction(Proto.HKPokerAction.HkActionCall, 0);
+        DisableBettingUI();
+    }
+    
+    public void OnClickBet(int amount)
+    {
+        Debug.Log($"[HK Poker] Player BET {amount}");
+        SendPlayerAction(Proto.HKPokerAction.HkActionBet, amount);
+        DisableBettingUI();
+    }
+    
+    public void OnClickRaise(int amount)
+    {
+        Debug.Log($"[HK Poker] Player RAISE {amount}");
+        SendPlayerAction(Proto.HKPokerAction.HkActionRaise, amount);
+        DisableBettingUI();
+    }
+    
+    public void OnClickAllIn()
+    {
+        Debug.Log("[HK Poker] Player ALL-IN");
+        SendPlayerAction(Proto.HKPokerAction.HkActionAllIn, 0);
+        DisableBettingUI();
     }
 
     public void OnClickSendTip()
     {
+        // Tip functionality
+    }
 
+    #endregion
+    
+    #region Network Requests
+    
+    private void SendPlayerAction(HKPokerAction action, long amount)
+    {
+        var request = new Proto.HKPlayerActionRequest
+        {
+            Action = action,
+            Amount = amount
+        };
+        
+        DataSender.SendMatchState(
+            (long) OpCodeRequest.PlayerAction,
+            request.ToByteArray()
+        );
+        
+        Debug.Log($"[HK Poker] Sent action: {action}, amount: {amount}");
+    }
+    
+    private void SendCardSwapRequest(bool swapCard)
+    {
+        var request = new Proto.HKCardSwapRequest
+        {
+            SwapCard = swapCard
+        };
+        
+        DataSender.SendMatchState(
+            (long)Proto.OpCodeRequest.CardSwap,
+            request.ToByteArray()
+        );
+        
+        Debug.Log($"[HK Poker] Sent card swap request: {swapCard}");
+    }
+    
+    private void DisableBettingUI()
+    {
+        if (buttonBetContainer != null)
+        {
+            buttonBetContainer.gameObject.SetActive(false);
+        }
     }
 
     #endregion
@@ -1013,6 +1171,13 @@ public class HongKongPokerView : BaseDiceGameView
     #region Chip Actions
     private void PlayerGiveChipsToBoxbet(int index)
     {
+        // Check if box bet exists
+        if (index < 0 || index >= listBoxBet.Count || listBoxBet[index] == null)
+        {
+            Debug.LogWarning($"[HK Poker] Box bet not found for player {index}");
+            return;
+        }
+        
         int valueBoxBet = listBoxBet[index].Chip;
         // if ((int)data["chipStack"] - preNextStack != 0)
         // {
