@@ -246,21 +246,16 @@ public class HongKongPokerView : BaseDiceGameView
                 int playerIndex = GetPlayerIndex(playerCards.UserId);
                 if (playerIndex < 0) continue;
                 
-                bool isMe = (playerCards.UserId == myUserId);
-                
-                // Deal face-up cards (visible to all)
-                foreach (var card in playerCards.FaceUpCards)
-                {
-                    DealACard(card, playerIndex, delay: 0.25f, isFaceUp: true);
-                }
-                
+                bool isMe = playerCards.UserId == myUserId;
+
+
                 // Deal face-down cards
                 if (isMe && playerCards.FaceDownCards != null && playerCards.FaceDownCards.Count > 0)
                 {
                     // My cards - show actual cards
                     foreach (var card in playerCards.FaceDownCards)
                     {
-                        DealACard(card, playerIndex, delay: 0.3f, isFaceUp: false);
+                        DealACard(card, playerIndex, delay: 0.3f, isFaceUp: false, true, true);
                     }
                 }
                 else if (!isMe && playerCards.FaceDownCards != null && playerCards.FaceDownCards.Count > 0)
@@ -271,6 +266,12 @@ public class HongKongPokerView : BaseDiceGameView
                     {
                         ShowCardBack(playerIndex, delay: 0.3f);
                     }
+                }
+                
+                // Deal face-up cards (visible to all)
+                foreach (var card in playerCards.FaceUpCards)
+                {
+                    DealACard(card, playerIndex, delay: 0.25f, isFaceUp: true);
                 }
             }
         }
@@ -865,7 +866,7 @@ public class HongKongPokerView : BaseDiceGameView
         playerCards.Add(card);
     }
     
-    private void DealACard(Card pokerCard, int playerIndex, float delay = 0f, bool isFaceUp = true, bool isAnimate = true)
+    private void DealACard(Card pokerCard, int playerIndex, float delay = 0f, bool isFaceUp = true, bool isAnimate = true, bool isMe = false)
     {
         List<CardModel> playerCards = listPlayerCards[playerIndex];
         Vector2 basePosition = listCardPosition[playerIndex];
@@ -916,8 +917,13 @@ public class HongKongPokerView : BaseDiceGameView
             else if (!isFaceUp)
             {
                 // Face-down card - set data but keep hidden for my view
-                card.SetData((int)pokerCard.Rank, (int)pokerCard.Suit);
                 // Will show later when needed
+                if (isMe)
+                {
+                    card.SetData((int)pokerCard.Rank, (int)pokerCard.Suit);
+                    card.ShowCard();
+                    card.ShowShadowCard();
+                }
             }
 
             card.transform.localRotation = Quaternion.Euler(0, 0, -90);

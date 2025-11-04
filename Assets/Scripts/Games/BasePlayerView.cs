@@ -422,6 +422,11 @@ public class BasePlayerView : MonoBehaviour
     /// </summary>
     public void SetPositionInfoThisPlayer()
     {
+
+        if (Config.currentGameId == Constants.HK_POKER_GAME_ID)
+        {
+            return;
+        }
         backgroundBar.transform.localPosition = new Vector2(120, -12);
         // if (
         //     Globals.Config.currentGameId == (int)Globals.GAMEID.TONGITS_JOKER ||
