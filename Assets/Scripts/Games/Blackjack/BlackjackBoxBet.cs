@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Common.Pool;
@@ -15,8 +16,11 @@ public class BlackjackBoxBet : MonoBehaviour
 {
     [Header(" Texts ")]
     [SerializeField] private TextMeshProUGUI textChipValue;
+    [SerializeField] private TextMeshProUGUI textChipWinValue;
     [SerializeField] private TextMeshProUGUI textTotalBet;
     [SerializeField] private TextMeshProUGUI textScore;
+    [SerializeField] private TextMeshProUGUI textChipWinLose;
+    [SerializeField] TMP_FontAsset fontWin, fontLose;
 
     [Header(" Images ")]
     [SerializeField] private Image iconChip;
@@ -24,6 +28,7 @@ public class BlackjackBoxBet : MonoBehaviour
     [SerializeField] private Image imageState;
     [SerializeField] private Image imageScoreBox;
     [SerializeField] private Image imageAction;
+    [SerializeField] private Image imageChipWin;
 
     [Header(" List Sprite ")]
     [SerializeField] private Sprite[] listImageChip;
@@ -41,7 +46,12 @@ public class BlackjackBoxBet : MonoBehaviour
     [SerializeField] private SkeletonGraphic animationBlackjack;
     [SerializeField] private SkeletonGraphic animationBust;
     [SerializeField] private SkeletonGraphic animationWow;
+    [SerializeField] private SkeletonGraphic animationWin;
+    [SerializeField] private SkeletonGraphic animationLose;
+    [SerializeField] private SkeletonGraphic animationPush;
     [SerializeField] private BlackjackBoxBet secondBoxBet;
+    public Transform ChipPosition => imageChip.transform;
+    public Transform ChipWinPosition => imageChipWin.transform;
     public Transform GetCardPosition => cardContainer;
     public BlackjackBoxBet SecondBoxBet => secondBoxBet;
     public bool isSecondBox = false;
@@ -50,7 +60,7 @@ public class BlackjackBoxBet : MonoBehaviour
     private const float CARD_SPACING = 35f;
     private readonly List<Tween> highlightTweens = new List<Tween>();
     private float boxWidth;
-    private int maxPoint;
+    private int minPoint, maxPoint;
     private int index;
     public bool IsEnlarging { get; private set; } = false;
     public long TotalBet { get; private set; }
@@ -58,6 +68,7 @@ public class BlackjackBoxBet : MonoBehaviour
     public bool HasBet { get; set; } = false;
     private Vector2 ImageScoreBoxPosition;
     private Vector2 initialPosition;
+    private Sequence seqTextFly;
 
     private void Awake()
     {
@@ -92,6 +103,7 @@ public class BlackjackBoxBet : MonoBehaviour
         if (minPoint != maxPoint && point != 21)
         {
             textScore.text = $"{minPoint}/{maxPoint}";
+            this.minPoint = minPoint;
             this.maxPoint = maxPoint;
         }
         else
@@ -158,6 +170,7 @@ public class BlackjackBoxBet : MonoBehaviour
                 animationBust.AnimationState.Complete += delegate
                 {
                     animationBust.gameObject.SetActive(false);
+                    HideImageChip();
                 };
                 break;
 
@@ -168,7 +181,10 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void ShowHigherScore()
     {
-        ShowScore(maxPoint);
+        if (minPoint != 0 && minPoint != maxPoint)
+        {
+            ShowScore(maxPoint);
+        }
     }
 
     public void HideScore()
@@ -182,12 +198,49 @@ public class BlackjackBoxBet : MonoBehaviour
             });
     }
 
+    public void ShowResult(int winType)
+    {
+        effectContainer.gameObject.SetActive(true);
+        imageState.gameObject.SetActive(false);
+        Debug.Log("WIN TYPE: " + winType);
+        if (winType > 0)
+        {
+            Utility.PlayAnimation(animationWin, "animation", false);
+            animationWin.AnimationState.Complete += delegate
+            {
+                effectContainer.gameObject.SetActive(false);
+                animationWin.gameObject.SetActive(false);
+            };
+        }
+        else if (winType == 0)
+        {
+
+            Utility.PlayAnimation(animationPush, "animation", false);
+            animationPush.AnimationState.Complete += delegate
+            {
+                effectContainer.gameObject.SetActive(false);
+                animationPush.gameObject.SetActive(false);
+            };
+        }
+        else
+        {
+            Utility.PlayAnimation(animationLose, "lose", false);
+            animationLose.AnimationState.Complete += delegate
+            {
+                animationLose.gameObject.SetActive(false);
+                effectContainer.gameObject.SetActive(false);
+                HideImageChip();
+            };
+        }
+    }
+
     public void SetBetValue(int index, long value, long totalValue, bool isWaiting = false)
     {
         Debug.Log("SetBetValue: " + value);
         TotalBet = totalValue;
         if (index < 0 || totalValue <= 0)
         {
+            Debug.Log("SET BET VALUE LAM MAT CHIP");
             imageChip.gameObject.SetActive(false);
             textTotalBet.text = Utility.FormatMoney(totalValue, true);
             iconChip.gameObject.SetActive(false);
@@ -204,11 +257,74 @@ public class BlackjackBoxBet : MonoBehaviour
         iconChip.gameObject.SetActive(true);
         textTotalBet.gameObject.SetActive(true);
         textTotalBet.text = Utility.FormatMoney(totalValue, true);
-
+        textChipValue.text = Utility.FormatMoney(value, true);
         animationWaiting.gameObject.SetActive(isWaiting);
 
         if (secondBoxBet != null)
             secondBoxBet.SetBetValue(index, value, totalValue, isWaiting);
+    }
+
+    public void SetWinChipVisual(int index, long value)
+    {
+        Debug.Log("CHIP WIN VALUE: " + value);
+        imageChipWin.gameObject.SetActive(true);
+        imageChipWin.sprite = listImageChip[index];
+        textChipWinValue.gameObject.SetActive(true);
+        textChipWinValue.text = Utility.FormatMoney(value, true);
+    }
+
+    public void MoveWinChipToPlayer(Vector2 playerPosition, Action callback = null)
+    {
+        if (imageChipWin.gameObject.activeSelf)
+        {
+            imageChipWin.transform
+                .DOMove(playerPosition, 0.5f)
+                .SetEase(Ease.InSine)
+                .OnComplete(() =>
+                {
+                    // Vector2 randomPosition = new Vector2(
+                    //     targetPosition.x + UnityEngine.Random.Range(-30, 30),
+                    //     targetPosition.y + UnityEngine.Random.Range(-8, 8)
+                    // );
+
+                    // chip.transform.DOLocalJump(randomPosition, 20, 1, 0.2f);
+                    imageChipWin.gameObject.SetActive(false);
+                    callback?.Invoke();
+                });
+        }
+    }
+
+    public void AnimateFlyMoney(long mo, int fonzSize = 50)
+    {
+        if (mo == 0) return;
+
+        textChipWinLose.fontSize = fonzSize;
+        if (mo < 0)
+        {
+            textChipWinLose.font = fontLose;
+            textChipWinLose.text = Utility.FormatMoney2(mo, true, true);
+        }
+        else
+        {
+            textChipWinLose.font = fontWin;
+            textChipWinLose.text = "+" + Utility.FormatMoney2(mo, true, true);
+        }
+
+        textChipWinLose.transform.localPosition = Vector2.zero;
+        int height = 100;
+
+        textChipWinLose.gameObject.SetActive(true);
+        if (seqTextFly != null)
+        {
+            seqTextFly.Kill();
+        }
+        seqTextFly = DOTween.Sequence()
+             .Append(textChipWinLose.transform.DOLocalMove(new Vector2(0, height), 2.0f).SetEase(Ease.OutBack))
+             .AppendInterval(1.0f)
+             .AppendCallback(() =>
+             {
+                 textChipWinLose.gameObject.SetActive(false);
+             });
     }
 
     public Vector2 GetNewCardPosition()
@@ -264,19 +380,26 @@ public class BlackjackBoxBet : MonoBehaviour
             cardModel.transform.DOLocalMove(targetPos, 0.1f);
         }
 
-        float scoreBoxoffsetY = IsEnlarging && !isBankerBox ? 60f : 0f;
-        Vector2 scoreBoxTargetPos = new(ImageScoreBoxPosition.x, ImageScoreBoxPosition.y + scoreBoxoffsetY);
+        float scoreBoxoffsetX = 0f;
+        float scoreBoxoffsetY = 0f;
+        if (IsEnlarging)
+        {
+            scoreBoxoffsetX = isBankerBox ? 30f : 0f;
+            scoreBoxoffsetY = isBankerBox ? 100f : 60f;
+        }
+        Debug.Log("isBanker: " + isBankerBox + " scoreBoxOffsetY: " + scoreBoxoffsetY);
+        Vector2 scoreBoxTargetPos = new(ImageScoreBoxPosition.x + scoreBoxoffsetX, ImageScoreBoxPosition.y + scoreBoxoffsetY);
         imageScoreBox.transform.localPosition = scoreBoxTargetPos;
     }
 
-    public void EnlargeCards()
+    public void EnlargeCards(float scale = 1.3f)
     {
-        DOVirtual.DelayedCall(0.6f, () =>
+        DOVirtual.DelayedCall(0.3f, () =>
         {
             if (!IsEnlarging)
             {
                 IsEnlarging = true;
-                cardContainer.transform.DOScale(Vector3.one * 1.3f, 0.25f);
+                cardContainer.transform.DOScale(Vector3.one * scale, 0.25f);
                 SpreadCards();
                 // foreach (Transform transform in cardContainer)
                 // {
@@ -291,7 +414,7 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void ShrinkCards()
     {
-        DOVirtual.DelayedCall(0.6f, () =>
+        DOVirtual.DelayedCall(0.3f, () =>
         {
             if (IsEnlarging)
             {
@@ -361,7 +484,7 @@ public class BlackjackBoxBet : MonoBehaviour
         imageAction.transform.DOKill();
         Vector2 initialPos = imageAction.transform.localPosition;
         imageAction.transform.localScale = Vector3.one * 1.1f;
-        imageAction.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        imageAction.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 20));
         if (action == BlackjackActionCode.BlackjackActionHit)
         {
             imageAction.transform.localScale = Vector3.one * 0.85f;
@@ -377,17 +500,20 @@ public class BlackjackBoxBet : MonoBehaviour
         if (actionIndex == -1) return;
         imageAction.sprite = listImageAction[actionIndex];
         imageAction.gameObject.SetActive(true);
-        Sequence s = DOTween.Sequence();
-            s.Append(imageAction.transform.DOLocalRotate(new Vector3(0, 0, 30f), 0.35f)
-                    .SetEase(Ease.InOutSine))
-            .Append(imageAction.transform.DOLocalRotate(new Vector3(0, 0, -30f), 0.35f)
-                    .SetEase(Ease.InOutSine))
-            .SetLoops(-1);
+        // Sequence s = DOTween.Sequence();
+        //     s.Append(imageAction.transform.DOLocalRotate(new Vector3(0, 0, 30f), 0.35f)
+        //             .SetEase(Ease.InOutSine))
+        //     .Append(imageAction.transform.DOLocalRotate(new Vector3(0, 0, -30f), 0.35f)
+        //             .SetEase(Ease.InOutSine))
+        //     .SetLoops(-1);
         // imageAction.transform
         //     .DOBlendableRotateBy(new Vector3(0, 0, 30f), 0.35f)
         //     .SetEase(Ease.InOutSine)
         //     .SetLoops(-1, LoopType.Yoyo);   
-
+        imageAction.transform.DORotate(new Vector3(0, 0, -20f), 0.4f)
+                .SetLoops(-1, LoopType.Yoyo)     // lặp vô hạn, qua lại
+                .SetEase(Ease.InOutSine);      // smooth
+                // .SetDelay(0.5f); 
         imageAction.transform.DOMoveY(transform.position.y + 170f, 1f)
             .SetEase(Ease.InOutSine)
             .OnComplete(() =>
@@ -474,8 +600,8 @@ public class BlackjackBoxBet : MonoBehaviour
     public void DoubleBoxBet()
     {
         TotalBet *= 2;
-        textTotalBet.text = Utility.FormatMoney(TotalBet, true);
-        textChipValue.text = Utility.FormatMoney(TotalBet, true);
+        // textTotalBet.text = Utility.FormatMoney(TotalBet, true);
+        // textChipValue.text = Utility.FormatMoney(TotalBet, true);
     }
 
     private void SetupSecondBox(BlackjackHand secondHand)
@@ -493,13 +619,45 @@ public class BlackjackBoxBet : MonoBehaviour
         secondBoxBet.SpreadCards();
 
         if (secondHand == null) return;
+        secondBoxBet.imageChip.gameObject.SetActive(true);
+        secondBoxBet.textChipValue.gameObject.SetActive(true);
         secondBoxBet.SetBetValue(0, TotalBet, TotalBet);
         secondBoxBet.ShowScore(secondHand.Point, secondHand.MinPoint, secondHand.MaxPoint);
     }
 
     public void HideImageChip()
     {
+        Debug.Log("HIDE IMAGE CHIP");
         imageChip.gameObject.SetActive(false);
+    }
+
+    public void HideImageChipWin()
+    {
+        Debug.Log("HIDE IMAGE CHIP");
+        imageChipWin.gameObject.SetActive(false);
+    }
+
+    public bool IsSplittableBox()
+    {
+        if (listCardModel.Count < 2) return false;
+        CardModel card1 = listCardModel[0];
+        CardModel card2 = listCardModel[1];
+
+        int rank1 = card1.GetRank();
+        int rank2 = card2.GetRank();
+
+        // Nếu hai lá cùng rank → có thể split
+        if (rank1 == rank2)
+            return true;
+
+        // Nếu đều là 10 hoặc là 10 / J / Q / K → cho phép split
+        bool isTenLike1 = rank1 == 10 || rank1 == 11 || rank1 == 12 || rank1 == 13;
+        bool isTenLike2 = rank2 == 10 || rank2 == 11 || rank2 == 12 || rank2 == 13;
+
+        if (isTenLike1 && isTenLike2)
+            return true;
+
+        return false;
     }
 
     public void Reset()
@@ -510,9 +668,15 @@ public class BlackjackBoxBet : MonoBehaviour
         imageScoreBox.gameObject.SetActive(false);
         imageChip.gameObject.SetActive(false);
         iconChip.gameObject.SetActive(false);
-        if (animationWaiting != null)
+
+        if (!isBankerBox)
         {
             animationWaiting.gameObject.SetActive(false);
+            imageChipWin.gameObject.SetActive(false);
+            textChipWinValue.gameObject.SetActive(false);
+            animationWin.gameObject.SetActive(false);
+            animationLose.gameObject.SetActive(false);
+            animationPush.gameObject.SetActive(false);
         }
         animationBlackjack.gameObject.SetActive(false);
         animationBust.gameObject.SetActive(false);
@@ -552,7 +716,7 @@ public class BlackjackBoxBet : MonoBehaviour
         animationWow.gameObject.SetActive(false);
         textTotalBet.gameObject.SetActive(false);
         effectContainer.gameObject.SetActive(false);
-        imageChip.gameObject.SetActive(false);
+        // imageChip.gameObject.SetActive(false);
         textChipValue.gameObject.SetActive(false);
 
     }

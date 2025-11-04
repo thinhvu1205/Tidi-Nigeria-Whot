@@ -1,5 +1,6 @@
 
 using Games;
+using Globals;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +19,7 @@ public class BlackjackChip : ChipBet
         if (index == 5)
         {
             imageInsurance.gameObject.SetActive(true);
-            textValue.text = value.ToString();
+            textValue.text = Utility.FormatMoney(value, true);
         }
         else
         {

@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 1451792417219962528}
   - component: {fileID: 6589808482901485293}
   m_Layer: 5
-  m_Name: Button 10
+  m_Name: Button 25
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -329,7 +329,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 10
+          m_IntArgument: 25
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 7975527254210729572}
   - component: {fileID: 664673582473977102}
   m_Layer: 5
-  m_Name: Button 100
+  m_Name: Button 200
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -462,7 +462,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 100
+          m_IntArgument: 200
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1911,7 +1911,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 50
+  m_text: 100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
   m_sharedMaterial: {fileID: 6795141060960944527, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
@@ -2909,7 +2909,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 10
+  m_text: 25
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
   m_sharedMaterial: {fileID: 6795141060960944527, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
@@ -3253,7 +3253,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100
+  m_text: 200
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
   m_sharedMaterial: {fileID: 6795141060960944527, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
@@ -4864,7 +4864,7 @@ GameObject:
   - component: {fileID: 5157151373273979962}
   - component: {fileID: 5695964206400992254}
   m_Layer: 5
-  m_Name: Button 30
+  m_Name: Button 50
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4979,7 +4979,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 30
+          m_IntArgument: 50
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -5124,7 +5124,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 30
+  m_text: 50
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
   m_sharedMaterial: {fileID: 6795141060960944527, guid: 03b33d827d591844da74a5b96c48eb52, type: 2}
@@ -6726,7 +6726,7 @@ GameObject:
   - component: {fileID: 3037651836285103847}
   - component: {fileID: 8895995825542506729}
   m_Layer: 5
-  m_Name: Button 50
+  m_Name: Button 100
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6841,7 +6841,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 50
+          m_IntArgument: 100
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
