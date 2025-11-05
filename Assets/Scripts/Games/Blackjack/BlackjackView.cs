@@ -320,10 +320,10 @@ public class BlackjackView : BaseDiceGameView
                 }
             }
         }
-        else
-        {
-            imageLight.gameObject.SetActive(false);
-        }
+        // else
+        // {
+        //     imageLight.gameObject.SetActive(false);
+        // }
 
         // Hiện hành động của người chơi
         if (data.PlayerAction != null)
@@ -332,7 +332,14 @@ public class BlackjackView : BaseDiceGameView
             BlackjackBoxBet boxBet = userIdToBoxBetView.GetValueOrDefault(data.PlayerAction.UserId);
             if (boxBet != null)
             {
-                boxBet.AnimateImageAction(data.PlayerAction.Code);
+                if (data.HandN0 == BlackjackHandN0.BlackjackHand1St)
+                {
+                    boxBet.AnimateImageAction(data.PlayerAction.Code);
+                }
+                else if (data.HandN0 == BlackjackHandN0.BlackjackHand2Nd)
+                {
+                    boxBet.SecondBoxBet.AnimateImageAction(data.PlayerAction.Code);
+                }
             }
 
             if (data.PlayerAction.Code == BlackjackActionCode.BlackjackActionDouble)
@@ -375,7 +382,7 @@ public class BlackjackView : BaseDiceGameView
         // Tách bài khi có 2 lá cùng Rank
         if (data.IsSplitHand)
         {
-            BlackjackBoxBet boxBet = userIdToBoxBetView.GetValueOrDefault(data.Hand.UserId);
+            BlackjackBoxBet boxBet = userIdToBoxBetView.GetValueOrDefault(data.PlayerAction.UserId);
             isSplitingHand = true;
             boxBet.SplitBoxBet(data.Hand.First, data.Hand.Second);
         }
@@ -401,15 +408,22 @@ public class BlackjackView : BaseDiceGameView
         {
             imageLight.SetActive(false);
             buttonBetContainer.gameObject.SetActive(false);
-            foreach(KeyValuePair<string, BlackjackBoxBet> kvp in userIdToBoxBetView)
+            if (hasDealtCardsForBanker)
             {
-                BlackjackBoxBet boxbet = kvp.Value;
-                boxbet.ShowHigherScore();
-            }
-            foreach (var player in userIdToView)
-            {
-                BasePlayerView playerView = player.Value;
-                playerView.HideCountDown();
+                foreach(KeyValuePair<string, BlackjackBoxBet> kvp in userIdToBoxBetView)
+                {
+                    BlackjackBoxBet boxbet = kvp.Value;
+                    if (boxbet.HasBet)
+                    {
+                        boxbet.ShowHigherScore();
+                        boxbet.SecondBoxBet.ShowHigherScore();                  
+                    }
+                }
+                foreach (var player in userIdToView)
+                {
+                    BasePlayerView playerView = player.Value;
+                    playerView.HideCountDown();
+                }
             }
             // BANKER
             if (data.NewCards.Count > 0)
@@ -1903,11 +1917,13 @@ public class BlackjackView : BaseDiceGameView
             },
             actionOnGet: (chip) =>
             {
+                if (chip == null) return;
                 chip.gameObject.SetActive(true);
                 chip.transform.localScale = Vector3.one;
             },
             actionOnRelease: (chip) =>
             {
+                DOTween.Kill(chip.transform);
                 chip.gameObject.SetActive(false);
             },
             actionOnDestroy: (chip) =>

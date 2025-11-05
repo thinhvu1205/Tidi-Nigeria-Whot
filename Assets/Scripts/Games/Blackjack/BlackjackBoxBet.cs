@@ -311,7 +311,7 @@ public class BlackjackBoxBet : MonoBehaviour
         }
 
         textChipWinLose.transform.localPosition = Vector2.zero;
-        int height = 100;
+        int height = 140;
 
         textChipWinLose.gameObject.SetActive(true);
         if (seqTextFly != null)

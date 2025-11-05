@@ -1428,10 +1428,8 @@ public class BaseSlotView : BaseGameView
         }
     }
 
-    protected void SetWinType(long winAmount)
+    protected virtual void SetWinType(long winAmount)
     {
-        Debug.Log("CURRENT BET LEVEL: " + currentBetLevel);
-        Debug.Log("WIN AMOUNT: " + winAmount);
         winType = WinType.NONE;
         // if (isGrandJackpot)
         // {

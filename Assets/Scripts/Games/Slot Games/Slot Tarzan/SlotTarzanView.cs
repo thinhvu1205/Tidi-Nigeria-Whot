@@ -537,10 +537,32 @@ public class SlotTarzanView : BaseSlotView
         NextTween();
     }
 
+    protected override void SetWinType(long winAmount)
+    {
+        winType = WinType.NONE;
+        // if (isGrandJackpot)
+        // {
+        //     winAmount = winAmount + validBetLevels[currentBetLevel] * jackpotLevel[3];
+        // }
+        if (winAmount > 100 * currentBetLevel)
+        {
+            winType = WinType.MEGA_WIN;
+        }
+        else if (winAmount > 20 * currentBetLevel)
+        {
+            winType = WinType.HUGE_WIN;
+        }
+        else if (winAmount > 10 * currentBetLevel)
+        {
+            winType = WinType.BIG_WIN;
+        }
+    }
+
     protected override void ShowWinAnimation(WinType winType)
     {
         effectContainer.gameObject.SetActive(true);
         animationEffect.gameObject.SetActive(true);
+        bigWinText.transform.parent.gameObject.SetActive(false);
         Sequence sequence = DOTween.Sequence();
         switch (winType)
         {
@@ -549,14 +571,12 @@ public class SlotTarzanView : BaseSlotView
                     .AppendCallback(() =>
                     {
                         bigWinText.transform.parent.gameObject.SetActive(true);
-                        bigWinText.gameObject.SetActive(true);
                         Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, 2.7f);
                     })
                     .AppendInterval(3.3f)
                     .OnComplete(() =>
                     {
                         bigWinText.transform.parent.gameObject.SetActive(false);
-                        bigWinText.transform.gameObject.SetActive(false);
                     });
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.BIG_WIN);
                 // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
@@ -568,14 +588,13 @@ public class SlotTarzanView : BaseSlotView
                 sequence.AppendInterval(0.7f)
                     .AppendCallback(() =>
                     {
-                    bigWinText.transform.parent.gameObject.SetActive(true);
+                        bigWinText.transform.parent.gameObject.SetActive(true);
                         Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, 5f);
                     })
                     .AppendInterval(5f)
                     .OnComplete(() =>
                     {
                         bigWinText.transform.parent.gameObject.SetActive(false);
-                        bigWinText.gameObject.SetActive(false);
                     });
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
                 bigWinText.gameObject.SetActive(true);
@@ -586,19 +605,18 @@ public class SlotTarzanView : BaseSlotView
                 Utility.PlayAnimationByPath(animationEffect, MEGA_WIN_ANIMATION_PATH, MEGA_WIN_ANIMATION_NAME, false);
                 break;
             case WinType.HUGE_WIN:
-                sequence.AppendInterval(0.5f)
+                sequence.AppendInterval(1f)
                     .AppendCallback(() =>
                     {
-                        Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, 4.3f);
+                        bigWinText.transform.parent.gameObject.SetActive(true);
+                        Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, 4.6f);
                     })
-                    .AppendInterval(0.5f)
+                    .AppendInterval(4.6f)
                     .OnComplete(() =>
                     {
                         bigWinText.transform.parent.gameObject.SetActive(false);
                     });
                 SoundManager.Instance.PlayEffectFromPath(SoundSlot.MEGA_WIN);
-                bigWinText.transform.parent.gameObject.SetActive(true);
-                bigWinText.gameObject.SetActive(true);
                 // Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, delay - 1);
                 // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
                 animationEffect.transform.localScale = new Vector2(1f, 1f);
