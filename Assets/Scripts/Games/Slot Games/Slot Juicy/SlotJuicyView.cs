@@ -38,6 +38,7 @@ public class SlotJuicyView : BaseSlotView
     private JackpotHistory jackpotHistory;
     private long rateJackpotGrand = 0, rateJackpotMajor = 0, rateJackpotMinor = 0, rateJackpotMini = 0, jpGrandPlayer = 0, jpMajorPlayer = 0, totalPackageValue = 0;
     private bool isInFruitRain, isInJuiceFree, isStartFruitRain, isEndFruitRain, isChooseFreeGame, isChooseFruitRain, isEndFreeGame, isChooseBasket, isBetLevelChanged;
+    private Tween tweenChooseBasket = null;
     protected override Dictionary<SiXiangSymbol, int> SymbolDictionary => new()
     {
         { SiXiangSymbol.K, 0 },
@@ -204,6 +205,8 @@ public class SlotJuicyView : BaseSlotView
             }
             else if (data.CurrentSixiangGame == SiXiangGame.JuiceFreeGame)
             {
+                totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
+                UpdateTotalChipWinValue();
                 spinType = SpinType.FREE_NORMAL;
                 ShowBackGroundFreeSpin();
                 UpdateSpinButtonUI();
@@ -268,7 +271,7 @@ public class SlotJuicyView : BaseSlotView
         }
 
         ///------------------CHECK SHOW WIN SCATTER--------------------//
-        if (CheckWinScatter())
+        if (CheckWinScatter() && !isInFruitRain)
         {
             tweenQueue.Enqueue(() => ShowWinScatter());
         }
@@ -284,14 +287,15 @@ public class SlotJuicyView : BaseSlotView
         ///------------------CHECK END FREE GAME--------------------//
         if (isEndFreeGame)
         {
-            backgroundFreeSpinAnimation.gameObject.SetActive(false);
-            backgroundFreeSpinLeftAnimation.gameObject.SetActive(false);
-            if (totalChipWinByGame > PaylineIdList.Count * currentBetLevel) winType = WinType.BIG_WIN;
-            if (totalChipWinByGame > 50 * currentBetLevel) winType = WinType.MEGA_WIN;
-            if (totalChipWinByGame > 0)
+            if (winType == WinType.NONE && totalChipWinByGame > 0)
             {
                 AnimateCoinsFly();
             }
+            if (totalChipWinByGame > lastTotalChipWinByGame)
+            {
+                UpdateTotalChipWinValue();
+            }
+            HideBackgroundFreeSpin();
             UpdateGameState(SlotGameState.PREPARE);
             spinType = SpinType.NORMAL;
         }
@@ -328,7 +332,7 @@ public class SlotJuicyView : BaseSlotView
         }
 
         ///------------------CHECK SHOW ONE BY ONE--------------------//
-        if (paylineList.Count > 0)
+        if (paylineList.Count > 0 && !isEndFreeGame)
         {
             if (spinType == SpinType.NORMAL)
             {
@@ -444,11 +448,15 @@ public class SlotJuicyView : BaseSlotView
         }; 
     }
 
-    private void SetupFruitRainGame()
+    private void SetupFruitRainGame(bool isKeep6FirstBasket = true)
     {
+        SetDarkAllItems(isBackgroundDark: false);
         freeSpinLeft = 3;
         ShowBackGroundFreeSpin();
-        CreateHolderPackageView();
+        if (isKeep6FirstBasket)
+        {
+            CreateHolderPackageView();
+        }
         tweenQueue.Enqueue(() => ShowPopupGetFruitRain());
 
         // Fruit Rain sẽ autospin cho đến khi hết Fruit Rain
@@ -684,7 +692,7 @@ public class SlotJuicyView : BaseSlotView
             basketGetFruitRain.gameObject.SetActive(false);
             if (isChooseFruitRain)
             {
-                SetupFruitRainGame();
+                SetupFruitRainGame(false);
             }
             else if (isChooseFreeGame)
             {
@@ -858,6 +866,13 @@ public class SlotJuicyView : BaseSlotView
         // Hết tween = hết show win line
         else
         {
+            if (isChooseBasket)
+            {
+                tweenQueue.Enqueue(() => ShowPopupChooseABucket());
+                isChooseBasket = false;
+                NextTween();
+            }
+
             Reset();
             // Nếu đang auto spin thì spin tiếp
             if (spinType == SpinType.AUTO || spinType == SpinType.FREE_AUTO)
@@ -894,8 +909,9 @@ public class SlotJuicyView : BaseSlotView
         lineOneByOneList.Clear();
         paylineList.Clear();
 
-        if (!isInFreeSpin && !isStartFruitRain)
+        if (!isInFruitRain && !isStartFruitRain)
         {
+            Debug.Log("SET LAI ON AI TAM");
             SetLightAllItems();
         }
 

@@ -1084,7 +1084,6 @@ public class BaseSlotView : BaseGameView
 
     protected virtual void ShowBackGroundFreeSpin()
     {
-        Debug.Log("ABCDEF");
         if (backgroundFreeSpinAnimation != null)
         {
             backgroundFreeSpinAnimation.gameObject.SetActive(true);

@@ -537,6 +537,46 @@ public class SlotTarzanView : BaseSlotView
         NextTween();
     }
 
+    protected override void NextTween()
+    {
+         if (tweenQueue.Count > 0)
+        {
+            TweenCallback nextTween = tweenQueue.Dequeue();
+            DOTween.Sequence().AppendCallback(nextTween).SetLink(gameObject, LinkBehaviour.KillOnDestroy);;
+        }
+        // Hết tween = hết show win line
+        else
+        {
+            if (isStartMiniGame)
+            {
+                isStartMiniGame = false;
+                Debug.Log("START MINIgAME");
+                spinType = SpinType.NORMAL;
+                UpdateGameState(SlotGameState.PREPARE);
+                tweenQueue.Enqueue(() => ShowPopupMinigame());
+            }
+            if (hasGotFreeSpin)
+            {
+                if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO)
+                {
+                    spinType = SpinType.FREE_NORMAL;
+                }
+                ShowBackGroundFreeSpin();
+                UpdateStateWinUI(StateWin.TOTAL_WIN);
+                chipWinText.text = "0";
+                freeSpinLeftText.text = "9";
+                hasGotFreeSpin = false;
+                isInFreeSpin = true;
+            }
+            Reset();
+            // Nếu đang auto spin thì spin tiếp
+            if (spinType == SpinType.AUTO || spinType == SpinType.FREE_AUTO)
+            {
+                HandleSpin();
+            }
+        }
+    }
+
     protected override void SetWinType(long winAmount)
     {
         winType = WinType.NONE;
