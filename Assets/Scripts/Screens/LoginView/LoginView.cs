@@ -14,6 +14,7 @@ namespace Screens.LoginView
     {
         [SerializeField] private GameObject loginView, loginForm, registerPopup;
         [SerializeField] private TMP_InputField idInputField, passwordInputField;
+        [SerializeField] private TMP_Dropdown serverDropdown;
         private const string FIRST_LOGIN_KEY = "firstLogin";
         private LoginPresenter loginPresenter;
 
@@ -30,6 +31,7 @@ namespace Screens.LoginView
         {
             loginPresenter = new LoginPresenter();
             loginPresenter.Init(this);
+            serverDropdown.onValueChanged.AddListener(OnSwitchServer);
             HandleFirstLogin();
         }
     
