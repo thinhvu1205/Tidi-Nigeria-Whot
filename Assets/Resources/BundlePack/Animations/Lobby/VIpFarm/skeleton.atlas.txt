@@ -1,0 +1,27 @@
+
+skeleton.png
+size: 224,148
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Than_cay_1
+  rotate: false
+  xy: 148, 81
+  size: 60, 65
+  orig: 60, 65
+  offset: 0, 0
+  index: -1
+ling_vang
+  rotate: false
+  xy: 2, 2
+  size: 144, 144
+  orig: 144, 144
+  offset: 0, 0
+  index: -1
+text
+  rotate: true
+  xy: 194, 4
+  size: 92, 27
+  orig: 92, 27
+  offset: 0, 0
+  index: -1

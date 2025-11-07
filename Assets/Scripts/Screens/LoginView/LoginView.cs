@@ -170,10 +170,16 @@ namespace Screens.LoginView
             UIManager.Instance.ShowProgressing();
             _ = loginPresenter.OnLoginWithId(userName, password);
         }
-    
-        public void OnLoginFbClick() {
+
+        public void OnLoginFbClick()
+        {
             UIManager.Instance.ShowProgressing();
             _ = loginPresenter.OnLoginFB();
+        }
+        
+        public void OnSwitchServer(int serverId)
+        {
+            NetworkManager.INSTANCE.SwitchServer(serverId, transform);
         }
     
         #endregion

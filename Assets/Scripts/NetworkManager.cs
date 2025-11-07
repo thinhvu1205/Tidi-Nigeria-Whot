@@ -26,7 +26,10 @@ public class NetworkManager : MonoBehaviour
         REFRESH_TOKEN_KEY = "refreshToken",
         LOGIN_TYPE_KEY = "loginType",
         USER_NAME_KEY = "UserName",
-        WORLD_CHAT_ROOM_NAME = "world_chat";
+        WORLD_CHAT_ROOM_NAME = "world_chat",
+        SERVER_TEST_PORT = "103.226.250.195",
+        SERVER_HUY_PORT = "172.16.56.36",
+        SERVER_TOAN_PORT = "172.16.56.104";
 
     private IClient _ClientC;
     private ISession _SessionIS;
@@ -37,7 +40,7 @@ public class NetworkManager : MonoBehaviour
     private readonly Queue<IApiChannelMessage> messageQueue = new Queue<IApiChannelMessage>();
     private readonly object queueLock = new object();
     private readonly object messageQueueLock = new object();
-    private bool connected, isKickOff = false;
+    private bool connected, isKickOff = false, isPause = false;
     public string CurrentRoomChatChannelId { get; private set; }
     #endregion
 
@@ -459,6 +462,8 @@ public class NetworkManager : MonoBehaviour
         
         _SocketIS.Closed += async () =>
         {
+            if(PlayerPrefs.GetInt(Config.AUTO_LOGIN, 0) == 0) 
+                return;
             UIManager.Instance.ShowProgressing();
             Debug.Log("ondisconnect");
 
@@ -531,6 +536,8 @@ public class NetworkManager : MonoBehaviour
             lock (queueLock)
             {
                 // Debug.Log("add state queue " + state);
+                if (isPause && state.OpCode != (int)OpCodeUpdate.OpcodeKickOffTheTable) return;
+
                 matchStateQueue.Enqueue(state);
             }
         };
@@ -619,7 +626,7 @@ public class NetworkManager : MonoBehaviour
         _ClientC = new Client("http", "172.23.112.1", 57350, "defaultkey");
         // _ClientC = new Client("http", "10.251.228.83", 57350, "defaultkey");
         _ClientC = new Client("http", "172.16.56.36", 57350, "defaultkey"); // Máy Huy
-        _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey"); // Server chung
+        // _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey"); // Server chung
         // _ClientC = new Client("http", "172.16.56.104", 57350, "defaultkey"); // Máy Toàn
         RestoreSession();
         string deviceId;
@@ -633,6 +640,25 @@ public class NetworkManager : MonoBehaviour
         Debug.Log("DEVICE ID: " + deviceId);
         Config.deviceId = deviceId;
         // _SocketIS = _ClientC.NewSocket();
+    }
+
+    public void SwitchServer(int serverId, Transform transform)
+    {
+        switch(serverId)
+        {
+            case 1:
+                _ClientC = new Client("http", SERVER_TEST_PORT, 57350, "defaultkey");
+                UIManager.Instance.ShowToast("Connect to Test Server", 2, transform);
+                break;
+            case 2:
+                _ClientC = new Client("http", SERVER_HUY_PORT, 57350, "defaultkey");
+                UIManager.Instance.ShowToast("Connect to Huy Server", 2, transform);
+                break;
+            case 3:
+                _ClientC = new Client("http", SERVER_TOAN_PORT, 57350, "defaultkey");
+                UIManager.Instance.ShowToast("Connect to Toan Server", 2, transform);
+                break;
+        }
     }
 
     #endregion
@@ -704,6 +730,7 @@ public class NetworkManager : MonoBehaviour
                 }
                 var state = matchStateQueue.Dequeue();
                 // Debug.Log("get state dequeue " + state);
+                if (state.MatchId != _MatchId) return;
                 GameManager.Instance.HandleMatchState(state);
             }
         }
@@ -731,5 +758,10 @@ public class NetworkManager : MonoBehaviour
             _DataHandlerAs[0].Invoke();
             _DataHandlerAs.RemoveAt(0);
         }
+    }
+
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        isPause = pauseStatus;
     }
 }

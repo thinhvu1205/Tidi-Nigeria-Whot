@@ -20,9 +20,16 @@ public class BaseGameView : BaseView
     public virtual GameState[] AvailableLeaveStates => new GameState[]{ GameState.Idle, GameState.Matching };
     public virtual bool CanLeaveTable => true;
     protected bool hasBet = false;
+    protected bool isPause = false;
+
     protected override void OnDestroy()
     {
         SoundManager.Instance.StopAllCurrentEffect();
+    }
+
+    protected virtual void OnApplicationPause(bool pause)
+    {
+        isPause = pause;     
     }
 
     public virtual void LoadInfoMatch(Match match)
@@ -65,38 +72,39 @@ public class BaseGameView : BaseView
 
     public virtual void HandleUpdateTable(IMatchState matchState)
     {
-        
+        if (isPause) return;
     }
     
     public virtual void HandleUpdateUserInTable(IMatchState matchState)
     {
-        
+        if (isPause) return;
     }
     
     public virtual void HandleUpdateDeal(IMatchState matchState)
     {
-        
+        if (isPause) return;
     }
 
     public virtual void HandleUpdateTurn(IMatchState matchState)
     {
-        
+        if (isPause) return;
     }
 
     public virtual void HandleUpdateCardState(IMatchState matchState)
     {
-        
+        if (isPause) return;
     }
 
     public virtual void HandleUpdateGameState(IMatchState matchState)
     {
+        if (isPause) return;
         UpdateGameState data = UpdateGameState.Parser.ParseFrom(matchState.State);
         GameState = data.State;
     }
 
     public virtual void HandleUpdateWallet(IMatchState matchState)
     {
-        
+        if (isPause) return;
     }
 
     public virtual async UniTask HandleUpdateKickOffTheTable(IMatchState matchState)
@@ -113,7 +121,7 @@ public class BaseGameView : BaseView
 
     public virtual void HandleFinish(IMatchState matchState)
     {
-        
+        if (isPause) return;
     }
 
     public virtual void HandleError(IMatchState matchState)
@@ -129,21 +137,25 @@ public class BaseGameView : BaseView
     // HK Poker specific handlers
     public virtual void HandleUpdatePlayerAction(IMatchState matchState)
     {
+        if (isPause) return;
         // Override in HongKongPokerView
     }
     
     public virtual void HandleUpdateNewRound(IMatchState matchState)
     {
+        if (isPause) return;
         // Override in HongKongPokerView
     }
     
     public virtual void HandleUpdateCardSwap(IMatchState matchState)
     {
+        if (isPause) return;
         // Override in HongKongPokerView
     }
     
     public virtual void HandleUpdateShowdown(IMatchState matchState)
     {
+        if (isPause) return;
         // Override in HongKongPokerView
     }
     

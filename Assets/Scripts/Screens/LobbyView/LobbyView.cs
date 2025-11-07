@@ -16,10 +16,10 @@ using UnityEngine.Pool;
 public class LobbyView : BaseView
 {
     [SerializeField] private Avatar avatar;
-    [SerializeField] private TextMeshProUGUI displayNameText, userIdText, accountChip, textTimeLeftToClaimReward;
-    [SerializeField] private Image allSlotGamesImage, allGamesImage;
+    [SerializeField] private TextMeshProUGUI displayNameText, userIdText, accountChip, textTimeLeftToClaimReward, textVipFarmPercent;
+    [SerializeField] private Image allSlotGamesImage, allGamesImage, imageVipFarmPercent;
     [SerializeField] private Transform bigGameIconParent, miniGameIconParent, slotGameIconParent, allGamesParent, slotGamesParent, textPreviewChatWorldParent;
-    [SerializeField] private GameObject gameIconPrefab, textPreviewChatWorldPrefab, videoBackground, redDotChipBonus, redDotFreeChip, redDotMail;
+    [SerializeField] private GameObject gameIconPrefab, textPreviewChatWorldPrefab, videoBackground, redDotChipBonus, redDotFreeChip, redDotMail, vipFarm;
     [SerializeField] private VideoPlayer videoPlayer;
     [SerializeField] private VideoClip videoStartSiXiang;
     private List<Game> gameList = new();
@@ -38,6 +38,11 @@ public class LobbyView : BaseView
         lobbyPresenter.Init(this);
         InitPool();
 
+        if (User.userProfile.VipLevel >= 2)
+        {
+            vipFarm.SetActive(true);
+            _ = GetVipFarmProgress();
+        }
         _ = LoadGames();
         OnClickAllGamesTab();
         UIManager.Instance.lobbyView = this;
@@ -62,7 +67,9 @@ public class LobbyView : BaseView
         NetworkManager.INSTANCE.OnMessageWorldReceived += NetworkManager_OnMessageReceived;
         CheckInBonusView.OnRewardClaimed += CheckInBonusView_OnRewardClaimed;
         FreeChipView.OnClaimed += FreeChipView_OnClaimed;
+        VipFarmView.OnClaimed += VipFarmView_OnClaimed;
     }
+
 
     protected override void OnDestroy()
     {
@@ -71,6 +78,7 @@ public class LobbyView : BaseView
         NetworkManager.INSTANCE.OnMessageWorldReceived -= NetworkManager_OnMessageReceived;
         CheckInBonusView.OnRewardClaimed -= CheckInBonusView_OnRewardClaimed;
         FreeChipView.OnClaimed -= FreeChipView_OnClaimed;
+        VipFarmView.OnClaimed -= VipFarmView_OnClaimed;
     }
 
     private async UniTask CheckUserInGame()
@@ -88,8 +96,6 @@ public class LobbyView : BaseView
         else
         {
             UIManager.Instance.OpenBanner(TypeInAppMessage.Banner, 0.6f);
-          
-
         }
     }
 
@@ -103,6 +109,11 @@ public class LobbyView : BaseView
         _ = GetFreeChip();
     }
 
+
+    private void VipFarmView_OnClaimed()
+    {
+        _ = GetVipFarmProgress();
+    }
 
     private void NetworkManager_OnMessageReceived(Nakama.IApiChannelMessage message)
     {
@@ -162,6 +173,13 @@ public class LobbyView : BaseView
         bool hasFreeChip = await lobbyPresenter.GetFreeChipList();
         redDotFreeChip.SetActive(hasFreeChip);
         Utility.AnimateRedDot(redDotFreeChip);
+    }
+
+    private async UniTask GetVipFarmProgress()
+    {
+        double progress = await lobbyPresenter.GetVipFarmProgress();
+        textVipFarmPercent.text = (progress * 100).ToString("F2") + "%";
+        imageVipFarmPercent.fillAmount = (float)progress;
     }
 
     private void UpdateUIListGame()
@@ -261,6 +279,7 @@ public class LobbyView : BaseView
     public void OnClickBanner() => UIManager.Instance.OpenBanner(TypeInAppMessage.HotNews);
     public void OnClickSendGift() => UIManager.Instance.OpenSendGift();
     public void OnClickSupport() => UIManager.Instance.OpenExchange();
+    public void OnClickVipFarm() => UIManager.Instance.OpenVipFarm();
     public void OnClickTimeScale()
     {
         if (Time.timeScale == 1)

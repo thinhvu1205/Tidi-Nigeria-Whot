@@ -598,7 +598,7 @@ public class SlotTarzanView : BaseSlotView
         }
     }
 
-    protected override void ShowWinAnimation(WinType winType)
+    protected override void ShowWinAnimation(WinType winType, bool isCoinFlyAfterwards = true)
     {
         effectContainer.gameObject.SetActive(true);
         animationEffect.gameObject.SetActive(true);

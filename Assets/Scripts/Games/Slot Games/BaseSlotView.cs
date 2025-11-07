@@ -96,7 +96,7 @@ public class BaseSlotView : BaseGameView
     protected virtual string FIVE_OF_A_KIND_ANIMATION_NAME => "animation";
     protected virtual string FREE_SPIN_ANIMATION_NAME => "eng";
     protected virtual string BACKGROUND_FREE_SPIN_ANIMATION_NAME => "animation";
-    public override bool CanLeaveTable => gameState != SlotGameState.SPINNING;
+    public override bool CanLeaveTable => gameState != SlotGameState.SPINNING && gameState != SlotGameState.SHOWING_RESULT;
 
     [Header("Game State")]
     protected SpinType spinType = SpinType.NORMAL;
@@ -702,7 +702,7 @@ public class BaseSlotView : BaseGameView
         }).SetLink(gameObject, LinkBehaviour.KillOnDestroy);;
     }
 
-    protected virtual void ShowWinAnimation(WinType winType)
+    protected virtual void ShowWinAnimation(WinType winType, bool isCoinFlyAfterwards = true)
     {
         float delay = 5.5f;
         effectContainer.gameObject.SetActive(true);
@@ -783,7 +783,10 @@ public class BaseSlotView : BaseGameView
                 if (new WinType[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(winType))
                 {
                     bigWinText.transform.parent.gameObject.SetActive(false);
-                    AnimateCoinsFly();
+                    if (isCoinFlyAfterwards)
+                    {
+                        AnimateCoinsFly();   
+                    }
                 }
                 NextTween();
                 effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);

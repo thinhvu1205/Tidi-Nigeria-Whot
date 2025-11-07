@@ -33,7 +33,7 @@ public class HongKongPokerView : BaseDiceGameView
     [SerializeField] private Sprite spriteFrameMask;
     [SerializeField] private Sprite[] listImageWinLose;
     [SerializeField] private TextMeshProUGUI textTipChip, textThanks, textCountDown;
-    [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private GameObject cardPrefab, sliderContainer;
     private List<HongKongPokerBoxBet> listBoxBet = new() { null, null, null, null, null };
     private List<List<CardModel>> listPlayerCards = new()
     {
@@ -232,7 +232,7 @@ public class HongKongPokerView : BaseDiceGameView
     {
         base.HandleUpdateNewRound(matchState);
         var data = HKUpdateNewRound.Parser.ParseFrom(matchState.State);
-        Debug.Log($"[HK Poker] New Round: {data.Round}, First Bettor: {data.FirstBettor}");
+        Debug.Log($"[HK Poker] New Round: {data.Round}, data: {data}");
         
         string myUserId = User.userProfile.UserId;
         
@@ -242,37 +242,61 @@ public class HongKongPokerView : BaseDiceGameView
         // ===== 1. DEAL CARDS =====
         if (data.PlayerCards != null && data.PlayerCards.Count > 0)
         {
-            foreach (var playerCards in data.PlayerCards)
+            // Chia bài lần đầu
+            if (data.Round == HKPokerRound.HkRoundPreFlop)
             {
-                int playerIndex = GetPlayerIndex(playerCards.UserId);
-                if (playerIndex < 0) continue;
-                
-                bool isMe = playerCards.UserId == myUserId;
+                foreach (HKPlayerCards playerCards in data.PlayerCards)
+                {
+                    int playerIndex = GetPlayerIndex(playerCards.UserId);
+                    if (playerIndex < 0) continue;
+
+                    bool isMe = playerCards.UserId == myUserId;
 
 
-                // Deal face-down cards
-                if (isMe && playerCards.FaceDownCards != null && playerCards.FaceDownCards.Count > 0)
-                {
-                    // My cards - show actual cards
-                    foreach (var card in playerCards.FaceDownCards)
+                    // Deal face-down cards
+                    if (isMe && playerCards.FaceDownCards != null && playerCards.FaceDownCards.Count > 0)
                     {
-                        DealACard(card, playerIndex, delay: 0.3f, isFaceUp: false, true, true);
+                        // My cards - show actual cards
+                        foreach (var card in playerCards.FaceDownCards)
+                        {
+                            DealACard(card, playerIndex, delay: 0.3f, isFaceUp: false, true, true);
+                        }
+                    }
+                    else if (!isMe && playerCards.FaceDownCards != null && playerCards.FaceDownCards.Count > 0)
+                    {
+                        // Other players - show card backs
+                        int faceDownCount = playerCards.FaceDownCards.Count;
+                        for (int i = 0; i < faceDownCount; i++)
+                        {
+                            ShowCardBack(playerIndex, delay: 0.3f);
+                        }
+                    }
+
+                    // Deal face-up cards (visible to all)
+                    foreach (var card in playerCards.FaceUpCards)
+                    {
+                        DOVirtual.DelayedCall(0.5f, () =>
+                        {
+                            DealACard(card, playerIndex, delay: 0.5f, isFaceUp: true);
+                        });
                     }
                 }
-                else if (!isMe && playerCards.FaceDownCards != null && playerCards.FaceDownCards.Count > 0)
+            }
+            // Ngửa hết bài của người chơi lên show điểm
+            else if (data.Round == HKPokerRound.HkRoundShowdown)
+            {
+
+            }
+            // Bốc 1 lá mới
+            else
+            {
+                foreach (HKPlayerCards playerCards in data.PlayerCards)
                 {
-                    // Other players - show card backs
-                    int faceDownCount = playerCards.FaceDownCards.Count;
-                    for (int i = 0; i < faceDownCount; i++)
-                    {
-                        ShowCardBack(playerIndex, delay: 0.3f);
-                    }
-                }
-                
-                // Deal face-up cards (visible to all)
-                foreach (var card in playerCards.FaceUpCards)
-                {
-                    DealACard(card, playerIndex, delay: 0.25f, isFaceUp: true);
+                    int playerIndex = GetPlayerIndex(playerCards.UserId);
+                    if (playerIndex < 0) continue;
+                    Card newCard = playerCards.AllCards[^1];
+                    if (newCard == null) continue;
+                    DealACard(newCard, playerIndex, delay: 0.25f, isFaceUp: true);
                 }
             }
         }
@@ -432,7 +456,7 @@ public class HongKongPokerView : BaseDiceGameView
         // TODO: Show action text above player
         // Example: Show text with fade-in/fade-out animation
         Debug.Log($"Player {playerIndex} action: {action} {(amount > 0 ? amount.ToString() : "")}");
-        
+
         // Show in BoxBet if available
         if (playerIndex >= 0 && playerIndex < listBoxBet.Count)
         {
@@ -443,25 +467,43 @@ public class HongKongPokerView : BaseDiceGameView
                 boxBet.SetInfo(action, playerIndex, amount);
             }
         }
+        
+        switch(action)
+        {
+            case HKPokerAction.HkActionFold:
+                Debug.Log("ANIMATE FOLD ACTION");
+                List<CardModel> cards = listPlayerCards[playerIndex];
+                for (int i = 0; i < cards.Count; i++)
+                {
+                    StartCoroutine(FoldDown(playerIndex, cards[i], i * 0.1f));
+                }
+                break;
+        }
     }
 
     private void UpdateBettingStateUI(HKBettingState bettingState)
     {
-        
+        Debug.Log($"[HK Poker] UpdateBettingStateUI: {bettingState.ToString()}");
+        long currentPlayerStack = 0; // Số chip còn lại trong bàn của người chơi hiện tại
+
         // Update each player's betting info
         foreach (var playerState in bettingState.PlayerStates)
         {
+            BasePlayerView playerView = userIdToView.GetValueOrDefault(playerState.UserId);
             int playerIndex = GetPlayerIndex(playerState.UserId);
             if (playerIndex < 0) continue;
-            
+            bool isMe = playerState.UserId == User.userProfile.UserId;
             // Update stack display
             long stack = playerState.Stack;
+            if (isMe) currentPlayerStack = stack;
             UpdatePlayerStack(playerIndex, stack);
             
             // Update bets
             if (!string.IsNullOrEmpty(playerState.TotalBet.ToString()))
             {
                 long totalBet = long.Parse(playerState.TotalBet.ToString());
+                playerView.AnimateFlyMoney(-totalBet);
+                // playerView.SetCurrentChip();
                 UpdatePlayerBet(playerIndex, totalBet);
             }
             
@@ -485,7 +527,7 @@ public class HongKongPokerView : BaseDiceGameView
             long minRaise = bettingState.MinRaise;
             
             buttonBetContainer.SetValues(
-                (int)currentBet,
+                (int)currentPlayerStack,
                 (int)minRaise,
                 (int)(currentBet + minRaise)
             );
@@ -495,7 +537,7 @@ public class HongKongPokerView : BaseDiceGameView
     private void ClearRoundUI()
     {
         // Clear previous round displays
-        Debug.Log("Clearing round UI");
+        // Debug.Log("Clearing round UI");
     }
 
     private void UpdateRoundUI(HKPokerRound round)
@@ -557,7 +599,7 @@ public class HongKongPokerView : BaseDiceGameView
                             .AppendInterval(0.5f)
                             .AppendCallback(() => PlayerGiveChipsToBoxbet(playerIndex));
                         
-                        Debug.Log($"[HK Poker] Player {playerState.UserId} auto bet {autoBet} (1/2 mark unit)");
+                        // Debug.Log($"[HK Poker] Player {playerState.UserId} auto bet {autoBet} (1/2 mark unit)");
                     }
                 }
             }
@@ -585,7 +627,7 @@ public class HongKongPokerView : BaseDiceGameView
         // ⚠️ ROUND 1, FIRST BETTOR: Chỉ BET/FOLD (KHÔNG CHECK)
         if (isRound1 && isFirstBettor && currentBet == 0)
         {
-            Debug.Log("[HK Poker] First bettor round 1 - only BET or FOLD");
+            // Debug.Log("[HK Poker] First bettor round 1 - only BET or FOLD");
             
             // Setup bet values
             buttonBetContainer.SetValues(
@@ -668,7 +710,7 @@ public class HongKongPokerView : BaseDiceGameView
     private void StartTurnTimer(int seconds)
     {
         // Start countdown timer
-        Debug.Log($"[HK Poker] Start turn timer: {seconds}s");
+        // Debug.Log($"[HK Poker] Start turn timer: {seconds}s");
         
         // TODO: Implement visual timer
         // Example:
@@ -875,42 +917,47 @@ public class HongKongPokerView : BaseDiceGameView
     public void OnClickFold()
     {
         Debug.Log("[HK Poker] Player FOLD");
-        SendPlayerAction(Proto.HKPokerAction.HkActionFold, 0);
+        SendPlayerAction(HKPokerAction.HkActionFold, 0);
         DisableBettingUI();
     }
     
     public void OnClickCheck()
     {
         Debug.Log("[HK Poker] Player CHECK");
-        SendPlayerAction(Proto.HKPokerAction.HkActionCheck, 0);
+        SendPlayerAction(HKPokerAction.HkActionCheck, 0);
         DisableBettingUI();
     }
     
     public void OnClickCall()
     {
         Debug.Log("[HK Poker] Player CALL");
-        SendPlayerAction(Proto.HKPokerAction.HkActionCall, 0);
+        SendPlayerAction(HKPokerAction.HkActionCall, 0);
         DisableBettingUI();
     }
-    
+
     public void OnClickBet(int amount)
     {
         Debug.Log($"[HK Poker] Player BET {amount}");
-        SendPlayerAction(Proto.HKPokerAction.HkActionBet, amount);
+        SendPlayerAction(HKPokerAction.HkActionBet, amount);
         DisableBettingUI();
     }
     
-    public void OnClickRaise(int amount)
+    public void OnClickRaise()
+    {
+        sliderContainer.SetActive(!sliderContainer.activeSelf);
+    }
+    
+    public void OnClickConfirmRaise(int amount)
     {
         Debug.Log($"[HK Poker] Player RAISE {amount}");
-        SendPlayerAction(Proto.HKPokerAction.HkActionRaise, amount);
+        SendPlayerAction(HKPokerAction.HkActionRaise, amount);
         DisableBettingUI();
     }
     
     public void OnClickAllIn()
     {
         Debug.Log("[HK Poker] Player ALL-IN");
-        SendPlayerAction(Proto.HKPokerAction.HkActionAllIn, 0);
+        SendPlayerAction(HKPokerAction.HkActionAllIn, 0);
         DisableBettingUI();
     }
 

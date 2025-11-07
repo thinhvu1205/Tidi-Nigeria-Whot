@@ -256,10 +256,7 @@ public class SlotJuicyView : BaseSlotView
             totalPackageValue = 0;
             ShowTotalMoneyPackage();
             tweenQueue.Enqueue(() => ShowPackageResult());
-            // if (winJackpot.HasValue)
-            // {
-            //     tweenQueue.Enqueue(() => ShowJackpotAnimation());
-            // }
+      
         }
         else
         {
@@ -354,8 +351,9 @@ public class SlotJuicyView : BaseSlotView
         NextTween();
     }
     
-    protected override void ShowWinAnimation(WinType winType)
+    protected override void ShowWinAnimation(WinType winType, bool isCoinFlyAfterwards = true)
     {
+        Debug.Log("ưinType: " + winType);
         effectContainer.gameObject.SetActive(true);
         animationEffect.gameObject.SetActive(true);
         bigWinText.gameObject.SetActive(false);
@@ -384,8 +382,9 @@ public class SlotJuicyView : BaseSlotView
                 sequence.AppendInterval(0.8f)
                     .AppendCallback(() =>
                     {
+                        Debug.Log("SAO K SETACTIVE ?");
                         bigWinText.gameObject.SetActive(true);
-                        Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, 5f);
+                        Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, 4.7f);
                     })
                     .AppendInterval(5f)
                     .AppendCallback(() =>
@@ -441,7 +440,10 @@ public class SlotJuicyView : BaseSlotView
             animationEffect.gameObject.SetActive(false);
             if (new WinType[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(winType))
             {
-                AnimateCoinsFly();
+                if (isCoinFlyAfterwards)
+                {
+                    AnimateCoinsFly();
+                }
             }
             NextTween();
             effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
@@ -619,7 +621,7 @@ public class SlotJuicyView : BaseSlotView
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.FREESPIN);
         effectContainer.gameObject.SetActive(true);
         popupResultPackageAnimation.gameObject.SetActive(true);
-        packageValueWinText.text = Utility.FormatNumber(totalPackageValue);
+        packageValueWinText.text = Utility.FormatNumber(totalChipWinByGame);
         Utility.PlayAnimationByPath(popupResultPackageAnimation, RESULT_BONUSGAME_ANIMPATH, "eng", true);
         popupResultPackageAnimation.transform.localScale = new Vector2(0.8f, 0.8f);
         popupResultPackageAnimation.transform.DOScale(new Vector2(1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
@@ -804,7 +806,17 @@ public class SlotJuicyView : BaseSlotView
         }
         sequence.OnComplete(() =>
         {
-            ShowPopupResultPackage();
+            if (winJackpot == WinJackpot.Grand)
+            {
+                tweenQueue.Enqueue(() => ShowJackpotAnimation());
+            }
+            tweenQueue.Enqueue(() =>
+            {
+                currentChipWin = totalChipWinByGame;
+                SetWinType(currentChipWin);
+                ShowWinAnimation(winType, false);
+            });
+            tweenQueue.Enqueue(() => ShowPopupResultPackage());
             foreach (Transform transform in holdPackageContainer)
             {
                 transform.gameObject.SetActive(false);
@@ -824,10 +836,11 @@ public class SlotJuicyView : BaseSlotView
 
     private void ShowJackpotAnimation()
     {
+        Debug.Log("jackpotHistory.Grand.ChipsAccum: " + jackpotHistory.Grand.ChipsAccum);
         effectContainer.gameObject.SetActive(true);
         jackpotAnimation.gameObject.SetActive(true);
         jackpotText.gameObject.SetActive(true);
-        Utility.TweenNumberToNumber(jackpotText, totalChipWinByGame, 0);
+        Utility.TweenNumberToNumber(jackpotText, jackpotHistory.Grand.ChipsAccum + jackpotHistory.Grand.Chips + jpGrandPlayer, 0);
         jackpotAnimation.transform.localScale = new Vector2(0.8f, 0.8f);
         string animationName = winJackpot switch
         {
@@ -841,7 +854,7 @@ public class SlotJuicyView : BaseSlotView
         DOTween.Sequence()
             .Append(jackpotAnimation.transform.DOScale(new Vector2(1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack))
             .Join(jackpotText.transform.DOScale(new Vector2(1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack))
-            .AppendInterval(2.5f)
+            .AppendInterval(3f)
             .Append(jackpotAnimation.transform.DOScale(new Vector2(1.5f, 1.5f), 0.3f).SetEase(Ease.InBack))
             .OnComplete(() =>
             {

@@ -61,7 +61,7 @@ public class BlackjackBoxBet : MonoBehaviour
     private readonly List<Tween> highlightTweens = new List<Tween>();
     private float boxWidth;
     private int minPoint, maxPoint;
-    private int index;
+    [SerializeField] private int index, chipIndex;
     public bool IsEnlarging { get; private set; } = false;
     public long TotalBet { get; private set; }
     public Vector2 BoxPosition { get; private set; }
@@ -139,6 +139,7 @@ public class BlackjackBoxBet : MonoBehaviour
                     animationBlackjack.gameObject.SetActive(false);
                     imageState.sprite = listImageState[0]; // Blackjack
                     imageState.gameObject.SetActive(true);
+                    ShrinkCurrentPlayerBoxbet();
                   
                 };
                 break;
@@ -154,6 +155,7 @@ public class BlackjackBoxBet : MonoBehaviour
                 animationWow.AnimationState.Complete += delegate
                 {
                     animationWow.gameObject.SetActive(false);
+                    ShrinkCurrentPlayerBoxbet();
                 };
 
                 break;
@@ -171,6 +173,7 @@ public class BlackjackBoxBet : MonoBehaviour
                 {
                     animationBust.gameObject.SetActive(false);
                     HideImageChip();
+                    ShrinkCurrentPlayerBoxbet();
                 };
                 break;
 
@@ -238,6 +241,7 @@ public class BlackjackBoxBet : MonoBehaviour
     {
         Debug.Log("SetBetValue: " + value);
         TotalBet = totalValue;
+        chipIndex = index;
         if (index < 0 || totalValue <= 0)
         {
             Debug.Log("SET BET VALUE LAM MAT CHIP");
@@ -431,6 +435,15 @@ public class BlackjackBoxBet : MonoBehaviour
         });
     }
 
+    private void ShrinkCurrentPlayerBoxbet()
+    {
+        Debug.Log("SHRINK CARDS");
+        if (IsEnlarging)
+        {
+            ShrinkCards();
+        }
+    }
+
     public void AnimateHighlightCards()
     {
         listCardModel[0].SetBorder(true);
@@ -621,7 +634,7 @@ public class BlackjackBoxBet : MonoBehaviour
         if (secondHand == null) return;
         secondBoxBet.imageChip.gameObject.SetActive(true);
         secondBoxBet.textChipValue.gameObject.SetActive(true);
-        secondBoxBet.SetBetValue(0, TotalBet, TotalBet);
+        secondBoxBet.SetBetValue(chipIndex, TotalBet, TotalBet);
         secondBoxBet.ShowScore(secondHand.Point, secondHand.MinPoint, secondHand.MaxPoint);
     }
 
@@ -662,7 +675,7 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void Reset()
     {
-        TotalBet = 0;
+        TotalBet = minPoint = maxPoint = 0;
         listCardModel.Clear();
         imageState.gameObject.SetActive(false);
         imageScoreBox.gameObject.SetActive(false);

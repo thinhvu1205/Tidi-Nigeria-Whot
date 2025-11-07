@@ -63,5 +63,22 @@ public class LobbyPresenter
             return false;
         }
     }
+
+    public async UniTask<double> GetVipFarmProgress()
+    {
+        UIManager.Instance.ShowProgressing();
+        try
+        {
+            var response = await DataSender.GetVipFarmProgress();
+            await lobbyView.OnSuccess();
+            double progress = response.Progress;
+            return progress;
+        }
+        catch (Exception ex)
+        {
+            lobbyView.OnError("Fail to get Vip Farm progress");
+            return 0;
+        }
+    }
 }
 

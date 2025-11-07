@@ -28,6 +28,7 @@ public class UIManager : Singleton<UIManager>
     public LobbyView lobbyView;
     private Transform parentPopups, parentGames, parentBanners, parentLobby, parentLoading;
     [HideInInspector] public BaseGameView gameView;
+    private GameObject currentToast;
     private const string POPUP_PARENT_TAG = "Parent Popups";
     private const string GAME_PARENT_TAG = "Parent Games";
     private const string BANNER_PARENT_TAG = "Parent Banner";
@@ -240,6 +241,11 @@ public class UIManager : Singleton<UIManager>
         {
             if (Constants.SLOT_GAMES_ID.Contains(Config.currentGameId))
             {
+                if (!gameView.CanLeaveTable)
+                {
+                    ShowToast("You can't return to the Lobby while a game is in progress!", 2, gameView.transform);
+                    return;
+                }
                 await DataSender.LeaveMatch();
                 // await NetworkManager.INSTANCE.LeaveRoomChat();
                 await NetworkManager.INSTANCE.JoinWorldChat();
@@ -280,7 +286,12 @@ public class UIManager : Singleton<UIManager>
 
     public void ShowToast(string message, float timeShow = 2, Transform parent = null)
     {
+        if (currentToast != null)
+        {
+            return;
+        }
         var compToast = Utility.CreateSprite(spriteToast);
+        currentToast = compToast.gameObject; 
         compToast.transform.SetParent(parent != null ? parent : transform);
         compToast.transform.SetAsLastSibling();
         compToast.type = Image.Type.Sliced;
@@ -321,6 +332,7 @@ public class UIManager : Singleton<UIManager>
         DOTween.Sequence().Append(compToast.rectTransform.DOScale(1, .5f).SetEase(Ease.OutBack)).Append(compToast.rectTransform.DOScale(0, .5f).SetEase(Ease.InBack).SetDelay(timeShow)).AppendCallback(() =>
         {
             Destroy(compToast.gameObject);
+            currentToast = null;
         }).SetAutoKill(true);
     }
 
@@ -499,6 +511,12 @@ public class UIManager : Singleton<UIManager>
             bannerView.SetBannerType(type);
             bannerView.transform.localScale = Vector3.zero;
         });
+    }
+
+    public void OpenVipFarm()
+    {
+        VipFarmView vipFarmView = Instantiate(LoadPrefabLobby("VipFarmView"), parentLobby).GetComponent<VipFarmView>();
+        vipFarmView.transform.localScale = Vector3.one;
     }
 
     public void OpenRule()

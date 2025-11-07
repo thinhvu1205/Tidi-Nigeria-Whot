@@ -27,7 +27,7 @@ public class BaseDiceGameView : BaseGameView
     protected List<Player> rearrangedPlayers = new List<Player>();
     protected List<Player> playingPlayers = new List<Player>();
     protected List<GameObject> listBtnInvite = new List<GameObject>();
-    private float interactTimer = 0, interactCountdown = 5;
+    private float interactTimer = 0, interactCountdown = 2;
 
     protected override void Update()
     {

@@ -109,7 +109,7 @@ public class SlotNoelView : BaseSlotView
         };
     }
     
-    protected override void ShowWinAnimation(WinType winType)
+    protected override void ShowWinAnimation(WinType winType, bool isCoinFlyAfterwards = true)
     {
         float delay = 6f;
         effectContainer.gameObject.SetActive(true);
