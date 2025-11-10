@@ -651,15 +651,15 @@ public class NetworkManager : MonoBehaviour
     {
         switch(serverId)
         {
-            case 1:
+            case 0:
                 _ClientC = new Client("http", SERVER_TEST_PORT, 57350, "defaultkey");
                 UIManager.Instance.ShowToast("Connect to Test Server", 2, transform);
                 break;
-            case 2:
+            case 1:
                 _ClientC = new Client("http", SERVER_HUY_PORT, 57350, "defaultkey");
                 UIManager.Instance.ShowToast("Connect to Huy Server", 2, transform);
                 break;
-            case 3:
+            case 2:
                 _ClientC = new Client("http", SERVER_TOAN_PORT, 57350, "defaultkey");
                 UIManager.Instance.ShowToast("Connect to Toan Server", 2, transform);
                 break;
