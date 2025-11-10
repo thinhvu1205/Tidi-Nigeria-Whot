@@ -464,7 +464,7 @@ public class SlotJuicyView : BaseSlotView
         // Fruit Rain sẽ autospin cho đến khi hết Fruit Rain
         if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO)
         {
-            spinType = SpinType.FREE_AUTO;
+            spinType = SpinType.FREE_NORMAL;
         }
         UpdateSpinButtonUI();
         UpdateStateWinUI(StateWin.TOTAL_WIN);

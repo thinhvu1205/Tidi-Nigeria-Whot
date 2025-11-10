@@ -203,10 +203,21 @@ public class WhotPlayerHand : MonoBehaviour
     #region Events
     public void WhotGame_OnNextTurn(WhotView.OnNextTurnEventArg e)
     {
+        Debug.Log("ON NEXT TURN");
         if (e.playerTurn == whotGame.GetCurrentPlayer().Id)
         {
             WhotCardModel callCardModel = e.CallCardModel;
             WhotCardEffect cardEffect = e.cardEffect;
+
+            if (cardEffect == WhotCardEffect.Whot)
+            {
+                foreach (WhotCardModel cardInHand in cardsInHand)
+                {
+                    cardInHand.SetSelectable(false);
+                    cardInHand.SetDark();
+                }
+                return;
+            }
             foreach (WhotCardModel card in cardsInHand)
             {
                 bool isSelectable = false;
@@ -258,6 +269,11 @@ public class WhotPlayerHand : MonoBehaviour
                             Rank = card.GetCardRank()
                         };
                         DataSender.SendMatchState((long)OpCodeRequest.PlayCard, cardObject.ToByteArray());
+                        foreach (WhotCardModel cardInHand in cardsInHand)
+                        {
+                            cardInHand.SetSelectable(false);
+                            // cardInHand.SetDark();
+                        }
                     }
                 }
             }

@@ -352,6 +352,10 @@ public class NetworkManager : MonoBehaviour
     {
         bool persistence = true;
         bool hidden = false;
+        if (!string.IsNullOrEmpty(worldChatChannelId))
+        {
+            return;
+        }
         IChannel channel = await _SocketIS.JoinChatAsync(WORLD_CHAT_ROOM_NAME, ChannelType.Room, persistence, hidden);
         worldChatChannelId = channel.Id;
         Debug.Log("Now connected to channel id: " + worldChatChannelId);
@@ -390,6 +394,7 @@ public class NetworkManager : MonoBehaviour
     public async UniTask LeaveWorldChat()
     {
         await _SocketIS.LeaveChatAsync(worldChatChannelId);
+        worldChatChannelId = "";
     }
     #endregion
 
@@ -626,7 +631,7 @@ public class NetworkManager : MonoBehaviour
         _ClientC = new Client("http", "172.23.112.1", 57350, "defaultkey");
         // _ClientC = new Client("http", "10.251.228.83", 57350, "defaultkey");
         _ClientC = new Client("http", "172.16.56.36", 57350, "defaultkey"); // Máy Huy
-        // _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey"); // Server chung
+        _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey"); // Server chung
         // _ClientC = new Client("http", "172.16.56.104", 57350, "defaultkey"); // Máy Toàn
         RestoreSession();
         string deviceId;

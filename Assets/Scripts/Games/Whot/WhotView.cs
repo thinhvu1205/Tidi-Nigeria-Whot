@@ -440,7 +440,7 @@ public class WhotView : BaseDiceGameView
     {
         var data = UpdateTurn.Parser.ParseFrom(matchState.State);
         Debug.Log("UPDATE TURN: " + data);
-        if (data.UserId == GetCurrentPlayer().Id)
+        if (data.UserId == GetCurrentPlayer().Id && currentEffect != WhotCardEffect.Whot)
         {
             yourTurnTransform.gameObject.SetActive(true);
             AnimateHighlightDeck();
@@ -913,6 +913,13 @@ public class WhotView : BaseDiceGameView
 
     private void AnimateOpenSuitPicker()
     {
+        foreach (WhotCardModel cardInHand in playerHand.cardsInHand)
+        {
+            Debug.Log("CARD: " + cardInHand.GetCardRank() + " - " + cardInHand.GetCardSuit());
+            Debug.Log("SET DARK VÌ ĐANG CHỌN CHẤT");
+            cardInHand.SetSelectable(false);
+            cardInHand.SetDark();
+        }
         Sequence sequence = DOTween.Sequence();
         sequence
             .AppendInterval(0.25f)

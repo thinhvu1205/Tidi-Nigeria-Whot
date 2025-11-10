@@ -219,6 +219,11 @@ public class SelectTableView : BaseView
 
     public void OnClickCreateTable()
     {
+        if (!betItemList.Any((bet) => bet.Enable))
+        {
+            UIManager.Instance.ShowConfirmDialog("You do not have enough chips to create table!", () => UIManager.Instance.OpenShop(), null, "Get More Chips");
+            return;
+        }
         UIManager.Instance.OpenCreateTableView();
     }
 

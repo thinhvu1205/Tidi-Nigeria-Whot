@@ -109,6 +109,7 @@ public class BlackjackBoxBet : MonoBehaviour
         else
         {
             this.maxPoint = point;
+            this.minPoint = point;
             textScore.text = point.ToString();
         }
 
@@ -264,7 +265,7 @@ public class BlackjackBoxBet : MonoBehaviour
         textChipValue.text = Utility.FormatMoney(value, true);
         animationWaiting.gameObject.SetActive(isWaiting);
 
-        if (secondBoxBet != null)
+        if (secondBoxBet != null && !secondBoxBet.gameObject.activeInHierarchy)
             secondBoxBet.SetBetValue(index, value, totalValue, isWaiting);
     }
 
@@ -593,15 +594,16 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void ShowSecondBox()
     {
+        Debug.Log("SHOW SECOND BOX");
         secondBoxBet.gameObject.SetActive(true);
         switch (index)
         {
             case 0:
-                transform.localPosition = new(BoxPosition.x - boxWidth, transform.localPosition.y + 70f);
-                secondBoxBet.transform.localPosition = new(2 * (BoxPosition.x + boxWidth), secondBoxBet.transform.localPosition.y);
+                transform.localPosition = new(BoxPosition.x - boxWidth, BoxPosition.y + 70f);
+                secondBoxBet.transform.localPosition = new(2 * (BoxPosition.x + boxWidth), BoxPosition.y);
                 break;
             case 1:
-                secondBoxBet.transform.position = new(secondBoxBet.transform.position.x + boxWidth * 2.5f + CARD_SPACING, secondBoxBet.transform.position.y);
+                secondBoxBet.transform.localPosition = new(secondBoxBet.transform.position.x + boxWidth * 2.5f + CARD_SPACING, secondBoxBet.transform.position.y);
                 break;
             case 2:
                 transform.localPosition = new(transform.localPosition.x - 1.4f * boxWidth, transform.localPosition.y);
@@ -673,7 +675,7 @@ public class BlackjackBoxBet : MonoBehaviour
         return false;
     }
 
-    public void Reset()
+    public void Reset(bool isRejoin = false)
     {
         TotalBet = minPoint = maxPoint = 0;
         listCardModel.Clear();
@@ -703,12 +705,16 @@ public class BlackjackBoxBet : MonoBehaviour
         Vector2 size = rect.sizeDelta;
         size.x = boxWidth;
         rect.sizeDelta = size;
-        if (secondBoxBet != null)
+
+        if (!isRejoin)
         {
-            secondBoxBet.gameObject.SetActive(false);
-            secondBoxBet.transform.position = transform.position;
-            secondBoxBet.transform.DOLocalMoveX(BoxPosition.x, 0.5f);
-            transform.localPosition = initialPosition;
+            if (secondBoxBet != null)
+            {
+                secondBoxBet.gameObject.SetActive(false);
+                secondBoxBet.transform.position = transform.position;
+                secondBoxBet.transform.DOLocalMoveX(BoxPosition.x, 0.5f);
+                transform.localPosition = initialPosition;
+            }
         }
 
         foreach (Transform child in cardContainer)
