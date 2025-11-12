@@ -467,22 +467,29 @@ public class NetworkManager : MonoBehaviour
         
         _SocketIS.Closed += async () =>
         {
-            if(PlayerPrefs.GetInt(Config.AUTO_LOGIN, 0) == 0) 
-                return;
-            UIManager.Instance.ShowProgressing();
-            Debug.Log("ondisconnect");
-
-            await UniTask.Delay(TimeSpan.FromSeconds(1));
-
-            if (isKickOff)
+            try
             {
-                PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
-                isKickOff = false;
-            }
+                await UniTask.SwitchToMainThread();
+                UIManager.Instance.ShowProgressing();
+                Debug.Log("ondisconnect");
 
-            UIManager.Instance.HideProgressing();
-            // Global.IsFreeChipLoaded = false;
-            await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
+                await UniTask.Delay(TimeSpan.FromSeconds(1));
+
+                PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
+                if (isKickOff)
+                {
+                    PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
+                    isKickOff = false;
+                }
+
+                UIManager.Instance.HideProgressing();
+                // Global.IsFreeChipLoaded = false;
+                await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Closed socker callback failed: {e}");
+            }
         };
         RegisterEventSocket();
 
@@ -493,7 +500,6 @@ public class NetworkManager : MonoBehaviour
             UIManager.Instance.HideProgressing();
             Debug.Log("Socket connected");
 
-            
             await JoinWorldChat();
 
             // InitSocketChat();
@@ -509,6 +515,12 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
+    [Serializable]
+    public class StreamKickMessage
+    {
+        public string type;
+        public string reason;
+    }
     
     private void RegisterEventSocket()
     {
@@ -546,9 +558,33 @@ public class NetworkManager : MonoBehaviour
                 matchStateQueue.Enqueue(state);
             }
         };
-        
-        _SocketIS.ReceivedNotification += notification =>
+
+        _SocketIS.ReceivedStreamState += async state =>
         {
+            await UniTask.SwitchToMainThread();
+            Debug.Log($"Received Stream State: {state}");
+            if (!string.IsNullOrEmpty(state.State))
+            {
+                try
+                {
+                    var msg = JsonUtility.FromJson<StreamKickMessage>(state.State);
+                    if (msg.type == "kick")
+                    {
+                        UIManager.Instance.ShowAlertDialog(msg.reason);
+                        isKickOff = true;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Failed to parse stream data: {e}");
+                }
+            }
+
+        };
+        
+        _SocketIS.ReceivedNotification += async notification =>
+        {
+            await UniTask.SwitchToMainThread();
             Debug.Log($"Received Notification: {notification}");
 
             switch (notification.Code)
@@ -584,7 +620,8 @@ public class NetworkManager : MonoBehaviour
                     }
                     break;
 
-                case -7:
+                case 101: // duplicate connection, kick old connection
+                    UIManager.Instance.ShowAlertDialog(notification.Subject);
                     isKickOff = true;
                     break;
                 
