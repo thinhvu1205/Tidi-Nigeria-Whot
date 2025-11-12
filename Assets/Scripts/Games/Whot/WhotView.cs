@@ -97,19 +97,11 @@ public class WhotView : BaseDiceGameView
     public float CurrentMarkUnit { get; private set; }
     public float HigherMarkUnit { get; private set; }
     public bool TypeWinMore = false;
+    private ChatInGameView chatInGameView;
+
     protected override void Awake()
     {
         base.Awake();
-        _ = NetworkManager.INSTANCE.JoinRoomChat(CHAT_ROOM_NAME);
-    }
-    
-    private void OnApplicationPause(bool pause)
-    {
-        // User quay lại foreground của app
-        if (!pause)
-        {
-            
-        }
     }
 
     public void Init()
@@ -159,6 +151,8 @@ public class WhotView : BaseDiceGameView
     {
         base.OnEnable();
         Init();
+        chatInGameView = UIManager.Instance.OpenChatInGame();
+        chatInGameView.Init();
     }
 
     protected override void OnDestroy()
@@ -167,6 +161,7 @@ public class WhotView : BaseDiceGameView
         PoolService.Instance.ClearPool<WhotCardModel>(PrefabType.WhotCard);
         PoolService.Instance.ClearPool<WhotChip>(PrefabType.ChipPlayerWhot);
         _ = UIManager.Instance.LoadProfileUser();
+        DestroyImmediate(chatInGameView.gameObject);
     }
 
     #region API Handlers
@@ -179,6 +174,8 @@ public class WhotView : BaseDiceGameView
         CurrentMarkUnit = match.Bet.MarkUnit;
         betText.text = "Bet: " + CurrentMarkUnit;
         idText.text = "ID: " + match.TableId;
+        _ = NetworkManager.INSTANCE.JoinRoomChat(CHAT_ROOM_NAME + "-" + match.TableId);
+
     }
 
     // Khi có người chơi join hoặc leave
@@ -1302,7 +1299,9 @@ public class WhotView : BaseDiceGameView
 
     public void OnClickChat()
     {
-        UIManager.Instance.OpenChatInGame();
+        Debug.Log("CLICK CHAT");
+        chatInGameView.transform.localScale = Vector3.one;
+        chatInGameView.Show();
     }
 
 

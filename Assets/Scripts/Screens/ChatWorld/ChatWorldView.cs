@@ -18,7 +18,6 @@ public class ChatWorldView : BaseView
     private ChatWorldPresenter chatWorldPresenter;
     private List<IApiChannelMessage> listMessage = new();
     private List<ChatPayload> listChatPayload = new();
-    private float containerWidth;
 
     protected override void Awake()
     {
@@ -31,7 +30,6 @@ public class ChatWorldView : BaseView
     protected override void Start()
     {
         base.Start();
-        containerWidth = Screen.width - 230f;
         _ = GetHistory();
 
         verticalPoolGroup.SetCellDataCallback<ChatPayload>((go, data, index) =>
@@ -111,12 +109,12 @@ public class ChatWorldView : BaseView
     private ChatPayload ConvertToChatPayload(IApiChannelMessage message)
     {
         ContentData data = JsonUtility.FromJson<ContentData>(message.Content);
-        Debug.Log("dataaaa: " + data.content.ToString());
         ChatPayload chatPayload = new()
         {
             Name = message.Username,
             Time = Utility.ConvertISOToHHMMDDMMYYYY(message.CreateTime),
-            Content = data.content
+            Content = data.content,
+            // Avatar = message.
         };
         return chatPayload;
     }

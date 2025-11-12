@@ -12,9 +12,9 @@ public class ChatInGameView : BaseView
     [SerializeField] private ChatInGameItem messagePrefab;
     [SerializeField] private Transform messageContentParent;
     [SerializeField] private TMP_InputField chatInputField;
-    [SerializeField] private TextMeshProUGUI textAccountChip;
     [SerializeField] private VerticalPoolGroup verticalPoolGroup;
-    private List<ChatData> _PoolData = new();
+    private List<IApiChannelMessage> listMessage = new();
+    private List<ChatPayload> listChatPayload = new();
     private ChatInGamePresenter chatInGamePresenter;
 
 
@@ -23,6 +23,7 @@ public class ChatInGameView : BaseView
         base.Awake();
         chatInGamePresenter = new ChatInGamePresenter();
         chatInGamePresenter.Init(this);
+        chatInputField.characterLimit = 200;
         // verticalPoolGroup.SetCellDataCallback<ChatData>((go, data, index) =>
         // {
         //     ChatInGameItem dataCIGI = go.GetComponent<ChatInGameItem>();
@@ -41,10 +42,16 @@ public class ChatInGameView : BaseView
         // verticalPoolGroup.ReloadDataToVisibleCell();
     }
 
+    protected override void Start()
+    {
+        base.Start();
+
+
+    }
+
     protected override void OnEnable()
     {
         base.OnEnable();
-        NetworkManager.INSTANCE.OnMessageTableReceived += NetworkManager_OnMessageTableReceived;
     }
 
 
@@ -54,15 +61,32 @@ public class ChatInGameView : BaseView
         NetworkManager.INSTANCE.OnMessageTableReceived -= NetworkManager_OnMessageTableReceived;
     }
 
+    public void Init()
+    {
+        verticalPoolGroup.SetCellDataCallback<ChatPayload>((go, data, index) =>
+        {
+            ChatItem chatItem = go.GetComponent<ChatItem>();
+            chatItem.SetInfo(data, index);
+            // chatItem.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, containerWidth); 
+            RectTransform childRect = chatItem.GetComponent<RectTransform>();
+            childRect.anchorMin = new Vector2(0, childRect.anchorMin.y);
+            childRect.anchorMax = new Vector2(1, childRect.anchorMax.y);
+            childRect.offsetMin = new Vector2(0, childRect.offsetMin.y);
+            childRect.offsetMax = new Vector2(0, childRect.offsetMax.y);
+        });
+        NetworkManager.INSTANCE.OnMessageTableReceived += NetworkManager_OnMessageTableReceived;
+        
+    }
+
     private void NetworkManager_OnMessageTableReceived(IApiChannelMessage message)
     {
-        var payload = JsonUtility.FromJson<ChatPayload>(message.Content);
-        if (!string.IsNullOrEmpty(payload.Content))
+        ChatPayload chatPayload = ConvertToChatPayload(message);
+        if (!string.IsNullOrEmpty(chatPayload.Content))
         {
-            bool isCurrentPlayer = message.SenderId == User.userProfile.UserId;
-            ChatInGameItem chatItem = Instantiate(messagePrefab, messageContentParent);
-            Debug.Log("MESSAGE CONTENT: " + message.CreateTime);
-            chatItem.SetInfo(message, isCurrentPlayer);
+            listChatPayload.Add(chatPayload);
+            verticalPoolGroup.SetAdapter(listChatPayload, false);
+            verticalPoolGroup.ScrollToLast(0);
+            // chatWorldItem.SetInfo(message, isCurrentPlayer);
         }
     }
 
@@ -74,11 +98,22 @@ public class ChatInGameView : BaseView
             chatInputField.text = "";
         }
     }
-}
-public class ChatData
-{
-    public int Id;
-    public string Content;
-    public bool IsUser;
-    public bool IsSelect;
+
+    private ChatPayload ConvertToChatPayload(IApiChannelMessage message)
+    {
+        ContentData data = JsonUtility.FromJson<ContentData>(message.Content);
+        ChatPayload chatPayload = new()
+        {
+            Name = message.Username,
+            Time = Utility.ConvertISOToHHMM(message.CreateTime),
+            Content = data.content,
+            // Avatar = message.
+        };
+        return chatPayload;
+    }
+
+    public override void OnClickCloseButton()
+    {
+        Hide(false);
+    }
 }

@@ -85,15 +85,14 @@ public class ChatItem : MonoBehaviour
         messageText.ForceMeshUpdate();
 
         float finalHeight = messageText.preferredHeight + PADDING;
-        Debug.Log("final width: " + finalWidth);
-        Debug.Log("final height: " + finalHeight);
 
         RectTransform frameRect = frameContent.GetComponent<RectTransform>();
         if (frameRect != null)
         {
-            Debug.Log("CO VAO DAY k ?");
             frameRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, finalWidth + PADDING * 6);
             frameRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, finalHeight + PADDING);
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, finalHeight + PADDING * 3);
+            
             // height = finalHeight + PADDING;
             // width = finalWidth + PADDING * 6;
         }

@@ -19,7 +19,7 @@ public class ChatWorldPresenter
     public async UniTask<List<IApiChannelMessage>> GetWorldChatHistory()
     {
         IApiChannelMessageList result = await NetworkManager.INSTANCE.GetWorldChatHistory();
-        return result.Messages.ToList();
+        return result.Messages.Reverse().ToList();;
     }
 
     public async UniTask SendMessage(string message)

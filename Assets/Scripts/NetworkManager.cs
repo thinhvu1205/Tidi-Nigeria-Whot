@@ -217,6 +217,7 @@ public class NetworkManager : MonoBehaviour
         _SessionIS = session;
         StoreSession(session);
         _ = InitSocket(session);
+
     }
     
     public void StoreSession(ISession session) {
@@ -327,6 +328,7 @@ public class NetworkManager : MonoBehaviour
     {
         try
         {
+            worldChatChannelId = "";
             await _ClientC.SessionLogoutAsync(_SessionIS.AuthToken, _SessionIS.RefreshToken);
             _SessionIS = null;
         }
@@ -359,7 +361,6 @@ public class NetworkManager : MonoBehaviour
         IChannel channel = await _SocketIS.JoinChatAsync(WORLD_CHAT_ROOM_NAME, ChannelType.Room, persistence, hidden);
         worldChatChannelId = channel.Id;
         Debug.Log("Now connected to channel id: " + worldChatChannelId);
-        ReceiveMessageWorldChat();
     }
 
     public async UniTask SendMessageWorldChat(string content)
@@ -370,24 +371,26 @@ public class NetworkManager : MonoBehaviour
         Debug.Log("SEND MESSAGE TO WORLD CHAT: " + sendAck.ToString());
     }
 
-    public void ReceiveMessageWorldChat()
+    public void RegisterMessageSocket()
     {
-        _SocketIS.ReceivedChannelMessage += message =>
-        {
-            lock (messageQueueLock)
-            {
-                // Debug.Log("add state queue " + state);
-                messageQueue.Enqueue(message);
-            }
-            Debug.Log("Received: " + message);
-            Debug.Log("Message content: " + message.Content);
-        };
+        _SocketIS.ReceivedChannelMessage += OnMessageReceived;
+    }
 
+    private void OnMessageReceived(IApiChannelMessage message)
+    {
+        lock (messageQueueLock)
+        {
+            // Debug.Log("add state queue " + state);
+            if (isPause) return;
+            messageQueue.Enqueue(message);
+        }
+        Debug.Log("Received: " + message);
+        Debug.Log("Message content: " + message.Content);
     }
 
     public async UniTask<IApiChannelMessageList> GetWorldChatHistory()
     {
-        var result = await _ClientC.ListChannelMessagesAsync(_SessionIS, worldChatChannelId, 10, true);
+        var result = await _ClientC.ListChannelMessagesAsync(_SessionIS, worldChatChannelId, 100, false);
         return result; 
     }
 
@@ -410,6 +413,7 @@ public class NetworkManager : MonoBehaviour
 
     public async UniTask SendMessageRoomChat(string content)
     {
+        if (string.IsNullOrEmpty(CurrentRoomChatChannelId)) return;
         var data = new Dictionary<string, string> {{"content", content}}.ToJson();
         Debug.Log("MESSAGE: " + content.ToString());
         var sendAck = await _SocketIS.WriteChatMessageAsync(CurrentRoomChatChannelId, data);
@@ -417,11 +421,18 @@ public class NetworkManager : MonoBehaviour
 
     public async UniTask LeaveRoomChat()
     {
-        if(string.IsNullOrEmpty(CurrentRoomChatChannelId)) return;
+        if (string.IsNullOrEmpty(CurrentRoomChatChannelId)) return;
         Debug.Log("CurrentRoomChatChannelId: " + CurrentRoomChatChannelId);
         await _SocketIS.LeaveChatAsync(CurrentRoomChatChannelId);
         CurrentRoomChatChannelId = "";
     }
+
+    public async UniTask<IApiChannelMessageList> GetRoomChatHistory()
+    {
+        var result = await _ClientC.ListChannelMessagesAsync(_SessionIS, CurrentRoomChatChannelId, 100, false);
+        return result; 
+    }
+    
     #endregion
 
     #region Friends
@@ -489,8 +500,8 @@ public class NetworkManager : MonoBehaviour
             try
             {
                 await UniTask.SwitchToMainThread();
-                if (PlayerPrefs.GetInt(Config.AUTO_LOGIN, 0) == 0)
-                    return;
+                // if (PlayerPrefs.GetInt(Config.AUTO_LOGIN, 0) == 0)
+                //     return;
                 UIManager.Instance.ShowProgressing();
                 Debug.Log("ondisconnect");
 
@@ -512,6 +523,7 @@ public class NetworkManager : MonoBehaviour
             }
         };
         RegisterEventSocket();
+        RegisterMessageSocket();
 
         try
         {

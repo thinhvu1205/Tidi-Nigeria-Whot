@@ -70,9 +70,9 @@ public class SettingsView : BaseView
         PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
         PlayerPrefs.DeleteKey("UserName");
         PlayerPrefs.DeleteKey("PassWord");
-#if UNITY_EDITOR
-        await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
-#endif
+// #if UNITY_EDITOR
+//         await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
+// #endif
     }
 
     public void OnClickQuitGame()

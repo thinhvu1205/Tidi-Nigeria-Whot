@@ -491,10 +491,11 @@ public class UIManager : Singleton<UIManager>
         friendsView.transform.localScale = Vector3.one;
     }
 
-    public void OpenChatInGame()
+    public ChatInGameView OpenChatInGame()
     {
         ChatInGameView chatInGameView = Instantiate(LoadPrefabPopup("PopupChatInGame"), parentPopups).GetComponent<ChatInGameView>();
-        chatInGameView.transform.localScale = Vector3.one;
+        chatInGameView.transform.localScale = Vector3.zero;
+        return chatInGameView;
     }
 
     public void OpenGroupMenu()
