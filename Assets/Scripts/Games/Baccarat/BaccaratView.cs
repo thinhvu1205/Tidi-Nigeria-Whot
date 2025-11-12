@@ -107,6 +107,7 @@ public class BaccaratView : BaseDiceGameView
     private Sequence waitingTextSequence;
     private const string WIN_ANIMATION_PATH = "Baccarat/Ani/skeleton_SkeletonData";
     private bool isNewGame = true;
+    private int minUnitTotalBet = 1, maxUnitTotalBet = 100;
     
     protected override void Awake()
     {
@@ -122,7 +123,7 @@ public class BaccaratView : BaseDiceGameView
         
     }
 
-protected override void OnDestroy()
+    protected override void OnDestroy()
     {
         // Clear all pools to ensure clean state
         PoolService.Instance.ClearPool<BaccaratChip>(PrefabType.ChipPlayerBaccarat);
@@ -254,11 +255,14 @@ protected override void OnDestroy()
                 {
                     if (data.UserBet.UserId == User.userProfile.UserId)
                     {
+                        var wallet = long.Parse(thisPlayer.wallet);
                         foreach (var infoBet in data.UserBet.Bets)
                         {
                             int i = (int)infoBet.Cell - 1;
                             listMyBet[i] += infoBet.Chips;
+                            wallet -= infoBet.Chips;
                         }
+                        thisPlayer.wallet = wallet.ToString();
                     }
 
                     foreach (var infoBet in data.UserBet.Bets)
@@ -274,9 +278,13 @@ protected override void OnDestroy()
                         ChipMoveTo(chip, i);
                         listChipInTable.Add(chip);
                     }
-
+                        
                     buttonBetBaccarat.SetActive(true);
                     SetStatusButtonsBet(!checkBeted, checkBeted);
+                    if (long.Parse(thisPlayer.wallet) / 2 < listMyBet.Sum())
+                    {
+                        SetStatusButtonsBet(false, false);
+                    }
                     SetDisplayBet();
                     UpdateStatePot();
 
@@ -759,10 +767,11 @@ protected override void OnDestroy()
     private void SetDisplayBet()
     {
         //long betValid = 0;
+        long totalBet = listMyBet.Sum();
         bool check = false;
         for (int i = 4; i >= 0; i--)
         {
-            if (listValueChipBets[i] > long.Parse(thisPlayer.wallet))
+            if (listValueChipBets[i] > long.Parse(thisPlayer.wallet) || totalBet + listValueChipBets[i] > maxUnitTotalBet * MarkUnit )
             {
                 listChipBets[i].interactable = false;
                 listChipBets[i].transform.localPosition = new Vector2(listChipBets[i].transform.localPosition.x, -321);
@@ -781,6 +790,11 @@ protected override void OnDestroy()
                 }
                 //betValid = listValueChipBets[i];
             }
+        }
+
+        if (check)
+        {
+            betValue = 0;
         }
     }
     
@@ -869,7 +883,11 @@ protected override void OnDestroy()
     
     public void OnClickBet(int betArea)
     {
-        if (betValue <= 0) return;
+        if (betValue <= 0)
+        {
+            UIManager.Instance.ShowAlertDialog("You have reached the betting limit for this round !");
+            return;
+        }
         if (GameState != GameState.Play) return;
         
         // Create bet request
@@ -1126,7 +1144,7 @@ protected override void OnDestroy()
         {
             btnGate.GetComponent<Button>().interactable = false;
         }
-        
+
         listWinResult.Clear();
         
         lbScoreBanker.text = "";

@@ -2591,7 +2591,7 @@ MonoBehaviour:
   icon_large: {fileID: 7592490177234256380}
   cardBorder: {fileID: 358204287591366472}
   imageSpritesPusoy: {fileID: 4343727234628468602, guid: 529182daeb1bb604db3c3af831c86172, type: 2}
-  animLapLanh: {fileID: 0}
+  animationSparkle: {fileID: 0}
   data:
     rank: 0
     suit: 0
@@ -2747,7 +2747,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 5943367996253664637}
   m_OnClick:
     m_PersistentCalls:
@@ -3245,7 +3245,7 @@ MonoBehaviour:
   icon_large: {fileID: 2473662456862978218}
   cardBorder: {fileID: 2794416111688698027}
   imageSpritesPusoy: {fileID: 4343727234628468602, guid: 529182daeb1bb604db3c3af831c86172, type: 2}
-  animLapLanh: {fileID: 0}
+  animationSparkle: {fileID: 0}
   data:
     rank: 0
     suit: 0
@@ -6149,7 +6149,7 @@ MonoBehaviour:
   icon_large: {fileID: 2565483431415732364}
   cardBorder: {fileID: 2880618837484279197}
   imageSpritesPusoy: {fileID: 4343727234628468602, guid: 529182daeb1bb604db3c3af831c86172, type: 2}
-  animLapLanh: {fileID: 0}
+  animationSparkle: {fileID: 0}
   data:
     rank: 0
     suit: 0
@@ -7899,7 +7899,7 @@ MonoBehaviour:
   icon_large: {fileID: 6038295357648547756}
   cardBorder: {fileID: 6229384396813401132}
   imageSpritesPusoy: {fileID: 4343727234628468602, guid: 529182daeb1bb604db3c3af831c86172, type: 2}
-  animLapLanh: {fileID: 0}
+  animationSparkle: {fileID: 0}
   data:
     rank: 0
     suit: 0
@@ -8491,7 +8491,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 5180241820413113330}
   m_OnClick:
     m_PersistentCalls:
@@ -13332,7 +13332,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 3180535529069365565}
   m_OnClick:
     m_PersistentCalls:
@@ -13877,7 +13877,7 @@ MonoBehaviour:
   icon_large: {fileID: 8370687675416647887}
   cardBorder: {fileID: 5865505751261104531}
   imageSpritesPusoy: {fileID: 4343727234628468602, guid: 529182daeb1bb604db3c3af831c86172, type: 2}
-  animLapLanh: {fileID: 0}
+  animationSparkle: {fileID: 0}
   data:
     rank: 0
     suit: 0
@@ -14832,7 +14832,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 3102416142142835853}
   m_OnClick:
     m_PersistentCalls:
@@ -15132,7 +15132,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 339307268130216333}
   m_OnClick:
     m_PersistentCalls:
@@ -15480,7 +15480,7 @@ MonoBehaviour:
   icon_large: {fileID: 9021042561650817003}
   cardBorder: {fileID: 3105107817356617801}
   imageSpritesPusoy: {fileID: 4343727234628468602, guid: 529182daeb1bb604db3c3af831c86172, type: 2}
-  animLapLanh: {fileID: 0}
+  animationSparkle: {fileID: 0}
   data:
     rank: 0
     suit: 0
