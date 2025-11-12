@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using GIKCore.Pool;
 using Globals;
 using Nakama;
 using TMPro;
@@ -10,14 +11,14 @@ using UnityEngine.UI;
 
 public class ChatWorldView : BaseView
 {
-    [SerializeField] private ChatWorldItem messagePrefab;
-    [SerializeField] private Transform messageContentParent;
     [SerializeField] private TMP_InputField chatInputField;
     [SerializeField] private TextMeshProUGUI textAccountChip;
-    [SerializeField] private ScrollRect scrollRect;
     [SerializeField] private TextMeshProUGUI textChip;
+    [SerializeField] private VerticalPoolGroup verticalPoolGroup;
     private ChatWorldPresenter chatWorldPresenter;
     private List<IApiChannelMessage> listMessage = new();
+    private List<ChatPayload> listChatPayload = new();
+    private float containerWidth;
 
     protected override void Awake()
     {
@@ -25,7 +26,26 @@ public class ChatWorldView : BaseView
         chatWorldPresenter = new ChatWorldPresenter();
         chatWorldPresenter.Init(this);
         chatInputField.characterLimit = 200;
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        containerWidth = Screen.width - 230f;
         _ = GetHistory();
+
+        verticalPoolGroup.SetCellDataCallback<ChatPayload>((go, data, index) =>
+        {
+            ChatItem chatItem = go.GetComponent<ChatItem>();
+            chatItem.SetInfo(data, index);
+            // chatItem.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, containerWidth); 
+            RectTransform childRect = chatItem.GetComponent<RectTransform>();
+            childRect.anchorMin = new Vector2(0, childRect.anchorMin.y);
+            childRect.anchorMax = new Vector2(1, childRect.anchorMax.y);
+            childRect.offsetMin = new Vector2(0, childRect.offsetMin.y);
+            childRect.offsetMax = new Vector2(0, childRect.offsetMax.y);
+        });
+
     }
 
     protected override void OnEnable()
@@ -42,52 +62,32 @@ public class ChatWorldView : BaseView
         NetworkManager.INSTANCE.OnMessageWorldReceived -= NetworkManager_OnMessageReceived;
     }
 
-    private void InitMessageUI()
-    {
-
-        foreach (Transform child in messageContentParent)
-        {
-            Destroy(child.gameObject);
-        }
-
-        foreach (IApiChannelMessage message in listMessage)
-        {
-            var payload = JsonUtility.FromJson<ChatPayload>(message.Content);
-            if (!string.IsNullOrEmpty(payload.content))
-            {
-                bool isCurrentPlayer = message.SenderId == User.userProfile.UserId;
-                ChatWorldItem chatWorldItem = Instantiate(messagePrefab, messageContentParent);
-                Debug.Log("MESSAGE CONTENT: " + message.CreateTime);
-                chatWorldItem.SetInfo(message, isCurrentPlayer);
-            }
-        }
-        StartCoroutine(WaitAndScrollToEnd());
-
-    }
-
-    private IEnumerator WaitAndScrollToEnd()
-    {
-        yield return null; // chờ 1 frame
-        scrollRect.verticalNormalizedPosition = 0f; // 0 = cuối, 1 = đầu
-    }
-
-
     private async UniTask GetHistory()
     {
         listMessage = await chatWorldPresenter.GetWorldChatHistory();
         Debug.Log("HISTORY RESULT: " + listMessage);
-        InitMessageUI();
+        if (listMessage.Count > 0)
+        {
+            listChatPayload.Clear(); // Clear list hiện tại
+            foreach(IApiChannelMessage message in listMessage)
+            {
+                ChatPayload chatPayload = ConvertToChatPayload(message);
+                listChatPayload.Add(chatPayload); // Add tất cả items từ list gốc
+            }
+            verticalPoolGroup.SetAdapter(listChatPayload);
+            verticalPoolGroup.ScrollToLast(0);
+        }
     }
 
     private void NetworkManager_OnMessageReceived(IApiChannelMessage message)
     {
-        var payload = JsonUtility.FromJson<ChatPayload>(message.Content);
-        if (!string.IsNullOrEmpty(payload.content))
+        ChatPayload chatPayload = ConvertToChatPayload(message);
+        if (!string.IsNullOrEmpty(chatPayload.Content))
         {
-            bool isCurrentPlayer = message.SenderId == User.userProfile.UserId;
-            ChatWorldItem chatWorldItem = Instantiate(messagePrefab, messageContentParent);
-            Debug.Log("MESSAGE CONTENT: " + message.CreateTime);
-            chatWorldItem.SetInfo(message, isCurrentPlayer);
+            listChatPayload.Add(chatPayload);
+            verticalPoolGroup.SetAdapter(listChatPayload, false);
+            verticalPoolGroup.ScrollToLast(0);
+            // chatWorldItem.SetInfo(message, isCurrentPlayer);
         }
     }
 
@@ -100,7 +100,7 @@ public class ChatWorldView : BaseView
         }
     }
 
-      public void UpdateProfileData()
+    public void UpdateProfileData()
     {
         if (User.userProfile != null)
         {
@@ -108,9 +108,36 @@ public class ChatWorldView : BaseView
         }
     }
 
+    private ChatPayload ConvertToChatPayload(IApiChannelMessage message)
+    {
+        ContentData data = JsonUtility.FromJson<ContentData>(message.Content);
+        Debug.Log("dataaaa: " + data.content.ToString());
+        ChatPayload chatPayload = new()
+        {
+            Name = message.Username,
+            Time = Utility.ConvertISOToHHMMDDMMYYYY(message.CreateTime),
+            Content = data.content
+        };
+        return chatPayload;
+    }
+
 }
 
 public struct ChatPayload
+{
+    public int GameID;
+    public int Type;
+    public string Name;
+    public string Content;
+    public int Vip;
+    public int Avatar;
+    public int ID;
+    public int FaceID;
+    public string Time;
+    public bool IsAudio;
+}
+
+public struct ContentData
 {
     public string content;
 }

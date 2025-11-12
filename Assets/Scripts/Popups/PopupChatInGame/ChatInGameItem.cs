@@ -28,13 +28,13 @@ public class ChatInGameItem : MonoBehaviour
         if (true)
         {
             var payload = JsonUtility.FromJson<ChatPayload>(message.Content);
-            if (string.IsNullOrEmpty(payload.content))
+            if (string.IsNullOrEmpty(payload.Content))
             {
                 Destroy(gameObject);
             }
             textName.text = message.Username;
             textTimeOtherPlayer.text = Utility.ConvertISOToHHMM(message.CreateTime);
-            textMessageOtherPlayer.text = payload.content;
+            textMessageOtherPlayer.text = payload.Content;
             float textWidth = textMessageOtherPlayer.preferredWidth;
             float textHeight = textMessageOtherPlayer.preferredHeight;
             rectTransformOtherPlayer.sizeDelta = new Vector2(textWidth + PADDING_WIDTH, rectTransformOtherPlayer.sizeDelta.y);

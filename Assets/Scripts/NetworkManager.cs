@@ -465,24 +465,51 @@ public class NetworkManager : MonoBehaviour
     {
         _SocketIS = _ClientC.NewSocket();
         
+        // _SocketIS.Closed += async () =>
+        // {
+        //     if(PlayerPrefs.GetInt(Config.AUTO_LOGIN, 0) == 0) 
+        //         return;
+        //     UIManager.Instance.ShowProgressing();
+        //     Debug.Log("ondisconnect");
+
+        //     await UniTask.Delay(TimeSpan.FromSeconds(1));
+
+        //     if (isKickOff)
+        //     {
+        //         PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
+        //         isKickOff = false;
+        //     }
+
+        //     UIManager.Instance.HideProgressing();
+        //     // Global.IsFreeChipLoaded = false;
+        //     await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
+        // };
         _SocketIS.Closed += async () =>
         {
-            if(PlayerPrefs.GetInt(Config.AUTO_LOGIN, 0) == 0) 
-                return;
-            UIManager.Instance.ShowProgressing();
-            Debug.Log("ondisconnect");
-
-            await UniTask.Delay(TimeSpan.FromSeconds(1));
-
-            if (isKickOff)
+            try
             {
-                PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
-                isKickOff = false;
-            }
+                await UniTask.SwitchToMainThread();
+                if (PlayerPrefs.GetInt(Config.AUTO_LOGIN, 0) == 0)
+                    return;
+                UIManager.Instance.ShowProgressing();
+                Debug.Log("ondisconnect");
 
-            UIManager.Instance.HideProgressing();
-            // Global.IsFreeChipLoaded = false;
-            await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
+                await UniTask.Delay(TimeSpan.FromSeconds(1));
+
+                if (isKickOff)
+                {
+                    PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
+                    isKickOff = false;
+                }
+
+                UIManager.Instance.HideProgressing();
+                // Global.IsFreeChipLoaded = false;
+                await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Closed socker callback failed: {e}");
+            }
         };
         RegisterEventSocket();
 
@@ -584,7 +611,7 @@ public class NetworkManager : MonoBehaviour
                     }
                     break;
 
-                case -7:
+                case 101:
                     isKickOff = true;
                     break;
                 

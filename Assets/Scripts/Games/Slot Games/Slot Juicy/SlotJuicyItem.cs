@@ -74,10 +74,14 @@ public class SlotJuicyItem : SlotItem
         {
             long value = ValuePackageList[i];
             TextMeshProUGUI textElement = valuePackageTextList[i];
-
-            if (value == 0 || (new int[] { 14, 15, 16 }).Contains(finishView[i]))
+            bool isWinJackpotBasket = (new int[] { 14, 15, 16 }).Contains(finishView[i]);
+            if (value == 0 || isWinJackpotBasket)
             {
                 textElement.gameObject.SetActive(false);
+                if (isWinJackpotBasket)
+                {
+                    SetDark(false, i);
+                }
             }
             else
             {

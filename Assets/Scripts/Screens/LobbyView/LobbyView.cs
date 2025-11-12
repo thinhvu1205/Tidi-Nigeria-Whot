@@ -38,11 +38,7 @@ public class LobbyView : BaseView
         lobbyPresenter.Init(this);
         InitPool();
 
-        if (User.userProfile.VipLevel >= 2)
-        {
-            vipFarm.SetActive(true);
-            _ = GetVipFarmProgress();
-        }
+        _ = GetVipFarmProgress();
         _ = LoadGames();
         OnClickAllGamesTab();
         UIManager.Instance.lobbyView = this;
@@ -123,10 +119,10 @@ public class LobbyView : BaseView
             textPreviewChatWorldPool.Release(listTextPreviewChatWorld[0]);
             listTextPreviewChatWorld.RemoveAt(0);
         }
-        if (!string.IsNullOrEmpty(payload.content))
+        if (!string.IsNullOrEmpty(payload.Content))
         {
             TextMeshProUGUI textPreview = textPreviewChatWorldPool.Get();
-            textPreview.text = message.Username + ": " + payload.content;
+            textPreview.text = message.Username + ": " + payload.Content;
             listTextPreviewChatWorld.Add(textPreview);
         }
     }
@@ -177,6 +173,15 @@ public class LobbyView : BaseView
 
     private async UniTask GetVipFarmProgress()
     {
+        if (User.userProfile.VipLevel < 2)
+        {
+            vipFarm.SetActive(false);
+            return;
+        }
+        else
+        {
+            vipFarm.SetActive(true);
+        }
         double progress = await lobbyPresenter.GetVipFarmProgress();
         textVipFarmPercent.text = (progress * 100).ToString("F2") + "%";
         imageVipFarmPercent.fillAmount = (float)progress;
@@ -225,6 +230,7 @@ public class LobbyView : BaseView
             accountChip.text = Utility.FormatNumber(User.userProfile.AccountChip);
             avatar.LoadAvatar(User.userProfile.AvatarId, User.userProfile.VipLevel);
         }
+        _ = GetVipFarmProgress();
     }
 
     private IEnumerator ClaimTimer()
