@@ -505,6 +505,12 @@ namespace Globals
             return dt.ToString("HH:mm");
         }
 
+         public static string ConvertISOToHHMMDDMMYYYY(string time)
+        {
+            DateTime dt = DateTime.Parse(time, null, DateTimeStyles.RoundtripKind);
+            return dt.ToString("HH:mm dd/MM/yyyy");
+        }
+
 
     private static DateTimeOffset ToDateTimeOffset(long unixSeconds, TimeZoneInfo tz = null)
     {

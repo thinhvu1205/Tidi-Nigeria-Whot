@@ -465,6 +465,25 @@ public class NetworkManager : MonoBehaviour
     {
         _SocketIS = _ClientC.NewSocket();
         
+        // _SocketIS.Closed += async () =>
+        // {
+        //     if(PlayerPrefs.GetInt(Config.AUTO_LOGIN, 0) == 0) 
+        //         return;
+        //     UIManager.Instance.ShowProgressing();
+        //     Debug.Log("ondisconnect");
+
+        //     await UniTask.Delay(TimeSpan.FromSeconds(1));
+
+        //     if (isKickOff)
+        //     {
+        //         PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
+        //         isKickOff = false;
+        //     }
+
+        //     UIManager.Instance.HideProgressing();
+        //     // Global.IsFreeChipLoaded = false;
+        //     await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
+        // };
         _SocketIS.Closed += async () =>
         {
             try
@@ -475,7 +494,6 @@ public class NetworkManager : MonoBehaviour
 
                 await UniTask.Delay(TimeSpan.FromSeconds(1));
 
-                PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
                 if (isKickOff)
                 {
                     PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);

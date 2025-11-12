@@ -57,7 +57,7 @@ public class ChatInGameView : BaseView
     private void NetworkManager_OnMessageTableReceived(IApiChannelMessage message)
     {
         var payload = JsonUtility.FromJson<ChatPayload>(message.Content);
-        if (!string.IsNullOrEmpty(payload.content))
+        if (!string.IsNullOrEmpty(payload.Content))
         {
             bool isCurrentPlayer = message.SenderId == User.userProfile.UserId;
             ChatInGameItem chatItem = Instantiate(messagePrefab, messageContentParent);

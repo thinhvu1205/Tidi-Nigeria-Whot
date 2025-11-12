@@ -474,7 +474,7 @@ public class SlotJuicyView : BaseSlotView
 
     private void SetupJuiceFreeGame()
     {
-        freeSpinLeft = 3;
+        // freeSpinLeft = 3;
         ShowBackGroundFreeSpin();
         if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO)
         {

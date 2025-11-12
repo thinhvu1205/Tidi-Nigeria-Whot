@@ -146,6 +146,7 @@ public class BlackjackView : BaseDiceGameView
         {
             ResetGame(true);
             RequestRejoinTable();
+            UpdateChipBetInteractivity();
         }
     }
 
@@ -211,6 +212,7 @@ public class BlackjackView : BaseDiceGameView
                 // Rebet
                 if (isRebet && data.Bet?.Balance.AmoutChipBet > 0)
                 {
+                    hasBet = true;
                     totalBetValue = data.Bet.Balance.AmoutChipBet;
                     OnClickButtonChip(lastChipIndex);
                 }
@@ -384,6 +386,25 @@ public class BlackjackView : BaseDiceGameView
                     boxBet.SecondBoxBet.SetBetValue(GetChipIndex(boxBet.SecondBoxBet.TotalBet), boxBet.SecondBoxBet.TotalBet, boxBet.SecondBoxBet.TotalBet);
                 }
                 ShrinkCurrentPlayerBoxbet();
+            }
+        }
+
+        if (data.IsUpdateLegalAction)
+        {
+            buttonBetContainer.gameObject.SetActive(true);
+            buttonDouble.gameObject.SetActive(true);
+            buttonSplit.gameObject.SetActive(true);
+            buttonHit.gameObject.SetActive(true);
+            buttonStand.gameObject.SetActive(true);
+
+            // Turn của người chơi hiện tại
+            if (data.Actions != null)
+            {
+                List<BlackjackActionCode> actions = data.Actions.Actions.ToList();
+                buttonDouble.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionDouble);
+                buttonSplit.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionSplit);
+                buttonHit.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionHit);
+                buttonStand.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionStay);
             }
         }
 
@@ -724,6 +745,10 @@ public class BlackjackView : BaseDiceGameView
                     BlackjackBoxBet boxBet = userIdToBoxBetView.GetValueOrDefault(playerHand.UserId);
                     if (playerHand.First.Cards.Count > 0)
                     {
+                        if (playerHand.UserId == User.userProfile.UserId)
+                        {
+                            isPlaying = true;
+                        }
                         foreach (Card card in playerHand.First.Cards)
                         {
                             CardModel cardModel = InitCard();
@@ -1457,14 +1482,14 @@ public class BlackjackView : BaseDiceGameView
                 float startTime = cardIndex * delayBetweenCards;
 
                 // Đặt parent về return container
-                seq.InsertCallback(startTime, () =>
-                {
-                    card.transform.SetParent(cardContainer, true);
-                });
+                // seq.InsertCallback(startTime, () =>
+                // {
+                //     card.transform.SetParent(cardContainer, true);
+                // });
 
                 // Move + Scale song song
                 seq.Insert(startTime + 0.5f,
-                    card.transform.DOLocalMove(returnCardContainer.localPosition, 0.5f)
+                    card.transform.DOMove(returnCardContainer.position, 0.5f)
                         .SetEase(Ease.OutCubic)
                         .OnComplete(() =>
                         {
@@ -2038,7 +2063,7 @@ public class BlackjackView : BaseDiceGameView
     {
         currentBetValue = playerReceiveCardCount = 0;
         currentChipIndex = -1;
-        hasDealtCardsForBanker = hasDealtCardsForPlayers = isCurrentPlayerFinished = isRebet = isSplitingHand = isCurrentPlayerTurnPassed = isRejoinTable = false;
+        hasDealtCardsForBanker = hasDealtCardsForPlayers = isCurrentPlayerFinished = isRebet = isSplitingHand = isCurrentPlayerTurnPassed = isRejoinTable = isClickDoubleBet = false;
         hasBet = false;
         listBankerCard.Clear();
 
