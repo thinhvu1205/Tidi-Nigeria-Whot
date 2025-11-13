@@ -147,6 +147,14 @@ public class BaccaratView : BaseDiceGameView
     }
 
     #region Hander Api
+
+    protected override void RequestSyncStateTable()
+    {
+        base.RequestSyncStateTable();
+        Debug.Log("Sync state Baccarat");
+        DataSender.SendMatchState((long)OpCodeRequest.UserInTable, Array.Empty<byte>());
+        DataSender.SendMatchState((long)OpCodeRequest.SyncTable, Array.Empty<byte>());
+    }
     
     public override void HandleUpdateTable(IMatchState matchState)
     {

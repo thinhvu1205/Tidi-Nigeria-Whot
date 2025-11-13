@@ -682,9 +682,5 @@ public class NetworkManager : MonoBehaviour
     private void OnApplicationPause(bool pauseStatus)
     {
         isPause = pauseStatus;
-        if (!isPause && UIManager.Instance.gameView != null)
-        {
-            SendMatchState((long) OpCodeRequest.SyncTable, Array.Empty<byte>());
-        }
     }
 }
