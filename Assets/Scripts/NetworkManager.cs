@@ -109,11 +109,11 @@ public class NetworkManager : MonoBehaviour
     {
         try
         {
-            var properties = new Dictionary<string, string>
-            {
-                { "device_id", Config.deviceId },
-            };
-            var match = await _SocketIS.JoinMatchAsync(matchId, properties);
+            // var properties = new Dictionary<string, string>
+            // {
+            //     { "device_id", Config.deviceId },
+            // };
+            var match = await _SocketIS.JoinMatchAsync(matchId);
 
             // Lưu lại thông tin match nếu cần
             _MatchId = match.Id;
@@ -217,7 +217,6 @@ public class NetworkManager : MonoBehaviour
         _SessionIS = session;
         StoreSession(session);
         _ = InitSocket(session);
-
     }
     
     public void StoreSession(ISession session) {
@@ -225,104 +224,6 @@ public class NetworkManager : MonoBehaviour
         PlayerPrefs.SetString(REFRESH_TOKEN_KEY, session.RefreshToken);
         Debug.Log("Session stored." + session);
     }
-
-    // public async UniTask LoginAsync(string username = "", string password = "")
-    // {
-    //     Debug.Log("Session: " + _SessionIS);
-    //     // Lần đầu đăng nhập hoặc session đã hết hạn
-    //     if (_SessionIS == null || _SessionIS.IsExpired)
-    //     {
-    //         // Hết hạn access token nhưng có refresh token
-    //         if (_SessionIS?.RefreshToken != null)
-    //         {
-    //             // Thử làm mới session với refresh token
-    //             if (await TryRefreshSessionAsync())
-    //             {
-    //                 // Làm mới session thành công -> đăng nhập thành công
-    //                 Debug.Log("✅ Refresh session thành công.");
-    //                 await FinalizeLoginAsync();
-    //                 return;
-    //             }
-    //         }
-    //
-    //         // Lần đầu đăng nhập / Hết hạn refresh token -> tạo session mới
-    //         Debug.Log("Đăng nhập với session mới.");
-    //         var isLoginSuccess = await TryLoginWithNewSessionAsync(username, password);
-    //         if (!isLoginSuccess)
-    //         {
-    //             Config.isLoginSuccessful = false;
-    //             return;
-    //         }
-    //     }
-    //     Config.userName = username;
-    //     Config.userPass = password;
-    //     await FinalizeLoginAsync();
-    // }
-    //
-    // private async UniTask FinalizeLoginAsync()
-    // {
-    //     PlayerPrefs.SetString(AUTH_TOKEN_KEY, _SessionIS.AuthToken);
-    //     PlayerPrefs.SetString(REFRESH_TOKEN_KEY, _SessionIS.RefreshToken);
-    //     if (Config.loginType == LoginType.NORMAL)
-    //     {
-    //         PlayerPrefs.SetString(USER_NAME_KEY, _SessionIS.Username);
-    //     }
-    //
-    //     Config.isLoginSuccessful = true;
-    // Config.SaveUserData();
-    //     Debug.Log($"🔐 Logged in! Token: {_SessionIS.AuthToken}, RefreshToken: {_SessionIS.RefreshToken}");
-    //     Debug.Log($"🔐 Session:{_SessionIS}");
-    //     await ConnectSocketAsync();
-    // }
-    //
-    // public async UniTask<bool> TryLoginWithNewSessionAsync(string username, string password)
-    // {
-    //     try
-    //     {
-    //         switch (Config.loginType)
-    //         {
-    //             case LoginType.NORMAL:
-    //                 Debug.Log("Đăng nhập bằng tài khoản thường.");
-    //                 _SessionIS = await _ClientC.AuthenticateEmailAsync("", password, username, create: false);
-    //                 break;
-    //
-    //             case LoginType.PLAYNOW:
-    //                 Debug.Log("Đăng nhập bằng PlayNow.");
-    //                 string deviceId = Config.deviceId;
-    //                 _SessionIS = await _ClientC.AuthenticateDeviceAsync(deviceId);
-    //                 break;
-    //
-    //             default:
-    //                 Debug.LogError("❌ Loại đăng nhập không hợp lệ.");
-    //                 return false;
-    //         }
-    //
-    //         PlayerPrefs.SetInt(LOGIN_TYPE_KEY, (int)Config.loginType);
-    //         Config.isLoginSuccessful = true;
-    //         return true;
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         UIManager.Instance.OpenDialog(e.Message);
-    //         _SessionIS = null;
-    //         return false;
-    //     }
-    // }
-    //
-    // private async UniTask<bool> TryRefreshSessionAsync()
-    // {
-    //     try
-    //     {
-    //         _SessionIS = await _ClientC.SessionRefreshAsync(_SessionIS);
-    //         return true;
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         UIManager.Instance.OpenDialog(e.Message);
-    //         _SessionIS = null;
-    //         return false;
-    //     }
-    // }
 
     public async UniTask LogoutAsync()
     {
@@ -370,12 +271,7 @@ public class NetworkManager : MonoBehaviour
         var sendAck = await _SocketIS.WriteChatMessageAsync(worldChatChannelId, data);
         Debug.Log("SEND MESSAGE TO WORLD CHAT: " + sendAck.ToString());
     }
-
-    public void RegisterMessageSocket()
-    {
-        _SocketIS.ReceivedChannelMessage += OnMessageReceived;
-    }
-
+    
     private void OnMessageReceived(IApiChannelMessage message)
     {
         lock (messageQueueLock)
@@ -476,25 +372,37 @@ public class NetworkManager : MonoBehaviour
     {
         _SocketIS = _ClientC.NewSocket();
         
-        // _SocketIS.Closed += async () =>
-        // {
-        //     if(PlayerPrefs.GetInt(Config.AUTO_LOGIN, 0) == 0) 
-        //         return;
-        //     UIManager.Instance.ShowProgressing();
-        //     Debug.Log("ondisconnect");
+        try
+        {
+            await _SocketIS.ConnectAsync(session);
+            connected = true;
+            Debug.Log("Socket connected");
+            RegisterEventSocket();
+            
+            await JoinWorldChat();
+            
+            // InitSocketChat();
+            // InitSocketNotifications();
+            // InitSocketMatchData();
+            // InitSocketMatchPresence();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"connect failed: {e}");
+            // Global.IsFreeChipLoaded = false;
+            await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
+        }
+    }
 
-        //     await UniTask.Delay(TimeSpan.FromSeconds(1));
-
-        //     if (isKickOff)
-        //     {
-        //         PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
-        //         isKickOff = false;
-        //     }
-
-        //     UIManager.Instance.HideProgressing();
-        //     // Global.IsFreeChipLoaded = false;
-        //     await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
-        // };
+    [Serializable]
+    public class StreamKickMessage
+    {
+        public string type;
+        public string reason;
+    }
+    
+    private void RegisterEventSocket()
+    {
         _SocketIS.Closed += async () =>
         {
             try
@@ -520,63 +428,10 @@ public class NetworkManager : MonoBehaviour
                 Debug.LogError($"Closed socker callback failed: {e}");
             }
         };
-        RegisterEventSocket();
-        RegisterMessageSocket();
-
-        try
-        {
-            await _SocketIS.ConnectAsync(session);
-            connected = true;
-            UIManager.Instance.HideProgressing();
-            Debug.Log("Socket connected");
-
-            await JoinWorldChat();
-
-            // InitSocketChat();
-            // InitSocketNotifications();
-            // InitSocketMatchData();
-            // InitSocketMatchPresence();
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"connect failed: {e}");
-            // Global.IsFreeChipLoaded = false;
-            await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
-        }
-    }
-
-    [Serializable]
-    public class StreamKickMessage
-    {
-        public string type;
-        public string reason;
-    }
-    
-    private void RegisterEventSocket()
-    {
-        // _SocketIS.ReceivedMatchmakerMatched += async (matched) =>
-        // {
-        //     try
-        //     {
-        //         UnityMainThreadDispatcher.Instance.Enqueue(() =>
-        //         {
-        //             GameManager.Instance.HandleMatchFound(matched);
-        //         });
-        //         IMatch match = await _SocketIS.JoinMatchAsync(matched);
-        //
-        //         UnityMainThreadDispatcher.Instance.Enqueue(() =>
-        //         {
-        //             GameManager.Instance.HandleMatchJoin(match);
-        //             _MatchId = matched.MatchId;
-        //         });
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         Debug.LogError("Error joining match: " + e);
-        //         throw;
-        //     }
-        // };
+        
         _SocketIS.ReceivedError += _OnErrorCb;
+        
+        _SocketIS.ReceivedChannelMessage += OnMessageReceived;
         
         _SocketIS.ReceivedMatchState += state =>
         {
@@ -659,14 +514,6 @@ public class NetworkManager : MonoBehaviour
                     break;
             }
         };
-        
-        // _SocketIS.ReceivedMatchPresence += presence =>
-        // {
-        //     UnityMainThreadDispatcher.Instance.Enqueue(() =>
-        //     {
-        //         GameManager.Instance.HandleMatchPresence(presence);
-        //     });
-        // };
 
     }
 
@@ -835,5 +682,9 @@ public class NetworkManager : MonoBehaviour
     private void OnApplicationPause(bool pauseStatus)
     {
         isPause = pauseStatus;
+        if (!isPause && UIManager.Instance.gameView != null)
+        {
+            SendMatchState((long) OpCodeRequest.SyncTable, Array.Empty<byte>());
+        }
     }
 }

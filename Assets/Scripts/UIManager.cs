@@ -58,29 +58,11 @@ public class UIManager : Singleton<UIManager>
     {
         ShowProgressing();
         gameView = null;
-        // Preload Scene (in Unity, use LoadSceneAsync)
-        await PreloadAndLoadSceneAsync(sceneName);
-    }
-    
-    private async UniTask PreloadAndLoadSceneAsync(string sceneName)
-    {
-        var asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-        if (asyncLoad != null)
+        if (sceneName == Config.MAIN_SCENE)
         {
-            asyncLoad.allowSceneActivation = false;
-
-            while (asyncLoad.progress < 0.9f)
-            {
-                await UniTask.Yield();
-            }
-
-            if (sceneName == Config.MAIN_SCENE)
-            {
-                await LoadProfileUser();
-            }
-
-            asyncLoad.allowSceneActivation = true;
+            await LoadProfileUser();
         }
+        SceneManager.LoadSceneAsync(sceneName);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
