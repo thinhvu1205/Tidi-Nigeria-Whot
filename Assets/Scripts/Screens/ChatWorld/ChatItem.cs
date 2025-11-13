@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Globals;
@@ -26,17 +27,19 @@ public class ChatItem : MonoBehaviour
     private const float PADDING = 12f;
     private const float EXTRA_PADDING = 10f;
     private const float MIN_WIDTH = 50f;
-    private const float DEFAULT_MAX_WIDTH = 400f;
+    private const float DEFAULT_MAX_WIDTH = 350f;
     private const float LOBBY_MAX_WIDTH = 500f;
     private bool isLobbyChat = true;
+    private float width, height;
 
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
     }
 
-    public void SetInfo(ChatPayload data, int index = -1)
+    public void SetInfo(ChatPayload data, int index = -1, bool isLobbyChat = true, Action<float, float> onSizeCalculated = null)
     {
+        this.isLobbyChat = isLobbyChat;
         // var payload = JsonUtility.FromJson<ChatPayload>(message.Content);
         if (string.IsNullOrEmpty(data.Content))
         {
@@ -60,6 +63,7 @@ public class ChatItem : MonoBehaviour
             textMessageRight.text = data.Content;
             AdjustFrameContent(chatContainerRight, textMessageRight);
         }
+        onSizeCalculated?.Invoke(width, height);
         // float textWidth = textMessage.preferredWidth;
         // float textHeight = textMessage.preferredHeight;
 
@@ -85,7 +89,8 @@ public class ChatItem : MonoBehaviour
         messageText.ForceMeshUpdate();
 
         float finalHeight = messageText.preferredHeight + PADDING;
-
+        width = finalWidth;
+        height = finalHeight;
         RectTransform frameRect = frameContent.GetComponent<RectTransform>();
         if (frameRect != null)
         {

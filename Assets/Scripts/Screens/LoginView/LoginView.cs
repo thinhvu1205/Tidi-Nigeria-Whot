@@ -25,6 +25,10 @@ namespace Screens.LoginView
             loginForm.SetActive(false);
             SoundManager.Instance.PlayMusicLobby();
             UIManager.Instance.HideProgressing();
+            if (!UIManager.Instance.isShowingGlobalDialog)
+            {
+                UIManager.Instance.HideGlobalDialog();
+            }
         }
 
         protected override void Start()

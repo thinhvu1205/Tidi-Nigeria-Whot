@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using GIKCore.Pool;
 using Globals;
 using Nakama;
 using TMPro;
@@ -12,9 +11,9 @@ public class ChatInGameView : BaseView
     [SerializeField] private ChatInGameItem messagePrefab;
     [SerializeField] private Transform messageContentParent;
     [SerializeField] private TMP_InputField chatInputField;
-    [SerializeField] private VerticalPoolGroup verticalPoolGroup;
+    [SerializeField] private VerticalPool verticalPoolGroup;
     private List<IApiChannelMessage> listMessage = new();
-    private List<ChatPayload> listChatPayload = new();
+    private List<PoolInfo> listPoolInfo = new();    
     private ChatInGamePresenter chatInGamePresenter;
 
 
@@ -63,17 +62,21 @@ public class ChatInGameView : BaseView
 
     public void Init()
     {
-        verticalPoolGroup.SetCellDataCallback<ChatPayload>((go, data, index) =>
+        verticalPoolGroup.SetApplyDataCb((go, data, index) =>
         {
             ChatItem chatItem = go.GetComponent<ChatItem>();
-            chatItem.SetInfo(data, index);
+            chatItem.SetInfo((ChatPayload)data.Data, index, true, (cellW, cellH) =>
+            {
+                data.SetCellWidth(verticalPoolGroup.GetComponent<RectTransform>().rect.width);
+                data.SetCellHeight(cellH + 40);
+            });
             // chatItem.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, containerWidth); 
             RectTransform childRect = chatItem.GetComponent<RectTransform>();
             childRect.anchorMin = new Vector2(0, childRect.anchorMin.y);
             childRect.anchorMax = new Vector2(1, childRect.anchorMax.y);
             childRect.offsetMin = new Vector2(0, childRect.offsetMin.y);
             childRect.offsetMax = new Vector2(0, childRect.offsetMax.y);
-        });
+        }, true);
         NetworkManager.INSTANCE.OnMessageTableReceived += NetworkManager_OnMessageTableReceived;
         
     }
@@ -83,9 +86,10 @@ public class ChatInGameView : BaseView
         ChatPayload chatPayload = ConvertToChatPayload(message);
         if (!string.IsNullOrEmpty(chatPayload.Content))
         {
-            listChatPayload.Add(chatPayload);
-            verticalPoolGroup.SetAdapter(listChatPayload, false);
-            verticalPoolGroup.ScrollToLast(0);
+            listPoolInfo.Add(new PoolInfo { Data = chatPayload });
+            verticalPoolGroup.SetControlInfo(listPoolInfo, listPoolInfo.Count - 1);
+
+            // verticalPoolGroup.ScrollToLast(0);
             // chatWorldItem.SetInfo(message, isCurrentPlayer);
         }
     }

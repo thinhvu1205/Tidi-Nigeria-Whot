@@ -91,6 +91,7 @@ public class DragonPearlItem : MonoBehaviour
                 .AppendInterval(0.33f)
                 .AppendCallback(() =>
                 {
+                    dragonPearlView.GameView.UpdateDragonPearlFreeSpinLeft();
                     dragonPearlView.GameView.UpdateTotalChipWinValue();
                     textChipValue.fontMaterial = materialText[0];
                     textChipValue.gameObject.SetActive(true);

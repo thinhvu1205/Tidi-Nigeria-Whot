@@ -600,7 +600,9 @@ public class NetworkManager : MonoBehaviour
                     var msg = JsonUtility.FromJson<StreamKickMessage>(state.State);
                     if (msg.type == "kick")
                     {
-                        UIManager.Instance.ShowAlertDialog(msg.reason);
+                        Config.loginType = LoginType.NONE;
+                        PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
+                        UIManager.Instance.ShowGlobalDialog(msg.reason);
                         isKickOff = true;
                     }
                 }

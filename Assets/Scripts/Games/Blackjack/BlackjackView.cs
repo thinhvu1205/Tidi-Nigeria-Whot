@@ -100,6 +100,7 @@ public class BlackjackView : BaseDiceGameView
         GameState.Preparing,
         GameState.Reward
     };
+    private const string CHAT_ROOM_NAME = "whot";
     private readonly Dictionary<string, BlackjackBoxBet> userIdToBoxBetView = new();
     private readonly Dictionary<string, BlackjackChip> userIdToInsuranceChip = new();
     private const float DEAL_CARD_ANIMATION_TIME = 0.4f;
@@ -125,17 +126,26 @@ public class BlackjackView : BaseDiceGameView
     [SerializeField] private bool isCurrentPlayerTurnPassed = false; // Check xem đã qua turn người chơi hiện tại chưa
     private Vector2 countdownPosition;
     private List<BalanceUpdate> listBalanceUpdate;
+    private ChatInGameView chatInGameView;
 
     protected override void Awake()
     {
         base.Awake();
         InitPool();
+        chatInGameView = UIManager.Instance.OpenChatInGame();
+        chatInGameView.Init();
         insurance.SetInfo(this);
         phaseBet.SetActive(false);
         phasePlay.SetActive(false);
         countdownPosition = countdownContainer.transform.position;
         if (countdownCoroutine != null)
             StopCoroutine(countdownCoroutine);
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        DestroyImmediate(chatInGameView.gameObject);
     }
 
     protected override void OnApplicationPause(bool pause)
@@ -165,6 +175,7 @@ public class BlackjackView : BaseDiceGameView
         textMaxBet.text = "Max bet " + Utility.FormatNumber(MarkUnit * 100);
         textMinBet.text = "Min bet " + Utility.FormatNumber(MarkUnit);
         // RequestRejoinTable();
+        _ = NetworkManager.INSTANCE.JoinRoomChat(CHAT_ROOM_NAME + "-" + match.TableId);
 
         // string labelJson = match.Label;
         // Match data = JsonConvert.DeserializeObject<Match>(labelJson);
@@ -1000,6 +1011,12 @@ public class BlackjackView : BaseDiceGameView
     }
 
     #region Buttons
+    public void OnClickChat()
+    {
+        chatInGameView.transform.localScale = Vector3.one;
+        chatInGameView.Show();
+    }
+
     /// --------- PHASE BET ------------ ///
     public void OnClickButtonChip(int index)
     {

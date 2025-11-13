@@ -26,6 +26,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] TMP_FontAsset fontLabelToast;
     public SelectTableView selectTableView;
     public LobbyView lobbyView;
+    public bool isShowingGlobalDialog = false;
     private Transform parentPopups, parentGames, parentBanners, parentLobby, parentLoading;
     [HideInInspector] public BaseGameView gameView;
     private GameObject currentToast;
@@ -98,6 +99,19 @@ public class UIManager : Singleton<UIManager>
     {
         // parentLoading.GetChild(0).gameObject.SetActive(false);
         Progressing.Instance.gameObject.SetActive(false);
+    }
+
+    public void ShowGlobalDialog(string message)
+    {
+        GlobalDialog.Instance.gameObject.SetActive(true);
+        GlobalDialog.Instance.SetInfo(message);
+        isShowingGlobalDialog = true;
+    }
+
+    public void HideGlobalDialog()
+    {
+        GlobalDialog.Instance.gameObject.SetActive(false);
+        isShowingGlobalDialog = false;
     }
     
     public Sprite GetAvatarDefault()
@@ -275,7 +289,7 @@ public class UIManager : Singleton<UIManager>
         dialogView.ConfigCancelButton(true, textCancel, cancelCallback);
     }
 
-    public void ShowAlertDialog(string content, Action confirmCallback = null)
+    public void ShowAlertDialog(string content, Action confirmCallback = null, bool isGlobal = true)
     {
         DialogView dialogView = Instantiate(LoadPrefabPopup("Dialog"), parentPopups).GetComponent<DialogView>();
         dialogView.transform.localScale = Vector3.one;

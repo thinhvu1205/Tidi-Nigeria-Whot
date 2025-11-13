@@ -629,7 +629,7 @@ MonoBehaviour:
   chatInputField: {fileID: 4313995312609646448}
   textAccountChip: {fileID: 7133346059710703626}
   textChip: {fileID: 7133346059710703626}
-  verticalPoolGroup: {fileID: 544262355386336839}
+  verticalPoolGroup: {fileID: 2019207197147238834}
 --- !u!1 &4529897271000410626
 GameObject:
   m_ObjectHideFlags: 0
@@ -2051,7 +2051,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1879106127279097055}
-  - component: {fileID: 544262355386336839}
+  - component: {fileID: 2019207197147238834}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -2078,7 +2078,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 444.07}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &544262355386336839
+--- !u!114 &2019207197147238834
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2087,18 +2087,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8375372844713251311}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05bc833480ce66948aaf342d4704eeaf, type: 3}
+  m_Script: {fileID: 11500000, guid: 3601a3acf7a09a84d8aef47b8a9d4c6a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp-firstpass::GIKCore.Pool.VerticalPoolGroup
-  m_CustomParent: {fileID: 0}
-  m_UseCustomLayoutOffset: 1
-  m_CustomLayoutOffset: {x: 0, y: 0}
-  m_ScrollRect: {fileID: 4940337967123660915}
-  m_CellPrefabs:
-  - {fileID: 5747711756123476023, guid: 7251c4ce4b6b63c489ddc59ea21f0dc7, type: 3}
-  m_CellSize: {x: 0, y: 0}
-  m_Spacing: {x: 0, y: 10}
-  m_ChildForceExpand: 0
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::VerticalPool
+  m_PfCell: {fileID: 5747711756123476023, guid: 7251c4ce4b6b63c489ddc59ea21f0dc7, type: 3}
+  m_SpacingV2: {x: 0, y: 40}
   m_PaddingTop: 50
-  m_PaddingBottom: 50
-  m_ChildAlignment: 0
+  m_PaddingBot: 50
+  m_PaddingLeft: 0
+  m_PaddingRight: 0
