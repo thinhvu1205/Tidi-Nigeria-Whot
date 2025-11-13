@@ -37,7 +37,6 @@ public class LobbyView : BaseView
         lobbyPresenter = new LobbyPresenter();
         lobbyPresenter.Init(this);
         InitPool();
-
         _ = GetVipFarmProgress();
         _ = LoadGames();
         OnClickAllGamesTab();

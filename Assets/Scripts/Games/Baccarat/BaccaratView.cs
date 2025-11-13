@@ -147,6 +147,14 @@ public class BaccaratView : BaseDiceGameView
     }
 
     #region Hander Api
+
+    protected override void RequestSyncStateTable()
+    {
+        base.RequestSyncStateTable();
+        Debug.Log("Sync state Baccarat");
+        DataSender.SendMatchState((long)OpCodeRequest.UserInTable, Array.Empty<byte>());
+        DataSender.SendMatchState((long)OpCodeRequest.SyncTable, Array.Empty<byte>());
+    }
     
     public override void HandleUpdateTable(IMatchState matchState)
     {
@@ -281,7 +289,8 @@ public class BaccaratView : BaseDiceGameView
                         
                     buttonBetBaccarat.SetActive(true);
                     SetStatusButtonsBet(!checkBeted, checkBeted);
-                    if (long.Parse(thisPlayer.wallet) / 2 < listMyBet.Sum())
+                    long currentBet = listMyBet.Sum();
+                    if (currentBet > long.Parse(thisPlayer.wallet) / 2 || 2 * currentBet > maxUnitTotalBet * MarkUnit )
                     {
                         SetStatusButtonsBet(false, false);
                     }

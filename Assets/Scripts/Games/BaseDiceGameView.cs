@@ -40,6 +40,19 @@ public class BaseDiceGameView : BaseGameView
     }
 
 
+    protected override void OnApplicationPause(bool pause)
+    {
+        if (!pause && UIManager.Instance.gameView != null)
+        {
+            RequestSyncStateTable();
+        }
+    }
+
+    protected virtual void RequestSyncStateTable()
+    {
+        
+    }
+
     public override void LoadInfoMatch(Match match)
     {
         base.LoadInfoMatch(match);
