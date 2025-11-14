@@ -525,7 +525,6 @@ public class SlotSixiangView : BaseSlotSymbolView
     #region Dragon Pearl
     public void ShowDragonPearlView()
     {
-        Debug.Log("SHOW DRAGON PEARL VIEW");
         dragonPearlView.gameObject.SetActive(true);
         dragonPearlView.SetInfo(this);
         SetAnimationGameName(DRAGON_PEARL_GAME_NAME);
@@ -541,7 +540,6 @@ public class SlotSixiangView : BaseSlotSymbolView
 
     public void UpdateVisualDragonPearlFreeSpinLeft(bool isWithShadow = false)
     {
-        Debug.Log("ANIMATE DRAGON PEARL FREE SPIN LEFT");
         // DragonPearlFreeSpinLeft = freeSpinLeft;
         textInfoSession.gameObject.SetActive(true);
         if (isWithShadow)

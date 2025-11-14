@@ -90,7 +90,6 @@ namespace Games.Card
         /// </summary>
         private void Initialize()
         {
-            Debug.Log("Initializing Card component");
             tweenLapLanh = null;
         }
 

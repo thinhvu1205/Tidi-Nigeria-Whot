@@ -549,6 +549,18 @@ public class NetworkManager : MonoBehaviour
         _ClientC = new Client("http", "172.16.56.36", 57350, "defaultkey"); // Máy Huy
         _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey"); // Server chung
         // _ClientC = new Client("http", "172.16.56.104", 57350, "defaultkey"); // Máy Toàn
+        switch(PlayerPrefs.GetInt("serverId"))
+        {
+            case 0:
+                _ClientC = new Client("http", SERVER_TEST_PORT, 57350, "defaultkey");
+                break;
+            case 1:
+                _ClientC = new Client("http", SERVER_HUY_PORT, 57350, "defaultkey");
+                break;
+            case 2:
+                _ClientC = new Client("http", SERVER_TOAN_PORT, 57350, "defaultkey");
+                break;
+        }
         RestoreSession();
         string deviceId;
         if (PlayerPrefs.HasKey(DEVICE_ID)) deviceId = PlayerPrefs.GetString(DEVICE_ID);
@@ -580,6 +592,7 @@ public class NetworkManager : MonoBehaviour
                 UIManager.Instance.ShowToast("Connect to Toan Server", 2, transform);
                 break;
         }
+        PlayerPrefs.SetInt("serverId", serverId);
     }
 
     #endregion
@@ -684,5 +697,27 @@ public class NetworkManager : MonoBehaviour
     private void OnApplicationPause(bool pauseStatus)
     {
         isPause = pauseStatus;
+    }
+
+    private async void OnDisable()
+    {
+        await SafeClose();
+    }
+
+    private async UniTask SafeClose()
+    {
+        try
+        {
+            if (_SocketIS != null)
+            {
+                await _SocketIS.CloseAsync();
+                _SocketIS = null;
+                Debug.Log("Socket closed safely.");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Error closing socket: " + e);
+        }
     }
 }

@@ -203,9 +203,9 @@ public class WhotPlayerHand : MonoBehaviour
     #region Events
     public void WhotGame_OnNextTurn(WhotView.OnNextTurnEventArg e)
     {
-        Debug.Log("ON NEXT TURN");
         if (e.playerTurn == whotGame.GetCurrentPlayer().Id)
         {
+        Debug.Log("ON NEXT TURN");
             WhotCardModel callCardModel = e.CallCardModel;
             WhotCardEffect cardEffect = e.cardEffect;
 

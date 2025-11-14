@@ -7,7 +7,7 @@ using System;
 using System.Threading.Tasks;
 public class BaseView : MonoBehaviour
 {
-    enum EFFECT_POPUP
+    protected enum EFFECT_POPUP
     {
         NONE,
         SCALE,
@@ -17,11 +17,11 @@ public class BaseView : MonoBehaviour
         MOVE_DOWN
     }
 
-    [SerializeField] private EFFECT_POPUP effectPopup = EFFECT_POPUP.NONE;
-    [SerializeField] private EFFECT_POPUP effectPopupReverse = EFFECT_POPUP.NONE;
+    [SerializeField] protected EFFECT_POPUP effectPopup = EFFECT_POPUP.NONE;
+    [SerializeField] protected EFFECT_POPUP effectPopupReverse = EFFECT_POPUP.NONE;
     [SerializeField] protected Image popupBackground;
     protected float originX = 0, originY = 0;
-    private const float ANIMATION_TIME = 0.3f;
+    protected const float ANIMATION_TIME = 0.3f;
 
     protected virtual void Awake()
     {
@@ -60,7 +60,7 @@ public class BaseView : MonoBehaviour
     {
         Hide();
     }
-    public void Show()
+    public virtual void Show()
     {
         gameObject.SetActive(true);
         if (popupBackground != null)
@@ -113,7 +113,7 @@ public class BaseView : MonoBehaviour
         }
     }
 
-    public void Hide(bool isDestroy = true, Action onCompleteCallback = null)
+    public virtual void Hide(bool isDestroy = true, Action onCompleteCallback = null, bool notDeactive = false)
     {
         if (popupBackground != null)
         {
@@ -151,7 +151,10 @@ public class BaseView : MonoBehaviour
             sequence.AppendCallback(() =>
             {
                 onCompleteCallback?.Invoke();
-                DeactiveOrDestroy(isDestroy);
+                if (!notDeactive)
+                {
+                    DeactiveOrDestroy(isDestroy);
+                }
             });
         }
         else
@@ -160,7 +163,7 @@ public class BaseView : MonoBehaviour
         }
     }
 
-    private void SetStretch()
+    protected void SetStretch()
     {
         var rect = GetComponent<RectTransform>();
         var anchorMin = rect.anchorMin;
@@ -173,7 +176,7 @@ public class BaseView : MonoBehaviour
         }
     }
 
-    private void Fade()
+    protected void Fade()
     {
         CanvasGroup canvasGroup = popupBackground.GetComponent<CanvasGroup>();
         if (canvasGroup == null)
@@ -186,7 +189,7 @@ public class BaseView : MonoBehaviour
         canvasGroup.DOFade(1, ANIMATION_TIME).SetEase(Ease.InSine);
     }
 
-    private void DeactiveOrDestroy(bool isDestroy = true, bool isSetParentNull = false)
+    protected void DeactiveOrDestroy(bool isDestroy = true, bool isSetParentNull = false)
     {
         if (isDestroy)
         {

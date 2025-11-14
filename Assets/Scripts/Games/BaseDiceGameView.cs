@@ -25,7 +25,7 @@ public class BaseDiceGameView : BaseGameView
     protected BasePlayerView thisPlayer = new();
     protected List<Player> players = new List<Player>();
     protected List<Player> rearrangedPlayers = new List<Player>();
-    protected List<Player> playingPlayers = new List<Player>();
+    [SerializeField] protected List<Player> playingPlayers = new List<Player>();
     protected List<GameObject> listBtnInvite = new List<GameObject>();
     private float interactTimer = 0, interactCountdown = 2;
 

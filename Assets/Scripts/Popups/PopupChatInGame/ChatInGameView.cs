@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using Globals;
 using Nakama;
 using TMPro;
@@ -108,16 +110,115 @@ public class ChatInGameView : BaseView
         ContentData data = JsonUtility.FromJson<ContentData>(message.Content);
         ChatPayload chatPayload = new()
         {
+            ID = message.SenderId,
             Name = message.Username,
             Time = Utility.ConvertISOToHHMM(message.CreateTime),
             Content = data.content,
-            // Avatar = message.
+            Avatar = data.sender_profile.avt,
+            Vip = data.sender_profile.vip_level
         };
         return chatPayload;
     }
 
     public override void OnClickCloseButton()
     {
-        Hide(false);
+        Hide(false, null, true);
+    }
+
+    // public override void Show()
+    // {
+    //     gameObject.SetActive(true);
+    //     Image background = transform.GetComponent<Image>();
+    //     if (popupBackground != null)
+    //     {
+    //         popupBackground.gameObject.SetActive(true);
+    //         popupBackground.DOKill();
+
+    //         Sequence sequence = DOTween.Sequence();
+    //         sequence.AppendCallback(() => SetStretch());
+
+    //         switch (effectPopup)
+    //         {
+    //             case EFFECT_POPUP.NONE:
+    //                 effectPopupReverse = EFFECT_POPUP.NONE;
+    //                 SetStretch();
+    //                 break;
+    //             case EFFECT_POPUP.SCALE:
+    //                 effectPopupReverse = EFFECT_POPUP.SCALE;
+    //                 Vector3 initialScale = new(0.8f, 0.8f, 0);
+    //                 Vector3 targetScale = new(1f, 1f, 0);
+    //                 background.rectTransform.localScale = initialScale;
+    //                 Fade();
+    //                 sequence.Append(background.rectTransform.DOScale(targetScale, ANIMATION_TIME).SetEase(Ease.OutBack).SetAutoKill(true));
+    //                 break;
+    //             case EFFECT_POPUP.MOVE_LEFT:
+    //                 // effectPopupReverse = EFFECT_POPUP.MOVE_RIGHT;
+    //                 Fade();
+    //                 background.transform.localPosition = new Vector3(-Screen.width, originY);
+    //                 sequence.Append(background.transform.DOLocalMoveX(originX, ANIMATION_TIME).SetEase(Ease.InSine).SetAutoKill(true));
+    //                 break;
+    //             case EFFECT_POPUP.MOVE_RIGHT:
+    //                 // effectPopupReverse = EFFECT_POPUP.MOVE_LEFT;
+    //                 Fade();
+    //                 background.rectTransform.localPosition = new Vector3(Screen.width, originY);
+    //                 sequence.Append(background.rectTransform.DOLocalMoveX(originX, ANIMATION_TIME).SetEase(Ease.InSine).SetAutoKill(true));
+    //                 break;
+    //             case EFFECT_POPUP.MOVE_UP:
+    //                 effectPopupReverse = EFFECT_POPUP.MOVE_DOWN;
+    //                 Fade();
+    //                 background.rectTransform.localPosition = new Vector3(originX, -Screen.height);
+    //                 sequence.Append(background.rectTransform.DOLocalMoveY(originX, ANIMATION_TIME).SetEase(Ease.InSine).SetAutoKill(true));
+    //                 break;
+    //             case EFFECT_POPUP.MOVE_DOWN:
+    //                 effectPopupReverse = EFFECT_POPUP.MOVE_UP;
+    //                 Fade();
+    //                 background.rectTransform.localPosition = new Vector3(originX, Screen.height);
+    //                 sequence.Append(background.rectTransform.DOLocalMoveY(originX, ANIMATION_TIME).SetEase(Ease.InSine).SetAutoKill(true));
+    //                 break;
+    //         }
+    //     }
+    // }
+
+    public override void Hide(bool isDestroy = true, Action onCompleteCallback = null, bool notDeactive = false)
+    {
+        Image background = transform.GetComponent<Image>();
+        if (background != null)
+        {
+            background.DOKill();
+            Sequence sequence = DOTween.Sequence();
+
+            switch (effectPopupReverse)
+            {
+                case EFFECT_POPUP.NONE:
+                    break;
+                case EFFECT_POPUP.SCALE:
+                    Vector3 targetScale = Vector3.zero;
+                    sequence.Append(background.rectTransform.DOScale(targetScale, ANIMATION_TIME).SetEase(Ease.InBack).SetAutoKill(true));
+                    break;
+                case EFFECT_POPUP.MOVE_LEFT:
+                    Fade();
+                    sequence.Append(background.rectTransform.DOLocalMoveX(-Screen.width, ANIMATION_TIME).SetEase(Ease.OutSine).SetAutoKill(true));
+                    break;
+                case EFFECT_POPUP.MOVE_RIGHT:
+                    Fade();
+                    sequence.Append(background.rectTransform.DOLocalMoveX(Screen.width, ANIMATION_TIME).SetEase(Ease.OutSine).SetAutoKill(true));
+
+                    break;
+                case EFFECT_POPUP.MOVE_UP:
+                    Fade();
+                    sequence.Append(background.rectTransform.DOLocalMoveY(Screen.height, ANIMATION_TIME).SetEase(Ease.OutSine).SetAutoKill(true));
+
+                    break;
+                case EFFECT_POPUP.MOVE_DOWN:
+                    Fade();
+                    sequence.Append(background.rectTransform.DOLocalMoveY(-Screen.height, ANIMATION_TIME).SetEase(Ease.OutSine).SetAutoKill(true));
+
+                    break;
+            }
+            sequence.AppendCallback(() =>
+            {
+                onCompleteCallback?.Invoke();
+            });
+        }
     }
 }

@@ -112,12 +112,15 @@ public class ChatWorldView : BaseView
     private ChatPayload ConvertToChatPayload(IApiChannelMessage message)
     {
         ContentData data = JsonUtility.FromJson<ContentData>(message.Content);
+        Debug.Log("SENDER AVATAR:" + data.sender_profile.avt);
         ChatPayload chatPayload = new()
         {
+            ID = message.SenderId,
             Name = message.Username,
             Time = Utility.ConvertISOToHHMMDDMMYYYY(message.CreateTime),
             Content = data.content,
-            // Avatar = message.
+            Avatar = data.sender_profile.avt,
+            Vip = data.sender_profile.vip_level
         };
         return chatPayload;
     }
@@ -131,14 +134,23 @@ public struct ChatPayload
     public string Name;
     public string Content;
     public int Vip;
-    public int Avatar;
-    public int ID;
+    public string Avatar;
+    public string ID;
     public int FaceID;
     public string Time;
     public bool IsAudio;
 }
 
-public struct ContentData
+[Serializable]
+public class ContentData
 {
     public string content;
+    public SenderProfile sender_profile;
+}
+
+[Serializable]
+public class SenderProfile
+{
+    public string avt;
+    public int vip_level;
 }

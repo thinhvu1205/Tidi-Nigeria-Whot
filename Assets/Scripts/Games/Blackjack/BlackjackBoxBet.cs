@@ -86,7 +86,6 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void ShowScore(int point, int minPoint = 0, int maxPoint = 0, BlackjackHandType type = BlackjackHandType.Normal)
     {
-        Debug.Log("SHOW SCORE WITH TYPE: " + type);
         // ----- Hiện score text với scale animation -----
         textScore.gameObject.SetActive(true);
         float totalWidth = (listCardModel.Count - 1) * CARD_SPACING;
@@ -240,12 +239,10 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void SetBetValue(int index, long value, long totalValue, bool isWaiting = false)
     {
-        Debug.Log("SetBetValue: " + value);
         TotalBet = totalValue;
         chipIndex = index;
         if (index < 0 || totalValue <= 0)
         {
-            Debug.Log("SET BET VALUE LAM MAT CHIP");
             imageChip.gameObject.SetActive(false);
             textTotalBet.text = Utility.FormatMoney(totalValue, true);
             iconChip.gameObject.SetActive(false);
@@ -392,7 +389,6 @@ public class BlackjackBoxBet : MonoBehaviour
             scoreBoxoffsetX = isBankerBox ? 30f : 0f;
             scoreBoxoffsetY = isBankerBox ? 100f : 60f;
         }
-        Debug.Log("isBanker: " + isBankerBox + " scoreBoxOffsetY: " + scoreBoxoffsetY);
         Vector2 scoreBoxTargetPos = new(ImageScoreBoxPosition.x + scoreBoxoffsetX, ImageScoreBoxPosition.y + scoreBoxoffsetY);
         imageScoreBox.transform.localPosition = scoreBoxTargetPos;
     }
@@ -438,7 +434,6 @@ public class BlackjackBoxBet : MonoBehaviour
 
     private void ShrinkCurrentPlayerBoxbet()
     {
-        Debug.Log("SHRINK CARDS");
         if (IsEnlarging)
         {
             ShrinkCards();
@@ -599,15 +594,15 @@ public class BlackjackBoxBet : MonoBehaviour
         switch (index)
         {
             case 0:
-                transform.localPosition = new(BoxPosition.x - boxWidth, BoxPosition.y + 70f);
-                secondBoxBet.transform.localPosition = new(2 * (BoxPosition.x + boxWidth), BoxPosition.y);
+                transform.localPosition = new(initialPosition.x - boxWidth, initialPosition.y + 70f);
+                secondBoxBet.GetComponent<RectTransform>().anchoredPosition = new(2 * (BoxPosition.x + boxWidth), secondBoxBet.transform.localPosition.y);
                 break;
             case 1:
-                secondBoxBet.transform.localPosition = new(secondBoxBet.transform.position.x + boxWidth * 2.5f + CARD_SPACING, secondBoxBet.transform.position.y);
+                secondBoxBet.GetComponent<RectTransform>().anchoredPosition= new(BoxPosition.x + boxWidth * 1.5f + CARD_SPACING, secondBoxBet.transform.localPosition.y);
                 break;
             case 2:
-                transform.localPosition = new(transform.localPosition.x - 1.4f * boxWidth, transform.localPosition.y);
-                secondBoxBet.transform.localPosition = new(BoxPosition.x + boxWidth * 1.5f + CARD_SPACING, secondBoxBet.transform.localPosition.y);
+                transform.localPosition = new(initialPosition.x - 1.4f * boxWidth, initialPosition.y);
+                secondBoxBet.GetComponent<RectTransform>().anchoredPosition= new(BoxPosition.x + boxWidth * 1.5f + CARD_SPACING, secondBoxBet.transform.localPosition.y);
                 break;
         }
     }
@@ -642,13 +637,11 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void HideImageChip()
     {
-        Debug.Log("HIDE IMAGE CHIP");
         imageChip.gameObject.SetActive(false);
     }
 
     public void HideImageChipWin()
     {
-        Debug.Log("HIDE IMAGE CHIP");
         imageChipWin.gameObject.SetActive(false);
     }
 
@@ -701,20 +694,20 @@ public class BlackjackBoxBet : MonoBehaviour
         textChipValue.gameObject.SetActive(false);
         effectContainer.gameObject.SetActive(false);
 
-        RectTransform rect = gameObject.transform as RectTransform;
-        Vector2 size = rect.sizeDelta;
-        size.x = boxWidth;
-        rect.sizeDelta = size;
-
         if (!isRejoin)
         {
             if (secondBoxBet != null)
             {
+                secondBoxBet.Reset();
                 secondBoxBet.gameObject.SetActive(false);
                 secondBoxBet.transform.position = transform.position;
                 secondBoxBet.transform.DOLocalMoveX(BoxPosition.x, 0.5f);
-                transform.localPosition = initialPosition;
             }
+        }
+
+        if (!isBankerBox)
+        {
+            transform.localPosition = initialPosition;
         }
 
         foreach (Transform child in cardContainer)

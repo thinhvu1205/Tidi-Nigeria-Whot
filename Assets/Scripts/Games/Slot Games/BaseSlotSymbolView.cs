@@ -129,6 +129,7 @@ public class BaseSlotSymbolView : BaseGameView
 
     protected bool hasSetupStartView = false, isInFreeSpin = false, isChooseBonusGame = false, isGetMatchResult = false, isCurrentlyAutoSpin = false;
     protected virtual float AUTO_SPIN_HOLD_DURATION => 1.3f;
+    public override bool CanLeaveTable => gameState != SlotGameState.SPINNING && gameState != SlotGameState.SHOWING_RESULT;
 
 
     [Header(" Object Pools ")]
@@ -152,6 +153,7 @@ public class BaseSlotSymbolView : BaseGameView
 
     protected override void Update()
     {
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || currentGame != SiXiangGame.Normal) return;
         HandleHoldingSpin();
     }
 

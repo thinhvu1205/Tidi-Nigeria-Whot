@@ -45,7 +45,8 @@ public class ChatItem : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        bool isMe = data.Name == User.userProfile.UserName;
+        Debug.Log("SENDER AVATAR ID: " + data.Avatar);
+        bool isMe = data.ID == User.userProfile.UserId;
 
         contentLeft.SetActive(!isMe);
         contentRight.SetActive(isMe);
@@ -54,6 +55,7 @@ public class ChatItem : MonoBehaviour
             textNameLeft.text = data.Name;
             textTimeLeft.text = data.Time;
             textMessageLeft.text = data.Content;
+            avatarLeft.LoadAvatar(data.Avatar, data.Vip);
             AdjustFrameContent(chatContainerLeft, textMessageLeft);
         }
         else
@@ -61,6 +63,7 @@ public class ChatItem : MonoBehaviour
             textNameRight.text = data.Name;
             textTimeRight.text = data.Time;
             textMessageRight.text = data.Content;
+            avatarRight.LoadAvatar(data.Avatar, data.Vip);
             AdjustFrameContent(chatContainerRight, textMessageRight);
         }
         onSizeCalculated?.Invoke(width, height);

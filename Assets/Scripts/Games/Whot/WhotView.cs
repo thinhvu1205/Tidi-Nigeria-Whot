@@ -104,6 +104,15 @@ public class WhotView : BaseDiceGameView
         base.Awake();
     }
 
+    protected override void RequestSyncStateTable()
+    {
+        base.RequestSyncStateTable();
+        DataSender.SendMatchState((long)OpCodeRequest.SyncTable, Array.Empty<byte>());
+        isRejoinTable = true;
+        playerHand.Reset();
+        Debug.Log("REJOIN TABLE");
+    }
+
     public void Init()
     {
         TypeWinMore = false;
@@ -198,10 +207,9 @@ public class WhotView : BaseDiceGameView
         int startIndex = players.IndexOf(currentPlayer);
 
         // Nếu GameState là Playing hoặc Reward và JoinPlayers có chứa currentPlayer thì là rejoin bàn
-        isRejoinTable =
-            (!(new GameState[] { GameState.Preparing, GameState.Idle, GameState.Matching }).Contains(gameState))
-            && joinPlayers.Find((player) => player.Id == currentPlayerId) != null;
-        if (isRejoinTable) hasDealtCards = true;
+        // isRejoinTable =
+        //     (!(new GameState[] { GameState.Preparing, GameState.Idle, GameState.Matching }).Contains(gameState))
+        //     && joinPlayers.Find((player) => player.Id == currentPlayerId) != null;
         Debug.Log("IS REJOIN TABLE: " + isRejoinTable);
         // Order lại List Player sao cho currentPlayer luôn ở đầu
         if (startIndex >= 0)
@@ -402,6 +410,7 @@ public class WhotView : BaseDiceGameView
         {
             case GameState.Preparing:
                 PrepareNewGame();
+                isRejoinTable = false;
                 countdownText.text = data.CountDown.ToString();
                 break;
             case GameState.Play:
@@ -437,6 +446,7 @@ public class WhotView : BaseDiceGameView
     {
         var data = UpdateTurn.Parser.ParseFrom(matchState.State);
         Debug.Log("UPDATE TURN: " + data);
+        hasDealtCards = true;
         if (data.UserId == GetCurrentPlayer().Id && currentEffect != WhotCardEffect.Whot)
         {
             yourTurnTransform.gameObject.SetActive(true);
@@ -459,6 +469,11 @@ public class WhotView : BaseDiceGameView
     public override void HandleUpdateCardState(IMatchState matchState)
     {
         var data = UpdateCardState.Parser.ParseFrom(matchState.State);
+        Debug.Log("UpdateCardState: " + data);
+        if (isRejoinTable)
+        {
+            
+        }
         playAreaParent.gameObject.SetActive(true);
 
         currentEffect = data.Effect;
@@ -530,11 +545,11 @@ public class WhotView : BaseDiceGameView
             default:
                 // Khi vào bàn đang dang chơi dở hoặc vào ván mới
                 Debug.Log("HAS DEALT CARDS: " + hasDealtCards);
-                if (hasDealtCards)
-                {
+                // if (hasDealtCards)
+                // {
                     Debug.Log("Has dealt cards, updating cards count");
                     UpdateCardsCount(data.DeckCount, playerCardsCount);
-                }
+                // }
                 break;
         }
     }
