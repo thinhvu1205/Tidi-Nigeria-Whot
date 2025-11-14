@@ -20,7 +20,7 @@ public class NetworkManager : MonoBehaviour
     public Action<IApiChannelMessage> OnMessageWorldReceived;
     public Action<IApiChannelMessage> OnMessageTableReceived;
 
-    private const string SESSION = "session",
+    public const string SESSION = "session",
         DEVICE_ID = "deviceId",
         AUTH_TOKEN_KEY = "authToken",
         REFRESH_TOKEN_KEY = "refreshToken",
@@ -543,31 +543,20 @@ public class NetworkManager : MonoBehaviour
 
     public void PreConnect()
     {
-        // _ClientC = new Client("http", "192.168.153.83", 57350, "defaultkey");
-        _ClientC = new Client("http", "172.23.112.1", 57350, "defaultkey");
-        // _ClientC = new Client("http", "10.251.228.83", 57350, "defaultkey");
-        _ClientC = new Client("http", "172.16.56.36", 57350, "defaultkey"); // Máy Huy
-        _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey"); // Server chung
+        string ipServer = PlayerPrefs.GetString("IpServer", SERVER_TEST_PORT);
+        // _ClientC = new Client("http", "172.23.112.1", 57350, "defaultkey");
+        // _ClientC = new Client("http", "172.16.56.36", 57350, "defaultkey"); // Máy Huy
+        // _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey"); // Server chung
         // _ClientC = new Client("http", "172.16.56.104", 57350, "defaultkey"); // Máy Toàn
-        switch(PlayerPrefs.GetInt("serverId"))
-        {
-            case 0:
-                _ClientC = new Client("http", SERVER_TEST_PORT, 57350, "defaultkey");
-                break;
-            case 1:
-                _ClientC = new Client("http", SERVER_HUY_PORT, 57350, "defaultkey");
-                break;
-            case 2:
-                _ClientC = new Client("http", SERVER_TOAN_PORT, 57350, "defaultkey");
-                break;
-        }
+        _ClientC = new Client("http", ipServer, 57350, "defaultkey");
         RestoreSession();
         string deviceId;
         if (PlayerPrefs.HasKey(DEVICE_ID)) deviceId = PlayerPrefs.GetString(DEVICE_ID);
         else
         {
-            deviceId = SystemInfo.deviceUniqueIdentifier;
-            if (deviceId == SystemInfo.unsupportedIdentifier) deviceId = Guid.NewGuid().ToString();
+            deviceId = Guid.NewGuid().ToString();
+            // deviceId = SystemInfo.deviceUniqueIdentifier;
+            // if (deviceId == SystemInfo.unsupportedIdentifier) deviceId = Guid.NewGuid().ToString();
             PlayerPrefs.SetString(DEVICE_ID, deviceId);
         }
         Debug.Log("DEVICE ID: " + deviceId);
@@ -580,14 +569,17 @@ public class NetworkManager : MonoBehaviour
         switch(serverId)
         {
             case 0:
+                PlayerPrefs.SetString("IpServer", SERVER_TEST_PORT);
                 _ClientC = new Client("http", SERVER_TEST_PORT, 57350, "defaultkey");
                 UIManager.Instance.ShowToast("Connect to Test Server", 2, transform);
                 break;
             case 1:
+                PlayerPrefs.SetString("IpServer", SERVER_HUY_PORT);
                 _ClientC = new Client("http", SERVER_HUY_PORT, 57350, "defaultkey");
                 UIManager.Instance.ShowToast("Connect to Huy Server", 2, transform);
                 break;
             case 2:
+                PlayerPrefs.SetString("IpServer", SERVER_TOAN_PORT);
                 _ClientC = new Client("http", SERVER_TOAN_PORT, 57350, "defaultkey");
                 UIManager.Instance.ShowToast("Connect to Toan Server", 2, transform);
                 break;

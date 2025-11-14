@@ -36,6 +36,21 @@ namespace Screens.LoginView
             loginPresenter = new LoginPresenter();
             loginPresenter.Init(this);
             serverDropdown.onValueChanged.AddListener(OnSwitchServer);
+            switch (PlayerPrefs.GetString("IpServer", NetworkManager.SERVER_TEST_PORT))
+            {
+                case NetworkManager.SERVER_TEST_PORT:
+                    serverDropdown.value = 0;
+                    break;
+                case NetworkManager.SERVER_HUY_PORT:
+                    serverDropdown.value = 1;
+                    break;
+                case NetworkManager.SERVER_TOAN_PORT:
+                    serverDropdown.value = 2;
+                    break;
+                default:
+                    serverDropdown.value = 0;
+                    break;
+            }
             HandleFirstLogin();
         }
     
