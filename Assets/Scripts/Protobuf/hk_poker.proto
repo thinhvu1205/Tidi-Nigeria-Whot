@@ -55,6 +55,29 @@ message HKPlayerBettingState {
   bool is_all_in = 8;         // Whether player is all-in
   bool can_swap = 9;          // Whether player can swap card (Round 4 only)
   bool has_swapped = 10;      // Whether player has swapped card
+  HKPlayerAvailableActions available_actions = 11;  // Available actions for this player
+}
+
+// Available actions for a player
+message HKPlayerAvailableActions {
+  bool can_fold = 1;
+  bool can_check = 2;
+  bool can_call = 3;
+  bool can_raise = 4;
+  bool can_bet = 5;
+  bool can_all_in = 6;
+  bool can_call_any = 7;        // Call Any - auto call when turn comes (for non-current players)
+
+  // Amounts (0 if action not available)
+  int64 call_amount = 8;        // Amount needed to call
+  int64 min_raise_amount = 9;   // Minimum raise amount
+  int64 max_raise_amount = 10;  // Maximum (all-in) raise amount
+  int64 min_bet_amount = 11;    // Minimum bet amount
+  int64 max_bet_amount = 12;    // Maximum bet amount
+
+  // Visibility flags (for non-current players)
+  bool raise_visible = 13;      // Raise button visible (false = invisible/IV)
+  bool call_visible = 14;       // Call button visible (false = invisible)
 }
 
 // Betting state for the table
@@ -67,6 +90,7 @@ message HKBettingState {
   string first_bettor = 6;    // First player to act in this round
   repeated HKPlayerBettingState player_states = 7;
   bool all_players_acted = 8;
+  HKPlayerAvailableActions current_player_actions = 9;  // Available actions for current player
 }
 
 // Pot information

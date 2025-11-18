@@ -521,6 +521,11 @@ public class BasePlayerView : MonoBehaviour
     public virtual void HideCountDown()
     {
         timeCountDown.gameObject.SetActive(false);
+        if (countdownCoroutine != null)
+        {
+            StopCoroutine(countdownCoroutine);
+            countdownCoroutine = null;
+        }
     }
 
     /// <summary>

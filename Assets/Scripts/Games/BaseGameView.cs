@@ -159,5 +159,11 @@ public class BaseGameView : BaseView
         // Override in HongKongPokerView
     }
     
+    public virtual void HandleBettingState(IMatchState matchState)
+    {
+        if (isPause) return;
+        // Override in HongKongPokerView
+    }
+    
     #endregion
 }
