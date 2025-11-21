@@ -153,7 +153,7 @@ public class BaseGameView : BaseView
         // Override in HongKongPokerView
     }
     
-    public virtual void HandleUpdateShowdown(IMatchState matchState)
+    public virtual async UniTask HandleUpdateShowdown(IMatchState matchState)
     {
         if (isPause) return;
         // Override in HongKongPokerView

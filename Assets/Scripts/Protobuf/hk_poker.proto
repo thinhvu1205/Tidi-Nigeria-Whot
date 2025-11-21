@@ -154,6 +154,7 @@ message HKUpdateNewRound {
   repeated HKPlayerCards player_cards = 2;
   string first_bettor = 3;
   HKBettingState betting_state = 4;
+  HKPotInfo pot_info = 5;
 }
 
 // Hand result for HK Poker

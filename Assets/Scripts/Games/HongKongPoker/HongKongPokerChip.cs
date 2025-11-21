@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Common.Pool;
 using DG.Tweening;
+using Games;
 using Globals;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HongKongPokerChip : MonoBehaviour
+public class HongKongPokerChip : ChipBet
 {
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private CanvasGroup canvasGroup;
@@ -47,7 +49,7 @@ public class HongKongPokerChip : MonoBehaviour
             });
     }
 
-    public void MoveToPlayer(Vector2 chipPosition, Vector2 playerPosition, int chipValue)
+    public float MoveToPlayer(Vector2 chipPosition, Vector2 playerPosition, int chipValue)
     {
         Debug.Log("MOVE TO PLAYER");
         gameObject.GetComponent<Image>().enabled = false;
@@ -65,7 +67,7 @@ public class HongKongPokerChip : MonoBehaviour
                 text.text = Utility.FormatMoney(chipValue);
                 canvasGroup.DOFade(1, 0.4f);
             })
-            .AppendInterval(4f)
+            .AppendInterval(3f)
             .AppendCallback(() =>
             {
                 text.transform.parent.gameObject.SetActive(false);
@@ -74,5 +76,8 @@ public class HongKongPokerChip : MonoBehaviour
             })
             .Join(transform.DOScale(0.5f, 1.0f).SetEase(Ease.OutCubic))
             .OnComplete(() => gameObject.SetActive(false));
+        float duration = seq.Duration();
+        return duration;
     }
+
 }

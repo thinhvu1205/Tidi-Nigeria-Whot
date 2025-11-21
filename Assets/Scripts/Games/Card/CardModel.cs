@@ -195,7 +195,7 @@ namespace Games.Card
         /// </summary>
         public void HideShadowCard()
         {
-            darkBg.gameObject.SetActive(false);
+            darkBg?.gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -401,10 +401,12 @@ namespace Games.Card
 
         public void OnGetFromPool()
         {
+            HideShadowCard();
         }
 
         public void OnReturnToPool()
         {
+            
         }
     }
 } 

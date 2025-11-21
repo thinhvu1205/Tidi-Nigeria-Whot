@@ -75,7 +75,7 @@ public class GameManager : Singleton<GameManager>
                     UIManager.Instance.gameView.HandleUpdateCardSwap(matchState);
                     break;
                 case (long)OpCodeUpdate.Showdown: // OPCODE_UPDATE_SHOWDOWN
-                    UIManager.Instance.gameView.HandleUpdateShowdown(matchState);
+                    _ = UIManager.Instance.gameView.HandleUpdateShowdown(matchState);
                     break;
                 case (long)OpCodeUpdate.BettingState:
                     UIManager.Instance.gameView.HandleBettingState(matchState);

@@ -1,11 +1,12 @@
 
+using Common.Pool;
 using Globals;
 using Proto;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HongKongPokerBoxBet : MonoBehaviour
+public class HongKongPokerBoxBet : MonoBehaviour, IPoolable
 {
     [SerializeField] Image icon;
 
@@ -40,10 +41,11 @@ public class HongKongPokerBoxBet : MonoBehaviour
                 // SoundManager.instance.playEffectFromPath(SOUND_GAME.ALL_IN);
                 break;
             case HKPokerAction.HkActionRaise:
+            case HKPokerAction.HkActionBet:
                 icon.sprite = listSprite[1];
                 // SoundManager.instance.playEffectFromPath(SOUND_GAME.BET);
                 break;
-            case HKPokerAction.HkActionBet:
+            case HKPokerAction.HkActionCall:
                 icon.sprite = chipBet == 0 ? listSprite[3] : listSprite[2];
                 // SoundManager.instance.playEffectFromPath(SOUND_GAME.BET);
                 break;
@@ -67,5 +69,15 @@ public class HongKongPokerBoxBet : MonoBehaviour
     {
         GetComponent<Image>().enabled = false;
         textChip.text = "";
+    }
+
+    public void OnGetFromPool()
+    {
+        
+    }
+
+    public void OnReturnToPool()
+    {
+       
     }
 }
