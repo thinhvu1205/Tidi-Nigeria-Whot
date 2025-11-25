@@ -1175,7 +1175,7 @@ public class HongKongPokerView : BaseDiceGameView
                     myAvailableActions,
                     (int)currentPlayerStack,
                     (int)bettingState.MinRaise,
-                    (int)bettingState.CurrentBet
+                    (int)bettingState.CurrentBet, pot.PotValue
                 );
             }
             else

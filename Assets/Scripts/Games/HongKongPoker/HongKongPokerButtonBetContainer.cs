@@ -338,11 +338,11 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
         HKPlayerAvailableActions availableActions,
         int playerStack,
         int minRaise,
-        int currentBet)
+        int currentBet, int currentPot)
     {
         playerCurrentChipValue = playerStack;
         markUnitValue = minRaise;
-        
+        potValue = currentPot;
         // ===== STEP 1: Tắt tất cả buttons trước (clear previous state) =====
         if (buttonFold != null) buttonFold.SetActive(false);
         if (buttonCheck != null) buttonCheck.SetActive(false);
