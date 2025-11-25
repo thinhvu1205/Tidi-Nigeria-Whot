@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Globals;
 using Newtonsoft.Json;
@@ -12,8 +13,20 @@ public class BannerView : BaseView
 {
     [SerializeField] private Image imageBanner;
     [SerializeField] private GameObject buttonClose;
-
+    private CancellationTokenSource cancellationTokenSource;
     private Action callback = null;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        cancellationTokenSource = new();
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        cancellationTokenSource.Cancel();
+    }
 
     public async void SetInfo(InAppMessage data, Sprite sprite)
     {
@@ -59,6 +72,7 @@ public class BannerView : BaseView
             {
                 buttonSprite = await Config.GetRemoteSprite(buttonData.urlButton);
             }
+            if (!this || !gameObject || cancellationTokenSource.IsCancellationRequested) return;
             if (buttonSprite != null)
             {
                 //var sp = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);

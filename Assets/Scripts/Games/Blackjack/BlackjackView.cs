@@ -252,6 +252,7 @@ public class BlackjackView : BaseDiceGameView
             {
                 isClickDoubleBet = false;
                 currentPlayerBoxBet.DoubleBoxBet();
+                currentPlayerBoxBet.ShowHigherScore();
                 totalBetValue *= 2;
                 currentPlayerBoxBet.SetBetValue(GetChipIndex(totalBetValue), totalBetValue, totalBetValue);
                 SetEnableDoubleBetButton(true);
@@ -476,6 +477,7 @@ public class BlackjackView : BaseDiceGameView
                 }
                 if (playerBet.Second > 0)
                 {
+                    Debug.Log("REJOIN SETUP SECOND BOX CHIP: " + playerBet.Second + ", " + GetChipIndex(playerBet.Second));
                     boxBet.SecondBoxBet.SetBetValue(GetChipIndex(playerBet.Second), playerBet.Second, playerBet.Second);
                 }
             }

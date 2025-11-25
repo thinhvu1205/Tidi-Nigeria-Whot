@@ -11,12 +11,13 @@ using Spine.Unity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Color = UnityEngine.Color;
 
 public class RouletteView : BaseDiceGameView
 {
     [SerializeField] private RouletteOptionBet[] listBetOptions;
     [SerializeField] private RouletteButtonBet[] listBetButtons;
-    [SerializeField] private Image imageSpin, imageBall, imagePopupHistory;
+    [SerializeField] private Image imageSpin, imageBall, imagePopupHistory, imageButtonRebet, imageButtonDouble;
     [SerializeField]
     private Image button1stDozenActive, button2ndDozenActive, button3rdDozenActive, button1To18Active,
     button19To36Active, buttonRedActive, buttonBlackActive, buttonOddActive, buttonEvenActive, button1stLineActive, button2ndLineActive, button3rdLineActive;
@@ -196,7 +197,6 @@ public class RouletteView : BaseDiceGameView
 
         currentBetValue += coefficients[currentBetIndex];
         UpdateTotalBetUI(TotalBetValue + currentBetValue);
-        UpdateTotalDealValueUI();
 
         if (Constants.RouletteNumberDictionary.TryGetValue(id, out int[] values))
         {
@@ -212,6 +212,7 @@ public class RouletteView : BaseDiceGameView
         {
             playersBet[id] = coefficients[currentBetIndex];             // chưa có -> add mới
         }
+        UpdateTotalDealValueUI();
     }
     #endregion
 
@@ -310,9 +311,9 @@ public class RouletteView : BaseDiceGameView
         }
         TotalBetValue += currentBetValue;
         currentBetValue = 0;
+        playersBet.Clear();
         UpdateTotalDealValueUI();
         UpdateTotalBetUI(TotalBetValue);
-        playersBet.Clear();
      
         DataSender.SendMatchState((long)OpCodeRequest.Bet, roulettePlayerBet.ToByteArray());
     }
@@ -339,9 +340,9 @@ public class RouletteView : BaseDiceGameView
             }
         }
         currentBetValue = 0;
+        playersBet.Clear(); 
         UpdateTotalDealValueUI();
         UpdateTotalBetUI(TotalBetValue);
-        playersBet.Clear(); 
     }
 
     public void OnClickButtonRebet()
@@ -476,7 +477,9 @@ public class RouletteView : BaseDiceGameView
             buttonClear.interactable = true;
         }
         buttonDouble.interactable = playersBet.Any();
+        imageButtonDouble.color = buttonDouble.interactable ? Color.white : Color.gray;
         buttonRebet.interactable = listDataRebet.Count > 0;
+        imageButtonRebet.color = buttonRebet.interactable ? Color.white : Color.gray;
     }
 
     private void ClearChip(Transform chipTransform)
@@ -834,7 +837,9 @@ public class RouletteView : BaseDiceGameView
         buttonDeal.interactable = false;
         buttonClear.interactable = false;
         buttonDouble.interactable = false;
+        imageButtonDouble.color = Color.gray;
         buttonRebet.interactable = false;
+        imageButtonRebet.color = Color.gray;
         OnClickButtonBet(currentBetIndex);
     }
 

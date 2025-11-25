@@ -160,6 +160,7 @@ public class SiXiangDragonPearlView : MonoBehaviour
         }
         else
         {
+            mainSequence.AppendInterval(IsWinBirdEye ? 1.2f : 0f);
             mainSequence.AppendCallback(() =>
             {
                 GameView.NextTween();

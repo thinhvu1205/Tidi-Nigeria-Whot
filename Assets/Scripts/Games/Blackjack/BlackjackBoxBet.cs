@@ -249,13 +249,16 @@ public class BlackjackBoxBet : MonoBehaviour
             textTotalBet.gameObject.SetActive(false);
             return;
         }
-        if (!isSecondBox)
-        {
+        // if (!isSecondBox)
+        // {
+        //     imageChip.gameObject.SetActive(true);
+        //     textChipValue.text = Utility.FormatMoney(value, true);
+        //     imageChip.sprite = listImageChip[index];
+        // }
+            imageChip.sprite = listImageChip[index];
             imageChip.gameObject.SetActive(true);
             textChipValue.gameObject.SetActive(true);
             textChipValue.text = Utility.FormatMoney(value, true);
-            imageChip.sprite = listImageChip[index];
-        }
         iconChip.gameObject.SetActive(true);
         textTotalBet.gameObject.SetActive(true);
         textTotalBet.text = Utility.FormatMoney(totalValue, true);
@@ -338,7 +341,7 @@ public class BlackjackBoxBet : MonoBehaviour
         float offsetY = IsEnlarging && !isBankerBox ? 30f : 0f;
         Vector2 targetPos = new(startX + newIndex * CARD_SPACING, cardContainer.localPosition.y  + offsetY);
 
-        return transform.TransformPoint(targetPos); ;
+        return transform.TransformPoint(targetPos); 
     }
 
     public void UpdateContainerWidth()

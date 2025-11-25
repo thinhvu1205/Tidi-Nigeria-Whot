@@ -184,6 +184,11 @@ public class DragonPearlItem : MonoBehaviour
                 case SiXiangSymbol.DragonpearlEyeTiger:
                     {
                         sequence
+                            .AppendCallback(() =>
+                            {
+                                // dragonPearlView.GameView.DragonPearlFreeSpinLeft += 1;
+                                dragonPearlView.GameView.UpdateDragonPearlFreeSpinLeft();
+                            })
                             .AppendInterval(2f)
                             .AppendCallback(() =>
                             {
@@ -194,6 +199,11 @@ public class DragonPearlItem : MonoBehaviour
                 case SiXiangSymbol.DragonpearlEyeWarrior:
                     {
                         sequence
+                            .AppendCallback(() =>
+                            {
+                                // dragonPearlView.GameView.DragonPearlFreeSpinLeft += 1;
+                                dragonPearlView.GameView.UpdateDragonPearlFreeSpinLeft();
+                            })
                             .AppendInterval(2f)
                             .AppendCallback(() =>
                             {
@@ -208,6 +218,11 @@ public class DragonPearlItem : MonoBehaviour
                         string jackpotNormalAnimationName = "normal_" + GetJackpotAnimationName(data.WinJp);
 
                         sequence
+                            .AppendCallback(() =>
+                            {
+                                // dragonPearlView.GameView.DragonPearlFreeSpinLeft += 1;
+                                dragonPearlView.GameView.UpdateDragonPearlFreeSpinLeft();
+                            })
                             .AppendInterval(2f)
                             .AppendCallback(() =>
                             {

@@ -78,7 +78,7 @@ public class GroupMenuView : BaseView
         musicButton.gameObject.SetActive(false);
         soundButton.gameObject.SetActive(false);
         string currentGameId = Config.currentGameId;
-        if (Constants.SLOT_GAMES_ID.Contains(currentGameId))
+        if (Constants.SLOT_GAMES_ID.Contains(currentGameId) || currentGameId == Constants.ROULETTE_GAME_ID)
         {
             switchTableButton.gameObject.SetActive(false);
         }
