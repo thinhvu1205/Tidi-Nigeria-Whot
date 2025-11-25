@@ -393,7 +393,10 @@ public class BasePlayerView : MonoBehaviour
     public void SetCurrentChip(long ag)
     {
         // Utility.TweenNumberTo(textMoney, ag, CurrentChip, 0.3f, false, false);
-        Utility.TweenNumberToNumberScale1(textMoney, ag, (int)CurrentChip, 0.5f, false);
+        if (ag != CurrentChip)
+        {
+            Utility.TweenNumberToNumberScale1(textMoney, ag, (int)CurrentChip, 0.5f, false);
+        }
 
         CurrentChip = ag;
     }

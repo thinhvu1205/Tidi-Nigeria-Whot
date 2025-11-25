@@ -5863,19 +5863,7 @@ MonoBehaviour:
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1842754485945695355}
-        m_TargetAssemblyTypeName: HongKongPokerButtonBetContainer, Assembly-CSharp
-        m_MethodName: OnValueChange
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &4969689374397777594
 GameObject:
   m_ObjectHideFlags: 0
@@ -8887,7 +8875,7 @@ MonoBehaviour:
   textButtonCall: {fileID: 6164320088411997464}
   textBet: {fileID: 7868246841305424001}
   textMax: {fileID: 1378058271949913766}
-  sliderHandle: {fileID: 2189408925686130343}
+  sliderHandle: {fileID: 203046071990744247}
   slider: {fileID: 3033407101660357055}
 --- !u!1 &6748329236887612686
 GameObject:

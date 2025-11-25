@@ -155,6 +155,8 @@ message HKUpdateNewRound {
   string first_bettor = 3;
   HKBettingState betting_state = 4;
   HKPotInfo pot_info = 5;
+  bool is_sync = 6;        // True if this is a sync (rejoin), false if new round
+  int64 card_swap_countdown = 7;  // Remaining seconds for card swap phase (Round 4 only, 0 if not applicable)
 }
 
 // Hand result for HK Poker
@@ -171,6 +173,7 @@ message HKUpdateShowdown {
   repeated HKHandResult hand_results = 1;
   HKPotInfo pot_info = 2;
   repeated string winners = 3;
+  bool is_sync = 4;  // True if this is a sync (rejoin), false if actual showdown
 }
 
 // Update for game state (extends UpdateGameState)

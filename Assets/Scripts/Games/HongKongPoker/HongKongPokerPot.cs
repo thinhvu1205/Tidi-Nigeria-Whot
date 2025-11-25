@@ -23,6 +23,7 @@ public class HongKongPokerPot : MonoBehaviour
     {
         ValueChange = valueNew - value;
         PotValue = valueNew;
+        if(ValueChange == 0) return;
         DOTween.Sequence()
             .AppendInterval(delayTime)
             .AppendCallback(() =>
