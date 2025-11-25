@@ -36,7 +36,7 @@ public class WhotMatchResult : MonoBehaviour
         timer = countdown;
         timerText.text = timer.ToString();
 
-        if (timer == 0)
+        if (timer == 1 && gameObject.activeInHierarchy)
         {
             OnClickPlayAgain();
         }
@@ -91,8 +91,8 @@ public class WhotMatchResult : MonoBehaviour
 
     public void OnClickPlayAgain()
     {
-        gameObject.SetActive(false);
         whotGame.ResetAllPlayers();
+        gameObject.SetActive(false);
     }
 
     public void OnClickBetMoreNote()

@@ -227,10 +227,10 @@ public class BaseSlotView : BaseGameView
 
     public virtual void OnStopSpin()
     {
-        if (isInFreeSpin)
-        {
-            ShowBackGroundFreeSpin();
-        }
+        // if (isInFreeSpin && !hasGotFreeSpin)
+        // {
+        //     ShowBackGroundFreeSpin();
+        // }
         // ShowWinAnimation(WinType.MEGA_WIN);
         IsSpinning = false;
  
@@ -785,7 +785,7 @@ public class BaseSlotView : BaseGameView
                     bigWinText.transform.parent.gameObject.SetActive(false);
                     if (isCoinFlyAfterwards)
                     {
-                        AnimateCoinsFly();   
+                        AnimateCoinsFly();
                     }
                 }
                 NextTween();
@@ -1087,6 +1087,7 @@ public class BaseSlotView : BaseGameView
 
     protected virtual void ShowBackGroundFreeSpin()
     {
+        Debug.Log("ShowBackGroundFreeSpin ");
         if (backgroundFreeSpinAnimation != null)
         {
             backgroundFreeSpinAnimation.gameObject.SetActive(true);
@@ -1480,7 +1481,8 @@ public class BaseSlotView : BaseGameView
         if (playerWallet < currentBetLevel && (spinType == SpinType.NORMAL || spinType == SpinType.AUTO))
         {
             spinType = SpinType.NORMAL;
-            UpdateSpinButtonUI();
+            UpdateGameState(SlotGameState.PREPARE);
+            IsSpinning = false;
             string message = "Not enough chips to spin.";
             UIManager.Instance.ShowConfirmDialog(message, () => UIManager.Instance.OpenShop(), null, "Get More Chips");
             return false;

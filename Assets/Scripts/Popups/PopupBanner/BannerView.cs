@@ -62,7 +62,7 @@ public class BannerView : BaseView
             if (buttonSprite != null)
             {
                 //var sp = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
-
+                if (!gameObject.activeInHierarchy) return;
                 var btnView = Utility.CreateButton(buttonSprite);
                 btnView.GetComponent<Image>().SetNativeSize();
                 btnView.transform.SetParent(imageBanner.transform, false);

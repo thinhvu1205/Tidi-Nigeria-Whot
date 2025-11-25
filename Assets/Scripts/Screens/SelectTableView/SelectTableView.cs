@@ -156,16 +156,19 @@ public class SelectTableView : BaseView
                 currentMarkUnitTab = (int)bet.MarkUnit;
                 await GetListTableByMarkUnit(currentMarkUnitTab);
             });
+ 
             if (!isTableTabSelected && bet.Enable)
             {
                 currentMarkUnitTab = (int)bet.MarkUnit;
                 tableTabItem.SetSelected();
                 isTableTabSelected = true;
+                _ = GetListTableByMarkUnit(currentMarkUnitTab);
             }
             else
             {
                 tableTabItem.SetUnselected();
             }
+            
         }
     }
 
@@ -257,7 +260,5 @@ public class SelectTableView : BaseView
         prevButton.gameObject.SetActive(viewportWidth < contentWidth && posX > 0.25f);
         nextButton.gameObject.SetActive(viewportWidth < contentWidth && posX < 0.75f);
     }
-
-
     #endregion
 }

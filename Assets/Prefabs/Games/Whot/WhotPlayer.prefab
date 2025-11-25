@@ -1,5 +1,40 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &69282774041017473
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 448662243545694087}
+  m_Layer: 5
+  m_Name: Draw Card Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &448662243545694087
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 69282774041017473}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4992261517435682700}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &73740777196846025
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,6 +200,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5520600940460768662}
+  - {fileID: 448662243545694087}
   - {fileID: 7796257983199705601}
   - {fileID: 4381101860699990054}
   m_Father: {fileID: 6697993886974305229}
@@ -854,9 +891,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '10
-
-'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7ff0de5fd0906472c81e1b2c028ae441, type: 2}
   m_sharedMaterial: {fileID: -8143075325125500292, guid: 7ff0de5fd0906472c81e1b2c028ae441, type: 2}
@@ -1529,6 +1564,8 @@ MonoBehaviour:
   cardsDisplay: {fileID: 116395859874360449}
   cardPrefab: {fileID: 9120301256744507343, guid: dc97c59986f4144e28f2082e917e6a80, type: 3}
   remainingCardsParent: {fileID: 7107553626782955985}
+  dealCardContainer: {fileID: 5520600940460768662}
+  drawCardContainer: {fileID: 448662243545694087}
   chipWinFont: {fileID: 11400000, guid: 68e6280662ed2420b8ad68207c89773e, type: 2}
   chipLoseFont: {fileID: 11400000, guid: 005d7e3b77e9b4c788b7f995113f08f0, type: 2}
   avatar: {fileID: 6480725550419531424}
@@ -1556,6 +1593,7 @@ MonoBehaviour:
   remainingCardsParent: {fileID: 7107553626782955985}
   lastCardNoti: {fileID: 7041566551525584878}
   backgroundImage: {fileID: 4753096025806832475}
+  currentLayout: 0
 --- !u!1 &4219335751972251826
 GameObject:
   m_ObjectHideFlags: 0
@@ -2100,7 +2138,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 27
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e51ce9611578648ceab7e8459d1c9f78, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 89e5b1001931a464a90e0f0ed28ee363, type: 2}
@@ -2360,6 +2398,41 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &8550591975727938383
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5520600940460768662}
+  m_Layer: 5
+  m_Name: Deal Card Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5520600940460768662
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8550591975727938383}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4992261517435682700}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &8683694775050175123
 GameObject:
   m_ObjectHideFlags: 0

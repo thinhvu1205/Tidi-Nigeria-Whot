@@ -1,0 +1,151 @@
+syntax = "proto3";
+
+package proto;
+
+import "common.proto";
+
+option go_package = "github.com/nk-nigeria/cgp-common/proto";
+
+// RouletteBetCode represents the type of bet action
+enum RouletteBetCode {
+  ROULETTE_BET_CODE_UNSPECIFIED = 0;
+  ROULETTE_BET_CODE_NORMAL = 1;      // Normal bet
+  ROULETTE_BET_CODE_REBET = 2;        // Rebet (place same bet as previous round)
+  ROULETTE_BET_CODE_DOUBLE = 3;       // Double bet (double the previous bet)
+}
+
+// RouletteBetCell represents different betting options in Roulette
+enum RouletteBetCell {
+  ROULETTE_BET_CELL_UNSPECIFIED = 0;
+  
+  // Inside bets - Single numbers (0-36)
+  ROULETTE_BET_CELL_0 = 1;
+  ROULETTE_BET_CELL_1 = 2;
+  ROULETTE_BET_CELL_2 = 3;
+  ROULETTE_BET_CELL_3 = 4;
+  ROULETTE_BET_CELL_4 = 5;
+  ROULETTE_BET_CELL_5 = 6;
+  ROULETTE_BET_CELL_6 = 7;
+  ROULETTE_BET_CELL_7 = 8;
+  ROULETTE_BET_CELL_8 = 9;
+  ROULETTE_BET_CELL_9 = 10;
+  ROULETTE_BET_CELL_10 = 11;
+  ROULETTE_BET_CELL_11 = 12;
+  ROULETTE_BET_CELL_12 = 13;
+  ROULETTE_BET_CELL_13 = 14;
+  ROULETTE_BET_CELL_14 = 15;
+  ROULETTE_BET_CELL_15 = 16;
+  ROULETTE_BET_CELL_16 = 17;
+  ROULETTE_BET_CELL_17 = 18;
+  ROULETTE_BET_CELL_18 = 19;
+  ROULETTE_BET_CELL_19 = 20;
+  ROULETTE_BET_CELL_20 = 21;
+  ROULETTE_BET_CELL_21 = 22;
+  ROULETTE_BET_CELL_22 = 23;
+  ROULETTE_BET_CELL_23 = 24;
+  ROULETTE_BET_CELL_24 = 25;
+  ROULETTE_BET_CELL_25 = 26;
+  ROULETTE_BET_CELL_26 = 27;
+  ROULETTE_BET_CELL_27 = 28;
+  ROULETTE_BET_CELL_28 = 29;
+  ROULETTE_BET_CELL_29 = 30;
+  ROULETTE_BET_CELL_30 = 31;
+  ROULETTE_BET_CELL_31 = 32;
+  ROULETTE_BET_CELL_32 = 33;
+  ROULETTE_BET_CELL_33 = 34;
+  ROULETTE_BET_CELL_34 = 35;
+  ROULETTE_BET_CELL_35 = 36;
+  ROULETTE_BET_CELL_36 = 37;
+  
+  // Outside bets
+  ROULETTE_BET_CELL_RED = 100;        // Red numbers
+  ROULETTE_BET_CELL_BLACK = 101;      // Black numbers
+  ROULETTE_BET_CELL_ODD = 102;        // Odd numbers (1, 3, 5, ...)
+  ROULETTE_BET_CELL_EVEN = 103;       // Even numbers (2, 4, 6, ...)
+  ROULETTE_BET_CELL_LOW = 104;        // Low numbers (1-18)
+  ROULETTE_BET_CELL_HIGH = 105;       // High numbers (19-36)
+  ROULETTE_BET_CELL_DOZEN_1 = 106;    // First dozen (1-12)
+  ROULETTE_BET_CELL_DOZEN_2 = 107;    // Second dozen (13-24)
+  ROULETTE_BET_CELL_DOZEN_3 = 108;    // Third dozen (25-36)
+  ROULETTE_BET_CELL_COLUMN_1 = 109;   // First column (1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34)
+  ROULETTE_BET_CELL_COLUMN_2 = 110;   // Second column (2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35)
+  ROULETTE_BET_CELL_COLUMN_3 = 111;   // Third column (3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36)
+  
+  // Inside bets - Multiple numbers
+  ROULETTE_BET_CELL_SPLIT = 200;      // Split bet (2 adjacent numbers)
+  ROULETTE_BET_CELL_STREET = 201;     // Street bet (3 numbers in a row)
+  ROULETTE_BET_CELL_CORNER = 202;     // Corner bet (4 numbers)
+  ROULETTE_BET_CELL_LINE = 203;       // Line bet (6 numbers - 2 rows)
+}
+
+// RouletteBet represents a single bet placed on the Roulette table
+message RouletteBet {
+  int64 chips = 1;                    // Amount of chips bet
+  RouletteBetCell cell = 2;           // The betting cell (number, color, etc.)
+  repeated int32 numbers = 3;          // For split/street/corner bets, list of numbers
+}
+
+// RoulettePlayerBet represents all bets placed by a single player
+message RoulettePlayerBet {
+  string user_id = 1;                 // User ID of the player
+  repeated RouletteBet bets = 2;       // List of bets placed
+}
+
+// RouletteBetResult represents the result of a single bet
+message RouletteBetResult {
+  bool is_win = 1;                    // Whether this bet won
+  RouletteBet bet = 2;                // The bet that was placed
+  int64 win_amount = 3;                // Amount won (0 if lost)
+}
+
+// RoulettePlayerBetResult represents all bet results for a single player
+message RoulettePlayerBetResult {
+  string user_id = 1;                 // User ID of the player
+  repeated RouletteBetResult lists = 2; // List of bet results
+}
+
+// RouletteGameFinish represents the final result of a Roulette game round
+message RouletteGameFinish {
+  int32 winning_number = 1;           // The winning number (0-36)
+  bool is_red = 2;                    // Whether winning number is red
+  bool is_black = 3;                  // Whether winning number is black
+  bool is_odd = 4;                    // Whether winning number is odd
+  bool is_even = 5;                   // Whether winning number is even
+  repeated RoulettePlayerBetResult list_bet_results = 6; // Results for all players
+}
+
+// RouletteUpdateDesk represents the current state of the Roulette table
+message RouletteUpdateDesk {
+  int32 n_players = 1;                // Number of players at the table
+  bool is_update_desk_cell = 2;       // Whether to update desk cells (betting areas)
+  repeated RouletteBetCellInfo desk_cells = 3; // Information about bets on each cell
+  bool is_update_user_bet = 4;        // Whether to update user's bet
+  RoulettePlayerBet user_bet = 5;     // User's current bet
+  repeated RoulettePlayerBet all_user_bets = 6; // All bets on the table (for rendering)
+  bool is_update_game_history = 7;    // Whether to update game history
+  RouletteSimpleHistory history = 8;  // Simple history (last N results)
+  repeated int32 detailed_history = 9; // Detailed history (all numbers)
+  int32 current_winning_number = 10;   // Current winning number (if game finished)
+  bool is_spinning = 11;              // Whether wheel is currently spinning
+  Error error = 12;                    // Error message (if any)
+  repeated int64 bet_levels = 13;     // Danh sách các mức cược bàn có sẵn (mcb) - load từ DB
+}
+
+// RouletteBetCellInfo represents betting information for a specific cell
+message RouletteBetCellInfo {
+  RouletteBetCell cell = 1;           // The betting cell
+  int64 chips = 2;                    // Total chips bet on this cell
+  int32 n_user_bet = 3;               // Number of users who bet on this cell
+}
+
+// RouletteSimpleHistory represents a simplified history of recent results
+message RouletteSimpleHistory {
+  repeated int32 recent_numbers = 1;  // Last N winning numbers
+  repeated int32 red_count = 2;       // Count of red numbers in recent history
+  repeated int32 black_count = 3;     // Count of black numbers in recent history
+  repeated int32 odd_count = 4;       // Count of odd numbers in recent history
+  repeated int32 even_count = 5;       // Count of even numbers in recent history
+}
+
+// Error and ErrorType are imported from common.proto
+

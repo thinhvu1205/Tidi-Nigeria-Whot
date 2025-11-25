@@ -527,10 +527,8 @@ public class SlotTarzanView : BaseSlotView
         ///------------------CHECK WIN MINIGAME--------------------//
         if (isStartMiniGame)
         {
-            isStartMiniGame = false;
             Debug.Log("START MINIgAME");
-            spinType = SpinType.NORMAL;
-            UpdateGameState(SlotGameState.PREPARE);
+      
             tweenQueue.Enqueue(() => ShowPopupMinigame());
         }
 
@@ -550,10 +548,9 @@ public class SlotTarzanView : BaseSlotView
             if (isStartMiniGame)
             {
                 isStartMiniGame = false;
-                Debug.Log("START MINIgAME");
-                spinType = SpinType.NORMAL;
-                UpdateGameState(SlotGameState.PREPARE);
-                tweenQueue.Enqueue(() => ShowPopupMinigame());
+                Debug.Log("START MINIgAME bù phát");
+                ShowPopupMinigame();
+                // tweenQueue.Enqueue(() => ShowPopupMinigame());
             }
             if (hasGotFreeSpin)
             {
@@ -797,6 +794,9 @@ public class SlotTarzanView : BaseSlotView
 
     private void ShowPopupMinigame()
     {
+        isStartMiniGame = false;
+        spinType = SpinType.NORMAL;
+        UpdateGameState(SlotGameState.PREPARE);
         effectContainer.gameObject.SetActive(true);
         popupMinigame.gameObject.SetActive(true);
         Utility.PlayAnimation(popupMinigame, "Eng", true);

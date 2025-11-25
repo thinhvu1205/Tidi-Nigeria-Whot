@@ -20,12 +20,15 @@ public class EnterPasswordView : BaseView
     public void SetPassword(string password)
     {
         correctPassword = password;
+        Debug.Log("correctPassword: " + correctPassword);
     }
 
     public void SetOnClickListener(Func<UniTask> callback)
     {
         buttonJoin.onClick.AddListener(() =>
         {
+                    Debug.Log("passwordInputField: " + passwordInputField.text);
+
             if (passwordInputField.text != correctPassword)
             {
                 UIManager.Instance.ShowAlertDialog("Wrong password!");
