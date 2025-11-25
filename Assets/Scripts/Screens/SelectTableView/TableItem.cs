@@ -16,7 +16,7 @@ public class TableItem : MonoBehaviour
     [SerializeField] List<Image> playerSlotImageList;
     [SerializeField] List<Sprite> slotIconList;
     [SerializeField] Button joinButton;
-    [SerializeField] GameObject fullObject;
+    [SerializeField] GameObject fullObject, imageDoubleDeck, imageLock;
 
     public void SetData(Match match)
     {
@@ -47,8 +47,10 @@ public class TableItem : MonoBehaviour
         }
         tableNameText.text = listName;
         tableIDText.text = match.TableId;
+        imageLock.SetActive(!string.IsNullOrEmpty(match.Password));
+        imageDoubleDeck.SetActive(false);
         joinButton.onClick.RemoveAllListeners();
-        joinButton.onClick.AddListener(() => _ = OnClickButtonJoin(match.MatchId, match.Open));
+        joinButton.onClick.AddListener(() => _ = OnClickButtonJoin(match.MatchId, match.Open, match.Password));
     }
 
     private async UniTask OnClickButtonJoin(string matchId, bool isOpen, string password = "")

@@ -215,7 +215,7 @@ public class BlackjackView : BaseDiceGameView
                 hasBet = true;
 
                 // Rebet
-                if (isRebet && data.Bet?.Balance.AmoutChipBet > 0)
+                if (isRebet && data.Bet?.Balance.AmoutChipBet > 0 && data.Bet.UserId == User.userProfile.UserId)
                 {
                     hasBet = true;
                     totalBetValue = data.Bet.Balance.AmoutChipBet;
@@ -598,8 +598,6 @@ public class BlackjackView : BaseDiceGameView
                     cardModel.HideCard();
                     if (data.HandN0 == BlackjackHandN0.BlackjackHand1St)
                     {
-                        Debug.Log("CARD MODEL: " + cardModel);
-                        Debug.Log("boxBet.GetCardPosition: " + boxBet.GetCardPosition);
                         cardModel.transform.SetParent(boxBet.GetCardPosition);
                         boxBet.listCardModel.Add(cardModel);
                     }
@@ -623,8 +621,6 @@ public class BlackjackView : BaseDiceGameView
                 if (!hasDealtCardsForPlayers)
                 {
                     playerReceiveCardCount++;
-                    Debug.Log("playerReceiveCardCount: " + playerReceiveCardCount);
-                    Debug.Log("playingPlayers: " + playingPlayers.Count);
                     if (playerReceiveCardCount == playingPlayers.Count)
                     {
                         StartCoroutine(DealCardsForPlayers());
@@ -750,7 +746,12 @@ public class BlackjackView : BaseDiceGameView
                         bankerBoxBet.ShowScore(playerHand.First.Point, playerHand.First.MinPoint, playerHand.First.MaxPoint, playerHand.First.Type);
                     }
 
-                    if (bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.RankA)
+                    if (bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.RankA
+                        || bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.Rank10
+                        || bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.RankJ
+                        || bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.RankQ
+                        || bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.RankK
+                    )
                     {
                         bankerBoxBet.AnimateHighlightCards();
                     }
@@ -903,6 +904,10 @@ public class BlackjackView : BaseDiceGameView
                     phasePlay.gameObject.SetActive(true);
                     imageLight.gameObject.SetActive(false);
                     HideAllPlayersLoading();
+                    if (!hasBet)
+                    {
+                        currentPlayerBoxBet.HideImageChip();
+                    }
                 }
                 break;
             case GameState.Reward:
@@ -1081,6 +1086,7 @@ public class BlackjackView : BaseDiceGameView
         }
         lastChipIndex = currentChipIndex;
         totalBetValue += currentBetValue;
+        Debug.Log("CLICK BUTTON DEAL");
         BlackjackBet bet = new BlackjackBet
         {
             Chips = currentBetValue,
@@ -1211,6 +1217,14 @@ public class BlackjackView : BaseDiceGameView
             {
                 isCurrentPlayerFinished = true;
             }
+            if (blackjackHandN0 == BlackjackHandN0.BlackjackHand1St)
+            {
+                currentPlayerBoxBet.ShrinkCards();
+            }
+            else if (blackjackHandN0 == BlackjackHandN0.BlackjackHand2Nd)
+            {
+                currentPlayerBoxBet.SecondBoxBet.ShrinkCards();
+            }
             buttonBetContainer.gameObject.SetActive(false);
 
         }
@@ -1262,6 +1276,14 @@ public class BlackjackView : BaseDiceGameView
             buttonBetContainer.gameObject.SetActive(false);
             currentPlayerBoxBet.ShowHigherScore();
             currentPlayerBoxBet.SecondBoxBet.ShowHigherScore();
+            if (blackjackHandN0 == BlackjackHandN0.BlackjackHand1St)
+            {
+                currentPlayerBoxBet.ShrinkCards();
+            }
+            else if (blackjackHandN0 == BlackjackHandN0.BlackjackHand2Nd)
+            {
+                currentPlayerBoxBet.SecondBoxBet.ShrinkCards();
+            }
             if (!isSplitingHand || (isSplitingHand && isCurrentPlayerTurn && blackjackHandN0 == BlackjackHandN0.BlackjackHand2Nd))
             {
                 isCurrentPlayerFinished = true;
@@ -1394,7 +1416,12 @@ public class BlackjackView : BaseDiceGameView
             bankerBoxBet.listCardModel.Add(cardModel);
             yield return new WaitForSeconds(0.2f);
         }
-        if (bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.RankA)
+        if (bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.RankA
+            || bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.Rank10
+            || bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.RankJ
+            || bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.RankQ
+            || bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.RankK
+        )
         {
             bankerBoxBet.AnimateHighlightCards();
         }
@@ -1953,7 +1980,6 @@ public class BlackjackView : BaseDiceGameView
     {
         base.CreatePlayerView(player, anchoredPos);
         string localUserId = User.userProfile.UserId;
-        Debug.Log("CREATE PLAYER VIEW: " + player.UserName);
         if (GameState == GameState.Play)
         {
             int playerIndex = players.IndexOf(player);
@@ -1971,7 +1997,6 @@ public class BlackjackView : BaseDiceGameView
             int playerIndex = rearrangedPlayers.IndexOf(player);
             if (!userIdToBoxBetView.TryGetValue(player.Id, out var boxBetView) || boxBetView == null)
             {
-                Debug.Log("PLAYER INDEX: " + playerIndex);
                 boxBetView = Instantiate(boxBetPrefab, boxBetContainer).GetComponent<BlackjackBoxBet>();
                 userIdToBoxBetView[player.Id] = boxBetView;
                 boxBetView.transform.localPosition = listBoxBetPosition[playerIndex];

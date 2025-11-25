@@ -19,16 +19,16 @@ public class ListBannerView : BaseView
     private const float SWIPE_TIME = .2f;
     private List<BannerView> listBannerView = new();
     private BannerView currentBanner;
-    private bool isScrolling, isClicking;
+    private bool isScrolling, isClicking, hasFetchData = false;
 
     private void LateUpdate()
     {
         if (isClicking) return;
         if (!Input.GetMouseButton(0))
         {
-            if (!isScrolling) return;
+            if (!isScrolling || !hasFetchData) return;
             isScrolling = false;
-            scrollRect.enabled = false;
+            scrollRect.enabled = false; 
             scrollRect.content.DOLocalMoveX(scrollRect.content.localPosition.x - FindNearestBannerLocalPosition().x, SWIPE_TIME)
                 .OnComplete(() =>
                 {
@@ -41,8 +41,8 @@ public class ListBannerView : BaseView
     }
     protected override void Start()
     {
-        transformBanner.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, scrollRect.viewport.rect.width);
-        transformBanner.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, scrollRect.viewport.rect.height);
+        // transformBanner.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, scrollRect.viewport.rect.width);
+        // transformBanner.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, scrollRect.viewport.rect.height);
         // _LoadListBanner();
     }
 
@@ -65,6 +65,7 @@ public class ListBannerView : BaseView
         List<InAppMessage> listData = response.InAppMessages.ToList();
         Sprite firstSprite = null, lastSprite = null;
         InAppMessage firstBannerData = null, lastBannerData = null;
+                hasFetchData = true;
 
         if (listData.Count == 0)
         {
@@ -100,6 +101,7 @@ public class ListBannerView : BaseView
                 nodeBanner.transform.localScale = Vector3.one;
                 nodeBanner.SetInfo(data, sprite);
                 listBannerView.Add(nodeBanner);
+                Debug.Log("CO VAO DAY K NHI");
                 if (listBannerView.Count == 1)
                 {
                     firstSprite = sprite;
@@ -124,12 +126,17 @@ public class ListBannerView : BaseView
             cloneLastTf.localScale = Vector3.one;
             BannerView cloneFirstBV = cloneFirstTf.GetChild(0).GetComponent<BannerView>();
             cloneFirstBV.transform.localScale = Vector3.one;
+            Debug.Log("FIRST SPRITE: " + firstSprite);
+            Debug.Log("LAST SPRITE: " + lastSprite);
             cloneFirstBV.SetInfo(firstBannerData, firstSprite);
             cloneFirstTf.SetAsLastSibling();
             BannerView cloneLastBV = cloneLastTf.GetChild(0).GetComponent<BannerView>();
             cloneLastBV.transform.localScale = Vector3.one;
             cloneLastBV.SetInfo(lastBannerData, lastSprite);
             cloneLastTf.SetAsFirstSibling();
+            await Task.Yield();
+            await Task.Yield();
+            await Task.Yield();
             await Task.Yield();
             await Task.Yield();
             await Task.Yield();
@@ -144,6 +151,7 @@ public class ListBannerView : BaseView
         foreach (BannerView bv in listBannerView) bv.gameObject.SetActive(true);
         UpdatePaginationDots();
     }
+    
 
     #region Button
 
@@ -250,6 +258,7 @@ public class ListBannerView : BaseView
 
     private Vector2 FindNearestBannerLocalPosition()
     {
+        Debug.Log("ALOOOOO");
         RectTransform contentRT = scrollRect.content, viewportRT = scrollRect.viewport;
         Vector2 returnedV2 = new();
         float minDistance = float.MaxValue;

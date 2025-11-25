@@ -12,7 +12,7 @@ using UnityEngine;
 
 public class WhotPlayerHand : MonoBehaviour
 {
-    [SerializeField] private Transform cardsParent, scoreParent, remainingCardsParent;
+    [SerializeField] private Transform cardsParent, dealCardsParent, scoreParent, remainingCardsParent;
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private TextMeshProUGUI scoreText;
     [HideInInspector] public List<WhotCardModel> cardsInHand, remainingWhotCards = new();
@@ -26,6 +26,8 @@ public class WhotPlayerHand : MonoBehaviour
     private float CARD_SPACING = 56f;
 
     public Transform GetCardsParent() => cardsParent;
+    public Transform GetDealCardsParent() => dealCardsParent;
+    public bool isFirstUpdateTurn = false;
 
     private void Awake()
     {
@@ -205,20 +207,29 @@ public class WhotPlayerHand : MonoBehaviour
     {
         if (e.playerTurn == whotGame.GetCurrentPlayer().Id)
         {
-        Debug.Log("ON NEXT TURN");
+            List<WhotCardModel> listCard;
+            if (isFirstUpdateTurn)
+            {
+                listCard = whotGame.GetDealCardsList();
+                isFirstUpdateTurn = false;
+            }
+            else
+            {
+                listCard = cardsInHand;
+            }
             WhotCardModel callCardModel = e.CallCardModel;
             WhotCardEffect cardEffect = e.cardEffect;
 
             if (cardEffect == WhotCardEffect.Whot)
             {
-                foreach (WhotCardModel cardInHand in cardsInHand)
+                foreach (WhotCardModel cardInHand in listCard)
                 {
                     cardInHand.SetSelectable(false);
                     cardInHand.SetDark();
                 }
                 return;
             }
-            foreach (WhotCardModel card in cardsInHand)
+            foreach (WhotCardModel card in listCard)
             {
                 bool isSelectable = false;
 
@@ -298,18 +309,30 @@ public class WhotPlayerHand : MonoBehaviour
         {
             PoolService.Instance.Release(PrefabType.WhotCard, card);
         }
-        foreach (WhotCardModel card in remainingWhotCards)
+        foreach (Transform card in GetDealCardsParent())
         {
-            PoolService.Instance.Release(PrefabType.WhotCard, card);
+            // PoolService.Instance.Release(PrefabType.WhotCard, card);
+            DestroyImmediate(card.gameObject);
         }
+        // foreach (Transform card in remainingWhotCards)
+        // {
+        //     // PoolService.Instance.Release(PrefabType.WhotCard, card);
+        //     DestroyImmediate(card.gameObject);
+        // }
         cardsInHand.Clear();
         remainingWhotCards.Clear();
         cardsParent.gameObject.SetActive(true);
+        dealCardsParent.gameObject.SetActive(false);
     }
 
     public void HideRemainingCards()
     {
         remainingCardsParent.gameObject.SetActive(false);
+        for (int i = remainingCardsParent.childCount - 1; i >= 1; i--)
+        {
+            Transform child = remainingCardsParent.GetChild(i);
+            DestroyImmediate(child.gameObject);
+        }
         scoreParent.gameObject.SetActive(false);
     }
     #region Helpers

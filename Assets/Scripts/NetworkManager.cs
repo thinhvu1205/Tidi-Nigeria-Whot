@@ -277,7 +277,7 @@ public class NetworkManager : MonoBehaviour
         lock (messageQueueLock)
         {
             // Debug.Log("add state queue " + state);
-            if (isPause) return;
+            // if (isPause) return;
             messageQueue.Enqueue(message);
         }
         Debug.Log("Received: " + message);

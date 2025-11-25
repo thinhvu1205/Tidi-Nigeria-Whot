@@ -16,12 +16,12 @@ public class WhotPlayer : MonoBehaviour
     [SerializeField] private Image countdownImage, lightImage, holdOnImage, suspensionImage, scoreImage;
     [SerializeField] private TextMeshProUGUI nameText, chipText, cardsLeftText, effectText, scoreText, plusText, chipAddText;
     [SerializeField] private GameObject lastCardNoti, effectNoti, cardsDisplay, cardPrefab;
-    [SerializeField] private Transform remainingCardsParent;
+    [SerializeField] private Transform remainingCardsParent, dealCardContainer, drawCardContainer;
     [SerializeField] private TMP_FontAsset chipWinFont, chipLoseFont;
     [SerializeField] private Avatar avatar;
     [HideInInspector] public bool isCurrentPlayer = false;
     [HideInInspector] public bool isWinner = false;
-    [HideInInspector] public bool isPlaying = true;
+    [SerializeField] public bool isPlaying = true;
     public string Id { get; private set; } = string.Empty;
     public string AvatarId { get; private set; } = string.Empty;
     public long VipLevel { get; private set; } = 0;
@@ -92,8 +92,8 @@ public class WhotPlayer : MonoBehaviour
         isCountingDown = false;
         countdownImage.gameObject.SetActive(false);
         lightImage.gameObject.SetActive(false);
-        // chipText.text = Utility.FormatNumber(Utility.ConvertStringToNumber(chipAmount));
-        AnimateChipValue(Utility.ConvertStringToLong(chipAmount));
+        chipText.text = Utility.FormatNumber(Utility.ConvertStringToNumber(chipAmount));
+        // AnimateChipValue(Utility.ConvertStringToLong(chipAmount));
     }
 
     public void SetWhotGame(WhotView whotGame)
@@ -115,10 +115,30 @@ public class WhotPlayer : MonoBehaviour
 
     public void Reset()
     {
-        isPlaying = true;
+        // isPlaying = true;
         HideCardsLeft();
-        cardsLeftText.text = "0";  
-        remainingCardsParent.gameObject.SetActive(false); 
+        cardsLeftText.text = "0";
+        HideRemainingCards();
+        ClearDealCardParent();
+        ClearDrawCardParent();
+    }
+
+    public void ClearDealCardParent()
+    {
+        GetDealedCardParent().gameObject.SetActive(false);
+        foreach (Transform child in GetDealedCardParent())
+        {
+            DestroyImmediate(child.gameObject);
+        }
+    }
+    
+    public void ClearDrawCardParent()
+    {
+        GetDrawCardParent().gameObject.SetActive(false);
+        foreach (Transform child in GetDrawCardParent())
+        {
+            DestroyImmediate(child.gameObject);
+        }
     }
 
     #region Visuals
@@ -144,7 +164,6 @@ public class WhotPlayer : MonoBehaviour
             WhotCardModel whotCardModel = PoolService.Instance.Get<WhotCardModel>(PrefabType.WhotCard);
             whotCardModel.transform.SetParent(remainingCardsParent);
             whotCardModel.SetInfo(card.Suit, card.Rank);
-            Debug.Log("INIT REMAINING CARD: " + card.Rank + " - " + card.Suit + " for player " + nameText.text.ToString() );
             whotCardModel.SetSelectable(false);
             whotCardModel.transform.localScale = Vector3.one * CARD_SCALE;
 
@@ -241,6 +260,7 @@ public class WhotPlayer : MonoBehaviour
 
     public void HideCardsLeft()
     {
+        Debug.Log("HIDE CARDS LEFT");
         cardsDisplay.SetActive(false);
     }
 
@@ -441,7 +461,7 @@ public class WhotPlayer : MonoBehaviour
     }
     public void AnimateChipValue(long toNumber = 0)
     {
-        Utility.TweenNumberToNumber(chipText, (int)toNumber, (int)GetChipAmount(), 0.5f, false);
+        Utility.TweenNumberToNumberScale1(chipText, (int)toNumber, (int)GetChipAmount(), 0.5f, false);
     }
 
     private void SortRemainingCards(List<WhotCard> cards)
@@ -478,7 +498,12 @@ public class WhotPlayer : MonoBehaviour
     }
     public Transform GetDealedCardParent()
     {
-        return cardsDisplay.transform;
+        return dealCardContainer;
+    }
+
+    public Transform GetDrawCardParent()
+    {
+        return drawCardContainer;
     }
 
     public Transform GetPlayedCardParent()
