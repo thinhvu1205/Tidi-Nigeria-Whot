@@ -41,8 +41,8 @@ public class ListBannerView : BaseView
     }
     protected override void Start()
     {
-        // transformBanner.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, scrollRect.viewport.rect.width);
-        // transformBanner.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, scrollRect.viewport.rect.height);
+        transformBanner.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, scrollRect.viewport.rect.width);
+        transformBanner.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, scrollRect.viewport.rect.height);
         // _LoadListBanner();
     }
 
@@ -51,6 +51,11 @@ public class ListBannerView : BaseView
         base.Awake();
         bannerPresenter = new BannerPresenter();
         bannerPresenter.Init(this);
+    }
+
+    public override void OnClickCloseButton()
+    {
+        Hide(false);
     }
 
     public void SetBannerType(TypeInAppMessage type)
@@ -99,10 +104,10 @@ public class ListBannerView : BaseView
                 gameObject.gameObject.SetActive(true);
                 BannerView nodeBanner = gameObject.transform.GetChild(0).GetComponent<BannerView>();
                 nodeBanner.transform.localScale = Vector3.one;
-                nodeBanner.SetInfo(data, sprite);
+                await nodeBanner.SetInfo(data, sprite);
                 listBannerView.Add(nodeBanner);
                 Debug.Log("CO VAO DAY K NHI");
-                if (listBannerView.Count == 1)
+                if (firstSprite == null && firstBannerData == null)
                 {
                     firstSprite = sprite;
                     firstBannerData = data;
@@ -128,19 +133,27 @@ public class ListBannerView : BaseView
             cloneFirstBV.transform.localScale = Vector3.one;
             Debug.Log("FIRST SPRITE: " + firstSprite);
             Debug.Log("LAST SPRITE: " + lastSprite);
-            cloneFirstBV.SetInfo(firstBannerData, firstSprite);
+            await cloneFirstBV.SetInfo(firstBannerData, firstSprite);
             cloneFirstTf.SetAsLastSibling();
             BannerView cloneLastBV = cloneLastTf.GetChild(0).GetComponent<BannerView>();
             cloneLastBV.transform.localScale = Vector3.one;
-            cloneLastBV.SetInfo(lastBannerData, lastSprite);
+            await cloneLastBV.SetInfo(lastBannerData, lastSprite);
             cloneLastTf.SetAsFirstSibling();
+            // await Task.Yield();
+            // await Task.Yield();
+            // await Task.Yield();
+            // await Task.Yield();
+            // await Task.Yield();
+            // await Task.Yield();
+            // scrollRect.content.anchoredPosition -= new Vector2(transformBanner.rect.width, 0);
+            scrollRect.StopMovement();
+            scrollRect.velocity = Vector2.zero;
+            scrollRect.content.anchoredPosition = new Vector2(-transformBanner.rect.width, 0);                    // Dừng mọi chuyển động
+            scrollRect.inertia = false;                   // Tắt quán tính tạm thời
+
+            // Bật lại inertia sau 1 frame
             await Task.Yield();
-            await Task.Yield();
-            await Task.Yield();
-            await Task.Yield();
-            await Task.Yield();
-            await Task.Yield();
-            scrollRect.content.anchoredPosition -= new Vector2(transformBanner.rect.width, 0);
+            scrollRect.inertia = true;
             listBannerView.Insert(0, cloneLastBV);
             listBannerView.Add(cloneFirstBV);
             cloneFirstTf.gameObject.SetActive(true);

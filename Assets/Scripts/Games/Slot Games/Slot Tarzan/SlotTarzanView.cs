@@ -10,6 +10,7 @@ using TMPro;
 using Color = UnityEngine.Color;
 using UnityEngine;
 using UnityEngine.UI;
+using Google.Protobuf;
 
 public class SlotTarzanView : BaseSlotView
 {
@@ -185,7 +186,7 @@ public class SlotTarzanView : BaseSlotView
     private readonly List<SiXiangSymbol> spinSymbolList = new();
     private int lastDiamondCollect, diamondCollect;
     private long updatedDiamondCollectAmount, diamondCollectChipAmount, diamondPotAmount;
-    private bool isWinTarzan, isInMiniGame, isStartMiniGame, isEndMiniGame, isWinDiamondPot;
+    private bool isWinTarzan, isInMiniGame, isStartMiniGame, isEndMiniGame, isWinDiamondPot, isBetLevelChanged;
     private float multiFreeGame;
 
     protected override void Awake()
@@ -331,8 +332,15 @@ public class SlotTarzanView : BaseSlotView
         if (hasSetupStartView)
         {
             // Bấm Spin
-            if (IsSpinning)
+            if (IsSpinning && !isBetLevelChanged)
+            {
                 OnStartSpin();
+                
+            }
+            else
+            {
+                isBetLevelChanged = false;
+            }
             if (data.CurrentSixiangGame == SiXiangGame.TarzanJungleTreasure)
             {
                 totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
@@ -882,6 +890,63 @@ public class SlotTarzanView : BaseSlotView
         });
     }
     #endregion
+
+    private void OnBetLevelChanged()
+    {
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
+        {
+            return;
+        }
+        isBetLevelChanged = true;
+        InfoBet infoBet = new()
+        {
+            Chips = currentBetLevel,
+        };
+        DataSender.SendMatchState((long)OpCodeRequest.Bet, infoBet.ToByteArray()); 
+        
+    }
+
+    public override void OnClickMaxBetButton()
+    {
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView )
+        {
+            return;
+        }
+
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
+        lastBetLevel = currentBetLevel;
+        currentBetLevel = betLevelList[^1];
+        if (lastBetLevel == currentBetLevel)
+        {
+            HandleSpin();
+        }
+        else
+        {
+            OnBetLevelChanged();
+        }
+        SetCurrentBetText(currentBetLevel);
+        SetCurrentBetImage(currentBetLevel);
+    }
+
+    public override void OnClickMinusBetButton()
+    {
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
+        {
+            return; 
+        }
+        base.OnClickMinusBetButton();
+        OnBetLevelChanged();
+    }
+
+    public override void OnClickPlusBetButton()
+    {
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
+        {
+            return; 
+        }
+        base.OnClickPlusBetButton();
+        OnBetLevelChanged();
+    }
 
     #region UI
     private void ShowAnimationLetter(Vector2 position, int index, TweenCallback cb = null)

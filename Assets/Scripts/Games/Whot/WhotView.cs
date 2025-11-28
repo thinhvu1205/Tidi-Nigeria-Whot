@@ -455,6 +455,7 @@ public class WhotView : BaseDiceGameView
             }
             playerHand.SortCards();
             playerHand.SpreadCards();
+            playerHand.isFirstUpdateTurn = false;
 
             // Khởi tạo lại call card
             if (callCardModel == null && data.TopCard != null)
@@ -556,6 +557,7 @@ public class WhotView : BaseDiceGameView
         else
         {
             HideYourTurn();
+            playerHand.isFirstUpdateTurn = false;
             playerHand.EndTurn();
         }
         OnNextTurn?.Invoke(new OnNextTurnEventArg

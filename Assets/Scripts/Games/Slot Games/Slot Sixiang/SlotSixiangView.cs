@@ -131,13 +131,13 @@ public class SlotSixiangView : BaseSlotSymbolView
         }
         else
         {
-            if (IsSpinning)
+            if (IsSpinning && !isBetLevelChanged)
             {
                 OnStartSpin();
             }
             else
             {
-
+                isBetLevelChanged = false;
                 UpdateJackpot(data);
                 UpdateGem();
                 if (isClickMaxBet)

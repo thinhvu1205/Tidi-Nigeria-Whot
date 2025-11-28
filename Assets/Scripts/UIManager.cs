@@ -25,6 +25,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] Sprite avtDefault, spriteToast;
     [SerializeField] TMP_FontAsset fontLabelToast;
     public SelectTableView selectTableView;
+    public ListBannerView bannerView;
     public LobbyView lobbyView;
     public bool isShowingGlobalDialog = false;
     private Transform parentPopups, parentGames, parentBanners, parentLobby, parentLoading;
@@ -504,9 +505,16 @@ public class UIManager : Singleton<UIManager>
     {
         DOVirtual.DelayedCall(delay, () =>
         {
-            ListBannerView bannerView = Instantiate(LoadPrefabPopup("ListBannerView"), parentBanners).GetComponent<ListBannerView>();
+            bannerView = Instantiate(LoadPrefabPopup("ListBannerView"), parentBanners).GetComponent<ListBannerView>();
             bannerView.SetBannerType(type);
-            bannerView.transform.localScale = Vector3.zero;
+            bannerView.transform.localScale = Vector3.zero;   
+            // if (bannerView == null)
+            // {
+            // }
+            // else
+            // {
+            //     bannerView.Show();
+            // }
         });
     }
 

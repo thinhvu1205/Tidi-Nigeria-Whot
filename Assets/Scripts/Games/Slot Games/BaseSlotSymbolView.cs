@@ -127,7 +127,7 @@ public class BaseSlotSymbolView : BaseGameView
     public bool IsSpinning { get; set; } = false;
     public int ScatterCount { get; set; } = 0;
 
-    protected bool hasSetupStartView = false, isInFreeSpin = false, isChooseBonusGame = false, isGetMatchResult = false, isCurrentlyAutoSpin = false;
+    protected bool hasSetupStartView = false, isInFreeSpin = false, isChooseBonusGame = false, isGetMatchResult = false, isCurrentlyAutoSpin = false, isBetLevelChanged = false;
     protected virtual float AUTO_SPIN_HOLD_DURATION => 1.3f;
     public override bool CanLeaveTable => gameState != SlotGameState.SPINNING && gameState != SlotGameState.SHOWING_RESULT;
 
@@ -187,13 +187,14 @@ public class BaseSlotSymbolView : BaseGameView
         }
         else
         {
-            if (IsSpinning)
+            if (IsSpinning && !isBetLevelChanged)
             {
                 OnStartSpin();
             }
             else
             {
                 Debug.Log("VAO DAY DE");
+                isBetLevelChanged = false;
                 UpdateJackpot(data);
                 UpdateGem();
 
@@ -223,6 +224,11 @@ public class BaseSlotSymbolView : BaseGameView
 
     private void OnBetLevelChanged()
     {
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
+        {
+            return;
+        }
+        isBetLevelChanged = true;
         InfoBet infoBet = new()
         {
             Chips = currentBetLevel,
@@ -242,6 +248,7 @@ public class BaseSlotSymbolView : BaseGameView
     #region Spin Actions
     protected virtual void OnStartSpin()
     {
+        Debug.Log("START SPIN");
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.SPIN_REEL);
         AnimateHideGemButtons();
         if (!isInFreeSpin)
@@ -1141,10 +1148,13 @@ public class BaseSlotSymbolView : BaseGameView
         lastBetLevel = currentBetLevel;
         currentBetLevel = listBetLevel[^1];
         SetCurrentBetImage(currentBetLevel);
-        OnBetLevelChanged();
         if (lastBetLevel == currentBetLevel)
         {
-            isClickMaxBet = true;
+            HandleSpin();
+        }
+        else
+        {
+            OnBetLevelChanged();
         }
     }
 
