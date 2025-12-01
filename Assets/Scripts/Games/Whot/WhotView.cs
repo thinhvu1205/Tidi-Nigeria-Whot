@@ -1185,20 +1185,20 @@ public class WhotView : BaseDiceGameView
     private void AnimateChipTransfer(Action callback)
     {
         victoryAnimationParent.gameObject.SetActive(false);
-            Sequence chipSequence = DOTween.Sequence();
-            int transferCount = 0;
-            int totalTransfers = playersList.Count(p => p.isPlaying && !p.isWinner);
-            foreach (WhotPlayer player in playersList)
-            {
-                if (!player.isPlaying || player.isWinner) continue;
-                bool isLast = ++transferCount == totalTransfers;
-                player.AnimateChipTransfer(GetWinner(), isLast);
-            }
-            chipSequence.AppendInterval(2.5f);
-            chipSequence.OnComplete(() =>
-            {
-                callback?.Invoke();
-            });
+        Sequence chipSequence = DOTween.Sequence();
+        int transferCount = 0;
+        int totalTransfers = playersList.Count(p => p.isPlaying && !p.isWinner);
+        foreach (WhotPlayer player in playersList)
+        {
+            if (!player.isPlaying || player.isWinner) continue;
+            bool isLast = ++transferCount == totalTransfers;
+            player.AnimateChipTransfer(GetWinner(), isLast);
+        }
+        chipSequence.AppendInterval(2.5f);
+        chipSequence.OnComplete(() =>
+        {
+            callback?.Invoke();
+        });
     }
 
     public void AnimateBetterLuckNextTime(List<WhotPlayerResult> result)

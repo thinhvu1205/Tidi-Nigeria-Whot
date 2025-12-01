@@ -21307,6 +21307,10 @@ MonoBehaviour:
   chipWin: 0
   chipAfter: 0
   playerWallet: 0
+  isRebet: 0
+  isConfirmRebet: 0
+  isShowingResult: 0
+  canClick: 1
   markUnit: 0
 --- !u!1 &5215012005464988131
 GameObject:
@@ -37370,6 +37374,14 @@ PrefabInstance:
     - target: {fileID: 3376316062051773352, guid: 1959e486536274ecbbf97f50efac8e78, type: 3}
       propertyPath: m_Name
       value: RoulettePlayerView
+      objectReference: {fileID: 0}
+    - target: {fileID: 7311306425477481946, guid: 1959e486536274ecbbf97f50efac8e78, type: 3}
+      propertyPath: m_overflowMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7311306425477481946, guid: 1959e486536274ecbbf97f50efac8e78, type: 3}
+      propertyPath: m_TextWrappingMode
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

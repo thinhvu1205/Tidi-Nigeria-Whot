@@ -35,13 +35,13 @@ public class TableItem : MonoBehaviour
         foreach (SimpleProfile simpleProfile in match.Profiles)
         {
             name = simpleProfile.UserName;
-            if (name.Length > 10)
-            {
-                name = name.Substring(0, 7) + "...";
-            }
+            // if (name.Length > 10)
+            // {
+            //     name = name.Substring(0, 7) + "...";
+            // }
             if (simpleProfile != match.Profiles.ToList().Last())
             {
-                name += ","; 
+                name += ", "; 
             }
             listName += name;
         }

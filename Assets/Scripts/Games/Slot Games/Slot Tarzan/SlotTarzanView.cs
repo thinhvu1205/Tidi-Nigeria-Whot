@@ -340,6 +340,14 @@ public class SlotTarzanView : BaseSlotView
             else
             {
                 isBetLevelChanged = false;
+                DisableAllCharacters();
+                foreach (SiXiangSymbol symbol in data.LetterSymbols)
+                {
+                    if (letterIndexMap.TryGetValue(symbol, out int index))
+                    {
+                        characterList[index].sprite = characterActiveList[index];
+                    }
+                }
             }
             if (data.CurrentSixiangGame == SiXiangGame.TarzanJungleTreasure)
             {
@@ -410,10 +418,10 @@ public class SlotTarzanView : BaseSlotView
 
 
         // JUNGLE LETTERS
-            foreach (SpinSymbol spinSymbol in data.SpinSymbols)
-            {
-                spinSymbolList.Add(spinSymbol.Symbol);
-            }
+        foreach (SpinSymbol spinSymbol in data.SpinSymbols)
+        {
+            spinSymbolList.Add(spinSymbol.Symbol);
+        }
 
         // Update Reward
         lastChipWin = currentChipWin;
@@ -556,12 +564,12 @@ public class SlotTarzanView : BaseSlotView
             if (isStartMiniGame)
             {
                 isStartMiniGame = false;
-                Debug.Log("START MINIgAME bù phát");
                 ShowPopupMinigame();
                 // tweenQueue.Enqueue(() => ShowPopupMinigame());
             }
             if (hasGotFreeSpin)
             {
+                Debug.Log("RESET HAS GOT FREE SPIN");
                 if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO)
                 {
                     spinType = SpinType.FREE_NORMAL;
@@ -573,6 +581,7 @@ public class SlotTarzanView : BaseSlotView
                 hasGotFreeSpin = false;
                 isInFreeSpin = true;
             }
+            // else if (isEndMiniGame && hasGotFreeSpin)
             Reset();
             // Nếu đang auto spin thì spin tiếp
             if (spinType == SpinType.AUTO || spinType == SpinType.FREE_AUTO)
@@ -1100,6 +1109,10 @@ public class SlotTarzanView : BaseSlotView
     {
         freeSpinLeftText.gameObject.SetActive(true);
         freeSpinLeftText.text = freeSpinLeft == -1 ? "9" : freeSpinLeft.ToString();
+        if (isInFreeSpin && isEndMiniGame)
+        {
+            freeSpinLeftText.text = "9";
+        }
     }
 
     protected override void DrawRectangularAndConnectingLines(int[] lineWinID, int startIndex, int matchedItemCount, UnityEngine.Color colorLine)
@@ -1270,7 +1283,7 @@ public class SlotTarzanView : BaseSlotView
     protected override void Reset()
     {
         base.Reset();
-
+        
     }
 
     public void Speed()

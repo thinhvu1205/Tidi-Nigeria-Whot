@@ -259,6 +259,7 @@ public class RouletteView : BaseDiceGameView
         if (TotalBetValue > 0 && TotalBetValue < markUnit)
         {
             UIManager.Instance.ShowToast("You must bet at least " + Utility.FormatNumber(markUnit) + " chips!", 2, transform);
+            canClick = true;
             return;
         }
         Debug.Log("CLICK");
@@ -315,6 +316,7 @@ public class RouletteView : BaseDiceGameView
     public void OnClickButtonDeal()
     {
         Debug.Log("TOTAL BET VALUE: " + TotalBetValue);
+        canClick = true;
         if (TotalBetValue + currentBetValue > markUnit * 100)
         {
             UIManager.Instance.ShowToast("You must bet at most " + Utility.FormatNumber(markUnit * 100) + " chips!", 2, transform);

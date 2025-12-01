@@ -166,6 +166,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 107dedb42d4724b3e86d3e67ac848b18, type: 3}
+    - target: {fileID: 1259823651276914608, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 13.3
+      objectReference: {fileID: 0}
     - target: {fileID: 1831605988215129025, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
       propertyPath: m_fontSize
       value: 30
@@ -304,15 +308,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4824909067868688869, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
       propertyPath: m_fontSize
-      value: 16.85
+      value: 15.3
       objectReference: {fileID: 0}
     - target: {fileID: 4824909067868688869, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
       propertyPath: m_margin.x
-      value: 16.721863
+      value: 1.3735199
       objectReference: {fileID: 0}
     - target: {fileID: 4824909067868688869, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
       propertyPath: m_margin.z
-      value: 16.502625
+      value: 0.083496094
       objectReference: {fileID: 0}
     - target: {fileID: 4824909067868688869, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
       propertyPath: m_fontAsset
