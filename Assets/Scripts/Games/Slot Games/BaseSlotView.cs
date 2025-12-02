@@ -432,7 +432,7 @@ public class BaseSlotView : BaseGameView
 
     public virtual void OnClickPlusBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || isInFreeSpin)
         {
             return; 
         }
@@ -449,7 +449,7 @@ public class BaseSlotView : BaseGameView
 
     public virtual void OnClickMinusBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView  || isInFreeSpin)
         {
             return; 
         }
@@ -467,7 +467,7 @@ public class BaseSlotView : BaseGameView
 
     public virtual void OnClickMaxBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || isClickMaxBet || !hasSetupStartView)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || isClickMaxBet || !hasSetupStartView || isInFreeSpin)
         {
             return;
         }

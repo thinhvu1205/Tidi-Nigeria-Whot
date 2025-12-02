@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Globals;
 using Newtonsoft.Json;
 using Proto;
@@ -28,7 +29,7 @@ public class BannerView : BaseView
         cancellationTokenSource.Cancel();
     }
 
-    public async void SetInfo(InAppMessage data, Sprite sprite)
+    public async UniTask SetInfo(InAppMessage data, Sprite sprite)
     {
         if (!gameObject.activeInHierarchy) return;
         bool isClose = data.Data.Params["isClose"] == "true" ? true : false;

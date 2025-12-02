@@ -461,7 +461,7 @@ public class WhotPlayer : MonoBehaviour
     }
     public void AnimateChipValue(long toNumber = 0)
     {
-        Utility.TweenNumberToNumberScale1(chipText, (int)toNumber, (int)GetChipAmount(), 0.5f, false);
+        Utility.TweenNumberToNumberScale1(chipText, toNumber, GetChipAmount(), 0.5f, false);
     }
 
     private void SortRemainingCards(List<WhotCard> cards)

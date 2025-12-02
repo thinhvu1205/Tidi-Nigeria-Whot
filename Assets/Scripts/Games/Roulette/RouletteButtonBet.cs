@@ -20,4 +20,17 @@ public class RouletteButtonBet : MonoBehaviour
     {
         imageBorder.gameObject.SetActive(isSelected);
     }
+
+    public void Enable()
+    {
+        button.interactable = true;
+        GetComponent<Image>().color = Color.white;
+        textbet.color = Color.white;
+    }
+
+    public void Disable()
+    {
+        button.interactable = false;
+        textbet.color = Color.gray;
+    }
 }

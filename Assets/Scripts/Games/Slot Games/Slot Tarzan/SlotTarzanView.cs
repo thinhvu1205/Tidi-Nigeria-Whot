@@ -10,6 +10,7 @@ using TMPro;
 using Color = UnityEngine.Color;
 using UnityEngine;
 using UnityEngine.UI;
+using Google.Protobuf;
 
 public class SlotTarzanView : BaseSlotView
 {
@@ -185,7 +186,7 @@ public class SlotTarzanView : BaseSlotView
     private readonly List<SiXiangSymbol> spinSymbolList = new();
     private int lastDiamondCollect, diamondCollect;
     private long updatedDiamondCollectAmount, diamondCollectChipAmount, diamondPotAmount;
-    private bool isWinTarzan, isInMiniGame, isStartMiniGame, isEndMiniGame, isWinDiamondPot;
+    private bool isWinTarzan, isInMiniGame, isStartMiniGame, isEndMiniGame, isWinDiamondPot, isBetLevelChanged;
     private float multiFreeGame;
 
     protected override void Awake()
@@ -331,8 +332,23 @@ public class SlotTarzanView : BaseSlotView
         if (hasSetupStartView)
         {
             // Bấm Spin
-            if (IsSpinning)
+            if (IsSpinning && !isBetLevelChanged)
+            {
                 OnStartSpin();
+                
+            }
+            else
+            {
+                isBetLevelChanged = false;
+                DisableAllCharacters();
+                foreach (SiXiangSymbol symbol in data.LetterSymbols)
+                {
+                    if (letterIndexMap.TryGetValue(symbol, out int index))
+                    {
+                        characterList[index].sprite = characterActiveList[index];
+                    }
+                }
+            }
             if (data.CurrentSixiangGame == SiXiangGame.TarzanJungleTreasure)
             {
                 totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
@@ -402,10 +418,10 @@ public class SlotTarzanView : BaseSlotView
 
 
         // JUNGLE LETTERS
-            foreach (SpinSymbol spinSymbol in data.SpinSymbols)
-            {
-                spinSymbolList.Add(spinSymbol.Symbol);
-            }
+        foreach (SpinSymbol spinSymbol in data.SpinSymbols)
+        {
+            spinSymbolList.Add(spinSymbol.Symbol);
+        }
 
         // Update Reward
         lastChipWin = currentChipWin;
@@ -548,12 +564,12 @@ public class SlotTarzanView : BaseSlotView
             if (isStartMiniGame)
             {
                 isStartMiniGame = false;
-                Debug.Log("START MINIgAME bù phát");
                 ShowPopupMinigame();
                 // tweenQueue.Enqueue(() => ShowPopupMinigame());
             }
             if (hasGotFreeSpin)
             {
+                Debug.Log("RESET HAS GOT FREE SPIN");
                 if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO)
                 {
                     spinType = SpinType.FREE_NORMAL;
@@ -565,6 +581,7 @@ public class SlotTarzanView : BaseSlotView
                 hasGotFreeSpin = false;
                 isInFreeSpin = true;
             }
+            // else if (isEndMiniGame && hasGotFreeSpin)
             Reset();
             // Nếu đang auto spin thì spin tiếp
             if (spinType == SpinType.AUTO || spinType == SpinType.FREE_AUTO)
@@ -883,6 +900,63 @@ public class SlotTarzanView : BaseSlotView
     }
     #endregion
 
+    private void OnBetLevelChanged()
+    {
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
+        {
+            return;
+        }
+        isBetLevelChanged = true;
+        InfoBet infoBet = new()
+        {
+            Chips = currentBetLevel,
+        };
+        DataSender.SendMatchState((long)OpCodeRequest.Bet, infoBet.ToByteArray()); 
+        
+    }
+
+    public override void OnClickMaxBetButton()
+    {
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView )
+        {
+            return;
+        }
+
+        SoundManager.Instance.PlayEffectFromPath(SoundSlot.CLICK);
+        lastBetLevel = currentBetLevel;
+        currentBetLevel = betLevelList[^1];
+        if (lastBetLevel == currentBetLevel)
+        {
+            HandleSpin();
+        }
+        else
+        {
+            OnBetLevelChanged();
+        }
+        SetCurrentBetText(currentBetLevel);
+        SetCurrentBetImage(currentBetLevel);
+    }
+
+    public override void OnClickMinusBetButton()
+    {
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
+        {
+            return; 
+        }
+        base.OnClickMinusBetButton();
+        OnBetLevelChanged();
+    }
+
+    public override void OnClickPlusBetButton()
+    {
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
+        {
+            return; 
+        }
+        base.OnClickPlusBetButton();
+        OnBetLevelChanged();
+    }
+
     #region UI
     private void ShowAnimationLetter(Vector2 position, int index, TweenCallback cb = null)
     {
@@ -1035,6 +1109,10 @@ public class SlotTarzanView : BaseSlotView
     {
         freeSpinLeftText.gameObject.SetActive(true);
         freeSpinLeftText.text = freeSpinLeft == -1 ? "9" : freeSpinLeft.ToString();
+        if (isInFreeSpin && isEndMiniGame)
+        {
+            freeSpinLeftText.text = "9";
+        }
     }
 
     protected override void DrawRectangularAndConnectingLines(int[] lineWinID, int startIndex, int matchedItemCount, UnityEngine.Color colorLine)
@@ -1205,7 +1283,7 @@ public class SlotTarzanView : BaseSlotView
     protected override void Reset()
     {
         base.Reset();
-
+        
     }
 
     public void Speed()

@@ -455,6 +455,7 @@ public class WhotView : BaseDiceGameView
             }
             playerHand.SortCards();
             playerHand.SpreadCards();
+            playerHand.isFirstUpdateTurn = false;
 
             // Khởi tạo lại call card
             if (callCardModel == null && data.TopCard != null)
@@ -556,6 +557,7 @@ public class WhotView : BaseDiceGameView
         else
         {
             HideYourTurn();
+            playerHand.isFirstUpdateTurn = false;
             playerHand.EndTurn();
         }
         OnNextTurn?.Invoke(new OnNextTurnEventArg
@@ -1183,20 +1185,20 @@ public class WhotView : BaseDiceGameView
     private void AnimateChipTransfer(Action callback)
     {
         victoryAnimationParent.gameObject.SetActive(false);
-            Sequence chipSequence = DOTween.Sequence();
-            int transferCount = 0;
-            int totalTransfers = playersList.Count(p => p.isPlaying && !p.isWinner);
-            foreach (WhotPlayer player in playersList)
-            {
-                if (!player.isPlaying || player.isWinner) continue;
-                bool isLast = ++transferCount == totalTransfers;
-                player.AnimateChipTransfer(GetWinner(), isLast);
-            }
-            chipSequence.AppendInterval(2.5f);
-            chipSequence.OnComplete(() =>
-            {
-                callback?.Invoke();
-            });
+        Sequence chipSequence = DOTween.Sequence();
+        int transferCount = 0;
+        int totalTransfers = playersList.Count(p => p.isPlaying && !p.isWinner);
+        foreach (WhotPlayer player in playersList)
+        {
+            if (!player.isPlaying || player.isWinner) continue;
+            bool isLast = ++transferCount == totalTransfers;
+            player.AnimateChipTransfer(GetWinner(), isLast);
+        }
+        chipSequence.AppendInterval(2.5f);
+        chipSequence.OnComplete(() =>
+        {
+            callback?.Invoke();
+        });
     }
 
     public void AnimateBetterLuckNextTime(List<WhotPlayerResult> result)
