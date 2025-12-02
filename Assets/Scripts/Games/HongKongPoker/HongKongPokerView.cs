@@ -19,14 +19,6 @@ using Random = UnityEngine.Random;
 
 public class HongKongPokerView : BaseDiceGameView
 {
-    public enum BetStatus
-    {
-        ALL_IN = 1,
-        RAISE = 2,
-        CALL = 3,
-        CHECK = 4,
-        FOLD = 5 
-    }
     [SerializeField] private Transform cardContainer, boxBetContainer, arrowSwapContainer, buttonChangeCardContainer, chipContainer, dealer;
     // [SerializeField] private PlayerViewHongKongPoker dealerHkPoker;
     [SerializeField] private HongKongPokerPot pot;
@@ -77,6 +69,7 @@ public class HongKongPokerView : BaseDiceGameView
     private Sequence cardSwapSequence;
     private Sequence countdownSequence;
     private Coroutine arrowSwapCoroutine;
+    private bool isSwapped = false, isRejoinTable = false;
     
     protected override void Awake()
     {
@@ -117,7 +110,7 @@ public class HongKongPokerView : BaseDiceGameView
     {
         base.RequestSyncStateTable();
         DataSender.SendMatchState((long)OpCodeRequest.SyncTable, Array.Empty<byte>());
-        // isRejoinTable = true;
+        isRejoinTable = true;
         // playerHand.Reset();
     }
 
@@ -168,7 +161,7 @@ public class HongKongPokerView : BaseDiceGameView
         Debug.Log($"[HK Poker] Update Table: Players={data.Players.Count}, Join={data.JoinPlayers.Count}, Leave={data.LeavePlayers.Count}");
         
         // Update player list
-        UpdatePosUserTable(data);
+        UpdatePosUserTable(data, true);
         
         // Handle players leaving - clear their cards
         foreach (var leavePlayer in data.LeavePlayers)
@@ -177,41 +170,42 @@ public class HongKongPokerView : BaseDiceGameView
         }
     }
 
-    public override void HandleUpdateDeal(IMatchState matchState)
-    {
-        base.HandleUpdateDeal(matchState);
-        var data = UpdateDeal.Parser.ParseFrom(matchState.State);
-        Debug.Log("Update Deal: " + data);
-   
-
-    }
-
     public override void HandleUpdateGameState(IMatchState matchState)
     {
         base.HandleUpdateGameState(matchState);
         var data = UpdateGameState.Parser.ParseFrom(matchState.State);
         Debug.Log("Update Game State: " + data);
         gameState = data.State;
+        if (gameState != GameState.Play && gameState != GameState.Reward)
+        {
+            if (isRejoinTable)
+            {
+                Debug.Log($"[HK Poker] Rejoining Table");
+                isRejoinTable = false;
+                ClearRoundUI();
+                ClearAllCards();
+                listBoxBet = new List<HongKongPokerBoxBet>() { null, null, null, null, null };
+                isSwapped = false;
+                pot.SetValue(0, 0f);
+            }
+        }
+        else
+        {
+            isRejoinTable = false;
+        }
         switch (gameState)
         {
+            case GameState.Idle:
+                break;
+            case GameState.Matching:
+                break;
             case GameState.Preparing:
                 textCountDown.gameObject.SetActive(true);
                 textCountDown.text = data.CountDown.ToString();
-                // if (data.CountDown == 1)
-                // {
-                //     _ = HandleStartGame();
-                // }
-
                 break;
             case GameState.Play:
                 break;
-            case GameState.Matching:
-
-                break;
-            case GameState.Idle:
-                break;
             case GameState.Reward:
-
                 break;
             case GameState.Finish:
                 break;
@@ -232,48 +226,18 @@ public class HongKongPokerView : BaseDiceGameView
     {
         base.HandleUpdateTurn(matchState);
         var data = UpdateTurn.Parser.ParseFrom(matchState.State);
-        Debug.Log($"[HK Poker] Update Turn: User={data.UserId}, Countdown={data.Countdown}s");
+        Debug.Log($"[HK Poker] Update Turn: Countdown={data.Countdown}s");
         
-        string myUserId = User.userProfile.UserId;
-        int currentPlayerIndex = GetPlayerIndex(data.UserId);
-        
-        // Highlight current player
-        if (currentPlayerIndex >= 0)
+        foreach (var player in userIdToView)
         {
-            HighlightPlayer(currentPlayerIndex, data.Countdown);
+            BasePlayerView playerView = player.Value;
+            playerView.HideCountDown();
         }
-        
-        // ✅ Enable betting UI if it's my turn
-        if (data.UserId == myUserId)
+
+        if (userIdToView.TryGetValue(data.UserId, out var view))
         {
-            // My turn - show button container, hide toggle container
-            if (buttonBetContainer != null)
-            {
-                buttonBetContainer.gameObject.SetActive(true);
-            }
-            if (toggleContainer != null)
-            {
-                // ✅ Disable toggles when it's my turn
-                toggleContainer.DisableToggles();
-                toggleContainer.gameObject.SetActive(false);
-                
-                // ✅ Note: Toggle validation will be done in HandleBettingState() 
-                // where we have access to current AvailableActions
-            }
-            StartTurnTimer((int)data.Countdown);
-        }
-        else
-        {
-            // Not my turn - show toggle container, hide button container
-            if (buttonBetContainer != null)
-            {
-                buttonBetContainer.gameObject.SetActive(false);
-            }
-            if (toggleContainer != null)
-            {
-                toggleContainer.gameObject.SetActive(true);
-                // ✅ Toggles are already enabled in UpdateTogglesFromAvailableActions()
-            }
+            Debug.Log($"Set Turn player {view.user_name}");
+            view.SetCurrentTurn(true, data.Countdown, 10);
         }
     }
 
@@ -383,7 +347,7 @@ public class HongKongPokerView : BaseDiceGameView
         // Animate chips to box bet
         if (data.Amount > 0)
         {
-            PlayerGiveChipsToBoxbet(playerIndex, data.UserId);
+            PlayerGiveChipsToBoxbet(playerIndex, data.UserId, (int)data.Amount);
         }
         
         // Update betting state UI - animate bet for actions that involve money
@@ -439,231 +403,241 @@ public class HongKongPokerView : BaseDiceGameView
         // ===== 1. DEAL CARDS =====
         if (data.PlayerCards != null && data.PlayerCards.Count > 0)
         {
-            // Chia bài lần đầu
-            if (data.Round == HKPokerRound.HkRoundPreFlop)
+            foreach (HKPlayerCards playerCards in data.PlayerCards)
             {
-                foreach (HKPlayerCards playerCards in data.PlayerCards)
+                int playerIndex = GetPlayerIndex(playerCards.UserId);
+                if (playerIndex < 0 || playerCards.AllCards == null || playerCards.AllCards.Count == 0) continue;
+
+                bool isMe = playerCards.UserId == myUserId;
+
+                if (isSync)
                 {
-                    int playerIndex = GetPlayerIndex(playerCards.UserId);
-                    if (playerIndex < 0) continue;
+                    // Get current cards count
+                    int currentCardCount = listPlayerCards[playerIndex].Count;
+                    int expectedCardCount = playerCards.AllCards.Count;
 
-                    bool isMe = playerCards.UserId == myUserId;
+                    Debug.Log(
+                        $"[HK Poker] Sync cards for player {playerCards.UserId}: current={currentCardCount}, expected={expectedCardCount}");
+                    bool isRound4 = data.Round == HKPokerRound.HkRound4Card;
+                    bool hasSwapped = false;
 
-                    if (isSync)
+                    if (isRound4 && swapStateMap.TryGetValue(playerCards.UserId, out var swapState))
                     {
-                        // ✅ Sync: Check và chỉ deal cards chưa có
-                        // Deal face-down cards
-                        if (isMe && playerCards.FaceDownCards != null && playerCards.FaceDownCards.Count > 0)
+                        hasSwapped = swapState;
+                        if (data.CardSwapCountdown == 0)
                         {
-                            foreach (var card in playerCards.FaceDownCards)
-                            {
-                                if (!HasCard(playerIndex, card.Rank, card.Suit))
-                                {
-                                    DealACard(card, playerIndex, delay: 0f, isFaceUp: false, isAnimate: false, isMe: true);
-                                }
-                            }
-                        }
-                        else if (!isMe && playerCards.FaceDownCards != null && playerCards.FaceDownCards.Count > 0)
-                        {
-                            int faceDownCount = playerCards.FaceDownCards.Count;
-                            int currentFaceDownCount = GetFaceDownCardCount(playerIndex);
-                            // Deal thêm cards nếu thiếu
-                            for (int i = currentFaceDownCount; i < faceDownCount; i++)
-                            {
-                                ShowCardBack(playerIndex, delay: 0f, isAnimate: false);
-                            }
+                            hasSwapped = true;
                         }
 
-                        // Deal face-up cards (visible to all)
-                        if (playerCards.FaceUpCards != null)
+                        Debug.Log($"[HK Poker] Round 4 sync for {playerCards.UserId}: hasSwapped={hasSwapped}");
+                    }
+
+                    // Step 1: Remove excess cards if client has more than server
+                    if (currentCardCount > expectedCardCount)
+                    {
+                        Debug.LogWarning(
+                            $"[HK Poker] Client has {currentCardCount} cards but server has {expectedCardCount}. Removing excess cards.");
+
+                        // Remove from the end to avoid index shifting issues
+                        for (int i = currentCardCount - 1; i >= expectedCardCount; i--)
                         {
-                            foreach (var card in playerCards.FaceUpCards)
+                            PoolService.Instance.Release(PrefabType.Card, listPlayerCards[playerIndex][i]);
+                            listPlayerCards[playerIndex].RemoveAt(i);
+                        }
+
+                        currentCardCount = listPlayerCards[playerIndex].Count;
+                    }
+
+                    // Step 2: Sync existing cards with server data
+                    for (int i = 0; i < currentCardCount; i++)
+                    {
+                        var serverCard = i == 0 ? playerCards.FaceDownCards[0] : playerCards.FaceUpCards[i-1];
+                        if(serverCard == null) continue;
+                        var clientCard = listPlayerCards[playerIndex][i];
+                        // Determine if this card should be face up based on server data
+                        bool shouldBeFaceUp = false;
+
+                        if (isRound4 && i == 3)
+                        {
+                            if (isMe)
                             {
-                                if (!HasCard(playerIndex, card.Rank, card.Suit))
-                                {
-                                    DealACard(card, playerIndex, delay: 0f, isFaceUp: true, isAnimate: false);
-                                }
+                                shouldBeFaceUp = hasSwapped;
+                            }
+                            else if (data.CardSwapCountdown == 0)
+                            {
+                                shouldBeFaceUp = true;
+                            }
+                        }
+                        else if (i != 0)
+                        {
+                            // First 3 cards (index 0-2) are always face up
+                            shouldBeFaceUp = true;
+                        }
+
+                        clientCard.SetData((int)serverCard.Rank, (int)serverCard.Suit);
+
+                        // Ensure card data matches server (in case of desync)
+                        if (shouldBeFaceUp)
+                        {
+                            clientCard.ShowCard();
+                            clientCard.HideShadowCard();
+                        }
+                        else
+                        {
+                            if (!isMe)
+                            {
+                                clientCard.HideCard();
+                            }
+                            else
+                            {
+                                clientCard.ShowCard();
+                                clientCard.ShowShadowCard();
                             }
                         }
                     }
-                    else
+
+                    // Step 3: Deal all missing cards
+                    for (int i = currentCardCount; i < expectedCardCount; i++)
                     {
-                        // ✅ New round: Animate cards
-                        // Deal face-down cards
-                        if (isMe && playerCards.FaceDownCards != null && playerCards.FaceDownCards.Count > 0)
+                        Card cardToDeal = i == 0 ? playerCards.FaceDownCards[0] : playerCards.FaceUpCards[i-1];
+                        if (cardToDeal == null) continue;
+
+                        // Determine if card should be face-up or face-down
+                        bool isFaceUp = false;
+
+                        if (isMe)
                         {
-                            foreach (var card in playerCards.FaceDownCards)
+                            // For current user: check if card is in face_up_cards or face_down_cards
+                            bool inFaceUp = playerCards.FaceUpCards != null &&
+                                            playerCards.FaceUpCards.Any(c =>
+                                                c.Rank == cardToDeal.Rank && c.Suit == cardToDeal.Suit);
+                            bool inFaceDown = playerCards.FaceDownCards != null &&
+                                              playerCards.FaceDownCards.Any(c =>
+                                                  c.Rank == cardToDeal.Rank && c.Suit == cardToDeal.Suit);
+
+                            if (inFaceUp)
                             {
-                                DealACard(card, playerIndex, delay: 0.3f, isFaceUp: false, isAnimate: true, isMe: true);
+                                isFaceUp = true;
+                            }
+                            else if (inFaceDown)
+                            {
+                                isFaceUp = false; // Face-down for current user
+                            }
+                            else
+                            {
+                                // Fallback: determine based on round and position
+                                if (isRound4 && i == 3)
+                                {
+                                    // Round 4, 4th card: face-down if not swapped yet
+                                    isFaceUp = hasSwapped; // If swapped, card is face-up; otherwise face-down
+                                }
+                                else
+                                {
+                                    isFaceUp = true; // Other cards are face-up
+                                }
                             }
                         }
-                        else if (!isMe && playerCards.FaceDownCards != null && playerCards.FaceDownCards.Count > 0)
+                        else
                         {
-                            int faceDownCount = playerCards.FaceDownCards.Count;
-                            for (int i = 0; i < faceDownCount; i++)
+                            // For other players: check if card is in face_up_cards
+                            bool inFaceUp = playerCards.FaceUpCards != null &&
+                                            playerCards.FaceUpCards.Any(c =>
+                                                c.Rank == cardToDeal.Rank && c.Suit == cardToDeal.Suit);
+
+                            if (inFaceUp)
                             {
-                                ShowCardBack(playerIndex, delay: 0.3f, isAnimate: true);
+                                isFaceUp = true;
+                            }
+                            else
+                            {
+                                // Face-down cards for other players show as card backs
+                                isFaceUp = false; // Will show card back
                             }
                         }
 
-                        // Deal face-up cards (visible to all)
-                        foreach (var card in playerCards.FaceUpCards)
+                        // Deal the card
+                        if (isRound4 && i == 3)
                         {
-                            DOVirtual.DelayedCall(0.5f, () =>
+                            // Round 4, 4th card
+                            if (isMe)
                             {
-                                DealACard(card, playerIndex, delay: 0.5f, isFaceUp: true, isAnimate: true);
-                            });
+                                // Current user: face-down if not swapped, face-up if swapped
+                                DealACard(cardToDeal, playerIndex, delay: 0f, isFaceUp: hasSwapped, isAnimate: false,
+                                    isMe: true);
+                            }
+                            else
+                            {
+                                // Other players: face-down if not swapped, face-up if swapped
+                                if (data.CardSwapCountdown == 0)
+                                {
+                                    DealACard(cardToDeal, playerIndex, delay: 0f, isFaceUp: true, isAnimate: false);
+                                }
+                                else
+                                {
+                                    ShowCardBack(playerIndex, delay: 0f, isAnimate: false);
+                                }
+                            }
                         }
+                        else if (!isMe && !isFaceUp)
+                        {
+                            // Other players' face-down cards: show card back
+                            ShowCardBack(playerIndex, delay: 0f, isAnimate: false);
+                        }
+                        else
+                        {
+                            // Face-up cards or current user's cards
+                            DealACard(cardToDeal, playerIndex, delay: 0f, isFaceUp: isFaceUp, isAnimate: false,
+                                isMe: isMe);
+                        }
+                    }
+                    
+                }
+                else if (data.Round == HKPokerRound.HkRoundPreFlop)
+                {
+                    // ✅ New round: Animate cards
+                    // Deal face-down cards
+                    if (isMe && playerCards.FaceDownCards != null && playerCards.FaceDownCards.Count > 0)
+                    {
+                        foreach (var card in playerCards.FaceDownCards)
+                        {
+                            DealACard(card, playerIndex, delay: 0.3f, isFaceUp: false, isAnimate: true, isMe: true);
+                        }
+                    }
+                    else if (!isMe && playerCards.FaceDownCards != null && playerCards.FaceDownCards.Count > 0)
+                    {
+                        int faceDownCount = playerCards.FaceDownCards.Count;
+                        for (int i = 0; i < faceDownCount; i++)
+                        {
+                            ShowCardBack(playerIndex, delay: 0.3f, isAnimate: true);
+                        }
+                    }
+
+                    // Deal face-up cards (visible to all)
+                    foreach (var card in playerCards.FaceUpCards)
+                    {
+                        DOVirtual.DelayedCall(0.5f,
+                            () => { DealACard(card, playerIndex, delay: 0.5f, isFaceUp: true, isAnimate: true); });
                     }
                 }
-            }
-            // Ngửa hết bài của người chơi lên show điểm
-            else if (data.Round == HKPokerRound.HkRoundShowdown)
-            {
-
-            }
-            // Bốc 1 lá mới
-            else
-            {
-                
-                foreach (HKPlayerCards playerCards in data.PlayerCards)
+                else if (data.Round != HKPokerRound.HkRoundShowdown)
                 {
-                    int playerIndex = GetPlayerIndex(playerCards.UserId);
-                    if (playerIndex < 0) continue;
-                    
-                    bool isMe = playerCards.UserId == myUserId;
-                    
                     if (foldedMap.TryGetValue(playerCards.UserId, out bool isFolded) && isFolded)
                     {
                         Debug.Log($"[HK Poker] Skipping card deal for folded player: {playerCards.UserId}");
                         continue;
                     }
-                    
-                    if (isSync) 
+
+                    Card newCard = playerCards.FaceUpCards[^1];
+                    if (newCard == null) continue;
+
+                    // Deal card normally for other players or other rounds
+                    if (data.Round == HKPokerRound.HkRound4Card)
                     {
-                        // ✅ Sync: Deal all missing cards, not just the last one
-                        if (playerCards.AllCards == null || playerCards.AllCards.Count == 0) continue;
-
-                        // Get current cards count
-                        int currentCardCount = listPlayerCards[playerIndex].Count;
-                        int expectedCardCount = playerCards.AllCards.Count;
-
-                        Debug.Log($"[HK Poker] Sync cards for player {playerCards.UserId}: current={currentCardCount}, expected={expectedCardCount}");
-                        bool isRound4 = data.Round == HKPokerRound.HkRound4Card;
-                        bool hasSwapped = false;
-                    
-                        if (isRound4 && swapStateMap.TryGetValue(playerCards.UserId, out var swapState))
-                        {
-                            hasSwapped = swapState;
-                            Debug.Log($"[HK Poker] Round 4 sync for {playerCards.UserId}: hasSwapped={hasSwapped}");
-                        }
-                        // Deal all missing cards
-                        for (int i = currentCardCount; i < expectedCardCount; i++)
-                        {
-                            Card cardToDeal = playerCards.AllCards[i];
-                            if (cardToDeal == null) continue;
-
-                            // Determine if card should be face-up or face-down
-                            bool isFaceUp = false;
-                            
-                            if (isMe)
-                            {
-                                // For current user: check if card is in face_up_cards or face_down_cards
-                                bool inFaceUp = playerCards.FaceUpCards != null && 
-                                                playerCards.FaceUpCards.Any(c => c.Rank == cardToDeal.Rank && c.Suit == cardToDeal.Suit);
-                                bool inFaceDown = playerCards.FaceDownCards != null && 
-                                                  playerCards.FaceDownCards.Any(c => c.Rank == cardToDeal.Rank && c.Suit == cardToDeal.Suit);
-                                
-                                if (inFaceUp)
-                                {
-                                    isFaceUp = true;
-                                }
-                                else if (inFaceDown)
-                                {
-                                    isFaceUp = false; // Face-down for current user
-                                }
-                                else
-                                {
-                                    // Fallback: determine based on round and position
-                                    if (isRound4 && i == 3)
-                                    {
-                                        // Round 4, 4th card: face-down if not swapped yet
-                                        isFaceUp = hasSwapped; // If swapped, card is face-up; otherwise face-down
-                                    }
-                                    else
-                                    {
-                                        isFaceUp = true; // Other cards are face-up
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                // For other players: check if card is in face_up_cards
-                                bool inFaceUp = playerCards.FaceUpCards != null && 
-                                                playerCards.FaceUpCards.Any(c => c.Rank == cardToDeal.Rank && c.Suit == cardToDeal.Suit);
-                                
-                                if (inFaceUp)
-                                {
-                                    isFaceUp = true;
-                                }
-                                else
-                                {
-                                    // Face-down cards for other players show as card backs
-                                    isFaceUp = false; // Will show card back
-                                }
-                            }
-
-                            // Deal the card
-                            if (isRound4 && i == 3)
-                            {
-                                // Round 4, 4th card
-                                if (isMe)
-                                {
-                                    // Current user: face-down if not swapped, face-up if swapped
-                                    DealACard(cardToDeal, playerIndex, delay: 0f, isFaceUp: hasSwapped, isAnimate: false, isMe: true);
-                                }
-                                else
-                                {
-                                    // Other players: face-down if not swapped, face-up if swapped
-                                    if (hasSwapped)
-                                    {
-                                        DealACard(cardToDeal, playerIndex, delay: 0f, isFaceUp: true, isAnimate: false);
-                                    }
-                                    else
-                                    {
-                                        ShowCardBack(playerIndex, delay: 0f, isAnimate: false);
-                                    }
-                                }
-                            }
-                            else if (!isMe && !isFaceUp)
-                            {
-                                // Other players' face-down cards: show card back
-                                ShowCardBack(playerIndex, delay: 0f, isAnimate: false);
-                            }
-                            else
-                            {
-                                // Face-up cards or current user's cards
-                                DealACard(cardToDeal, playerIndex, delay: 0f, isFaceUp: isFaceUp, isAnimate: false, isMe: isMe);
-                            }
-                        }
+                        DealACard(newCard, playerIndex, delay: 0.25f, isFaceUp: false, isAnimate: true, isMe: isMe);
                     }
                     else
                     {
-                        // ✅ New round: Animate only the new card (last card)
-                        if (playerCards.AllCards == null || playerCards.AllCards.Count == 0) continue;
-                        
-                        Card newCard = playerCards.AllCards[^1];
-                        if (newCard == null) continue;
-
-                        // Deal card normally for other players or other rounds
-                        if (data.Round == HKPokerRound.HkRound4Card)
-                        {
-                            DealACard(newCard, playerIndex, delay: 0.25f, isFaceUp: false, isAnimate: true, isMe: isMe);
-                        }
-                        else
-                        {
-                            DealACard(newCard, playerIndex, delay: 0.25f, isFaceUp: true, isAnimate: true);
-                        }
+                        DealACard(newCard, playerIndex, delay: 0.25f, isFaceUp: true, isAnimate: true);
                     }
                 }
             }
@@ -796,8 +770,9 @@ public class HongKongPokerView : BaseDiceGameView
             {
                 // For current user: 
                 // 1. Show the old face-down card (card 1) as face-up (it's now the 4th position)
-                if (data.NewFaceUpCard != null)
+                if (data.NewFaceUpCard != null && !isSwapped)
                 {
+                    isSwapped = true;
                     // Show the swapped card (old face-down card is now face-up at 4th position)
                     // DealACard(data.NewFaceUpCard, playerIndex, delay: 0.1f, isFaceUp: true);
                     cardPlayer[3].HideShadowCard();
@@ -818,10 +793,13 @@ public class HongKongPokerView : BaseDiceGameView
             // Keep: Don't swap, show the 4th card for current user (it was hidden before)
             if (isMe)
             {
-                // Show the 4th card that was hidden
-                Debug.Log("[HK Poker] Current user chose to KEEP card - showing 4th card");
-                // DealACard(hiddenFourthCard, playerIndex, delay: 0.1f, isFaceUp: true);
-                cardPlayer[3].HideShadowCard();
+                if (!isSwapped)
+                {
+                    // Show the 4th card that was hidden
+                    isSwapped = true;
+                    Debug.Log("[HK Poker] Current user chose to KEEP card - showing 4th card");
+                    cardPlayer[3].HideShadowCard();
+                }
             }
             else
             {
@@ -842,7 +820,7 @@ public class HongKongPokerView : BaseDiceGameView
 
         ClearRoundUI();
         listBoxBet = new List<HongKongPokerBoxBet>() { null, null, null, null, null };
-
+        isSwapped = false;
         pot.SetValue((int)data.PotInfo.TotalPot, 0.5f);
 
 
@@ -905,6 +883,7 @@ public class HongKongPokerView : BaseDiceGameView
                             {
                                 // Show money flying animation for THIS winner
                                 playerWinner.AnimateFlyMoney(balanceUpdate.AmountChipAdd, 45);
+                                playerWinner.SetCurrentChip(balanceUpdate.AmountChipCurrent);
                             });
                     }
                     
@@ -954,43 +933,7 @@ public class HongKongPokerView : BaseDiceGameView
     
     #endregion
 
-    #region Helper 
-
-    
-    // ✅ Helper function: Check xem card đã tồn tại chưa
-    private bool HasCard(int playerIndex, CardRank rank, CardSuit suit)
-    {
-        if (playerIndex < 0 || playerIndex >= listPlayerCards.Count)
-            return false;
-
-        List<CardModel> playerCards = listPlayerCards[playerIndex];
-        foreach (var card in playerCards)
-        {
-            if (card != null && card.GetRank() == (int)rank && card.GetSuit() == (int)suit)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // ✅ Helper function: Đếm số face-down cards (card back)
-    private int GetFaceDownCardCount(int playerIndex)
-    {
-        if (playerIndex < 0 || playerIndex >= listPlayerCards.Count)
-            return 0;
-
-        int count = 0;
-        List<CardModel> playerCards = listPlayerCards[playerIndex];
-        foreach (var card in playerCards)
-        {
-            if (card != null && !card.IsShow())
-            {
-                count++;
-            }
-        }
-        return count;
-    }
+    #region Helper
     
     // ✅ Sync box bets from betting state (for rejoin/sync)
     private void SyncBoxBetsFromBettingState(HKBettingState bettingState)
@@ -1084,46 +1027,6 @@ public class HongKongPokerView : BaseDiceGameView
         return -1;
     }
     
-    private void ShowBoxBetPLayer(int playerIndex, HKPokerAction action, int amount, bool skipAnimation = false)
-    {
-        Debug.Log($"Player {playerIndex} action: {action} {(amount > 0 ? amount.ToString() : "")}");
-
-        // Show in BoxBet if available
-        if (playerIndex >= 0 && playerIndex < listBoxBet.Count)
-        {
-            var boxBet = listBoxBet[playerIndex];
-            if (boxBet != null)
-            {
-                // Update box bet display with action
-                boxBet.gameObject.SetActive(true);
-                boxBet.SetInfo(action, playerIndex, amount);
-            }
-            else
-            {
-                boxBet = PoolService.Instance.Get<HongKongPokerBoxBet>(PrefabType.BoxBetPlayerHkPoker);
-                listBoxBet[playerIndex] = boxBet;
-                boxBet.transform.localPosition = listBoxBetPosition[playerIndex];
-                boxBet.SetInfo(action, playerIndex, amount);
-            }
-        }
-
-        // Handle Fold animation (only if not skipping)
-        if (!skipAnimation)
-        {
-            switch(action)
-            {
-                case HKPokerAction.HkActionFold:
-                    Debug.Log("ANIMATE FOLD ACTION");
-                    List<CardModel> cards = listPlayerCards[playerIndex];
-                    for (int i = 0; i < cards.Count; i++)
-                    {
-                        StartCoroutine(FoldDown(playerIndex, cards[i], i * 0.1f));
-                    }
-                    break;
-            }
-        }
-    }
-
     private void UpdateBettingStateUI(HKBettingState bettingState, bool shouldAnimateBet = false)
     {
         Debug.Log($"[HK Poker] UpdateBettingStateUI: {bettingState}, shouldAnimateBet: {shouldAnimateBet}");
@@ -1156,58 +1059,34 @@ public class HongKongPokerView : BaseDiceGameView
             }
         }
         
-        string myUserId = User.userProfile.UserId;
-        bool isMyTurn = !string.IsNullOrEmpty(bettingState.CurrentPlayer) && bettingState.CurrentPlayer == myUserId;
-        
+        bool isMyTurn = !string.IsNullOrEmpty(bettingState.CurrentPlayer) && bettingState.CurrentPlayer == User.userProfile.UserId;
+
         // Update button container for ON TURN players
-        if (buttonBetContainer != null && isMyTurn)
+        if (isMyTurn)
         {
             // Use CurrentPlayerActions if available (backward compatibility)
             if (myAvailableActions == null && bettingState.CurrentPlayerActions != null)
             {
                 myAvailableActions = bettingState.CurrentPlayerActions;
             }
-            
+
             if (myAvailableActions != null)
             {
                 // Update buttons based on available actions from server
-                buttonBetContainer.UpdateButtonsFromAvailableActions(
+                buttonBetContainer?.UpdateButtonsFromAvailableActions(
                     myAvailableActions,
                     (int)currentPlayerStack,
                     (int)bettingState.MinRaise,
                     (int)bettingState.CurrentBet, pot.PotValue
                 );
             }
-            else
-            {
-                // Fallback: use old method if no available actions
-                long currentBet = bettingState.CurrentBet;
-                long minRaise = bettingState.MinRaise;
-                buttonBetContainer.SetValues(
-                    (int)currentPlayerStack,
-                    (int)minRaise,
-                    pot.PotValue
-                );
-            }
         }
-        
-        // Update toggle container for OFF TURN players
-        if (toggleContainer != null && !isMyTurn)
+        else
         {
-            // Find my player state and get available actions
-            HKPlayerAvailableActions myOffTurnActions = null;
-            foreach (var playerState in bettingState.PlayerStates)
+            // Update toggle container for OFF TURN players
+            if (myAvailableActions != null)
             {
-                if (playerState.UserId == myUserId && playerState.AvailableActions != null)
-                {
-                    myOffTurnActions = playerState.AvailableActions;
-                    break;
-                }
-            }
-            
-            if (myOffTurnActions != null)
-            {
-                toggleContainer.UpdateTogglesFromAvailableActions(myOffTurnActions);
+                toggleContainer?.UpdateTogglesFromAvailableActions(myAvailableActions);
             }
         }
     }
@@ -1318,29 +1197,6 @@ public class HongKongPokerView : BaseDiceGameView
         //     buttonChangeCardContainer?.gameObject.SetActive(true);
         // }
     }
-
-    private void HighlightPlayer(int playerIndex, long timeTurn)
-    {
-        // Highlight current player turn
-        Debug.Log($"Highlight player {playerIndex}");
-        
-        // TODO: Add visual highlight (glow effect, border, etc.)
-        // Example: 
-        
-        foreach (var player in userIdToView)
-        {
-            BasePlayerView playerView = player.Value;
-            playerView.HideCountDown();
-        }
-        if (playerIndex >= 0 && playerIndex < rearrangedPlayers.Count)
-        {
-            var player = rearrangedPlayers[playerIndex];
-            if (userIdToView.TryGetValue(player.Id, out var view))
-            {
-                view.SetCurrentTurn(true, timeTurn, 10);
-            }
-        }
-    }
     
     private void HandleRound1AutoBet(HKUpdateNewRound data)
     {
@@ -1364,140 +1220,20 @@ public class HongKongPokerView : BaseDiceGameView
                     if (playerIndex >= 0)
                     {
                         // Show auto bet animation
-                        ShowBoxBet(HKPokerAction.HkActionBet, playerIndex, (int)autoBet);
+                        ShowBoxBetPLayer(playerIndex, HKPokerAction.HkActionBet, (int)autoBet);
                         
                         // Animate chips to box bet
                         DOTween.Sequence()
                             .AppendInterval(0.5f)
-                            .AppendCallback(() => PlayerGiveChipsToBoxbet(playerIndex, playerState.UserId));
+                            .AppendCallback(() => PlayerGiveChipsToBoxbet(playerIndex, playerState.UserId,(int)autoBet));
                         
                         // Update previous bet for auto bet player
                         previousRoundBets[playerState.UserId] = autoBet;
-                        
-                        // Animate fly money for auto bet
-                        BasePlayerView playerView = userIdToView.GetValueOrDefault(playerState.UserId);
-                        if (playerView != null)
-                        {
-                            playerView.AnimateFlyMoney(-autoBet, 45);
-                        }
-                        
                         // Debug.Log($"[HK Poker] Player {playerState.UserId} auto bet {autoBet} (1/2 mark unit)");
                     }
                 }
             }
         }
-    }
-    
-    private void EnableBettingUI(HKBettingState bettingState, HKPokerRound round)
-    {
-        string myUserId = User.userProfile.UserId;
-        var myPlayerState = bettingState.PlayerStates.FirstOrDefault(p => p.UserId == myUserId);
-        if (myPlayerState == null) return;
-        
-        bool isFirstBettor = (myUserId == bettingState.FirstBettor);
-        bool isRound1 = (round == HKPokerRound.HkRoundPreFlop);
-        long currentBet = bettingState.CurrentBet;
-        long myRoundBet = !string.IsNullOrEmpty(myPlayerState.CurrentRoundBet.ToString()) 
-            ? myPlayerState.CurrentRoundBet 
-            : 0;
-        long myStack = myPlayerState.Stack;
-        long minRaise = bettingState.MinRaise;
-        
-        // Show betting UI
-        buttonBetContainer.gameObject.SetActive(true);
-        
-        // ⚠️ ROUND 1, FIRST BETTOR: Chỉ BET/FOLD (KHÔNG CHECK)
-        if (isRound1 && isFirstBettor && currentBet == 0)
-        {
-            // Debug.Log("[HK Poker] First bettor round 1 - only BET or FOLD");
-            
-            // Setup bet values
-            buttonBetContainer.SetValues(
-                (int)minRaise,      // Min bet = mark unit
-                (int)minRaise,      // Min raise
-                (int)myStack        // Max
-            );
-            
-            // Enable BET and FOLD only (NO CHECK)
-            // buttonBetContainer.SetButtonsEnabled(
-            //     fold: true,
-            //     check: false,     // ❌ NO CHECK for first bettor round 1
-            //     call: false,
-            //     bet: true,
-            //     raise: false,
-            //     allIn: true
-            // );
-        }
-        else if (currentBet == 0)
-        {
-            // No bet yet - can CHECK or BET
-            buttonBetContainer.SetValues(
-                (int)minRaise,
-                (int)minRaise,
-                (int)myStack
-            );
-            
-            // buttonBetContainer.SetButtonsEnabled(
-            //     fold: true,
-            //     check: true,      // ✅ Can check
-            //     call: false,
-            //     bet: true,
-            //     raise: false,
-            //     allIn: true
-            // );
-        }
-        else if (currentBet > myRoundBet)
-        {
-            // There's a bet - can CALL/RAISE/FOLD
-            long amountToCall = currentBet - myRoundBet;
-            
-            buttonBetContainer.SetValues(
-                (int)currentBet,
-                (int)minRaise,
-                (int)(currentBet + minRaise)
-            );
-            
-            // buttonBetContainer.SetButtonsEnabled(
-            //     fold: true,
-            //     check: false,
-            //     call: true,       // ✅ Can call
-            //     bet: false,
-            //     raise: myStack > amountToCall,  // Can raise if enough chips
-            //     allIn: true
-            // );
-        }
-        else
-        {
-            // Already matched bet - can CHECK
-            buttonBetContainer.SetValues(
-                (int)currentBet,
-                (int)minRaise,
-                (int)(currentBet + minRaise)
-            );
-            
-            // buttonBetContainer.SetButtonsEnabled(
-            //     fold: true,
-            //     check: true,      // ✅ Can check
-            //     call: false,
-            //     bet: false,
-            //     raise: true,
-            //     allIn: true
-            // );
-        }
-        
-        // Start turn timer
-        StartTurnTimer(10); // 10 seconds
-    }
-    
-    private void StartTurnTimer(int seconds)
-    {
-        // Start countdown timer
-        // Debug.Log($"[HK Poker] Start turn timer: {seconds}s");
-        
-        // TODO: Implement visual timer
-        // Example:
-        // StopAllCoroutines();
-        // StartCoroutine(TurnTimerCountdown(seconds));
     }
     
     private void UpdatePlayerStack(int playerIndex, long stack)
@@ -1515,40 +1251,6 @@ public class HongKongPokerView : BaseDiceGameView
         }
     }
     
-    private void UpdatePlayerBet(int playerIndex, long bet)
-    {
-        // Update player's bet display
-        Debug.Log($"Player {playerIndex} bet: {bet}");
-        
-        // Update box bet if exists
-        if (playerIndex >= 0 && playerIndex < listBoxBet.Count && listBoxBet[playerIndex] != null)
-        {
-            // Update box bet chip value
-            // listBoxBet[playerIndex].UpdateChip((int)bet);
-        }
-    }
-    
-    private void MarkPlayerFolded(int playerIndex)
-    {
-        // Mark player as folded (grayed out, etc.)
-        Debug.Log($"Player {playerIndex} FOLDED");
-        
-        // TODO: Visual feedback
-        // - Gray out cards
-        // - Show "FOLD" text
-        // - Disable player highlight
-    }
-    
-    private void MarkPlayerAllIn(int playerIndex)
-    {
-        // Mark player as all-in
-        Debug.Log($"Player {playerIndex} ALL-IN");
-        
-        // TODO: Visual feedback
-        // - Show "ALL-IN" badge
-        // - Special highlight color
-    }
-
     private void ShowSwapAnimation(int playerIndex, Card newFaceUpCard)
     {
         if (playerIndex < 0 || playerIndex >= listPlayerCards.Count) return;
@@ -1649,6 +1351,7 @@ public class HongKongPokerView : BaseDiceGameView
                 if (card != null)
                 {
                     PoolService.Instance.Release(PrefabType.Card, card);
+                    card.transform.position = dealer.transform.position;
                 }
             }
             cards.Clear();
@@ -1836,6 +1539,7 @@ public class HongKongPokerView : BaseDiceGameView
         bool isLeftTable = !(basePosition.x > 0);
         
         CardModel card = PoolService.Instance.Get<CardModel>(PrefabType.Card);
+        card.transform.localPosition = new Vector2(0, 275f);
         card.HideCard(); // Keep it as card back
 
         if (!isLeftTable)
@@ -1903,6 +1607,7 @@ public class HongKongPokerView : BaseDiceGameView
         bool isLeftTable = !(basePosition.x > 0);
 
         CardModel card = PoolService.Instance.Get<CardModel>(PrefabType.Card);
+        card.transform.localPosition = new Vector2(0, 275f);
         card.HideCard();
 
         if (!isLeftTable)
@@ -1973,10 +1678,20 @@ public class HongKongPokerView : BaseDiceGameView
         else
         {
             card.SetData((int)pokerCard.Rank, (int)pokerCard.Suit);
+            card.transform.localScale = new Vector3(0.45f, 0.45f, 1);
             card.transform.localPosition = targetPosition;
+            card.transform.localRotation = Quaternion.Euler(0, 0, 0);
             if (isFaceUp)
             {
                 card.ShowCard();
+            }
+            else
+            {
+                if (isMe)
+                {
+                    card.ShowCard();
+                    card.ShowShadowCard();
+                }
             }
         }
         playerCards.Add(card);
@@ -1985,17 +1700,59 @@ public class HongKongPokerView : BaseDiceGameView
     #endregion
 
     #region Boxbet Actions
-    private void ShowBoxBet(HKPokerAction status, int index, int chip)
+    private void ShowBoxBetPLayer(int playerIndex, HKPokerAction action, int amount, bool skipAnimation = false)
     {
-        HongKongPokerBoxBet boxBet = PoolService.Instance.Get<HongKongPokerBoxBet>(PrefabType.BoxBetPlayerHkPoker);
-        listBoxBet[index] = boxBet;
-        boxBet.transform.localPosition = listBoxBetPosition[index];
-        boxBet.SetInfo(status, index, chip);
+        Debug.Log($"Player {playerIndex} action: {action} {(amount > 0 ? amount.ToString() : "")}");
+
+        // Show in BoxBet if available
+        if (playerIndex >= 0 && playerIndex < listBoxBet.Count)
+        {
+            var boxBet = listBoxBet[playerIndex];
+            if (boxBet != null)
+            {
+                // Update box bet display with action
+                boxBet.gameObject.SetActive(true);
+                boxBet.SetInfo(action, playerIndex, amount);
+            }
+            else
+            {
+                boxBet = PoolService.Instance.Get<HongKongPokerBoxBet>(PrefabType.BoxBetPlayerHkPoker);
+                listBoxBet[playerIndex] = boxBet;
+                boxBet.transform.localPosition = listBoxBetPosition[playerIndex];
+                boxBet.SetInfo(action, playerIndex, amount);
+            }
+        }
+
+        // Handle Fold animation (only if not skipping)
+
+        switch(action)
+        {
+            case HKPokerAction.HkActionFold:
+                Debug.Log("ANIMATE FOLD ACTION");
+                List<CardModel> cards = listPlayerCards[playerIndex];
+                for (int i = 0; i < cards.Count; i++)
+                {
+                    if (!skipAnimation) 
+                    { 
+                        StartCoroutine(FoldDown(playerIndex, cards[i], i * 0.1f));
+                    }
+                    else
+                    {
+                        cards[i].HideShadowCard();
+                        cards[i].HideCard();
+                        cards[i].SetDark(true);
+                    }
+                    
+                }
+                break;
+        }
+        
     }
+
     #endregion
 
     #region Chip Actions
-    private void PlayerGiveChipsToBoxbet(int index, string userId)
+    private void PlayerGiveChipsToBoxbet(int index, string userId, int amount)
     {
         // Check if box bet exists
         if (index < 0 || index >= listBoxBet.Count || listBoxBet[index] == null)
@@ -2004,21 +1761,13 @@ public class HongKongPokerView : BaseDiceGameView
             return;
         }
         
-        int valueBoxBet = listBoxBet[index].Chip;
-        BasePlayerView playerView = userIdToView.GetValueOrDefault(userId);
-        // if ((int)data["chipStack"] - preNextStack != 0)
-        // {
-        //     currentPlayer.playerView.effectFlyMoney(-valueBoxBet);
-        // }
-        playerView.AnimateFlyMoney(-valueBoxBet, 45);
-        
-
         int numberChip = 0;
-        if (valueBoxBet > 0)
+        if (userIdToView.TryGetValue(userId, out var playerView) && amount > 0)
         {
-            numberChip = Mathf.Clamp((int)Mathf.Ceil((float)valueBoxBet / MarkUnit), 1, 4);
+            playerView.AnimateFlyMoney(-amount, 45);
+            numberChip = Mathf.Clamp((int)Mathf.Ceil((float)amount / MarkUnit), 1, 4);
         }
-
+        
         Vector2 targetPosition = listBoxBetPosition[index];
         Vector2 startPosition = listCardPosition[index];
 
@@ -2030,7 +1779,6 @@ public class HongKongPokerView : BaseDiceGameView
 
             Sequence sequence = DOTween.Sequence();
             sequence.AppendInterval(i * 0.1f).AppendCallback(() => chip.MoveToBoxBet(targetPosition));
-                
         }
     }
 

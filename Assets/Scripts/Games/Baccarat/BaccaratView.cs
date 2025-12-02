@@ -107,8 +107,8 @@ public class BaccaratView : BaseDiceGameView
     private Sequence waitingTextSequence;
     private const string WIN_ANIMATION_PATH = "Baccarat/Ani/skeleton_SkeletonData";
     private bool isNewGame = true;
-    private int minUnitTotalBet = 1, maxUnitTotalBet = 100;
-    
+    private int minUnitTotalBet = 1,  maxUnitTotalBet = 100;
+    private bool isEnableRebet = false;
     protected override void Awake()
     {
         base.Awake();
@@ -166,7 +166,7 @@ public class BaccaratView : BaseDiceGameView
         {
             if (data.Error.ErrorType == ErrorType.ChipNotEnough)
             {
-                Debug.Log("Not enough chip ");
+                UIManager.Instance.ShowAlertDialog("Not enough chip !");
             }
             
         }else
@@ -527,7 +527,10 @@ public class BaccaratView : BaseDiceGameView
                     }
 
                     SetDisplayBet();
-                    SetStatusButtonsBet(!checkBeted, checkBeted);
+                    var sumLastBet = listLastBet.Sum();
+                    isEnableRebet =  sumLastBet <= long.Parse(thisPlayer.wallet) && sumLastBet > 0;
+                    SetStatusButtonsBet(isEnableRebet, checkBeted);
+                
                     foreach (var player in players)
                     {
                         if (userIdToView.TryGetValue(player.Id, out var playerView))
