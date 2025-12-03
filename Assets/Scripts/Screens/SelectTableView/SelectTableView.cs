@@ -62,9 +62,8 @@ public class SelectTableView : BaseView
         Bets bets = await selectTablePresenter.GetListBet(Config.currentGameId);
         UIManager.Instance.HideProgressing();
         betItemList = bets.Bets_.ToList();
-        Debug.Log("List bet game whot : " + bets.ToString());
+        Debug.Log("List bet game : " + bets.ToString());
         LoadListBetItem();
-        LoadListTableTab();
     }
 
     private async UniTask GetListTableByMarkUnit(int markUnit)
@@ -212,6 +211,7 @@ public class SelectTableView : BaseView
         selectTableButton.GetComponent<Image>().sprite = buttonSpriteList[0];
         currentSelectTableTab = SelectTableTab.TABLE;
         GetListTableByMarkUnit(currentMarkUnitTab).Forget();
+        LoadListTableTab();
         LoadListTableItem();
     }
 

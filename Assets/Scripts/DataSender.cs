@@ -292,7 +292,7 @@ public class DataSender
         try
         {
             var match = await NetworkManager.INSTANCE.JoinMatch(matchId);
-            Match data = JsonConvert.DeserializeObject<Match>(match.Label);
+            Match data = DecodeFromJson<Match>(match.Label);
             return data;
         }
         catch (Exception ex)

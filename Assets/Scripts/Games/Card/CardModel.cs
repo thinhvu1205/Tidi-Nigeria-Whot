@@ -117,8 +117,8 @@ namespace Games.Card
         
             // Set card sprites
             this.value.sprite = imageSpritesPusoy.GetSprite($"card_{rank}");
-            this.icon_small.sprite = imageSpritesPusoy.GetSprite($"card_{CARD_TYPE[type]}_small");
-            this.icon_large.sprite = imageSpritesPusoy.GetSprite($"card{(rank > 10 ? "_" + rank : "")}_{CARD_TYPE[type]}");
+            icon_small.sprite = imageSpritesPusoy.GetSprite($"card_{CARD_TYPE[type]}_small");
+            icon_large.sprite = imageSpritesPusoy.GetSprite($"card{(rank > 10 ? "_" + rank : "")}_{CARD_TYPE[type]}");
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 
+using System;
 using Common.Pool;
 using Globals;
 using Proto;
@@ -14,13 +15,22 @@ public class HongKongPokerBoxBet : MonoBehaviour, IPoolable
 
     [SerializeField] TextMeshProUGUI textChip;
     public int Chip { get; private set; }
+    private HKPokerAction currentAction = HKPokerAction.HkActionNone;
 
     public void SetInfo(HKPokerAction status, int index, int chipBet = 0)
     {
-        Chip = chipBet;
+        if (status == HKPokerAction.HkActionRaise && (currentAction == HKPokerAction.HkActionBet || currentAction == HKPokerAction.HkActionRaise))
+        {
+            Chip += chipBet;
+        }
+        else
+        {
+            Chip = chipBet;
+        }
         transform.localScale = index <= 4 ? Vector2.one : Vector2.one * -1;
         textChip.transform.localScale = index <= 4 ? Vector2.one : Vector2.one * -1;
         icon.transform.localScale = index <= 4 ? Vector2.one : Vector2.one * -1;
+        currentAction = status;
         if (chipBet == 0)
         {
             GetComponent<Image>().enabled = false;
@@ -32,7 +42,7 @@ public class HongKongPokerBoxBet : MonoBehaviour, IPoolable
             {
                 GetComponent<Image>().enabled = true;
             }
-            textChip.text = Utility.FormatMoney2(chipBet, true);
+            textChip.text = Utility.FormatMoney2(Chip, true);
         }
         switch (status)
         {
@@ -71,6 +81,13 @@ public class HongKongPokerBoxBet : MonoBehaviour, IPoolable
         textChip.text = "";
     }
 
+    private void OnDisable()
+    {
+        Chip = 0;
+        currentAction = HKPokerAction.HkActionNone;
+        textChip.text = "";
+    }
+
     public void OnGetFromPool()
     {
         
@@ -78,6 +95,8 @@ public class HongKongPokerBoxBet : MonoBehaviour, IPoolable
 
     public void OnReturnToPool()
     {
-       
+        Chip = 0;
+        currentAction = HKPokerAction.HkActionNone;
+        textChip.text = "";
     }
 }
