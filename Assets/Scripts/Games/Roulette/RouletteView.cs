@@ -147,13 +147,7 @@ public class RouletteView : BaseDiceGameView
         if (data.BetLevels.Count > 0)
         {
             coefficients = data.BetLevels.ToList();
-            markUnit = User.userProfile.AccountChip / 20f;
-
-            float closest = coefficients
-                .OrderBy(x => Mathf.Abs(x - markUnit))
-                .First();
-
-            markUnit = closest;
+            markUnit = coefficients[0];
             InitButtonBet();
         }
 

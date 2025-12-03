@@ -123,9 +123,11 @@ public class NetworkManager : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.Log("Err when join match : " + ex.Message);
+            Debug.Log("Err when join match : " + ex);
+            UIManager.Instance.HideProgressing();
+            UIManager.Instance.ShowConfirmDialog(ex.Message, () => UIManager.Instance.OpenShop(), null, "Get More Chips");
             Config.currentMatchId = "";
-            throw;
+            return null;
         }
     }
 
