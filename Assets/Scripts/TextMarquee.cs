@@ -5,7 +5,7 @@ using UnityEngine;
 public class TextMarquee : MonoBehaviour
 {
     public TextMeshProUGUI text;
-    private float duration = 2f; // thời gian để chạy 1 chiều
+    private float duration = 3.5f; // thời gian để chạy 1 chiều
 
     private RectTransform textRT;
     private RectTransform maskRT;
@@ -24,7 +24,7 @@ public class TextMarquee : MonoBehaviour
         text.ForceMeshUpdate();
 
         float maskWidth = maskRT.rect.width;
-        float textWidth = text.preferredWidth;
+        float textWidth = text.preferredWidth + 20f;
 
         // Nếu text không dài hơn mask thì không animate
         Debug.Log("textWidth: " + textWidth);
@@ -36,6 +36,7 @@ public class TextMarquee : MonoBehaviour
         }
 
         // Điểm bắt đầu (text nằm sát trái)
+        text.alignment = TextAlignmentOptions.Left;
         float startX = 0;
         // Điểm kết thúc (đi hết bên trái)
         float endX = -(textWidth - maskWidth);

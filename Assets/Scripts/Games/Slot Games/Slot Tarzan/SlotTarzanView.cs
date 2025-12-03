@@ -477,7 +477,7 @@ public class SlotTarzanView : BaseSlotView
 
 
         // ///------------------CHECK SHOW FREESPIN--------------------//
-        if (hasGotFreeSpin)
+        if (hasGotFreeSpin && !isStartMiniGame)
         {
             Debug.Log("GET FREE SPIN");
             tweenQueue.Enqueue(() =>
@@ -544,7 +544,7 @@ public class SlotTarzanView : BaseSlotView
         if (isStartMiniGame)
         {
             Debug.Log("START MINIgAME");
-      
+            hasGotFreeSpin = false;
             tweenQueue.Enqueue(() => ShowPopupMinigame());
         }
 
@@ -817,7 +817,7 @@ public class SlotTarzanView : BaseSlotView
         effectContainer.gameObject.SetActive(true);
         popupMinigame.gameObject.SetActive(true);
         Utility.PlayAnimation(popupMinigame, "Eng", true);
-        Utility.PlayAnimationByPath(buttonPopupMinigame, BUTTON_CONFIRM_ANIMATION_PATH, "start", true);
+        Utility.PlayAnimationByPath(buttonPopupMinigame, BUTTON_CONFIRM_ANIMATION_PATH, "start", false);
 
         popupMinigame.transform.localScale = new Vector2(0.5f, 0.5f);
         popupMinigame.transform.localPosition = Vector2.zero;
@@ -871,7 +871,35 @@ public class SlotTarzanView : BaseSlotView
             {
                 AnimateCoinsFly();
             }
-            NextTween();
+         
+        });
+    }
+
+    protected override void AnimateCoinsFly(int totalCoins = 5, float timeInterval = 0.05f)
+    {
+        Debug.Log("AnimateCoinsFly");
+        Sequence sequence = DOTween.Sequence().SetLink(gameObject, LinkBehaviour.KillOnDestroy);;
+        for (int i = 0; i < totalCoins; i++)
+        {
+            int index = i;
+            sequence
+                .AppendInterval(i * timeInterval)
+                .AppendCallback(() =>
+                {
+                    Image coin = coinPool.Get();
+                    coin.gameObject.SetActive(true);
+                    // coin.GetComponent<Animator>().Play("Idle");
+                    AnimateCoinFly(coin, chipWinText.transform, chipImage.transform);
+                });
+        }
+        sequence.OnComplete(() =>
+        {
+            SetCurrentChipValue(playerWalletAfter);
+            if (hasGotFreeSpin && isEndMiniGame)
+            {
+                ShowPopupGetFreeSpin();
+                NextTween();
+            }
         });
     }
 

@@ -1284,7 +1284,7 @@ public class BaseSlotView : BaseGameView
     #endregion
 
     #region Effects
-    protected void AnimateCoinsFly(int totalCoins = 5, float timeInterval = 0.05f)
+    protected virtual void AnimateCoinsFly(int totalCoins = 5, float timeInterval = 0.05f)
     {
         Debug.Log("AnimateCoinsFly");
         Sequence sequence = DOTween.Sequence().SetLink(gameObject, LinkBehaviour.KillOnDestroy);;

@@ -107,6 +107,7 @@ public class SlotSixiangView : BaseSlotSymbolView
             UpdateGem();
 
             // Khi đang chơi dở minigame -> kết nối lại
+            totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
             if (currentGame == SiXiangGame.DragonPearl || currentGame == SiXiangGame.SixangbonusDragonPearl)
             {
                 ShowDragonPearlView();
@@ -912,10 +913,8 @@ public class SlotSixiangView : BaseSlotSymbolView
         SetAnimationBackground(SIXIANG_GAME_NAME);
         InitColumns();
         ResetToNormalState(true);
-
-       
     }
-
+    
     private void SetWinType(long winAmount)
     {
         winType = WinType.NONE;
