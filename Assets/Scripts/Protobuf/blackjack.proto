@@ -59,8 +59,9 @@ message BlackjackBet {
 message BlackjackBetResult {
   int64 bet_amount = 1;
   int64 win_amount = 2;
-  int64 total = 3;
-  int32 is_win = 4;
+  int64 fee_amount = 3;
+  int64 total = 4;
+  int32 is_win = 5;
 }
 
 message BlackjackPlayerBet {
