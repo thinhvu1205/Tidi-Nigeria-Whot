@@ -89,7 +89,16 @@ public class SiXiangLuckyDrawView : MonoBehaviour
     public void SixiangView_OnUpdateTable(SlotSixiangView.OnUpdateTableEventArgs e)
     {
         SlotDesk data = e.data;
-        if (data.SpinSymbols.Count == 0) return;
+        if (data.SpinSymbols.Count == 0)
+        {
+            foreach(SpinSymbol spinSymbol in data.Matrix.SpinLists)
+            {
+                int index = spinSymbol.Index;
+                listItem[index].Init(spinSymbol);
+            }
+            gameView.UpdateTotalChipWinValue();
+            return;
+        }
         SpinSymbol item = data.SpinSymbols[0];
         int itemIndex = item.Index;
         bool isFinishGame = data.IsFinishGame;
@@ -121,7 +130,7 @@ public class SiXiangLuckyDrawView : MonoBehaviour
         {
             DOTween
                 .Sequence(transform)
-                .AppendInterval(4.0f)
+                .AppendInterval(10.0f)
                 .AppendCallback(() =>
                 {
                     isAutoPlay = true;

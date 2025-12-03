@@ -112,6 +112,7 @@ public class RouletteView : BaseDiceGameView
         var updateTable = UpdateTable.Parser.ParseFrom(matchState.State);
         Debug.Log("HandleUpdateUserInTable " + updateTable);
         player.SetData(updateTable.Players[0]);
+        playerWallet = long.Parse(updateTable.Players[0].Wallet);
         // UpdateListPlayer(updateTable.Players.ToList());
     }
 
@@ -300,6 +301,11 @@ public class RouletteView : BaseDiceGameView
             listDataRebet.AddRange(listDataBet);
             listDataBet.Clear();
             playersBet.Clear(); 
+        }
+        else
+        {
+            // TODO
+            Reset();
         }
     }
 

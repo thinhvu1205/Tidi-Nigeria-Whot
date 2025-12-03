@@ -100,7 +100,7 @@ public class BlackjackView : BaseDiceGameView
         GameState.Preparing,
         GameState.Reward
     };
-    private const string CHAT_ROOM_NAME = "whot";
+    private const string CHAT_ROOM_NAME = "blackjack";
     private readonly Dictionary<string, BlackjackBoxBet> userIdToBoxBetView = new();
     private readonly Dictionary<string, BlackjackChip> userIdToInsuranceChip = new();
     private const float DEAL_CARD_ANIMATION_TIME = 0.4f;
@@ -318,6 +318,9 @@ public class BlackjackView : BaseDiceGameView
             }
 
             // Cập nhật các nút hành động
+            Debug.Log("isPlaying: " + isPlaying);
+            Debug.Log("isCurrentPlayerFinished: " + isCurrentPlayerFinished);
+            Debug.Log("playerIndex <= currentPlayerIndex: " + (playerIndex <= currentPlayerIndex));
             if (isPlaying && !isCurrentPlayerFinished && playerIndex <= currentPlayerIndex && GameState == GameState.Play)
             {
                 buttonBetContainer.gameObject.SetActive(true);
@@ -522,6 +525,7 @@ public class BlackjackView : BaseDiceGameView
                 Sequence sequence = DOTween.Sequence();
                 if (data.IsRevealBankerHiddenCard && bankerBoxBet.listCardModel.Count >= 2)
                 {
+                    currentPlayerBoxBet.ShowHigherScore();
                     bankerBoxBet.EnlargeCards(1.4f);
                     Card flippedCard = data.NewCards[0];
                     CardModel flippedCardModel = bankerBoxBet.listCardModel[1];
@@ -712,6 +716,7 @@ public class BlackjackView : BaseDiceGameView
         // Rejoin Table
         if (data.AllPlayerHand.Count > 0)
         {
+            Debug.Log("UPDATE DEAL REJOIN TABLE");
             hasDealtCardsForBanker = true;
             hasDealtCardsForPlayers = true;
             phasePlay.SetActive(true);
@@ -787,7 +792,7 @@ public class BlackjackView : BaseDiceGameView
                     {
                         Debug.Log("REJOIN TABLE - SHOW SECOND BOX");
                         boxBet.ShowSecondBox();
-                        boxBet.SecondBoxBet.ResetSecondBox();
+                        // boxBet.SecondBoxBet.ResetSecondBox();
                         foreach (Card card in playerHand.Second.Cards)
                         {
                            
@@ -811,7 +816,8 @@ public class BlackjackView : BaseDiceGameView
                 }
             }
 
-            if (isPlaying && !isCurrentPlayerFinished)
+            int playerIndex = playingPlayers.FindIndex(p => p.Id == data.UserId);
+            if (isPlaying && !isCurrentPlayerFinished && playerIndex <= currentPlayerIndex && GameState == GameState.Play)
             {
                 buttonBetContainer.gameObject.SetActive(true);
                 buttonDouble.gameObject.SetActive(true);
@@ -1715,6 +1721,9 @@ public class BlackjackView : BaseDiceGameView
             .AppendCallback(() =>
             {
                 // Chip fly to all user
+                foreach (BalanceUpdate update in listBalanceUpdate)
+                {
+                }
                 Dictionary<string, BalanceResultData> playerResults = listBetResult
                     .Where(r => !string.IsNullOrEmpty(r.UserId))
                     .ToDictionary(

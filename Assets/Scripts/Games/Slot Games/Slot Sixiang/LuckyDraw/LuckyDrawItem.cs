@@ -11,6 +11,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using Proto;
 using Globals;
+using Unity.Android.Gradle.Manifest;
 
 public class LuckyDrawItem : MonoBehaviour
 {
@@ -20,6 +21,45 @@ public class LuckyDrawItem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI textChipWin;
     public SiXiangLuckyDrawView.JackpotType typeItem = SiXiangLuckyDrawView.JackpotType.NORMAL;
     private readonly string[] listAnimName = new string[] { "minor", "major", "mega", "grand" };
+
+    public void Init(SpinSymbol item)
+    {
+        string animationNormal = "normal_";
+        string typeAnim = "normal";
+        switch (item.Symbol)
+        {
+            case SiXiangSymbol.LuckydrawMinor:
+                typeAnim = "minor";
+                typeItem = SiXiangLuckyDrawView.JackpotType.MINOR;
+                break;
+            case SiXiangSymbol.LuckydrawMajor:
+                typeAnim = "major";
+                typeItem = SiXiangLuckyDrawView.JackpotType.MAJOR;
+                break;
+            case SiXiangSymbol.LuckydrawMega:
+                typeAnim = "mega";
+                typeItem = SiXiangLuckyDrawView.JackpotType.MEGA;
+                break;
+            case SiXiangSymbol.LuckydrawGrand:
+                typeAnim = "grand";
+                typeItem = SiXiangLuckyDrawView.JackpotType.GRAND;
+                break;
+            default:
+                typeAnim = "normal";
+                animationNormal = "";
+                typeItem = SiXiangLuckyDrawView.JackpotType.NORMAL;
+                break;
+        }
+        string animationName = animationNormal + typeAnim;
+        Debug.Log("ANIMATION NAME: " + animationName);
+        Utility.PlayAnimation(spine, animationName, true);
+
+        if (typeItem == (int)SiXiangLuckyDrawView.JackpotType.NORMAL && item.WinAmount > 0)
+        {
+            textChipWin.gameObject.SetActive(true);
+            textChipWin.text = Utility.FormatMoney(item.WinAmount, true);
+        }
+    }
 
     public void SetResult(SpinSymbol item, bool isFinishGame)
     {

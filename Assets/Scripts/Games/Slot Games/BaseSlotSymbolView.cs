@@ -1332,8 +1332,8 @@ public class BaseSlotSymbolView : BaseGameView
             freeSpinLeft = (int)data.GameConfig.NumFreeSpin;
             // isLastFreeSpin = data.GameConfig.NumFreeSpin <= 0;
             // lastTotalChipWinByGame = totalChipWinByGame;
-            totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
         }
+            totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
         if (freeSpinLeft > 0)
         {
             // ShowBackGroundFreeSpin();
