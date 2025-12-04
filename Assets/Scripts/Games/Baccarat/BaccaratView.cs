@@ -203,10 +203,19 @@ public class BaccaratView : BaseDiceGameView
             }
 
             // 🎯 NEW: Render ALL user bets (for late-join / reconnect)
-            if (data.AllUserBets != null && data.AllUserBets.Count > 0)
+            if (data.AllUserBets is { Count: > 0 })
             {
                 Debug.Log($"[AllUserBets] Rendering {data.AllUserBets.Count} user bets for sync");
-                
+                listMyBet = listMyBet.Select(x => x * 0).ToArray();
+                listBet = listBet.Select(x => x * 0).ToArray();
+                foreach (var chip in listChipInTable)
+                {
+                    if (chip != null)
+                    {
+                        PoolService.Instance.Release(PrefabType.ChipPlayerBaccarat, chip);
+                    }
+                }
+                listChipInTable.Clear();
                 foreach (var userBet in data.AllUserBets)
                 {
                     if (userIdToView.TryGetValue(userBet.UserId, out var playerView))
