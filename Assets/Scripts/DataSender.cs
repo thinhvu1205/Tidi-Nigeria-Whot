@@ -297,8 +297,9 @@ public class DataSender
         }
         catch (Exception ex)
         {
-            Debug.LogError("JoinMatch failed: " + ex.Message);
-            UIManager.Instance.ShowAlertDialog(ex.Message, null);
+            // Debug.LogError("JoinMatch failed: " + ex.Message);
+            Error error = DecodeFromJson<Error>(ex.Message);
+            UIManager.Instance.ShowConfirmDialog(error.Error_, () => UIManager.Instance.OpenShop(), null, "Get More Chips");
             return null;
         }
     }

@@ -11,7 +11,6 @@ using System;
 using Cysharp.Threading.Tasks;
 using Proto;
 using Globals;
-using Unity.Android.Gradle.Manifest;
 
 public class LuckyDrawItem : MonoBehaviour
 {
