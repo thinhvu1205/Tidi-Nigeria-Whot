@@ -29,6 +29,7 @@ public class WhotView : BaseDiceGameView
         public WhotCardModel CallCardModel;
         public int countdown;
         public WhotCardEffect cardEffect;
+        public bool isSecondTurn;
     }
     [SerializeField] private GameObject whotPlayerPrefab;
     [FormerlySerializedAs("whotCardPrefab")] 
@@ -102,6 +103,7 @@ public class WhotView : BaseDiceGameView
     public float HigherMarkUnit { get; private set; }
     public bool TypeWinMore = false;
     private ChatInGameView chatInGameView;
+    [SerializeField] private string lastTurnPlayerId, currentTurnPlayerId;
 
     protected override void Awake()
     {
@@ -277,6 +279,7 @@ public class WhotView : BaseDiceGameView
                 int spawnIndex = spawnOrders[players.Count - 1][i];
                 // WhotPlayer whotPlayer = Instantiate(whotPlayerPrefab, playerPositionsList[spawnIndex]).GetComponent<WhotPlayer>();
                 WhotPlayer whotPlayer = playersByPosition[spawnIndex];
+                // playersList.Add(whotPlayer);
                 whotPlayer.gameObject.SetActive(true);
                 whotPlayer.SetPlayerInfo(
                     player.Id,
@@ -313,6 +316,7 @@ public class WhotView : BaseDiceGameView
                     whotPlayer.HideCardsLeft();
                 }
             }
+            RearrangePlayerPosition();
             return;
         }
 
@@ -548,6 +552,8 @@ public class WhotView : BaseDiceGameView
     {
         var data = UpdateTurn.Parser.ParseFrom(matchState.State);
         Debug.Log("UPDATE TURN: " + data);
+        lastTurnPlayerId = currentTurnPlayerId;
+        currentTurnPlayerId = data.UserId;
         hasDealtCards = true;
         if (data.UserId == GetCurrentPlayer().Id && currentEffect != WhotCardEffect.Whot)
         {
@@ -565,7 +571,8 @@ public class WhotView : BaseDiceGameView
             playerTurn = data.UserId,
             CallCardModel = callCardModel,
             countdown = (int)data.Countdown,
-            cardEffect = currentEffect
+            cardEffect = currentEffect,
+            isSecondTurn = lastTurnPlayerId == currentTurnPlayerId && !string.IsNullOrEmpty(lastTurnPlayerId)
         });
     }
 
@@ -651,6 +658,7 @@ public class WhotView : BaseDiceGameView
                 // Khi vào bàn đang dang chơi dở hoặc vào ván mới
                 if (hasDealtCards || isRejoinTable)
                 {
+                    Debug.Log("AAAAAAAA");
                     UpdateCardsCount(data.DeckCount, playerCardsCount);
                 }
                 break;
@@ -1596,6 +1604,7 @@ public class WhotView : BaseDiceGameView
         for (int i = 0; i < rearrangedPlayersList.Count; i++)
         {
             Player player = rearrangedPlayersList[i];
+            Debug.Log("PLAYER NAME: " + player.UserName);
             int spawnIndex = spawnOrders[rearrangedPlayersList.Count - 1][i];
             WhotPlayer whotPlayer = playersByPosition[spawnIndex];
             whotPlayer.gameObject.SetActive(true);

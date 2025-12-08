@@ -61,11 +61,12 @@ public class BlackjackBoxBet : MonoBehaviour
     private readonly List<Tween> highlightTweens = new List<Tween>();
     private float boxWidth;
     private int minPoint, maxPoint;
-    [SerializeField] private int index, chipIndex;
+    private int index, chipIndex;
     public bool IsEnlarging { get; private set; } = false;
     public long TotalBet { get; private set; }
     public Vector2 BoxPosition { get; private set; }
     public bool HasBet { get; set; } = false;
+    public bool HasEnded { get; set; } = false;
     private Vector2 ImageScoreBoxPosition;
     private Vector2 initialPosition;
     private Sequence seqTextFly;
@@ -99,7 +100,7 @@ public class BlackjackBoxBet : MonoBehaviour
         imageScoreBox.transform.localScale = Vector3.zero; // bắt đầu nhỏ
         imageScoreBox.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack);
 
-        if (minPoint != maxPoint && point != 21)
+        if (minPoint != maxPoint && point != 21 && !HasEnded)
         {
             textScore.text = $"{minPoint}/{maxPoint}";
             this.minPoint = minPoint;
@@ -172,7 +173,7 @@ public class BlackjackBoxBet : MonoBehaviour
                 animationBust.AnimationState.Complete += delegate
                 {
                     animationBust.gameObject.SetActive(false);
-                    HideImageChip();
+                    // HideImageChip();
                     ShrinkCurrentPlayerBoxbet();
                 };
                 break;
@@ -232,7 +233,7 @@ public class BlackjackBoxBet : MonoBehaviour
             {
                 animationLose.gameObject.SetActive(false);
                 effectContainer.gameObject.SetActive(false);
-                HideImageChip();
+                // HideImageChip();
             };
         }
     }
@@ -719,6 +720,7 @@ public class BlackjackBoxBet : MonoBehaviour
         }
         textChipValue.text = "";
         HasBet = false; 
+        HasEnded = false;
 
     }
 

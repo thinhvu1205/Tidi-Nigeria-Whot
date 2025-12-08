@@ -205,9 +205,18 @@ public class SiXiangDragonPearlView : MonoBehaviour
                 }
                 foreach (SpinSymbol item in listSpinSymbol)
                 {
-                    if (item.WinAmount > 0)
+                    DragonPearlItem dragonPearlItem = listItem[item.Col][item.Row];
+                    if (new SiXiangSymbol[] { 
+                        SiXiangSymbol.DragonpearlEyeBird, 
+                        SiXiangSymbol.DragonpearlEyeDragon, 
+                        SiXiangSymbol.DragonpearlEyeTiger, 
+                        SiXiangSymbol.DragonpearlEyeWarrior
+                        }.Contains(item.Symbol))
                     {
-                        DragonPearlItem dragonPearlItem = listItem[item.Col][item.Row];
+                        dragonPearlItem.SetupEye(item);
+                    }
+                    else if (item.WinAmount > 0)
+                    {
                         dragonPearlItem.SetInfo(item);
                     }
                 }

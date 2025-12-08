@@ -181,8 +181,8 @@ namespace Screens.LoginView
         public void OnClickButtonSubmit()
         {
             UIManager.Instance.ShowProgressing();
-            string userName = idInputField.text;
-            string password = passwordInputField.text;
+            string userName = idInputField.text.Trim();
+            string password = passwordInputField.text.Trim();
             _ = loginPresenter.OnLoginWithId(userName, password);
         }
 

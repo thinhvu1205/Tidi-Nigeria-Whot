@@ -10,6 +10,7 @@ using Nakama;
 using Newtonsoft.Json;
 using SimpleJSON;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class DataSender
 {
@@ -229,8 +230,9 @@ public class DataSender
     // }
 
     #region Match
-    public static async UniTask<RpcFindMatchResponse> FindMatch(string gameCode, int markUnit, bool isCreateGame)
+    public static async UniTask<RpcFindMatchResponse> FindMatch(string gameCode, int markUnit, bool isCreateGame, bool isWithNonOpen = false, string tableId = "")
     {
+        Debug.Log("isWithNonOpen: "+ isWithNonOpen);
         try
         {
             RpcFindMatchRequest rpcFindMatchRequest = new()
@@ -238,7 +240,8 @@ public class DataSender
                 GameCode = gameCode,
                 MarkUnit = markUnit,
                 Create = isCreateGame,
-                WithNonOpen = false
+                WithNonOpen = isWithNonOpen,
+                TableId = tableId
             };
 
             var response = await NetworkManager.INSTANCE.RPCSend(FIND_MATCH, rpcFindMatchRequest);
@@ -254,6 +257,7 @@ public class DataSender
         catch (Exception ex)
         {
             Debug.LogError("FindMatch failed: " + ex.Message);
+            UIManager.Instance.HideProgressing();
             UIManager.Instance.ShowConfirmDialog("FindMatch failed : " + ex.Message, null, null);
             return null;
         }

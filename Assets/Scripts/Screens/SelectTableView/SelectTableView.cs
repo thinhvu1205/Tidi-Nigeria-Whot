@@ -81,6 +81,22 @@ public class SelectTableView : BaseView
         matchList = response.Matches.ToList();
         LoadListTableItem();
     }
+
+    private async UniTask FindTable(string tableId)
+    {
+        matchList.Clear();
+        RpcFindMatchResponse response = await selectTablePresenter.FindTable(Config.currentGameId, tableId);
+        UIManager.Instance.HideProgressing();
+        if (response == null)
+        {
+            LoadListTableItem();
+            return;
+        }
+
+        Debug.Log("Find match response: " + response.ToString());
+        matchList = response.Matches.ToList();
+        LoadListTableItem();
+    }
     #endregion
     private void UpdateVisuals()
     {
@@ -202,7 +218,7 @@ public class SelectTableView : BaseView
 
     }
 
-    public void OnClickSelectTable()
+    public void OnClickSelectTable(bool isFetchListItem = true)
     {
         if (currentSelectTableTab == SelectTableTab.TABLE) return;
         scrollRectTable.gameObject.SetActive(true);
@@ -210,9 +226,12 @@ public class SelectTableView : BaseView
         selectBetButton.GetComponent<Image>().sprite = buttonSpriteList[1];
         selectTableButton.GetComponent<Image>().sprite = buttonSpriteList[0];
         currentSelectTableTab = SelectTableTab.TABLE;
-        GetListTableByMarkUnit(currentMarkUnitTab).Forget();
         LoadListTableTab();
-        LoadListTableItem();
+        if (isFetchListItem)
+        {
+            GetListTableByMarkUnit(currentMarkUnitTab).Forget();
+            LoadListTableItem();
+        }
     }
 
     public void OnClickQuickStart()
@@ -233,6 +252,14 @@ public class SelectTableView : BaseView
     public void OnClickReload()
     {
         _ = GetListTableByMarkUnit(currentMarkUnitTab);
+    }
+
+    public void OnClickFindTable()
+    {
+        string tableId = findTableInputField.text.Trim();
+        if (string.IsNullOrEmpty(tableId)) return;
+        _ = FindTable(tableId);
+        OnClickSelectTable(false);
     }
 
     public void OnClickNext()

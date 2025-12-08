@@ -39,6 +39,7 @@ public class DragonPearlItem : MonoBehaviour
     public Sequence SetInfo(SpinSymbol data, bool isDouble = false)
     {
         Symbol = data.Symbol;
+        if (data.Symbol == SiXiangSymbol.Unspecified) return null;
         WinAmount = data.WinAmount;
         spine.gameObject.SetActive(false);
         spine.transform.localPosition = Vector2.zero;
@@ -234,6 +235,7 @@ public class DragonPearlItem : MonoBehaviour
                             // .AppendInterval(spine.Skeleton.Data.FindAnimation(jackpotShakeAnimationName).Duration)
                             .AppendCallback(() =>
                             {
+                                Debug.Log("VAO DAY K ???");
                                 textChipValue.gameObject.SetActive(true);
                                 textChipValue.fontMaterial = materialText[1];
                                 textChipValue.text = data.WinJp switch
@@ -252,6 +254,47 @@ public class DragonPearlItem : MonoBehaviour
             }
         }
         return sequence;
+    }
+
+    public void SetupEye(SpinSymbol data)
+    {
+        string animationPath = "";
+        string jackpotNormalAnimationName = "normal_" + GetJackpotAnimationName(data.WinJp);
+        switch (data.Symbol)
+        {
+            case SiXiangSymbol.DragonpearlEyeBird:
+                animationPath = EYE_BIRD_ANIMATION_PATH;
+                break; // + thêm số lượt quay 
+            case SiXiangSymbol.DragonpearlEyeTiger:
+                animationPath = TIGER_EYE_ANIMATION_PATH;
+                break; // x2 giá trị ở tất cả các ô
+            case SiXiangSymbol.DragonpearlEyeWarrior:
+                animationPath = TURTLE_EYE_ANIMATION_PATH;
+                break; // rơi 3 ngọc bất kì
+            case SiXiangSymbol.DragonpearlEyeDragon:
+                {
+                    textChipValue.gameObject.SetActive(true);
+                    textChipValue.fontMaterial = materialText[1];
+                    textChipValue.text = data.WinJp switch
+                    {
+                        WinJackpot.Minor => "MINOR",
+                        WinJackpot.Major => "MAJOR",
+                        WinJackpot.Mega => "MEGA",
+                        WinJackpot.Grand => "GRAND",
+                        _ => ""
+                    };
+                }
+                break; // rơi 1 ngọc jackpot
+        }
+        if (data.Symbol == SiXiangSymbol.DragonpearlEyeDragon)
+        {
+            Utility.PlayAnimationByPath(spine, GOLD_ANIMATION_PATH, jackpotNormalAnimationName, false);
+            // spine.AnimationState.SetAnimation(0, jackpotNormalAnimationName, true);
+        }
+        else
+        {
+            Utility.PlayAnimationByPath(spine, animationPath, "animation", false);  
+        }
     }
     
     private string GetJackpotAnimationName(WinJackpot winJackpot)

@@ -6028,8 +6028,6 @@ MonoBehaviour:
   isSecondBox: 0
   isBankerBox: 1
   listCardModel: []
-  index: 0
-  chipIndex: 0
 --- !u!1 &3804878380355045317
 GameObject:
   m_ObjectHideFlags: 0
@@ -10192,8 +10190,8 @@ RectTransform:
   - {fileID: 9017902890183755616}
   - {fileID: 6720972495287711276}
   - {fileID: 7403841249794825177}
-  - {fileID: 4724810874967440124}
   - {fileID: 456101181768813524}
+  - {fileID: 4724810874967440124}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

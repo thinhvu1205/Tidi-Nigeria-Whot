@@ -123,7 +123,12 @@ public class SlotJuicyView : BaseSlotView
                     }
                 }
 
+                // Thay đổi mcb thì ko làm mất giá trị package từ trc
+                // if (!isBetLevelChanged && !isInFruitRain)
+                // {
                 SetPackageValue(column, valuePackageColumnArray);
+                // column.ShowPackageValue();
+                // }
 
                 // Khi đã bấm Spin
                 if (hasSetupStartView)
@@ -488,6 +493,7 @@ public class SlotJuicyView : BaseSlotView
 
     private void SetPackageValue(SlotColumn column, long[] packageValues)
     {
+        Debug.Log("PACKAGE VALUES: " + string.Join(", ", packageValues));
         column.SetPackageValue(packageValues);
     }
 
@@ -542,12 +548,14 @@ public class SlotJuicyView : BaseSlotView
     {
         effectContainer.gameObject.SetActive(false);
         popupResultPackageAnimation.gameObject.SetActive(false);
+        isInFreeSpin = false;
         AnimateCoinsFly();
         UpdateTotalChipWinValue();
     }
 
     private void OnBetLevelChanged()
     {
+        Debug.Log("OnBetLevelChanged");
         if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
         {
             return;

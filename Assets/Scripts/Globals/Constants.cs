@@ -110,6 +110,16 @@ namespace Globals
             { WhotCardSuit.WhotSuitUnspecified, 5 }, // Whot
         };
 
+        public static WhotCardRank[] WhotListCardEffect = new WhotCardRank[]
+        {
+            WhotCardRank.WhotRank1,
+            WhotCardRank.WhotRank2,
+            WhotCardRank.WhotRank5,
+            WhotCardRank.WhotRank8,
+            WhotCardRank.WhotRank14,
+            WhotCardRank.WhotRank20
+        };
+
         public static readonly Dictionary<int, int[]> RouletteNumberDictionary = new()
         {
             { 0, new[] { 0 } },

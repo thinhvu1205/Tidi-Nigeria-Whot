@@ -38,6 +38,7 @@ SpriteAtlas:
     cachedData: {fileID: 0}
     packedSpriteRenderDataKeys:
     - 8afa526039a8bb448ac4c8f0ab850725: 21300000
+    - 817f3201d148247a98b9f9b475559bdc: 766940222544145765
     - 8e3a5761a774e8346a6c78f5acd5ba71: 21300000
     - 46b4ecc1953e8fe449f0737b4359260d: 21300000
     - 1b52a512bb835a4499ad1371e165b760: 21300000
@@ -52,7 +53,6 @@ SpriteAtlas:
     - 9049f287de43f654ca791b279a464689: 21300000
     - 2e77cae7ff5ea8f43a906760034b89ba: 21300000
     - e3f721180613fa44db1a4f3679e66dc0: 21300000
-    - 970388687d7fef743850329654aa7638: 21300000
     - b1d9cc19fbef2e048ab4d998aba13f0f: 21300000
     - 84a9e99945a5edb48889521a266248da: 21300000
     - 0e7716b90fb83be44918cc103bcf1678: 21300000
@@ -70,6 +70,7 @@ SpriteAtlas:
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 8afa526039a8bb448ac4c8f0ab850725, type: 3}
+  - {fileID: 766940222544145765, guid: 817f3201d148247a98b9f9b475559bdc, type: 3}
   - {fileID: 21300000, guid: 8e3a5761a774e8346a6c78f5acd5ba71, type: 3}
   - {fileID: 21300000, guid: 46b4ecc1953e8fe449f0737b4359260d, type: 3}
   - {fileID: 21300000, guid: 1b52a512bb835a4499ad1371e165b760, type: 3}
@@ -84,7 +85,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 9049f287de43f654ca791b279a464689, type: 3}
   - {fileID: 21300000, guid: 2e77cae7ff5ea8f43a906760034b89ba, type: 3}
   - {fileID: 21300000, guid: e3f721180613fa44db1a4f3679e66dc0, type: 3}
-  - {fileID: 21300000, guid: 970388687d7fef743850329654aa7638, type: 3}
   - {fileID: 21300000, guid: b1d9cc19fbef2e048ab4d998aba13f0f, type: 3}
   - {fileID: 21300000, guid: 84a9e99945a5edb48889521a266248da, type: 3}
   - {fileID: 21300000, guid: 0e7716b90fb83be44918cc103bcf1678, type: 3}
@@ -101,6 +101,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: c90d596e79a3ef943b3f069805a96e1e, type: 3}
   m_PackedSpriteNamesToIndex:
   - Group-7
+  - BigEye 1_0
   - BigRoad_P_PB
   - B 1
   - SmallRoad_P
@@ -115,7 +116,6 @@ SpriteAtlas:
   - BreadRoad_P_P
   - Group-6
   - CockRoad_B
-  - BigEye
   - CockRoad_P
   - BreadRoad_B_PB
   - BreadRoad_P_B

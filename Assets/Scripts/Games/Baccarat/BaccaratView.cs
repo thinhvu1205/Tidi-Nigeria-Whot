@@ -81,7 +81,7 @@ public class BaccaratView : BaseDiceGameView
     private List<int> listWinResult = new List<int>();
     private List<int> savePotLose = new List<int>();
     [HideInInspector] public List<TypeWinBaccarat> listSaveHistory = new List<TypeWinBaccarat>();
-
+    private ChatInGameView chatInGameView;
     public override GameState[] AvailableLeaveStates => new GameState[]
     {
         GameState.Idle,
@@ -106,6 +106,7 @@ public class BaccaratView : BaseDiceGameView
     private int indexCard = 0;
     private Sequence waitingTextSequence;
     private const string WIN_ANIMATION_PATH = "Baccarat/Ani/skeleton_SkeletonData";
+    private const string CHAT_ROOM_NAME = "baccarat";
     private bool isNewGame = true;
     private int minUnitTotalBet = 1,  maxUnitTotalBet = 100;
     private bool isEnableRebet = false;
@@ -113,6 +114,8 @@ public class BaccaratView : BaseDiceGameView
     {
         base.Awake();
         LoadProfile();
+        chatInGameView = UIManager.Instance.OpenChatInGame();
+        chatInGameView.Init();
         buttonBetBaccarat.SetActive(false);
         PoolService.Instance.Register(PrefabType.Card, cardContainer, listCardP[0], 8, 10, 6);
         PoolService.Instance.Register(PrefabType.ChipPlayerBaccarat, chipContainer.transform, chipPref, 20, 30, 15);
@@ -144,6 +147,12 @@ public class BaccaratView : BaseDiceGameView
         thisPlayer.avatar_id = User.userProfile.AvatarId;
         thisPlayer.vipLevel = User.userProfile.VipLevel;
         thisPlayer.user_name = User.userProfile.DisplayName;
+    }
+
+    public void OnClickChat()
+    {
+        chatInGameView.transform.localScale = Vector3.one;
+        chatInGameView.Show();
     }
 
     #region Hander Api

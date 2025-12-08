@@ -17,9 +17,9 @@ public class ChangeNameView : BaseView
 
     public async void HandleSubmit()
     {
-        string userName = userNameInputField.text;
-        string password = passwordInputField.text;
-        string reEnterPassword = reEnterPasswordInputField.text;
+        string userName = userNameInputField.text.Trim();
+        string password = passwordInputField.text.Trim();
+        string reEnterPassword = reEnterPasswordInputField.text.Trim();
 
         if (string.IsNullOrEmpty(userName))
         {

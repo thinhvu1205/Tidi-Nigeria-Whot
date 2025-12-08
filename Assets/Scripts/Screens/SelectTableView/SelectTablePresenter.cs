@@ -36,7 +36,22 @@ public class SelectTablePresenter
         UIManager.Instance.ShowProgressing();
         try
         {
-            RpcFindMatchResponse response = await DataSender.FindMatch(currentGameId, markUnit, false);
+            RpcFindMatchResponse response = await DataSender.FindMatch(currentGameId, markUnit, false, false);
+            return response;
+        }
+        catch (Exception)
+        {
+            selectTableView.OnError("Error while getting match!");
+            throw;
+        }
+    }
+
+    public async UniTask<RpcFindMatchResponse> FindTable(string currentGameId, string tableId)
+    {
+        UIManager.Instance.ShowProgressing();
+        try
+        {
+            RpcFindMatchResponse response = await DataSender.FindMatch(currentGameId, 0, false, false, tableId);
             return response;
         }
         catch (Exception)

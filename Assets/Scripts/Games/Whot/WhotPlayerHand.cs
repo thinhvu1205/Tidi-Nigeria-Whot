@@ -205,6 +205,7 @@ public class WhotPlayerHand : MonoBehaviour
     #region Events
     public void WhotGame_OnNextTurn(WhotView.OnNextTurnEventArg e)
     {
+        Debug.Log("IS SECOND TURNL: " + e.isSecondTurn);
         if (e.playerTurn == whotGame.GetCurrentPlayer().Id)
         {
             List<WhotCardModel> listCard;
@@ -233,22 +234,38 @@ public class WhotPlayerHand : MonoBehaviour
             {
                 bool isSelectable = false;
 
-                if (callCardModel.GetCardRank() == WhotCardRank.WhotRank2 && cardEffect != WhotCardEffect.EffectNone)
+                if (!e.isSecondTurn)
                 {
-                    isSelectable = card.GetCardRank() == WhotCardRank.WhotRank2;
+                    if (callCardModel.GetCardRank() == WhotCardRank.WhotRank2 && cardEffect != WhotCardEffect.EffectNone)
+                    {
+                        isSelectable = card.GetCardRank() == WhotCardRank.WhotRank2;
+                    }
+                    else if (callCardModel.GetCardRank() == WhotCardRank.WhotRank5 && cardEffect != WhotCardEffect.EffectNone)
+                    {
+                        isSelectable = card.GetCardRank() == WhotCardRank.WhotRank5;
+                    }
+                    else if (card.GetCardRank() == WhotCardRank.WhotRank20)
+                    {
+                        isSelectable = true;
+                    }
+                    else if (card.GetCardSuit() == callCardModel.GetCardSuit() || card.GetCardRank() == callCardModel.GetCardRank())
+                    {
+                        isSelectable = true;
+                    }
+                    
                 }
-                else if (callCardModel.GetCardRank() == WhotCardRank.WhotRank5 && cardEffect != WhotCardEffect.EffectNone)
+                else
                 {
-                    isSelectable = card.GetCardRank() == WhotCardRank.WhotRank5;
+                    if (!Constants.WhotListCardEffect.Contains(callCardModel.GetCardRank()) && Constants.WhotListCardEffect.Contains(card.GetCardRank()))
+                    {
+                        isSelectable = false;
+                    }
+                    else if (card.GetCardSuit() == callCardModel.GetCardSuit() || card.GetCardRank() == callCardModel.GetCardRank())
+                    {
+                        isSelectable = true;
+                    }
                 }
-                else if (card.GetCardRank() == WhotCardRank.WhotRank20)
-                {
-                    isSelectable = true;
-                }
-                else if (card.GetCardSuit() == callCardModel.GetCardSuit() || card.GetCardRank() == callCardModel.GetCardRank())
-                {
-                    isSelectable = true;
-                }
+
 
                 card.SetSelectable(isSelectable);
                 if (isSelectable)

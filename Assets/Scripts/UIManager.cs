@@ -115,7 +115,7 @@ public class UIManager : Singleton<UIManager>
     public async UniTask HandleFindAndJoinMatch(int markUnit)
     {
         ShowProgressing();
-        RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, true);
+        RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, true, true);
         if (response == null) return;
         Debug.Log("Find match response: " + response.ToString());
         if (response.Matches.Count > 0)
