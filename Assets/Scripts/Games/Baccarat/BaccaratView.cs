@@ -99,7 +99,16 @@ public class BaccaratView : BaseDiceGameView
     private long[] listMyBet = { 0, 0, 0, 0, 0 };
     private long[] listLastBet = { 0, 0, 0, 0, 0 };
     private readonly Vector3 dealCardPos = new Vector3(296, 301, 0);
-
+    private Vector2[] posP = {
+        new Vector2(-101, 171),
+        new Vector2(-172, 171),
+        new Vector2(-254, 171)
+    };
+    private Vector2[] posB = {
+        new Vector2(101, 171),
+        new Vector2(172, 171),
+        new Vector2(254, 171)
+    };
 
     private int scorePl = 0, scoreBk = 0, scorePl1 = 0, scoreBk1 = 0;
     private bool checkBeted = false, checkBetDouble = false;
@@ -161,6 +170,7 @@ public class BaccaratView : BaseDiceGameView
     {
         base.RequestSyncStateTable();
         Debug.Log("Sync state Baccarat");
+        ResetUIOnDataSync();
         DataSender.SendMatchState((long)OpCodeRequest.UserInTable, Array.Empty<byte>());
         DataSender.SendMatchState((long)OpCodeRequest.SyncTable, Array.Empty<byte>());
     }
@@ -215,16 +225,7 @@ public class BaccaratView : BaseDiceGameView
             if (data.AllUserBets is { Count: > 0 })
             {
                 Debug.Log($"[AllUserBets] Rendering {data.AllUserBets.Count} user bets for sync");
-                listMyBet = listMyBet.Select(x => x * 0).ToArray();
-                listBet = listBet.Select(x => x * 0).ToArray();
-                foreach (var chip in listChipInTable)
-                {
-                    if (chip != null)
-                    {
-                        PoolService.Instance.Release(PrefabType.ChipPlayerBaccarat, chip);
-                    }
-                }
-                listChipInTable.Clear();
+                
                 foreach (var userBet in data.AllUserBets)
                 {
                     if (userIdToView.TryGetValue(userBet.UserId, out var playerView))
@@ -364,8 +365,11 @@ public class BaccaratView : BaseDiceGameView
             }
             SetStatusButtonsBet(!checkBeted, checkBeted);
             
+            int playerCount = baccaratUpdateDeal.Hands.Player.Cards.Count;
+            int bankerCount = baccaratUpdateDeal.Hands.Banker.Cards.Count;
+            
             // Display all Player cards instantly
-            for (int i = 0; i < baccaratUpdateDeal.Hands.Player.Cards.Count && i < listCardP.Count; i++)
+            for (int i = 0; i < playerCount && i < listCardP.Count; i++)
             {
                 var card = baccaratUpdateDeal.Hands.Player.Cards[i];
                 listCardP[i].SetData((int)card.Rank, (int)card.Suit);
@@ -374,7 +378,7 @@ public class BaccaratView : BaseDiceGameView
             }
             
             // Display all Banker cards instantly
-            for (int i = 0; i < baccaratUpdateDeal.Hands.Banker.Cards.Count && i < listCardB.Count; i++)
+            for (int i = 0; i < bankerCount && i < listCardB.Count; i++)
             {
                 var card = baccaratUpdateDeal.Hands.Banker.Cards[i];
                 listCardB[i].SetData((int)card.Rank, (int)card.Suit);
@@ -383,14 +387,16 @@ public class BaccaratView : BaseDiceGameView
             }
             
             // Update scores
-            if (baccaratUpdateDeal.Hands.Player.Cards.Count > 0)
+            if (playerCount > 0)
             {
                 lbScorePlayer.text = baccaratUpdateDeal.Hands.Player.Point.ToString();
+                if (playerCount == 3) scorePlayer.transform.localPosition = new Vector2(-338, 174);
                 scorePlayer.SetActive(true);
             }
-            if (baccaratUpdateDeal.Hands.Banker.Cards.Count > 0)
+            if (bankerCount > 0)
             {
                 lbScoreBanker.text = baccaratUpdateDeal.Hands.Banker.Point.ToString();
+                if (bankerCount == 3) scoreBanker.transform.localPosition = new Vector2(338, 174);
                 scoreBanker.SetActive(true);
             }
             
@@ -431,8 +437,12 @@ public class BaccaratView : BaseDiceGameView
         
         if (baccaratUpdateDeal.IsPlayer)
         {
-            cardModel.SetData((int)baccaratUpdateDeal.Cards[0].Rank, (int)baccaratUpdateDeal.Cards[0].Suit);
-            listCardP[currentIndex].SetData((int)baccaratUpdateDeal.Cards[0].Rank, (int)baccaratUpdateDeal.Cards[0].Suit);
+            if (baccaratUpdateDeal.Cards != null)
+            {
+                cardModel.SetData((int)baccaratUpdateDeal.Cards[0].Rank, (int)baccaratUpdateDeal.Cards[0].Suit);
+                listCardP[currentIndex].SetData((int)baccaratUpdateDeal.Cards[0].Rank,
+                    (int)baccaratUpdateDeal.Cards[0].Suit);
+            }
 
             int i = currentIndex;
             if (i == 2)
@@ -465,8 +475,12 @@ public class BaccaratView : BaseDiceGameView
         }
         else
         {
-            cardModel.SetData((int)baccaratUpdateDeal.Cards[0].Rank, (int)baccaratUpdateDeal.Cards[0].Suit);
-            listCardB[currentIndex].SetData((int)baccaratUpdateDeal.Cards[0].Rank, (int)baccaratUpdateDeal.Cards[0].Suit);
+            if (baccaratUpdateDeal.Cards != null)
+            {
+                cardModel.SetData((int)baccaratUpdateDeal.Cards[0].Rank, (int)baccaratUpdateDeal.Cards[0].Suit);
+                listCardB[currentIndex].SetData((int)baccaratUpdateDeal.Cards[0].Rank,
+                    (int)baccaratUpdateDeal.Cards[0].Suit);
+            }
 
             int i = currentIndex;
             if (i == 2)
@@ -528,11 +542,12 @@ public class BaccaratView : BaseDiceGameView
                 if (isNewGame)
                 {
                     isNewGame = false;
-                    lb_waiting.gameObject.SetActive(false);
                     if (waitingTextSequence != null && waitingTextSequence.IsActive())
                     {
                         waitingTextSequence.Kill();
+                        waitingTextSequence = null;
                     }
+                    lb_waiting.gameObject.SetActive(false);
                     clock.gameObject.SetActive(true);
                     buttonBetBaccarat.SetActive(true);
                     foreach (var btn in listPot)
@@ -541,7 +556,7 @@ public class BaccaratView : BaseDiceGameView
                     }
                     if (popupHistory != null)
                     {
-                        // popupHistory.onClickClose(true);
+                        popupHistory.gameObject.SetActive(false);
                     }
 
                     SetDisplayBet();
@@ -692,7 +707,7 @@ public class BaccaratView : BaseDiceGameView
         
         // Reset and Return cards to deck
         sequence.AppendInterval(1.5f).AppendCallback(ResetGame);
-        sequence.AppendInterval(1.0f).AppendCallback(SetLoopLbWaiting);
+        // sequence.AppendInterval(1.0f).AppendCallback(SetLoopLbWaiting);
     }
     
     #endregion
@@ -1196,6 +1211,76 @@ public class BaccaratView : BaseDiceGameView
         UpdateStatePot();
         AnimateReturnCards();
         Debug.Log("Game reset completed");
+    }
+
+    private void ResetUIOnDataSync()
+    {
+        //reset time for preparing, play
+        isNewGame = true;
+        lbTimeBet.text = "";
+        lb_waiting.gameObject.SetActive(false);
+        
+        foreach (var btnGate in listPot)
+        {
+            btnGate.GetComponent<Button>().interactable = false;
+        }
+        
+        indexCard = 0;
+        scorePl = 0;
+        scorePl1 = 0;
+        scoreBk = 0;
+        scoreBk1 = 0;
+        
+        // reset score
+        lbScoreBanker.text = "";
+        lbScorePlayer.text = "";
+        ani_win.gameObject.SetActive(false);
+        scoreBanker.SetActive(false);
+        scorePlayer.SetActive(false);
+        scoreBanker.transform.localPosition = new Vector2(253, 174);
+        scorePlayer.transform.localPosition = new Vector2(-253, 174);
+        
+        // reset count down player
+        foreach (var player in players)
+        {
+            if (userIdToView.TryGetValue(player.Id, out var playerView))
+            {
+                playerView.HideCountDown();
+            }
+        }
+        
+        // Clear chips
+        foreach (BaccaratChip chip in listChipInTable)
+        {
+            if (chip != null)
+            {
+                PoolService.Instance.Release(PrefabType.ChipPlayerBaccarat, chip);
+            }
+        }
+        listChipInTable.Clear();
+        
+        // reset label chip bet player
+        listBet = listBet.Select(x => x * 0).ToArray();
+        listMyBet = listMyBet.Select(x => x * 0).ToArray();
+        UpdateStatePot();
+        
+        // reset card 
+        for (int i = 0; i < listCardP.Count; i++)
+        {
+            var card = listCardP[i];
+            card.gameObject.SetActive(false);
+            card.transform.localPosition = posP[i];
+            card.transform.localEulerAngles = new Vector3(0, 0, i == 2 ? -90 : 0);
+        }
+
+        for (int i = 0; i < listCardB.Count; i++)
+        {
+            var card = listCardB[i];
+            card.gameObject.SetActive(false);
+            card.transform.localPosition = posB[i];
+            card.transform.localEulerAngles = new Vector3(0, 0, i == 2 ? 90 : 0);
+        }
+        
     }
     
 }
