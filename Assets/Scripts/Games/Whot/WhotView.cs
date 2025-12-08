@@ -749,6 +749,7 @@ public class WhotView : BaseDiceGameView
     {
 
         // Khi người chơi hiện tại bấm rút bài
+        DataSender.SendMatchState((long)OpCodeRequest.OpcodeUserInteractCards, new byte[0]);
         if (!yourTurnTransform.gameObject.activeSelf) return;
         DataSender.SendMatchState((long)OpCodeRequest.DrawCard, new byte[0]);
         playerHand.EndTurn();

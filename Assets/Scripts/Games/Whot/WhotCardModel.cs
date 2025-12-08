@@ -48,6 +48,7 @@ public class WhotCardModel : MonoBehaviour,IPoolable
 
     public void OnSelect()
     {
+        DataSender.SendMatchState((long)OpCodeRequest.OpcodeUserInteractCards, new byte[0]);
         if (!isSelectable) return;
         OnCardSelected?.Invoke(this, new OnCardSelectedEventArg { isSelected = isSelected });
         isSelected = true;
