@@ -178,7 +178,7 @@ public class WhotView : BaseDiceGameView
             .OrderBy(b => b.MarkUnit)
             .FirstOrDefault();
 
-        HigherMarkUnit = higherBet ?.MarkUnit ?? CurrentMarkUnit;
+        HigherMarkUnit = higherBet ?.MarkUnit ?? 0;
     }
     
     protected override void OnEnable()
@@ -694,7 +694,7 @@ public class WhotView : BaseDiceGameView
     public override async UniTask HandleUpdateKickOffTheTable(IMatchState matchState)
     {
         Debug.Log("kick off the table whot view " + TypeWinMore);
-        if (TypeWinMore)
+        if (TypeWinMore && HigherMarkUnit != 0)
         {
             await UIManager.Instance.HandleFindAndJoinMatch((int)HigherMarkUnit);
             return;
@@ -1184,7 +1184,7 @@ public class WhotView : BaseDiceGameView
                 cbShowMatchRs = () =>
                 {
                     whotMatchResult.gameObject.SetActive(true);
-                    whotMatchResult.SetInfo(this, playersList, result, balanceUpdates, true);
+                    whotMatchResult.SetInfo(this, playersList, result, balanceUpdates, true, HigherMarkUnit != 0);
                 };
             });
         };

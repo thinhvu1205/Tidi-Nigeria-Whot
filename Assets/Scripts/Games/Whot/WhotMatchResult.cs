@@ -42,11 +42,18 @@ public class WhotMatchResult : MonoBehaviour
         }
     }
 
-    public void SetInfo(WhotView whotGame, List<WhotPlayer> players, List<WhotPlayerResult> result, List<BalanceUpdate> balanceUpdates, bool isVictory)
+    public void SetInfo(WhotView whotGame, List<WhotPlayer> players, List<WhotPlayerResult> result, List<BalanceUpdate> balanceUpdates, bool isVictory, bool isEnableWinmore = true)
     {
         this.whotGame = whotGame;
         UpdateBetNoteText();
-        SetWinMoreButtonListener();
+        if (isEnableWinmore)
+        {
+            SetWinMoreButtonListener();
+        }
+        else
+        {
+            winMoreButton.gameObject.SetActive(false);
+        }
         backgroundWin.gameObject.SetActive(isVictory);
         backgroundLose.gameObject.SetActive(!isVictory);
         victoryImage.gameObject.SetActive(isVictory);

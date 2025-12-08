@@ -391,7 +391,7 @@ public class HongKongPokerView : BaseDiceGameView
         // ✅ Tạo dictionary để lookup nhanh isFolded (O(1) thay vì O(n))
         Dictionary<string, bool> foldedMap = new Dictionary<string, bool>();
         Dictionary<string, bool> swapStateMap = new Dictionary<string, bool>();
-        if (data.BettingState != null && data.BettingState.PlayerStates != null)
+        if (data.BettingState is { PlayerStates: not null })
         {
             foreach (var ps in data.BettingState.PlayerStates)
             {
@@ -675,62 +675,30 @@ public class HongKongPokerView : BaseDiceGameView
         // ===== 6. HANDLE ROUND 4 CARD SWAP PHASE =====
         if (data.Round == HKPokerRound.HkRound4Card && data.CardSwapCountdown > 0)
         {
-            if (foldedMap.TryGetValue(myUserId, out bool isFolded) && isFolded)
-            {
-                return;
-            }
-            
-            // ✅ Get swap state for current user
-            bool hasSwapped = false;
-            if (swapStateMap.TryGetValue(myUserId, out var mySwapState))
-            {
-                hasSwapped = mySwapState;
-            }
             // ✅ Sync: Use countdown from server, New round: Start from 8
-            int timeStart = data.IsSync ? (int)data.CardSwapCountdown : 8;
-            
+            int timeStart = (int)data.CardSwapCountdown;
+
             // Round 4: Card swap phase - disable action buttons, show swap/keep buttons
             Debug.Log("[HK Poker] Round 4: Card swap phase - disabling action buttons");
-            
+
             // Disable all action buttons during card swap phase
             if (buttonBetContainer != null)
             {
                 buttonBetContainer.gameObject.SetActive(false);
             }
+
             if (toggleContainer != null)
             {
                 toggleContainer.gameObject.SetActive(false);
             }
-            
+
             // ✅ Cleanup old sequences before creating new ones
             CleanupRound4Animations();
-            
-            // Show swap/keep buttons
-            cardSwapSequence = DOTween.Sequence();
-            cardSwapSequence.AppendCallback(() =>
-            {
-                if (this == null || hasSwapped) return;
-                buttonChangeCardContainer?.gameObject.SetActive(true);
-                arrowSwapContainer.gameObject.SetActive(true);
-                
-                // ✅ Stop old coroutine before starting new one
-                if (arrowSwapCoroutine != null)
-                {
-                    StopCoroutine(arrowSwapCoroutine);
-                }
-                arrowSwapCoroutine = StartCoroutine(AnimateArrowSwapLoop(timeStart));
-            }).AppendInterval((timeStart - 1) * 1.0f).AppendCallback(() =>
-            {
-                if (!hasSwapped) 
-                {
-                    OnClickKeepCard();
-                }
-            });
 
             // ✅ Show countdown timer
             textCountDown.gameObject.SetActive(true);
             textCountDown.text = timeStart.ToString();
-            
+
             countdownSequence = DOTween.Sequence();
             countdownSequence.AppendInterval(1f).AppendCallback(() =>
             {
@@ -739,14 +707,32 @@ public class HongKongPokerView : BaseDiceGameView
                 {
                     textCountDown.text = timeStart.ToString();
                 }
-                else
-                {
-                    textCountDown.gameObject.SetActive(false);
-                }
-            }).SetLoops(timeStart).OnComplete(() =>
+            }).SetLoops(timeStart).OnComplete(() => { textCountDown.gameObject.SetActive(false); });
+
+            // Show swap/keep buttons for user playing and isFold = false
+            if (foldedMap.TryGetValue(myUserId, out var isFolded) && !isFolded)
             {
-                textCountDown.gameObject.SetActive(false);
-            });
+                // ✅ Get swap state for current user
+                bool hasSwapped = false;
+                if (swapStateMap.TryGetValue(myUserId, out var mySwapState))
+                {
+                    hasSwapped = mySwapState;
+                }
+
+                cardSwapSequence = DOTween.Sequence();
+                cardSwapSequence.AppendCallback(() =>
+                {
+                    if (this == null || hasSwapped) return;
+                    buttonChangeCardContainer?.gameObject.SetActive(true);
+                    arrowSwapContainer.gameObject.SetActive(true);
+                    // ✅ Stop old coroutine before starting new one
+                    if (arrowSwapCoroutine != null)
+                    {
+                        StopCoroutine(arrowSwapCoroutine);
+                    }
+                    arrowSwapCoroutine = StartCoroutine(AnimateArrowSwapLoop(timeStart));
+                });
+            }
         }
     }
 
