@@ -97,6 +97,7 @@ public class WhotView : BaseDiceGameView
     private bool isWinMoreTable = false;
     private bool hasAdjustedPlayerLayout = false;
     private bool isUpdateUserInTable = false;
+    private bool isDoubleDecking;
     private int totalCardsLeft = 54;
     private Action cbShowMatchRs = null;
     public float CurrentMarkUnit { get; private set; }
@@ -108,6 +109,11 @@ public class WhotView : BaseDiceGameView
     protected override void Awake()
     {
         base.Awake();
+    }
+
+    protected override void Update()
+    {
+        
     }
 
     protected override void OnApplicationPause(bool pause)
@@ -215,7 +221,7 @@ public class WhotView : BaseDiceGameView
         else
         {
             UserData userData = JsonUtility.FromJson<UserData>(match.UserData);
-            bool isDoubleDecking = userData.is_double_decking;
+            isDoubleDecking = userData.is_double_decking;
             doubleDeckImage.gameObject.SetActive(isDoubleDecking);  
         }
         _ = NetworkManager.INSTANCE.JoinRoomChat(CHAT_ROOM_NAME + "-" + match.TableId);
@@ -572,7 +578,7 @@ public class WhotView : BaseDiceGameView
             CallCardModel = callCardModel,
             countdown = (int)data.Countdown,
             cardEffect = currentEffect,
-            isSecondTurn = lastTurnPlayerId == currentTurnPlayerId && !string.IsNullOrEmpty(lastTurnPlayerId)
+            isSecondTurn = isDoubleDecking && !Constants.WhotListCardEffect.Contains(callCardModel.GetCardRank()) && lastTurnPlayerId == currentTurnPlayerId && !string.IsNullOrEmpty(lastTurnPlayerId)
         });
     }
 
@@ -696,7 +702,15 @@ public class WhotView : BaseDiceGameView
         Debug.Log("kick off the table whot view " + TypeWinMore);
         if (TypeWinMore && HigherMarkUnit != 0)
         {
-            await UIManager.Instance.HandleFindAndJoinMatch((int)HigherMarkUnit);
+            if (isDoubleDecking)
+            {
+                string customData = "{\"is_double_decking\": true}";
+                await  UIManager.Instance.HandleCreateMatch("", (int)HigherMarkUnit, customData);
+            }
+            else
+            {
+                await UIManager.Instance.HandleFindAndJoinMatch((int)HigherMarkUnit);
+            }
             return;
         }
         await base.HandleUpdateKickOffTheTable(matchState);
@@ -1250,7 +1264,7 @@ public class WhotView : BaseDiceGameView
                 cbShowMatchRs = () =>
                 {
                     whotMatchResult.gameObject.SetActive(true);
-                    whotMatchResult.SetInfo(this, playersList, result, balanceUpdates, false);
+                    whotMatchResult.SetInfo(this, playersList, result, balanceUpdates, false, HigherMarkUnit != 0);
                 };
             });
         };

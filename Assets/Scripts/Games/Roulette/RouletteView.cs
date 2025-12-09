@@ -86,7 +86,7 @@ public class RouletteView : BaseDiceGameView
     private List<long> coefficients = new();
     [SerializeField] private long chipWin, chipAfter, playerWallet;
     [SerializeField] private bool isRebet = false, isConfirmRebet = false, isShowingResult = false, canClick = true;
-    [SerializeField] private float markUnit;
+    [SerializeField] private long markUnit;
 
     protected override void Awake()
     {
@@ -146,8 +146,8 @@ public class RouletteView : BaseDiceGameView
         Debug.Log("Update table: " + data.ToString());
         if (data.BetLevels.Count > 0)
         {
-            coefficients = data.BetLevels.ToList();
-            markUnit = coefficients[0];
+            markUnit = (long)data.BetLevels.ToList()[0];
+            coefficients = new List<long>() { markUnit, markUnit * 5, markUnit * 10, markUnit * 50, markUnit * 100};
             InitButtonBet();
         }
 

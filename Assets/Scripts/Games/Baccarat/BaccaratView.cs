@@ -138,6 +138,7 @@ public class BaccaratView : BaseDiceGameView
     {
         base.LoadInfoMatch(match);
         SetInfoBet(MarkUnit);
+         _ = NetworkManager.INSTANCE.JoinRoomChat(CHAT_ROOM_NAME + "-" + match.TableId);
     }
 
     private void LoadProfile()

@@ -37,8 +37,9 @@ public class SlotJuicyView : BaseSlotView
     private WinJackpot? winJackpot;
     private JackpotHistory jackpotHistory;
     private long rateJackpotGrand = 0, rateJackpotMajor = 0, rateJackpotMinor = 0, rateJackpotMini = 0, jpGrandPlayer = 0, jpMajorPlayer = 0, totalPackageValue = 0;
-    private bool isInFruitRain, isInJuiceFree, isStartFruitRain, isEndFruitRain, isChooseFreeGame, isChooseFruitRain, isEndFreeGame, isChooseBasket, isBetLevelChanged;
+    private bool isInFruitRain, isInJuiceFree, isStartFruitRain, isEndFruitRain, isChooseFreeGame, isChooseFruitRain, isEndFreeGame, isChooseBasket, isBetLevelChanged, isFinishGame;
     private Tween tweenChooseBasket = null;
+    private SiXiangGame nextGame;
     protected override Dictionary<SiXiangSymbol, int> SymbolDictionary => new()
     {
         { SiXiangSymbol.K, 0 },
@@ -77,7 +78,7 @@ public class SlotJuicyView : BaseSlotView
         spinList = data.Matrix.SpinLists.ToList();
         jackpotHistory = data.WinJpHistory;
         winJackpot = data.WinJp;
-
+        nextGame = data.NextSixiangGame;
         isInFreeSpin = data.CurrentSixiangGame == SiXiangGame.JuiceFreeGame || data.CurrentSixiangGame == SiXiangGame.JuiceFruitRain;
         isInFruitRain = data.CurrentSixiangGame == SiXiangGame.JuiceFruitRain;
         isInJuiceFree = data.CurrentSixiangGame == SiXiangGame.JuiceFreeGame;
@@ -87,6 +88,7 @@ public class SlotJuicyView : BaseSlotView
         isChooseFreeGame = data.NextSixiangGame == SiXiangGame.JuiceFreeGame && data.CurrentSixiangGame == SiXiangGame.JuiceFruitBasket;
         isChooseFruitRain = data.NextSixiangGame == SiXiangGame.JuiceFruitRain && data.CurrentSixiangGame == SiXiangGame.JuiceFruitBasket;
         isChooseBasket = data.NextSixiangGame == SiXiangGame.JuiceFruitBasket && data.CurrentSixiangGame != SiXiangGame.JuiceFruitBasket;
+        isFinishGame = data.IsFinishGame;
 
         winType = data.BigWin switch
         {
@@ -249,14 +251,14 @@ public class SlotJuicyView : BaseSlotView
         UpdateJackpot();
 
         ///------------------CHECK FRUIT RAIN--------------------//
-        if (isStartFruitRain)
+        if (isStartFruitRain || (isFinishGame && nextGame == SiXiangGame.JuiceFruitRain))
         {
             SetupFruitRainGame();
             return;
         }
 
         ///------------------CHECK END FRUIT RAIN --------------------//
-        if (isEndFruitRain)
+        if (isEndFruitRain && isFinishGame)
         {
             totalPackageValue = 0;
             ShowTotalMoneyPackage();
@@ -467,7 +469,7 @@ public class SlotJuicyView : BaseSlotView
         tweenQueue.Enqueue(() => ShowPopupGetFruitRain());
 
         // Fruit Rain sẽ autospin cho đến khi hết Fruit Rain
-        if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO)
+        if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO || spinType == SpinType.FREE_AUTO)
         {
             spinType = SpinType.FREE_NORMAL;
         }

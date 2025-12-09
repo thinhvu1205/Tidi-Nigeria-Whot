@@ -1,22 +1,10 @@
 fileFormatVersion: 2
-guid: e1ec817635d49654d89b7efd29bb8f39
+guid: 6d5626f88f7fc4457ba95fdb2e27479e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4197569896958664083
-    second: history_0
-  - first:
-      213: -4313025376933839118
-    second: history_1
-  - first:
-      213: 7250044453150430583
-    second: history_2
-  - first:
-      213: 8887428308680669788
-    second: history_3
-  - first:
-      213: -3923187249403174783
-    second: history_4
+      213: -115211994945437459
+    second: Rounded Rectangle 3 copy 4_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -59,7 +47,7 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 2
-  spriteExtrude: 0
+  spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
@@ -82,7 +70,7 @@ TextureImporter:
   swizzle: 50462976
   cookieLightType: 0
   platformSettings:
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -95,7 +83,7 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -108,7 +96,7 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -121,8 +109,8 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: iPhone
+  - serializedVersion: 4
+    buildTarget: iOS
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -138,126 +126,42 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: history_0
+      name: Rounded Rectangle 3 copy 4_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 48
-        height: 47
+        width: 22
+        height: 415
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d62e7eb1b6c3fb5c0800000000000000
-      internalID: -4197569896958664083
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: history_1
-      rect:
-        serializedVersion: 2
-        x: 12
-        y: 0
-        width: 10
-        height: 31
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2fefc94654e0524c0800000000000000
-      internalID: -4313025376933839118
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: history_2
-      rect:
-        serializedVersion: 2
-        x: 25
-        y: 0
-        width: 10
-        height: 24
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 77592db84055d9460800000000000000
-      internalID: 7250044453150430583
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: history_3
-      rect:
-        serializedVersion: 2
-        x: 38
-        y: 0
-        width: 10
-        height: 31
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c5a79a985fc765b70800000000000000
-      internalID: 8887428308680669788
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: history_4
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 9
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1806bfb8bf90e89c0800000000000000
-      internalID: -3923187249403174783
+      spriteID: de0c96f0d4fa66ef0800000000000000
+      internalID: -115211994945437459
       vertices: []
       indices: 
       edges: []
       weights: []
     outline: []
+    customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
     nameFileIdTable:
-      history_0: -4197569896958664083
-      history_1: -4313025376933839118
-      history_2: 7250044453150430583
-      history_3: 8887428308680669788
-      history_4: -3923187249403174783
+      Rounded Rectangle 3 copy 4_0: -115211994945437459
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

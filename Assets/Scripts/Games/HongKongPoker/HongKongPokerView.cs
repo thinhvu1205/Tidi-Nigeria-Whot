@@ -43,11 +43,11 @@ public class HongKongPokerView : BaseDiceGameView
 
     private Vector2[] listCardPosition = new Vector2[]
     {
-        new(-12, -207),
-        new(-404, -49),
-        new(-357, 168),
+        new(-12, -197),
+        new(-354, -49),
+        new(-327, 168),
         new(350, 168),
-        new(403, -60)
+        new(334, -60)
     };
 
     private Vector2[] listBoxBetPosition = new Vector2[]
@@ -70,12 +70,16 @@ public class HongKongPokerView : BaseDiceGameView
     private Sequence countdownSequence;
     private Coroutine arrowSwapCoroutine;
     private bool isSwapped = false, isRejoinTable = false;
-    
+    private ChatInGameView chatInGameView;
+    private const string CHAT_ROOM_NAME = "hkpoker";
+
     protected override void Awake()
     {
         base.Awake();
         InitPool();
-        
+        chatInGameView = UIManager.Instance.OpenChatInGame();
+        chatInGameView.Init();
+
         // Set view reference in button container
         if (buttonBetContainer != null)
         {
@@ -152,6 +156,7 @@ public class HongKongPokerView : BaseDiceGameView
         {
             sliderContainer.SetActive(false);
         }
+        _ = NetworkManager.INSTANCE.JoinRoomChat(CHAT_ROOM_NAME + "-" + match.TableId);
     }
     
     public override void HandleUpdateTable(IMatchState matchState)
@@ -1363,6 +1368,11 @@ public class HongKongPokerView : BaseDiceGameView
     #endregion
     
     #region Button Actions
+    public void OnClickChat()
+    {
+        chatInGameView.transform.localScale = Vector3.one;
+        chatInGameView.Show();
+    }
     
     // Card swap buttons (Round 4)
     public void OnClickSwap()

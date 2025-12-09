@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
   m_Name: skeleton_Atlas
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: spine-unity::Spine.Unity.SpineAtlasAsset
   atlasFile: {fileID: 4900000, guid: 983b443c24bfbd7428d58486547a3221, type: 3}
   materials:
   - {fileID: 2100000, guid: caa09fe9a8feb3d479eaee1ffe684f9d, type: 2}

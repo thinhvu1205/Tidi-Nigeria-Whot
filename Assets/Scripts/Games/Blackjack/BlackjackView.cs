@@ -352,6 +352,7 @@ public class BlackjackView : BaseDiceGameView
             }
             else
             {
+                Debug.Log("YOOOO");
                 buttonBetContainer.gameObject.SetActive(false);
             }
 
@@ -1138,6 +1139,7 @@ public class BlackjackView : BaseDiceGameView
 
     public void OnClickButtonClear()
     {
+        Debug.Log("OnClickButtonClear");
         currentBetValue = 0;
         textDealValue.text = currentBetValue.ToString();
         textClearValue.text = currentBetValue.ToString();

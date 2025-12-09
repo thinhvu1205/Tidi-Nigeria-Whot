@@ -28,6 +28,7 @@ public class WhotSuitPicker : MonoBehaviour
 
     public void OnPickSuit(WhotCardSuit cardSuit)
     {
+        DataSender.SendMatchState((long)OpCodeRequest.OpcodeUserInteractCards, new byte[0]);
         switch (cardSuit)
         {
             case WhotCardSuit.WhotSuitCircle:
