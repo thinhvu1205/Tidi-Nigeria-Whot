@@ -37,9 +37,9 @@ public class SlotJuicyView : BaseSlotView
     private WinJackpot? winJackpot;
     private JackpotHistory jackpotHistory;
     private long rateJackpotGrand = 0, rateJackpotMajor = 0, rateJackpotMinor = 0, rateJackpotMini = 0, jpGrandPlayer = 0, jpMajorPlayer = 0, totalPackageValue = 0;
-    private bool isInFruitRain, isInJuiceFree, isStartFruitRain, isEndFruitRain, isChooseFreeGame, isChooseFruitRain, isEndFreeGame, isChooseBasket, isBetLevelChanged, isFinishGame;
+    private bool isInFruitRain, isInJuiceFree, isStartFruitRain, isEndFruitRain, isChooseFreeGame, isChooseFruitRain, isEndFreeGame, isChooseBasket, isBetLevelChanged, isFinishGame, isSetUpFruitRainGame = false;
     private Tween tweenChooseBasket = null;
-    private SiXiangGame nextGame;
+    private SiXiangGame nextGame, currentGame;
     protected override Dictionary<SiXiangSymbol, int> SymbolDictionary => new()
     {
         { SiXiangSymbol.K, 0 },
@@ -67,6 +67,29 @@ public class SlotJuicyView : BaseSlotView
         { SiXiangSymbol.JuiceFruitbasketRandom6, 13 },
         { SiXiangSymbol.JuiceFruitbasketRandom7, 13 },
     };
+
+    protected override void OnValueChangeSlider(int selectID)
+    {
+        switch (selectID)
+        {
+            case 0:
+                ReqSpecGame = 0;
+                break;
+            case 1:
+                ReqSpecGame = (int)SiXiangGame.JuiceFruitBasket;
+                break;
+            case 2 :
+                ReqSpecGame = (int)SiXiangGame.JuiceFruitRain; 
+                break;
+            case 3 :
+                ReqSpecGame = -1; // 3 scatter va 6 gio
+                break;
+            default:
+                ReqSpecGame = 0;
+                break;
+        }
+    }
+    
     public override void HandleUpdateTable(IMatchState matchState)
     {
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
@@ -79,6 +102,7 @@ public class SlotJuicyView : BaseSlotView
         jackpotHistory = data.WinJpHistory;
         winJackpot = data.WinJp;
         nextGame = data.NextSixiangGame;
+        currentGame = data.CurrentSixiangGame;
         isInFreeSpin = data.CurrentSixiangGame == SiXiangGame.JuiceFreeGame || data.CurrentSixiangGame == SiXiangGame.JuiceFruitRain;
         isInFruitRain = data.CurrentSixiangGame == SiXiangGame.JuiceFruitRain;
         isInJuiceFree = data.CurrentSixiangGame == SiXiangGame.JuiceFreeGame;
@@ -129,11 +153,12 @@ public class SlotJuicyView : BaseSlotView
                 // if (!isBetLevelChanged && !isInFruitRain)
                 // {
                 SetPackageValue(column, valuePackageColumnArray);
-                // column.ShowPackageValue();
+                
+               
                 // }
 
                 // Khi đã bấm Spin
-                if (hasSetupStartView)
+                if (hasSetupStartView && !isSetUpFruitRainGame)
                 {
                     column.SetFinishView(columnArray);
                     paylineList = data.Paylines.ToList();
@@ -142,8 +167,15 @@ public class SlotJuicyView : BaseSlotView
                 // Khi lần đầu vào game -> Setup Views
                 else
                 {
+                    if (isSetUpFruitRainGame)
+                    {
+                        column.SetFinishViewNow(columnArray);
+                    }
+                    else
+                    {
+                        column.SetStartView(columnArray);
+                    }
 
-                    column.SetStartView(columnArray);
                     if (data.CurrentSixiangGame == SiXiangGame.JuiceFruitRain)
                     {
                         column.ShowPackageValue();
@@ -170,7 +202,8 @@ public class SlotJuicyView : BaseSlotView
             isLastFreeSpin = false;
             lastTotalChipWinByGame = 0;
         }
-        if (hasSetupStartView)
+
+        if (hasSetupStartView && !isSetUpFruitRainGame)
         {
             // Bấm Spin
             if (IsSpinning && !isBetLevelChanged)
@@ -209,6 +242,7 @@ public class SlotJuicyView : BaseSlotView
                 ShowBackGroundFreeSpin();
                 CreateHolderPackageView();
                 UpdateSpinButtonUI();
+                isSetUpFruitRainGame = false;
             }
             else if (data.CurrentSixiangGame == SiXiangGame.JuiceFreeGame)
             {
@@ -251,14 +285,14 @@ public class SlotJuicyView : BaseSlotView
         UpdateJackpot();
 
         ///------------------CHECK FRUIT RAIN--------------------//
-        if (isStartFruitRain || (isFinishGame && nextGame == SiXiangGame.JuiceFruitRain))
+        if (isStartFruitRain)
         {
             SetupFruitRainGame();
             return;
         }
-
+        
         ///------------------CHECK END FRUIT RAIN --------------------//
-        if (isEndFruitRain && isFinishGame)
+        if (isEndFruitRain || (isFinishGame && currentGame == SiXiangGame.JuiceFruitRain))
         {
             totalPackageValue = 0;
             ShowTotalMoneyPackage();
@@ -459,13 +493,15 @@ public class SlotJuicyView : BaseSlotView
 
     private void SetupFruitRainGame(bool isKeep6FirstBasket = true)
     {
+        Debug.Log("SetupFruitRainGame");
+        isSetUpFruitRainGame = true;
         SetDarkAllItems(isBackgroundDark: false);
         freeSpinLeft = 3;
         ShowBackGroundFreeSpin();
-        if (isKeep6FirstBasket)
-        {
-            CreateHolderPackageView();
-        }
+        // if (isKeep6FirstBasket)
+        // {
+        //     CreateHolderPackageView();
+        // }
         tweenQueue.Enqueue(() => ShowPopupGetFruitRain());
 
         // Fruit Rain sẽ autospin cho đến khi hết Fruit Rain
@@ -553,6 +589,7 @@ public class SlotJuicyView : BaseSlotView
         isInFreeSpin = false;
         AnimateCoinsFly();
         UpdateTotalChipWinValue();
+        NextTween();
     }
 
     private void OnBetLevelChanged()
@@ -718,6 +755,7 @@ public class SlotJuicyView : BaseSlotView
 
     public void HidePopupGetFruitRain()
     {
+        GetMatchResult();
         popupGetFruitRain.Hide(false, () =>
             {
                 effectContainer.gameObject.SetActive(false);
@@ -840,6 +878,11 @@ public class SlotJuicyView : BaseSlotView
             spinType = SpinType.NORMAL;
             UpdateGameState(SlotGameState.PREPARE);
             SetLightAllItems();
+            if(isFinishGame && nextGame == SiXiangGame.JuiceFruitRain)
+            {
+                Debug.Log("FruitRain 2 Lan Lien Tuc");
+                tweenQueue.Enqueue(() => SetupFruitRainGame());
+            }
             NextTween();
         });
     }

@@ -24,7 +24,7 @@ public class SlotItem : MonoBehaviour
     protected SlotColumn column;
     protected int[] finishView = new int[3];
     protected int[] spreadFinishView = new int[3];
-    protected int position = 0;
+    public int position { get; set; } = 0;
 
     public float Speed { get; set; } = 0.075f;
     public float SpeedBackSpin { get; set; } = 0.175f;
@@ -166,6 +166,7 @@ public class SlotItem : MonoBehaviour
     {
         for (int i = 0; i < finishView.Length; i++)
         {
+            if(finishView[i] < 0 )return;
             Image image = slotImageList[i];
             image.sprite = spriteList[finishView[i]];
             image.SetNativeSize();
