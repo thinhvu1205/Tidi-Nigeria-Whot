@@ -260,6 +260,7 @@ public class DragonPearlItem : MonoBehaviour
     {
         string animationPath = "";
         string jackpotNormalAnimationName = "normal_" + GetJackpotAnimationName(data.WinJp);
+        imageBackground.enabled = true;
         switch (data.Symbol)
         {
             case SiXiangSymbol.DragonpearlEyeBird:

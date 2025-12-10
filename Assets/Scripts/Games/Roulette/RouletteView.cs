@@ -184,6 +184,11 @@ public class RouletteView : BaseDiceGameView
             UIManager.Instance.ShowToast("You do not have enough chips!", 2, transform);
             return;
         }
+        if (TotalBetValue + currentBetValue + coefficients[currentBetIndex] > markUnit * 100)
+        {
+            UIManager.Instance.ShowToast("You must bet at most " + Utility.FormatNumber(markUnit * 100) + " chips!", 2, transform);
+            return;
+        }
         if (Constants.RouletteNumberDictionary.TryGetValue(id, out int[] values))
         {
             Debug.Log("ID PRESSED: " + id);
@@ -209,6 +214,11 @@ public class RouletteView : BaseDiceGameView
         {
             return;
         }
+        if (TotalBetValue + currentBetValue + coefficients[currentBetIndex] > markUnit * 100)
+        {
+            return;
+        }
+
         Debug.Log("SELECTED BET: " + selectedOption.transform.position);
        
         SoundManager.Instance.PlayEffectFromPath(SoundRoulette.chipAdd);
