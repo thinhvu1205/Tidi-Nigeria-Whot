@@ -41,7 +41,7 @@ public class BaseSlotView : BaseGameView
     [SerializeField] protected Transform lineContainer, effectContainer, paylineInfoContainer, paylineIconContainer, columnContainer, coinParent;
     [SerializeField] protected GameObject rulePrefab, linePrefab, coinPrefab, columnPrefab;
     [SerializeField] protected SkeletonGraphic backgroundFreeSpinAnimation, thirdScatterAnimation, buttonSpinAnimation, animationEffect, backgroundFreeSpinLeftAnimation;
-
+    [SerializeField] protected TMP_Dropdown reqSpecGameDropdown;
     [Header("Constants")]
     protected readonly string[] colorsList = new string[]
     {
@@ -121,6 +121,7 @@ public class BaseSlotView : BaseGameView
     public bool IsSpinning { get; set; } = false;
     protected bool isHoldingSpin, hasGotFreeSpin, isInFreeSpin, isLastFreeSpin, hasSetupStartView = false, isClickMaxBet = false, isGetMatchResult = false;
     protected float holdingSpinTime = 0;
+    protected int ReqSpecGame = 0;
 
     protected override void Awake()
     {
@@ -130,6 +131,7 @@ public class BaseSlotView : BaseGameView
         UpdateSpinButtonUI();
         SetSpinAnimation(spinType);
         SoundManager.Instance.PlayMusicInGame(SOUND_BACKGROUND_ANIMATION_PATH);
+        reqSpecGameDropdown.onValueChanged.AddListener(OnValueChangeSlider);
     }
 
     protected override void Update()
@@ -182,6 +184,12 @@ public class BaseSlotView : BaseGameView
     #endregion
 
     #region Spin Actions
+
+    protected virtual void OnValueChangeSlider(int selectID)
+    {
+       
+    }
+    
     protected void HandleSpin()
     {
         Debug.Log("HANDLE SPIN");
@@ -194,6 +202,7 @@ public class BaseSlotView : BaseGameView
         InfoBet infoBet = new()
         {
             Chips = currentBetLevel,
+            ReqSpecGame = ReqSpecGame,
         };
         DataSender.SendMatchState((long)OpCodeRequest.Spin, infoBet.ToByteArray());
         UpdateGameState(SlotGameState.SPINNING);

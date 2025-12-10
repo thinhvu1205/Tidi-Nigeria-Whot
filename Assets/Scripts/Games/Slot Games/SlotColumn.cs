@@ -184,6 +184,21 @@ public class SlotColumn : MonoBehaviour
         }
     }
 
+    public void SetFinishViewNow(int[] symbolIdArray)
+    {
+        foreach (SlotItem item in itemList)
+        {
+            if (item.position == 2)
+            {
+                
+                item.SetFinishIndices(symbolIdArray);
+                item.SetFinishView();
+                item.SetItemValuePackage();
+            }
+            
+        } 
+    }
+
     public void SetSpreadFinishView(int[] symbolIdArray)
     {
         foreach (SlotItem item in itemList)
