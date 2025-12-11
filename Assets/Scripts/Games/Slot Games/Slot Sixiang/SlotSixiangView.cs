@@ -802,6 +802,7 @@ public class SlotSixiangView : BaseSlotSymbolView
         luckyDrawView.SetInfo(this);
         SetAnimationGameName(LUCKY_DRAW_GAME_NAME);
         SetAnimationBackground(LUCKY_DRAW_GAME_NAME);
+        gameState = SlotGameState.SPINNING;
         columnContainer.gameObject.SetActive(false);
     }
     #endregion
