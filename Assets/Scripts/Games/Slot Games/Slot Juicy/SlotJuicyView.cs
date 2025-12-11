@@ -7,6 +7,7 @@ using DG.Tweening;
 using Globals;
 using Google.Protobuf;
 using Nakama;
+using Spine;
 using Spine.Unity;
 using TMPro;
 using UnityEngine;
@@ -40,6 +41,9 @@ public class SlotJuicyView : BaseSlotView
     private bool isInFruitRain, isInJuiceFree, isStartFruitRain, isEndFruitRain, isChooseFreeGame, isChooseFruitRain, isEndFreeGame, isChooseBasket, isBetLevelChanged, isFinishGame, isSetUpFruitRainGame = false;
     private Tween tweenChooseBasket = null;
     private SiXiangGame nextGame, currentGame;
+    private WinType _currentWinType;
+    private bool _currentIsCoinFlyAfterwards;
+
     protected override Dictionary<SiXiangSymbol, int> SymbolDictionary => new()
     {
         { SiXiangSymbol.K, 0 },
@@ -283,20 +287,13 @@ public class SlotJuicyView : BaseSlotView
         }
         IsSpinning = false;
         UpdateJackpot();
-
-        ///------------------CHECK FRUIT RAIN--------------------//
-        if (isStartFruitRain)
-        {
-            SetupFruitRainGame();
-            return;
-        }
         
         ///------------------CHECK END FRUIT RAIN --------------------//
         if (isEndFruitRain || (isFinishGame && currentGame == SiXiangGame.JuiceFruitRain))
         {
             totalPackageValue = 0;
             ShowTotalMoneyPackage();
-            tweenQueue.Enqueue(() => ShowPackageResult());
+            tweenQueue.Enqueue(ShowPackageResult);
       
         }
         else
@@ -311,7 +308,7 @@ public class SlotJuicyView : BaseSlotView
         ///------------------CHECK SHOW WIN SCATTER--------------------//
         if (CheckWinScatter() && !isInFruitRain)
         {
-            tweenQueue.Enqueue(() => ShowWinScatter());
+            tweenQueue.Enqueue(ShowWinScatter);
         }
 
         ///------------------CHECK FREE GAME--------------------//
@@ -325,17 +322,23 @@ public class SlotJuicyView : BaseSlotView
         ///------------------CHECK END FREE GAME--------------------//
         if (isEndFreeGame)
         {
-            if (winType == WinType.NONE && totalChipWinByGame > 0)
+            tweenQueue.Enqueue(() =>
             {
-                AnimateCoinsFly();
-            }
-            if (totalChipWinByGame > lastTotalChipWinByGame)
-            {
-                UpdateTotalChipWinValue();
-            }
-            HideBackgroundFreeSpin();
-            UpdateGameState(SlotGameState.PREPARE);
-            spinType = SpinType.NORMAL;
+                if (winType == WinType.NONE && totalChipWinByGame > 0)
+                {
+                    AnimateCoinsFly();
+                }
+
+                if (totalChipWinByGame > lastTotalChipWinByGame)
+                {
+                    UpdateTotalChipWinValue();
+                }
+
+                HideBackgroundFreeSpin();
+                UpdateGameState(SlotGameState.PREPARE);
+                spinType = SpinType.NORMAL;
+                StartCoroutine(DelayNextTween());
+            });
         }
 
 
@@ -348,7 +351,7 @@ public class SlotJuicyView : BaseSlotView
         ///------------------CHECK SHOW ALL LINE--------------------///
         if (paylineList.Count > 0)
         {
-            tweenQueue.Enqueue(() => ShowAllWinLines());
+            tweenQueue.Enqueue(ShowAllWinLines);
         }
 
 
@@ -375,26 +378,35 @@ public class SlotJuicyView : BaseSlotView
             if (spinType == SpinType.NORMAL)
             {
                 // if (freespinLeft == 0) listActionHandleSpin.Add(acShowOneWinLine);
-                tweenQueue.Enqueue(() => ShowWinLineOneByOne());
+                tweenQueue.Enqueue(ShowWinLineOneByOne);
             }
             else if (spinType == SpinType.AUTO || spinType == SpinType.FREE_AUTO)
             {
-                if (paylineList.Count == 1) tweenQueue.Enqueue(() => ShowWinLineOneByOne());
+                if (paylineList.Count == 1) tweenQueue.Enqueue(ShowWinLineOneByOne);
                 // if (!isInFreeSpin) listActionHandleSpin.Add(acShowAnimChipBay);
             }
         }
 
         if (isChooseBasket)
         {
-            tweenQueue.Enqueue(() => ShowPopupChooseABucket());
+            tweenQueue.Enqueue(ShowPopupChooseABucket);
         }
 
+        ///------------------CHECK FRUIT RAIN--------------------//
+        if (isStartFruitRain || (isFinishGame && nextGame == SiXiangGame.JuiceFruitRain))
+        {
+            tweenQueue.Enqueue(() => SetupFruitRainGame());
+        }
+        
         NextTween();
     }
     
     protected override void ShowWinAnimation(WinType winType, bool isCoinFlyAfterwards = true)
     {
-        Debug.Log("ưinType: " + winType);
+        Debug.Log("winType: " + winType);
+        if(winType == WinType.NONE) return;
+        _currentWinType = winType;
+        _currentIsCoinFlyAfterwards = isCoinFlyAfterwards;
         effectContainer.gameObject.SetActive(true);
         animationEffect.gameObject.SetActive(true);
         bigWinText.gameObject.SetActive(false);
@@ -472,24 +484,31 @@ public class SlotJuicyView : BaseSlotView
                 bigWinText.transform.parent.gameObject.SetActive(false);
                 Utility.PlayAnimationByPath(animationEffect, FREE_SPIN_ANIMATION_PATH, FREE_SPIN_ANIMATION_NAME, false);
                 break;
+            default:
+                effectContainer.gameObject.SetActive(false);
+                animationEffect.gameObject.SetActive(false);
+                break;
         }
 
+        animationEffect.AnimationState.Complete -= OnAnimationComplete;
+        animationEffect.AnimationState.Complete += OnAnimationComplete;
 
-        animationEffect.AnimationState.Complete += delegate
-        {
-            effectContainer.gameObject.SetActive(false);
-            animationEffect.gameObject.SetActive(false);
-            if (new WinType[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(winType))
-            {
-                if (isCoinFlyAfterwards)
-                {
-                    AnimateCoinsFly();
-                }
-            }
-            NextTween();
-            effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
-        }; 
     }
+    
+    private void OnAnimationComplete(TrackEntry trackEntry)
+    {
+        effectContainer.gameObject.SetActive(false);
+        animationEffect.gameObject.SetActive(false);
+
+        if (new[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(_currentWinType))
+        {
+            if (_currentIsCoinFlyAfterwards)
+                AnimateCoinsFly();
+        }
+        NextTween();
+        effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
+    }
+
 
     private void SetupFruitRainGame(bool isKeep6FirstBasket = true)
     {
@@ -502,7 +521,7 @@ public class SlotJuicyView : BaseSlotView
         // {
         //     CreateHolderPackageView();
         // }
-        tweenQueue.Enqueue(() => ShowPopupGetFruitRain());
+        tweenQueue.Enqueue(ShowPopupGetFruitRain);
 
         // Fruit Rain sẽ autospin cho đến khi hết Fruit Rain
         if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO || spinType == SpinType.FREE_AUTO)
@@ -589,9 +608,9 @@ public class SlotJuicyView : BaseSlotView
         isInFreeSpin = false;
         AnimateCoinsFly();
         UpdateTotalChipWinValue();
-        NextTween();
+        StartCoroutine(DelayNextTween());
     }
-
+    
     private void OnBetLevelChanged()
     {
         Debug.Log("OnBetLevelChanged");
@@ -878,11 +897,6 @@ public class SlotJuicyView : BaseSlotView
             spinType = SpinType.NORMAL;
             UpdateGameState(SlotGameState.PREPARE);
             SetLightAllItems();
-            if(isFinishGame && nextGame == SiXiangGame.JuiceFruitRain)
-            {
-                Debug.Log("FruitRain 2 Lan Lien Tuc");
-                tweenQueue.Enqueue(() => SetupFruitRainGame());
-            }
             NextTween();
         });
     }
@@ -947,6 +961,7 @@ public class SlotJuicyView : BaseSlotView
             }
         }
     }
+    
     protected override void Reset()
     {
         if (spinType == SpinType.NORMAL || spinType == SpinType.FREE_NORMAL)
@@ -1021,5 +1036,11 @@ public class SlotJuicyView : BaseSlotView
             minorJackpotText.SetValue(valueJPMinorCurrent, true, 0.2f);
             miniJackpotText.SetValue(valueJPMiniCurrent, true, 0.2f);
         }
+    }
+    
+    private IEnumerator DelayNextTween(float timeDelay = 2f)
+    {
+        yield return new WaitForSeconds(timeDelay);
+        NextTween();
     }
 }
