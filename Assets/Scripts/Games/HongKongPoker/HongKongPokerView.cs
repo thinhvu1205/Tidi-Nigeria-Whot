@@ -632,17 +632,34 @@ public class HongKongPokerView : BaseDiceGameView
                         continue;
                     }
 
-                    Card newCard = playerCards.FaceUpCards[^1];
-                    if (newCard == null) continue;
+                    int currentCardCount = listPlayerCards[playerIndex].Count - 1;
+                    int expectedCardCount = data.Round switch
+                    {
+                        HKPokerRound.HkRoundPreFlop => 2,
+                        HKPokerRound.HkRound3Card   => 3,
+                        HKPokerRound.HkRound4Card   => 4,
+                        HKPokerRound.HkRound5Card   => 5,
+                        HKPokerRound.HkRoundShowdown => 5, 
+                        _ => 0
+                    };
+                    if (currentCardCount < expectedCardCount)
+                    {
+                        int cardsToDeal = expectedCardCount - currentCardCount;
+                        for (int i = 0; i < cardsToDeal; i++)
+                        {
+                            int cardIndex = currentCardCount + i;
+                            if (cardIndex < playerCards.FaceUpCards.Count)
+                            {
+                                Card newCard = playerCards.FaceUpCards[cardIndex];
+                                if (newCard == null) continue;
 
-                    // Deal card normally for other players or other rounds
-                    if (data.Round == HKPokerRound.HkRound4Card)
-                    {
-                        DealACard(newCard, playerIndex, delay: 0.25f, isFaceUp: false, isAnimate: true, isMe: isMe);
-                    }
-                    else
-                    {
-                        DealACard(newCard, playerIndex, delay: 0.25f, isFaceUp: true, isAnimate: true);
+                                // Round 4: lá thứ 4 (index 3) là face-down nếu chưa swap
+                                bool isFaceUp = !(data.Round == HKPokerRound.HkRound4Card && cardIndex == 2);
+
+                                float delay = 0.25f * (i + 1);
+                                DealACard(newCard, playerIndex, delay: delay, isFaceUp: isFaceUp, isAnimate: true, isMe: isMe);
+                            }
+                        }
                     }
                 }
             }
@@ -712,7 +729,16 @@ public class HongKongPokerView : BaseDiceGameView
                 {
                     textCountDown.text = timeStart.ToString();
                 }
-            }).SetLoops(timeStart).OnComplete(() => { textCountDown.gameObject.SetActive(false); });
+            }).SetLoops(timeStart).OnComplete(() =>
+            {
+                textCountDown.gameObject.SetActive(false);
+                if (arrowSwapCoroutine != null)
+                {
+                    StopCoroutine(arrowSwapCoroutine);
+                }
+                arrowSwapContainer.gameObject.SetActive(false);
+                buttonChangeCardContainer.gameObject.SetActive(false);
+            });
 
             // Show swap/keep buttons for user playing and isFold = false
             if (foldedMap.TryGetValue(myUserId, out var isFolded) && !isFolded)
@@ -735,7 +761,7 @@ public class HongKongPokerView : BaseDiceGameView
                     {
                         StopCoroutine(arrowSwapCoroutine);
                     }
-                    arrowSwapCoroutine = StartCoroutine(AnimateArrowSwapLoop(timeStart));
+                    arrowSwapCoroutine = StartCoroutine(AnimateArrowSwapLoop());
                 });
             }
         }
@@ -835,8 +861,12 @@ public class HongKongPokerView : BaseDiceGameView
         }
         
 
-        // Distribute pot to winners (all at once - parallel)
-        if (data.Winners is { Count: > 0 })
+        // ✅ Distribute pot to ALL players who received money (not just winners)
+        var playersToPay = balanceResult.Updates
+            .Where(x => x.AmountChipAdd > 0) // All players who received money
+            .ToList();
+
+        if (playersToPay.Count > 0)
         {
             DOTween.Sequence()
                 .AppendInterval(3f) // Delay before starting chip distribution
@@ -844,22 +874,30 @@ public class HongKongPokerView : BaseDiceGameView
                 {
                     float maxChipMoveTime = 0f;
                     
-                    // Start chip animations for all winners simultaneously
-                    foreach (var winnerId in data.Winners)
+                    // Start chip animations for all players who received money
+                    foreach (var balanceUpdate in playersToPay)
                     {
-                        var balanceUpdate = balanceResult.Updates.FirstOrDefault(x => x.UserId == winnerId);
-                        var playerWinner = userIdToView.GetValueOrDefault(winnerId);
+                        var winnerId = balanceUpdate.UserId;
+                        var playerView = userIdToView.GetValueOrDefault(winnerId);
                         
-                        if (playerWinner == null || balanceUpdate == null) continue;
+                        if (playerView == null) continue;
                         
-                        int winnerIndex = GetPlayerIndex(winnerId);
-                        if (winnerIndex < 0) continue;
+                        int playerIndex = GetPlayerIndex(winnerId);
+                        if (playerIndex < 0) continue;
 
-                        // Set win effect
-                        playerWinner.SetEffectWin(isLoop: false);
+                        // ✅ Check if this player is a winner (has profit > 0)
+                        bool isWinner = data.Winners != null && data.Winners.Contains(winnerId);
+                        
+                        // ✅ Only show win effect for actual winners (profit > 0)
+                        if (isWinner)
+                        {
+                            playerView.SetEffectWin(isLoop: false);
+                        }
+                        
                         pot.SetValue(0, 0.5f);
-                        // Animate chips from dealer to player
-                        float chipMoveDuration = DealerGiveChipsToPlayer(winnerIndex, (int)balanceUpdate.AmountChipAdd);
+                        
+                        // Animate chips from dealer to player (for ALL who received money)
+                        float chipMoveDuration = DealerGiveChipsToPlayer(playerIndex, (int)balanceUpdate.AmountChipAdd);
                         
                         // Track max duration (for final cleanup)
                         if (chipMoveDuration > maxChipMoveTime)
@@ -872,9 +910,8 @@ public class HongKongPokerView : BaseDiceGameView
                             .AppendInterval(chipMoveDuration)
                             .AppendCallback(() =>
                             {
-                                // Show money flying animation for THIS winner
-                                playerWinner.AnimateFlyMoney(balanceUpdate.AmountChipAdd, 45);
-                                playerWinner.SetCurrentChip(balanceUpdate.AmountChipCurrent);
+                                playerView.AnimateFlyMoney(balanceUpdate.AmountChipAdd, 45);
+                                playerView.SetCurrentChip(balanceUpdate.AmountChipCurrent);
                             });
                     }
                     
@@ -889,7 +926,7 @@ public class HongKongPokerView : BaseDiceGameView
         }
         else
         {
-            // No winners (shouldn't happen, but collect cards anyway)
+            // No one received money (shouldn't happen, but collect cards anyway)
             DOTween.Sequence()
                 .AppendInterval(2f)
                 .AppendCallback(() =>
@@ -1907,7 +1944,7 @@ public class HongKongPokerView : BaseDiceGameView
         }
     }
     
-    private IEnumerator AnimateArrowSwapLoop(int repeatCount)
+    private IEnumerator AnimateArrowSwapLoop(int repeatCount = 13)
     {
         for (int i = 0; i < repeatCount; i++)
         {
