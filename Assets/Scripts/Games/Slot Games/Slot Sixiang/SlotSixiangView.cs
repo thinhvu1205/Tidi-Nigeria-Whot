@@ -381,6 +381,7 @@ public class SlotSixiangView : BaseSlotSymbolView
         {
             OnSelectBonusGame(index);
             AnimateHideGemButtons();
+            SetCurrentChipValue(data.GameReward.BalanceChipsWalletAfter);
         }
 
     }

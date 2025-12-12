@@ -12,7 +12,7 @@ using System;
 
 public class RapidPayRow : MonoBehaviour
 {
-    [SerializeField] private int indexRow = 0;
+    [SerializeField] private int indexRow;
     public List<Button> listButtonItem = new();
     private Button currentItemPick;
     private const string ITEM_ANIMATION_PATH = "SiXiang/Spine/ItemPick/skeleton_SkeletonData";
@@ -61,6 +61,44 @@ public class RapidPayRow : MonoBehaviour
             Id = (listButtonItem.Count - 1 - listButtonItem.IndexOf(btn))
         };
         DataSender.SendMatchState((long)OpCodeRequest.Spin, infoBet.ToByteArray());
+    }
+
+    public void SetupData(SlotDesk data)
+    {
+        List<SiXiangSymbol> matrix = data.Matrix.Lists.ToList();
+        List<SpinSymbol> spinList = data.Matrix.SpinLists.ToList();
+        int[] listIndexThisRow = listResultIndex[indexRow];
+        foreach(int index in listIndexThisRow)
+        {
+            Debug.Log("Index: " + index);
+            if (matrix[index] == SiXiangSymbol.RapidpayLuckybox || matrix[index] == SiXiangSymbol.Unspecified) return;
+            listButtonItem.ForEach((btn) =>
+            {
+                btn.interactable = false;
+            });
+        }
+
+        for (int i = 0; i < listButtonItem.Count; i++)
+        {
+            Debug.Log("YO VAO ĐÂY ĐI");
+            SkeletonGraphic spineItemCurrent = listButtonItem[i].GetComponentInChildren<SkeletonGraphic>();
+            spineItemCurrent.color = Color.gray;
+            SiXiangSymbol symbol = matrix[listIndexThisRow[i]];
+            Utility.PlayAnimationByPath(spineItemCurrent, ITEM_ANIMATION_PATH, GetAnimationName(symbol), false);
+        }
+
+        foreach (int index in listIndexThisRow)
+        {
+            SpinSymbol spinSymbol = spinList[index];
+            if (spinSymbol.Symbol != SiXiangSymbol.Unspecified)
+            {
+                int buttonIndex = Array.IndexOf(listIndexThisRow, spinSymbol.Index);
+                SkeletonGraphic spineItem = listButtonItem[buttonIndex].GetComponentInChildren<SkeletonGraphic>();
+                spineItem.color = Color.white;
+                Utility.PlayAnimationByPath(spineItem, ITEM_ANIMATION_PATH, GetAnimationName(spinSymbol.Symbol), false);
+                return;
+            }
+        }
     }
 
     public void SetResult(SlotDesk data)

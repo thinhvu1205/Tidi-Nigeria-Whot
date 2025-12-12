@@ -7,6 +7,7 @@ using Globals;
 using TMPro;
 using Proto;
 using System;
+using System.Linq;
 
 
 public class SiXiangRapidPayView : MonoBehaviour
@@ -21,7 +22,8 @@ public class SiXiangRapidPayView : MonoBehaviour
     private SlotSixiangView gameView;
     private RapidPayRow currentRow;
     private AudioSource soundMoney;
-    private int indexRow = 0, multiplierBonus = 1;
+    private int indexRow = 0;
+    private long multiplierBonus = 1;
     private long winAmount = 0;
     private bool canSkipAnimation = false;
 
@@ -65,7 +67,20 @@ public class SiXiangRapidPayView : MonoBehaviour
     private void SixiangView_OnUpdateTable(SlotSixiangView.OnUpdateTableEventArgs e)
     {
         SlotDesk data = e.data;
-        if (data.SpinSymbols.Count == 0) return;
+        if (data.SpinSymbols.Count == 0)
+        {
+            // Setup data cũ
+            indexRow = data.Matrix.SpinLists.Where(spinSymbol => spinSymbol.Symbol != SiXiangSymbol.Unspecified).ToList().Count;
+            SetInitView();
+            foreach(RapidPayRow row in listRows)
+            {
+                row.SetupData(data);
+            }
+            multiplierBonus =  data.GameReward.TotalChipsWinByGame / (gameView.GetCurrentBetLevel() / 2);
+            textTotalBonus.text = "x" + multiplierBonus;
+            textWinAmount.SetValue(data.GameReward.TotalChipsWinByGame, true, 0.5f);
+            return;
+        }
         SpinSymbol item = data.SpinSymbols[0];
         Debug.Log("CURRENT ROW: " + indexRow);
         currentRow.SetResult(data);

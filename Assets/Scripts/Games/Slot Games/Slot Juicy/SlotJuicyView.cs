@@ -38,7 +38,7 @@ public class SlotJuicyView : BaseSlotView
     private WinJackpot? winJackpot;
     private JackpotHistory jackpotHistory;
     private long rateJackpotGrand = 0, rateJackpotMajor = 0, rateJackpotMinor = 0, rateJackpotMini = 0, jpGrandPlayer = 0, jpMajorPlayer = 0, totalPackageValue = 0;
-    private bool isInFruitRain, isInJuiceFree, isStartFruitRain, isEndFruitRain, isChooseFreeGame, isChooseFruitRain, isEndFreeGame, isChooseBasket, isBetLevelChanged, isFinishGame, isSetUpFruitRainGame = false;
+    private bool isInFruitRain, isInJuiceFree, isStartFruitRain, isEndFruitRain, isChooseFreeGame, isChooseFruitRain, isEndFreeGame, isChooseBasket, isBetLevelChanged, isFinishGame, isSetUpFruitRainGame, canChangeBetLevel = false;
     private Tween tweenChooseBasket = null;
     private SiXiangGame nextGame, currentGame;
     private WinType _currentWinType;
@@ -117,7 +117,7 @@ public class SlotJuicyView : BaseSlotView
         isChooseFruitRain = data.NextSixiangGame == SiXiangGame.JuiceFruitRain && data.CurrentSixiangGame == SiXiangGame.JuiceFruitBasket;
         isChooseBasket = data.NextSixiangGame == SiXiangGame.JuiceFruitBasket && data.CurrentSixiangGame != SiXiangGame.JuiceFruitBasket;
         isFinishGame = data.IsFinishGame;
-
+        canChangeBetLevel = true;
         winType = data.BigWin switch
         {
             BigWin.Big => WinType.BIG_WIN,
@@ -154,12 +154,10 @@ public class SlotJuicyView : BaseSlotView
                 }
 
                 // Thay đổi mcb thì ko làm mất giá trị package từ trc
-                // if (!isBetLevelChanged && !isInFruitRain)
-                // {
-                SetPackageValue(column, valuePackageColumnArray);
-                
-               
-                // }
+                if (!isBetLevelChanged)
+                {
+                    SetPackageValue(column, valuePackageColumnArray);        
+                }
 
                 // Khi đã bấm Spin
                 if (hasSetupStartView && !isSetUpFruitRainGame)
@@ -178,6 +176,7 @@ public class SlotJuicyView : BaseSlotView
                     else
                     {
                         column.SetStartView(columnArray);
+                        // column.ShowPackageValue();
                     }
 
                     if (data.CurrentSixiangGame == SiXiangGame.JuiceFruitRain)
@@ -540,7 +539,7 @@ public class SlotJuicyView : BaseSlotView
         ShowBackGroundFreeSpin();
         if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO)
         {
-            spinType = SpinType.FREE_AUTO;
+            spinType = SpinType.FREE_NORMAL;
         }
         UpdateSpinButtonUI();
         UpdateStateWinUI(StateWin.TOTAL_WIN);
@@ -558,7 +557,7 @@ public class SlotJuicyView : BaseSlotView
 
     public override void OnClickMaxBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView )
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel)
         {
             return;
         }
@@ -583,7 +582,7 @@ public class SlotJuicyView : BaseSlotView
 
     public override void OnClickMinusBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel)
         {
             return; 
         }
@@ -593,7 +592,7 @@ public class SlotJuicyView : BaseSlotView
 
     public override void OnClickPlusBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel)
         {
             return; 
         }
@@ -614,11 +613,12 @@ public class SlotJuicyView : BaseSlotView
     private void OnBetLevelChanged()
     {
         Debug.Log("OnBetLevelChanged");
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel)
         {
             return;
         }
         isBetLevelChanged = true;
+        canChangeBetLevel = false;
         InfoBet infoBet = new()
         {
             Chips = currentBetLevel,
