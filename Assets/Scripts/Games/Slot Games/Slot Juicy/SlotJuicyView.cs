@@ -323,9 +323,27 @@ public class SlotJuicyView : BaseSlotView
         {
             tweenQueue.Enqueue(() =>
             {
-                if (winType == WinType.NONE && totalChipWinByGame > 0)
+                bool hasWin = totalChipWinByGame > 0;
+                bool isNormalWin = winType == WinType.NONE;
+
+                if (hasWin)
                 {
-                    AnimateCoinsFly();
+                    if (isNormalWin)
+                    {
+                        // WinType.NONE → chỉ bay chip
+                        AnimateCoinsFly();
+                    }
+                    else
+                    {
+                        // Win animation → sau đó bay chip
+                        ShowWinAnimation(winType, false);
+
+                        tweenQueue.Enqueue(() =>
+                        {
+                            AnimateCoinsFly();
+                            StartCoroutine(DelayNextTween());
+                        });
+                    }
                 }
 
                 if (totalChipWinByGame > lastTotalChipWinByGame)
@@ -333,10 +351,15 @@ public class SlotJuicyView : BaseSlotView
                     UpdateTotalChipWinValue();
                 }
 
+                // ----- Reset state -----
                 HideBackgroundFreeSpin();
                 UpdateGameState(SlotGameState.PREPARE);
                 spinType = SpinType.NORMAL;
-                StartCoroutine(DelayNextTween());
+
+                if (isNormalWin)
+                {
+                    StartCoroutine(DelayNextTween());
+                }
             });
         }
 
@@ -875,7 +898,7 @@ public class SlotJuicyView : BaseSlotView
         {
             if (winJackpot == WinJackpot.Grand)
             {
-                tweenQueue.Enqueue(() => ShowJackpotAnimation());
+                tweenQueue.Enqueue(ShowJackpotAnimation);
             }
             tweenQueue.Enqueue(() =>
             {
@@ -883,7 +906,7 @@ public class SlotJuicyView : BaseSlotView
                 SetWinType(currentChipWin);
                 ShowWinAnimation(winType, false);
             });
-            tweenQueue.Enqueue(() => ShowPopupResultPackage());
+            tweenQueue.Enqueue(ShowPopupResultPackage);
             foreach (Transform transform in holdPackageContainer)
             {
                 transform.gameObject.SetActive(false);
