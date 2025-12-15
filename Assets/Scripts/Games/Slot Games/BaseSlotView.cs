@@ -131,7 +131,6 @@ public class BaseSlotView : BaseGameView
         UpdateSpinButtonUI();
         SetSpinAnimation(spinType);
         SoundManager.Instance.PlayMusicInGame(SOUND_BACKGROUND_ANIMATION_PATH);
-        reqSpecGameDropdown.onValueChanged.AddListener(OnValueChangeSlider);
     }
 
     protected override void Update()
@@ -664,7 +663,7 @@ public class BaseSlotView : BaseGameView
         paylineText.text = $"Win {payline.Chips} chips";
     }
 
-    protected void ShowWinScatter()
+    protected virtual void ShowWinScatter()
     {
         // Nếu đang ko Free Spin (tính cả Fruit Rain) thì có hiệu ứng tiền bay và Update tiền thưởng ngay lập tức
         // if (!isInFreeSpin)

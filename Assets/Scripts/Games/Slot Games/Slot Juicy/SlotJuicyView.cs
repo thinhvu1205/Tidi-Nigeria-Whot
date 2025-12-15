@@ -72,6 +72,12 @@ public class SlotJuicyView : BaseSlotView
         { SiXiangSymbol.JuiceFruitbasketRandom7, 13 },
     };
 
+    protected override void Awake()
+    {
+        base.Awake();
+        reqSpecGameDropdown.onValueChanged.AddListener(OnValueChangeSlider);
+    }
+    
     protected override void OnValueChangeSlider(int selectID)
     {
         switch (selectID)
@@ -506,6 +512,85 @@ public class SlotJuicyView : BaseSlotView
         }
         NextTween();
         effectContainer.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
+    }
+
+    protected override void ShowWinScatter()
+    {
+        // Nếu đang ko Free Spin (tính cả Fruit Rain) thì có hiệu ứng tiền bay và Update tiền thưởng ngay lập tức
+        // if (!isInFreeSpin)
+        // {
+        //     AnimateCoinsFly();
+        //     SetCurrentChipValue(playerWalletAfter);
+        //     UpdateChipWinValue();
+        // }
+        // else
+        // {
+        //     UpdateTotalChipWinValue();
+        // }
+        List<int> scatterColumnIds = new();
+        // 1. Lấy danh sách index có Contains(12)
+        List<int> columnsWith12 = new List<int>();
+        for (int i = 0; i < slotColumnList.Count; i++)
+        {
+            if (slotColumnList[i].ResultItem.GetFinishView().Contains(12))
+                columnsWith12.Add(i);
+        }
+
+        // 2. Tìm các đoạn liên tiếp
+        List<List<int>> consecutiveGroups = new List<List<int>>();
+        List<int> currentGroup = new List<int>();
+
+        for (int i = 0; i < columnsWith12.Count; i++)
+        {
+            if (i == 0 || columnsWith12[i] == columnsWith12[i - 1] + 1)
+            {
+                // Cùng nhóm liên tiếp
+                currentGroup.Add(columnsWith12[i]);
+            }
+            else
+            {
+                // Nhóm mới
+                if (currentGroup.Count > 0)
+                    consecutiveGroups.Add(new List<int>(currentGroup));
+                currentGroup.Clear();
+                currentGroup.Add(columnsWith12[i]);
+            }
+        }
+
+        // add nhóm cuối
+        if (currentGroup.Count > 0)
+            consecutiveGroups.Add(new List<int>(currentGroup));
+
+        // 3. Chỉ add những nhóm có length >= 3
+        foreach (var group in consecutiveGroups)
+        {
+            if (group.Count >= 3)
+                scatterColumnIds.AddRange(group);
+        }
+        foreach (int id in scatterColumnIds)
+        {
+            slotColumnList[id].ResultItem.ShowScatterAnimation();
+        }   
+        DOTween.Sequence().AppendInterval(3.5f).AppendCallback(() =>
+        {
+            SetLightAllItems();
+            if (paylineList.Count == 0 && currentChipWin > 0)
+            {
+                if (isInFreeSpin)
+                {
+                    UpdateTotalChipWinValue();
+                }
+                else
+                {
+                    UpdateChipWinValue();
+                    if (!isLastFreeSpin)
+                    {
+                        AnimateCoinsFly();
+                    }
+                }
+            }
+            NextTween();
+        }).SetLink(gameObject, LinkBehaviour.KillOnDestroy);;
     }
 
 

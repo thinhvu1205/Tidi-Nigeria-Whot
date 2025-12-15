@@ -189,7 +189,7 @@ public class BaccaratView : BaseDiceGameView
                 UIManager.Instance.ShowAlertDialog("Not enough chip !");
             }
             
-        }else
+        } else
         {
             if (data.IsUpdateDeskCell)
             {
@@ -428,7 +428,7 @@ public class BaccaratView : BaseDiceGameView
             }
             SetStatusButtonsBet(!checkBeted, checkBeted);
         }
-        
+        SoundManager.Instance.PlayEffectFromPath(Sound.DISPATCH_CARD); 
         CardModel cardModel = PoolService.Instance.Get<CardModel>(PrefabType.Card);
         cardModel.HideCard();
         cardModel.transform.localPosition = dealCardPos;
@@ -548,6 +548,7 @@ public class BaccaratView : BaseDiceGameView
                         waitingTextSequence.Kill();
                         waitingTextSequence = null;
                     }
+                    SoundManager.Instance.PlayEffectFromPath(Sound.START_GAME);
                     lb_waiting.gameObject.SetActive(false);
                     clock.gameObject.SetActive(true);
                     buttonBetBaccarat.SetActive(true);
@@ -658,6 +659,7 @@ public class BaccaratView : BaseDiceGameView
             {
                 if (!listWinResult.Contains(chip.gateId))
                 {
+                    SoundManager.Instance.PlayEffectFromPath(Sound.GET_CHIP);
                     // Animate losing chips to collection position
                     chip.transform.DOLocalMove(collectionPos, 0.5f).SetEase(Ease.InSine);
                     chip.transform.DOScale(Vector3.zero, 0.5f).OnComplete(() =>
@@ -789,6 +791,10 @@ public class BaccaratView : BaseDiceGameView
     
     private void SetTextTime(int time)
     {
+        if (time > 0)
+        {
+            SoundManager.Instance.PlayEffectFromPath(Sound.CLOCK_TICK);
+        }
         lbTimeBet.SetText(time.ToString());
         if (time == 3) Config.Vibration();
     }
@@ -857,7 +863,7 @@ public class BaccaratView : BaseDiceGameView
     
     public void OnClickChipBet(int chipBet)
     {
-        // SoundManager.instance.soundClick();
+        SoundManager.Instance.PlayEffectFromPath(Sound.CLICK);
 
         betValue = listValueChipBets[chipBet];
         for (int i = 0; i < 5; i++)
@@ -870,7 +876,7 @@ public class BaccaratView : BaseDiceGameView
     
     public void OnClickDoubleBet()
     {
-        // SoundManager.instance.soundClick();
+        SoundManager.Instance.PlayEffectFromPath(Sound.CLICK);
         int timeleft = int.Parse(lbTimeBet.text);
         if (timeleft > 1)
         {
@@ -894,7 +900,7 @@ public class BaccaratView : BaseDiceGameView
 
     public void OnClickRebet()
     {
-        // SoundManager.instance.soundClick();
+        SoundManager.Instance.PlayEffectFromPath(Sound.CLICK);
 
         int timeleft = int.Parse(lbTimeBet.text);
         if (timeleft > 1)
@@ -1028,7 +1034,7 @@ public class BaccaratView : BaseDiceGameView
             var chip = listChipInTable[i];
             if (listWinResult.Contains(chip.gateId))
             {
-                // SoundManager.instance.playEffectFromPath(Globals.SOUND_GAME.THROW_CHIP);
+                SoundManager.Instance.PlayEffectFromPath(Sound.THROW_CHIP);
                 BaccaratChip chip1 = PoolService.Instance.Get<BaccaratChip>(PrefabType.ChipPlayerBaccarat);
                 chip1.SetInfo(chip.idPl, chip.gateId, posModel, chip.chipValue, chip.chipSprite);
                 chip1.transform.localScale = new Vector2(0.5f, 0.5f);
@@ -1050,7 +1056,7 @@ public class BaccaratView : BaseDiceGameView
                     BaccaratChip chip = listChipInTable[i];
                     if (listWinResult.Contains(chip.gateId))
                     {
-                        // SoundManager.instance.playEffectFromPath(Globals.SOUND_GAME.WIN);
+                        SoundManager.Instance.PlayEffectFromPath(Sound.WIN);
                         // get player bet win position - Sửa cast an toàn
                         if (userIdToView.TryGetValue(chip.idPl, out var playerView))
                         {

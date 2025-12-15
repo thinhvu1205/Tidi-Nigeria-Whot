@@ -210,6 +210,7 @@ public class BlackjackView : BaseDiceGameView
         {
             if (playerId != null && userIdToView.TryGetValue(playerId, out var playerView))
             {
+                SoundManager.Instance.PlayEffectFromPath(SoundBlackjack.BET);
                 playerView.AnimateFlyMoney(data.Bet.Balance.AmountChipAdd);
                 playerView.SetCurrentChip(data.Bet.Balance.AmountChipCurrent);
                 hasBet = true;
@@ -1484,6 +1485,7 @@ public class BlackjackView : BaseDiceGameView
 
     private void AnimateFlipCard(CardModel cardModel)
     {
+        SoundManager.Instance.PlayEffectFromPath(SoundBlackjack.CARD_FLIP);
         cardModel.transform.DOScale(new Vector2(0.01f, 1f), DEAL_CARD_ANIMATION_TIME / 2f).OnComplete(() =>
         {
             cardModel.ShowCard();

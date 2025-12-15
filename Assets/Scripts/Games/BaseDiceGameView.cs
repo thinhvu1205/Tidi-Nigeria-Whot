@@ -116,6 +116,7 @@ public class BaseDiceGameView : BaseGameView
                 Debug.Log($"Player {lp.UserName} left the table");
                 if (userIdToView.TryGetValue(lp.Id, out var view))
                 {
+                    SoundManager.Instance.PlayEffectFromPath(Sound.REMOVE);
                     Destroy(view.gameObject);
                     RemovePlayerBoxBet(lp.Id);
                     userIdToView.Remove(lp.Id);

@@ -86,4 +86,11 @@ namespace Globals
 
 
     }
+
+    public class SoundBlackjack
+    {
+        // public const string snd_click = "Sounds/Roulette/snd_click";
+        public const string BET = "Sounds/Blackjack/bet";
+        public const string CARD_FLIP = "Sounds/Blackjack/cardFlipBlackjack";
+    }
 }

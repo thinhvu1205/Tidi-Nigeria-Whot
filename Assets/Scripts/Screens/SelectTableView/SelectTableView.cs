@@ -149,6 +149,7 @@ public class SelectTableView : BaseView
 
     private void LoadListTableTab()
     {
+        Debug.Log("YOO");
         foreach (Transform transform in tabItemParent)
         {
             Destroy(transform.gameObject);
@@ -158,7 +159,7 @@ public class SelectTableView : BaseView
         foreach (Bet bet in betItemList)
         {
             // Instantiate table tab item
-            if (!bet.Enable || bet.CountPlaying == 0) continue;
+            if (bet.CountPlaying == 0) continue;
             TableTabItem tableTabItem = Instantiate(tabItemPrefab, tabItemParent).GetComponent<TableTabItem>();
             tableTabItem.SetData(bet.MarkUnit, true);
             tableTabItem.GetComponent<Button>().onClick.AddListener(async () =>
