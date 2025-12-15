@@ -1104,7 +1104,7 @@ public class HongKongPokerView : BaseDiceGameView
                 buttonBetContainer?.UpdateButtonsFromAvailableActions(
                     myAvailableActions,
                     (int)currentPlayerStack,
-                    (int)bettingState.MinRaise,
+                    (int)bettingState.BigBlind,
                     (int)bettingState.CurrentBet, pot.PotValue
                 );
             }

@@ -78,13 +78,16 @@ message HKPlayerAvailableActions {
   // Visibility flags (for non-current players)
   bool raise_visible = 13;      // Raise button visible (false = invisible/IV)
   bool call_visible = 14;       // Call button visible (false = invisible)
+  // Quick bet amounts for slider (only set when isCurrentPlayer = true)
+  // Array contains 5 values in order: [Base, 1/8, 1/4, 1/2, All-in]
+  repeated int64 quick_bet_amounts = 15;
 }
 
 // Betting state for the table
 message HKBettingState {
   HKPokerRound round = 1;
   int64 current_bet = 2;      // Current bet to call
-  int64 min_raise = 3;        // Minimum raise amount
+  int64 big_blind = 3;        // big blind
   string current_player = 4;  // UserId of player whose turn it is
   int32 dealer_position = 5;  // Position of dealer button
   string first_bettor = 6;    // First player to act in this round

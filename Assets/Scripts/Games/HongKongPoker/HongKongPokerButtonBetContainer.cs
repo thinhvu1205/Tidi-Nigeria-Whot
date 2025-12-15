@@ -18,6 +18,9 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
     private float betValue = 0, playerCurrentChipValue = 0, markUnitValue = 0, potValue = 0;
     private bool isBetMode = false; // true = Bet mode, false = Raise mode
     private HongKongPokerView view; // Reference to view for sending actions
+    
+    // Quick bet amounts from server: [Base, 1/8, 1/4, 1/2, All-in]
+    private List<long> quickBetAmounts = new List<long>();
 
     void Start()
     {
@@ -35,50 +38,64 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
 
         betValue = markUnitValue;
         textBet.text = Utility.FormatMoney((int)markUnitValue);
-        // if (playerCurrentChipValue <= 0)
-        // {
-        //     buttonAllIn.SetActive(true);
-        //     buttonRaise.SetActive(false);
-        //     buttonCall.SetActive(false);
-        // }
-        // else
-        // {
-        //     buttonRaise.SetActive(true);
-        //     buttonCall.SetActive(true);
-        //     buttonAllIn.SetActive(false);
-        // }
-
     }
 
     private void OnValueChange()
     {
-        float rawValue = slider.value;
+        if (slider == null) return;
 
-        // Convert real money -> 0..1
-        float normalized = (rawValue - slider.minValue) / (slider.maxValue - slider.minValue);
-        normalized = Mathf.Clamp01(normalized);
+        long rawValue = (long)slider.value;
 
-        float valueMoney = 0;
+        long minBet = (long)slider.minValue;
+        long maxBet = (long)slider.maxValue;
 
-        if (normalized <= 0.7f)
+        long step = GetStepUnit();
+        if(step == 0) return;
+
+        // SNAP theo đơn vị
+        long snappedValue =
+            ((rawValue - minBet) / step) * step + minBet;
+
+        // Clamp an toàn
+        snappedValue = (long) Mathf.Clamp(snappedValue, minBet, maxBet);
+
+        // Update slider về đúng mốc (tránh loop)
+        slider.SetValueWithoutNotify(snappedValue);
+
+        betValue = snappedValue;
+
+        if (textBet != null)
         {
-            valueMoney = Mathf.FloorToInt((normalized / 0.7f) * (playerCurrentChipValue / 2));
-        }
-        else
-        {
-            float t = (normalized - 0.7f) / 0.3f;
-            valueMoney = Mathf.FloorToInt(playerCurrentChipValue / 2 + t * (playerCurrentChipValue / 2));
+            textBet.text = Utility.FormatMoney((int)betValue);
         }
 
-        // clamp
-        if (valueMoney < slider.minValue) valueMoney = slider.minValue;
-        if (valueMoney > slider.maxValue) valueMoney = slider.maxValue;
+        Debug.Log($"[HK Poker] Slider raw={rawValue}, snapped={snappedValue}, step={step}");
+    }
+    
+    private long CalculateEValue()
+    {
+        if (quickBetAmounts == null || quickBetAmounts.Count < 5)
+            return 0;
 
-        betValue = valueMoney;
-        Debug.Log("Bet Value "+betValue);
-        textBet.text = Utility.FormatMoney((int)betValue);
+        long baseAmount  = quickBetAmounts[0]; // B + C + D
+        long allInAmount = quickBetAmounts[4]; // A
+
+        return (long)Mathf.Max(0, allInAmount - baseAmount);
     }
 
+    private long GetStepUnit()
+    {
+        long eValue = CalculateEValue();
+
+        if (eValue <= 0)
+            return (long) markUnitValue;
+
+        if (eValue < 16 * markUnitValue)
+            return (long) Mathf.Max(1, eValue / 16);
+
+        return (long) markUnitValue;
+    }
+    
     public void OnClickFold()
     {
         if (view != null)
@@ -111,13 +128,10 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
             buttonRaise.SetActive(false);
         }
         
-        // SoundManager.instance.soundClick();
-        // isClickRaise = true;
         if (slider != null && slider.transform.parent != null)
         {
             slider.transform.parent.gameObject.SetActive(true);
         }
-        // ResetSlider();
     }
 
     public void OnClickAllIn()
@@ -162,12 +176,12 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
         }
     }
 
-    public void OnClick1In2()
+    public void OnClick1In8()
     {
-        if (view != null)
+        if (view != null && quickBetAmounts != null && quickBetAmounts.Count >= 5)
         {
-            // Calculate 1/2 pot, but not less than minRaise
-            int betAmount = Mathf.Max((int)(potValue * 0.5f), (int)markUnitValue);
+            // Use 1/8 amount from server (index 1)
+            int betAmount = (int)quickBetAmounts[1];
         
             if (isBetMode)
             {
@@ -182,12 +196,11 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
 
     public void OnClick1In4()
     {
-        if (view != null)
+        if (view != null && quickBetAmounts != null && quickBetAmounts.Count >= 5)
         {
-            // Calculate 1/4 pot, but not less than minRaise
-            int betAmount = Mathf.Max((int)(potValue * 0.25f), (int)markUnitValue);
+            // Use 1/4 amount from server (index 2)
+            int betAmount = (int)quickBetAmounts[2];
 
-        
             if (isBetMode)
             {
                 view.OnClickConfirmBet(betAmount);
@@ -199,12 +212,12 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
         }
     }
 
-    public void OnClick1In8()
+    public void OnClick1In2()
     {
-        if (view != null)
+        if (view != null && quickBetAmounts != null && quickBetAmounts.Count >= 5)
         {
-            // Calculate 1/8 pot, but not less than minRaise
-            int betAmount = Mathf.Max((int)(potValue * 0.125f), (int)markUnitValue);
+            // Use 1/2 amount from server (index 3)
+            int betAmount = (int)quickBetAmounts[3];
         
             if (isBetMode)
             {
@@ -223,7 +236,7 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
         {
             Debug.Log("Reset min value "+ slider.minValue);
             slider.value = slider.minValue;
-            betValue = slider.value;
+            betValue = slider.minValue;
         }
 
         if (sliderHandle != null)
@@ -231,8 +244,18 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
             sliderHandle.fillAmount = 0f;
         }
 
-        if (textBet != null)
+        // Set bet value to base amount if available, otherwise use markUnitValue
+        if (quickBetAmounts != null && quickBetAmounts.Count >= 5)
         {
+            betValue = quickBetAmounts[0]; // Base amount
+            if (textBet != null)
+            {
+                textBet.text = Utility.FormatMoney((int)betValue);
+            }
+        }
+        else if (textBet != null)
+        {
+            betValue = markUnitValue;
             textBet.text = Utility.FormatMoney((int)markUnitValue);
         }
     }
@@ -249,6 +272,7 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
         markUnitValue = 0;
         potValue = 0;
         isBetMode = false;
+        quickBetAmounts.Clear();
         
         // Hide all buttons
         if (buttonFold != null) buttonFold.SetActive(false);
@@ -289,12 +313,21 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
     public void UpdateButtonsFromAvailableActions(
         HKPlayerAvailableActions availableActions,
         int playerStack,
-        int minRaise,
+        int bigBlind,
         int currentBet, int currentPot)
     {
         playerCurrentChipValue = playerStack;
-        markUnitValue = minRaise;
+        markUnitValue = bigBlind;
         potValue = currentPot;
+        
+        // Store quick bet amounts from server: [Base, 1/8, 1/4, 1/2, All-in]
+        quickBetAmounts.Clear();
+        if (availableActions.QuickBetAmounts != null && availableActions.QuickBetAmounts.Count >= 5)
+        {
+            quickBetAmounts.AddRange(availableActions.QuickBetAmounts);
+            Debug.Log($"[HK Poker] Quick bet amounts: Base={quickBetAmounts[0]}, 1/8={quickBetAmounts[1]}, 1/4={quickBetAmounts[2]}, 1/2={quickBetAmounts[3]}, All-in={quickBetAmounts[4]}");
+        }
+        
         // ===== STEP 1: Tắt tất cả buttons trước (clear previous state) =====
         if (buttonFold != null) buttonFold.SetActive(false);
         if (buttonCheck != null) buttonCheck.SetActive(false);
@@ -353,26 +386,40 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
                     // Bet mode - no bet yet, can bet
                     isBetMode = true;
                     textButtonRaise.text = "Bet";
-                    // Set slider range for bet
-                    if (slider != null)
+                    
+                    // Set slider range from quick bet amounts if available
+                    if (slider != null && quickBetAmounts != null && quickBetAmounts.Count >= 5)
                     {
-                        slider.minValue = availableActions.MinBetAmount > 0 ? availableActions.MinBetAmount : minRaise;
+                        slider.minValue = quickBetAmounts[0]; // Base
+                        slider.maxValue = quickBetAmounts[4];  // All-in
+                    }
+                    else
+                    {
+                        // Fallback to old values
+                        slider.minValue = availableActions.MinBetAmount > 0 ? availableActions.MinBetAmount : bigBlind;
                         slider.maxValue = availableActions.MaxBetAmount > 0 ? availableActions.MaxBetAmount : playerStack;
                     }
-                    markUnitValue = availableActions.MinBetAmount > 0 ? availableActions.MinBetAmount : minRaise;
+                    // markUnitValue = availableActions.MinBetAmount > 0 ? availableActions.MinBetAmount : bigBlind;
                 }
                 else if (canRaise)
                 {
                     // Raise mode - there's a bet, can raise
                     isBetMode = false;
                     textButtonRaise.text = "Raise";
-                    // Set slider range for raise
-                    if (slider != null)
+                    
+                    // Set slider range from quick bet amounts if available
+                    if (slider != null && quickBetAmounts != null && quickBetAmounts.Count >= 5)
                     {
-                        slider.minValue = availableActions.MinRaiseAmount > 0 ? availableActions.MinRaiseAmount : (currentBet + minRaise);
+                        slider.minValue = quickBetAmounts[0]; // Base
+                        slider.maxValue = quickBetAmounts[4];  // All-in
+                    }
+                    else
+                    {
+                        // Fallback to old values
+                        slider.minValue = availableActions.MinRaiseAmount > 0 ? availableActions.MinRaiseAmount : (currentBet + bigBlind);
                         slider.maxValue = availableActions.MaxRaiseAmount > 0 ? availableActions.MaxRaiseAmount : playerStack;
                     }
-                    markUnitValue = availableActions.MinRaiseAmount > 0 ? availableActions.MinRaiseAmount : (currentBet + minRaise);
+                    // markUnitValue = availableActions.MinRaiseAmount > 0 ? availableActions.MinRaiseAmount : (currentBet + bigBlind);
                 }
             }
         }
@@ -383,10 +430,18 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
             buttonAllIn.SetActive(availableActions.CanAllIn);
         }
         
-        // Reset slider to minimum value
+        // Update MAX text if available
+        if (textMax != null && quickBetAmounts != null && quickBetAmounts.Count >= 5)
+        {
+            textMax.text = Utility.FormatMoney((int)quickBetAmounts[4]); // All-in amount
+            textMax.gameObject.SetActive(true);
+        }
+        
+        // Reset slider to minimum value (Base)
         if (slider != null && playerCurrentChipValue > 0)
         {
             ResetSlider();
         }
     }
 }
+
