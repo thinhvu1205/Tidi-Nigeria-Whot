@@ -63,6 +63,9 @@ public class GameManager : Singleton<GameManager>
                 case (long)OpCodeUpdate.OpcodeError:
                     UIManager.Instance.gameView.HandleError(matchState);
                     break;
+                case (long) OpCodeUpdate.OpcodeResponseTipIngame:
+                    UIManager.Instance.gameView.HandleTipInGame(matchState);
+                    break;
                 
                 // HK Poker OpCodes
                 case (long)OpCodeUpdate.PlayerAction: // OPCODE_UPDATE_PLAYER_ACTION

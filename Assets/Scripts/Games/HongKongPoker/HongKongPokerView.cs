@@ -918,10 +918,7 @@ public class HongKongPokerView : BaseDiceGameView
                     // After longest chip animation completes, collect cards and reset pot
                     DOTween.Sequence()
                         .AppendInterval(maxChipMoveTime + 3f) // Wait for longest animation + small buffer
-                        .AppendCallback(() =>
-                        {
-                            AnimateCollectCards().Forget();
-                        });
+                        .AppendCallback(FoldAllCardsEndGame);
                 });
         }
         else
@@ -931,7 +928,7 @@ public class HongKongPokerView : BaseDiceGameView
                 .AppendInterval(2f)
                 .AppendCallback(() =>
                 {
-                    AnimateCollectCards().Forget();
+                    FoldAllCardsEndGame();
                     pot.SetValue(0);
                 });
         }
@@ -957,6 +954,70 @@ public class HongKongPokerView : BaseDiceGameView
         base.HandleUpdateWallet(matchState);
         balanceResult = BalanceResult.Parser.ParseFrom(matchState.State);
         Debug.Log("Update Wallet: " + balanceResult);
+    }
+
+    public override void HandleTipInGame(IMatchState matchState)
+    {
+        base.HandleTipInGame(matchState);
+        TipInGameResponse tipInGameResponse = TipInGameResponse.Parser.ParseFrom(matchState.State);
+        
+        Debug.Log("Handle Tip " + tipInGameResponse);
+        if (tipInGameResponse.Success)
+        {
+            long numberChip = 0, amount = tipInGameResponse.TipAmount;
+            if (userIdToView.TryGetValue(tipInGameResponse.UserId, out var playerView) && amount > 0)
+            {
+                numberChip = Mathf.Clamp((int)Mathf.Ceil((float)amount / MarkUnit), 2, 4);
+            }
+            
+            if (playerView == null || numberChip <= 0)
+                return;
+            // SoundManager.Instance.PlayMusicInGame(Tip);
+            Vector3 startPos = playerView.transform.position;
+            Vector3 upPos = startPos + Vector3.up * 90f;
+            Vector3 dealerPos = dealer.transform.position;
+
+            float spawnDelay = 0.12f;
+
+            for (int i = 0; i < numberChip; i++)
+            {
+                var chip = PoolService.Instance.Get<HongKongPokerChip>(PrefabType.ChipPlayerHkPoker);
+                var tf = chip.transform;
+
+                tf.position = startPos;
+                tf.localScale = Vector3.one * 0.45f;
+
+                Sequence seq = DOTween.Sequence();
+                seq.SetDelay(i * spawnDelay);
+
+                seq.Append(tf.DOMove(upPos, 0.18f).SetEase(Ease.OutCubic));
+                seq.Append(tf.DOMove(dealerPos, 0.6f).SetEase(Ease.InQuad));
+
+                seq.OnComplete(() => { PoolService.Instance.Release(PrefabType.ChipPlayerHkPoker, chip); });
+            }
+            
+            float totalTime = (numberChip - 1) * spawnDelay + 0.18f + 0.6f;
+            DOVirtual.DelayedCall(totalTime, () =>
+            {
+                StartCoroutine(ShowThanksDialog(amount));
+            });
+
+            IEnumerator ShowThanksDialog(long chips)
+            {
+                GameObject parentObject = textTipChip.transform.parent.gameObject;
+                textTipChip.text = Utility.FormatNumber(chips);
+                string playerName = playerView.user_name;
+                textThanks.text = (playerName.Length >= 7 ? playerView.user_name.Substring(0, 7) + "..., " : playerName + ", ") + "Thank you";
+                parentObject.SetActive(true);
+                yield return new WaitForSeconds(3f);
+                parentObject.SetActive(false);
+            }
+        }
+        else
+        {
+            UIManager.Instance.ShowAlertDialog(tipInGameResponse.Error);
+        }
+        
     }
     
     #endregion
@@ -1512,7 +1573,7 @@ public class HongKongPokerView : BaseDiceGameView
 
     public void OnClickSendTip()
     {
-        // Tip functionality
+        DataSender.SendMatchState((long)OpCodeRequest.TipIngame, Array.Empty<byte>());
     }
 
     #endregion
@@ -1845,7 +1906,66 @@ public class HongKongPokerView : BaseDiceGameView
     #endregion
 
     #region Animation
-    
+
+    private void FoldAllCardsEndGame()
+    {
+        Sequence masterSeq = DOTween.Sequence();
+
+        float cardStagger = 0.06f;   // khoảng lệch giữa các lá
+
+        float currentTime = 0f;
+
+        for (int p = 0; p < listPlayerCards.Count; p++)
+        {
+            var playerCards = listPlayerCards[p];
+            if (playerCards == null || playerCards.Count == 0)
+                continue;
+
+            float sk1 = (p <= 2) ? -15f : 15f;
+            float sk2 = -sk1;
+
+            foreach (var card in playerCards)
+            {
+                if (card == null) continue;
+
+                Transform tf = card.transform;
+                tf.DOKill(true);
+
+                float startTime = currentTime;
+
+                masterSeq.Insert(startTime,
+                    tf.DOScale(new Vector3(0f, 0.55f, 1f), 0.15f)
+                        .SetEase(Ease.OutCubic));
+
+                masterSeq.Insert(startTime,
+                    tf.DORotate(new Vector3(0, sk1, 0), 0.15f)
+                        .SetEase(Ease.OutCubic));
+
+                masterSeq.InsertCallback(startTime + 0.15f, () =>
+                {
+                    card.HideCard();
+                    card.SetDark(false);
+                    card.HideShadowCard();
+                    tf.rotation = Quaternion.Euler(0, sk2, 0);
+                });
+
+                masterSeq.Insert(startTime + 0.15f,
+                    tf.DOScale(new Vector3(0.45f, 0.45f, 1f), 0.15f)
+                        .SetEase(Ease.OutCubic));
+
+                masterSeq.Insert(startTime + 0.15f,
+                    tf.DORotate(Vector3.zero, 0.15f)
+                        .SetEase(Ease.OutCubic));
+
+                currentTime += cardStagger;
+            }
+
+            currentTime += 0.12f;
+        }
+        masterSeq.AppendInterval(2f);
+        masterSeq.OnComplete(() => AnimateCollectCards().Forget());
+    }
+
     private async UniTask AnimateCollectCards()
     {
         var delay = 0;

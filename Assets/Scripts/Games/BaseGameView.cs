@@ -133,6 +133,11 @@ public class BaseGameView : BaseView
             UIManager.Instance.ShowToast("You cannot leave while the match is in progress!", 2, transform);
         }
     }
+
+    public virtual void HandleTipInGame(IMatchState matchState)
+    {
+        
+    }
     
     // HK Poker specific handlers
     public virtual void HandleUpdatePlayerAction(IMatchState matchState)
