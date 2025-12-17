@@ -124,6 +124,14 @@ enum OpCodeUpdate {
   OPCODE_UPDATE_BETTING_STATE = 24;   // Betting state update (optional)
 }
 
+// Response for tip in game
+message TipInGameResponse {
+  string user_id = 1;
+  int64 tip_amount = 2;
+  bool success = 3;
+  string error = 4;
+}
+
 message UpdateTable {
   repeated Player players = 1;
   repeated Player playing_players = 2;
