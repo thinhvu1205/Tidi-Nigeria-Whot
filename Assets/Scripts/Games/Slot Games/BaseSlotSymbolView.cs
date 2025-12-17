@@ -127,9 +127,9 @@ public class BaseSlotSymbolView : BaseGameView
     public bool IsSpinning { get; set; } = false;
     public int ScatterCount { get; set; } = 0;
 
-    protected bool hasSetupStartView = false, isInFreeSpin = false, isChooseBonusGame = false, isGetMatchResult = false, isCurrentlyAutoSpin = false, isBetLevelChanged = false;
+    protected bool hasSetupStartView = false, isInFreeSpin = false, isChooseBonusGame = false, isGetMatchResult = false, isCurrentlyAutoSpin = false, isBetLevelChanged = false, isWinScatter = false;
     protected virtual float AUTO_SPIN_HOLD_DURATION => 1.3f;
-    public override bool CanLeaveTable => gameState != SlotGameState.SPINNING && gameState != SlotGameState.SHOWING_RESULT;
+    public override bool CanLeaveTable => gameState != SlotGameState.SPINNING && gameState != SlotGameState.SHOWING_RESULT && currentGame == SiXiangGame.Normal;
 
 
     [Header(" Object Pools ")]
@@ -398,6 +398,7 @@ public class BaseSlotSymbolView : BaseGameView
 
     public virtual void CheckThirdScatter(int columnIndex)
     {
+        Debug.Log("CheckThirdScatter: " + columnIndex);
         if (columnIndex == 4 || isInFreeSpin) return;
         if (ScatterCount == 2)
         {
@@ -983,7 +984,7 @@ public class BaseSlotSymbolView : BaseGameView
         sequence.OnComplete(() =>
         {
             SetCurrentChipValue(playerWalletAfter);
-            if (tweenQueue.Count > 0)
+            if (tweenQueue.Count > 0 && !isWinScatter)
                 NextTween();
         });
     }
@@ -1161,7 +1162,7 @@ public class BaseSlotSymbolView : BaseGameView
     public void OnClickBuyGem(int index)
     {
         SiXiangBuyGemsPopup popup = Instantiate(UIManager.Instance.LoadPrefabPopup("PopupBuySixiangGem"), transform).GetComponent<SiXiangBuyGemsPopup>();
-        popup.SetInfo(index, gemPrice, currentBetLevel);
+        popup.SetInfo(index, gemPrice, playerChip);
     }
 
     public void OnClickShopButton()
