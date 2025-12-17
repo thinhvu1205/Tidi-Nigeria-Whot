@@ -77,7 +77,7 @@ public class SlotJuicyView : BaseSlotView
         base.Awake();
         reqSpecGameDropdown.onValueChanged.AddListener(OnValueChangeSlider);
     }
-    
+
     protected override void OnValueChangeSlider(int selectID)
     {
         switch (selectID)
@@ -329,6 +329,7 @@ public class SlotJuicyView : BaseSlotView
         {
             tweenQueue.Enqueue(() =>
             {
+                SetWinType(totalChipWinByGame);     
                 bool hasWin = totalChipWinByGame > 0;
                 bool isNormalWin = winType == WinType.NONE;
 
@@ -342,6 +343,7 @@ public class SlotJuicyView : BaseSlotView
                     else
                     {
                         // Win animation → sau đó bay chip
+                        currentChipWin = totalChipWinByGame;
                         ShowWinAnimation(winType, false);
 
                         tweenQueue.Enqueue(() =>

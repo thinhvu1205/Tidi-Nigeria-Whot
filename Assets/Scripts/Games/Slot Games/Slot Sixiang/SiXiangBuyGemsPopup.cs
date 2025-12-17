@@ -53,11 +53,10 @@ public class SiXiangBuyGemsPopup : BaseView
         }
         OnClickCloseButton();
     }
-    public void SetInfo(int indexGem, long pricePearl, long bet)
+    public void SetInfo(int indexGem, long pricePearl, long playerChip)
     {
         // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.CLICK);
-        long accountChip = User.userProfile.AccountChip;
-        bool isEnoughChip = accountChip >= pricePearl;
+        bool isEnoughChip = playerChip >= pricePearl;
         price = pricePearl;
      
         buttonConfirm.interactable = isEnoughChip;

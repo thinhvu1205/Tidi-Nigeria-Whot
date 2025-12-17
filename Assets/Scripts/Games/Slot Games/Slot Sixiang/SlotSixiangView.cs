@@ -46,6 +46,8 @@ public class SlotSixiangView : BaseSlotSymbolView
     private const string DRAGON_PEARL_GAME_NAME = "dragonpearl";
     private const string DRAGON_PEARL_BACKGROUND_ANIMATION_PATH = "SiXiang/Spine/DragonPearl/BgGame/skeleton_SkeletonData";
     private const string DRAGON_PEARL_ANIMAL_ANIMATION_PATH = "SiXiang/Spine/Animal/Dragon/skeleton_SkeletonData";
+    private const string GOLD_PICK_GAME_NAME = "goldpick";
+    private const string GOLD_PICKL_BACKGROUND_ANIMATION_PATH = "SiXiang/Spine/BgMiniGame/skeleton_SkeletonData";
     private const string GOLD_PICK_PREFAB_PATH = "Sixiang/GoldPickView";
     private const string GOLD_PICK_ANIMAL_ANIMATION_PATH = "SiXiang/Spine/Animal/Tiger/skeleton_SkeletonData";
     private const string GOLD_PICK_ANIMAL_ANIMATION_NAME = "3";
@@ -67,7 +69,7 @@ public class SlotSixiangView : BaseSlotSymbolView
     public Queue<TweenCallback> TweenQueue => tweenQueue;
     [SerializeField] private SpinType lastSpinType = SpinType.NORMAL;
     [SerializeField] private int lastRemainingAutoSpin = 0;
-    private bool isWinScatter = false, isFromScatter = false, winChipFromScatter = false, winMiniGameFromScatter = false;
+    private bool isFromScatter = false, winChipFromScatter = false, winMiniGameFromScatter = false;
 
     public class OnUpdateTableEventArgs : EventArgs
     {
@@ -82,10 +84,11 @@ public class SlotSixiangView : BaseSlotSymbolView
     {
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
         currentGame = data.CurrentSixiangGame;
-   
+
         Debug.Log("Slot : " + data.ToString());
         listSpinSymbol = data.Matrix.SpinLists.ToList();
         listGem = data.SixiangGems.ToList();
+        playerChip = data.GameReward.BalanceChipsWalletAfter;
         gemPrice = data.ChipsBuyGem;
         // winType = data.BigWin switch
         // {
@@ -300,6 +303,58 @@ public class SlotSixiangView : BaseSlotSymbolView
                 isWinScatter = true;
             }
             NextTween();
+        }
+    }
+
+    public override void NextTween()
+    {
+        Debug.Log("NEXT TWEEN");
+        if (tweenQueue.Count > 0)
+        {
+            TweenCallback nextTween = tweenQueue.Dequeue();
+            DOTween.Sequence().AppendCallback(nextTween);
+        }
+        // Hết tween = hết show win line
+        else
+        {
+            if (isWinScatter)
+            {
+                ShowAnimationCutScene();
+                // tweenQueue.Enqueue(() => ShowPopupMinigame());
+            }
+            DOTween.Sequence()
+                .AppendInterval(0.25f)
+                .AppendCallback(() =>
+                {
+                    Reset();
+                    // Nếu đang auto spin thì spin tiếp
+                    if (spinType == SpinType.AUTO || spinType == SpinType.FREE_AUTO)
+                    {
+                        if (autoSpinRemain > 0 || isInFreeSpin)
+                        {
+                            HandleSpin();
+                        }
+                        // Nếu hết auto spin thì set spinType về NORMAL
+                        else
+                        {
+                            spinType = SpinType.NORMAL;
+                        }
+                    }
+                });
+            // if (hasGotFreeSpin)
+            // {
+            //     if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO)
+            //     {
+            //         spinType = SpinType.FREE_NORMAL;
+            //     }
+            //     ShowBackGroundFreeSpin();
+            //     UpdateStateWinUI(StateWin.TOTAL_WIN);
+            //     chipWinText.text = "0";
+            //     freeSpinLeftText.text = "9";
+            //     hasGotFreeSpin = false;
+
+            // }
+
         }
     }
 
@@ -761,6 +816,7 @@ public class SlotSixiangView : BaseSlotSymbolView
         {
             goldPickView.gameObject.SetActive(true);
         }
+        gameState = SlotGameState.SPINNING;
         goldPickView.SetInfo(this, freeSpinLeft);
         backgroundGoldPick.gameObject.SetActive(true);
     }
@@ -955,6 +1011,9 @@ public class SlotSixiangView : BaseSlotSymbolView
                 break;
             case LUCKY_DRAW_GAME_NAME:
                 Utility.PlayAnimationByPath(animationBackground, LUCKY_DRAW_BACKGROUND_ANIMATION_PATH, "animation", true);
+                break;
+            case GOLD_PICK_GAME_NAME:
+                Utility.PlayAnimationByPath(animationBackground, GOLD_PICKL_BACKGROUND_ANIMATION_PATH, "animation", true);
                 break;
 
         }
