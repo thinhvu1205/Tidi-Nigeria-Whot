@@ -90,7 +90,7 @@ namespace Globals
             { "whot-game", "Whot" },
             { "roulette", "Roulette" },
             { "fruit", "Slot Fruit" },
-            { "chinese-poker", "Hongkong Poker" },
+            { "hk-poker", "Hongkong Poker" },
             { "baccarat", "Baccarat" },
             { "sixiang", "Slot Sixiang" },
             { "tarzan", "Slot Tarzan" },

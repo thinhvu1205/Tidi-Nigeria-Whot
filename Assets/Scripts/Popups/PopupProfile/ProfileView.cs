@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Globals;
 using TMPro;
 using Unity.VisualScripting;
@@ -116,7 +116,7 @@ public class ProfileView : BaseView
         }
     }
 
-    private async Task OnUpdateAvatar(string name)
+    private async UniTask OnUpdateAvatar(string name)
     {
         // await ShowToast(name);
         await profilePresenter.OnUpdateAvatar(name);

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Proto;
 using Cysharp.Threading.Tasks;
 using Globals;
@@ -361,10 +360,34 @@ public class NetworkManager : MonoBehaviour
     #endregion
 
     #region Leaderboard
-    public async UniTask<IApiLeaderboardRecordList> GetListLeaderboard(string leaderboardId, int limit = 100)
+    public async UniTask<IApiLeaderboardRecordList> GetListLeaderboard(string leaderboardId, string userId = null,  int limit = 15)
     {
-        IApiLeaderboardRecordList leaderboardRecordList = await _ClientC.ListLeaderboardRecordsAsync(_SessionIS, leaderboardId, null, limit);
-        return leaderboardRecordList;
+        try
+        {
+            string[] ownerIds = null;
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                ownerIds = new[] { userId };
+                limit = 1;
+            }
+            var leaderboardRecordList = await _ClientC.ListLeaderboardRecordsAsync(
+                session: _SessionIS,
+                leaderboardId: leaderboardId,
+                ownerIds: ownerIds,
+                expiry: null,
+                limit: limit,
+                cursor: null
+            );
+
+            Debug.Log("Receive leaderboard record "+ leaderboardRecordList.ToString());
+            return leaderboardRecordList;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
     #endregion
     

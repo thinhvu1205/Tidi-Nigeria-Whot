@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Globals;
 using Proto;
@@ -31,7 +30,7 @@ public class MailPresenter
         }
     }
 
-    public async Task DeleteAllNotification()
+    public async UniTask DeleteAllNotification()
     {
         try
         {
@@ -43,7 +42,7 @@ public class MailPresenter
         }
     }
 
-    public async Task DeleteNotification(long notiId)
+    public async UniTask DeleteNotification(long notiId)
     {
         try
         {

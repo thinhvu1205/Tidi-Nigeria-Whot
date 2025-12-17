@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Globals;
 using Nakama;
@@ -17,7 +16,7 @@ public class ExchangePresenter
         exchangeView = view;
     }
 
-    public async Task<ExchangeDealInShop> GetListExchangeDeal()
+    public async UniTask<ExchangeDealInShop> GetListExchangeDeal()
     {
         try
         {
@@ -30,7 +29,7 @@ public class ExchangePresenter
         }
     }
 
-    public async Task<ListExchangeInfo> GetListExchange()
+    public async UniTask<ListExchangeInfo> GetListExchange()
     {
         try
         {
@@ -43,7 +42,7 @@ public class ExchangePresenter
         }
     }
 
-    public async Task<ExchangeInfo> AddExchange(string cashId, string dealId)
+    public async UniTask<ExchangeInfo> AddExchange(string cashId, string dealId)
     {
         try
         {
@@ -56,7 +55,7 @@ public class ExchangePresenter
         }
     }
 
-    public async Task<ExchangeInfo> CancelExchange(string exchangeId)
+    public async UniTask<ExchangeInfo> CancelExchange(string exchangeId)
     {
         try
         {

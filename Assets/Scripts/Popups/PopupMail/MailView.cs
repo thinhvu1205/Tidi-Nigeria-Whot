@@ -8,7 +8,6 @@ using System;
 using Cysharp.Threading.Tasks;
 using Proto;
 using System.Linq;
-using System.Threading.Tasks;
 
 public class MailView : BaseView
 {
@@ -88,7 +87,7 @@ public class MailView : BaseView
         _ = HandleClickDelete();
     }
 
-    public async Task HandleClickDelete()
+    public async UniTask HandleClickDelete()
     {
         foreach (var mailItem in listMailSelected)
         {

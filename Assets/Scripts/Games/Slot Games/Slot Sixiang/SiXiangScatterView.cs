@@ -5,7 +5,6 @@ using DG.Tweening;
 using Spine.Unity;
 using UnityEngine.UI;
 using TMPro;
-using System.Threading.Tasks;
 using System;
 using Newtonsoft.Json.Linq;
 using Globals;
