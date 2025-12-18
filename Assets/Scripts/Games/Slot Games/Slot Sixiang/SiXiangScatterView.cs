@@ -25,7 +25,7 @@ public class SiXiangScatterView : MonoBehaviour
     SkeletonGraphic animationBackgroundWin, animationLight, animationBackground, animationButtonSpin, animationResultSpin;
 
     private bool isPrepareStop = false;
-    private int typeResult = 5;
+    private int typeResult;
     private long winAmount = 0, currentBetLevel = 0;
     private bool isWaitForAutoSpin = true;
     private SpinSymbol spinResult;
@@ -35,7 +35,7 @@ public class SiXiangScatterView : MonoBehaviour
     private void OnEnable()
     {
         winAmount = currentBetLevel = 0;
-        typeResult = 5;
+        // typeResult = 5;
         isWaitForAutoSpin = true;
         buttonSpin.interactable = true;
         Utility.PlayAnimation(animationButtonSpin, "spin_anim", true);

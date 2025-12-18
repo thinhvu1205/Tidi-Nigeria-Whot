@@ -322,6 +322,7 @@ public class BlackjackView : BaseDiceGameView
             Debug.Log("isPlaying: " + isPlaying);
             Debug.Log("isCurrentPlayerFinished: " + isCurrentPlayerFinished);
             Debug.Log("playerIndex <= currentPlayerIndex: " + (playerIndex <= currentPlayerIndex));
+            Debug.Log("GameState: " + GameState);
             if (isPlaying && !isCurrentPlayerFinished && playerIndex <= currentPlayerIndex && GameState == GameState.Play)
             {
                 buttonBetContainer.gameObject.SetActive(true);
