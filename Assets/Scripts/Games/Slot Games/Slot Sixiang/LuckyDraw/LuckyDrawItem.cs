@@ -6,7 +6,6 @@ using TMPro;
 using UnityEngine.UI;
 using Newtonsoft.Json.Linq;
 using DG.Tweening;
-using System.Threading.Tasks;
 using System;
 using Cysharp.Threading.Tasks;
 using Proto;

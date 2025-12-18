@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using System;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+
 public class BaseView : MonoBehaviour
 {
     protected enum EFFECT_POPUP
@@ -205,7 +206,7 @@ public class BaseView : MonoBehaviour
         }
     }
     
-    public async Task OnSuccess(string message = "", bool isReloadProfile = false)
+    public async UniTask OnSuccess(string message = "", bool isReloadProfile = false)
     {
         UIManager.Instance.HideProgressing();
         if (!string.IsNullOrEmpty(message))
@@ -218,7 +219,7 @@ public class BaseView : MonoBehaviour
         }
     }
     
-    public async Task ShowToast(string message = "", bool isReloadProfile = false)
+    public async UniTask ShowToast(string message = "", bool isReloadProfile = false)
     {
         UIManager.Instance.HideProgressing();
         if (!string.IsNullOrEmpty(message))

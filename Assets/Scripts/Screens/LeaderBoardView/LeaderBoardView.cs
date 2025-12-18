@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Globals;
 using Nakama;
@@ -12,14 +11,15 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static LeaderBoardTab;
-
+using Avatar = Common.Objects.Avatar;
 public class LeaderBoardView : BaseView
 {
     [SerializeField] private GameObject leaderBoardItemPrefab, leaderBoardTabPrefab;
     [SerializeField] private Transform leaderBoardItemParent, leaderBoardTabParent;
 
-    [Header("Current User")]
-    [SerializeField] private Image currentUserAvatarImage, topImage;
+    [Header("Current User")] [SerializeField]
+    private Avatar currentUserAvatarImage;
+    [SerializeField] private Image topImage;
     [SerializeField] private TextMeshProUGUI currentUserNameText, currentUserTopText, currentUserChipValueText;
     [SerializeField] private List<Sprite> topSprites = new();
 
@@ -29,6 +29,7 @@ public class LeaderBoardView : BaseView
     private LeaderboardPresenter leaderboardPresenter;
     private List<Game> gameList = new();
     private List<IApiLeaderboardRecord> recordList = new();
+    private IApiLeaderboardRecord currentUserRecord;
     private string currentTabGameCode = "";
 
     protected override void Awake()
@@ -41,22 +42,26 @@ public class LeaderBoardView : BaseView
     protected override void Start()
     {
         base.Start();
-        _ = LoadListGame();
-        _ = LoadListLeaderBoard();
+        _ = InitData();
+       
+    }
+
+    private async UniTask InitData()
+    {
+        await LoadListGame();
+        // await LoadListLeaderBoard();
     }
     
-
-
     #region Data
-    private async Task LoadListGame()
+    private async UniTask LoadListGame()
     {
         gameList.Clear();
         try
         {
             GameListResponse gameListResponse = await leaderboardPresenter.LoadGameList();
+            Debug.Log("Game List : " + gameListResponse.ToString());
             gameList = gameListResponse.Games.ToList();
             UpdateUIListGame();
-            Debug.Log("GAME LIST: " + gameListResponse.ToString());
         }
         catch (Exception ex)
         {
@@ -67,28 +72,76 @@ public class LeaderBoardView : BaseView
 
     private async UniTask LoadListLeaderBoard()
     {
-        Debug.Log("BAT DAU GOI GET LIST");
+        Debug.Log("get list record game "+ currentTabGameCode);
 
         IApiLeaderboardRecordList apiLeaderboardRecordList = await leaderboardPresenter.LoadList(currentTabGameCode);
         recordList = apiLeaderboardRecordList.Records.ToList();
         recordList.Sort((record1, record2) => int.Parse(record1.Rank) - int.Parse(record2.Rank));
 
-        recordList.Clear();
         foreach (var leaderboardItem in listLeaderboardItem)
         {
             Destroy(leaderboardItem.gameObject);
         }
+        listLeaderboardItem.Clear();
         UpdateUIListRecord();
         
         LeaderBoardRecord leaderBoardRecord = await leaderboardPresenter.LoadInfo(currentTabGameCode);
         
-
         
     }
+    
+    private async UniTask LoadInfoCurrentUser()
+    {
+        Debug.Log("get current user record game " + currentTabGameCode);
+
+        IApiLeaderboardRecordList list =
+            await leaderboardPresenter.LoadList(currentTabGameCode, User.userProfile.UserId);
+
+        IApiLeaderboardRecord record;
+
+        // 👉 CASE 1: CHƯA CÓ RECORD TRONG LEADERBOARD
+        if (list == null || list.Records == null || !list.Records.Any())
+        {
+            UpdateUserLeaderboardUI("1000", "0", User.userProfile.AvatarId, User.userProfile.VipLevel);
+        }
+        else
+        {
+            record = list.Records.First();
+            var json = JObject.Parse(record.Metadata);
+            string avatarId = json["avatar_id"]?.ToString() ?? "";
+            long vipLevel = json["vip_level"]?.Value<long>() ?? 0;
+            Debug.Log("ttt " + avatarId + " : " + vipLevel);
+            UpdateUserLeaderboardUI(record.Rank, record.Score, avatarId, vipLevel);
+        }
+        
+    }
+    
 
     #endregion
 
     #region UI
+    
+    private void UpdateUserLeaderboardUI(string rank = "1000", string score = "0", string avatarId = "", long vipLevel = 0)
+    {
+        int rank1 = int.Parse(rank);
+        if (rank1 > 3)
+        {
+            topImage.gameObject.SetActive(false);
+            currentUserTopText.gameObject.SetActive(true);
+            currentUserTopText.text = rank1 > 999 ? "999+" : rank;
+        }
+        else
+        {
+            topImage.gameObject.SetActive(true);
+            currentUserTopText.gameObject.SetActive(false);
+            topImage.sprite = topSprites[rank1 - 1];
+        }
+
+        currentUserNameText.text = User.userProfile.UserName;
+        currentUserChipValueText.text = score;
+        currentUserAvatarImage.LoadAvatar(avatarId, vipLevel);
+    }
+
     private void UpdateUIListGame()
     {
         foreach (Game game in gameList)
@@ -98,34 +151,20 @@ public class LeaderBoardView : BaseView
             leaderBoardTab.OnTabClicked += LeaderBoardTab_OnTabClicked;
             listLeaderboardTab.Add(leaderBoardTab);
         }
-        listLeaderboardTab[0].OnClickTab();
+        listLeaderboardTab[0]?.OnClickTab();
     }
 
     private void UpdateUIListRecord()
     {
         foreach (IApiLeaderboardRecord record in recordList)
         {
+            var json = JObject.Parse(record.Metadata);
+            string avatarId = json["avatar_id"]?.ToString() ?? "";
+            long vipLevel = json["vip_level"]?.Value<long>() ?? 0;
+            Debug.Log("ttt " + avatarId + " : " + vipLevel);
             LeaderBoardItem leaderBoardItem = Instantiate(leaderBoardItemPrefab, leaderBoardItemParent).GetComponent<LeaderBoardItem>();
-            leaderBoardItem.SetData(record.Rank, record.Username, record.Score);
+            leaderBoardItem.SetData(record.Rank, record.Username, record.Score, avatarId, vipLevel);
             listLeaderboardItem.Add(leaderBoardItem);
-            if (record.Username == User.userProfile.DisplayName)
-            {
-                int rank = int.Parse(record.Rank);
-                if (rank > 3)
-                {
-                    topImage.gameObject.SetActive(false);
-                    currentUserTopText.gameObject.SetActive(true);
-                    currentUserTopText.text = record.Rank;
-                }
-                else
-                {
-                    topImage.gameObject.SetActive(true);
-                    currentUserTopText.gameObject.SetActive(false);
-                    topImage.sprite = topSprites[rank - 1];
-                }
-                currentUserNameText.text = record.Username;
-                currentUserChipValueText.text = record.Score;
-            }
         }
     }
     #endregion
@@ -151,6 +190,7 @@ public class LeaderBoardView : BaseView
                 leaderboardTab.SelectTab(false);
             }
         }
+        _ = LoadInfoCurrentUser();
         _ = LoadListLeaderBoard();
     }
         

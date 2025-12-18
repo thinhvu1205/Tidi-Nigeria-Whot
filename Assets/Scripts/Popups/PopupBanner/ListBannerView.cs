@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Globals;
 using Proto;
@@ -63,7 +63,7 @@ public class ListBannerView : BaseView
         _ = GetBannerData(type);
     }
 
-    public async Task GetBannerData(TypeInAppMessage type)
+    public async UniTask GetBannerData(TypeInAppMessage type)
     {
         Debug.Log("TYPE: " + type);
         ListInAppMessage response = await bannerPresenter.GetBanner(typeInAppMessage: type);
@@ -152,7 +152,7 @@ public class ListBannerView : BaseView
             scrollRect.inertia = false;                   // Tắt quán tính tạm thời
 
             // Bật lại inertia sau 1 frame
-            await Task.Yield();
+            await UniTask.Yield();
             scrollRect.inertia = true;
             listBannerView.Insert(0, cloneLastBV);
             listBannerView.Add(cloneFirstBV);
