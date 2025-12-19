@@ -6,6 +6,7 @@ using System.Numerics;
 using Games;
 using Games.Card;
 using Globals;
+using Nakama;
 using Proto;
 using TMPro;
 using UnityEngine;
@@ -18,7 +19,8 @@ public class BaseDiceGameView : BaseGameView
     [SerializeField] protected List<Vector2> listPosView;
     [SerializeField] protected BasePlayerView playerViewPrefab;
     [SerializeField] protected GameObject invitePrefab;
-    [SerializeField] protected Transform inviteContainer, playerContainer, hiddenPlayerContainer;
+    [SerializeField] protected Transform inviteContainer, playerContainer, hiddenPlayerContainer, emojiContainer;
+    [SerializeField] protected EmojiItem emojiItemPrefab;
     public int MarkUnit { get; private set; }
 
     protected readonly Dictionary<string, BasePlayerView> userIdToView = new();
@@ -28,6 +30,26 @@ public class BaseDiceGameView : BaseGameView
     [SerializeField] protected List<Player> playingPlayers = new List<Player>();
     protected List<GameObject> listBtnInvite = new List<GameObject>();
     private float interactTimer = 0, interactCountdown = 2;
+    private ChatInGameView chatInGameView;
+    private EmojiInGameView emojiInGameView;
+
+
+    protected override void Start()
+    {
+        base.Start();
+        chatInGameView = UIManager.Instance.OpenChatInGame();
+        chatInGameView.Init();
+        emojiInGameView = UIManager.Instance.OpenEmojiInGame();
+        NetworkManager.INSTANCE.OnMessageTableReceived += NetworkManager_OnMessageTableReceived;
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        Destroy(chatInGameView.gameObject);
+        Destroy(emojiInGameView.gameObject);
+        NetworkManager.INSTANCE.OnMessageTableReceived -= NetworkManager_OnMessageTableReceived;
+    }
 
     protected override void Update()
     {
@@ -207,5 +229,95 @@ public class BaseDiceGameView : BaseGameView
     {
 
     }
+
+    public void OnClickChat()
+    {
+        chatInGameView.transform.localScale = Vector3.one;
+        chatInGameView.Show();
+    }
+
+    public void OnClickEmoji()
+    {
+        emojiInGameView.transform.localScale = Vector3.one;
+        emojiInGameView.Show();
+    }
+
+    protected virtual void NetworkManager_OnMessageTableReceived(IApiChannelMessage message)
+    {
+        EmojiData emojiData = ConvertEmojiData(message);
+        if (!string.IsNullOrEmpty(emojiData.emojiId)
+            && !string.IsNullOrEmpty(emojiData.senderId)
+            && string.IsNullOrEmpty(emojiData.receiverId)
+        )
+        {
+            Debug.Log("TU GUI ");
+            if (userIdToView.TryGetValue(emojiData.senderId, out BasePlayerView senderView) 
+            )
+            {
+                EmojiItem emojiItem = Instantiate(emojiItemPrefab, senderView.transform);
+                emojiItem.transform.SetParent(emojiContainer);
+                emojiItem.ShowEmote(int.Parse(emojiData.emojiId));
+            }
+        }
+
+
+        // Send emote tới người chơi khác
+        else if (!string.IsNullOrEmpty(emojiData.emojiId)
+            && !string.IsNullOrEmpty(emojiData.senderId)
+            && !string.IsNullOrEmpty(emojiData.receiverId)
+        )
+        {
+            Debug.Log("GUI CHO NGUOI KHAC");
+            if (emojiData.senderId == emojiData.receiverId)
+            {
+                if (userIdToView.TryGetValue(emojiData.senderId, out BasePlayerView senderView))
+                {
+                    foreach(KeyValuePair<string, BasePlayerView> kvp in userIdToView)
+                    {
+                        if (emojiData.senderId == kvp.Key) continue;
+                        EmojiItem emojiItem = Instantiate(emojiItemPrefab, senderView.transform);
+                        emojiItem.transform.SetParent(emojiContainer);
+                        StartCoroutine(emojiItem.SendEmojiTo(int.Parse(emojiData.emojiId), kvp.Value.transform));
+                    }
+                }
+            }
+            else if (userIdToView.TryGetValue(emojiData.senderId, out BasePlayerView senderView) && 
+                userIdToView.TryGetValue(emojiData.receiverId, out BasePlayerView receiverView)
+            )
+            {
+                EmojiItem emojiItem = Instantiate(emojiItemPrefab, senderView.transform);
+                emojiItem.transform.SetParent(emojiContainer);
+                StartCoroutine(emojiItem.SendEmojiTo(int.Parse(emojiData.emojiId), receiverView.transform));
+            }
+            
+        }
+
+    }
+
+    protected EmojiData ConvertEmojiData(IApiChannelMessage message)
+    {
+        EmojiData data = JsonUtility.FromJson<EmojiData>(message.Content);
+        // EmojiPayload chatPayload = new()
+        // {
+        //     ID = message.SenderId,
+        //     Name = message.Username,
+        //     Time = Utility.ConvertISOToHHMM(message.CreateTime),
+        //     Content = data.content,
+        //     Avatar = data.sender_profile.avt,
+        //     Vip = data.sender_profile.vip_level
+        // };
+        Debug.Log("SENDER ID: " + data.senderId);
+        Debug.Log("RECEIVER ID: " + data.receiverId);
+        Debug.Log("EMOJI ID: " + data.emojiId);
+        return data;
+    }
     
+}
+
+
+public class EmojiData
+{
+    public string senderId;
+    public string receiverId;
+    public string emojiId;
 }

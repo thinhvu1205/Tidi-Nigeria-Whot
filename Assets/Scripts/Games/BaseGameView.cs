@@ -11,6 +11,7 @@ using UnityEngine;
 using GameState = Proto.GameState;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using System;
 
 public class BaseGameView : BaseView
 {
@@ -21,6 +22,8 @@ public class BaseGameView : BaseView
     public virtual bool CanLeaveTable => true;
     protected bool hasBet = false;
     protected bool isPause = false;
+
+    
 
     protected override void OnDestroy()
     {
@@ -171,4 +174,11 @@ public class BaseGameView : BaseView
     }
     
     #endregion
+
+
+
+    
+
 }
+
+

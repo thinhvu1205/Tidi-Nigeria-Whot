@@ -93,4 +93,14 @@ namespace Globals
         public const string BET = "Sounds/Blackjack/bet";
         public const string CARD_FLIP = "Sounds/Blackjack/cardFlipBlackjack";
     }
+
+    public class SoundEmoji
+    {
+        public const string BOOM = "Sounds/Emoji/bom";
+        public const string BEER = "Sounds/Emoji/bom";
+        public const string ROSE = "Sounds/Emoji/bom";
+        public const string KISS = "Sounds/Emoji/bom";
+        public const string TOMATO = "Sounds/Emoji/bom";
+        public const string WATER = "Sounds/Emoji/bom";
+    }
 }

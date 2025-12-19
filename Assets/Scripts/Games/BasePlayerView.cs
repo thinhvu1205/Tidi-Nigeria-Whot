@@ -762,6 +762,12 @@ public class BasePlayerView : MonoBehaviour
             pots[i].gameObject.SetActive(i < num);
         }
     }
+
+    public void OnClickAvatar()
+    {
+        PlayerProfileInGameView playerProfileInGameView = UIManager.Instance.OpenPlayerProfileInGame();
+        playerProfileInGameView.SetInfo(user_name, id, sid, (int)vipLevel, avatar_id);
+    }
     
 
 }

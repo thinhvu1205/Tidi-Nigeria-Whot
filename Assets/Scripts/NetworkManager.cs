@@ -316,6 +316,27 @@ public class NetworkManager : MonoBehaviour
         var sendAck = await _SocketIS.WriteChatMessageAsync(CurrentRoomChatChannelId, data);
     }
 
+    public async UniTask SendEmojiToPlayerRoomChat(string senderId, string receiverId, string emojiId)
+    {
+        if (string.IsNullOrEmpty(CurrentRoomChatChannelId)) return;
+        var data = new Dictionary<string, string> {
+            { "senderId", senderId },
+            { "receiverId", receiverId },
+            { "emojiId", emojiId},
+            }.ToJson();
+        var sendAck = await _SocketIS.WriteChatMessageAsync(CurrentRoomChatChannelId, data);
+    }
+
+    public async UniTask SendEmoji(string emojiId, string senderId)
+    {
+        if (string.IsNullOrEmpty(CurrentRoomChatChannelId)) return;
+        var data = new Dictionary<string, string> {
+            { "emojiId", emojiId},
+            { "senderId", senderId},
+            }.ToJson();
+        var sendAck = await _SocketIS.WriteChatMessageAsync(CurrentRoomChatChannelId, data);
+    }
+
     public async UniTask LeaveRoomChat()
     {
         if (string.IsNullOrEmpty(CurrentRoomChatChannelId)) return;

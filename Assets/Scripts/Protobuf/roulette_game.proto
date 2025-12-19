@@ -88,7 +88,8 @@ message RouletteBet {
 // RoulettePlayerBet represents all bets placed by a single player
 message RoulettePlayerBet {
   string user_id = 1;                 // User ID of the player
-  repeated RouletteBet bets = 2;       // List of bets placed
+  RouletteBetCode code = 2;           // Type of bet action (NORMAL, REBET, DOUBLE)
+  repeated RouletteBet bets = 3;      // List of bets placed
 }
 
 // RouletteBetResult represents the result of a single bet
