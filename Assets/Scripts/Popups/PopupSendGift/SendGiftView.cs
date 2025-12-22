@@ -21,7 +21,7 @@ public class SendGiftView : BaseView
     [SerializeField] private TextMeshProUGUI idFriendTxt;
     [SerializeField] private TextMeshProUGUI amountChipTxt;
     [SerializeField] private TMP_InputField idInputField, amountChipInputField;
-    private bool isEditing = false;
+    private bool canSend = true;
     
     protected override void OnEnable()
     {
@@ -75,6 +75,8 @@ public class SendGiftView : BaseView
 
     private async UniTask OnClickSendGift()
     {
+        if (!canSend) return;
+        canSend = false;
         string recipientId = Regex.Replace(idInputField.text, @"\p{C}+", "").Trim();
         
         string cleanInput = Regex.Replace(amountChipInputField.text, @"\p{C}+", "").Trim();
@@ -97,6 +99,7 @@ public class SendGiftView : BaseView
             return;
         }
         
+        UIManager.Instance.ShowProgressing();
         FreeChip freeChip = await DataSender.SendGift(amount, recipientId);
         if (freeChip != null)
         {
@@ -106,6 +109,7 @@ public class SendGiftView : BaseView
             currentChipTxt.text = Utility.FormatNumber(User.userProfile.AccountChip);
 
             await OnSuccess("Send gift successfully!", true);
+            canSend = true;
             OnClickHistoryTab();
             
         }

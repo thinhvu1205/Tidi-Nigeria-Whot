@@ -132,6 +132,10 @@ public class SlotSixiangView : BaseSlotSymbolView
             {
                 ShowChooseBonusGame();
             }
+            else if (currentGame == SiXiangGame.Bonus)
+            {
+                ShowScatterView();
+            }
         }
         else
         {

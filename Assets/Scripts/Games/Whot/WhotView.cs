@@ -103,7 +103,6 @@ public class WhotView : BaseDiceGameView
     public float CurrentMarkUnit { get; private set; }
     public float HigherMarkUnit { get; private set; }
     public bool TypeWinMore = false;
-    private ChatInGameView chatInGameView;
     [SerializeField] private string lastTurnPlayerId, currentTurnPlayerId;
 
     protected override void Awake()
@@ -191,8 +190,6 @@ public class WhotView : BaseDiceGameView
     {
         base.OnEnable();
         Init();
-        chatInGameView = UIManager.Instance.OpenChatInGame();
-        chatInGameView.Init();
     }
 
     protected override void OnDestroy()
@@ -201,7 +198,6 @@ public class WhotView : BaseDiceGameView
         PoolService.Instance.ClearPool<WhotCardModel>(PrefabType.WhotCard);
         PoolService.Instance.ClearPool<WhotChip>(PrefabType.ChipPlayerWhot);
         _ = UIManager.Instance.LoadProfileUser();
-        DestroyImmediate(chatInGameView.gameObject);
     }
 
     #region API Handlers
@@ -288,6 +284,7 @@ public class WhotView : BaseDiceGameView
                 // playersList.Add(whotPlayer);
                 whotPlayer.gameObject.SetActive(true);
                 whotPlayer.SetPlayerInfo(
+                    player,
                     player.Id,
                     player.AvatarId,
                     player.UserName,
@@ -337,6 +334,7 @@ public class WhotView : BaseDiceGameView
                 WhotPlayer whotPlayer = playersByPosition[spawnIndex];
                 whotPlayer.gameObject.SetActive(true);
                 whotPlayer.SetPlayerInfo(
+                    player,
                     player.Id,
                     player.AvatarId,
                     player.UserName,
@@ -386,6 +384,7 @@ public class WhotView : BaseDiceGameView
                     WhotPlayer whotPlayer = playersByPosition[emptySlotIndex];
                     whotPlayer.gameObject.SetActive(true);
                     whotPlayer.SetPlayerInfo(
+                        player,
                         player.Id,
                         player.AvatarId,
                         player.UserName,
@@ -1457,6 +1456,53 @@ public class WhotView : BaseDiceGameView
         };
         DataSender.SendMatchState((long)OpCodeRequest.CallWhot, cardObject.ToByteArray());
     }
+
+    protected override void NetworkManager_OnMessageTableReceived(IApiChannelMessage message)
+    {
+        EmojiData emojiData = ConvertEmojiData(message);
+        WhotPlayer sender = GetPlayerByID(emojiData.senderId);
+        if (sender == null) return;
+        if (!string.IsNullOrEmpty(emojiData.emojiId)
+            && !string.IsNullOrEmpty(emojiData.senderId)
+            && string.IsNullOrEmpty(emojiData.receiverId)
+        )
+        {
+            Debug.Log("TU GUI ");
+            EmojiItem emojiItem = Instantiate(emojiItemPrefab, sender.GetPlayedCardParent());
+            emojiItem.transform.SetParent(emojiContainer);
+            emojiItem.ShowEmote(int.Parse(emojiData.emojiId));
+        }
+
+
+        // Send emote tới người chơi khác
+        else if (!string.IsNullOrEmpty(emojiData.emojiId)
+            && !string.IsNullOrEmpty(emojiData.senderId)
+            && !string.IsNullOrEmpty(emojiData.receiverId)
+        )
+        {
+            Debug.Log("GUI CHO NGUOI KHAC");
+            
+            if (emojiData.senderId == emojiData.receiverId)
+            {
+                foreach(WhotPlayer player in playersByPosition)
+                {
+                    if (emojiData.senderId == player.Id || !player.gameObject.activeInHierarchy) continue;
+                    EmojiItem emojiItem = Instantiate(emojiItemPrefab, sender.GetPlayedCardParent());
+                    emojiItem.transform.SetParent(emojiContainer);
+                    StartCoroutine(emojiItem.SendEmojiTo(int.Parse(emojiData.emojiId), player.GetPlayedCardParent()));
+                }
+                
+            }
+            else 
+            {
+                WhotPlayer receiver = GetPlayerByID(emojiData.receiverId);
+                EmojiItem emojiItem = Instantiate(emojiItemPrefab, sender.GetPlayedCardParent());
+                emojiItem.transform.SetParent(emojiContainer);
+                StartCoroutine(emojiItem.SendEmojiTo(int.Parse(emojiData.emojiId), receiver.GetPlayedCardParent()));
+            }
+            
+        }
+    }
     #endregion
 
     #region Getters
@@ -1491,13 +1537,6 @@ public class WhotView : BaseDiceGameView
     {
         _ = UIManager.Instance.HandleLeaveGame();
     }
-
-    public void OnClickChat()
-    {
-        chatInGameView.transform.localScale = Vector3.one;
-        chatInGameView.Show();
-    }
-
 
     private WhotCardModel InitCard(Transform initTransform)
     {
@@ -1625,6 +1664,7 @@ public class WhotView : BaseDiceGameView
             WhotPlayer whotPlayer = playersByPosition[spawnIndex];
             whotPlayer.gameObject.SetActive(true);
             whotPlayer.SetPlayerInfo(
+                player,
                 player.Id,
                 player.AvatarId,
                 player.UserName,

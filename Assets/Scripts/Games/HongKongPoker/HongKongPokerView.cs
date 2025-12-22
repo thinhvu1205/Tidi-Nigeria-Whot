@@ -70,15 +70,12 @@ public class HongKongPokerView : BaseDiceGameView
     private Sequence countdownSequence;
     private Coroutine arrowSwapCoroutine;
     private bool isSwapped = false, isRejoinTable = false;
-    private ChatInGameView chatInGameView;
     private const string CHAT_ROOM_NAME = "hkpoker";
 
     protected override void Awake()
     {
         base.Awake();
         InitPool();
-        chatInGameView = UIManager.Instance.OpenChatInGame();
-        chatInGameView.Init();
 
         // Set view reference in button container
         if (buttonBetContainer != null)
@@ -1466,12 +1463,6 @@ public class HongKongPokerView : BaseDiceGameView
     #endregion
     
     #region Button Actions
-    public void OnClickChat()
-    {
-        chatInGameView.transform.localScale = Vector3.one;
-        chatInGameView.Show();
-    }
-    
     // Card swap buttons (Round 4)
     public void OnClickSwap()
     {

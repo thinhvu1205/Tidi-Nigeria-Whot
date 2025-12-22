@@ -127,14 +127,11 @@ public class BlackjackView : BaseDiceGameView
     [SerializeField] private bool isCurrentPlayerTurnPassed = false; // Check xem đã qua turn người chơi hiện tại chưa
     private Vector2 countdownPosition;
     private List<BalanceUpdate> listBalanceUpdate;
-    private ChatInGameView chatInGameView;
 
     protected override void Awake()
     {
         base.Awake();
         InitPool();
-        chatInGameView = UIManager.Instance.OpenChatInGame();
-        chatInGameView.Init();
         insurance.SetInfo(this);
         phaseBet.SetActive(false);
         phasePlay.SetActive(false);
@@ -148,7 +145,6 @@ public class BlackjackView : BaseDiceGameView
         base.OnDestroy();
         PoolService.Instance.ClearPool<BlackjackChip>(PrefabType.ChipPlayerBlackjack);
         PoolService.Instance.ClearPool<CardModel>(PrefabType.Card);
-        DestroyImmediate(chatInGameView.gameObject);
     }
 
     #region API Handlers
@@ -322,6 +318,7 @@ public class BlackjackView : BaseDiceGameView
             Debug.Log("isPlaying: " + isPlaying);
             Debug.Log("isCurrentPlayerFinished: " + isCurrentPlayerFinished);
             Debug.Log("playerIndex <= currentPlayerIndex: " + (playerIndex <= currentPlayerIndex));
+            Debug.Log("GameState: " + GameState);
             if (isPlaying && !isCurrentPlayerFinished && playerIndex <= currentPlayerIndex && GameState == GameState.Play)
             {
                 buttonBetContainer.gameObject.SetActive(true);
@@ -770,6 +767,7 @@ public class BlackjackView : BaseDiceGameView
                         && GameState == GameState.Play
                     )
                     {
+                        Debug.Log("bankerBoxBet.AnimateHighlightCards();");
                         bankerBoxBet.AnimateHighlightCards();
                     }
                 }
@@ -910,6 +908,7 @@ public class BlackjackView : BaseDiceGameView
                 Debug.Log("HandleUpdateGameState Preparing " + data.ToString());
                 break;
             case GameState.Play:
+                Debug.Log("HandleUpdateGameState Play " + data.ToString());
                 if (isCountingDown)
                 {
                     if (countdownCoroutine != null)
@@ -1040,11 +1039,6 @@ public class BlackjackView : BaseDiceGameView
     }
 
     #region Buttons
-    public void OnClickChat()
-    {
-        chatInGameView.transform.localScale = Vector3.one;
-        chatInGameView.Show();
-    }
 
     /// --------- PHASE BET ------------ ///
     public void OnClickButtonChip(int index)

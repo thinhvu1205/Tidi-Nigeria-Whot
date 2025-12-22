@@ -74,7 +74,7 @@ public class RouletteView : BaseDiceGameView
     };
 
     private int result, currentBetIndex;
-    [SerializeField] public long TotalBetValue { get; private set; } = 0;
+    [SerializeField] private long totalBetValue;
     [SerializeField] private long currentBetValue;
     private RouletteOptionBet resultOption, selectedOption;
     private readonly List<BetData> listDataBet = new();
@@ -86,7 +86,7 @@ public class RouletteView : BaseDiceGameView
     private List<long> coefficients = new();
     [SerializeField] private long chipWin, chipAfter, playerWallet;
     [SerializeField] private bool isRebet = false, isConfirmRebet = false, isShowingResult = false, canClick = true;
-    [SerializeField] private long markUnit;
+    [SerializeField] private long markUnit, maxBetValue;
 
     protected override void Awake()
     {
@@ -147,6 +147,7 @@ public class RouletteView : BaseDiceGameView
         if (data.BetLevels.Count > 0)
         {
             markUnit = (long)data.BetLevels.ToList()[0];
+            maxBetValue = markUnit * 100;
             coefficients = new List<long>() { markUnit, markUnit * 5, markUnit * 10, markUnit * 50, markUnit * 100};
             InitButtonBet();
         }
@@ -184,9 +185,9 @@ public class RouletteView : BaseDiceGameView
             UIManager.Instance.ShowToast("You do not have enough chips!", 2, transform);
             return;
         }
-        if (TotalBetValue + currentBetValue + coefficients[currentBetIndex] > markUnit * 100)
+        if (totalBetValue + currentBetValue + coefficients[currentBetIndex] > maxBetValue)
         {
-            UIManager.Instance.ShowToast("You must bet at most " + Utility.FormatNumber(markUnit * 100) + " chips!", 2, transform);
+            UIManager.Instance.ShowToast("You can bet at most " + Utility.FormatNumber(maxBetValue) + " chips!", 2, transform);
             return;
         }
         if (Constants.RouletteNumberDictionary.TryGetValue(id, out int[] values))
@@ -214,7 +215,7 @@ public class RouletteView : BaseDiceGameView
         {
             return;
         }
-        if (TotalBetValue + currentBetValue + coefficients[currentBetIndex] > markUnit * 100)
+        if (totalBetValue + currentBetValue + coefficients[currentBetIndex] > maxBetValue)
         {
             return;
         }
@@ -235,7 +236,7 @@ public class RouletteView : BaseDiceGameView
         selectedOption.AddChip(chip);
 
         currentBetValue += coefficients[currentBetIndex];
-        UpdateTotalBetUI(TotalBetValue + currentBetValue);
+        UpdateTotalBetUI(totalBetValue + currentBetValue);
 
         if (Constants.RouletteNumberDictionary.TryGetValue(id, out int[] values))
         {
@@ -252,6 +253,7 @@ public class RouletteView : BaseDiceGameView
             playersBet[id] = coefficients[currentBetIndex];             // chưa có -> add mới
         }
         UpdateTotalDealValueUI();
+        UpdateButtonBetInteractivity();
     }
     #endregion
 
@@ -261,7 +263,7 @@ public class RouletteView : BaseDiceGameView
         Debug.Log("BEFORE CLICK");
         if (isShowingResult || !canClick) return;
         canClick = false;
-        if (TotalBetValue > 0 && TotalBetValue < markUnit)
+        if (totalBetValue > 0 && totalBetValue < markUnit)
         {
             UIManager.Instance.ShowToast("You must bet at least " + Utility.FormatNumber(markUnit) + " chips!", 2, transform);
             canClick = true;
@@ -299,7 +301,7 @@ public class RouletteView : BaseDiceGameView
         //     listDataBetForRebetTemp.AddRange(listDataBetForRebet);
         //     listDataBetForRebet.Clear();
         // }
-        if (TotalBetValue > 0)
+        if (totalBetValue > 0)
         {
             listDataRebet.Clear();
             listDataRebet.AddRange(listDataBet);
@@ -325,14 +327,14 @@ public class RouletteView : BaseDiceGameView
 
     public void OnClickButtonDeal()
     {
-        Debug.Log("TOTAL BET VALUE: " + TotalBetValue);
+        Debug.Log("TOTAL BET VALUE: " + totalBetValue);
         canClick = true;
-        if (TotalBetValue + currentBetValue > markUnit * 100)
+        if (totalBetValue + currentBetValue > maxBetValue)
         {
-            UIManager.Instance.ShowToast("You must bet at most " + Utility.FormatNumber(markUnit * 100) + " chips!", 2, transform);
+            UIManager.Instance.ShowToast("You must bet at most " + Utility.FormatNumber(maxBetValue) + " chips!", 2, transform);
             return;
         }
-        TotalBetValue += currentBetValue;
+        totalBetValue += currentBetValue;
         currentBetValue = 0;
 
         if (isRebet && !isConfirmRebet)
@@ -383,7 +385,7 @@ public class RouletteView : BaseDiceGameView
         }
         playersBet.Clear();
         UpdateTotalDealValueUI();
-        UpdateTotalBetUI(TotalBetValue);
+        UpdateTotalBetUI(totalBetValue);
     
         DataSender.SendMatchState((long)OpCodeRequest.Bet, roulettePlayerBet.ToByteArray());
     }
@@ -413,7 +415,8 @@ public class RouletteView : BaseDiceGameView
         currentBetValue = 0;
         playersBet.Clear(); 
         UpdateTotalDealValueUI();
-        UpdateTotalBetUI(TotalBetValue);
+        UpdateTotalBetUI(totalBetValue);
+        UpdateButtonBetInteractivity();
     }
 
     public void OnClickButtonRebet()
@@ -447,7 +450,8 @@ public class RouletteView : BaseDiceGameView
             }
         }
         UpdateTotalDealValueUI();
-        UpdateTotalBetUI(TotalBetValue + currentBetValue);
+        UpdateTotalBetUI(totalBetValue + currentBetValue);
+        UpdateButtonBetInteractivity();
     }
 
     public void OnClickButtonDouble()
@@ -491,7 +495,7 @@ public class RouletteView : BaseDiceGameView
             playersBet[key] *= 2;
         }
         UpdateTotalDealValueUI();
-        UpdateTotalBetUI(TotalBetValue + currentBetValue);
+        UpdateTotalBetUI(totalBetValue + currentBetValue);
         // playersBet.Clear();
     }
 
@@ -550,9 +554,9 @@ public class RouletteView : BaseDiceGameView
         }
         long totalRebetAmount = listDataRebet.Sum(data => data.BetAmount);
 
-        buttonDouble.interactable = playersBet.Any() && playerWallet >= 2 * currentBetValue;
+        buttonDouble.interactable = playersBet.Any() && playerWallet >= 2 * currentBetValue && maxBetValue >= 2 * currentBetValue && maxBetValue >= 2 * totalBetValue;
         imageButtonDouble.color = buttonDouble.interactable ? Color.white : Color.gray;
-        buttonRebet.interactable = listDataRebet.Count > 0 && !isRebet && !isConfirmRebet && playerWallet >= totalRebetAmount;
+        buttonRebet.interactable = listDataRebet.Count > 0 && !isRebet && !isConfirmRebet && playerWallet >= totalRebetAmount && !isShowingResult;
         imageButtonRebet.color = buttonRebet.interactable ? Color.white : Color.gray;
     }
 
@@ -695,7 +699,7 @@ public class RouletteView : BaseDiceGameView
             // Delay tiếp 3s sau khi show animation mới restart game
             DOVirtual.DelayedCall(1f, () =>
             {
-                if (TotalBetValue > 0)
+                if (totalBetValue > 0)
                 {
                     SoundManager.Instance.PlayEffectFromPath(Sound.THROW_CHIP);
                     Reset();
@@ -763,7 +767,7 @@ public class RouletteView : BaseDiceGameView
             textNumLose.transform.localPosition = new Vector3(108, 40, 0);
             textNumLose.gameObject.SetActive(true);
             // textNumLose.transform.DOLocalMoveY(10, 0.5f);
-            textNumLose.text = $"-{Utility.FormatNumber(TotalBetValue)}";
+            textNumLose.text = $"-{Utility.FormatNumber(totalBetValue)}";
             // playSound(SOUND_GAME.LOSE);
         }
         Utility.PlayAnimation(animationWinLose, animationName, false);
@@ -938,7 +942,10 @@ public class RouletteView : BaseDiceGameView
             {
                 continue;
             }
-            if (coefficients[index] > playerWallet)
+            if (coefficients[index] > playerWallet || 
+                currentBetValue + coefficients[index] > maxBetValue || 
+                totalBetValue + coefficients[index] > maxBetValue 
+            )
             {
                 button.Disable();
             }
@@ -952,7 +959,7 @@ public class RouletteView : BaseDiceGameView
     private void Reset()
     {
         currentBetValue = 0;
-        TotalBetValue = 0;
+        totalBetValue = 0;
         chipWin = 0;
         chipAfter = 0;
         isRebet = false;
@@ -964,7 +971,7 @@ public class RouletteView : BaseDiceGameView
         listDataBet.Clear();
         buttonSpin.interactable = true;
         UpdateTotalDealValueUI();
-        UpdateTotalBetUI(TotalBetValue);
+        UpdateTotalBetUI(totalBetValue);
         UpdateButtonBetInteractivity();
         // Xóa chip
         foreach (RouletteOptionBet betOption in listBetOptions)

@@ -555,6 +555,20 @@ public class UIManager : Singleton<UIManager>
         return chatInGameView;
     }
 
+    public EmojiInGameView OpenEmojiInGame()
+    {
+        EmojiInGameView emojiInGameView = Instantiate(LoadPrefabPopup("PopupEmojiInGame"), parentPopups).GetComponent<EmojiInGameView>();
+        emojiInGameView.transform.localScale = Vector3.zero;
+        return emojiInGameView;
+    }
+
+    public PlayerProfileInGameView OpenPlayerProfileInGame()
+    {
+        PlayerProfileInGameView profileInGameView = Instantiate(LoadPrefabPopup("PopupPlayerProfileInGame"), parentPopups).GetComponent<PlayerProfileInGameView>();
+        profileInGameView.transform.localScale = Vector3.one;
+        return profileInGameView;
+    }
+
     public void OpenGroupMenu()
     {
         GroupMenuView groupMenuView = Instantiate(LoadPrefabPopup("GroupMenu"), parentGames).GetComponent<GroupMenuView>();

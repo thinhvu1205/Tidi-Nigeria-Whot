@@ -36,6 +36,7 @@ public class WhotPlayer : MonoBehaviour
     private const float CARD_SCALE = 0.86f;
     private float SCORE_IMAGE_OFFSET = 120f;
     private float CARD_SPACING = CARD_SCALE / 2 * 100f;
+    private Player player;
 
     private void Awake()
     {
@@ -77,6 +78,7 @@ public class WhotPlayer : MonoBehaviour
     }
 
     public void SetPlayerInfo(
+        Player player,
         string playerId,
         string avatarId,
         string playerName,
@@ -84,6 +86,7 @@ public class WhotPlayer : MonoBehaviour
         long vipLevel = 0
     )
     {
+        this.player = player;
         Id = playerId;
         AvatarId = avatarId;
         VipLevel = vipLevel;
@@ -286,6 +289,12 @@ public class WhotPlayer : MonoBehaviour
     {
         effectText.text = effect;
         AnimateShowEffectNoti();
+    }
+
+    public void OnClickAvatar()
+    {
+        PlayerProfileInGameView playerProfileInGameView = UIManager.Instance.OpenPlayerProfileInGame();
+        playerProfileInGameView.SetInfo(player.UserName, player.Id, player.Sid.ToString(), (int)player.VipLevel, player.AvatarId);
     }
 
     #endregion
