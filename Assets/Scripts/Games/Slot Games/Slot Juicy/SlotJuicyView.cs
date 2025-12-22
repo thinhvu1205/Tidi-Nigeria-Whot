@@ -38,7 +38,7 @@ public class SlotJuicyView : BaseSlotView
     private WinJackpot? winJackpot;
     private JackpotHistory jackpotHistory;
     private long rateJackpotGrand = 0, rateJackpotMajor = 0, rateJackpotMinor = 0, rateJackpotMini = 0, jpGrandPlayer = 0, jpMajorPlayer = 0, totalPackageValue = 0;
-    private bool isInFruitRain, isInJuiceFree, isStartFruitRain, isEndFruitRain, isChooseFreeGame, isChooseFruitRain, isEndFreeGame, isChooseBasket, isBetLevelChanged, isFinishGame, isSetUpFruitRainGame, canChangeBetLevel = false;
+    private bool isInFruitRain, isInJuiceFree, isStartFruitRain, isEndFruitRain, isChooseFreeGame, isChooseFruitRain, isEndFreeGame, isChooseBasket, isBetLevelChanged, isFinishGame, isSetUpFruitRainGame, canChangeBetLevel, isChooseFruitRainBasket = false;
     private Tween tweenChooseBasket = null;
     private SiXiangGame nextGame, currentGame;
     private WinType _currentWinType;
@@ -160,7 +160,7 @@ public class SlotJuicyView : BaseSlotView
                 }
 
                 // Thay đổi mcb thì ko làm mất giá trị package từ trc
-                if (!isBetLevelChanged)
+                if (!isBetLevelChanged && !isChooseFruitRainBasket)
                 {
                     SetPackageValue(column, valuePackageColumnArray);        
                 }
@@ -196,6 +196,7 @@ public class SlotJuicyView : BaseSlotView
                     }
                 }
             }
+            isChooseFruitRainBasket = false;
         }
 
         if (data.GameConfig != null)
@@ -625,12 +626,15 @@ public class SlotJuicyView : BaseSlotView
         isSetUpFruitRainGame = true;
         SetDarkAllItems(isBackgroundDark: false);
         freeSpinLeft = 3;
-        ShowBackGroundFreeSpin();
         // if (isKeep6FirstBasket)
         // {
         //     CreateHolderPackageView();
         // }
-        tweenQueue.Enqueue(ShowPopupGetFruitRain);
+        tweenQueue.Enqueue(() =>
+        {
+            ShowBackGroundFreeSpin();
+            ShowPopupGetFruitRain();
+        });
 
         // Fruit Rain sẽ autospin cho đến khi hết Fruit Rain
         if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO || spinType == SpinType.FREE_AUTO)
@@ -870,6 +874,7 @@ public class SlotJuicyView : BaseSlotView
             basketGetFruitRain.gameObject.SetActive(false);
             if (isChooseFruitRain)
             {
+                isChooseFruitRainBasket = true;
                 SetupFruitRainGame(false);
             }
             else if (isChooseFreeGame)
