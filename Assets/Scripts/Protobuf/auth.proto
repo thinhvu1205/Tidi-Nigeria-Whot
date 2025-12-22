@@ -46,6 +46,43 @@ message Profile {
   bool is_banned = 27;
   int64 last_login_unix = 28;
   int64 user_sid = 29;
+  repeated FeatureName allowed_features = 30;
+}
+
+enum FeatureName {
+  FEATURE_UNSPECIFIED = 0;
+
+  // Login category
+  FEATURE_QUICK_LOGIN = 1;              // Login nhanh
+  FEATURE_LOGIN_USERNAME_PASS = 2;      // Login username/pass
+
+  // Lobby category
+  FEATURE_SUPPORT = 10;                 // Support
+  FEATURE_PROFILE = 11;                 // Profile
+  FEATURE_SHOP = 12;                    // Shop
+  FEATURE_NEWS = 13;                    // News
+  FEATURE_SETTING = 14;                 // Setting
+  FEATURE_CHECK_IN_ONLINE = 15;          // Check_in Online
+  FEATURE_FREE_CHIP = 16;               // FreeChip
+  FEATURE_MAIL = 17;                    // Mail
+  FEATURE_RANK = 18;                    // Rank
+  FEATURE_GIFT_CODE = 19;               // Gift Code
+  FEATURE_BANK = 20;                    // Bank
+  FEATURE_CHAT_WORLD = 21;              // Chat World
+  FEATURE_CHAT_TABLE = 22;              // Chat Table
+  FEATURE_EXCHANGE = 23;                // Exchange
+  FEATURE_TIN_NONG_POPUP = 24;          // Tin nóng Popup
+  FEATURE_NEW_BANNER = 25;              // New banner
+  FEATURE_QUICK_PLAY = 26;              // Quick Play
+  FEATURE_VIP_FARM = 27;                // Vip's Farm
+  FEATURE_SETTING_ACCOUNT_DELETION = 28; // Setting - Account Deletion
+
+  // Vào sảnh chọn mức cược
+  FEATURE_SELECT_BET = 30;              // Select Bet
+  FEATURE_SELECT_TABLE = 31;            // Select Table
+
+  // Join bàn
+  FEATURE_CHECK_DOC = 40;               // Check DOC, với từng game
 }
 
 message PlayingMatch {

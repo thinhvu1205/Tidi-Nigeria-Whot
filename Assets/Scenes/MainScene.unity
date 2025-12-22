@@ -4924,7 +4924,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 2020769042}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -4949,6 +4949,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 102f4975f2354126a211ce97488284ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2020769042 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 482160970948043802, guid: 1da8ec4c2c82e0a4b96ce57f5eaebaf6, type: 3}
+  m_PrefabInstance: {fileID: 2020769037}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2100730289
@@ -7082,6 +7093,25 @@ MonoBehaviour:
   vipFarm: {fileID: 2131430989}
   videoPlayer: {fileID: 7967093209636587933}
   videoStartSiXiang: {fileID: 32900000, guid: f8eac803f79f84f8593df8163b435027, type: 3}
+  btnSupport: {fileID: 6694891826023090127}
+  btnProfile: {fileID: 2020769040}
+  btnShop: {fileID: 5115674561114467944}
+  btnNews: {fileID: 9016032634521831436}
+  btnSetting: {fileID: 3217860502372453308}
+  btnCheckinOnline: {fileID: 4181798156410837832}
+  btnFreeChip: {fileID: 6903379882991772607}
+  btnMail: {fileID: 7842801097275826949}
+  btnRank: {fileID: 8949366008135853635}
+  btnGiftCode: {fileID: 7140602673134735163}
+  btnBank: {fileID: 0}
+  btnChatWorld: {fileID: 1577253020}
+  btnChatTable: {fileID: 0}
+  btnExchange: {fileID: 0}
+  btnNewsPopup: {fileID: 0}
+  btnNewBanner: {fileID: 0}
+  btnQuickPlay: {fileID: 0}
+  btnVipFarm: {fileID: 0}
+  btnSettingAccountDeletion: {fileID: 0}
 --- !u!222 &2096517325741251164
 CanvasRenderer:
   m_ObjectHideFlags: 0

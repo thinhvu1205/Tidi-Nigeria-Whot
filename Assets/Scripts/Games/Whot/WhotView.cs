@@ -713,6 +713,7 @@ public class WhotView : BaseDiceGameView
             }
             return;
         }
+        UIManager.Instance.HideProgressing();
         await base.HandleUpdateKickOffTheTable(matchState);
     }
     #endregion

@@ -22,6 +22,26 @@ public class LobbyView : BaseView
     [SerializeField] private GameObject gameIconPrefab, textPreviewChatWorldPrefab, videoBackground, redDotChipBonus, redDotFreeChip, redDotMail, vipFarm;
     [SerializeField] private VideoPlayer videoPlayer;
     [SerializeField] private VideoClip videoStartSiXiang;
+    [Header("Area Buttons")]
+    [SerializeField] private Button btnSupport;
+    [SerializeField] private Button btnProfile;
+    [SerializeField] private Button btnShop;
+    [SerializeField] private Button btnNews;
+    [SerializeField] private Button btnSetting;
+    [SerializeField] private Button btnCheckinOnline;
+    [SerializeField] private Button btnFreeChip;
+    [SerializeField] private Button btnMail;
+    [SerializeField] private Button btnRank;
+    [SerializeField] private Button btnGiftCode;
+    [SerializeField] private Button btnBank;
+    [SerializeField] private Button btnChatWorld;
+    [SerializeField] private Button btnChatTable;
+    [SerializeField] private Button btnExchange;
+    [SerializeField] private Button btnNewsPopup;
+    [SerializeField] private Button btnNewBanner;
+    [SerializeField] private Button btnQuickPlay;
+    [SerializeField] private Button btnVipFarm;
+
     private List<Game> gameList = new();
     private List<TextMeshProUGUI> listTextPreviewChatWorld = new();
     private LobbyPresenter lobbyPresenter;
@@ -84,7 +104,7 @@ public class LobbyView : BaseView
             var labelMatch = await DataSender.JoinMatch(User.userProfile.PlayingMatch.MatchId);
             if (labelMatch != null)
             {
-                Config.currentGameId = User.userProfile.PlayingMatch.Code;
+                Config.currentGameId = labelMatch.Name;
                 UIManager.Instance.HandleOpenGame(labelMatch);
             }
         }
@@ -229,7 +249,70 @@ public class LobbyView : BaseView
             accountChip.text = Utility.FormatNumber(User.userProfile.AccountChip);
             avatar.LoadAvatar(User.userProfile.AvatarId, User.userProfile.VipLevel);
         }
+        UpdateFeatureButtons();
         _ = GetVipFarmProgress();
+    }
+
+    /// <summary>
+    /// Cập nhật trạng thái hiển thị của các buttons dựa trên allowedFeatures từ server
+    /// Gọi method này khi Profile được cập nhật hoặc khi cần refresh UI
+    /// </summary>
+    private void UpdateFeatureButtons()
+    {
+        if (btnSupport != null)
+            btnSupport.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureSupport));
+        
+        if (btnProfile != null)
+            btnProfile.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureProfile));
+        
+        if (btnShop != null)
+            btnShop.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureShop));
+        
+        if (btnNews != null)
+            btnNews.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureNews));
+        
+        if (btnSetting != null)
+            btnSetting.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureSetting));
+        
+        if (btnCheckinOnline != null)
+            btnCheckinOnline.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureCheckInOnline));
+        
+        if (btnFreeChip != null)
+            btnFreeChip.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureFreeChip));
+        
+        if (btnMail != null)
+            btnMail.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureMail));
+        
+        if (btnRank != null)
+            btnRank.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureRank));
+        
+        if (btnGiftCode != null)
+            btnGiftCode.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureGiftCode));
+        
+        if (btnBank != null)
+            btnBank.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureBank));
+        
+        if (btnChatWorld != null)
+            btnChatWorld.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureChatWorld));
+        
+        if (btnChatTable != null)
+            btnChatTable.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureChatTable));
+        
+        if (btnExchange != null)
+            btnExchange.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureExchange));
+        
+        if (btnNewsPopup != null)
+            btnNewsPopup.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureTinNongPopup));
+        
+        if (btnNewBanner != null)
+            btnNewBanner.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureNewBanner));
+        
+        if (btnQuickPlay != null)
+            btnQuickPlay.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureQuickPlay));
+        
+        if (btnVipFarm != null)
+            btnVipFarm.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureVipFarm));
+        
     }
 
     private IEnumerator ClaimTimer()

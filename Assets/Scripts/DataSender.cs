@@ -25,6 +25,7 @@ public class DataSender
     public const string UPDATE_AVATAR = "update_avatar";
     public const string LINK_USERNAME = "link_username";
     public const string CHANGE_PASS = "user_change_pass";
+    public const string DELETE_ACCOUNT = "delete_account";
     public const string PUSH_TO_BANK = "push_to_bank";
     public const string WITH_DRAW = "with_draw";
     public const string SEND_GIFT = "send_gift";
@@ -211,6 +212,22 @@ public class DataSender
         };
         var response = await NetworkManager.INSTANCE.RPCSend(UPDATE_PROFILE, data);
         return DecodeFromJson<Profile>(response.Payload);
+    }
+
+    public static async UniTask<string> DeleteAccount()
+    {
+        try
+        {
+            var response = await NetworkManager.INSTANCE.RPCSend(DELETE_ACCOUNT);
+            return response.Payload;
+        }
+        catch (Exception e)
+        {
+            UIManager.Instance.HideProgressing();
+            UIManager.Instance.ShowAlertDialog("An error has occurred.");
+            throw;
+        }
+        
     }
     #endregion
 

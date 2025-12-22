@@ -361,6 +361,11 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenShop()
     {
+        if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureShop))
+        {
+            ShowAlertDialog("This feature is not available for your account.");
+            return;
+        }
         ShopView shopView = Instantiate(LoadPrefabLobby("ShopView"), parentLobby).GetComponent<ShopView>();
         shopView.transform.localScale = Vector3.one;
     }
@@ -374,18 +379,33 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenExchange()
     {
+        if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureExchange))
+        {
+            ShowAlertDialog("This feature is not available for your account.");
+            return;
+        }
         ExchangeView exchangeView = Instantiate(LoadPrefabLobby("ExchangeView"), parentLobby).GetComponent<ExchangeView>();
         exchangeView.transform.localScale = Vector3.one;
     }
 
     public void OpenSelectTable()
     {
+        if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureSelectTable))
+        {
+            ShowAlertDialog("This feature is not available for your account.");
+            return;
+        }
         SelectTableView selectTableView = Instantiate(LoadPrefabLobby("SelectTableView"), parentLobby).GetComponent<SelectTableView>();
         selectTableView.transform.localScale = Vector3.one;
     }
 
     public void OpenLeaderboard()
     {
+        if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureRank))
+        {
+            ShowAlertDialog("This feature is not available for your account.");
+            return;
+        }
         LeaderBoardView leaderBoardView = Instantiate(LoadPrefabLobby("LeaderboardView"), parentLobby).GetComponent<LeaderBoardView>();
         leaderBoardView.transform.localScale = Vector3.one;
     }
@@ -398,18 +418,33 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenChatWorld()
     {
+        if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureChatWorld))
+        {
+            ShowAlertDialog("This feature is not available for your account.");
+            return;
+        }
         ChatWorldView chatWorldView = Instantiate(LoadPrefabLobby("ChatWorldView"), parentLobby).GetComponent<ChatWorldView>();
         chatWorldView.transform.localScale = Vector3.one;
     }
 
     public void OpenGiftCode()
     {
+        if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureGiftCode))
+        {
+            ShowAlertDialog("This feature is not available for your account.");
+            return;
+        }
         GiftCodeView giftCodeView = Instantiate(LoadPrefabPopup("PopupGiftCode"), parentPopups).GetComponent<GiftCodeView>();
         giftCodeView.transform.localScale = Vector3.one;
     }
 
     public void OpenSupport()
     {
+        if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureSupport))
+        {
+            ShowAlertDialog("This feature is not available for your account.");
+            return;
+        }
         SupportView supportView = Instantiate(LoadPrefabPopup("PopupSupport"), parentPopups).GetComponent<SupportView>();
         supportView.transform.localScale = Vector3.one;
     }
@@ -421,11 +456,21 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenFreeChips()
     {
+        if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureFreeChip))
+        {
+            ShowAlertDialog("This feature is not available for your account.");
+            return;
+        }
         FreeChipView freeChipView = Instantiate(LoadPrefabPopup("PopupFreechips"), parentPopups).GetComponent<FreeChipView>();
         freeChipView.transform.localScale = Vector3.one;
     }
     public void OpenMail()
     {
+        if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureMail))
+        {
+            ShowAlertDialog("This feature is not available for your account.");
+            return;
+        }
         MailView mailView = Instantiate(LoadPrefabPopup("PopupMail"), parentPopups).GetComponent<MailView>();
         mailView.transform.localScale = Vector3.one;
     }
@@ -437,6 +482,11 @@ public class UIManager : Singleton<UIManager>
     }
     public void OpenSetting()
     {
+        if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureSetting))
+        {
+            ShowAlertDialog("This feature is not available for your account.");
+            return;
+        }
         SettingsView settingsView = Instantiate(LoadPrefabPopup("PopupSettings"), parentPopups).GetComponent<SettingsView>();
         settingsView.transform.localScale = Vector3.one;
     }
@@ -448,6 +498,11 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenCheckInBonus()
     {
+        if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureCheckInOnline))
+        {
+            ShowAlertDialog("This feature is not available for your account.");
+            return;
+        }
         CheckInBonusView checkInBonusView = Instantiate(LoadPrefabPopup("PopupCheckInBonus"), parentPopups).GetComponent<CheckInBonusView>();
         checkInBonusView.transform.localScale = Vector3.one;
     }
@@ -472,6 +527,11 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenProfile()
     {
+        if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureProfile))
+        {
+            ShowAlertDialog("This feature is not available for your account.");
+            return;
+        }
         ProfileView profileView = Instantiate(LoadPrefabPopup("PopupProfile"), parentPopups).GetComponent<ProfileView>();
         profileView.transform.localScale = Vector3.one;
     }
@@ -520,6 +580,11 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenVipFarm()
     {
+        if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureVipFarm))
+        {
+            ShowAlertDialog("This feature is not available for your account.");
+            return;
+        }
         VipFarmView vipFarmView = Instantiate(LoadPrefabLobby("VipFarmView"), parentLobby).GetComponent<VipFarmView>();
         vipFarmView.transform.localScale = Vector3.one;
     }

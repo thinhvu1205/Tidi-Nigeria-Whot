@@ -34,7 +34,7 @@ public class NetworkManager : MonoBehaviour
     private ISession _SessionIS;
     private ISocket _SocketIS;
     private List<Action> _DataHandlerAs = new();
-    private string _MatchId, worldChatChannelId;
+    private string worldChatChannelId;
     private readonly Queue<IMatchState> matchStateQueue = new Queue<IMatchState>();
     private readonly Queue<IApiChannelMessage> messageQueue = new Queue<IApiChannelMessage>();
     private readonly object queueLock = new object();
@@ -115,7 +115,6 @@ public class NetworkManager : MonoBehaviour
             var match = await _SocketIS.JoinMatchAsync(matchId);
 
             // Lưu lại thông tin match nếu cần
-            _MatchId = match.Id;
             Config.currentMatchId = matchId;
             return match;
             
@@ -134,7 +133,7 @@ public class NetworkManager : MonoBehaviour
     {
         try
         {
-            await _SocketIS.LeaveMatchAsync(_MatchId);
+            await _SocketIS.LeaveMatchAsync(Config.currentMatchId);
         }
         catch (ApiResponseException e)
         {
@@ -144,7 +143,7 @@ public class NetworkManager : MonoBehaviour
         
     }
 
-    public void SendMatchState(long opCode, byte[] data) => _SocketIS.SendMatchStateAsync(_MatchId, opCode, data);
+    public void SendMatchState(long opCode, byte[] data) => _SocketIS.SendMatchStateAsync(Config.currentMatchId, opCode, data);
 
     #endregion
 
@@ -369,7 +368,6 @@ public class NetworkManager : MonoBehaviour
             if (!string.IsNullOrEmpty(userId))
             {
                 ownerIds = new[] { userId };
-                limit = 1;
             }
             var leaderboardRecordList = await _ClientC.ListLeaderboardRecordsAsync(
                 session: _SessionIS,
@@ -681,7 +679,7 @@ public class NetworkManager : MonoBehaviour
                 }
                 var state = matchStateQueue.Dequeue();
                 // Debug.Log("get state dequeue " + state);
-                if (state.MatchId != _MatchId) return;
+                if (state.MatchId != Config.currentMatchId) return;
                 GameManager.Instance.HandleMatchState(state);
             }
         }

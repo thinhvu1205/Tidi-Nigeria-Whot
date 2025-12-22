@@ -74,7 +74,22 @@ public class LeaderBoardView : BaseView
     {
         Debug.Log("get list record game "+ currentTabGameCode);
 
-        IApiLeaderboardRecordList apiLeaderboardRecordList = await leaderboardPresenter.LoadList(currentTabGameCode);
+        IApiLeaderboardRecordList apiLeaderboardRecordList = await leaderboardPresenter.LoadList(currentTabGameCode, User.userProfile.UserId);
+        
+        currentUserRecord = apiLeaderboardRecordList.OwnerRecords.FirstOrDefault();
+        if (currentUserRecord != null)
+        {
+            var json = JObject.Parse(currentUserRecord.Metadata);
+            string avatarId = json["avatar_id"]?.ToString() ?? "";
+            long vipLevel = json["vip_level"]?.Value<long>() ?? 0;
+            Debug.Log("Info current user record " + avatarId + " : " + vipLevel);
+            UpdateUserLeaderboardUI(currentUserRecord.Rank, currentUserRecord.Score, avatarId, vipLevel);
+        }
+        else
+        {
+            UpdateUserLeaderboardUI("1000", "0", User.userProfile.AvatarId, User.userProfile.VipLevel);
+        }
+
         recordList = apiLeaderboardRecordList.Records.ToList();
         recordList.Sort((record1, record2) => int.Parse(record1.Rank) - int.Parse(record2.Rank));
 
@@ -90,33 +105,6 @@ public class LeaderBoardView : BaseView
         
     }
     
-    private async UniTask LoadInfoCurrentUser()
-    {
-        Debug.Log("get current user record game " + currentTabGameCode);
-
-        IApiLeaderboardRecordList list =
-            await leaderboardPresenter.LoadList(currentTabGameCode, User.userProfile.UserId);
-
-        IApiLeaderboardRecord record;
-
-        // 👉 CASE 1: CHƯA CÓ RECORD TRONG LEADERBOARD
-        if (list == null || list.Records == null || !list.Records.Any())
-        {
-            UpdateUserLeaderboardUI("1000", "0", User.userProfile.AvatarId, User.userProfile.VipLevel);
-        }
-        else
-        {
-            record = list.Records.First();
-            var json = JObject.Parse(record.Metadata);
-            string avatarId = json["avatar_id"]?.ToString() ?? "";
-            long vipLevel = json["vip_level"]?.Value<long>() ?? 0;
-            Debug.Log("ttt " + avatarId + " : " + vipLevel);
-            UpdateUserLeaderboardUI(record.Rank, record.Score, avatarId, vipLevel);
-        }
-        
-    }
-    
-
     #endregion
 
     #region UI
@@ -190,7 +178,6 @@ public class LeaderBoardView : BaseView
                 leaderboardTab.SelectTab(false);
             }
         }
-        _ = LoadInfoCurrentUser();
         _ = LoadListLeaderBoard();
     }
         

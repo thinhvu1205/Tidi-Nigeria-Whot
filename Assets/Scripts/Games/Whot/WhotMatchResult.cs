@@ -120,6 +120,7 @@ public class WhotMatchResult : MonoBehaviour
         {
             UniTask.Void(async () =>
             {
+                UIManager.Instance.ShowProgressing();
                 if (whotGame != null) whotGame.TypeWinMore = true;
                 await UIManager.Instance.HandleLeaveGame();
             });

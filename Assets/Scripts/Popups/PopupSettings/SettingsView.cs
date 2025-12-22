@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Globals;
+using Proto;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ public class SettingsView : BaseView
     [SerializeField] private Image toggleSoundImage, toggleMusicImage;
     [SerializeField] private TextMeshProUGUI displayNameText, userIdText;
     [SerializeField] private Avatar avatar;
+    [SerializeField] private Button btnSettingAccountDeletion;
     private SettingPresenter settingPresenter;
 
     protected override void Awake()
@@ -52,6 +54,10 @@ public class SettingsView : BaseView
         }
         toggleSoundImage.gameObject.SetActive(Config.isOpenSound);
         toggleMusicImage.gameObject.SetActive(Config.isOpenMusic);
+        if (btnSettingAccountDeletion != null)
+        {
+            btnSettingAccountDeletion.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureSettingAccountDeletion));
+        }
     }
 
     #region Button
@@ -111,7 +117,17 @@ public class SettingsView : BaseView
 
     public void OnClickDeleteAccount()
     {
+        _ = DeleteAccount();
+    }
 
+    private async UniTask DeleteAccount()
+    {
+        UIManager.Instance.ShowProgressing();
+        await DataSender.DeleteAccount();
+        Config.loginType = LoginType.NONE;
+        PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
+        PlayerPrefs.DeleteKey("UserName");
+        PlayerPrefs.DeleteKey("PassWord");
     }
 
     public void OnClickFacebook()
