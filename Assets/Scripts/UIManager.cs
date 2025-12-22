@@ -179,6 +179,11 @@ public class UIManager : Singleton<UIManager>
         
         if (gameView != null)
         {
+            if (gameView.WantSwitchTable)
+            {
+                gameView.LoadInfoMatch(labelMatch);
+                return;
+            }
             WhotView whotView = gameView as WhotView;
             if (whotView != null && whotView.TypeWinMore)
             {

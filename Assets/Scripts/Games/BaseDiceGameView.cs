@@ -23,8 +23,8 @@ public class BaseDiceGameView : BaseGameView
     [SerializeField] protected EmojiItem emojiItemPrefab;
     public int MarkUnit { get; private set; }
 
-    protected readonly Dictionary<string, BasePlayerView> userIdToView = new();
-    protected BasePlayerView thisPlayer = new();
+    protected Dictionary<string, BasePlayerView> userIdToView = new();
+    protected BasePlayerView currentPlayerView = new();
     protected List<Player> players = new List<Player>();
     protected List<Player> rearrangedPlayers = new List<Player>();
     [SerializeField] protected List<Player> playingPlayers = new List<Player>();
@@ -57,7 +57,7 @@ public class BaseDiceGameView : BaseGameView
         if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && interactTimer <= 0)
         {
             interactTimer = interactCountdown;
-            DataSender.SendMatchState((long)OpCodeRequest.OpcodeUserInteractCards, new byte[0]);
+            DataSender.SendMatchState((long)OpCodeRequest.OpcodeUserInteractCards, Array.Empty<byte>());
         }
     }
 
@@ -80,10 +80,20 @@ public class BaseDiceGameView : BaseGameView
         base.LoadInfoMatch(match);
         Debug.Log("LOAD INFO MATCH: " + match.ToString());
         Debug.Log("CURRENT GAME ID: " + Config.currentGameId);
-        Debug.Log("Current Game is Table Game: " + Constants.SELECT_TABLE_GAMES_ID.Contains(Config.currentGameId));
         if (!Constants.SELECT_TABLE_GAMES_ID.Contains(Config.currentGameId)) return;
         Debug.Log("LOAD INFO TABLE GAME");
-        MarkUnit = (int)match.MarkUnit;
+        MarkUnit = match.MarkUnit;
+        WantSwitchTable = false;
+        foreach (var userId in userIdToView.Keys.ToList())
+        {
+            var view = userIdToView[userId];
+            if (view != null)
+            {
+                Destroy(view.gameObject);
+            }
+
+            userIdToView.Remove(userId);
+        }
         if (textMatchInfo != null)
         {
             textMatchInfo.text = $"ID {match.TableId}\nBet: {Utility.FormatMoney(MarkUnit)}";
@@ -133,24 +143,24 @@ public class BaseDiceGameView : BaseGameView
         }
 
         // 3) Xử lý players leave
-            foreach (var lp in update.LeavePlayers)
+        foreach (var lp in update.LeavePlayers)
+        {
+            Debug.Log($"Player {lp.UserName} left the table");
+            if (userIdToView.TryGetValue(lp.Id, out var view))
             {
-                Debug.Log($"Player {lp.UserName} left the table");
-                if (userIdToView.TryGetValue(lp.Id, out var view))
-                {
-                    SoundManager.Instance.PlayEffectFromPath(Sound.REMOVE);
-                    Destroy(view.gameObject);
-                    RemovePlayerBoxBet(lp.Id);
-                    userIdToView.Remove(lp.Id);
-                }
+                SoundManager.Instance.PlayEffectFromPath(Sound.REMOVE);
+                Destroy(view.gameObject);
+                RemovePlayerBoxBet(lp.Id);
+                userIdToView.Remove(lp.Id);
             }
+        }
 
         // 4) Xử lý players join
         foreach (var jp in update.JoinPlayers)
         {
             Debug.Log($"Player {jp.UserName} joined the table");
         }
-
+        
         // 5) Tạo/update player views theo danh sách players mới
         var localInPlayers = players.Exists(p => p.Id == localUserId);
 
@@ -173,34 +183,21 @@ public class BaseDiceGameView : BaseGameView
         }
 
         // Gán các vị trí tiếp theo theo thứ tự trong update.players, bỏ qua local
-        if (GameState == Proto.GameState.Play)
+        for (int i = 0; i < rearrangedPlayers.Count && positionIndex < listPosView.Count; i++)
         {
-            for (int i = 0; i < rearrangedPlayers.Count && positionIndex < listPosView.Count; i++)
-            {
-                var p = rearrangedPlayers[i];
-                if (p.Id == localUserId || playingPlayers.Contains(p)) continue;
-                CreatePlayerView(p, listPosView[i]);
-                // positionIndex++;
-            } 
-        }
-        else
-        {
-            for (int i = 0; i < rearrangedPlayers.Count && positionIndex < listPosView.Count; i++)
-            {
-                var p = rearrangedPlayers[i];
-                if (p.Id == localUserId) continue;
-                CreatePlayerView(p, listPosView[positionIndex]);
-                positionIndex++;
-            } 
-        }
+            var p = rearrangedPlayers[i];
+            if (p.Id == localUserId) continue;
+            CreatePlayerView(p, listPosView[positionIndex]);
+            positionIndex++;
+        } 
+        
+        if (currentPlayerView == userIdToView.GetValueOrDefault(localUserId)) return;
 
-        if (thisPlayer == userIdToView.GetValueOrDefault(localUserId)) return;
-
-        // 6) Cập nhật thisPlayer và UI
-        thisPlayer = userIdToView.GetValueOrDefault(localUserId);
-        if (thisPlayer != null)
+        // 6) Update UI current Player
+        currentPlayerView = userIdToView.GetValueOrDefault(localUserId);
+        if (currentPlayerView != null)
         {
-            thisPlayer.SetPositionInfoThisPlayer();
+            currentPlayerView.SetPositionInfoThisPlayer();
         }
     }
 

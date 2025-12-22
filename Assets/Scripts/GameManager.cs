@@ -83,6 +83,9 @@ public class GameManager : Singleton<GameManager>
                 case (long)OpCodeUpdate.BettingState:
                     UIManager.Instance.gameView.HandleBettingState(matchState);
                     break;
+                case (long)OpCodeUpdate.ChangeTable:
+                    UIManager.Instance.gameView.HandleSwitchTable(matchState);
+                    break; 
                 
             }
         }

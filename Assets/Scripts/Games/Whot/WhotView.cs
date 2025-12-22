@@ -203,6 +203,10 @@ public class WhotView : BaseDiceGameView
     #region API Handlers
     public override void LoadInfoMatch(Match match)
     {
+        if (TypeWinMore || WantSwitchTable)
+        {
+            Init();
+        }
         base.LoadInfoMatch(match);
         playersParent.gameObject.SetActive(true);
         // string labelJson = match.Label;
@@ -227,10 +231,6 @@ public class WhotView : BaseDiceGameView
     // Khi có người chơi join hoặc leave
     public override void HandleUpdateTable(IMatchState matchState)
     {
-        if (TypeWinMore)
-        {
-            Init();
-        }
         var data = UpdateTable.Parser.ParseFrom(matchState.State);
         Debug.Log("UPDATE TABLE: " + data.ToString());
         playersParent.gameObject.SetActive(true);

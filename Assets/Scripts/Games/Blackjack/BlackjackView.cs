@@ -1881,7 +1881,7 @@ public class BlackjackView : BaseDiceGameView
     {
         foreach (Player player in rearrangedPlayers)
         {
-            if (player.Id == thisPlayer.id) continue;
+            if (player.Id == currentPlayerView.id) continue;
             if (userIdToBoxBetView.TryGetValue(player.Id, out var boxBet))
             {
                 if (!boxBet.HasBet)
@@ -1895,7 +1895,7 @@ public class BlackjackView : BaseDiceGameView
     {
         foreach (Player player in rearrangedPlayers)
         {
-            if (player.Id == thisPlayer.id) continue;
+            if (player.Id == currentPlayerView.id) continue;
             if (userIdToBoxBetView.TryGetValue(player.Id, out var boxBet))
             {
                 boxBet.HideAnimationWaiting();

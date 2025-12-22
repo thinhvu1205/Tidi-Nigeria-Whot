@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Globals;
+using Google.Protobuf;
+using Proto;
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,17 +23,29 @@ public class GroupMenuView : BaseView
 
     public void OnClickSwitchTable()
     {
+        Hide();
+        var gameView = UIManager.Instance.gameView;
+        if (gameView == null) return;
+        
+        var changeTableRequest = new ChangeTableRequest
+        {
+            Cancel = gameView.WantSwitchTable
+        };
 
+        DataSender.SendMatchState(
+            (long)OpCodeRequest.ChangeTable,
+            changeTableRequest.ToByteArray()
+        );
     }
 
     public void OnClickLeaveTable()
     {
+        Hide();
         UniTask.Void(async () =>
         {
             UIManager.Instance.ShowProgressing();
             await UIManager.Instance.HandleLeaveGame();
             UIManager.Instance.HideProgressing();
-            Hide();
         });
     }
 

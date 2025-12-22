@@ -112,19 +112,17 @@ public class NetworkManager : MonoBehaviour
             // {
             //     { "device_id", Config.deviceId },
             // };
+            Config.currentMatchId = string.Empty;
             var match = await _SocketIS.JoinMatchAsync(matchId);
-
-            // Lưu lại thông tin match nếu cần
             Config.currentMatchId = matchId;
             return match;
-            
         }
         catch (Exception ex)
         {
             Debug.Log("Err when join match : " + ex);
             UIManager.Instance.HideProgressing();
             UIManager.Instance.ShowConfirmDialog(ex.Message, () => UIManager.Instance.OpenShop(), null, "Get More Chips");
-            Config.currentMatchId = "";
+            Config.currentMatchId = string.Empty;
             return null;
         }
     }
@@ -479,11 +477,10 @@ public class NetworkManager : MonoBehaviour
         
         _SocketIS.ReceivedMatchState += state =>
         {
+            if (isPause && state.OpCode != (int)OpCodeUpdate.OpcodeKickOffTheTable && state.OpCode != (int)OpCodeUpdate.ChangeTable) return;
             lock (queueLock)
             {
                 // Debug.Log("add state queue " + state);
-                if (isPause && state.OpCode != (int)OpCodeUpdate.OpcodeKickOffTheTable) return;
-
                 matchStateQueue.Enqueue(state);
             }
         };
@@ -694,7 +691,7 @@ public class NetworkManager : MonoBehaviour
         {
             while (matchStateQueue.Count > 0)
             {
-                if (!UIManager.Instance.gameView)
+                if (!UIManager.Instance.gameView || string.IsNullOrEmpty(Config.currentMatchId))
                 {
                     return;
                 }
