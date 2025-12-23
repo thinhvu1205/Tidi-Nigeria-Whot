@@ -80,22 +80,32 @@ public class SendGiftView : BaseView
         string recipientId = Regex.Replace(idInputField.text, @"\p{C}+", "").Trim();
         
         string cleanInput = Regex.Replace(amountChipInputField.text, @"\p{C}+", "").Trim();
+
+        if (string.IsNullOrEmpty(recipientId))
+        {
+            UIManager.Instance.ShowAlertDialog("Recipient ID is empty.");
+            canSend = true;
+            return;
+        }
         
         if (string.IsNullOrEmpty(cleanInput))
         {
             UIManager.Instance.ShowAlertDialog("Value of chip is empty.");
+            canSend = true;
             return;
         }
 
         if (!long.TryParse(cleanInput, out long amount))
         {
             UIManager.Instance.ShowAlertDialog("Value of chip invalid.");
+            canSend = true;
             return;
         }
 
         if (User.userProfile.AccountChip < amount * 103 / 100)
         {
             UIManager.Instance.ShowAlertDialog("You do not have enough chips.");
+            canSend = true;
             return;
         }
         
@@ -109,12 +119,15 @@ public class SendGiftView : BaseView
             currentChipTxt.text = Utility.FormatNumber(User.userProfile.AccountChip);
 
             await OnSuccess("Send gift successfully!", true);
-            canSend = true;
+            
             OnClickHistoryTab();
             
         }
-  
-       
+        else
+        {
+            UIManager.Instance.HideProgressing();
+        }
+        canSend = true;
     }
 
     private async UniTask LoadDataHistoryGift()
@@ -148,7 +161,7 @@ public class SendGiftView : BaseView
     {
         foreach(Transform child in historyItemContainer)
         {
-            DestroyImmediate(child.gameObject);
+            Destroy(child.gameObject);
         }
         foreach (var walletLedgerItem in transaction.transactions)
         {

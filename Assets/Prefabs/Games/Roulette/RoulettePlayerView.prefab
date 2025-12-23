@@ -396,7 +396,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8707924144333828752, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
       propertyPath: m_margin.x
-      value: 7.2338257
+      value: 6.3241577
       objectReference: {fileID: 0}
     - target: {fileID: 8707924144333828752, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
       propertyPath: m_margin.y
@@ -404,7 +404,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8707924144333828752, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
       propertyPath: m_margin.z
-      value: 13.461121
+      value: 8.316284
       objectReference: {fileID: 0}
     - target: {fileID: 8707924144333828752, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
       propertyPath: m_fontAsset
@@ -416,7 +416,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8707924144333828752, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
       propertyPath: m_fontSizeMin
-      value: 13
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8707924144333828752, guid: 101eed2251b924c6ba7d2b6e32e4fdda, type: 3}
       propertyPath: m_fontSizeBase

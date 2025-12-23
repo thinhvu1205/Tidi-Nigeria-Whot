@@ -36,12 +36,14 @@ public class FreeChipView : BaseView
 
     private void UpdateUIRewardList()
     {
+        Debug.Log("UpdateUIRewardList");
         foreach(Transform child in freeChipItemContainer)
         {
-            DestroyImmediate(child.gameObject);
+            Destroy(child.gameObject);
         }
         foreach (FreeChip freeChip in listFreeChip)
         {
+            Debug.Log("FREE CHIP INSTANTIATED");
             FreeChipItem freeChipItem = Instantiate(freeChipItemPrefab, freeChipItemContainer).GetComponent<FreeChipItem>();
             freeChipItem.SetInfo(freeChip);
             freeChipItem.OnItemClicked += FreeChipItem_OnItemClicked;

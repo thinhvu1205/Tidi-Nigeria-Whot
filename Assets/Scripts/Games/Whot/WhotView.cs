@@ -195,6 +195,7 @@ public class WhotView : BaseDiceGameView
     protected override void OnDestroy()
     {
         // Clear all pools to ensure clean state
+        base.OnDestroy();
         PoolService.Instance.ClearPool<WhotCardModel>(PrefabType.WhotCard);
         PoolService.Instance.ClearPool<WhotChip>(PrefabType.ChipPlayerWhot);
         _ = UIManager.Instance.LoadProfileUser();

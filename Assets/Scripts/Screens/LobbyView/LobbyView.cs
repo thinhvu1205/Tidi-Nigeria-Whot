@@ -200,10 +200,10 @@ public class LobbyView : BaseView
         else
         {
             vipFarm.SetActive(true);
+            double progress = await lobbyPresenter.GetVipFarmProgress();
+            textVipFarmPercent.text = (progress * 100).ToString("F2") + "%";
+            imageVipFarmPercent.fillAmount = (float)progress;
         }
-        double progress = await lobbyPresenter.GetVipFarmProgress();
-        textVipFarmPercent.text = (progress * 100).ToString("F2") + "%";
-        imageVipFarmPercent.fillAmount = (float)progress;
     }
 
     private void UpdateUIListGame()

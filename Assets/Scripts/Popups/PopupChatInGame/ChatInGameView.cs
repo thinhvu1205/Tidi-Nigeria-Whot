@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using DG.Tweening;
 using Globals;
 using Nakama;
@@ -11,10 +13,10 @@ using UnityEngine.UI;
 public class ChatInGameView : BaseView
 {
     [SerializeField] private ChatInGameItem messagePrefab;
-    [SerializeField] private Transform messageContentParent;
+    [SerializeField] private Transform messageContentParent, chatContainer, recorderContainer;
     [SerializeField] private TMP_InputField chatInputField;
     [SerializeField] private VerticalPool verticalPoolGroup;
-    private List<IApiChannelMessage> listMessage = new();
+    [SerializeField] private MicrophoneRecorder microphoneRecorder;
     private List<PoolInfo> listPoolInfo = new();    
     private ChatInGamePresenter chatInGamePresenter;
 
@@ -53,6 +55,8 @@ public class ChatInGameView : BaseView
     protected override void OnEnable()
     {
         base.OnEnable();
+        chatContainer.gameObject.SetActive(true);
+        recorderContainer.gameObject.SetActive(false);
     }
 
 
@@ -79,6 +83,31 @@ public class ChatInGameView : BaseView
             childRect.offsetMin = new Vector2(0, childRect.offsetMin.y);
             childRect.offsetMax = new Vector2(0, childRect.offsetMax.y);
         }, true);
+
+        microphoneRecorder.SetData(30, null, null, async () =>
+        {
+            byte[] returnedBytes;
+            using (MemoryStream output = new())
+            {
+                using (DeflateStream deflate = new(output, System.IO.Compression.CompressionLevel.Optimal))
+                    deflate.Write(microphoneRecorder.GetBytes(), 0, microphoneRecorder.GetBytes().Length);
+                returnedBytes = output.ToArray();
+            }
+            Debug.Log("check byte " + microphoneRecorder.GetBytes().Length);
+            string base64 = Convert.ToBase64String(returnedBytes);
+
+            long timeNowInSeconds = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            List<string> splitBytes = new();
+            for (int i = 0; i < base64.Length; i += 350000) splitBytes.Add(base64.Substring(i, Mathf.Min(350000, base64.Length - i)));
+
+            if (splitBytes.Count <= 1) await chatInGamePresenter.SendChatVoice(User.userProfile.UserName, splitBytes[0]);
+            else
+            {
+                for (int i = 0; i < splitBytes.Count; i++)
+                    await chatInGamePresenter.SendChatVoice(User.userProfile.UserName, splitBytes[i], i + 1, splitBytes.Count, timeNowInSeconds);
+            }
+            microphoneRecorder.OnClickClose();
+        });
         NetworkManager.INSTANCE.OnMessageTableReceived += NetworkManager_OnMessageTableReceived;
         
     }
@@ -94,6 +123,18 @@ public class ChatInGameView : BaseView
             // verticalPoolGroup.ScrollToLast(0);
             // chatWorldItem.SetInfo(message, isCurrentPlayer);
         }
+    }
+    
+    public void OnClickMicro()
+    {
+        chatContainer.gameObject.SetActive(false);
+        recorderContainer.gameObject.SetActive(true);    
+    }
+
+    public void OnClickSendChatVoice()
+    {
+        chatContainer.gameObject.SetActive(true);
+        recorderContainer.gameObject.SetActive(false);    
     }
 
     public void OnClickSendMessage()

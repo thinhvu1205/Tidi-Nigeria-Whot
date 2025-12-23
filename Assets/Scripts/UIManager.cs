@@ -24,6 +24,7 @@ public class UIManager : Singleton<UIManager>
     public SpriteAtlas avatarAtlas, cardAtlas;
     [SerializeField] Sprite avtDefault, spriteToast;
     [SerializeField] TMP_FontAsset fontLabelToast;
+    [SerializeField] Canvas canvasGame;
     public SelectTableView selectTableView;
     public ListBannerView bannerView;
     public LobbyView lobbyView;
@@ -64,7 +65,7 @@ public class UIManager : Singleton<UIManager>
         {
             await LoadProfileUser();
         }
-        SceneManager.LoadSceneAsync(sceneName);
+        await SceneManager.LoadSceneAsync(sceneName);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -100,6 +101,17 @@ public class UIManager : Singleton<UIManager>
     public Sprite GetAvatarDefault()
     {
         return avtDefault;
+    }
+
+    public void ChangeOrientation(ScreenOrientation screenOrient)
+    {
+        canvasGame.GetComponent<CanvasScaler>().matchWidthOrHeight = screenOrient == ScreenOrientation.Portrait ? 0 : 1.0f;
+        canvasGame.GetComponent<CanvasScaler>().referenceResolution = screenOrient == ScreenOrientation.Portrait ? new Vector2(720, 1280) : new Vector2(1280, 720);
+        Screen.orientation = screenOrient;
+        DOTween.Sequence().AppendInterval(0.5f).AppendCallback(() =>
+        {
+            SafeArea.Instance.ChangeOrient();
+        });
     }
 
     public void DestroyAllChildren(Transform transform)

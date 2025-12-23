@@ -135,6 +135,7 @@ public class BaccaratView : BaseDiceGameView
     protected override void OnDestroy()
     {
         // Clear all pools to ensure clean state
+        base.OnDestroy();
         PoolService.Instance.ClearPool<BaccaratChip>(PrefabType.ChipPlayerBaccarat);
         PoolService.Instance.ClearPool<CardModel>(PrefabType.Card);
     }

@@ -75,30 +75,6 @@ namespace Globals
                 Handheld.Vibrate();
         }
         
-        public static void decodeCard(int code, ref int N, ref int S)
-        {
-            if (code == CODE_JOKER_RED || code == CODE_JOKER_BLACK)
-            {
-                S = code;
-                N = code;
-                return;
-            }
-            // // mỗi game có 1 điều decode # nhau
-            S = ((code - 1) / 13) + 1; //>=1 <=4
-            N = ((code - 1) % 13) + 2; // >=2 , <=14
-
-            // if (currentGameId == (int)GAMEID.LUCKY_89)
-            // {
-            //     N = ((code - 1) % 13) + 1;
-            // }
-            //
-            // if (curGameId == (int)GAMEID.TONGITS_JOKER)
-            // {
-            //     if (N == 14) N = 1;
-            // }
-            //nameCard = N + getSuitInVN();
-        }
-        
         public static async UniTask<Sprite> GetRemoteSprite(string url, bool isLoadBanner = false)
         {
             if (isLoadBanner)
