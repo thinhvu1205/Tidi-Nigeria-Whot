@@ -21,7 +21,7 @@ public class BaseGameView : BaseView
     public virtual GameState[] AvailableLeaveStates => new GameState[]{ GameState.Idle, GameState.Matching };
     public virtual bool CanLeaveTable => true;
     protected bool hasBet = false;
-    protected bool isPause = false;
+    public bool WantSwitchTable = false;
 
     
 
@@ -32,7 +32,7 @@ public class BaseGameView : BaseView
 
     protected virtual void OnApplicationPause(bool pause)
     {
-        isPause = pause;     
+           
     }
 
     public virtual void LoadInfoMatch(Match match)
@@ -75,39 +75,38 @@ public class BaseGameView : BaseView
 
     public virtual void HandleUpdateTable(IMatchState matchState)
     {
-        if (isPause) return;
+       
     }
     
     public virtual void HandleUpdateUserInTable(IMatchState matchState)
     {
-        if (isPause) return;
+       
     }
     
     public virtual void HandleUpdateDeal(IMatchState matchState)
     {
-        if (isPause) return;
+        
     }
 
     public virtual void HandleUpdateTurn(IMatchState matchState)
     {
-        if (isPause) return;
+        
     }
 
     public virtual void HandleUpdateCardState(IMatchState matchState)
     {
-        if (isPause) return;
+        
     }
 
     public virtual void HandleUpdateGameState(IMatchState matchState)
     {
-        if (isPause) return;
         UpdateGameState data = UpdateGameState.Parser.ParseFrom(matchState.State);
         GameState = data.State;
     }
 
     public virtual void HandleUpdateWallet(IMatchState matchState)
     {
-        if (isPause) return;
+        
     }
 
     public virtual async UniTask HandleUpdateKickOffTheTable(IMatchState matchState)
@@ -116,6 +115,7 @@ public class BaseGameView : BaseView
         if (UIManager.Instance.gameView == null) return;
         Destroy(UIManager.Instance.gameView.gameObject);
         UIManager.Instance.gameView = null;
+        Config.currentMatchId = string.Empty;
         await NetworkManager.INSTANCE.LeaveRoomChat();
         await NetworkManager.INSTANCE.JoinWorldChat();
         await UIManager.Instance.LoadProfileUser();
@@ -124,7 +124,24 @@ public class BaseGameView : BaseView
 
     public virtual void HandleFinish(IMatchState matchState)
     {
-        if (isPause) return;
+        
+    }
+    
+    public virtual void HandleSwitchTable(IMatchState matchState)
+    {
+        if(UIManager.Instance.gameView == null) return;
+        var changeTableUpdate = ChangeTableUpdate.Parser.ParseFrom(matchState.State);
+        if (changeTableUpdate.ShouldChange)
+        {
+            _ = UIManager.Instance.HandleFindAndJoinMatch(changeTableUpdate.MarkUnit);
+        }
+        else
+        {
+            UIManager.Instance.gameView.WantSwitchTable = changeTableUpdate.Requested;
+            UIManager.Instance.ShowAlertDialog(changeTableUpdate.Requested
+                ? "You will change room after this game is finished"
+                : "Your request to change room is canceled");
+        }
     }
 
     public virtual void HandleError(IMatchState matchState)
@@ -145,32 +162,27 @@ public class BaseGameView : BaseView
     // HK Poker specific handlers
     public virtual void HandleUpdatePlayerAction(IMatchState matchState)
     {
-        if (isPause) return;
-        // Override in HongKongPokerView
+        
     }
     
     public virtual void HandleUpdateNewRound(IMatchState matchState)
     {
-        if (isPause) return;
-        // Override in HongKongPokerView
+        
     }
     
     public virtual void HandleUpdateCardSwap(IMatchState matchState)
     {
-        if (isPause) return;
-        // Override in HongKongPokerView
+       
     }
     
     public virtual async UniTask HandleUpdateShowdown(IMatchState matchState)
     {
-        if (isPause) return;
-        // Override in HongKongPokerView
+       
     }
     
     public virtual void HandleBettingState(IMatchState matchState)
     {
-        if (isPause) return;
-        // Override in HongKongPokerView
+      
     }
     
     #endregion

@@ -89,6 +89,8 @@ enum OpCodeRequest {
   // HK Poker OpCodes
   OPCODE_REQUEST_PLAYER_ACTION = 18;  // HK Poker betting action
   OPCODE_REQUEST_CARD_SWAP = 19;      // HK Poker card swap (Round 4)
+  // Change table
+  OPCODE_REQUEST_CHANGE_TABLE = 20;   // Request to change table after game ends
 }
 
 
@@ -122,6 +124,8 @@ enum OpCodeUpdate {
   OPCODE_UPDATE_CARD_SWAP = 22;       // Card swap result
   OPCODE_UPDATE_SHOWDOWN = 23;        // Showdown results
   OPCODE_UPDATE_BETTING_STATE = 24;   // Betting state update (optional)
+  // Change table
+  OPCODE_UPDATE_CHANGE_TABLE = 25;    // Confirm change table request / notify to change
 }
 
 // Response for tip in game
@@ -143,4 +147,17 @@ message UpdateTable {
   int64 remain_time = 8; // remain time to end game
   GameState game_state = 9;
   Jackpot jp_treasure = 10;
+}
+
+// Request to change table
+message ChangeTableRequest {
+  bool cancel = 1;  // true = cancel request, false = request change
+}
+
+// Response/Update for change table
+message ChangeTableUpdate {
+  bool requested = 1;     // true = request accepted, false = cancelled
+  bool should_change = 2; // true = time to change table now (sent after game ends)
+  string game_code = 3;
+  int32 mark_unit = 4;
 }

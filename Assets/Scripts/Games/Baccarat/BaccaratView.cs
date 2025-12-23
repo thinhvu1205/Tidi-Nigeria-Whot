@@ -143,6 +143,10 @@ public class BaccaratView : BaseDiceGameView
 
     public override void LoadInfoMatch(Match match)
     {
+        if (WantSwitchTable)
+        {
+            ResetDefaultUI();
+        }
         base.LoadInfoMatch(match);
         SetInfoBet(MarkUnit);
          _ = NetworkManager.INSTANCE.JoinRoomChat(CHAT_ROOM_NAME + "-" + match.TableId);
@@ -150,11 +154,11 @@ public class BaccaratView : BaseDiceGameView
 
     private void LoadProfile()
     {
-        thisPlayer.id = User.userProfile.UserId;
-        thisPlayer.wallet = User.userProfile.AccountChip.ToString();
-        thisPlayer.avatar_id = User.userProfile.AvatarId;
-        thisPlayer.vipLevel = User.userProfile.VipLevel;
-        thisPlayer.user_name = User.userProfile.DisplayName;
+        currentPlayerView.id = User.userProfile.UserId;
+        currentPlayerView.wallet = User.userProfile.AccountChip.ToString();
+        currentPlayerView.avatar_id = User.userProfile.AvatarId;
+        currentPlayerView.vipLevel = User.userProfile.VipLevel;
+        currentPlayerView.user_name = User.userProfile.DisplayName;
     }
 
     #region Hander Api
@@ -163,7 +167,7 @@ public class BaccaratView : BaseDiceGameView
     {
         base.RequestSyncStateTable();
         Debug.Log("Sync state Baccarat");
-        ResetUIOnDataSync();
+        ResetDefaultUI();
         DataSender.SendMatchState((long)OpCodeRequest.UserInTable, Array.Empty<byte>());
         DataSender.SendMatchState((long)OpCodeRequest.SyncTable, Array.Empty<byte>());
     }
@@ -275,14 +279,14 @@ public class BaccaratView : BaseDiceGameView
                 {
                     if (data.UserBet.UserId == User.userProfile.UserId)
                     {
-                        var wallet = long.Parse(thisPlayer.wallet);
+                        var wallet = long.Parse(currentPlayerView.wallet);
                         foreach (var infoBet in data.UserBet.Bets)
                         {
                             int i = (int)infoBet.Cell - 1;
                             listMyBet[i] += infoBet.Chips;
                             wallet -= infoBet.Chips;
                         }
-                        thisPlayer.wallet = wallet.ToString();
+                        currentPlayerView.wallet = wallet.ToString();
                     }
 
                     foreach (var infoBet in data.UserBet.Bets)
@@ -302,7 +306,7 @@ public class BaccaratView : BaseDiceGameView
                     buttonBetBaccarat.SetActive(true);
                     SetStatusButtonsBet(!checkBeted, checkBeted);
                     long currentBet = listMyBet.Sum();
-                    if (currentBet > long.Parse(thisPlayer.wallet) / 2 || 2 * currentBet > maxUnitTotalBet * MarkUnit )
+                    if (currentBet > long.Parse(currentPlayerView.wallet) / 2 || 2 * currentBet > maxUnitTotalBet * MarkUnit )
                     {
                         SetStatusButtonsBet(false, false);
                     }
@@ -555,7 +559,7 @@ public class BaccaratView : BaseDiceGameView
 
                     SetDisplayBet();
                     var sumLastBet = listLastBet.Sum();
-                    isEnableRebet =  sumLastBet <= long.Parse(thisPlayer.wallet) && sumLastBet > 0;
+                    isEnableRebet =  sumLastBet <= long.Parse(currentPlayerView.wallet) && sumLastBet > 0;
                     SetStatusButtonsBet(isEnableRebet, checkBeted);
                 
                     foreach (var player in players)
@@ -693,9 +697,9 @@ public class BaccaratView : BaseDiceGameView
                 if (!userIdToView.TryGetValue(playerId, out var playerObj) || balanceUpdate.AmountChipAdd <= 0) continue;
                 playerObj.AnimateFlyMoney(balanceUpdate.AmountChipAdd, 40);
                 playerObj.SetCurrentChip(balanceUpdate.AmountChipCurrent);
-                if (playerId == thisPlayer.id)
+                if (playerId == currentPlayerView.id)
                 {
-                    thisPlayer.wallet = balanceUpdate.AmountChipCurrent.ToString();
+                    currentPlayerView.wallet = balanceUpdate.AmountChipCurrent.ToString();
                 }
             }
         });
@@ -815,7 +819,7 @@ public class BaccaratView : BaseDiceGameView
         bool check = false;
         for (int i = 4; i >= 0; i--)
         {
-            if (listValueChipBets[i] > long.Parse(thisPlayer.wallet) || totalBet + listValueChipBets[i] > maxUnitTotalBet * MarkUnit )
+            if (listValueChipBets[i] > long.Parse(currentPlayerView.wallet) || totalBet + listValueChipBets[i] > maxUnitTotalBet * MarkUnit )
             {
                 listChipBets[i].interactable = false;
                 listChipBets[i].transform.localPosition = new Vector2(listChipBets[i].transform.localPosition.x, -321);
@@ -1212,7 +1216,7 @@ public class BaccaratView : BaseDiceGameView
         Debug.Log("Game reset completed");
     }
 
-    private void ResetUIOnDataSync()
+    private void ResetDefaultUI()
     {
         //reset time for preparing, play
         isNewGame = true;
