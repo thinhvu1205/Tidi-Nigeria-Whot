@@ -6,9 +6,14 @@ using System.IO.Compression;
 using DG.Tweening;
 using Globals;
 using Nakama;
+using Newtonsoft.Json;
+using Proto;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
+using UniTask = Cysharp.Threading.Tasks.UniTask;
 
 public class ChatInGameView : BaseView
 {
@@ -17,7 +22,7 @@ public class ChatInGameView : BaseView
     [SerializeField] private TMP_InputField chatInputField;
     [SerializeField] private VerticalPool verticalPoolGroup;
     [SerializeField] private MicrophoneRecorder microphoneRecorder;
-    private List<PoolInfo> listPoolInfo = new();    
+    private List<PoolInfo> listPoolInfo = new();
     private ChatInGamePresenter chatInGamePresenter;
 
 
@@ -48,8 +53,6 @@ public class ChatInGameView : BaseView
     protected override void Start()
     {
         base.Start();
-
-
     }
 
     protected override void OnEnable()
@@ -86,30 +89,48 @@ public class ChatInGameView : BaseView
 
         microphoneRecorder.SetData(30, null, null, async () =>
         {
-            byte[] returnedBytes;
-            using (MemoryStream output = new())
+            try
             {
-                using (DeflateStream deflate = new(output, System.IO.Compression.CompressionLevel.Optimal))
-                    deflate.Write(microphoneRecorder.GetBytes(), 0, microphoneRecorder.GetBytes().Length);
-                returnedBytes = output.ToArray();
+                byte[] voiceBytes = microphoneRecorder.GetBytes();
+                Debug.Log($"Voice byte length: {voiceBytes.Length}");
+
+                long timeNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                string fileName = $"voice_{User.userProfile.UserName}_{timeNow}.mp3";
+
+                // 1️⃣ Get PUT URL
+                PreSignPutResponse putResponse =
+                    await DataSender.GetVoiceUploadPresignedUrl(fileName);
+
+                if (string.IsNullOrEmpty(putResponse?.Url))
+                    throw new Exception("Put URL is null");
+
+                // 2️⃣ Upload
+                var uploadReq = UnityWebRequest.Put(putResponse.Url, voiceBytes);
+                uploadReq.SetRequestHeader("Content-Type", "audio/mpeg");
+                await uploadReq.SendWebRequest();
+
+                if (uploadReq.result != UnityWebRequest.Result.Success)
+                    throw new Exception(uploadReq.error);
+
+                if (string.IsNullOrEmpty(putResponse?.GetUrl))
+                    throw new Exception("Get URL is null");
+                // 4️⃣ Send chat
+                await chatInGamePresenter.SendChatVoice(
+                    User.userProfile.UserName,
+                    putResponse.GetUrl
+                );
             }
-            Debug.Log("check byte " + microphoneRecorder.GetBytes().Length);
-            string base64 = Convert.ToBase64String(returnedBytes);
-
-            long timeNowInSeconds = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            List<string> splitBytes = new();
-            for (int i = 0; i < base64.Length; i += 350000) splitBytes.Add(base64.Substring(i, Mathf.Min(350000, base64.Length - i)));
-
-            if (splitBytes.Count <= 1) await chatInGamePresenter.SendChatVoice(User.userProfile.UserName, splitBytes[0]);
-            else
+            catch (Exception e)
             {
-                for (int i = 0; i < splitBytes.Count; i++)
-                    await chatInGamePresenter.SendChatVoice(User.userProfile.UserName, splitBytes[i], i + 1, splitBytes.Count, timeNowInSeconds);
+                Debug.LogError($"Voice upload failed: {e}");
             }
-            microphoneRecorder.OnClickClose();
+            finally
+            {
+                microphoneRecorder.OnClickClose();
+            }
         });
+
         NetworkManager.INSTANCE.OnMessageTableReceived += NetworkManager_OnMessageTableReceived;
-        
     }
 
     private void NetworkManager_OnMessageTableReceived(IApiChannelMessage message)
@@ -124,17 +145,17 @@ public class ChatInGameView : BaseView
             // chatWorldItem.SetInfo(message, isCurrentPlayer);
         }
     }
-    
+
     public void OnClickMicro()
     {
         chatContainer.gameObject.SetActive(false);
-        recorderContainer.gameObject.SetActive(true);    
+        recorderContainer.gameObject.SetActive(true);
     }
 
     public void OnClickSendChatVoice()
     {
         chatContainer.gameObject.SetActive(true);
-        recorderContainer.gameObject.SetActive(false);    
+        recorderContainer.gameObject.SetActive(false);
     }
 
     public void OnClickSendMessage()
@@ -148,17 +169,109 @@ public class ChatInGameView : BaseView
 
     private ChatPayload ConvertToChatPayload(IApiChannelMessage message)
     {
-        ContentData data = JsonUtility.FromJson<ContentData>(message.Content);
-        ChatPayload chatPayload = new()
+        ChatPayload chatPayload = new ChatPayload();
+
+        try
         {
-            ID = message.SenderId,
-            Name = message.Username,
-            Time = Utility.ConvertISOToHHMM(message.CreateTime),
-            Content = data.content,
-            Avatar = data.sender_profile.avt,
-            Vip = data.sender_profile.vip_level
-        };
+            // Parse message content (JSON string từ server)
+            if (!string.IsNullOrEmpty(message.Content))
+            {
+                // Parse JSON content
+                var contentData = JsonConvert.DeserializeObject<ContentData>(message.Content);
+
+                if (contentData != null)
+                {
+                    // 1. Check voice message first
+                    if (!string.IsNullOrEmpty(contentData.voice_url))
+                    {
+                        chatPayload.IsAudio = true;
+                        chatPayload.Content = contentData.voice_url; 
+                       _ = Test(contentData.voice_url);
+                    }
+                    else
+                    {
+                        // 2. Text message
+                        chatPayload.IsAudio = false;
+                        chatPayload.Content = contentData.text ?? "";
+                    }
+
+                    // 3. Sender info từ sender_profile (server tự thêm)
+                    if (contentData.sender_profile != null)
+                    {
+                        chatPayload.Name = message.Username; // Fallback to message.Username
+                        chatPayload.Avatar = contentData.sender_profile.avt ?? "";
+                        chatPayload.Vip = (int) contentData.sender_profile.vip_level;
+                    }
+                    else
+                    {
+                        chatPayload.Name = message.Username;
+                    }
+
+                    // 4. Sender ID
+                    chatPayload.ID = message.SenderId;
+                    
+                }
+                else
+                {
+                    // Fallback: treat as plain text if JSON parse fails
+                    chatPayload.Content = message.Content;
+                    chatPayload.IsAudio = false;
+                }
+            }
+            else
+            {
+                // Empty content
+                chatPayload.IsAudio = false;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error parsing chat message: {e.Message}\nContent: {message.Content}");
+            // Fallback to basic info
+            chatPayload.Content = message.Content ?? "";
+            chatPayload.IsAudio = false;
+        }
+
         return chatPayload;
+    }
+
+    private async UniTask Test(string url = "")
+    {
+        UnityWebRequest unityWebRequest =
+            UnityWebRequest.Get(url);
+
+        unityWebRequest.downloadHandler = new DownloadHandlerBuffer();
+                        
+
+        await unityWebRequest.SendWebRequest();
+
+        if (unityWebRequest.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError($"Voice download failed: {unityWebRequest.error}");
+            return;
+        }
+
+        byte[] voiceBytes = unityWebRequest.downloadHandler.data;
+        Debug.Log($"Downloaded voice bytes: {voiceBytes.Length}"); 
+    }
+
+// Data classes để parse JSON từ server
+    [Serializable]
+    public class ContentData
+    {
+        public string text; // Text message (optional)
+        public string voice_url; // Voice URL (optional)
+        public SenderProfile sender_profile; // Added by server hook
+        public string sender_id; // Optional
+        public string sender; // Optional
+    }
+
+    [Serializable]
+    public class SenderProfile
+    {
+        public string avt; // Avatar ID
+        public int vip_level; // VIP level
+        public string updated_at; // Timestamp (optional)
     }
 
     public override void OnClickCloseButton()
@@ -234,32 +347,35 @@ public class ChatInGameView : BaseView
                     break;
                 case EFFECT_POPUP.SCALE:
                     Vector3 targetScale = Vector3.zero;
-                    sequence.Append(background.rectTransform.DOScale(targetScale, ANIMATION_TIME).SetEase(Ease.InBack).SetAutoKill(true));
+                    sequence.Append(background.rectTransform.DOScale(targetScale, ANIMATION_TIME).SetEase(Ease.InBack)
+                        .SetAutoKill(true));
                     break;
                 case EFFECT_POPUP.MOVE_LEFT:
                     Fade();
-                    sequence.Append(background.rectTransform.DOLocalMoveX(-Screen.width, ANIMATION_TIME).SetEase(Ease.OutSine).SetAutoKill(true));
+                    sequence.Append(background.rectTransform.DOLocalMoveX(-Screen.width, ANIMATION_TIME)
+                        .SetEase(Ease.OutSine).SetAutoKill(true));
                     break;
                 case EFFECT_POPUP.MOVE_RIGHT:
                     Fade();
-                    sequence.Append(background.rectTransform.DOLocalMoveX(Screen.width, ANIMATION_TIME).SetEase(Ease.OutSine).SetAutoKill(true));
+                    sequence.Append(background.rectTransform.DOLocalMoveX(Screen.width, ANIMATION_TIME)
+                        .SetEase(Ease.OutSine).SetAutoKill(true));
 
                     break;
                 case EFFECT_POPUP.MOVE_UP:
                     Fade();
-                    sequence.Append(background.rectTransform.DOLocalMoveY(Screen.height, ANIMATION_TIME).SetEase(Ease.OutSine).SetAutoKill(true));
+                    sequence.Append(background.rectTransform.DOLocalMoveY(Screen.height, ANIMATION_TIME)
+                        .SetEase(Ease.OutSine).SetAutoKill(true));
 
                     break;
                 case EFFECT_POPUP.MOVE_DOWN:
                     Fade();
-                    sequence.Append(background.rectTransform.DOLocalMoveY(-Screen.height, ANIMATION_TIME).SetEase(Ease.OutSine).SetAutoKill(true));
+                    sequence.Append(background.rectTransform.DOLocalMoveY(-Screen.height, ANIMATION_TIME)
+                        .SetEase(Ease.OutSine).SetAutoKill(true));
 
                     break;
             }
-            sequence.AppendCallback(() =>
-            {
-                onCompleteCallback?.Invoke();
-            });
+
+            sequence.AppendCallback(() => { onCompleteCallback?.Invoke(); });
         }
     }
 }

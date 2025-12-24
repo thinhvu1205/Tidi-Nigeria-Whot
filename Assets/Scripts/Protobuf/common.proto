@@ -386,7 +386,22 @@ message PreSignPutRequest {
   string bucketName = 2;
 }
 
-message PreSignPutResponse { string url = 1; }
+message PreSignPutResponse {
+  string url = 1;
+  string get_url = 2;
+}
+
+// Upload voice message request - server will upload to Minio and return URL
+message UploadVoiceRequest {
+  string voice_data_base64 = 1;  // Base64 encoded voice data
+  string file_name = 2;          // Optional: custom file name (if empty, server generates)
+}
+
+// Upload voice message response
+message UploadVoiceResponse {
+  string url = 1;      // GET URL for downloading the voice file
+  string file_name = 2; // Generated file name
+}
 
 message ReferUser {
   int64 id = 1;
