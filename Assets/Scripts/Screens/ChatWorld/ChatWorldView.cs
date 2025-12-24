@@ -34,7 +34,7 @@ public class ChatWorldView : BaseView
         verticalPoolGroup.SetApplyDataCb((go, data, index) =>
         {
             ChatItem chatItem = go.GetComponent<ChatItem>();
-            chatItem.SetInfo((ChatPayload)data.Data, index, false, (cellW, cellH) =>
+            chatItem.SetInfo((ChatPayload)data.Data, null, true, (cellW, cellH) =>
             {
                 data.SetCellWidth(verticalPoolGroup.GetComponent<RectTransform>().rect.width);
                 data.SetCellHeight(cellH + 40);

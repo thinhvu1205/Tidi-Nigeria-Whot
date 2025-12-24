@@ -22,6 +22,7 @@ public class ChatInGameView : BaseView
     [SerializeField] private TMP_InputField chatInputField;
     [SerializeField] private VerticalPool verticalPoolGroup;
     [SerializeField] private MicrophoneRecorder microphoneRecorder;
+    [SerializeField] private AudioSource audioSource;
     private List<PoolInfo> listPoolInfo = new();
     private ChatInGamePresenter chatInGamePresenter;
 
@@ -74,7 +75,7 @@ public class ChatInGameView : BaseView
         verticalPoolGroup.SetApplyDataCb((go, data, index) =>
         {
             ChatItem chatItem = go.GetComponent<ChatItem>();
-            chatItem.SetInfo((ChatPayload)data.Data, index, true, (cellW, cellH) =>
+            chatItem.SetInfo((ChatPayload)data.Data, audioSource, false, (cellW, cellH) =>
             {
                 data.SetCellWidth(verticalPoolGroup.GetComponent<RectTransform>().rect.width);
                 data.SetCellHeight(cellH + 40);
@@ -136,8 +137,15 @@ public class ChatInGameView : BaseView
     private void NetworkManager_OnMessageTableReceived(IApiChannelMessage message)
     {
         ChatPayload chatPayload = ConvertToChatPayload(message);
+        Debug.Log("chatPayload.Content: " + chatPayload.Content);
+        Debug.Log("chatPayload.IsAudio: " + chatPayload.IsAudio);
+        Debug.Log("chatPayload.Name: " + chatPayload.Name);
+        Debug.Log("chatPayload.Time: " + chatPayload.Time);
+        Debug.Log("chatPayload.Avatar: " + chatPayload.Avatar);
+        Debug.Log("chatPayload.Vip: " + chatPayload.Vip);
         if (!string.IsNullOrEmpty(chatPayload.Content))
         {
+        Debug.Log("NHAN DUOC TIN NHAN");
             listPoolInfo.Add(new PoolInfo { Data = chatPayload });
             verticalPoolGroup.SetControlInfo(listPoolInfo, listPoolInfo.Count - 1);
 
@@ -177,7 +185,7 @@ public class ChatInGameView : BaseView
             if (!string.IsNullOrEmpty(message.Content))
             {
                 // Parse JSON content
-                var contentData = JsonConvert.DeserializeObject<ContentData>(message.Content);
+                var contentData = JsonConvert.DeserializeObject<ChatContentData>(message.Content);
 
                 if (contentData != null)
                 {
@@ -186,7 +194,7 @@ public class ChatInGameView : BaseView
                     {
                         chatPayload.IsAudio = true;
                         chatPayload.Content = contentData.voice_url; 
-                       _ = Test(contentData.voice_url);
+                    //    _ = Test(contentData.voice_url);
                     }
                     else
                     {
@@ -201,6 +209,7 @@ public class ChatInGameView : BaseView
                         chatPayload.Name = message.Username; // Fallback to message.Username
                         chatPayload.Avatar = contentData.sender_profile.avt ?? "";
                         chatPayload.Vip = (int) contentData.sender_profile.vip_level;
+                        chatPayload.Time = Utility.ConvertISOToHHMM(message.CreateTime);
                     }
                     else
                     {
@@ -209,6 +218,7 @@ public class ChatInGameView : BaseView
 
                     // 4. Sender ID
                     chatPayload.ID = message.SenderId;
+                    
                     
                 }
                 else
@@ -255,24 +265,6 @@ public class ChatInGameView : BaseView
         Debug.Log($"Downloaded voice bytes: {voiceBytes.Length}"); 
     }
 
-// Data classes để parse JSON từ server
-    [Serializable]
-    public class ContentData
-    {
-        public string text; // Text message (optional)
-        public string voice_url; // Voice URL (optional)
-        public SenderProfile sender_profile; // Added by server hook
-        public string sender_id; // Optional
-        public string sender; // Optional
-    }
-
-    [Serializable]
-    public class SenderProfile
-    {
-        public string avt; // Avatar ID
-        public int vip_level; // VIP level
-        public string updated_at; // Timestamp (optional)
-    }
 
     public override void OnClickCloseButton()
     {
@@ -378,4 +370,23 @@ public class ChatInGameView : BaseView
             sequence.AppendCallback(() => { onCompleteCallback?.Invoke(); });
         }
     }
+// Data classes để parse JSON từ server
 }
+[Serializable]
+public class ChatContentData
+{
+    public string text; // Text message (optional)
+    public string voice_url; // Voice URL (optional)
+    public ChatSenderProfile sender_profile; // Added by server hook
+    public string sender_id; // Optional
+    public string sender; // Optional
+}
+
+[Serializable]
+public class ChatSenderProfile
+{
+    public string avt; // Avatar ID
+    public int vip_level; // VIP level
+    public string updated_at; // Timestamp (optional)
+}
+

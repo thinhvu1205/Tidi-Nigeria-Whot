@@ -242,6 +242,7 @@ public class BaseDiceGameView : BaseGameView
     protected virtual void NetworkManager_OnMessageTableReceived(IApiChannelMessage message)
     {
         EmojiData emojiData = ConvertEmojiData(message);
+        if (emojiData.isEmoji != "true") return;
         if (!string.IsNullOrEmpty(emojiData.emojiId)
             && !string.IsNullOrEmpty(emojiData.senderId)
             && string.IsNullOrEmpty(emojiData.receiverId)
@@ -314,6 +315,7 @@ public class BaseDiceGameView : BaseGameView
 
 public class EmojiData
 {
+    public string isEmoji;
     public string senderId;
     public string receiverId;
     public string emojiId;

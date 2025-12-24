@@ -308,7 +308,7 @@ public class NetworkManager : MonoBehaviour
     public async UniTask SendMessageRoomChat(string content)
     {
         if (string.IsNullOrEmpty(CurrentRoomChatChannelId)) return;
-        var data = new Dictionary<string, string> {{"content", content}}.ToJson();
+        var data = new Dictionary<string, string> {{"text", content}}.ToJson();
         Debug.Log("MESSAGE: " + content.ToString());
         var sendAck = await _SocketIS.WriteChatMessageAsync(CurrentRoomChatChannelId, data);
     }
@@ -328,6 +328,7 @@ public class NetworkManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(CurrentRoomChatChannelId)) return;
         var data = new Dictionary<string, string> {
+            { "isEmoji", "true" },
             { "emojiId", emojiId},
             { "senderId", senderId},
             }.ToJson();

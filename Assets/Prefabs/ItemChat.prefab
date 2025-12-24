@@ -515,7 +515,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 758143985435290526, guid: a1be2f3877530324da23497395c4117a, type: 3}
+  m_Sprite: {fileID: 758143985435290526, guid: 40006283ea3f544e4b98af0e776e7c67, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -762,7 +762,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1696987549263409590}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0.04617883, z: -0, w: 0.9989332}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -784,10 +784,10 @@ RectTransform:
   - {fileID: 7754347710780196545}
   - {fileID: 415348188793420605}
   m_Father: {fileID: 5732831098169323388}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -5.294, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -39.662003, y: -0.000015258789}
+  m_AnchoredPosition: {x: -32.7, y: -0.000015258789}
   m_SizeDelta: {x: 212.68, y: 55.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1724128658969253889
@@ -982,7 +982,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -89, y: -31}
+  m_AnchoredPosition: {x: -89, y: -26}
   m_SizeDelta: {x: 295.2, y: 48.4973}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8687498389410786700
@@ -2623,8 +2623,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -23, y: 110}
-  m_SizeDelta: {x: 672, y: 116.51953}
+  m_AnchoredPosition: {x: -23, y: 108.99896}
+  m_SizeDelta: {x: 672, y: 118.5216}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5220256452245834372
 MonoBehaviour:
@@ -2652,6 +2652,10 @@ MonoBehaviour:
   contentRight: {fileID: 4142223635646866855}
   chatContainerRight: {fileID: 1493570459031337750}
   imageNarrowRight: {fileID: 0}
+  groupLineLeft: {fileID: 1935174706459170994}
+  groupLineRight: {fileID: 1696987549263409590}
+  audioButtonLeft: {fileID: 6119046667998193977}
+  audioButtonRight: {fileID: 7777860579140721797}
 --- !u!1 &5928699732643731156
 GameObject:
   m_ObjectHideFlags: 0
@@ -2929,7 +2933,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5a102562fbd9a476e9a3a801b2f96dfb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 15830b3d9d94549668c514b8ffab5b51, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2983,9 +2987,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ItemChat, Assembly-CSharp
-        m_MethodName: DoClickAudio
+      - m_Target: {fileID: 5220256452245834372}
+        m_TargetAssemblyTypeName: ChatItem, Assembly-CSharp
+        m_MethodName: OnClickPlayAudio
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3708,7 +3712,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5a102562fbd9a476e9a3a801b2f96dfb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 15830b3d9d94549668c514b8ffab5b51, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3762,9 +3766,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ItemChat, Assembly-CSharp
-        m_MethodName: DoClickAudio
+      - m_Target: {fileID: 5220256452245834372}
+        m_TargetAssemblyTypeName: ChatItem, Assembly-CSharp
+        m_MethodName: OnClickPlayAudio
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
