@@ -17,8 +17,8 @@ public class LeaderBoardTab : MonoBehaviour
     public string GameCode { get; private set; }
     private void Start()
     {
-        selectedBackgroundImage.gameObject.SetActive(false);
-        unselectedBackgroundImage.gameObject.SetActive(true);
+        // selectedBackgroundImage.gameObject.SetActive(false);
+        // unselectedBackgroundImage.gameObject.SetActive(true);
     }
 
     public void SetData(string name, string gameCode)
@@ -40,5 +40,6 @@ public class LeaderBoardTab : MonoBehaviour
         Debug.Log("SelectTab: " + isSelected);
         selectedBackgroundImage.gameObject.SetActive(isSelected);
         unselectedBackgroundImage.gameObject.SetActive(!isSelected);
+        nameText.color = isSelected ? Color.white : Color.gray;
     }
 }

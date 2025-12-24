@@ -5,7 +5,6 @@ using Cysharp.Threading.Tasks;
 using Globals;
 using Google.Protobuf;
 using Proto;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.UI;
 

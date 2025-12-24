@@ -539,8 +539,8 @@ public class RouletteView : BaseDiceGameView
 
     private void UpdateTotalDealValueUI()
     {
-        textDealValue.text = Utility.FormatNumber(currentBetValue);
-        textClearValue.text = Utility.FormatNumber(currentBetValue);
+        textDealValue.text = Utility.FormatMoney(currentBetValue, true);
+        textClearValue.text = Utility.FormatMoney(currentBetValue, true);
 
         if (currentBetValue == 0)
         {

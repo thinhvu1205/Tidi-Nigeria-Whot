@@ -366,7 +366,7 @@ public class LobbyView : BaseView
     public void OnClickGiftCode() => UIManager.Instance.OpenGiftCode();
     public void OnClickBanner() => UIManager.Instance.OpenBanner(TypeInAppMessage.Event);
     public void OnClickSendGift() => UIManager.Instance.OpenSendGift();
-    public void OnClickSupport() => UIManager.Instance.OpenExchange();
+    public void OnClickSupport() => UIManager.Instance.OpenSupport();
     public void OnClickVipFarm() => UIManager.Instance.OpenVipFarm();
     public void OnClickTimeScale()
     {

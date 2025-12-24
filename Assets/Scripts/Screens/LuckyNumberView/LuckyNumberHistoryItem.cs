@@ -12,7 +12,7 @@ public class LuckyNumberHistoryItem : MonoBehaviour
     public void Init(LotteryTicket ticket)
     {
         textId.text = ticket.Id.ToString();
-        textDrawTime.text = Utility.ConvertUnixTimeToHHMMDDMMYYYY(ticket.PurchaseTimeUnix);
+        textDrawTime.text = Utility.ConvertUnixTimeToDDMMYYYYHHMM(ticket.DrawTimeUnix);
         textChosenNumbers.text = string.Join(", ", ticket.Numbers);
         textStatus.text = ticket.Status switch
         {

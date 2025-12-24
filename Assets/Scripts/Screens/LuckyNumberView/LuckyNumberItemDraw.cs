@@ -17,6 +17,7 @@ public class LuckyNumberItemDraw : MonoBehaviour
     [SerializeField] private Sprite[] listSpriteDrawNum; 
     public long id;
     public bool isSelected = false;
+    public bool isInteractable = true;
 
     public void SetInfo(LotteryDraw draw, int index)
     {

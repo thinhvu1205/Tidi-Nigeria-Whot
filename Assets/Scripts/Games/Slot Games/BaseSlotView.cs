@@ -677,7 +677,7 @@ public class BaseSlotView : BaseGameView
         //     UpdateTotalChipWinValue();
         // }
         List<int> scatterColumnIds = new();
-        slotColumnList.Take(3).ToList().ForEach(arr =>
+        slotColumnList.ToList().ForEach(arr =>
         {
             if (arr.ResultItem.GetFinishView().Contains(12))
             {

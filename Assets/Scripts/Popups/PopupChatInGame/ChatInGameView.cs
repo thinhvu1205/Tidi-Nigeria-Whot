@@ -95,10 +95,10 @@ public class ChatInGameView : BaseView
             }
             Debug.Log("check byte " + microphoneRecorder.GetBytes().Length);
             string base64 = Convert.ToBase64String(returnedBytes);
-
+            Debug.Log("base64: " + base64);
             long timeNowInSeconds = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             List<string> splitBytes = new();
-            for (int i = 0; i < base64.Length; i += 350000) splitBytes.Add(base64.Substring(i, Mathf.Min(350000, base64.Length - i)));
+            for (int i = 0; i < base64.Length; i += 40) splitBytes.Add(base64.Substring(i, Mathf.Min(40, base64.Length - i)));
 
             if (splitBytes.Count <= 1) await chatInGamePresenter.SendChatVoice(User.userProfile.UserName, splitBytes[0]);
             else

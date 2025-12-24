@@ -40,6 +40,7 @@ public class LuckyNumberView : BaseView
     private List<LuckyNumberItemDraw> listLuckyNumberItemDraw = new();
     private List<int> listSelectedNumbers = new();
     private long selectedDrawId;
+    private long price;
 
     protected override void Awake()
     {
@@ -119,6 +120,7 @@ public class LuckyNumberView : BaseView
             item.SetInfo(draw, i);
             item.GetComponent<Button>().onClick.AddListener(() => OnChooseDraw(item));
             listLuckyNumberItemDraw.Add(item);
+            price = draw.TicketPrice;
         }
     }
 
@@ -161,18 +163,32 @@ public class LuckyNumberView : BaseView
 
     public void OnChooseDraw(LuckyNumberItemDraw item)
     {
+        if (!item.isInteractable) return;
         if (item.isSelected)
         {
             selectedDrawId = 0;
             buttonConfirmDraw.interactable = false;
+            ResetDraw();
         }
         else
         {
             selectedDrawId = item.id;
             buttonConfirmDraw.interactable = true;
+            foreach(LuckyNumberItemDraw otherItem in listLuckyNumberItemDraw)
+            {
+                if (otherItem == item) continue;
+                otherItem.isInteractable = false;
+            }
         }        
         item.ToggleSelected();
+    }
 
+    private void ResetDraw()
+    {
+        foreach(LuckyNumberItemDraw otherItem in listLuckyNumberItemDraw)
+        {
+            otherItem.isInteractable = true;
+        }
     }
 
     public void OnClickQuickPick()
@@ -257,6 +273,14 @@ public class LuckyNumberView : BaseView
         if (selectedDrawId == 0)
         {
             UIManager.Instance.ShowToast("Please select a draw.", 2, transform);
+            return;
+        }
+        if (User.userProfile.AccountChip < price)
+        {
+            UIManager.Instance.ShowConfirmDialog("You do not have enough chips!", () => UIManager.Instance.OpenShop(), null, "Get More Chips");
+            selectedDrawId = 0;
+            ResetDraw();
+            selectView.OnClickCloseButton();
             return;
         }
         BuyLotteryTicketResponse buyLotteryTicketResponse = await luckyNumberPresenter.BuyLotteryTicket(listSelectedNumbers, selectedDrawId);

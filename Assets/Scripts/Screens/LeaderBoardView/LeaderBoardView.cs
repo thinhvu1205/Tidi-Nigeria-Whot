@@ -20,7 +20,7 @@ public class LeaderBoardView : BaseView
     [Header("Current User")] [SerializeField]
     private Avatar currentUserAvatarImage;
     [SerializeField] private Image topImage;
-    [SerializeField] private TextMeshProUGUI currentUserNameText, currentUserTopText, currentUserChipValueText;
+    [SerializeField] private TextMeshProUGUI currentUserNameText, currentUserTopText, currentUserChipValueText, accountChip, textNextReset;
     [SerializeField] private List<Sprite> topSprites = new();
 
     private List<LeaderBoardItem> listLeaderboardItem = new();
@@ -31,25 +31,46 @@ public class LeaderBoardView : BaseView
     private List<IApiLeaderboardRecord> recordList = new();
     private IApiLeaderboardRecord currentUserRecord;
     private string currentTabGameCode = "";
+    private long resetTimeUnix;
 
     protected override void Awake()
     {
         base.Awake();
         leaderboardPresenter = new LeaderboardPresenter();
         leaderboardPresenter.Init(this);
+        UpdateVisuals();
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        if (resetTimeUnix == 0) return;
+        textNextReset.text = "Reset in: " + Utility.FormatCountdownFromUnix(resetTimeUnix.ToString());
     }
 
     protected override void Start()
     {
         base.Start();
         _ = InitData();
+        User.OnProfileUpdated += UpdateVisuals;
        
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        User.OnProfileUpdated -= UpdateVisuals;
     }
 
     private async UniTask InitData()
     {
         await LoadListGame();
         // await LoadListLeaderBoard();
+    }
+
+    private void UpdateVisuals()
+    {
+        accountChip.text = Utility.FormatNumber(User.userProfile.AccountChip);
     }
     
     #region Data
@@ -101,7 +122,7 @@ public class LeaderBoardView : BaseView
         UpdateUIListRecord();
         
         LeaderBoardRecord leaderBoardRecord = await leaderboardPresenter.LoadInfo(currentTabGameCode);
-        
+        resetTimeUnix = leaderBoardRecord.CdResetUnix;
         
     }
     
@@ -126,8 +147,8 @@ public class LeaderBoardView : BaseView
         }
 
         currentUserNameText.text = User.userProfile.UserName;
-        currentUserChipValueText.text = score;
-        currentUserAvatarImage.LoadAvatar(avatarId, vipLevel);
+        currentUserChipValueText.text = Utility.FormatNumber(int.Parse(score));
+        currentUserAvatarImage.LoadAvatar(User.userProfile.AvatarId, vipLevel);
     }
 
     private void UpdateUIListGame()
@@ -139,7 +160,10 @@ public class LeaderBoardView : BaseView
             leaderBoardTab.OnTabClicked += LeaderBoardTab_OnTabClicked;
             listLeaderboardTab.Add(leaderBoardTab);
         }
-        listLeaderboardTab[0]?.OnClickTab();
+        if (listLeaderboardTab.Count > 0)
+        {
+            listLeaderboardTab[0].OnClickTab();
+        }
     }
 
     private void UpdateUIListRecord()
@@ -147,7 +171,12 @@ public class LeaderBoardView : BaseView
         foreach (IApiLeaderboardRecord record in recordList)
         {
             var json = JObject.Parse(record.Metadata);
+            bool isMe = record.OwnerId == User.userProfile.UserId;
             string avatarId = json["avatar_id"]?.ToString() ?? "";
+            if (isMe)
+            {
+                avatarId = User.userProfile.AvatarId;
+            }
             long vipLevel = json["vip_level"]?.Value<long>() ?? 0;
             Debug.Log("ttt " + avatarId + " : " + vipLevel);
             LeaderBoardItem leaderBoardItem = Instantiate(leaderBoardItemPrefab, leaderBoardItemParent).GetComponent<LeaderBoardItem>();
@@ -161,6 +190,8 @@ public class LeaderBoardView : BaseView
 
     private void LeaderBoardTab_OnTabClicked(object sender, OnTabClickedEventArgs e)
     {
+                Debug.Log("OnClickTab: " + e.gameCode, this);
+
         selectedTab = sender as LeaderBoardTab;
         if (currentTabGameCode == e.gameCode)
         {

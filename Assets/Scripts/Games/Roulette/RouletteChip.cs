@@ -21,7 +21,7 @@ public class RouletteChip : MonoBehaviour
         image.transform.localPosition = new Vector3(0, 32, 0);
         image.transform.DOLocalMove(Vector3.zero, 0.25f);
         image.transform.DOScale(Vector3.one * 0.5f, 0.25f);
-        textBet.text = Utility.FormatNumber(value);
+        textBet.text = Utility.FormatMoney(value, true);
         IsDealt = false;
         Value = value;
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Globals;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +17,7 @@ public class LeaderBoardItem : MonoBehaviour
     {
         topText.text = top;
         nameText.text = name;
-        chipValueText.text = score;
+        chipValueText.text = Utility.FormatNumber(int.Parse(score));
         DisplayTopImage(int.Parse(top));
         avatarImage.LoadAvatar(avatarId, vip);
     }

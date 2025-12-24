@@ -7111,7 +7111,6 @@ MonoBehaviour:
   btnNewBanner: {fileID: 0}
   btnQuickPlay: {fileID: 0}
   btnVipFarm: {fileID: 0}
-  btnSettingAccountDeletion: {fileID: 0}
 --- !u!222 &2096517325741251164
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10194,7 +10193,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2087277481093540520}
         m_TargetAssemblyTypeName: LobbyView, Assembly-CSharp
-        m_MethodName: OnClickVipFarm
+        m_MethodName: OnClickSupport
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

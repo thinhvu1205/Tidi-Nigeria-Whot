@@ -74,6 +74,7 @@ message LotteryDraw {
   int64 total_ticket_sales = 8; // Total money from ticket sales
   int64 actual_draw_time_unix = 9; // When draw actually happened
   WinnerStats winner_stats = 10; // Statistics about winners
+  int64 ticket_price = 11; // Ticket price for this draw session
 }
 
 // Statistics about winners in a draw

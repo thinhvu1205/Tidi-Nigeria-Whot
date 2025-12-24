@@ -499,6 +499,40 @@ namespace Globals
             return dateTime.ToString("HH:mm dd/MM/yyyy");
         }
 
+        public static string ConvertUnixTimeToDDMMYYYYHHMM(long createTimeUnix)
+        {
+            DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(createTimeUnix).LocalDateTime;
+            return dateTime.ToString("dd/MM/yyyy HH:mm");
+        }
+
+        public static string FormatCountdownFromUnix(string unixSeconds)
+        {
+            if (!long.TryParse(unixSeconds, out long targetUnix))
+                return string.Empty;
+
+            DateTimeOffset targetTime = DateTimeOffset.FromUnixTimeSeconds(targetUnix);
+            DateTimeOffset now = DateTimeOffset.UtcNow;
+
+            TimeSpan remain = targetTime - now;
+
+            // Nếu đã quá hạn
+            if (remain.TotalSeconds <= 0)
+                return "00:00:00";
+
+            // Nếu còn >= 1 ngày → hiển thị ngày giờ tuyệt đối
+            if (remain.TotalDays >= 1)
+            {
+                return targetTime.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss");
+            }
+
+            // Nếu < 1 ngày → hiển thị đếm ngược HH:mm:ss
+            int hours = (int)remain.TotalHours;
+            int minutes = remain.Minutes;
+            int seconds = remain.Seconds;
+
+            return $"{hours:00}:{minutes:00}:{seconds:00}";
+        }
+
         public static string ConvertISOToHHMM(string time)
         {
             DateTime dt = DateTime.Parse(time, null, DateTimeStyles.RoundtripKind);
