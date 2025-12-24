@@ -10,6 +10,7 @@ using Nakama;
 using Newtonsoft.Json;
 using SimpleJSON;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UIElements;
 
 public class DataSender
@@ -23,6 +24,7 @@ public class DataSender
     public const string GET_PROFILE = "get_profile";
     public const string UPDATE_PROFILE = "update_profile";
     public const string UPDATE_AVATAR = "update_avatar";
+    public const string PRE_SIGN_PUT = "pre_sign_put";
     public const string LINK_USERNAME = "link_username";
     public const string CHANGE_PASS = "user_change_pass";
     public const string DELETE_ACCOUNT = "delete_account";
@@ -800,4 +802,27 @@ public class DataSender
     }
     #endregion
 
+    #region ChatVoice
+
+    public static async UniTask<PreSignPutResponse> GetVoiceUploadPresignedUrl(string fileName)
+    {
+        try
+        {
+            var preSignPutRequest = new PreSignPutRequest()
+            {
+                FileName = fileName,
+                BucketName = "voice-chat"
+            };
+            
+            IApiRpc rpcResponse = await NetworkManager.INSTANCE.RPCSend(PRE_SIGN_PUT, preSignPutRequest);
+            return DecodeFromJson<PreSignPutResponse>(rpcResponse.Payload);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error uploading voice file: {e.Message}");
+            return null;
+        }
+    }
+
+    #endregion
 }

@@ -334,17 +334,13 @@ public class NetworkManager : MonoBehaviour
         var sendAck = await _SocketIS.WriteChatMessageAsync(CurrentRoomChatChannelId, data);
     }
 
-    public async UniTask SendChatVoice(string senderId, string text, int index = 0, int totalPart = 0, long time = -1)
+    public async UniTask SendChatVoice(string senderId, string voiceUrl)
     {
         if (string.IsNullOrEmpty(CurrentRoomChatChannelId)) return;
-        Debug.Log("DISCONNECT ???");
         var data = new Dictionary<string, string> {
             { "senderId", senderId},
             { "isAudio", "true"},
-            { "data", text},
-            { "index", index.ToString() },
-            { "totalPart", totalPart.ToString() },
-            { "time", time.ToString() },
+            { "voice_url", voiceUrl},
             }.ToJson();
         var sendAck = await _SocketIS.WriteChatMessageAsync(CurrentRoomChatChannelId, data);
     }
