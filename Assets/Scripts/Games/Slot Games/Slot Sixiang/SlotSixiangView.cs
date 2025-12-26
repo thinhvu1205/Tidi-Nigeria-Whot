@@ -570,7 +570,7 @@ public class SlotSixiangView : BaseSlotSymbolView
             animationAnimal.transform.parent.gameObject.SetActive(false);
             animationAnimal.gameObject.SetActive(false);
             effectContainer.gameObject.SetActive(false);
-
+            CanSpin = true;
             if (isEndBonusGame)
             {
                 OnFinishBonusGame();

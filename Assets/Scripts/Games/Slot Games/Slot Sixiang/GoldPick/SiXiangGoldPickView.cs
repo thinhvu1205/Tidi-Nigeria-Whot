@@ -31,6 +31,10 @@ public class SiXiangGoldPickView : MonoBehaviour
     
     private void OnEnable()
     {
+        foreach(Transform child in itemContainer)
+        {
+            Destroy(child.gameObject);
+        }
         itemPool = new UnityEngine.Pool.ObjectPool<GameObject>(
             createFunc: () =>
             {

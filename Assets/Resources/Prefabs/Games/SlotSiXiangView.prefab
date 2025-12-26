@@ -8852,7 +8852,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -9552,6 +9552,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   container: {fileID: 4552852195475658095}
+  slotSixiangView: {fileID: 2799109186998425622}
 --- !u!1 &6599964485631753946
 GameObject:
   m_ObjectHideFlags: 0
@@ -13481,6 +13482,7 @@ MonoBehaviour:
   effectPopup: 0
   effectPopupReverse: 0
   popupBackground: {fileID: 0}
+  WantSwitchTable: 0
   animationSpecialWin: {fileID: 2131749852979346010}
   animationJackpotWin: {fileID: 7864831807772772807}
   animationBackgroundMoney: {fileID: 5509735563504968216}

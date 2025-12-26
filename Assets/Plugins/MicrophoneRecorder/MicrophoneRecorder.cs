@@ -155,6 +155,11 @@ public class MicrophoneRecorder : MonoBehaviour
         int samplesLength = (int)(audioClip.frequency * recordedLength);
         float[] samples = new float[samplesLength];
         audioClip.GetData(samples, 0);
+        for (int i = 0; i < samples.Length; i++)
+        {
+            samples[i] *= 5f;
+            samples[i] = Mathf.Clamp(samples[i], -1f, 1f); // bắt buộc
+        }
         audioBytes = new byte[samples.Length * 4];
         Buffer.BlockCopy(samples, 0, audioBytes, 0, audioBytes.Length);
         UnityEngine.Debug.Log("xem frequence may" + audioClip.frequency + "  " + AudioSettings.outputSampleRate);
