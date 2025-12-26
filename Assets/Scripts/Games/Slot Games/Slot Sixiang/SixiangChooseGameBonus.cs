@@ -10,6 +10,7 @@ using SixiangSymbol = Proto.SiXiangSymbol;
 public class SixiangChooseGameBonus : MonoBehaviour
 {
     [SerializeField] Transform container;
+    [SerializeField] private SlotSixiangView slotSixiangView;
     private bool isInteractable = true;
 
     protected Dictionary<int, SiXiangSymbol> BonusGameDictionary => new()
@@ -34,6 +35,7 @@ public class SixiangChooseGameBonus : MonoBehaviour
         };
         DataSender.SendMatchState((long)OpCodeRequest.Spin, infoBet.ToByteArray());
         isInteractable = false;
+        slotSixiangView.CanSpin = false;
     }
     public void OnClose()
     {

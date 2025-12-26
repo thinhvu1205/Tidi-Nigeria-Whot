@@ -15,6 +15,7 @@ public class SiXiangBuyGemsPopup : BaseView
     [SerializeField] TextMeshProUGUI textInfo;
     [SerializeField] Sprite[] listSpriteGem;
     [SerializeField] Button buttonConfirm;
+    BaseSlotSymbolView slotSixiangView;
     private int typeGameBonus = 0;
     private long price = 0;
 
@@ -38,7 +39,7 @@ public class SiXiangBuyGemsPopup : BaseView
             };
             Debug.Log("TYPEGAMEBONUS: " + typeGameBonus);
             DataSender.SendMatchState((long)OpCodeRequest.BuySixiangGem, infoBet.ToByteArray());
-
+            
 
             // SiXiangView.Instance.agPlayer -= price;
             // SiXiangView.Instance.setAGPlayer();
@@ -51,11 +52,13 @@ public class SiXiangBuyGemsPopup : BaseView
             //      UIManager.instance.openShop();
             //  }, Globals.Config.getTextConfig("label_cancel"));
         }
+        slotSixiangView.CanSpin = false;
         OnClickCloseButton();
     }
-    public void SetInfo(int indexGem, long pricePearl, long playerChip)
+    public void SetInfo(BaseSlotSymbolView slotSixiangView, int indexGem, long pricePearl, long playerChip)
     {
         // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.CLICK);
+        this.slotSixiangView = slotSixiangView;
         bool isEnoughChip = playerChip >= pricePearl;
         price = pricePearl;
      

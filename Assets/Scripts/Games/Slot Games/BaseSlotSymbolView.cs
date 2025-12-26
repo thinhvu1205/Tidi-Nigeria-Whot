@@ -125,6 +125,7 @@ public class BaseSlotSymbolView : BaseGameView
     protected SiXiangGame currentGame = SiXiangGame.Normal, nextGame = SiXiangGame.Normal;
     protected List<Sequence> listSequenceSymbolOneByOne = new();
     public bool IsSpinning { get; set; } = false;
+    public bool CanSpin { get; set; } = true;
     public int ScatterCount { get; set; } = 0;
 
     protected bool hasSetupStartView = false, isInFreeSpin = false, isChooseBonusGame = false, isGetMatchResult = false, isCurrentlyAutoSpin = false, isBetLevelChanged = false, isWinScatter = false;
@@ -1162,7 +1163,7 @@ public class BaseSlotSymbolView : BaseGameView
     public void OnClickBuyGem(int index)
     {
         SiXiangBuyGemsPopup popup = Instantiate(UIManager.Instance.LoadPrefabPopup("PopupBuySixiangGem"), transform).GetComponent<SiXiangBuyGemsPopup>();
-        popup.SetInfo(index, gemPrice, playerChip);
+        popup.SetInfo(this, index, gemPrice, playerChip);
     }
 
     public void OnClickShopButton()
@@ -1459,6 +1460,6 @@ public class BaseSlotSymbolView : BaseGameView
     public SiXiangGame GetCurrentGame() => currentGame;
     public long GetCurrentBetLevel() => currentBetLevel;
     protected bool IsSpinnable() => listBetLevel.Count > 0 && User.userProfile.AccountChip > currentBetLevel;
-    protected bool IsButtonInteractable() => new SiXiangGame[] { SiXiangGame.Normal, SiXiangGame.DragonPearl, SiXiangGame.SixangbonusDragonPearl }.Contains(currentGame) || new SiXiangGame[] { SiXiangGame.DragonPearl, SiXiangGame.SixangbonusDragonPearl }.Contains(nextGame);
+    protected bool IsButtonInteractable() => CanSpin && (new SiXiangGame[] { SiXiangGame.Normal, SiXiangGame.DragonPearl, SiXiangGame.SixangbonusDragonPearl }.Contains(currentGame) || new SiXiangGame[] { SiXiangGame.DragonPearl, SiXiangGame.SixangbonusDragonPearl }.Contains(nextGame));
 }
 

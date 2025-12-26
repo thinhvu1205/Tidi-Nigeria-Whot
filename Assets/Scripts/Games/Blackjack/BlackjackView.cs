@@ -220,7 +220,7 @@ public class BlackjackView : BaseDiceGameView
                 }
 
                 // Player Khác đặt cược
-                if (playerId != currentPlayerId)
+                if (playerId != currentPlayerId && data.Bet.Insurance == 0)
                 {
                     BlackjackBoxBet boxbet = userIdToBoxBetView.GetValueOrDefault(playerId);
                     boxbet.HasBet = true;
@@ -258,12 +258,6 @@ public class BlackjackView : BaseDiceGameView
 
         if (data.IsNewTurn || (isRejoinTable && GameState == GameState.Play))
         {
-            Debug.Log("playing player count: " + playingPlayers.Count);
-            foreach(Player player in playingPlayers)
-            {
-                Debug.Log("PLAYER NAMEEEE:" + player.UserName);
-            }
-            Debug.Log("INDEX OF CURRENT PLAYER TURN: " + playingPlayers.FindIndex(p => p.Id == data.InTurn));
             int playerIndex = playingPlayers.FindIndex(p => p.Id == data.InTurn);
             isRejoinTable = false;
             BlackjackBoxBet boxBet = userIdToBoxBetView.GetValueOrDefault(data.InTurn);
@@ -317,9 +311,11 @@ public class BlackjackView : BaseDiceGameView
             // Cập nhật các nút hành động
             Debug.Log("isPlaying: " + isPlaying);
             Debug.Log("isCurrentPlayerFinished: " + isCurrentPlayerFinished);
-            Debug.Log("playerIndex <= currentPlayerIndex: " + (playerIndex <= currentPlayerIndex));
+            Debug.Log("playerIndex: " + (playerIndex));
+            Debug.Log("currentPlayerIndex: " + (currentPlayerIndex));
             Debug.Log("GameState: " + GameState);
-            if (isPlaying && !isCurrentPlayerFinished && playerIndex <= currentPlayerIndex && GameState == GameState.Play)
+            Debug.Log("data.IsInsuranceTurnEnter: " + data.IsInsuranceTurnEnter);
+            if (!data.IsInsuranceTurnEnter && isPlaying && !isCurrentPlayerFinished && playerIndex <= currentPlayerIndex && GameState == GameState.Play)
             {
                 buttonBetContainer.gameObject.SetActive(true);
                 buttonDouble.gameObject.SetActive(true);
@@ -414,24 +410,29 @@ public class BlackjackView : BaseDiceGameView
             }
         }
 
-        if (data.IsUpdateLegalAction)
-        {
-            buttonBetContainer.gameObject.SetActive(true);
-            buttonDouble.gameObject.SetActive(true);
-            buttonSplit.gameObject.SetActive(true);
-            buttonHit.gameObject.SetActive(true);
-            buttonStand.gameObject.SetActive(true);
+        // if (data.IsUpdateLegalAction)
+        // {
+        //     Debug.Log("IsUpdateLegalAction?");
+        //     buttonBetContainer.gameObject.SetActive(true);
+        //     buttonDouble.gameObject.SetActive(true);
+        //     buttonSplit.gameObject.SetActive(true);
+        //     buttonHit.gameObject.SetActive(true);
+        //     buttonStand.gameObject.SetActive(true);
 
-            // Turn của người chơi hiện tại
-            if (data.Actions != null)
-            {
-                List<BlackjackActionCode> actions = data.Actions.Actions.ToList();
-                buttonDouble.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionDouble);
-                buttonSplit.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionSplit);
-                buttonHit.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionHit);
-                buttonStand.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionStay);
-            }
-        }
+        //     // Turn của người chơi hiện tại
+        //     if (data.Actions != null)
+        //     {
+        //         List<BlackjackActionCode> actions = data.Actions.Actions.ToList();
+        //         buttonDouble.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionDouble);
+        //         buttonSplit.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionSplit);
+        //         buttonHit.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionHit);
+        //         buttonStand.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionStay);
+        //     }
+        // }
+        // else
+        // {
+        //     buttonBetContainer.gameObject.SetActive(false);
+        // }
 
 
         // Nhà cái có 1 lá Át, hiện popup bảo hiểm
@@ -443,6 +444,7 @@ public class BlackjackView : BaseDiceGameView
 
         if (data.IsBankerNotBlackjack)
         {
+            bankerBoxBet.StopHighlightCards();
             foreach(KeyValuePair<string, BlackjackChip> kvp in userIdToInsuranceChip)
             {
                 BlackjackChip chip = kvp.Value;
@@ -488,6 +490,18 @@ public class BlackjackView : BaseDiceGameView
                 {
                     Debug.Log("REJOIN SETUP SECOND BOX CHIP: " + playerBet.Second + ", " + GetChipIndex(playerBet.Second));
                     boxBet.SecondBoxBet.SetBetValue(GetChipIndex(playerBet.Second), playerBet.Second, playerBet.Second);
+                }
+                // TO F
+                if (playerBet.Insurance > 0)
+                {
+                    BasePlayerView playerView = userIdToView.GetValueOrDefault(playerBet.UserId);
+                    BlackjackChip chip = PoolService.Instance.Get<BlackjackChip>(PrefabType.ChipPlayerBlackjack);
+                    userIdToInsuranceChip[playerBet.UserId] = chip;
+                    chip.transform.SetParent(chipContainer);
+                    chip.SetInfo(5, playerView.GetAvatarPosition(), playerBet.Insurance);
+                    chip.transform.localScale = Vector2.one * 0.8f;
+                    chip.transform.localPosition = listInsuranceChipPosition[GetPlayerIndexById(playerBet.UserId)];
+                    
                 }
             }
         }
@@ -826,39 +840,39 @@ public class BlackjackView : BaseDiceGameView
             }
 
             int playerIndex = playingPlayers.FindIndex(p => p.Id == data.UserId);
-            if (isPlaying && !isCurrentPlayerFinished && playerIndex <= currentPlayerIndex && GameState == GameState.Play)
-            {
-                buttonBetContainer.gameObject.SetActive(true);
-                buttonDouble.gameObject.SetActive(true);
-                buttonSplit.gameObject.SetActive(true);
-                buttonHit.gameObject.SetActive(true);
-                buttonStand.gameObject.SetActive(true);
+            // if (isPlaying && !isCurrentPlayerFinished && playerIndex <= currentPlayerIndex && GameState == GameState.Play)
+            // {
+            //     buttonBetContainer.gameObject.SetActive(true);
+            //     buttonDouble.gameObject.SetActive(true);
+            //     buttonSplit.gameObject.SetActive(true);
+            //     buttonHit.gameObject.SetActive(true);
+            //     buttonStand.gameObject.SetActive(true);
 
-                // // Turn của người chơi hiện tại
-                // if (data.Actions != null)
-                // {
-                //     buttonBetContainer.gameObject.SetActive(true);
-                //     List<BlackjackActionCode> actions = data.Actions.Actions.ToList();
-                //     buttonDouble.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionDouble);
-                //     buttonSplit.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionSplit);
-                //     buttonHit.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionHit);
-                //     buttonStand.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionStay);
-                // }
+            //     // // Turn của người chơi hiện tại
+            //     // if (data.Actions != null)
+            //     // {
+            //     //     buttonBetContainer.gameObject.SetActive(true);
+            //     //     List<BlackjackActionCode> actions = data.Actions.Actions.ToList();
+            //     //     buttonDouble.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionDouble);
+            //     //     buttonSplit.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionSplit);
+            //     //     buttonHit.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionHit);
+            //     //     buttonStand.button.interactable = actions.Contains(BlackjackActionCode.BlackjackActionStay);
+            //     // }
 
-                // // Turn của người chơi khác
-                // if (data.InTurn != User.userProfile.UserId)
-                // {
-                //     buttonDouble.button.interactable = true;
-                //     buttonSplit.button.interactable = false;
-                //     buttonHit.button.interactable = true;
-                //     buttonStand.button.interactable = true;
-                // }
-                UpdateButtonActionVisual(isCurrentPlayerTurn);
-            }
-            else
-            {
-                buttonBetContainer.gameObject.SetActive(false);
-            }
+            //     // // Turn của người chơi khác
+            //     // if (data.InTurn != User.userProfile.UserId)
+            //     // {
+            //     //     buttonDouble.button.interactable = true;
+            //     //     buttonSplit.button.interactable = false;
+            //     //     buttonHit.button.interactable = true;
+            //     //     buttonStand.button.interactable = true;
+            //     // }
+            //     UpdateButtonActionVisual(isCurrentPlayerTurn);
+            // }
+            // else
+            // {
+            //     buttonBetContainer.gameObject.SetActive(false);
+            // }
         }
     }
 
@@ -2153,6 +2167,7 @@ public class BlackjackView : BaseDiceGameView
 
     private void ResetGame(bool isRejoin = false)
     {
+        Debug.Log("RESET GAME");
         currentBetValue = playerReceiveCardCount = 0;
         currentChipIndex = -1;
         hasDealtCardsForBanker = hasDealtCardsForPlayers = isCurrentPlayerFinished = isRebet = isSplitingHand = isCurrentPlayerTurnPassed = isRejoinTable = isClickDoubleBet = false;
