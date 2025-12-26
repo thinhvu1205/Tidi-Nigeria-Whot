@@ -10,6 +10,8 @@ using Nakama;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Nakama.TinyJson;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class NetworkManager : MonoBehaviour
 {
@@ -538,8 +540,14 @@ public class NetworkManager : MonoBehaviour
                     //     Global.ChatView.AddUserToQueue(usersResult.Users[0]);
                     // }
                     break;
+                
+                case (int)TypeNotification.MailBox:
+                    var obj = JsonConvert.DeserializeObject<JObject>(notification.Content);
+                    string content = obj["content"]?.ToString();
+                    UIManager.Instance.ShowAlertDialog(content);
+                    break;
 
-                case 2:
+                case (int)TypeNotification.Gift:
                     var uiManager = UIManager.Instance;
 
                     if (UIManager.Instance.gameView != null)
