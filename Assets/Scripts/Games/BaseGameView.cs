@@ -22,7 +22,7 @@ public class BaseGameView : BaseView
     public virtual bool CanLeaveTable => true;
     protected bool hasBet = false;
     public bool WantSwitchTable = false;
-
+    public Match MatchLabel;
     
 
     protected override void OnDestroy()
@@ -37,7 +37,7 @@ public class BaseGameView : BaseView
 
     public virtual void LoadInfoMatch(Match match)
     {
-        
+        MatchLabel = match;
     }
     
     public virtual void OnClickBack()
@@ -133,7 +133,8 @@ public class BaseGameView : BaseView
         var changeTableUpdate = ChangeTableUpdate.Parser.ParseFrom(matchState.State);
         if (changeTableUpdate.ShouldChange)
         {
-            _ = UIManager.Instance.HandleFindAndJoinMatch(changeTableUpdate.MarkUnit);
+            string userData = $"{{\"last_table_id\": \"{MatchLabel.TableId}\"}}";
+            _ = UIManager.Instance.HandleFindAndJoinMatch(changeTableUpdate.MarkUnit, userData);
         }
         else
         {

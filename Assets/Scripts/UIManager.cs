@@ -124,10 +124,10 @@ public class UIManager : Singleton<UIManager>
     
     #region Games
 
-    public async UniTask HandleFindAndJoinMatch(int markUnit)
+    public async UniTask HandleFindAndJoinMatch(int markUnit, string userData = "")
     {
         ShowProgressing();
-        RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, true, true);
+        RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, true, userData : userData);
         if (response == null) return;
         Debug.Log("Find match response: " + response.ToString());
         if (response.Matches.Count > 0)

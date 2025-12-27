@@ -36,7 +36,7 @@ public class SelectTablePresenter
         UIManager.Instance.ShowProgressing();
         try
         {
-            RpcFindMatchResponse response = await DataSender.FindMatch(currentGameId, markUnit, false, false);
+            RpcFindMatchResponse response = await DataSender.FindMatch(currentGameId, markUnit, false, true);
             return response;
         }
         catch (Exception)
@@ -51,7 +51,7 @@ public class SelectTablePresenter
         UIManager.Instance.ShowProgressing();
         try
         {
-            RpcFindMatchResponse response = await DataSender.FindMatch(currentGameId, 0, false, false, tableId);
+            RpcFindMatchResponse response = await DataSender.FindMatch(currentGameId, 0, false, true, tableId);
             return response;
         }
         catch (Exception)
