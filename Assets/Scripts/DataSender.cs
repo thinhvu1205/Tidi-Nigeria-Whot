@@ -249,7 +249,7 @@ public class DataSender
     // }
 
     #region Match
-    public static async UniTask<RpcFindMatchResponse> FindMatch(string gameCode, int markUnit, bool isCreateGame, bool isWithNonOpen = false, string tableId = "")
+    public static async UniTask<RpcFindMatchResponse> FindMatch(string gameCode, int markUnit, bool isCreateGame, bool isWithNonOpen = false, string tableId = "", string userData = "")
     {
         Debug.Log("isWithNonOpen: "+ isWithNonOpen);
         try
@@ -260,7 +260,8 @@ public class DataSender
                 MarkUnit = markUnit,
                 Create = isCreateGame,
                 WithNonOpen = isWithNonOpen,
-                TableId = tableId
+                TableId = tableId,
+                UserData = userData
             };
 
             var response = await NetworkManager.INSTANCE.RPCSend(FIND_MATCH, rpcFindMatchRequest);
