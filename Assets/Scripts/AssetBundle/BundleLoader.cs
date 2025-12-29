@@ -1,23 +1,20 @@
 using System;
 using System.IO;
-using System.Linq;
 using Spine;
 using Spine.Unity;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 [DisallowMultipleComponent, ExecuteInEditMode]
 public class BundleLoader : MonoBehaviour
 {
     public enum TYPE_ASSET { NONE, IMAGE, SKELETON_GRAPHIC };
-    [HideInInspector] public TYPE_ASSET Type = TYPE_ASSET.IMAGE;
-    [HideInInspector] public Image ThisImg;
-    [HideInInspector] public SkeletonGraphic ThisSG;
-    [HideInInspector] public string BundleLabel, AssetName, AnimName;
-    [HideInInspector] public bool SetNativeSize;
-    [SerializeField] private UnityEvent m_OnEnableUE;
+    [SerializeField, HideInInspector] public TYPE_ASSET Type = TYPE_ASSET.IMAGE;
+    [NonSerialized] public Image ThisImg;
+    [NonSerialized] public SkeletonGraphic ThisSG;
+    [SerializeField, HideInInspector] public string BundleLabel, AssetName, AnimName;
+    [SerializeField, HideInInspector] public bool SetNativeSize;
 
     public void RefreshUI()
     {
@@ -53,8 +50,6 @@ public class BundleLoader : MonoBehaviour
                 }
         }
     }
-    public void RemoveOnEnableCbListeners() => m_OnEnableUE.RemoveAllListeners();
-    public void AddOnEnableCb(UnityAction eventUE) => m_OnEnableUE.AddListener(eventUE);
 
     private void OnDisable()
     {
@@ -81,12 +76,10 @@ public class BundleLoader : MonoBehaviour
         }
         else RefreshUI();
     }
-    private void OnEnable()
-    {
-        m_OnEnableUE?.Invoke();
-    }
     private void Awake()
     {
+        ThisSG = GetComponent<SkeletonGraphic>();
+        ThisImg = GetComponent<Image>();
         BundleHandler.MAIN.AddLoader(this);
     }
 }
@@ -95,100 +88,104 @@ public class BundleLoader : MonoBehaviour
 [CustomEditor(typeof(BundleLoader))]
 public class LoaderEditor : Editor
 {
+    private SerializedProperty _AssetName, _BundleLabel, _AnimName, _SetNativeSize, _Type;
     private string[] _AnimNames;
     private SkeletonData _LastSD;
 
     public override void OnInspectorGUI()
     {
         BundleLoader thisBL = (BundleLoader)target;
+        serializedObject.Update();
         if (Application.isPlaying)
         {
-            EditorGUILayout.LabelField("Asset Name", thisBL.AssetName);
-            if (thisBL.Type == BundleLoader.TYPE_ASSET.SKELETON_GRAPHIC) EditorGUILayout.LabelField("Anim Name", thisBL.AnimName);
+            EditorGUILayout.LabelField("Asset Name", _AssetName.stringValue);
+            if ((BundleLoader.TYPE_ASSET)_Type.enumValueIndex == BundleLoader.TYPE_ASSET.SKELETON_GRAPHIC)
+                EditorGUILayout.LabelField("Anim Name", _AnimName.stringValue);
+            serializedObject.ApplyModifiedProperties();
             return; // test in editor play mode will cause error, only work with this in editor idle mode
         }
         base.OnInspectorGUI();
-        if (thisBL.GetComponent<Image>() != null) thisBL.Type = BundleLoader.TYPE_ASSET.IMAGE;
-        else if (thisBL.GetComponent<SkeletonGraphic>() != null) thisBL.Type = BundleLoader.TYPE_ASSET.SKELETON_GRAPHIC;
-        else thisBL.Type = BundleLoader.TYPE_ASSET.NONE;
-        EditorGUILayout.LabelField("Type: " + thisBL.Type.ToString(), EditorStyles.boldLabel);
-        switch (thisBL.Type)
+        _Type.enumValueIndex = (int)BundleLoader.TYPE_ASSET.NONE;
+        thisBL.ThisImg = thisBL.GetComponent<Image>();
+        if (thisBL.ThisImg != null) _Type.enumValueIndex = (int)BundleLoader.TYPE_ASSET.IMAGE;
+        else
+        {
+            thisBL.ThisSG = thisBL.GetComponent<SkeletonGraphic>();
+            if (thisBL.ThisSG != null) _Type.enumValueIndex = (int)BundleLoader.TYPE_ASSET.SKELETON_GRAPHIC;
+        }
+        EditorGUILayout.LabelField("Type: " + ((BundleLoader.TYPE_ASSET)_Type.enumValueIndex), EditorStyles.boldLabel);
+        switch ((BundleLoader.TYPE_ASSET)_Type.enumValueIndex)
         {
             case BundleLoader.TYPE_ASSET.NONE:
                 {
                     EditorGUILayout.HelpBox("YOU MUST ADD A COMPONENT FIRST!", MessageType.Warning);
-                    thisBL.AddOnEnableCb(null);
                     break;
                 }
             case BundleLoader.TYPE_ASSET.IMAGE:
                 {
-                    if (thisBL.ThisImg == null) thisBL.ThisImg = thisBL.GetComponent<Image>();
-                    if (thisBL.ThisImg == null || !thisBL.ThisImg.enabled)
+                    if (!thisBL.ThisImg.enabled)
                     {
                         EditorGUILayout.HelpBox("You must have an active Image!", MessageType.Warning);
-                        thisBL.AddOnEnableCb(null);
                         return;
                     }
                     if (thisBL.ThisImg.sprite == null)
                     {
                         EditorGUILayout.HelpBox("No Image asset found!", MessageType.Warning);
-                        EditorGUILayout.LabelField("Label", thisBL.BundleLabel);
-                        if (thisBL.BundleLabel.Equals(""))
+                        EditorGUILayout.LabelField("Label", _BundleLabel.stringValue);
+                        if (_BundleLabel.stringValue.Equals(""))
                             EditorGUILayout.HelpBox("No label, this asset is not in any bundle!", MessageType.Warning);
-                        EditorGUILayout.LabelField("Asset Name", thisBL.AssetName);
-                        EditorGUILayout.LabelField("Set Native Size", thisBL.SetNativeSize ? "True" : "False");
-                        thisBL.AddOnEnableCb(null);
+                        EditorGUILayout.LabelField("Asset Name", _AssetName.stringValue);
+                        EditorGUILayout.LabelField("Set Native Size", _SetNativeSize.boolValue ? "True" : "False");
                         return;
                     }
-                    thisBL.AssetName = AssetDatabase.GetAssetPath(thisBL.ThisImg.sprite);
-                    string path = thisBL.AssetName;
+                    _AssetName.stringValue = AssetDatabase.GetAssetPath(thisBL.ThisImg.sprite);
+                    string path = _AssetName.stringValue;
                     do
                     {
-                        thisBL.BundleLabel = AssetImporter.GetAtPath(path).assetBundleName;
-                        if (thisBL.BundleLabel.Equals("")) path = Path.GetDirectoryName(path);
+                        _BundleLabel.stringValue = AssetImporter.GetAtPath(path).assetBundleName;
+                        if (_BundleLabel.stringValue.Equals("")) path = Path.GetDirectoryName(path);
                         else path = "";
                     } while (!path.Equals(""));
-                    EditorGUILayout.TextField("Bundle Label", thisBL.BundleLabel);
-                    if (thisBL.BundleLabel.Equals(""))
+                    EditorGUILayout.TextField("Bundle Label", _BundleLabel.stringValue);
+                    if (_BundleLabel.stringValue.Equals(""))
                         EditorGUILayout.HelpBox("No label, this asset is not in any bundle!", MessageType.Warning);
-                    EditorGUILayout.TextField("Asset Name", thisBL.AssetName);
-                    thisBL.SetNativeSize = EditorGUILayout.Toggle("Set Native Size", thisBL.SetNativeSize);
+                    EditorGUILayout.TextField("Asset Name", _AssetName.stringValue);
+                    _SetNativeSize.boolValue = EditorGUILayout.Toggle("Set Native Size", _SetNativeSize.boolValue);
                     break;
                 }
             case BundleLoader.TYPE_ASSET.SKELETON_GRAPHIC:
                 {
-                    if (thisBL.ThisSG == null) thisBL.ThisSG = thisBL.GetComponent<SkeletonGraphic>();
-                    if (thisBL.ThisSG == null || !thisBL.ThisSG.enabled)
+                    if (!thisBL.ThisSG.enabled)
                     {
                         EditorGUILayout.HelpBox("You must have an active SkeletonGraphic!", MessageType.Warning);
-                        thisBL.AddOnEnableCb(null);
                         return;
                     }
                     if (thisBL.ThisSG.SkeletonDataAsset == null)
                     {
                         EditorGUILayout.HelpBox("No SkeletonData asset found!", MessageType.Warning);
-                        EditorGUILayout.LabelField("Label", thisBL.BundleLabel);
-                        if (thisBL.BundleLabel.Equals(""))
+                        EditorGUILayout.LabelField("Label", _BundleLabel.stringValue);
+                        if (_BundleLabel.stringValue.Equals(""))
                             EditorGUILayout.HelpBox("No label, this asset is not in any bundle!", MessageType.Warning);
-                        EditorGUILayout.LabelField("Asset Name", thisBL.AssetName);
-                        EditorGUILayout.LabelField("Anim Name", thisBL.AnimName);
-                        thisBL.AddOnEnableCb(null);
+                        EditorGUILayout.LabelField("Asset Name", _AssetName.stringValue);
+                        EditorGUILayout.LabelField("Anim Name", _AnimName.stringValue);
                         return;
                     }
                     SkeletonData thisSD = thisBL.ThisSG.SkeletonData;
-                    thisBL.AssetName = AssetDatabase.GetAssetPath(thisBL.ThisSG.skeletonDataAsset);
-                    string path = Path.GetDirectoryName(thisBL.AssetName);
+                    string assetName = AssetDatabase.GetAssetPath(thisBL.ThisSG.skeletonDataAsset);
+                    if (string.IsNullOrEmpty(assetName)) return;
+                    _AssetName.stringValue = assetName;
+                    string path = Path.GetDirectoryName(_AssetName.stringValue);
                     do
                     {
-                        thisBL.BundleLabel = AssetImporter.GetAtPath(path).assetBundleName;
-                        if (thisBL.BundleLabel.Equals("")) path = Path.GetDirectoryName(path);
+                        _BundleLabel.stringValue = AssetImporter.GetAtPath(path).assetBundleName;
+                        if (_BundleLabel.stringValue.Equals("")) path = Path.GetDirectoryName(path);
                         else path = "";
                     }
                     while (!path.Equals(""));
-                    EditorGUILayout.TextField("Bundle Label", thisBL.BundleLabel);
-                    if (thisBL.BundleLabel.Equals(""))
+                    EditorGUILayout.TextField("Bundle Label", _BundleLabel.stringValue);
+                    if (_BundleLabel.stringValue.Equals(""))
                         EditorGUILayout.HelpBox("No label, this asset is not in any bundle!", MessageType.Warning);
-                    EditorGUILayout.TextField("Asset Name", thisBL.AssetName);
+                    EditorGUILayout.TextField("Asset Name", _AssetName.stringValue);
                     if (_LastSD != thisSD)
                     {
                         _LastSD = thisSD;
@@ -196,12 +193,21 @@ public class LoaderEditor : Editor
                         int id = 0;
                         ExposedList<Spine.Animation> thisAs = thisSD.Animations;
                         foreach (Spine.Animation anim in thisAs) _AnimNames[id++] = anim.Name;
-                        thisBL.AnimName = thisBL.ThisSG.startingAnimation;
+                        _AnimName.stringValue = thisBL.ThisSG.startingAnimation;
                     }
-                    thisBL.AnimName = _AnimNames[EditorGUILayout.Popup("Animation", Mathf.Max(0, Array.IndexOf(_AnimNames, thisBL.AnimName)), _AnimNames)];
+                    _AnimName.stringValue = _AnimNames[EditorGUILayout.Popup("Animation", Mathf.Max(0, Array.IndexOf(_AnimNames, _AnimName.stringValue)), _AnimNames)];
                     break;
                 }
         }
+        serializedObject.ApplyModifiedProperties();
+    }
+    private void OnEnable()
+    {
+        _AssetName = serializedObject.FindProperty("AssetName");
+        _BundleLabel = serializedObject.FindProperty("BundleLabel");
+        _AnimName = serializedObject.FindProperty("AnimName");
+        _SetNativeSize = serializedObject.FindProperty("SetNativeSize");
+        _Type = serializedObject.FindProperty("Type");
     }
 }
 #endif

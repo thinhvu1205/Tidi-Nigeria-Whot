@@ -12,6 +12,7 @@ using DG.Tweening;
 using Avatar = Common.Objects.Avatar;
 using System.Collections;
 using UnityEngine.Pool;
+using Nakama;
 
 public class LobbyView : BaseView
 {
@@ -65,6 +66,7 @@ public class LobbyView : BaseView
         _ =  NetworkManager.INSTANCE.JoinWorldChat();
         _ = GetClaimableReward();
         _ = GetFreeChip();
+        _ = GetHotNews();
     }
 
 
@@ -130,18 +132,23 @@ public class LobbyView : BaseView
         _ = GetVipFarmProgress();
     }
 
-    private void NetworkManager_OnMessageReceived(Nakama.IApiChannelMessage message)
+    private void NetworkManager_OnMessageReceived(IApiChannelMessage message)
     {
-        var payload = JsonUtility.FromJson<ChatPayload>(message.Content);
+        ChatPayload chatPayload = ConvertToChatPayload(message);
         if (listTextPreviewChatWorld.Count >= 5)
         {
             textPreviewChatWorldPool.Release(listTextPreviewChatWorld[0]);
             listTextPreviewChatWorld.RemoveAt(0);
         }
-        if (!string.IsNullOrEmpty(payload.Content))
+        if (!string.IsNullOrEmpty(chatPayload.Content))
         {
+            string name = message.Username;
+            if (name.Length > 10)
+            {
+                name = name.Substring(0, 7) + "...";
+            }
             TextMeshProUGUI textPreview = textPreviewChatWorldPool.Get();
-            textPreview.text = message.Username + ": " + payload.Content;
+            textPreview.text = name + ": " + chatPayload.Content;
             listTextPreviewChatWorld.Add(textPreview);
         }
     }
@@ -188,6 +195,17 @@ public class LobbyView : BaseView
         bool hasFreeChip = await lobbyPresenter.GetFreeChipList();
         redDotFreeChip.SetActive(hasFreeChip);
         Utility.AnimateRedDot(redDotFreeChip);
+    }
+
+    private async UniTask GetHotNews()
+    {
+        ListInAppMessage listInAppMessage = await lobbyPresenter.GetHotNews();
+        Debug.Log("GetHotNews");
+        foreach(InAppMessage inAppMessage in listInAppMessage.InAppMessages.ToList())
+        {
+        Debug.Log("LIST HOT NEW: " + inAppMessage);
+            
+        }
     }
 
     private async UniTask GetVipFarmProgress()
@@ -410,6 +428,22 @@ public class LobbyView : BaseView
             });
         }
 
+    }
+
+    private ChatPayload ConvertToChatPayload(IApiChannelMessage message)
+    {
+        ContentData data = JsonUtility.FromJson<ContentData>(message.Content);
+        Debug.Log("SENDER AVATAR:" + data.sender_profile.avt);
+        ChatPayload chatPayload = new()
+        {
+            ID = message.SenderId,
+            Name = message.Username,
+            Time = Utility.ConvertISOToHHMMDDMMYYYY(message.CreateTime),
+            Content = data.content,
+            Avatar = data.sender_profile.avt,
+            Vip = data.sender_profile.vip_level
+        };
+        return chatPayload;
     }
     
 

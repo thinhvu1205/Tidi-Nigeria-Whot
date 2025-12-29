@@ -80,5 +80,11 @@ public class LobbyPresenter
             return 0;
         }
     }
+
+    public async UniTask<ListInAppMessage> GetHotNews()
+    {
+        var inAppMessageData = await DataSender.GetListInAppMessage(TypeInAppMessage.HotNews);
+        return inAppMessageData;
+    }
 }
 

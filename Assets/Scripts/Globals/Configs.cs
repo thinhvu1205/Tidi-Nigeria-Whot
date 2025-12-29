@@ -35,8 +35,13 @@ namespace Globals
         public static string brand = SystemInfo.deviceModel;
         public static bool isVibration = false;
         public static string currentUrlRule = "";
+        public static string privacyPolicyLink = "";
         public static string chatTeleSupportLink = "";
         public static string chatMessSupportLink = "";
+        public static string ruleLink = "";
+        public static string groupLink = "";
+        public static string facebookLink = "";
+        public static string feedBackLink = "";
 
         public static bool isOpenSound = true;
         public static bool isOpenMusic = true;
@@ -186,4 +191,14 @@ namespace Globals
             PlayerPrefs.Save();
         }
     }
+}
+
+public class LinkGlobalValue
+{
+    public string rule_link;
+    public long update_at;
+    public string update_by;
+    public string group_link;
+    public string facebook_link;
+    public string feedback_link;
 }

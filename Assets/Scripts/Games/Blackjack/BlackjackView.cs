@@ -1113,7 +1113,7 @@ public class BlackjackView : BaseDiceGameView
         }
         if (totalBetValue + currentBetValue > MarkUnit * 100)
         {
-            UIManager.Instance.ShowToast("You must bet at most " + Utility.FormatNumber(MarkUnit * 100) + " chips!", 2, transform);
+            UIManager.Instance.ShowToast("You can only bet at most " + Utility.FormatNumber(MarkUnit * 100) + " chips!", 2, transform);
             return;
         }
         lastChipIndex = currentChipIndex;

@@ -17,7 +17,7 @@ public class LeaderBoardItem : MonoBehaviour
     {
         topText.text = top;
         nameText.text = name;
-        chipValueText.text = Utility.FormatNumber(int.Parse(score));
+        chipValueText.text = Utility.FormatNumber(long.Parse(score));
         DisplayTopImage(int.Parse(top));
         avatarImage.LoadAvatar(avatarId, vip);
     }
