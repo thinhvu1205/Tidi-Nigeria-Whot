@@ -30,7 +30,9 @@ public class NetworkManager : MonoBehaviour
         WORLD_CHAT_ROOM_NAME = "world_chat",
         SERVER_TEST_PORT = "103.226.250.195",
         SERVER_HUY_PORT = "172.16.56.36",
-        SERVER_TOAN_PORT = "172.16.56.104";
+        SERVER_TOAN_PORT = "172.16.56.104",
+        STORAGE_COLLECTION = "link_global",
+        STORAGE_KEY = "links";
 
     private IClient _ClientC;
     private ISession _SessionIS;
@@ -435,7 +437,7 @@ public class NetworkManager : MonoBehaviour
             Debug.Log("Socket connected");
             RegisterEventSocket();
             
-            await JoinWorldChat();
+            // await JoinWorldChat();
             
             // InitSocketChat();
             // InitSocketNotifications();
@@ -545,6 +547,7 @@ public class NetworkManager : MonoBehaviour
                     var obj = JsonConvert.DeserializeObject<JObject>(notification.Content);
                     string content = obj["content"]?.ToString();
                     UIManager.Instance.ShowAlertDialog(content);
+                    _ = UIManager.Instance.LoadProfileUser();
                     break;
 
                 case (int)TypeNotification.Gift:
@@ -646,6 +649,35 @@ public class NetworkManager : MonoBehaviour
                 break;
         }
         PlayerPrefs.SetInt("serverId", serverId);
+    }
+
+    public async UniTask GetConfigFromStorage()
+    {
+        try
+        {
+            IApiStorageObjects result = await _ClientC.ReadStorageObjectsAsync(_SessionIS, new IApiReadStorageObjectId[] {
+                new StorageObjectId {
+                    Collection = STORAGE_COLLECTION,
+                    Key = STORAGE_KEY
+                }
+            });
+            string json = result.Objects.FirstOrDefault().Value.ToString();
+            LinkGlobalValue data =
+                JsonUtility.FromJson<LinkGlobalValue>(json);
+                Debug.Log("JSON: " + json);
+            Config.ruleLink = data.rule_link;
+            Config.groupLink = data.group_link;
+            Config.facebookLink = data.facebook_link;
+            Config.feedBackLink = data.feedback_link;
+            Config.privacyPolicyLink = "";
+            
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError(e);
+            throw;
+        }
+
     }
 
     #endregion

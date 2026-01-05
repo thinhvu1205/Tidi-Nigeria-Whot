@@ -187,7 +187,7 @@ public class RouletteView : BaseDiceGameView
         }
         if (totalBetValue + currentBetValue + coefficients[currentBetIndex] > maxBetValue)
         {
-            UIManager.Instance.ShowToast("You can bet at most " + Utility.FormatNumber(maxBetValue) + " chips!", 2, transform);
+            UIManager.Instance.ShowToast("You can only bet at most " + Utility.FormatNumber(maxBetValue) + " chips!", 2, transform);
             return;
         }
         if (Constants.RouletteNumberDictionary.TryGetValue(id, out int[] values))

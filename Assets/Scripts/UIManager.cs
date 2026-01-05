@@ -18,6 +18,7 @@ using DG.Tweening;
 using TMPro;
 using Color = UnityEngine.Color;
 using Newtonsoft.Json;
+using Gpm.WebView;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -25,11 +26,12 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] Sprite avtDefault, spriteToast;
     [SerializeField] TMP_FontAsset fontLabelToast;
     [SerializeField] Canvas canvasGame;
+    [SerializeField] AlertMessage alertMessage;
     public SelectTableView selectTableView;
     public ListBannerView bannerView;
     public LobbyView lobbyView;
     public bool isShowingGlobalDialog = false;
-    private Transform parentPopups, parentGames, parentBanners, parentLobby, parentLoading;
+    private Transform parentPopups, parentGames, parentBanners, parentLobby, parentLoading, parentAlert;
     [HideInInspector] public BaseGameView gameView;
     private GameObject currentToast;
     private const string POPUP_PARENT_TAG = "Parent Popups";
@@ -64,6 +66,7 @@ public class UIManager : Singleton<UIManager>
         if (sceneName == Config.MAIN_SCENE)
         {
             await LoadProfileUser();
+            await NetworkManager.INSTANCE.GetConfigFromStorage();
         }
         await SceneManager.LoadSceneAsync(sceneName);
     }
@@ -312,6 +315,7 @@ public class UIManager : Singleton<UIManager>
         compToast.rectTransform.sizeDelta = new Vector2(400, 80);
         compToast.rectTransform.localScale = Vector3.one;
         compToast.transform.localPosition = new Vector2(0, -Screen.height / 4);
+        compToast.raycastTarget = false;
 
 
         var label = Utility.CreateLabel(message, 30);
@@ -507,6 +511,18 @@ public class UIManager : Singleton<UIManager>
         SettingsView settingsView = Instantiate(LoadPrefabPopup("PopupSettings"), parentPopups).GetComponent<SettingsView>();
         settingsView.transform.localScale = Vector3.one;
     }
+
+    public void OpenSettingInGame()
+    {
+        if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureSetting))
+        {
+            ShowAlertDialog("This feature is not available for your account.");
+            return;
+        }
+        SettingsView settingsView = Instantiate(LoadPrefabPopup("PopupSettingsInGame"), parentPopups).GetComponent<SettingsView>();
+        settingsView.transform.localScale = Vector3.one;
+    }
+
     public void OpenChipOnline()
     {
         ChipOnlineView chipOnlineView = Instantiate(LoadPrefabPopup("PopupChipOnline"), parentPopups).GetComponent<ChipOnlineView>();
@@ -592,8 +608,9 @@ public class UIManager : Singleton<UIManager>
         groupMenuView.transform.localScale = Vector3.one;
     }
 
-    public void OpenBanner(TypeInAppMessage type, float delay = 0.3f)
+    public void OpenBanner(TypeInAppMessage type, float delay = 0.1f)
     {
+        Debug.Log("OPEN BANNER");
         DOVirtual.DelayedCall(delay, () =>
         {
             bannerView = Instantiate(LoadPrefabPopup("ListBannerView"), parentBanners).GetComponent<ListBannerView>();
@@ -625,15 +642,106 @@ public class UIManager : Singleton<UIManager>
         gameView.OpenRule();
     }
 
-    public void OpenWebView(string url = "", string title = "")
+    public void OpenWebPage(string URL)
     {
-        // WebViewControl webview = Instantiate(LoadPrefabPopup("WebView"), transform).GetComponent<WebViewControl>();
-        // webview.loadUrl(url, title);
-        // webview.transform.SetAsLastSibling();
+        GpmWebView.ShowUrl(
+            "https://google.com/",
+            new GpmWebViewRequest.Configuration()
+            {
+                style = GpmWebViewStyle.POPUP,
+                orientation = GpmOrientation.UNSPECIFIED,
+                isClearCookie = true,
+                isClearCache = true,
+                isNavigationBarVisible = true,
+                isCloseButtonVisible = true,
+                margins = new GpmWebViewRequest.Margins
+                {
+                    hasValue = true,
+                    left = 0,
+                    top = 200,
+                    right = 0,
+                    bottom = 0
+                },
+                supportMultipleWindows = true,
+#if UNITY_IOS
+                contentMode = GpmWebViewContentMode.MOBILE,
+                isMaskViewVisible = true,
+#endif
+            },
+            OnCallback,
+            new List<string>()
+            {
+            "USER_ CUSTOM_SCHEME"
+            });
     }
     #endregion
 
     #region Helpers
+    private void OnCallback(GpmWebViewCallback.CallbackType callbackType, string data, GpmWebViewError error)
+    {
+        Debug.Log("OnCallback: " + callbackType);
+        switch (callbackType)
+        {
+            case GpmWebViewCallback.CallbackType.Open:
+                if (error != null)
+                {
+                    Debug.LogFormat("Fail to open WebView. Error:{0}", error);
+                }
+                break;
+            case GpmWebViewCallback.CallbackType.Close:
+                if (error != null)
+                {
+                    Debug.LogFormat("Fail to close WebView. Error:{0}", error);
+                }
+                break;
+            case GpmWebViewCallback.CallbackType.PageStarted:
+                if (string.IsNullOrEmpty(data) == false)
+                {
+                    Debug.LogFormat("PageStarted Url : {0}", data);
+                }
+                break;
+            case GpmWebViewCallback.CallbackType.PageLoad:
+                if (string.IsNullOrEmpty(data) == false)
+                {
+                    Debug.LogFormat("Loaded Page:{0}", data);
+                }
+                break;
+            case GpmWebViewCallback.CallbackType.MultiWindowOpen:
+                Debug.Log("MultiWindowOpen");
+                break;
+            case GpmWebViewCallback.CallbackType.MultiWindowClose:
+                Debug.Log("MultiWindowClose");
+                break;
+            case GpmWebViewCallback.CallbackType.Scheme:
+                if (error == null)
+                {
+                    if (data.Equals("USER_ CUSTOM_SCHEME") == true || data.Contains("CUSTOM_SCHEME") == true)
+                    {
+                        Debug.Log(string.Format("scheme:{0}", data));
+                    }
+                }
+                else
+                {
+                    Debug.Log(string.Format("Fail to custom scheme. Error:{0}", error));
+                }
+                break;
+            case GpmWebViewCallback.CallbackType.GoBack:
+                Debug.Log("GoBack");
+                break;
+            case GpmWebViewCallback.CallbackType.GoForward:
+                Debug.Log("GoForward");
+                break;
+            case GpmWebViewCallback.CallbackType.ExecuteJavascript:
+                Debug.LogFormat("ExecuteJavascript data : {0}, error : {1}", data, error);
+                break;
+#if UNITY_ANDROID
+        case GpmWebViewCallback.CallbackType.BackButtonClose:
+            Debug.Log("BackButtonClose");
+            break;
+#endif
+        }
+    }
+
     public GameObject LoadPrefab(string path)
     {
         return Resources.Load(path) as GameObject;

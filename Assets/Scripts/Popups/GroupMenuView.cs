@@ -51,7 +51,7 @@ public class GroupMenuView : BaseView
     public void OnClickSettings()
     {
         Hide();
-        UIManager.Instance.OpenSetting();
+        UIManager.Instance.OpenSettingInGame();
     }
 
     public void OnClickMusic()
@@ -82,7 +82,7 @@ public class GroupMenuView : BaseView
         else
         {
             //require("Util").onCallWebView(urlRule);
-            UIManager.Instance.OpenWebView(urlRule);
+            UIManager.Instance.OpenWebPage("facebook.com");
 
         }
     }

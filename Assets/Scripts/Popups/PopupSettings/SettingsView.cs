@@ -104,16 +104,6 @@ public class SettingsView : BaseView
 
     }
 
-    public void OnClickPrivacyPolicy()
-    {
-
-    }
-
-    public void OnClickFeedback()
-    {
-        Hide();
-        UIManager.Instance.OpenFeedback();
-    }
 
     public void OnClickDeleteAccount()
     {
@@ -130,14 +120,26 @@ public class SettingsView : BaseView
         PlayerPrefs.DeleteKey("PassWord");
     }
 
+    public void OnClickFeedback()
+    {
+        Application.OpenURL(Config.feedBackLink);
+    }
+
+    public void OnClickPrivacyPolicy()
+    {
+        Application.OpenURL(Config.privacyPolicyLink);
+    }
+
+
     public void OnClickFacebook()
     {
-
+        Debug.Log("facebookLink: " + Config.facebookLink);
+        Application.OpenURL(Config.facebookLink);
     }
 
     public void OnClickGroup()
     {
-
+        Application.OpenURL(Config.groupLink);
     }
     #endregion
 

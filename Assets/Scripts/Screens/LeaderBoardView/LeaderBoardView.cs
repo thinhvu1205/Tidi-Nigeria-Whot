@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Globals;
 using Nakama;
 using Newtonsoft.Json.Linq;
@@ -23,6 +24,7 @@ public class LeaderBoardView : BaseView
     [SerializeField] private TextMeshProUGUI currentUserNameText, currentUserTopText, currentUserChipValueText, accountChip, textNextReset;
     [SerializeField] private List<Sprite> topSprites = new();
 
+    [SerializeField] private ScrollRect scrollRect;
     private List<LeaderBoardItem> listLeaderboardItem = new();
     private List<LeaderBoardTab> listLeaderboardTab = new();
     private LeaderBoardTab selectedTab;
@@ -120,7 +122,7 @@ public class LeaderBoardView : BaseView
         }
         listLeaderboardItem.Clear();
         UpdateUIListRecord();
-        
+        await scrollRect.DOVerticalNormalizedPos(1.0f, 0.2f).SetEase(Ease.OutSine);
         LeaderBoardRecord leaderBoardRecord = await leaderboardPresenter.LoadInfo(currentTabGameCode);
         resetTimeUnix = leaderBoardRecord.CdResetUnix;
         
@@ -178,7 +180,8 @@ public class LeaderBoardView : BaseView
                 avatarId = User.userProfile.AvatarId;
             }
             long vipLevel = json["vip_level"]?.Value<long>() ?? 0;
-            Debug.Log("ttt " + avatarId + " : " + vipLevel);
+            Debug.Log("avatarID " + avatarId + ", viplevel: " + vipLevel);
+            Debug.Log("Rank " + record.Rank + ", name: " + record.Username + ", score: " + record.Score);
             LeaderBoardItem leaderBoardItem = Instantiate(leaderBoardItemPrefab, leaderBoardItemParent).GetComponent<LeaderBoardItem>();
             leaderBoardItem.SetData(record.Rank, record.Username, record.Score, avatarId, vipLevel);
             listLeaderboardItem.Add(leaderBoardItem);
@@ -191,7 +194,6 @@ public class LeaderBoardView : BaseView
     private void LeaderBoardTab_OnTabClicked(object sender, OnTabClickedEventArgs e)
     {
                 Debug.Log("OnClickTab: " + e.gameCode, this);
-
         selectedTab = sender as LeaderBoardTab;
         if (currentTabGameCode == e.gameCode)
         {

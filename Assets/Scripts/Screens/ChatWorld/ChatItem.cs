@@ -76,13 +76,12 @@ public class ChatItem : MonoBehaviour
             audioButtonLeft.SetActive(isAudio);
             if (isAudio)
             {
-                
+                AdjustFrameContent(chatContainerLeft);
             }
             else
             {
                 textMessageLeft.text = data.Content;
                 AdjustFrameContent(chatContainerLeft, textMessageLeft);
-                onSizeCalculated?.Invoke(width, height);
             }
             avatarLeft.LoadAvatar(data.Avatar, data.Vip);
         }
@@ -95,16 +94,16 @@ public class ChatItem : MonoBehaviour
             audioButtonRight.SetActive(isAudio);
             if (isAudio)
             {
-                
+                AdjustFrameContent(chatContainerRight);
             }
             else
             {
                 textMessageRight.text = data.Content;
                 AdjustFrameContent(chatContainerRight, textMessageRight);
-                onSizeCalculated?.Invoke(width, height);
             }
             avatarRight.LoadAvatar(data.Avatar, data.Vip);
         }
+        onSizeCalculated?.Invoke(width, height);
         // float textWidth = textMessage.preferredWidth;
         // float textHeight = textMessage.preferredHeight;
 
@@ -138,6 +137,22 @@ public class ChatItem : MonoBehaviour
             frameRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, finalWidth + PADDING * 6);
             frameRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, finalHeight + PADDING);
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, finalHeight + PADDING * 3);
+            
+            // height = finalHeight + PADDING;
+            // width = finalWidth + PADDING * 6;
+        }
+    }
+
+    private void AdjustFrameContent(GameObject frameContent)
+    {
+        width = 292f;
+        height = 55f;
+        RectTransform frameRect = frameContent.GetComponent<RectTransform>();
+        if (frameRect != null)
+        {
+            frameRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+            frameRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
             
             // height = finalHeight + PADDING;
             // width = finalWidth + PADDING * 6;
