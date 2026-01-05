@@ -57,7 +57,7 @@ public class WhotPlayerResultItem : MonoBehaviour
         avatar.LoadAvatar(player.AvatarId, player.VipLevel);
         winnerImage.gameObject.SetActive(player.isWinner);
         nameText.text = player.GetPlayerName();
-        cashText.text = int.Parse(cash) >= 0 ? "+" + cash : cash;
+        cashText.text = int.Parse(cash) >= 0 ? "+" + Utility.FormatNumber(int.Parse(cash)) : Utility.FormatNumber(int.Parse(cash));
         scoreText.text = score;
 
         foreach (Transform child in cardLeftParent)

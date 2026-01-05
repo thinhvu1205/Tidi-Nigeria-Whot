@@ -202,6 +202,7 @@ public class SlotJuicyView : BaseSlotView
         if (data.GameConfig != null)
         {
             freeSpinLeft = (int)data.GameConfig.NumFreeSpin;
+            numWild = (int)data.GameConfig.NumWild;
             isLastFreeSpin = data.GameConfig.NumFreeSpin <= 0;
             lastTotalChipWinByGame = totalChipWinByGame;
             totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
@@ -624,6 +625,7 @@ public class SlotJuicyView : BaseSlotView
     {
         Debug.Log("SetupFruitRainGame");
         isSetUpFruitRainGame = true;
+        isStartFruitRain = false;
         SetDarkAllItems(isBackgroundDark: false);
         freeSpinLeft = 3;
         // if (isKeep6FirstBasket)
@@ -848,12 +850,11 @@ public class SlotJuicyView : BaseSlotView
             {
                 if (isChooseFreeGame)
                 {
-                    int wildNumber = 10;
                     basketGetFreeGame.gameObject.SetActive(true);
                     basketGetFruitRain.gameObject.SetActive(false);
                     basketGetFreeGame.DOScale(Vector2.one, 0.3f).SetEase(Ease.OutBack);
                     Utility.TweenNumberToNumber(titleBasketTotalFreeSpin, freeSpinLeft, 0, 1.0f);      
-                    Utility.TweenNumberToNumber(titleBasketAddedWild, wildNumber, 0, 1.0f);      
+                    Utility.TweenNumberToNumber(titleBasketAddedWild, numWild, 0, 1.0f);      
                 }
                 if (isChooseFruitRain)
                 {
@@ -1065,6 +1066,12 @@ public class SlotJuicyView : BaseSlotView
             {
                 tweenQueue.Enqueue(() => ShowPopupChooseABucket());
                 isChooseBasket = false;
+                NextTween();
+            }
+
+             if (isStartFruitRain)
+            {
+                tweenQueue.Enqueue(() => SetupFruitRainGame());
                 NextTween();
             }
 

@@ -35,6 +35,7 @@ public class CheckInBonusView : BaseView
     private List<WeeklyRewardTemplate> listWeeklyRewardTemplate = new();
     private Reward nextReward;
     private CheckInBonusDailyItem nextClaimableDailyItem;
+    private Tween claimRewardTween;
     private int VipLevel => (int)User.userProfile.VipLevel;
     private int dailyStreak = 0;
     private int weeklyStreak = 0;
@@ -59,6 +60,12 @@ public class CheckInBonusView : BaseView
 
     }
 
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        claimRewardTween?.Kill();
+    }
+
     private async UniTask GetDailyReward(bool isFill)
     {
         UIManager.Instance.ShowProgressing();
@@ -75,6 +82,7 @@ public class CheckInBonusView : BaseView
         UIManager.Instance.HideProgressing();
         nextReward = reward;
         dailyStreak = (int)reward.Streak;
+        if (!gameObject.activeInHierarchy) return;
         if (reward.CanClaim && reward.DeviceAllowed)
         {
             redDotDaily.SetActive(true);
@@ -151,21 +159,22 @@ public class CheckInBonusView : BaseView
     {
         buttonClaimDailyChip.gameObject.SetActive(false);
         nextClaimableDailyItem.AnimateReceiveReward();
-        DOVirtual.DelayedCall(2f, async () =>
+        claimRewardTween?.Kill();
+        OnRewardClaimed?.Invoke();
+        claimRewardTween = DOVirtual.DelayedCall(2f, async () =>
         {
             await UIManager.Instance.LoadProfileUser();
             await GetClaimableDailyReward(false);
-            OnRewardClaimed?.Invoke();
-        });
+        }).SetTarget(this);
     }
 
     public void ReceiveWeeklyReward()
     {
+        OnRewardClaimed?.Invoke();
         DOVirtual.DelayedCall(0.5f, async () =>
         {
             await UIManager.Instance.LoadProfileUser();
             await GetClaimableWeeklyReward();
-            OnRewardClaimed?.Invoke();
         });
     }
 

@@ -289,10 +289,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: +1
+  m_text: 0000000
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 005d7e3b77e9b4c788b7f995113f08f0, type: 2}
-  m_sharedMaterial: {fileID: -5032452413146060414, guid: 005d7e3b77e9b4c788b7f995113f08f0, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 50d24157e8531a84285ce80e6f5cc27e, type: 2}
+  m_sharedMaterial: {fileID: 5720225189385879858, guid: 50d24157e8531a84285ce80e6f5cc27e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -316,8 +316,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
-  m_fontSizeBase: 28
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -326,7 +326,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: -10
+  m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1566,8 +1566,8 @@ MonoBehaviour:
   remainingCardsParent: {fileID: 7107553626782955985}
   dealCardContainer: {fileID: 5520600940460768662}
   drawCardContainer: {fileID: 448662243545694087}
-  chipWinFont: {fileID: 11400000, guid: 68e6280662ed2420b8ad68207c89773e, type: 2}
-  chipLoseFont: {fileID: 11400000, guid: 005d7e3b77e9b4c788b7f995113f08f0, type: 2}
+  chipWinFont: {fileID: 11400000, guid: 50d24157e8531a84285ce80e6f5cc27e, type: 2}
+  chipLoseFont: {fileID: 11400000, guid: d8226e79a3ad345148d6eb0e25b7d612, type: 2}
   avatar: {fileID: 6480725550419531424}
   isCurrentPlayer: 0
   isWinner: 0

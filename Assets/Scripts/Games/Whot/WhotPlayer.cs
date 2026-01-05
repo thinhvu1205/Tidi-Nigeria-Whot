@@ -419,11 +419,11 @@ public class WhotPlayer : MonoBehaviour
         chipAddText.font = amount > 0 ? chipWinFont : chipLoseFont;
         if (amount >= 0)
         {
-            chipAddText.text = $"+{amount}";
+            chipAddText.text = $"+{Utility.FormatNumber(amount)}";
         }
         else
         {
-            chipAddText.text = $"{amount}";
+            chipAddText.text = $"{Utility.FormatNumber(amount)}";
         }
 
         chipAddText.transform.localPosition = GetAvatarImage().transform.localPosition + new Vector3(-12f, 20f, 0f);

@@ -213,7 +213,7 @@ public class WhotView : BaseDiceGameView
         // string labelJson = match.Label;
         // Match data = JsonConvert.DeserializeObject<Match>(labelJson);
         CurrentMarkUnit = match.Bet.MarkUnit;
-        betText.text = "Bet: " + CurrentMarkUnit;
+        betText.text = "Bet: " + Utility.FormatNumber(CurrentMarkUnit);
         idText.text = "ID: " + match.TableId;
         if (string.IsNullOrEmpty(match.UserData))
         {

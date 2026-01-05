@@ -116,7 +116,7 @@ public class BaseSlotView : BaseGameView
     protected Queue<TweenCallback> tweenQueue = new();
     protected List<Sequence> lineOneByOneSequenceList = new();
     [SerializeField] protected long playerWallet, playerWalletAfter, lastBetLevel, currentBetLevel, lastChipWin = 0, currentChipWin = 0, totalChipWinByGame = 0, lastTotalChipWinByGame = 0;
-    protected int totalLineWin = 0, freeSpinLeft = 0;
+    protected int totalLineWin = 0, freeSpinLeft = 0, numWild;
     public int ScatterCount { get; set; } = 0;
     public bool IsSpinning { get; set; } = false;
     protected bool isHoldingSpin, hasGotFreeSpin, isInFreeSpin, isLastFreeSpin, hasSetupStartView = false, isClickMaxBet = false, isGetMatchResult = false;

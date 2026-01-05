@@ -111,7 +111,7 @@ public class BlackjackView : BaseDiceGameView
     [SerializeField] private BlackjackActionCode nextActionCode = BlackjackActionCode.BlackjackActionUnspecified; // 1: Split, 2: Double, 3: Hit, 4: Stand
     [SerializeField] private long totalBetValue = 0, currentBetValue = 0, lastBetValue = 0;
     private BlackjackHandN0 blackjackHandN0 = BlackjackHandN0.BlackjackHand1St;
-    private long playerWallet = 0;
+    [SerializeField] private long playerWallet = 0;
     private int currentPlayerIndex = 0;
     private bool hasDealtCardsForPlayers = false; // Check xem đã chia bài cho các player chưa
     private bool hasDealtCardsForBanker = false; // Check xem đã chia bài cho banker chưa
@@ -220,22 +220,26 @@ public class BlackjackView : BaseDiceGameView
                 }
 
                 // Player Khác đặt cược
-                if (playerId != currentPlayerId && data.Bet.Insurance == 0)
+                if (playerId != currentPlayerId)
                 {
-                    BlackjackBoxBet boxbet = userIdToBoxBetView.GetValueOrDefault(playerId);
-                    boxbet.HasBet = true;
-                    boxbet.HideAnimationWaiting();
-
-                    BlackjackChip chip = PoolService.Instance.Get<BlackjackChip>(PrefabType.ChipPlayerBlackjack);
-                    int chipIndex = GetChipIndex((int)data.Bet.Balance.AmoutChipBet);
-                    chip.transform.SetParent(playerView.GetAvatarTransform().parent, true);
-                    chip.SetInfo(chipIndex, playerView.GetAvatarPosition());
-                    chip.transform.localScale = Vector2.zero * 0.3f;
-                    AnimateMoveChipForward(chip, boxbet.transform.position, () =>
+                    if (data.Bet.Insurance == 0)
                     {
-                        long totalBet = data.Bet.Balance.AmoutChipBet + boxbet.TotalBet;
-                        boxbet.SetBetValue(GetChipIndex(totalBet), totalBet, totalBet);
-                    });
+                        BlackjackBoxBet boxbet = userIdToBoxBetView.GetValueOrDefault(playerId);
+                        boxbet.HasBet = true;
+                        boxbet.HideAnimationWaiting();
+
+                        BlackjackChip chip = PoolService.Instance.Get<BlackjackChip>(PrefabType.ChipPlayerBlackjack);
+                        int chipIndex = GetChipIndex((int)data.Bet.Balance.AmoutChipBet);
+                        chip.transform.SetParent(playerView.GetAvatarTransform().parent, true);
+                        chip.SetInfo(chipIndex, playerView.GetAvatarPosition());
+                        chip.transform.localScale = Vector2.zero * 0.3f;
+                        AnimateMoveChipForward(chip, boxbet.transform.position, () =>
+                        {
+                            if (data.Bet.Second > 0) return;
+                            long totalBet = data.Bet.Balance.AmoutChipBet + boxbet.TotalBet;
+                            boxbet.SetBetValue(GetChipIndex(totalBet), totalBet, totalBet);
+                        });
+                    }
                 }
                 else
                 {
@@ -1173,6 +1177,11 @@ public class BlackjackView : BaseDiceGameView
         if (playerWallet < totalBetValue)
         {
             ShowNotEnoughChipDialog();
+            return;
+        }
+        if (totalBetValue * 2 > MarkUnit * 100)
+        {
+            UIManager.Instance.ShowToast("You can only bet at most " + Utility.FormatNumber(MarkUnit * 100) + " chips!", 2, transform);
             return;
         }
         BlackjackBet bet = new BlackjackBet

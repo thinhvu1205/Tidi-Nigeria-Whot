@@ -49,6 +49,7 @@ public class LobbyView : BaseView
     private int timeLeftToClaimReward;
     private bool canClaimCheckinBonus, isDeviceAllowed, hasReachedMaxStreak;
     private ObjectPool<TextMeshProUGUI> textPreviewChatWorldPool;
+    private Coroutine claimTimerCoroutine;
     VideoPlayer.EventHandler videoStartedListener;
     VideoPlayer.EventHandler videoEndedListener;
 
@@ -69,6 +70,13 @@ public class LobbyView : BaseView
         _ = GetHotNews();
     }
 
+    void OnApplicationPause(bool pause)
+    {
+        if (!pause && UIManager.Instance.gameView == null)
+        {
+            _ = GetClaimableReward();
+        }
+    }
 
     protected override void Start()
     {
@@ -145,7 +153,7 @@ public class LobbyView : BaseView
             string name = message.Username;
             if (name.Length > 10)
             {
-                name = name.Substring(0, 7) + "...";
+                name = name[..7] + "...";
             }
             TextMeshProUGUI textPreview = textPreviewChatWorldPool.Get();
             textPreview.text = name + ": " + chatPayload.Content;
@@ -186,8 +194,21 @@ public class LobbyView : BaseView
 
         if (isDeviceAllowed && !hasReachedMaxStreak)
         {
-            StartCoroutine(ClaimTimer());
+            StartClaimTimer();
         }
+    }
+
+    private void StartClaimTimer()
+    {
+        // Nếu đang chạy → stop trước
+        if (claimTimerCoroutine != null)
+        {
+            StopCoroutine(claimTimerCoroutine);
+            claimTimerCoroutine = null;
+        }
+
+        // Start coroutine mới
+        claimTimerCoroutine = StartCoroutine(ClaimTimer());
     }
 
     private async UniTask GetFreeChip()
