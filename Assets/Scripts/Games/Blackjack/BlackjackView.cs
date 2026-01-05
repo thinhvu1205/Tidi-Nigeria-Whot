@@ -274,9 +274,11 @@ public class BlackjackView : BaseDiceGameView
             
             if (!string.IsNullOrEmpty(lastPlayerTurnId) && !string.IsNullOrEmpty(currentPlayerTurnId) && lastPlayerTurnId != currentPlayerTurnId)
             {
-                BlackjackBoxBet lastTurnBoxBet = userIdToBoxBetView.GetValueOrDefault(lastPlayerTurnId);
-                lastTurnBoxBet.ShowHigherScore();
-                lastTurnBoxBet.SecondBoxBet.ShowHigherScore();
+                if (userIdToBoxBetView.TryGetValue(lastPlayerTurnId, out var lastTurnBoxBet))
+                {
+                    lastTurnBoxBet.ShowHigherScore();
+                    lastTurnBoxBet.SecondBoxBet.ShowHigherScore();
+                }
             }
             // Debug.Log("IsNewTurn - isCurrentPlayerFinished: " + isCurrentPlayerFinished);
             isCurrentPlayerTurn = data.InTurn == User.userProfile.UserId;
@@ -2177,6 +2179,8 @@ public class BlackjackView : BaseDiceGameView
     private void ResetGame(bool isRejoin = false)
     {
         Debug.Log("RESET GAME");
+        lastPlayerTurnId = "";
+        currentPlayerTurnId = "";
         currentBetValue = playerReceiveCardCount = 0;
         currentChipIndex = -1;
         hasDealtCardsForBanker = hasDealtCardsForPlayers = isCurrentPlayerFinished = isRebet = isSplitingHand = isCurrentPlayerTurnPassed = isRejoinTable = isClickDoubleBet = false;
