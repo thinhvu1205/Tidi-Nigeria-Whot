@@ -69,14 +69,7 @@ public class NetworkManager : MonoBehaviour
     #endregion
 
     #region Match
-
-    public async void CreateMatch(string gameCode)
-    {
-        var match = await _SocketIS.CreateMatchAsync(gameCode);
-        Debug.Log("-----Match----- " + match.ToString());
-        await JoinMatch(match.Id);
-    }
-
+    
     // public async void MakingMatch(string gameCode)
     // {
     //     try
@@ -108,16 +101,21 @@ public class NetworkManager : MonoBehaviour
     //     }
     // }
 
-    public async UniTask<IMatch> JoinMatch(string matchId)
+    public async UniTask<IMatch> JoinMatch(string matchId, string passWord = "")
     {
         try
         {
-            // var properties = new Dictionary<string, string>
-            // {
-            //     { "device_id", Config.deviceId },
-            // };
+            Dictionary<string, string> properties = new Dictionary<string, string>{};
+            if (!string.IsNullOrEmpty(passWord))
+            {
+                properties = new Dictionary<string, string>
+                {
+                    { "password", passWord },
+                };
+            }
+           
             Config.currentMatchId = string.Empty;
-            var match = await _SocketIS.JoinMatchAsync(matchId);
+            var match = await _SocketIS.JoinMatchAsync(matchId, properties);
             Config.currentMatchId = matchId;
             return match;
         }
@@ -125,7 +123,7 @@ public class NetworkManager : MonoBehaviour
         {
             Debug.Log("Err when join match : " + ex);
             UIManager.Instance.HideProgressing();
-            UIManager.Instance.ShowConfirmDialog(ex.Message, () => UIManager.Instance.OpenShop(), null, "Get More Chips");
+            DataSender.ParseError(ex.Message);
             Config.currentMatchId = string.Empty;
             return null;
         }

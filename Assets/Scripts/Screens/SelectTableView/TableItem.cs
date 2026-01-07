@@ -50,10 +50,10 @@ public class TableItem : MonoBehaviour
         imageLock.SetActive(!string.IsNullOrEmpty(match.Password));
         imageDoubleDeck.SetActive(false);
         joinButton.onClick.RemoveAllListeners();
-        joinButton.onClick.AddListener(() => _ = OnClickButtonJoin(match.MatchId, match.Open, match.Password));
+        joinButton.onClick.AddListener(() => _ = OnClickButtonJoin(match.MatchId, match.Open));
     }
 
-    private async UniTask OnClickButtonJoin(string matchId, bool isOpen, string password = "")
+    private async UniTask OnClickButtonJoin(string matchId, bool isOpen)
     {
         if (isOpen)
         {
@@ -62,15 +62,14 @@ public class TableItem : MonoBehaviour
         else
         {
             UIManager.Instance.OpenEnterPasswordView(out EnterPasswordView enterPasswordView);
-            enterPasswordView.SetPassword(password);
-            enterPasswordView.SetOnClickListener(() => JoinMatch(matchId));
+            enterPasswordView.SetOnClickListener(password => JoinMatch(matchId, password));
         }
     }
 
-    private async UniTask JoinMatch(string matchId)
+    private async UniTask JoinMatch(string matchId, string passWord = "")
     {
         Debug.Log("TRY JOIN MATCH: " + matchId);
-        var labelMatch = await DataSender.JoinMatch(matchId);
+        var labelMatch = await DataSender.JoinMatch(matchId, passWord);
         if (labelMatch != null)
         {
             Config.currentGameId = labelMatch.Name;

@@ -67,8 +67,7 @@ public class DataSender
     public const string VIP_FARM_PROGRESS = "vip-farm-progress";
     public const string VIP_FARM_CLAIM = "vip-farm-claim";
     #endregion
-
-
+    
     #region ConvertProtobuf
     private static T DecodeFromBase64<T>(string base64) where T : IMessage<T>, new()
     {
@@ -83,10 +82,31 @@ public class DataSender
         return parser.Parse<T>(json);
     }
 
+    public static void ParseError(string message)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(message)) return;
+            Error error = DecodeFromJson<Error>(message);
+            if (error == null) return;
+            if (error.ErrorType == ErrorType.ChipNotEnough)
+            {
+                UIManager.Instance.ShowConfirmDialog(error.Error_, () => UIManager.Instance.OpenShop(), null, "Get More Chips");
+            }
+            else
+            {
+                UIManager.Instance.ShowAlertDialog(error.Error_);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Parse Error Fail " + e);
+        }
+        
+    }
+
     #endregion
-
-    #region RPC
-
+    
     #region Login
     // public static async UniTask LoginAsGuest()
     // {
@@ -103,14 +123,24 @@ public class DataSender
     //     await NetworkManager.INSTANCE.LogoutAsync();
     // }
     #endregion
-
-
+    
+    #region RPC
+    
     public static async UniTask<GameListResponse> GetListGame()
     {
         var response = await NetworkManager.INSTANCE.RPCSend(LIST_GAME);
         return DecodeFromJson<GameListResponse>(response.Payload);
     }
+    
+    public static async UniTask<Bets> GetListBet(string gameCode)
+    {
+        BetListRequest betListRequest = new() { Code = gameCode };
+        var response = await NetworkManager.INSTANCE.RPCSend(LIST_BET, betListRequest);
+        return DecodeFromJson<Bets>(response.Payload);
+    }
 
+    #endregion
+    
     #region Notifications
 
     public static async UniTask<ListNotification> GetListNotification(int limit = 100, TypeNotification type = TypeNotification.MailBox)
@@ -155,10 +185,11 @@ public class DataSender
         var response = await NetworkManager.INSTANCE.RPCSend(DELETE_ALL_NOTIFICATION);
         return DecodeFromJson<Notification>(response.Payload);
     }
+    
     #endregion
-
-
+    
     #region Account
+    
     public static async UniTask<Profile> GetProfile()
     {
         var response = await NetworkManager.INSTANCE.RPCSend(GET_PROFILE);
@@ -231,24 +262,11 @@ public class DataSender
         }
         
     }
+    
     #endregion
-
-
-    public static async UniTask<Bets> GetListBet(string gameCode)
-    {
-        BetListRequest betListRequest = new() { Code = gameCode };
-        var response = await NetworkManager.INSTANCE.RPCSend(LIST_BET, betListRequest);
-        return DecodeFromJson<Bets>(response.Payload);
-    }
-
-    // public static async UniTask<PlayerCountByBetResponse> GetPlayerCountByBet(string gameCode)
-    // {
-    //     BetListRequest betListRequest = new(){Code = gameCode};
-    //     var response = await NetworkManager.INSTANCE.RPCSend(GET_PLAYER_COUNT_BY_BET, betListRequest);
-    //     return DecodeFromJson<PlayerCountByBetResponse>(response.Payload);
-    // }
-
+    
     #region Match
+    
     public static async UniTask<RpcFindMatchResponse> FindMatch(string gameCode, int markUnit, bool isCreateGame, bool isWithNonOpen = false, string tableId = "", string userData = "")
     {
         Debug.Log("isWithNonOpen: "+ isWithNonOpen);
@@ -276,18 +294,12 @@ public class DataSender
         }
         catch (Exception ex)
         {
-            Debug.LogError("FindMatch failed: " + ex.Message);
+            // Debug.LogError("FindMatch failed: " + ex.Message);
             UIManager.Instance.HideProgressing();
-            UIManager.Instance.ShowConfirmDialog("FindMatch failed : " + ex.Message, null, null);
+            ParseError(ex.Message);
             return null;
         }
     }
-
-
-    // public static void MakingMatch(string gameCode)
-    // {
-    //     NetworkManager.INSTANCE.MakingMatch(gameCode);
-    // }
 
     public static async UniTask<RpcCreateMatchResponse> CreateMatch(string gameCode, string passWord, int markUnit, string customData)
     {
@@ -305,25 +317,31 @@ public class DataSender
         }
         catch (Exception ex)
         {
-            Debug.LogError("CreateMatch failed : " + ex.Message);
-            UIManager.Instance.ShowConfirmDialog("CreateMatch failed : " + ex.Message, null, null);
+            ParseError(ex.Message);
             return null;
         }
     }
 
-    public static async UniTask<Match> JoinMatch(string matchId)
+    public static async UniTask<Match> JoinMatch(string matchId, string passWord = "")
     {
         try
         {
-            var match = await NetworkManager.INSTANCE.JoinMatch(matchId);
+            var match = await NetworkManager.INSTANCE.JoinMatch(matchId, passWord);
             Match data = DecodeFromJson<Match>(match.Label);
             return data;
         }
         catch (Exception ex)
         {
             // Debug.LogError("JoinMatch failed: " + ex.Message);
-            Error error = DecodeFromJson<Error>(ex.Message);
-            UIManager.Instance.ShowConfirmDialog(error.Error_, () => UIManager.Instance.OpenShop(), null, "Get More Chips");
+            // Error error = DecodeFromJson<Error>(ex.Message);
+            // if (error.ErrorType == ErrorType.ChipNotEnough)
+            // {
+            //     UIManager.Instance.ShowConfirmDialog(error.Error_, () => UIManager.Instance.OpenShop(), null, "Get More Chips");
+            // }
+            // else
+            // {
+            //     UIManager.Instance.ShowAlertDialog(error.Error_);
+            // }
             return null;
         }
     }
@@ -344,17 +362,7 @@ public class DataSender
         }
         catch (Exception ex)
         {
-            Error error = DecodeFromJson<Error>(ex.Message);
-            switch (error.Code)
-            {
-                case 103: // Not enough Chip
-                    UIManager.Instance.ShowConfirmDialog(error.Error_, () => UIManager.Instance.OpenShop(), null, "Get More Chips");
-                    break;
-                default:
-                    UIManager.Instance.ShowAlertDialog(error.Error_);
-                    break;
-
-            }
+            ParseError(ex.Message);
             return null;
         }
     }
@@ -377,21 +385,26 @@ public class DataSender
         Debug.Log("SendMatchState opCode: " + opCode + ", data: " + BitConverter.ToString(data));
         NetworkManager.INSTANCE.SendMatchState(opCode, data);
     }
+    
     #endregion
 
     #region Friends
+    
     public static void GetListFriends(int state = 0, int limit = 100, string cursor = "", Action<IApiFriendList> handleCB = null)
     {
         NetworkManager.INSTANCE.GetListFriends(state, limit, cursor, handleCB);
     }
+    
     public static void FindFriendsWithIds(List<string> ids = null, List<string> names = null, Action<IApiUsers> handleCb = null)
     {
         NetworkManager.INSTANCE.GetUsersWithIds(ids, names, handleCb);
     }
+    
     public static void SendFriendRequestToId(string userId, Action handleCb = null)
     {
         NetworkManager.INSTANCE.AddFriend(userId, handleCb);
     }
+    
     #endregion
 
     #region PopupView
@@ -427,8 +440,7 @@ public class DataSender
         }
         catch (Exception ex)
         {
-            Error error = DecodeFromJson<Error>(ex.Message);
-            UIManager.Instance.ShowAlertDialog(error.Error_);
+            ParseError(ex.Message);
             return null;
         }
     }
@@ -536,9 +548,7 @@ public class DataSender
         var response = await NetworkManager.INSTANCE.RPCSend(LIST_IN_APP_MESSAGE, inAppMessageRequest);
         return DecodeFromJson<ListInAppMessage>(response.Payload);
     }
-
-
-    #endregion
+    
     #endregion
 
     #region Leaderboard

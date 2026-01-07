@@ -181,7 +181,7 @@ public class UIManager : Singleton<UIManager>
         HideProgressing();
         if (response == null) return;
         Debug.Log("Create match response: " + response.ToString());
-        var labelMatch = await DataSender.JoinMatch(response.MatchId);
+        var labelMatch = await DataSender.JoinMatch(response.MatchId, passWord);
         if (labelMatch != null)
         {
             HandleOpenGame(labelMatch);
