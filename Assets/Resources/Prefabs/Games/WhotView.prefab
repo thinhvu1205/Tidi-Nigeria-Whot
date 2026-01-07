@@ -7772,8 +7772,8 @@ MonoBehaviour:
   remainingCardsParent: {fileID: 8029803521223218055}
   dealCardContainer: {fileID: 4706702315754018752}
   drawCardContainer: {fileID: 852530485545218165}
-  chipWinFont: {fileID: 11400000, guid: 68e6280662ed2420b8ad68207c89773e, type: 2}
-  chipLoseFont: {fileID: 11400000, guid: 005d7e3b77e9b4c788b7f995113f08f0, type: 2}
+  chipWinFont: {fileID: 11400000, guid: 50d24157e8531a84285ce80e6f5cc27e, type: 2}
+  chipLoseFont: {fileID: 11400000, guid: d8226e79a3ad345148d6eb0e25b7d612, type: 2}
   avatar: {fileID: 6069906798349057270}
   isCurrentPlayer: 0
   isWinner: 0
@@ -7862,6 +7862,7 @@ MonoBehaviour:
   effectPopup: 0
   effectPopupReverse: 0
   popupBackground: {fileID: 0}
+  WantSwitchTable: 0
   textMatchInfo: {fileID: 0}
   textGameName: {fileID: 0}
   listPosView: []
@@ -13932,8 +13933,8 @@ MonoBehaviour:
   remainingCardsParent: {fileID: 4457223209679071601}
   dealCardContainer: {fileID: 1433617989390445878}
   drawCardContainer: {fileID: 7010066046628813582}
-  chipWinFont: {fileID: 11400000, guid: 68e6280662ed2420b8ad68207c89773e, type: 2}
-  chipLoseFont: {fileID: 11400000, guid: 005d7e3b77e9b4c788b7f995113f08f0, type: 2}
+  chipWinFont: {fileID: 11400000, guid: 50d24157e8531a84285ce80e6f5cc27e, type: 2}
+  chipLoseFont: {fileID: 11400000, guid: d8226e79a3ad345148d6eb0e25b7d612, type: 2}
   avatar: {fileID: 470642878489429504}
   isCurrentPlayer: 0
   isWinner: 0
