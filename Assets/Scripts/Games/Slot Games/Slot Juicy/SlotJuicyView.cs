@@ -42,6 +42,7 @@ public class SlotJuicyView : BaseSlotView
     private Tween tweenChooseBasket = null;
     private SiXiangGame nextGame, currentGame;
     private WinType _currentWinType;
+    private Coroutine delayNextTweenCoroutine;
     private bool _currentIsCoinFlyAfterwards;
 
     protected override Dictionary<SiXiangSymbol, int> SymbolDictionary => new()
@@ -214,12 +215,22 @@ public class SlotJuicyView : BaseSlotView
             lastTotalChipWinByGame = 0;
         }
 
+        if (data.GameReward != null)
+        {
+            lastTotalChipWinByGame = totalChipWinByGame;
+            totalChipWinByGame = data.GameReward.TotalChipsWinByGame;
+        }
+
         if (hasSetupStartView && !isSetUpFruitRainGame)
         {
             // Bấm Spin
             if (IsSpinning && !isBetLevelChanged)
             {
                 OnStartSpin();
+                if (delayNextTweenCoroutine != null)
+                {
+                    StopCoroutine(delayNextTweenCoroutine);
+                }
             }
             // Chỉ thay đổi mức cược (Update Jackpot)
             else
@@ -325,6 +336,14 @@ public class SlotJuicyView : BaseSlotView
             UpdateGameState(SlotGameState.PREPARE);
             ShowBackGroundFreeSpin();
         }
+        
+        if (isInJuiceFree)
+        {
+            if (totalChipWinByGame > lastTotalChipWinByGame)
+            {
+                UpdateTotalChipWinValue();
+            }
+        }
 
         ///------------------CHECK END FREE GAME--------------------//
         if (isEndFreeGame)
@@ -351,7 +370,7 @@ public class SlotJuicyView : BaseSlotView
                         tweenQueue.Enqueue(() =>
                         {
                             AnimateCoinsFly();
-                            StartCoroutine(DelayNextTween());
+                            delayNextTweenCoroutine = StartCoroutine(DelayNextTween());
                         });
                     }
                 }
@@ -368,7 +387,7 @@ public class SlotJuicyView : BaseSlotView
 
                 if (isNormalWin)
                 {
-                    StartCoroutine(DelayNextTween());
+                    delayNextTweenCoroutine = StartCoroutine(DelayNextTween());
                 }
             });
         }
@@ -1062,16 +1081,17 @@ public class SlotJuicyView : BaseSlotView
         // Hết tween = hết show win line
         else
         {
-            if (isChooseBasket)
+            if (isChooseBasket && !IsSpinning)
             {
-                tweenQueue.Enqueue(() => ShowPopupChooseABucket());
+                ShowPopupChooseABucket();
                 isChooseBasket = false;
                 NextTween();
             }
 
-             if (isStartFruitRain)
+             if (isStartFruitRain && !IsSpinning)
             {
-                tweenQueue.Enqueue(() => SetupFruitRainGame());
+                SetupFruitRainGame();
+                isStartFruitRain = false;
                 NextTween();
             }
 
