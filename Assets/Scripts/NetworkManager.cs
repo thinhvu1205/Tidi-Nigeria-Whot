@@ -451,10 +451,38 @@ public class NetworkManager : MonoBehaviour
     }
 
     [Serializable]
-    public class StreamKickMessage
+    public class VipRange
     {
-        public string type;
-        public string reason;
+        public int min;
+        public int max;
+    }
+
+    [Serializable]
+    public class HotNewsMessage
+    {
+        public string type;        // "co" | "big_win"
+        public string user_id;
+        public string user_name;
+        public string avatar_id;
+        public VipRange[] vip_ranges;
+    
+        // Optional fields - chỉ có khi type tương ứng
+        public long co_value;      // Chỉ có khi type = "co"
+        public long chips_win;     // Chỉ có khi type = "big_win"
+        public string game_name;   // Chỉ có khi type = "big_win"
+    
+        public override string ToString()
+        {
+            if (type == "co")
+            {
+                return $"Hot News CO: User {user_name} exchanged {co_value} USD";
+            }
+            else if (type == "big_win")
+            {
+                return $"Hot News Big Win: User {user_name} won {chips_win} chips in {game_name}";
+            }
+            return $"Hot News: {type} from {user_name}";
+        }
     }
     
     private void RegisterEventSocket()
@@ -507,14 +535,50 @@ public class NetworkManager : MonoBehaviour
             {
                 try
                 {
-                    var msg = JsonUtility.FromJson<StreamKickMessage>(state.State);
-                    if (msg.type == "kick")
+                    switch (state.Stream.Mode)
                     {
-                        Config.loginType = LoginType.NONE;
-                        PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
-                        UIManager.Instance.ShowGlobalDialog(msg.reason);
-                        isKickOff = true;
+                        case 0:
+                            if (state.Stream.Label == "session_kick")
+                            {
+                                Config.loginType = LoginType.NONE;
+                                PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
+                                UIManager.Instance.ShowGlobalDialog(state.State);
+                                isKickOff = true;
+                            }
+                            break;
+                        case 2:
+                            if (state.Stream.Label == "hot_news")
+                            {
+                                try
+                                {
+                                    var msg = JsonUtility.FromJson<HotNewsMessage>(state.State);
+                                    Debug.Log($"Hot News received: {msg}");
+            
+                                    // Check VIP range để quyết định có hiển thị không
+                                    var userVipLevel = User.userProfile.VipLevel; // Implement method này
+                                    bool shouldShow = false;
+            
+                                    if (msg.vip_ranges is { Length: > 0 })
+                                    {
+                                        var vipRange = msg.vip_ranges[0];
+                                        shouldShow = userVipLevel >= vipRange.min && userVipLevel <= vipRange.max;
+                                    }
+            
+                                    if (shouldShow)
+                                    {
+                                        // Hiển thị popup hot news
+                                        // ShowHotNewsPopup(msg);
+                                        UIManager.Instance.ShowAlertDialog(msg.ToString());
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    Debug.LogError($"Failed to parse hot news: {e}");
+                                }
+                            }
+                            break;
                     }
+                    
                 }
                 catch (Exception e)
                 {
