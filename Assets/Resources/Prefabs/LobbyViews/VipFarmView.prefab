@@ -162,6 +162,7 @@ GameObject:
   - component: {fileID: 6099048971414108437}
   - component: {fileID: 200035815458984550}
   - component: {fileID: 6880904718979643721}
+  - component: {fileID: 8814159077804199687}
   m_Layer: 0
   m_Name: AnimTree_2
   m_TagString: Untagged
@@ -242,6 +243,23 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &8814159077804199687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317162258038839027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BundleLoader
+  Type: 2
+  BundleLabel: assets--resources--bundlepack--animations--vipfarm
+  AssetName: Assets/Resources/BundlePack/Animations/VipFarm/anims/V6_Lua/skeleton_SkeletonData.asset
+  AnimName: V6_4
+  SetNativeSize: 0
 --- !u!1 &506324977073094326
 GameObject:
   m_ObjectHideFlags: 0
@@ -938,15 +956,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BundleLoader
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 2821426553051878385}
-  BundleLabel: 
+  BundleLabel: assets--resources--bundlepack--animations--vipfarm
   AssetName: Assets/Resources/BundlePack/Animations/VipFarm/anims/getChip/skeleton_SkeletonData.asset
   AnimName: animation
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &3621690346112841025
 GameObject:
   m_ObjectHideFlags: 0
@@ -1622,6 +1635,7 @@ GameObject:
   - component: {fileID: 7544139054025899276}
   - component: {fileID: 5554551042429923911}
   - component: {fileID: 1429766110282659544}
+  - component: {fileID: 1438858673609784550}
   m_Layer: 0
   m_Name: AnimTree_3
   m_TagString: Untagged
@@ -1702,6 +1716,23 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &1438858673609784550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5622772450985559207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BundleLoader
+  Type: 2
+  BundleLabel: assets--resources--bundlepack--animations--vipfarm
+  AssetName: Assets/Resources/BundlePack/Animations/VipFarm/anims/V2_CaTim/skeleton_SkeletonData.asset
+  AnimName: V2_1
+  SetNativeSize: 0
 --- !u!1 &6169377313357572581
 GameObject:
   m_ObjectHideFlags: 0
@@ -2511,7 +2542,7 @@ GameObject:
   - component: {fileID: 8160756783765525480}
   - component: {fileID: 6811744681682504928}
   - component: {fileID: 6001281529876686611}
-  - component: {fileID: 6590034866418420218}
+  - component: {fileID: 7381080140007164214}
   m_Layer: 0
   m_Name: Animation Background Purple Light
   m_TagString: Untagged
@@ -2592,7 +2623,7 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
---- !u!114 &6590034866418420218
+--- !u!114 &7381080140007164214
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2605,15 +2636,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BundleLoader
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 6001281529876686611}
-  BundleLabel: 
+  BundleLabel: assets--resources--bundlepack--animations--vipfarm
   AssetName: Assets/Resources/BundlePack/Animations/VipFarm/anims/Light_tim/skeleton_SkeletonData.asset
   AnimName: light_tim
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &7854648419988228949
 GameObject:
   m_ObjectHideFlags: 0
@@ -2758,15 +2784,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BundleLoader
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 2066384208612632400}
-  BundleLabel: 
+  BundleLabel: assets--resources--bundlepack--animations--vipfarm
   AssetName: Assets/Resources/BundlePack/Animations/VipFarm/anims/Anim_code/light_vang/skeleton_SkeletonData.asset
   AnimName: light
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &8099116380929113215
 GameObject:
   m_ObjectHideFlags: 0
@@ -3008,15 +3029,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BundleLoader
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 7085215197126127873}
   BundleLabel: 
   AssetName: Assets/Resources/BundlePack/Animations/vip_farm/anims/V3_Muop/skeleton_SkeletonData.asset
   AnimName: V3_4
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &8788126530394616939
 GameObject:
   m_ObjectHideFlags: 0
@@ -3241,6 +3257,7 @@ GameObject:
   - component: {fileID: 954157045925714814}
   - component: {fileID: 479555979645175898}
   - component: {fileID: 806811086592260379}
+  - component: {fileID: 8200752260562493554}
   m_Layer: 0
   m_Name: AnimTree_1
   m_TagString: Untagged
@@ -3321,6 +3338,23 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &8200752260562493554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9001454703538838035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BundleLoader
+  Type: 2
+  BundleLabel: assets--resources--bundlepack--animations--vipfarm
+  AssetName: Assets/Resources/BundlePack/Animations/VipFarm/anims/V3_Muop/skeleton_SkeletonData.asset
+  AnimName: V3_1
+  SetNativeSize: 0
 --- !u!1 &9101807683287963083
 GameObject:
   m_ObjectHideFlags: 0

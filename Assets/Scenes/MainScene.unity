@@ -5339,7 +5339,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2131430990}
   - component: {fileID: 2131430992}
-  - component: {fileID: 2131430991}
   m_Layer: 5
   m_Name: Vip Farm
   m_TagString: Untagged
@@ -5370,23 +5369,6 @@ RectTransform:
   m_AnchoredPosition: {x: 426, y: -94}
   m_SizeDelta: {x: 311.765, y: 61.1044}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2131430991
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2131430989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BundleLoader
-  Type: 0
-  BundleLabel: 
-  AssetName: 
-  AnimName: 
-  SetNativeSize: 0
 --- !u!222 &2131430992
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5406,8 +5388,8 @@ GameObject:
   - component: {fileID: 2132100607}
   - component: {fileID: 2132100610}
   - component: {fileID: 2132100609}
-  - component: {fileID: 2132100608}
   - component: {fileID: 2132100611}
+  - component: {fileID: 2132100612}
   m_Layer: 0
   m_Name: Animation
   m_TagString: Untagged
@@ -5436,23 +5418,6 @@ RectTransform:
   m_AnchoredPosition: {x: 70.1, y: -15}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2132100608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2132100606}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Type: 2
-  BundleLabel: assets--resources--bundlepack--animations--lobby
-  AssetName: Assets/Resources/BundlePack/Animations/Lobby/VIpFarm/skeleton_SkeletonData.asset
-  AnimName: animation
-  SetNativeSize: 0
 --- !u!114 &2132100609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5565,6 +5530,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2132100612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132100606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BundleLoader
+  Type: 2
+  BundleLabel: assets--resources--bundlepack--animations--lobby
+  AssetName: Assets/Resources/BundlePack/Animations/Lobby/VIpFarm/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
 --- !u!224 &10451283031887020
 RectTransform:
   m_ObjectHideFlags: 0
