@@ -67,7 +67,12 @@ public class LobbyView : BaseView
         _ =  NetworkManager.INSTANCE.JoinWorldChat();
         _ = GetClaimableReward();
         _ = GetFreeChip();
-        _ = GetHotNews();
+        
+        // Initialize Announcement Ticker
+        if (AlertMessage.Instance != null)
+        {
+            _ = AlertMessage.Instance.InitializeAnnouncementTicker();
+        }
     }
 
     void OnApplicationPause(bool pause)
@@ -218,16 +223,6 @@ public class LobbyView : BaseView
         Utility.AnimateRedDot(redDotFreeChip);
     }
 
-    private async UniTask GetHotNews()
-    {
-        ListInAppMessage listInAppMessage = await lobbyPresenter.GetHotNews();
-        Debug.Log("GetHotNews");
-        foreach(InAppMessage inAppMessage in listInAppMessage.InAppMessages.ToList())
-        {
-        Debug.Log("LIST HOT NEW: " + inAppMessage);
-            
-        }
-    }
 
     private async UniTask GetVipFarmProgress()
     {

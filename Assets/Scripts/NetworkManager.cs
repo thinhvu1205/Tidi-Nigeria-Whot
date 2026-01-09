@@ -20,6 +20,7 @@ public class NetworkManager : MonoBehaviour
     public static NetworkManager INSTANCE { get; private set; }
     public Action<IApiChannelMessage> OnMessageWorldReceived;
     public Action<IApiChannelMessage> OnMessageTableReceived;
+    public Action OnAnnouncementTickerUpdated; // Event khi announcement ticker được update
 
     public const string SESSION = "session",
         DEVICE_ID = "deviceId",
@@ -575,6 +576,12 @@ public class NetworkManager : MonoBehaviour
                                 {
                                     Debug.LogError($"Failed to parse hot news: {e}");
                                 }
+                            }else if (state.Stream.Label == "announcement_ticker")
+                            {
+                                // Nhận event từ server → refresh announcement ticker list luôn
+                                // Không cần parse vì chỉ cần biết có update là refresh
+                                Debug.Log("Announcement Ticker event received, refreshing list...");
+                                OnAnnouncementTickerUpdated?.Invoke();
                             }
                             break;
                     }

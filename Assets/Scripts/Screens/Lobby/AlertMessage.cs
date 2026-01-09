@@ -1,93 +1,339 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Cysharp.Threading.Tasks;
+using Globals;
+using Proto;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using DG.Tweening;
-using Newtonsoft.Json.Linq;
-using System;
 
 public class AlertMessage : Singleton<AlertMessage>
 {
     [SerializeField] TextMeshProUGUI textAlert;
+    [SerializeField] RectTransform rectTfParent;
 
-    private RectTransform rectTransform;
-    private RectTransform rectTransformParent;
-
-    private bool isRunning = false;
-    private Vector2 posInView;
-    private Vector2 sizeBg;
+    private RectTransform rectTf;
+    private bool isRunningAnnouncement = false;
     private Rect parentRect;
 
-    void Update()
-    {
-        //checkPosition();
-    }
+    // Announcement Ticker variables
+    private Queue<InAppMessage> announcementTickerQueue = new Queue<InAppMessage>();
+    private List<InAppMessage> currentRoundAnnouncements = new List<InAppMessage>(); // Danh sách announcements trong vòng hiện tại
+    private Coroutine announcementTickerCoroutine;
+    private DateTime roundStartTime = DateTime.MinValue; // Thời gian bắt đầu vòng hiện tại
+    private int defaultFrequencySeconds = 30; // Default frequency nếu không có trong params
+    private int delayBetweenAnnouncements = 15; // Delay cố định 15s giữa các announcements trong cùng 1 vòng
+    private LobbyPresenter lobbyPresenter;
     protected override void Awake()
     {
         base.Awake();
-        // rectTfParent = transform.parent.GetComponent<RectTransform>();
-        // parentRect = rectTfParent.rect;
-        // lbAlert.transform.localPosition = new Vector2(parentRect.width / 2, 17);
-    }
-
-    // Update is called once per frame
-    public void addAlertMessage(JObject data)
-    {
-
-        // listData.Add(data);
-        if (!isRunning)
+        
+        // Setup rect transforms for animation
+        if (rectTfParent == null)
         {
-            showAlertMessage();
+            rectTfParent = transform.parent.GetComponent<RectTransform>();
+        }
+        if (rectTfParent != null)
+        {
+            parentRect = rectTfParent.rect;
+        }
+        rectTf = GetComponent<RectTransform>();
+        
+        // Initialize announcement ticker
+        lobbyPresenter = new LobbyPresenter();
+        
+        // Subscribe to network events
+        if (NetworkManager.INSTANCE != null)
+        {
+            NetworkManager.INSTANCE.OnAnnouncementTickerUpdated += OnAnnouncementTickerUpdated;
         }
     }
-    //Guid uid_action;
-    public void showAlertMessage()
+
+    private void OnDestroy()
     {
+        // Unsubscribe from network events
+        if (NetworkManager.INSTANCE != null)
+        {
+            NetworkManager.INSTANCE.OnAnnouncementTickerUpdated -= OnAnnouncementTickerUpdated;
+        }
+        
+        // Stop coroutine
+        if (announcementTickerCoroutine != null)
+        {
+            StopCoroutine(announcementTickerCoroutine);
+            announcementTickerCoroutine = null;
+        }
+    }
 
-        // if (listData.Count > 0 && !UIManager.instance.isLoginShow())
-        // {
-        //     if (UIManager.instance.gameView == null)
-        //     {
-        //         if (!gameObject.activeSelf)
-        //         {
-        //             UIManager.instance.showAlert(true);
-        //         }
-        //     }
-        //     if (!gameObject.activeSelf)
-        //         gameObject.SetActive(true);
-        //     isRunning = true;
-        //     JObject data = listData[0];
-        //     listData.RemoveAt(0);
-        //     Globals.Config.list_Alert.Remove(data);
-        //     lbAlert.text = (string)data["data"];
-        //     Vector2 posEnd = Vector2.zero;
-        //     if (transform.localEulerAngles.z == 0)
-        //     {
-        //         lbAlert.transform.localPosition = new Vector2(parentRect.width / 2, 17);
-        //         posEnd = new Vector2(-parentRect.width / 2 - lbAlert.preferredWidth, 17);
-        //     }
-        //     else
-        //     {
-        //         lbAlert.transform.localPosition = new Vector2(parentRect.height / 2 + 17, 17);
-        //         posEnd = new Vector2(-parentRect.height / 2 - lbAlert.preferredWidth, 17);
-        //     }
-        //     lbAlert.transform.DOLocalMoveX(posEnd.x, 12.5f).OnComplete(() =>
-        //     {
-        //         isRunning = false;
-        //         DOTween.Sequence().AppendInterval(0.5f).AppendCallback(() =>
-        //         {
-        //             showAlertMessage();
-        //         });
+    /// <summary>
+    /// Hiển thị announcement ticker với animation chạy ngang
+    /// </summary>
+    public void ShowAnnouncementTicker(string content)
+    {
+        if (textAlert == null || rectTfParent == null)
+        {
+            Debug.LogWarning("AlertMessage: textAlert or rectTfParent is null");
+            return;
+        }
 
-        //     });
-        // }
-        // else
-        // {
-        //     DOTween.Kill(lbAlert.transform);
-        //     isRunning = false;
-        //     UIManager.instance.showAlert(false);
-        //     gameObject.SetActive(false);
-        // }
+        // Chỉ hiển thị khi không có game view (trong lobby)
+        if (UIManager.Instance != null && UIManager.Instance.gameView != null)
+        {
+            return;
+        }
+
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+
+        isRunningAnnouncement = true;
+        textAlert.text = content;
+
+        // Setup vị trí ban đầu và kết thúc cho animation
+        Vector2 posStart = new Vector2(parentRect.width / 2, 0);
+        Vector2 posEnd = new Vector2(-parentRect.width / 2 - textAlert.preferredWidth, 0);
+
+        textAlert.transform.localPosition = posStart;
+
+        // Animation chạy ngang từ phải sang trái
+        textAlert.transform.DOLocalMoveX(posEnd.x, 12.5f).OnComplete(() =>
+        {
+            isRunningAnnouncement = false;
+            // Delay 0.5s trước khi có thể hiển thị announcement tiếp theo
+            DOTween.Sequence().AppendInterval(0.5f).AppendCallback(() =>
+            {
+                // Nếu queue còn announcement, coroutine sẽ tự động xử lý tiếp
+            });
+        });
+
+        Debug.Log($"Announcement Ticker displayed with animation: {content}");
+    }
+
+    /// <summary>
+    /// Initialize và fetch announcements lần đầu
+    /// </summary>
+    public async UniTask InitializeAnnouncementTicker()
+    {
+        await RefreshAnnouncements();
+    }
+
+    /// <summary>
+    /// Callback khi server gửi event announcement updated
+    /// </summary>
+    private void OnAnnouncementTickerUpdated()
+    {
+        _ = RefreshAnnouncements();
+    }
+
+    /// <summary>
+    /// Refresh danh sách announcements từ server và filter
+    /// </summary>
+    public async UniTask RefreshAnnouncements()
+    {
+        try
+        {
+            ListInAppMessage listInAppMessage = await lobbyPresenter.GetAnnouncementTicker();
+            Debug.Log("GetAnnouncementTicker " + listInAppMessage);
+            
+            if (User.userProfile == null)
+            {
+                Debug.LogWarning("User profile is null, cannot filter announcement ticker");
+                return;
+            }
+
+            var userVipLevel = User.userProfile.VipLevel;
+            var validAnnouncements = FilterValidAnnouncements(listInAppMessage, userVipLevel);
+            
+            if (validAnnouncements.Count > 0)
+            {
+                Debug.Log($"Found {validAnnouncements.Count} valid announcement tickers (server already sorted by priority)");
+                
+                // Clear queue và thêm tất cả valid announcements
+                announcementTickerQueue.Clear();
+                foreach (var announcement in validAnnouncements)
+                {
+                    announcementTickerQueue.Enqueue(announcement);
+                }
+                
+                // Lưu danh sách announcements của vòng hiện tại
+                currentRoundAnnouncements = new List<InAppMessage>(validAnnouncements);
+                
+                // Start coroutine để xử lý hiển thị
+                if (announcementTickerCoroutine == null)
+                {
+                    announcementTickerCoroutine = StartCoroutine(ProcessAnnouncementTickerQueue());
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error refreshing announcements: {e}");
+        }
+    }
+
+    /// <summary>
+    /// Filter announcements dựa trên VIP level
+    /// </summary>
+    private List<InAppMessage> FilterValidAnnouncements(ListInAppMessage listInAppMessage, long userVipLevel)
+    {
+        var validAnnouncements = new List<InAppMessage>();
+        
+        foreach(InAppMessage inAppMessage in listInAppMessage.InAppMessages.ToList())
+        {
+
+            bool isVipValid = true;
+            if (inAppMessage.Data?.Params != null)
+            {
+                if (inAppMessage.Data.Params.ContainsKey("vipMin") && 
+                    int.TryParse(inAppMessage.Data.Params["vipMin"], out int vipMin))
+                {
+                    if (userVipLevel < vipMin)
+                    {
+                        Debug.Log($"Announcement {inAppMessage.Id} VIP too low (required: {vipMin}, user: {userVipLevel})");
+                        isVipValid = false;
+                    }
+                }
+                
+                if (isVipValid && inAppMessage.Data.Params.ContainsKey("vipMax") && 
+                    int.TryParse(inAppMessage.Data.Params["vipMax"], out int vipMax))
+                {
+                    if (userVipLevel > vipMax)
+                    {
+                        Debug.Log($"Announcement {inAppMessage.Id} VIP too high (required: {vipMax}, user: {userVipLevel})");
+                        isVipValid = false;
+                    }
+                }
+            }
+            
+            if (isVipValid)
+            {
+                validAnnouncements.Add(inAppMessage);
+                Debug.Log($"Valid Announcement Ticker: ID={inAppMessage.Id}, Content={inAppMessage.Data?.Params?.GetValueOrDefault("content", "N/A")}");
+            }
+        }
+        
+        return validAnnouncements;
+    }
+
+    /// <summary>
+    /// Coroutine để xử lý queue announcement ticker
+    /// Logic: Hiển thị tuần tự với delay 15s giữa mỗi announcement, sau khi hết 1 vòng thì check frequencySeconds
+    /// </summary>
+    private IEnumerator ProcessAnnouncementTickerQueue()
+    {
+        while (true)
+        {
+            // Lấy frequency từ announcement đầu tiên trong vòng (hoặc default)
+            int frequencySeconds = defaultFrequencySeconds;
+            if (currentRoundAnnouncements.Count > 0 && 
+                currentRoundAnnouncements[0].Data?.Params != null &&
+                currentRoundAnnouncements[0].Data.Params.ContainsKey("frequencySeconds") &&
+                int.TryParse(currentRoundAnnouncements[0].Data.Params["frequencySeconds"], out int freq))
+            {
+                frequencySeconds = freq;
+            }
+            
+            // Nếu đây là vòng mới, check rate limiting từ vòng trước
+            if (roundStartTime != DateTime.MinValue)
+            {
+                var timeSinceRoundStart = (DateTime.UtcNow - roundStartTime).TotalSeconds;
+                if (timeSinceRoundStart < frequencySeconds)
+                {
+                    var delaySeconds = frequencySeconds - (int)timeSinceRoundStart;
+                    Debug.Log($"Rate limiting: waiting {delaySeconds} seconds before starting new round (frequency: {frequencySeconds}s)");
+                    yield return new WaitForSeconds(delaySeconds);
+                }
+            }
+            
+            // Bắt đầu vòng mới
+            roundStartTime = DateTime.UtcNow;
+            Debug.Log($"Starting new round with {announcementTickerQueue.Count} announcements, frequency: {frequencySeconds}s");
+            
+            // Hiển thị tất cả announcements trong vòng
+            int announcementsInRound = announcementTickerQueue.Count;
+            for (int i = 0; i < announcementsInRound; i++)
+            {
+                if (announcementTickerQueue.Count == 0)
+                    break;
+                    
+                var announcement = announcementTickerQueue.Dequeue();
+                
+                // Đợi nếu đang có animation chạy
+                while (isRunningAnnouncement)
+                {
+                    yield return new WaitForSeconds(0.1f);
+                }
+
+                if (announcement.Data?.Params != null && 
+                    announcement.Data.Params.ContainsKey("content"))
+                {
+                    var content = announcement.Data.Params["content"];
+                    ShowAnnouncementTicker(content);
+                    Debug.Log($"Displayed announcement ticker ({i + 1}/{announcementsInRound}): {content}");
+                    
+                    // Đợi animation hoàn thành (12.5s animation + 0.5s delay = 13s)
+                    yield return new WaitForSeconds(13f);
+                    
+                    // Delay 15s giữa các announcements (trừ announcement cuối cùng)
+                    if (i < announcementsInRound - 1)
+                    {
+                        Debug.Log($"Waiting {delayBetweenAnnouncements}s before next announcement");
+                        yield return new WaitForSeconds(delayBetweenAnnouncements);
+                    }
+                }
+                else
+                {
+                    // Delay một chút nếu không có content
+                    yield return new WaitForSeconds(1f);
+                }
+            }
+            
+            // Sau khi hết 1 vòng, quay lại thêm tất cả announcements vào queue để lặp lại
+            if (currentRoundAnnouncements.Count > 0)
+            {
+                Debug.Log($"Round completed, re-queuing {currentRoundAnnouncements.Count} announcements for next round");
+                foreach (var announcement in currentRoundAnnouncements)
+                {
+                    announcementTickerQueue.Enqueue(announcement);
+                }
+            }
+            else
+            {
+                // Nếu không còn announcements, dừng coroutine
+                Debug.Log("No more announcements, stopping ticker");
+                break;
+            }
+        }
+        
+        // Clear coroutine reference khi dừng
+        announcementTickerCoroutine = null;
+        roundStartTime = DateTime.MinValue;
+    }
+
+    /// <summary>
+    /// Clear queue và stop processing (có thể gọi khi vào game hoặc logout)
+    /// </summary>
+    public void ClearAnnouncementTickerQueue()
+    {
+        announcementTickerQueue.Clear();
+        currentRoundAnnouncements.Clear();
+        roundStartTime = DateTime.MinValue;
+        
+        if (announcementTickerCoroutine != null)
+        {
+            StopCoroutine(announcementTickerCoroutine);
+            announcementTickerCoroutine = null;
+        }
+        
+        // Stop animation nếu đang chạy
+        if (isRunningAnnouncement && textAlert != null)
+        {
+            DOTween.Kill(textAlert.transform);
+            isRunningAnnouncement = false;
+        }
     }
 }
