@@ -260,6 +260,16 @@ public class BlackjackView : BaseDiceGameView
             }
         }
 
+        if (data.Error != null)
+        {
+            switch(data.Error.ErrorType)
+            {
+                case ErrorType.ChipNotEnough:   
+                    ShowNotEnoughChipDialog();
+                    break;
+            }
+        }
+
         if (data.IsNewTurn || (isRejoinTable && GameState == GameState.Play))
         {
             int playerIndex = playingPlayers.FindIndex(p => p.Id == data.InTurn);
@@ -442,8 +452,9 @@ public class BlackjackView : BaseDiceGameView
 
 
         // Nhà cái có 1 lá Át, hiện popup bảo hiểm
+        // && playerWallet >= totalBetValue / 2
         bool isCurrentPlayerPayInsurance = data.PlayersBet.Count > 0 && data.PlayersBet.FirstOrDefault((bet) => bet.UserId == User.userProfile.UserId)?.Insurance > 0;
-        if (data.IsInsuranceTurnEnter && isPlaying && playerWallet >= totalBetValue / 2 && !isCurrentPlayerPayInsurance)
+        if (data.IsInsuranceTurnEnter && isPlaying  && !isCurrentPlayerPayInsurance)
         {
             insurance.Show();
         }

@@ -450,40 +450,7 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    [Serializable]
-    public class VipRange
-    {
-        public int min;
-        public int max;
-    }
-
-    [Serializable]
-    public class HotNewsMessage
-    {
-        public string type;        // "co" | "big_win"
-        public string user_id;
-        public string user_name;
-        public string avatar_id;
-        public VipRange[] vip_ranges;
     
-        // Optional fields - chỉ có khi type tương ứng
-        public long co_value;      // Chỉ có khi type = "co"
-        public long chips_win;     // Chỉ có khi type = "big_win"
-        public string game_name;   // Chỉ có khi type = "big_win"
-    
-        public override string ToString()
-        {
-            if (type == "co")
-            {
-                return $"Hot News CO: User {user_name} exchanged {co_value} USD";
-            }
-            else if (type == "big_win")
-            {
-                return $"Hot News Big Win: User {user_name} won {chips_win} chips in {game_name}";
-            }
-            return $"Hot News: {type} from {user_name}";
-        }
-    }
     
     private void RegisterEventSocket()
     {
@@ -549,6 +516,7 @@ public class NetworkManager : MonoBehaviour
                         case 2:
                             if (state.Stream.Label == "hot_news")
                             {
+                                // UIManager.Instance.ShowHotNews();
                                 try
                                 {
                                     var msg = JsonUtility.FromJson<HotNewsMessage>(state.State);
@@ -556,20 +524,24 @@ public class NetworkManager : MonoBehaviour
             
                                     // Check VIP range để quyết định có hiển thị không
                                     var userVipLevel = User.userProfile.VipLevel; // Implement method này
-                                    bool shouldShow = false;
+                                    // bool shouldShow = false;
             
                                     if (msg.vip_ranges is { Length: > 0 })
                                     {
-                                        var vipRange = msg.vip_ranges[0];
-                                        shouldShow = userVipLevel >= vipRange.min && userVipLevel <= vipRange.max;
+                                        foreach(VipRange vipRange in msg.vip_ranges)
+                                        {
+                                            bool shouldShow = userVipLevel >= vipRange.min && userVipLevel <= vipRange.max;
+                                            if (shouldShow)
+                                            {
+                                                // Hiển thị popup hot news
+                                                // ShowHotNewsPopup(msg);
+                                                UIManager.Instance.ShowHotNews(msg);
+                                                return;
+                                            }
+                                            
+                                        }
                                     }
             
-                                    if (shouldShow)
-                                    {
-                                        // Hiển thị popup hot news
-                                        // ShowHotNewsPopup(msg);
-                                        UIManager.Instance.ShowAlertDialog(msg.ToString());
-                                    }
                                 }
                                 catch (Exception e)
                                 {
@@ -866,5 +838,40 @@ public class NetworkManager : MonoBehaviour
         {
             Debug.Log("Error closing socket: " + e);
         }
+    }
+}
+
+[Serializable]
+public class VipRange
+{
+    public int min;
+    public int max;
+}
+
+[Serializable]
+public class HotNewsMessage
+{
+    public string type;        // "co" | "big_win"
+    public string user_id;
+    public string user_name;
+    public string avatar_id;
+    public VipRange[] vip_ranges;
+
+    // Optional fields - chỉ có khi type tương ứng
+    public long co_value;      // Chỉ có khi type = "co"
+    public long chips_win;     // Chỉ có khi type = "big_win"
+    public string game_name;   // Chỉ có khi type = "big_win"
+
+    public override string ToString()
+    {
+        if (type == "co")
+        {
+            return $"Hot News CO: User {user_name} exchanged {co_value} USD, vip range: {vip_ranges[0].min} - {vip_ranges[0].max}";
+        }
+        else if (type == "big_win")
+        {
+            return $"Hot News Big Win: User {user_name} won {chips_win} chips in {game_name}, vip range: {vip_ranges[0].min} - {vip_ranges[0].max}";
+        }
+        return $"Hot News: {type} from {user_name}";
     }
 }

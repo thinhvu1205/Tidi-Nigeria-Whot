@@ -1,15 +1,16 @@
 ManifestFileVersion: 0
-CRC: 2903415814
+UnityVersion: 6000.2.7f2
+CRC: 2720854248
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 84258aa3215b40278da3583396ed66d1
+    Hash: e0255ec993484a4fa66f2014ef1eec46
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 1856002aaa865914a7f405d2095206fc
+    Hash: e6a32554d661cad82f7fb1d1e8936e0d
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 84258aa3215b40278da3583396ed66d1
+    Hash: 5547f582802e8cfd6224c061ef148070
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -35,15 +36,28 @@ Assets:
 - Assets/Resources/BundlePack/Animations/Lobby/ChipBonus/gift/skeleton_Material.mat
 - Assets/Resources/BundlePack/Animations/Lobby/ChipBonus/gift/skeleton_SkeletonData.asset
 - Assets/Resources/BundlePack/Animations/Lobby/ChipBonus/light/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Lobby/HotNew/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Lobby/HotNew/skeleton_Atlas.asset
 - Assets/Resources/BundlePack/Animations/Lobby/ChipBonus/gift/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Lobby/VIpFarm/skeleton_Material-Additive.mat
 - Assets/Resources/BundlePack/Animations/Lobby/ChipBonus/light/skeleton_SkeletonData.asset
 - Assets/Resources/BundlePack/Animations/Lobby/ChipBonus/light/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Lobby/HotNew/skeleton.png
 - Assets/Resources/BundlePack/Animations/Lobby/ChipBonus/gift/skeleton.json
+- Assets/Resources/BundlePack/Animations/Lobby/VIpFarm/skeleton.json
 - Assets/Resources/BundlePack/Animations/Lobby/ChipBonus/gift/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/Lobby/VIpFarm/skeleton_Material.mat
 - Assets/Resources/BundlePack/Animations/Lobby/ChipBonus/light/skeleton.png
 - Assets/Resources/BundlePack/Animations/Lobby/ChipBonus/light/skeleton_Atlas.asset
 - Assets/Resources/BundlePack/Animations/Lobby/ChipBonus/gift/skeleton.png
+- Assets/Resources/BundlePack/Animations/Lobby/HotNew/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Lobby/VIpFarm/skeleton.png
+- Assets/Resources/BundlePack/Animations/Lobby/VIpFarm/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Lobby/HotNew/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/Lobby/VIpFarm/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/Lobby/VIpFarm/skeleton_Atlas.asset
 - Assets/Resources/BundlePack/Animations/Lobby/ChipBonus/gift/skeleton_Material-Additive.mat
 - Assets/Resources/BundlePack/Animations/Lobby/ChipBonus/light/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/Lobby/HotNew/skeleton.json
 - Assets/Resources/BundlePack/Animations/Lobby/ChipBonus/light/skeleton.json
 Dependencies: []

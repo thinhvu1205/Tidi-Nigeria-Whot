@@ -1,0 +1,106 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.2.7f2
+CRC: 1791912227
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 30c97d536e7cf90160fb702653023c6d
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: e6a32554d661cad82f7fb1d1e8936e0d
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 368975b49b2b61f920d1fdec6fffaa79
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials
+Assets:
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V9_Dua/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V8_Chuoi/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/Anim_code/light_vang/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/getChip/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V9_Dua/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V6_Lua/skeleton.png
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V8_Chuoi/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V5_Ngo/skeleton.png
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V5_Ngo/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V5_Ngo/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V4_DuaHau/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V9_Dua/skeleton.png
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V5_Ngo/skeleton.json
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V2_CaTim/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V6_Lua/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/getChip/skeleton.json
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/Anim_code/light_vang/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V4_DuaHau/skeleton.png
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V10_Xoai/skeleton.json
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/Anim_code/light_vang/skeleton.png
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/Anim_code/light_vang/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V4_DuaHau/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V10_Xoai/skeleton.png
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V2_CaTim/skeleton.png
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V7_DuDu/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V3_Muop/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V9_Dua/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V3_Muop/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/getChip/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/getChip/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/getChip/skeleton.png
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V3_Muop/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V6_Lua/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V10_Xoai/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/Light_tim/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/Anim_code/light_vang/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V3_Muop/skeleton.json
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V3_Muop/skeleton.png
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V10_Xoai/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/Anim_code/light_vang/skeleton.json
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V6_Lua/skeleton.json
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/Light_tim/skeleton.json
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V2_CaTim/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V7_DuDu/skeleton.json
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V7_DuDu/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/getChip/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V4_DuaHau/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V8_Chuoi/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/Light_tim/skeleton.png
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V5_Ngo/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V8_Chuoi/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V10_Xoai/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V5_Ngo/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V2_CaTim/skeleton.json
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V7_DuDu/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/Light_tim/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V9_Dua/skeleton.json
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/Light_tim/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V3_Muop/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V7_DuDu/skeleton.png
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V4_DuaHau/skeleton.json
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V4_DuaHau/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/Light_tim/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V6_Lua/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V6_Lua/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V8_Chuoi/skeleton.json
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V8_Chuoi/skeleton.png
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V2_CaTim/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V9_Dua/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V10_Xoai/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V2_CaTim/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/VipFarm/anims/V7_DuDu/skeleton.atlas.txt
+Dependencies: []

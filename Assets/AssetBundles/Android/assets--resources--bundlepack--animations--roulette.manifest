@@ -1,15 +1,16 @@
 ManifestFileVersion: 0
-CRC: 3029022424
+UnityVersion: 6000.2.7f2
+CRC: 3225304311
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b1fa9d0664df2fd0230c3cb3f9bfa633
+    Hash: 313542ca8dee8bb9a094cf075a56ed1e
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 1856002aaa865914a7f405d2095206fc
+    Hash: e6a32554d661cad82f7fb1d1e8936e0d
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b1fa9d0664df2fd0230c3cb3f9bfa633
+    Hash: 149fe5453124c30551ef20ce52e1b68d
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -29,6 +30,8 @@ ClassTypes:
 SerializeReferenceClassIdentifiers:
 - AssemblyName: spine-unity
   ClassName: Spine.Unity.BlendModeMaterials
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials/ReplacementMaterial
 Assets:
 - Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/spine/skeleton.atlas.txt
 - Assets/Resources/BundlePack/Animations/Roulette/btn_spin_anim/skeleton.png
@@ -43,6 +46,7 @@ Assets:
 - Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/spine/skeleton.json
 - Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/vongsang/skeleton.png
 - Assets/Resources/BundlePack/Animations/Roulette/btn_spin_anim/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/Roulette/btn_spin_anim/skeleton_Material-Additive.mat
 - Assets/Resources/BundlePack/Animations/Roulette/btn_spin_anim/skeleton_Atlas.asset
 - Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/showso/spin_SkeletonData.asset
 - Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/spine/skeleton.png

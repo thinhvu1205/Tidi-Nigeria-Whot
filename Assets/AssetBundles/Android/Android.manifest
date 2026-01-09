@@ -1,37 +1,51 @@
 ManifestFileVersion: 0
-CRC: 4013139272
+UnityVersion: 6000.2.7f2
+CRC: 238364820
+HashAppended: 0
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: assets--resources--bundlepack--animations--baccarat
+      Name: assets--resources--bundlepack--animations--anim_icongames
       Dependencies: {}
     Info_1:
-      Name: assets--resources--bundlepack--animations--common
+      Name: assets--resources--bundlepack--animations--hongkongpoker
       Dependencies: {}
     Info_2:
       Name: assets--resources--bundlepack--animations--roulette
       Dependencies: {}
     Info_3:
-      Name: assets--resources--bundlepack--animations--kaeng
+      Name: assets--resources--bundlepack--animations--common
       Dependencies: {}
     Info_4:
-      Name: assets--resources--bundlepack--animations--sixiang--spine
+      Name: assets--resources--bundlepack--animations--slotspine
       Dependencies: {}
     Info_5:
       Name: assets--resources--bundlepack--animations--blackjack
       Dependencies: {}
     Info_6:
-      Name: assets--resources--bundlepack--animations--hongkongpoker
+      Name: assets--resources--bundlepack--animations--baccarat
       Dependencies: {}
     Info_7:
-      Name: assets--resources--bundlepack--animations--whot
+      Name: assets--resources--bundlepack--animations--sixiang--spine
       Dependencies: {}
     Info_8:
-      Name: assets--resources--bundlepack--animations--slotspine
+      Name: assets--resources--bundlepack--animations--lobby
       Dependencies: {}
     Info_9:
-      Name: assets--resources--bundlepack--animations--anim_icongames
+      Name: assets--resources--bundlepack--animations--whot
       Dependencies: {}
     Info_10:
-      Name: assets--resources--bundlepack--animations--lobby
+      Name: assets--resources--bundlepack--animations--kaeng
+      Dependencies: {}
+    Info_11:
+      Name: assets--resources--bundlepack--animations--vipfarm
+      Dependencies: {}
+    Info_12:
+      Name: assets--resources--bundlepack--animations--sixiang
+      Dependencies: {}
+    Info_13:
+      Name: assets--resources--bundlepack--animations--chat_action
+      Dependencies: {}
+    Info_14:
+      Name: assets--resources--bundlepack--animations--emoticon
       Dependencies: {}
