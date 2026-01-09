@@ -1,0 +1,181 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.2.7f2
+CRC: 1443623839
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4bbd4715920adfa35d10999d3634d1fb
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: e6a32554d661cad82f7fb1d1e8936e0d
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 9a51b47ccdc5c2fe352ab1552bf74983
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials/ReplacementMaterial
+Assets:
+- Assets/Resources/BundlePack/Animations/emoticon/e4/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e14/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e24/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e6/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e23/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e16/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e6/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e8/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e19/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e21/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e8/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e10/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e2/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e15/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e1/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e20/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e17/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e9/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e13/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e24/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e10/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e11/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e20/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e19/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e4/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e10/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e9/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e11/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e12/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e14/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e17/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e5/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e14/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e18/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e6/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e12/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e18/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e23/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e10/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e20/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e12/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e9/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e4/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e21/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e7/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e5/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e16/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e16/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e16/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e15/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e17/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e18/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e8/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e9/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e5/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e2/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e7/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e7/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e3/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e1/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e19/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e1/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e22/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e8/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e18/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e6/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e23/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e22/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e3/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e10/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e15/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e18/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e9/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e3/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e11/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e18/skeleton_Material-Additive.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e22/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e3/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e13/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e11/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e17/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e2/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e7/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e5/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e21/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e6/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e8/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e17/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e24/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e4/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e14/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e1/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e12/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e16/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e18/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e12/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e13/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e13/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e15/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e15/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e24/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e7/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e2/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e16/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e17/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e19/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e11/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e3/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e4/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e7/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e22/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e20/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e14/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e13/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e22/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e2/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e5/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e9/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e14/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e11/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e1/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e6/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e12/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e20/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e21/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e23/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e10/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e4/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e24/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e23/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e19/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e20/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e21/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/emoticon/e19/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e15/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e5/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e1/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e13/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e2/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e21/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/emoticon/e3/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/emoticon/e22/skeleton.png
+- Assets/Resources/BundlePack/Animations/emoticon/e23/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e24/skeleton.json
+- Assets/Resources/BundlePack/Animations/emoticon/e8/skeleton.json
+Dependencies: []

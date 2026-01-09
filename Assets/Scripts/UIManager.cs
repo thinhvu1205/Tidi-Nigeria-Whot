@@ -301,6 +301,12 @@ public class UIManager : Singleton<UIManager>
         dialogView.ConfigCancelButton(false, "Cancel", null);
     }
 
+    public void ShowHotNews(HotNewsMessage hotNewsMessage)
+    {
+        HotNews.Instance.SetInfo(hotNewsMessage);
+        HotNews.Instance.PlayShowAnimation();
+    }
+
     public void ShowToast(string message, float timeShow = 2, Transform parent = null)
     {
         if (currentToast != null)

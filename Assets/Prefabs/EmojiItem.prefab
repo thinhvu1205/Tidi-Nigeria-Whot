@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 7023968168353747870}
   - component: {fileID: 1031155307716606179}
   - component: {fileID: 3517348338415073418}
+  - component: {fileID: 4388913201277180783}
   m_Layer: 0
   m_Name: Animation
   m_TagString: Untagged
@@ -170,6 +171,23 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &4388913201277180783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4080900062130289162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BundleLoader
+  Type: 2
+  BundleLabel: assets--resources--bundlepack--animations--chat_action
+  AssetName: Assets/Resources/BundlePack/Animations/chat_action/beer/skeleton_SkeletonData.asset
+  AnimName: animation
+  SetNativeSize: 0
 --- !u!1 &8080051109863309287
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,8 +10,17 @@ public class EmojiItem : MonoBehaviour
     [SerializeField] private Image image;
     [SerializeField] private SkeletonGraphic skeletonGraphic;
     [SerializeField] private Sprite[] listSprite; // 0: bomb, 1: beer, 2: tomato, 3: kiss, 4: water, 5: rose
-    [SerializeField] private SkeletonDataAsset[] listAnimation;
+    [SerializeField] private string[] listAnimationName = new string[]
+    {
+        "bomb",
+        "beer",
+        "tomato",
+        "kiss",
+        "water",
+        "rose",
+    };
     private const string EMOJI_PATH = "emoticon/%id/skeleton_SkeletonData";
+    private const string CHAT_ACTION_PATH = "chat_action/%name/skeleton_SkeletonData";
 
     public void ShowEmote(int emojiId)
     {
@@ -47,12 +56,15 @@ public class EmojiItem : MonoBehaviour
         transform.DOMove(target.position, 1).SetEase(Ease.OutQuad).OnComplete(() =>
         {
             image.gameObject.SetActive(false);
-            skeletonGraphic.gameObject.SetActive(true);
-            skeletonGraphic.skeletonDataAsset = listAnimation[emojiId];
-            skeletonGraphic.Initialize(true);
-            skeletonGraphic.startingAnimation = "animation";
-            skeletonGraphic.startingLoop = false;
-            skeletonGraphic.transform.localScale = Vector3.one;
+            string animPath = CHAT_ACTION_PATH.Replace("%name", listAnimationName[emojiId]);
+                Debug.Log("ANIM PATH: " + animPath);
+            Utility.PlayAnimationByPath(skeletonGraphic, animPath, "animation", true);
+            // skeletonGraphic.gameObject.SetActive(true);
+            // skeletonGraphic.skeletonDataAsset = listAnimation[emojiId];
+            // skeletonGraphic.Initialize(true);
+            // skeletonGraphic.startingAnimation = "animation";
+            // skeletonGraphic.startingLoop = false;
+            // skeletonGraphic.transform.localScale = Vector3.one;
             skeletonGraphic.AnimationState.Complete += delegate
             {
                 Destroy(gameObject);

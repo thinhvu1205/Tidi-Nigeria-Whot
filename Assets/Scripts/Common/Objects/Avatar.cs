@@ -90,6 +90,11 @@ namespace Common.Objects
             //     textName.text = name;
             // }
         }
+        
+        public void SetShowBorder(bool isShow)
+        {
+            imageBorder.gameObject.SetActive(isShow);
+        }
 
         public async void loadAvatarAsync(int idAva, string fbName, string fbId = "")
         {

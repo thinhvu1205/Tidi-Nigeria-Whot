@@ -1,0 +1,24 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.2.7f2
+CRC: 607549199
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 07b861c8f5e8a61add1da3b752d537bf
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: b1a2f2a8994861621cd7feeaface0462
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: ff604a73d8298aa1af3b33221bedc641
+HashAppended: 0
+ClassTypes:
+- Class: 84
+  Script: {instanceID: 0}
+- Class: 329
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Resources/BundlePack/Animations/SiXiang/intromp4.mp4
+- Assets/Resources/BundlePack/Animations/SiXiang/VideoRender.renderTexture
+Dependencies: []

@@ -1,0 +1,70 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.2.7f2
+CRC: 2284121193
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 9674a30a2d162ea29a1f5ad8ef1850d3
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: e6a32554d661cad82f7fb1d1e8936e0d
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: cd2024a9b7da7f07e7a611d6069d4505
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials
+Assets:
+- Assets/Resources/BundlePack/Animations/chat_action/beer/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/chat_action/bomb/skeleton.png
+- Assets/Resources/BundlePack/Animations/chat_action/kiss/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/chat_action/tomato/skeleton.png
+- Assets/Resources/BundlePack/Animations/chat_action/tomato/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/chat_action/water/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/chat_action/kiss/skeleton.json
+- Assets/Resources/BundlePack/Animations/chat_action/kiss/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/chat_action/beer/skeleton.png
+- Assets/Resources/BundlePack/Animations/chat_action/rose/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/chat_action/water/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/chat_action/beer/skeleton.json
+- Assets/Resources/BundlePack/Animations/chat_action/beer/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/chat_action/rose/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/chat_action/rose/skeleton.png
+- Assets/Resources/BundlePack/Animations/chat_action/tomato/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/chat_action/beer/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/chat_action/tomato/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/chat_action/rose/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/chat_action/bomb/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/chat_action/water/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/chat_action/bomb/skeleton_SkeletonData.asset
+- Assets/Resources/BundlePack/Animations/chat_action/kiss/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/chat_action/rose/skeleton.json
+- Assets/Resources/BundlePack/Animations/chat_action/bomb/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/chat_action/water/skeleton.json
+- Assets/Resources/BundlePack/Animations/chat_action/water/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/chat_action/water/skeleton.png
+- Assets/Resources/BundlePack/Animations/chat_action/bomb/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/chat_action/kiss/skeleton.png
+- Assets/Resources/BundlePack/Animations/chat_action/rose/skeleton.atlas.txt
+- Assets/Resources/BundlePack/Animations/chat_action/beer/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/chat_action/kiss/skeleton_Material.mat
+- Assets/Resources/BundlePack/Animations/chat_action/tomato/skeleton_Atlas.asset
+- Assets/Resources/BundlePack/Animations/chat_action/tomato/skeleton.json
+- Assets/Resources/BundlePack/Animations/chat_action/bomb/skeleton.json
+Dependencies: []
