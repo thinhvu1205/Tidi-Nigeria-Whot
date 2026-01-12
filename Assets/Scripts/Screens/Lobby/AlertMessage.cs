@@ -2,19 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Cysharp.Threading.Tasks;
 using Globals;
 using Proto;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using DG.Tweening;
 
-public class AlertMessage : Singleton<AlertMessage>
+public class AlertMessage : Singleton<AlertMessage>, IPointerClickHandler
 {
-    [SerializeField] TextMeshProUGUI textAlert;
+    [SerializeField] TMP_Text textAlert;
     [SerializeField] RectTransform rectTfParent;
-
     private RectTransform rectTf;
     private bool isRunningAnnouncement = false;
     private Rect parentRect;
@@ -27,6 +28,10 @@ public class AlertMessage : Singleton<AlertMessage>
     private int defaultFrequencySeconds = 30; // Default frequency nếu không có trong params
     private int delayBetweenAnnouncements = 15; // Delay cố định 15s giữa các announcements trong cùng 1 vòng
     private LobbyPresenter lobbyPresenter;
+    
+    // URL detection regex
+    private static readonly Regex UrlRegex = new Regex(@"(https?://[^\s]+)", RegexOptions.Compiled);
+    
     protected override void Awake()
     {
         base.Awake();
@@ -67,6 +72,25 @@ public class AlertMessage : Singleton<AlertMessage>
             announcementTickerCoroutine = null;
         }
     }
+    
+    
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Vector3 mousePosition = new Vector3(eventData.position.x, eventData.position.y, 0);
+        Camera canvasWorldCamera = null;
+        if (textAlert.canvas.renderMode != RenderMode.ScreenSpaceOverlay)
+        {
+            canvasWorldCamera = textAlert.canvas.worldCamera;
+        }
+        var linkTaggedText = TMP_TextUtilities.FindIntersectingLink( textAlert, mousePosition, canvasWorldCamera);
+            
+        if (linkTaggedText != -1)
+        {
+            TMP_LinkInfo linkInfo = textAlert.textInfo.linkInfo[linkTaggedText];
+            // OnClickedOnLinkEvent?.Invoke(linkInfo.GetLinkText());
+            OnLinkClicked(linkInfo.GetLinkID(), linkInfo.GetLinkText(), linkTaggedText);
+        }
+    }
 
     /// <summary>
     /// Hiển thị announcement ticker với animation chạy ngang
@@ -91,11 +115,14 @@ public class AlertMessage : Singleton<AlertMessage>
         }
 
         isRunningAnnouncement = true;
-        textAlert.text = content;
+        
+        // Transform content: detect links và wrap thành TMP link tags
+        string processedContent = TransformLinks(content);
+        textAlert.text = processedContent;
 
         // Setup vị trí ban đầu và kết thúc cho animation
-        Vector2 posStart = new Vector2(parentRect.width / 2, 0);
-        Vector2 posEnd = new Vector2(-parentRect.width / 2 - textAlert.preferredWidth, 0);
+        Vector2 posStart = new Vector2(parentRect.width / 2, parentRect.height / 2 - 5);
+        Vector2 posEnd = new Vector2(-parentRect.width / 2 - textAlert.preferredWidth, parentRect.height / 2 - 5);
 
         textAlert.transform.localPosition = posStart;
 
@@ -334,6 +361,54 @@ public class AlertMessage : Singleton<AlertMessage>
         {
             DOTween.Kill(textAlert.transform);
             isRunningAnnouncement = false;
+        }
+    }
+    
+    /// <summary>
+    /// Transform links trong content thành TMP link tags
+    /// </summary>
+    private string TransformLinks(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+            return input;
+        
+        // Replace URLs với TMP link tags
+        return UrlRegex.Replace(input, match =>
+        {
+            string url = CleanUrl(match.Value);
+            // TMP link format: <link="url">text</link>
+            // Color và underline để user biết là clickable
+            return $"<link=\"{url}\"><color=#00AFFF><u>{url}</u></color></link>";
+        });
+    }
+    
+    /// <summary>
+    /// Clean URL: remove trailing punctuation
+    /// </summary>
+    private string CleanUrl(string raw)
+    {
+        if (string.IsNullOrEmpty(raw))
+            return raw;
+        
+        // Remove trailing punctuation that might be part of sentence
+        return raw.TrimEnd('.', ',', '!', '?', ')', ']', '}', ';', ':');
+    }
+    
+    /// <summary>
+    /// Handle TMP link click
+    /// </summary>
+    private void OnLinkClicked(string linkID, string linkText, int linkIndex)
+    {
+        // linkID chứa URL từ tag <link="url">
+        if (!string.IsNullOrEmpty(linkID))
+        {
+            Debug.Log($"Opening link: {linkID}");
+            Application.OpenURL(linkID);
+        }
+        else
+        {
+            // Fallback: try to extract URL from linkText
+            Debug.LogWarning($"Link ID is empty, trying to extract from text: {linkText}");
         }
     }
 }

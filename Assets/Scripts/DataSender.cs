@@ -150,7 +150,7 @@ public class DataSender
             Limit = limit,
             Type = type
         };
-        var response = await NetworkManager.INSTANCE.RPCSend(LIST_NOTIFICATION);
+        var response = await NetworkManager.INSTANCE.RPCSend(LIST_NOTIFICATION, notificationRequest);
         return DecodeFromJson<ListNotification>(response.Payload);
     }
 

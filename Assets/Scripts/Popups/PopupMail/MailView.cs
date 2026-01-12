@@ -24,9 +24,9 @@ public class MailView : BaseView
     protected override void Start()
     {
         base.Start();
-        _ = LoadListMail();
         mailPresenter = new MailPresenter();
         mailPresenter.Init(this);
+        _ = LoadListMail();
     }
 
     #region Event    
@@ -122,11 +122,11 @@ public class MailView : BaseView
         }
         try
         {
-            ListNotification listNotification = await mailPresenter.GetListNotification();
-            this.listNotification = listNotification.Notifications.ToList();
-            checkAllButton.gameObject.SetActive(this.listNotification.Count > 0);
-            Debug.Log("GAME LIST: " + listNotification.ToString());
-            foreach (Notification notification in this.listNotification)
+            ListNotification dataListNotification = await mailPresenter.GetListNotification();
+            listNotification = dataListNotification.Notifications.ToList();
+            checkAllButton.gameObject.SetActive(listNotification.Count > 0);
+            Debug.Log("GAME LIST: " + dataListNotification.ToString());
+            foreach (Notification notification in listNotification)
             {
                 MailItem mailItem = Instantiate(mailItemPrefab, mailItemParent).GetComponent<MailItem>();
                 mailItem.SetData(notification);
