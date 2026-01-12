@@ -58,7 +58,7 @@ public class RegisterView : BaseView
             UIManager.Instance.ShowAlertDialog("Register successful!", () =>
             {
                 Hide(false);
-                loginView.OnRegisterSuccess(userName, password);
+                loginView.OnLoginSuccess();
             });
         }
         catch (Exception ex)

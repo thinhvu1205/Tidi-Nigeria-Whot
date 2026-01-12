@@ -115,6 +115,7 @@ public class VipFarmView : BaseView
         Utility.TweenNumberToNumber(textMoneyReceive, (int)reward, 0);
         animationReceive.AnimationState.Complete += async delegate
         {
+            Debug.Log("DIEN XONG R DAY");
             receiveInfo.SetActive(false);
             await GetVipFarmProgress();
             OnClaimed?.Invoke();

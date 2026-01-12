@@ -163,21 +163,24 @@ public class LuckyNumberView : BaseView
 
     public void OnChooseDraw(LuckyNumberItemDraw item)
     {
+        Debug.Log("OnChooseDraw");
         if (!item.isInteractable) return;
         if (item.isSelected)
         {
+            Debug.Log("CHON ITEM CU");
             selectedDrawId = 0;
             buttonConfirmDraw.interactable = false;
             ResetDraw();
         }
         else
         {
+            Debug.Log("CHON ITEM MOI");
             selectedDrawId = item.id;
             buttonConfirmDraw.interactable = true;
             foreach(LuckyNumberItemDraw otherItem in listLuckyNumberItemDraw)
             {
                 if (otherItem == item) continue;
-                otherItem.isInteractable = false;
+                otherItem.SetUnselected();
             }
         }        
         item.ToggleSelected();

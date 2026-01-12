@@ -30,6 +30,12 @@ public class LuckyNumberItemDraw : MonoBehaviour
         drawNumImage.sprite = listSpriteDrawNum[index];
     }
 
+    public void SetUnselected()
+    {
+        isSelected = false;
+        backGroundImage.sprite = listSpriteBackground[0];
+    }
+
     public void ToggleSelected()
     {
         isSelected = !isSelected;

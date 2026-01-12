@@ -447,7 +447,7 @@ public class UIManager : Singleton<UIManager>
     {
         if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureChatWorld))
         {
-            ShowAlertDialog("This feature is not available for your account.");
+            ShowAlertDialog("Upgrade to VIP 2 to unlock this feature.");
             return;
         }
         ChatWorldView chatWorldView = Instantiate(LoadPrefabLobby("ChatWorldView"), parentLobby).GetComponent<ChatWorldView>();

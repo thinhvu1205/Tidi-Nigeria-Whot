@@ -50,6 +50,8 @@ public class LobbyView : BaseView
     private bool canClaimCheckinBonus, isDeviceAllowed, hasReachedMaxStreak;
     private ObjectPool<TextMeshProUGUI> textPreviewChatWorldPool;
     private Coroutine claimTimerCoroutine;
+    private Coroutine clearChatCoroutine;
+    private const float CLEAR_DELAY = 20f;
     VideoPlayer.EventHandler videoStartedListener;
     VideoPlayer.EventHandler videoEndedListener;
 
@@ -80,6 +82,7 @@ public class LobbyView : BaseView
         if (!pause && UIManager.Instance.gameView == null)
         {
             _ = GetClaimableReward();
+            _ =  NetworkManager.INSTANCE.JoinWorldChat();
         }
     }
 
@@ -147,6 +150,7 @@ public class LobbyView : BaseView
 
     private void NetworkManager_OnMessageReceived(IApiChannelMessage message)
     {
+        ResetClearTimer();
         ChatPayload chatPayload = ConvertToChatPayload(message);
         if (listTextPreviewChatWorld.Count >= 5)
         {
@@ -156,14 +160,44 @@ public class LobbyView : BaseView
         if (!string.IsNullOrEmpty(chatPayload.Content))
         {
             string name = message.Username;
+            string content = chatPayload.Content;
             if (name.Length > 10)
             {
                 name = name[..7] + "...";
             }
+            if (content.Length > 10)
+            {
+                content = content[..7] + "...";
+            }
             TextMeshProUGUI textPreview = textPreviewChatWorldPool.Get();
-            textPreview.text = name + ": " + chatPayload.Content;
+            textPreview.text = name + ": " + content;
+            textPreview.transform.SetAsLastSibling();
             listTextPreviewChatWorld.Add(textPreview);
         }
+    }
+
+    private IEnumerator ClearChatAfterDelay()
+    {
+        yield return new WaitForSeconds(CLEAR_DELAY);
+        ClearAllPreviewChats();
+    }
+
+    private void ResetClearTimer()
+    {
+        if (clearChatCoroutine != null)
+            StopCoroutine(clearChatCoroutine);
+
+        clearChatCoroutine = StartCoroutine(ClearChatAfterDelay());
+    }
+
+    private void ClearAllPreviewChats()
+    {
+        for (int i = 0; i < listTextPreviewChatWorld.Count; i++)
+        {
+            textPreviewChatWorldPool.Release(listTextPreviewChatWorld[i]);
+        }
+
+        listTextPreviewChatWorld.Clear();
     }
 
 
@@ -395,7 +429,11 @@ public class LobbyView : BaseView
     public void OnClickMail() => UIManager.Instance.OpenMail();
     public void OnClickCheckInBonus() => UIManager.Instance.OpenCheckInBonus();
     public void OnClickFriend() => UIManager.Instance.OpenFriend();
-    public void OnClickChatWorld() => UIManager.Instance.OpenChatWorld();
+    public void OnClickChatWorld()
+    {
+        ClearAllPreviewChats();
+        UIManager.Instance.OpenChatWorld();
+    }
     public void OnClickSetting() => UIManager.Instance.OpenSetting();
     public void OnClickGiftCode() => UIManager.Instance.OpenGiftCode();
     public void OnClickBanner() => UIManager.Instance.OpenBanner(TypeInAppMessage.Event);
