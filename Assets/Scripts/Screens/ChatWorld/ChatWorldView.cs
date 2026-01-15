@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Globals;
 using Nakama;
+using Proto;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -94,6 +95,12 @@ public class ChatWorldView : BaseView
 
     public void OnClickSendMessage()
     {
+        Debug.Log("OnClickSendMessage");
+        if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureChatWorld))
+        {
+            UIManager.Instance.ShowAlertDialog("Upgrade to VIP 2 to use Chat World.", null, transform);
+            return;
+        }
         if (!string.IsNullOrEmpty(chatInputField.text))
         {
             _ = chatWorldPresenter.SendMessage(chatInputField.text);

@@ -27,8 +27,8 @@ public class SlotJuicyView : BaseSlotView
     protected override Vector2 RECT_SIZE => new(140f, 135f);
     protected override string SOUND_BACKGROUND_ANIMATION_PATH => SoundSlot.BG_JUICY_GARDEN;
     protected override string BIG_WIN_ANIMATION_PATH => "SlotSpine/JuicyGarden/big_megawinJuicy/skeleton_SkeletonData";
-    protected override string MEGA_WIN_ANIMATION_PATH => "GameView/SlotSpine/JuicyGarden/big_megawinJuicy/skeleton_SkeletonData";
-    protected override string FREE_SPIN_ANIMATION_PATH => "GameView/SlotSpine/JuicyGarden/AnimBox/skeleton_SkeletonData";
+    protected override string MEGA_WIN_ANIMATION_PATH => "SlotSpine/JuicyGarden/big_megawinJuicy/skeleton_SkeletonData";
+    protected override string FREE_SPIN_ANIMATION_PATH => "SlotSpine/JuicyGarden/AnimBox/skeleton_SkeletonData";
     protected override string BACKGROUND_FREE_SPIN_ANIMATION_PATH => "SlotSpine/JuicyGarden/BgFreeSpin/skeleton_SkeletonData";
     private const string BACKGROUND_MONEY_PACKAGE_ANIMATION_PATH = "SlotSpine/JuicyGarden/EffectPackage/skeleton_SkeletonData";
     private const string BACKGROUND_CHOOSE_A_BUCKET_ANIMATION_PATH = "SlotSpine/JuicyGarden/AnimBox/skeleton_SkeletonData";

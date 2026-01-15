@@ -7,6 +7,7 @@ using Games;
 using Games.Card;
 using Globals;
 using Nakama;
+using Newtonsoft.Json;
 using Proto;
 using TMPro;
 using UnityEngine;
@@ -241,7 +242,30 @@ public class BaseDiceGameView : BaseGameView
 
     protected virtual void NetworkManager_OnMessageTableReceived(IApiChannelMessage message)
     {
+        
         EmojiData emojiData = ConvertEmojiData(message);
+        
+        // Chat
+        if (string.IsNullOrEmpty(emojiData.emojiId))
+        {
+            BasePlayerView player = userIdToView[message.SenderId];
+            if (player != null)
+            {
+                ChatPayload chatPayload = ConvertToChatPayload(message);
+                if (chatPayload.IsAudio)
+                {
+                    player.ShowBubbleChat("Sent a voice message");
+                }
+                else
+                {
+                    player.ShowBubbleChat(chatPayload.Content);
+                Debug.Log("MESSAGE: " + chatPayload.Content);    
+                    
+                }
+            }
+        }
+
+        // Emoji
         if (!string.IsNullOrEmpty(emojiData.emojiId)
             && !string.IsNullOrEmpty(emojiData.senderId)
             && string.IsNullOrEmpty(emojiData.receiverId)
@@ -307,6 +331,76 @@ public class BaseDiceGameView : BaseGameView
         Debug.Log("RECEIVER ID: " + data.receiverId);
         Debug.Log("EMOJI ID: " + data.emojiId);
         return data;
+    }
+
+    protected ChatPayload ConvertToChatPayload(IApiChannelMessage message)
+    {
+        ChatPayload chatPayload = new ChatPayload();
+
+        try
+        {
+            // Parse message content (JSON string từ server)
+            if (!string.IsNullOrEmpty(message.Content))
+            {
+                // Parse JSON content
+                var contentData = JsonConvert.DeserializeObject<ChatContentData>(message.Content);
+
+                if (contentData != null)
+                {
+                    // 1. Check voice message first
+                    if (!string.IsNullOrEmpty(contentData.voice_url))
+                    {
+                        chatPayload.IsAudio = true;
+                        chatPayload.Content = contentData.voice_url; 
+                    //    _ = Test(contentData.voice_url);
+                    }
+                    else
+                    {
+                        // 2. Text message
+                        chatPayload.IsAudio = false;
+                        chatPayload.Content = contentData.text ?? "";
+                    }
+
+                    // 3. Sender info từ sender_profile (server tự thêm)
+                    if (contentData.sender_profile != null)
+                    {
+                        chatPayload.Name = message.Username; // Fallback to message.Username
+                        chatPayload.Avatar = contentData.sender_profile.avt ?? "";
+                        chatPayload.Vip = (int) contentData.sender_profile.vip_level;
+                        chatPayload.Time = Utility.ConvertISOToHHMM(message.CreateTime);
+                    }
+                    else
+                    {
+                        chatPayload.Name = message.Username;
+                    }
+
+                    // 4. Sender ID
+                    chatPayload.ID = message.SenderId;
+                    
+                    
+                }
+                else
+                {
+                    // Fallback: treat as plain text if JSON parse fails
+                    chatPayload.Content = message.Content;
+                    chatPayload.IsAudio = false;
+                }
+            }
+            else
+            {
+                // Empty content
+                chatPayload.IsAudio = false;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error parsing chat message: {e.Message}\nContent: {message.Content}");
+            // Fallback to basic info
+            chatPayload.Content = message.Content ?? "";
+            chatPayload.IsAudio = false;
+        }
+
+        return chatPayload;
     }
     
 }

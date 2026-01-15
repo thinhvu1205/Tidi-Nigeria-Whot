@@ -152,7 +152,7 @@ public class LobbyView : BaseView
     {
         ResetClearTimer();
         ChatPayload chatPayload = ConvertToChatPayload(message);
-        if (listTextPreviewChatWorld.Count >= 5)
+        if (listTextPreviewChatWorld.Count >= 3)
         {
             textPreviewChatWorldPool.Release(listTextPreviewChatWorld[0]);
             listTextPreviewChatWorld.RemoveAt(0);
@@ -360,8 +360,8 @@ public class LobbyView : BaseView
         if (btnBank != null)
             btnBank.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureBank));
         
-        if (btnChatWorld != null)
-            btnChatWorld.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureChatWorld));
+        // if (btnChatWorld != null)
+        //     btnChatWorld.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureChatWorld));
         
         if (btnChatTable != null)
             btnChatTable.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureChatTable));

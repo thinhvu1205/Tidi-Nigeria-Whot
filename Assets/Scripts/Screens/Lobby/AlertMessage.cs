@@ -16,6 +16,7 @@ public class AlertMessage : Singleton<AlertMessage>, IPointerClickHandler
 {
     [SerializeField] TMP_Text textAlert;
     [SerializeField] RectTransform rectTfParent;
+    [SerializeField] GameObject background;
     private RectTransform rectTf;
     private bool isRunningAnnouncement = false;
     private Rect parentRect;
@@ -49,7 +50,7 @@ public class AlertMessage : Singleton<AlertMessage>, IPointerClickHandler
         
         // Initialize announcement ticker
         lobbyPresenter = new LobbyPresenter();
-        
+        background.SetActive(false);
         // Subscribe to network events
         if (NetworkManager.INSTANCE != null)
         {
@@ -104,11 +105,11 @@ public class AlertMessage : Singleton<AlertMessage>, IPointerClickHandler
         }
 
         // Chỉ hiển thị khi không có game view (trong lobby)
-        if (UIManager.Instance != null && UIManager.Instance.gameView != null)
-        {
-            return;
-        }
-
+        // if (UIManager.Instance != null && UIManager.Instance.gameView != null)
+        // {
+        //     return;
+        // }
+        background.SetActive(true);
         if (!gameObject.activeSelf)
         {
             gameObject.SetActive(true);
@@ -121,8 +122,8 @@ public class AlertMessage : Singleton<AlertMessage>, IPointerClickHandler
         textAlert.text = processedContent;
 
         // Setup vị trí ban đầu và kết thúc cho animation
-        Vector2 posStart = new Vector2(parentRect.width / 2, parentRect.height / 2 - 5);
-        Vector2 posEnd = new Vector2(-parentRect.width / 2 - textAlert.preferredWidth, parentRect.height / 2 - 5);
+        Vector2 posStart = new Vector2(parentRect.width / 2, textAlert.transform.localPosition.y);
+        Vector2 posEnd = new Vector2(-parentRect.width / 2 - textAlert.preferredWidth, textAlert.transform.localPosition.y);
 
         textAlert.transform.localPosition = posStart;
 
@@ -130,6 +131,7 @@ public class AlertMessage : Singleton<AlertMessage>, IPointerClickHandler
         textAlert.transform.DOLocalMoveX(posEnd.x, 12.5f).OnComplete(() =>
         {
             isRunningAnnouncement = false;
+            background.SetActive(false);
             // Delay 0.5s trước khi có thể hiển thị announcement tiếp theo
             DOTween.Sequence().AppendInterval(0.5f).AppendCallback(() =>
             {

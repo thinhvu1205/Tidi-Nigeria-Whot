@@ -132,37 +132,40 @@ public class BlackjackBoxBet : MonoBehaviour
         switch (type)
         {
             case BlackjackHandType.Blackjack:
-                animationBlackjack.gameObject.SetActive(true);
-                animationBlackjack.AnimationState.SetAnimation(0, "animation", false);
+                Utility.PlayAnimation(animationBlackjack, "animation", false);
+                // animationBlackjack.gameObject.SetActive(true);
+                // animationBlackjack.AnimationState.SetAnimation(0, "animation", false);
 
-                animationBlackjack.AnimationState.Complete += delegate
+                DOVirtual.DelayedCall(1.5f, () =>
                 {
                     animationBlackjack.gameObject.SetActive(false);
                     imageState.sprite = listImageState[0]; // Blackjack
                     imageState.gameObject.SetActive(true);
                     ShrinkCurrentPlayerBoxbet();
-                  
-                };
+                });
                 break;
 
             case BlackjackHandType._21P:
-                animationWow.gameObject.SetActive(true);
-                animationWow.AnimationState.SetAnimation(0, "animation", false);
+                Utility.PlayAnimation(animationWow, "animation", false);
+                // animationWow.gameObject.SetActive(true);
+                // animationWow.AnimationState.SetAnimation(0, "animation", false);
                 foreach (var card in listCardModel)
                 {
                     card.ShowSparkleAnimation();
                 }
 
-                animationWow.AnimationState.Complete += delegate
+                DOVirtual.DelayedCall(1.4f, () =>
                 {
                     animationWow.gameObject.SetActive(false);
                     ShrinkCurrentPlayerBoxbet();
-                };
+                });
+
 
                 break;
             case BlackjackHandType.Busted:
-                animationBust.gameObject.SetActive(true);
-                animationBust.AnimationState.SetAnimation(0, "animation", false);
+                Utility.PlayAnimation(animationBust, "animation", false);
+                // animationBust.gameObject.SetActive(true);
+                // animationBust.AnimationState.SetAnimation(0, "animation", false);
                 foreach (var card in listCardModel)
                 {
                     card.SetDark(true);
@@ -170,12 +173,12 @@ public class BlackjackBoxBet : MonoBehaviour
                 imageState.sprite = listImageState[1]; // Bust
                 imageState.gameObject.SetActive(true);
 
-                animationBust.AnimationState.Complete += delegate
+                DOVirtual.DelayedCall(1f, () =>
                 {
                     animationBust.gameObject.SetActive(false);
                     // HideImageChip();
                     ShrinkCurrentPlayerBoxbet();
-                };
+                });
                 break;
 
             default:
@@ -210,31 +213,30 @@ public class BlackjackBoxBet : MonoBehaviour
         if (winType > 0)
         {
             Utility.PlayAnimation(animationWin, "animation", false);
-            animationWin.AnimationState.Complete += delegate
+            DOVirtual.DelayedCall(0.65f, () =>
             {
                 effectContainer.gameObject.SetActive(false);
-                animationWin.gameObject.SetActive(false);
-            };
+                animationWin.gameObject.SetActive(false); 
+            });
         }
         else if (winType == 0)
         {
 
             Utility.PlayAnimation(animationPush, "animation", false);
-            animationPush.AnimationState.Complete += delegate
+            DOVirtual.DelayedCall(1.2f, () =>
             {
                 effectContainer.gameObject.SetActive(false);
                 animationPush.gameObject.SetActive(false);
-            };
+            });
         }
         else
         {
             Utility.PlayAnimation(animationLose, "lose", false);
-            animationLose.AnimationState.Complete += delegate
+            DOVirtual.DelayedCall(1.35f, () =>
             {
                 animationLose.gameObject.SetActive(false);
                 effectContainer.gameObject.SetActive(false);
-                // HideImageChip();
-            };
+            });
         }
     }
 

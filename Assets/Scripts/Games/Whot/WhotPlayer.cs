@@ -10,6 +10,7 @@ using System;
 using Common.Pool;
 using Games.Whot;
 using Avatar = Common.Objects.Avatar;
+using Color = UnityEngine.Color;
 
 public class WhotPlayer : MonoBehaviour
 {
@@ -22,6 +23,9 @@ public class WhotPlayer : MonoBehaviour
     [HideInInspector] public bool isCurrentPlayer = false;
     [HideInInspector] public bool isWinner = false;
     [SerializeField] public bool isPlaying = true;
+    [SerializeField] private Image bubbleChat;
+    [SerializeField] private TextMeshProUGUI textChat;
+    private Sequence bubbleSeq;
     public string Id { get; private set; } = string.Empty;
     public string AvatarId { get; private set; } = string.Empty;
     public long VipLevel { get; private set; } = 0;
@@ -295,6 +299,51 @@ public class WhotPlayer : MonoBehaviour
     {
         PlayerProfileInGameView playerProfileInGameView = UIManager.Instance.OpenPlayerProfileInGame();
         playerProfileInGameView.SetInfo(player.UserName, player.Id, player.Sid.ToString(), (int)player.VipLevel, player.AvatarId);
+    }
+
+    public void ShowBubbleChat(string message)
+    {
+        textChat.text = message;
+        bubbleChat.gameObject.SetActive(true);
+
+        // ❌ Kill sequence cũ → reset timer 3s
+        if (bubbleSeq != null && bubbleSeq.IsActive())
+        {
+            bubbleSeq.Kill();
+        }
+
+        // Reset trạng thái
+        Color c = bubbleChat.color;
+        c.a = 0f;
+        bubbleChat.color = c;
+        bubbleChat.transform.localScale = Vector3.zero;
+
+        // ✅ Tạo sequence mới
+        bubbleSeq = DOTween.Sequence();
+
+        bubbleSeq.Append(bubbleChat.DOFade(1f, 0.5f));
+        bubbleSeq.Join(
+            bubbleChat.transform
+                .DOScale(1f, 0.5f)
+                .SetEase(Ease.OutBack)
+        );
+
+        // ⏳ Giữ 3s (reset từ đầu mỗi lần gọi)
+        bubbleSeq.AppendInterval(3f);
+
+        bubbleSeq.Append(bubbleChat.DOFade(0f, 0.5f));
+        bubbleSeq.Join(
+            bubbleChat.transform
+                .DOScale(0.8f, 0.5f)
+                .SetEase(Ease.InBack)
+        );
+
+        bubbleSeq.OnComplete(() =>
+        {
+            bubbleChat.gameObject.SetActive(false);
+        });
+
+        bubbleSeq.SetUpdate(true);
     }
 
     #endregion

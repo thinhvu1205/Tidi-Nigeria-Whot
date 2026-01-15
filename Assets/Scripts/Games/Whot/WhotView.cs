@@ -629,8 +629,9 @@ public class WhotView : BaseDiceGameView
                     WhotCardModel playedCardModel = InitCard(data.TopCard, player.GetPlayedCardParent());
                     playedCardModel.SetInfo(data.TopCard.Suit, data.TopCard.Rank);
                     player.PlayACard(playedCardModel);
-                    player.CardsLeft--;
-                    player.UpdateCardsLeftVisual();
+                    // player.CardsLeft--;
+                    // player.UpdateCardsLeftVisual();
+                    UpdateCardsCount(data.DeckCount, playerCardsCount);
                 }
 
                 // Nếu effect là chọn chất lá Whot thì ko update card count vì server ko trả về
@@ -1461,8 +1462,27 @@ public class WhotView : BaseDiceGameView
     protected override void NetworkManager_OnMessageTableReceived(IApiChannelMessage message)
     {
         EmojiData emojiData = ConvertEmojiData(message);
-        WhotPlayer sender = GetPlayerByID(emojiData.senderId);
+        WhotPlayer sender = GetPlayerByID(message.SenderId);
         if (sender == null) return;
+         // Chat
+        if (string.IsNullOrEmpty(emojiData.emojiId))
+        {
+            if (sender != null)
+            {
+                ChatPayload chatPayload = ConvertToChatPayload(message);
+                if (chatPayload.IsAudio)
+                {
+                    sender.ShowBubbleChat("Sent a voice message");
+                }
+                else
+                {
+                    sender.ShowBubbleChat(chatPayload.Content);
+                Debug.Log("MESSAGE: " + chatPayload.Content);    
+                    
+                }
+            }
+        }
+        // Emoji
         if (!string.IsNullOrEmpty(emojiData.emojiId)
             && !string.IsNullOrEmpty(emojiData.senderId)
             && string.IsNullOrEmpty(emojiData.receiverId)

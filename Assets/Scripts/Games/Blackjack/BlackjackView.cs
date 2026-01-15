@@ -736,11 +736,11 @@ public class BlackjackView : BaseDiceGameView
                             effectContainer.gameObject.SetActive(true);
                             Utility.PlayAnimation(animationWinBlackjack, "animation", false);
                             // animationWinBlackjack.gameObject.SetActive(true);
-                            animationWinBlackjack.AnimationState.Complete += delegate
+                            DOVirtual.DelayedCall(4f, () =>
                             {
                                 effectContainer.gameObject.SetActive(false);
                                 animationWinBlackjack.gameObject.SetActive(false);
-                            };
+                            });
                         }
 
                     });
@@ -2058,7 +2058,7 @@ public class BlackjackView : BaseDiceGameView
         string localUserId = User.userProfile.UserId;
         if (GameState == GameState.Play)
         {
-            int playerIndex = players.IndexOf(player);
+            int playerIndex = rearrangedPlayers.IndexOf(player);
             if (!userIdToBoxBetView.TryGetValue(player.Id, out var boxBetView) || boxBetView == null)
             {
                 boxBetView = Instantiate(boxBetPrefab, boxBetContainer).GetComponent<BlackjackBoxBet>();
@@ -2066,6 +2066,8 @@ public class BlackjackView : BaseDiceGameView
                 boxBetView.transform.localPosition = listBoxBetPosition[playerIndex];
                 boxBetView.gameObject.SetActive(true);
                 boxBetView.SetInfo(playerIndex, listBoxBetPosition[playerIndex]);
+                Debug.Log("INSTANTIATE BOXBET FOR: " + player.UserName + " with INDEX: " + playerIndex);
+
             }
         }
         else
@@ -2078,6 +2080,7 @@ public class BlackjackView : BaseDiceGameView
                 boxBetView.transform.localPosition = listBoxBetPosition[playerIndex];
                 boxBetView.gameObject.SetActive(true);
                 boxBetView.SetInfo(playerIndex, listBoxBetPosition[playerIndex]);
+                Debug.Log("INSTANTIATE BOXBET FOR: " + player.UserName + " with INDEX: " + playerIndex);
                 // boxBetView.SetInfo(this, 1);
             }
             else

@@ -37,6 +37,11 @@ public class MailItem : MonoBehaviour
         textTime.text = timePart;
     }
 
+    public void OnClickDetail()
+    {
+        UIManager.Instance.OpenMailDetail(notification);
+    }
+
     public void OnClickCheckbox()
     {
         isChecked = !isChecked;

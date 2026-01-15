@@ -292,9 +292,10 @@ public class UIManager : Singleton<UIManager>
         dialogView.ConfigCancelButton(true, textCancel, cancelCallback);
     }
 
-    public void ShowAlertDialog(string content, Action confirmCallback = null, bool isGlobal = true)
+    public void ShowAlertDialog(string content, Action confirmCallback = null, Transform parent = null)
     {
-        DialogView dialogView = Instantiate(LoadPrefabPopup("Dialog"), parentPopups).GetComponent<DialogView>();
+        parent = parent == null ? parentPopups : parent;
+        DialogView dialogView = Instantiate(LoadPrefabPopup("Dialog"), parent).GetComponent<DialogView>();
         dialogView.transform.localScale = Vector3.one;
         dialogView.SetContent(content);
         dialogView.ConfigConfirmButton(true, "OK", confirmCallback);
@@ -445,11 +446,11 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenChatWorld()
     {
-        if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureChatWorld))
-        {
-            ShowAlertDialog("Upgrade to VIP 2 to unlock this feature.");
-            return;
-        }
+        // if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureChatWorld))
+        // {
+        //     ShowAlertDialog("Upgrade to VIP 2 to unlock this feature.");
+        //     return;
+        // }
         ChatWorldView chatWorldView = Instantiate(LoadPrefabLobby("ChatWorldView"), parentLobby).GetComponent<ChatWorldView>();
         chatWorldView.transform.localScale = Vector3.one;
     }
@@ -500,6 +501,13 @@ public class UIManager : Singleton<UIManager>
         }
         MailView mailView = Instantiate(LoadPrefabPopup("PopupMail"), parentPopups).GetComponent<MailView>();
         mailView.transform.localScale = Vector3.one;
+    }
+
+    public void OpenMailDetail(Notification notification)
+    {
+        MailDetailView mailView = Instantiate(LoadPrefabPopup("PopupMailDetail"), parentPopups).GetComponent<MailDetailView>();
+        mailView.transform.localScale = Vector3.one;
+        mailView.SetData(notification);
     }
 
     public void OpenJackpot()

@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Globals;
 using Proto;
 using Spine.Unity;
@@ -113,13 +114,16 @@ public class VipFarmView : BaseView
         receiveInfo.SetActive(true);
         Utility.PlayAnimation(animationReceive, "animation", false);
         Utility.TweenNumberToNumber(textMoneyReceive, (int)reward, 0);
-        animationReceive.AnimationState.Complete += async delegate
+        await DOVirtual.DelayedCall(4f, async () =>
         {
+     
             Debug.Log("DIEN XONG R DAY");
             receiveInfo.SetActive(false);
             await GetVipFarmProgress();
             OnClaimed?.Invoke();
-        };
+         
+            
+        });
 
     }
 }

@@ -9,6 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Avatar = Common.Objects.Avatar;
+using Color = UnityEngine.Color;
 
 public class BasePlayerView : MonoBehaviour
 {
@@ -59,6 +60,12 @@ public class BasePlayerView : MonoBehaviour
     [Header("=== VIP SYSTEM ===")]
     [Tooltip("VIP item GameObject")]
     GameObject itemVip;
+    [SerializeField] private Image bubbleChat;
+    [SerializeField] private TextMeshProUGUI textChat;
+    private Sequence bubbleSeq;
+    private const string WIN_ANIMATION_PATH = "Common/win/skeleton_SkeletonData";
+    private const string DRAW_ANIMATION_PATH = "Common/draw/skeleton_SkeletonData";
+    private const string LOSE_ANIMATION_PATH = "Common/lose/skeleton_SkeletonData";
 
     private string _id;
     public string id
@@ -576,16 +583,17 @@ public class BasePlayerView : MonoBehaviour
     public virtual void SetEffectWin(string animName = "win", bool isLoop = true)
     {
         animationResult.gameObject.SetActive(true);
-        animationResult.skeletonDataAsset = listAnimationResult[2];
-        animationResult.Initialize(true);
+        Utility.PlayAnimationByPath(animationResult, WIN_ANIMATION_PATH, animName, isLoop);
+        // animationResult.skeletonDataAsset = listAnimationResult[2];
+        // animationResult.Initialize(true);
 
-        animationResult.AnimationState.SetAnimation(0, animName, isLoop);
+        // animationResult.AnimationState.SetAnimation(0, animName, isLoop);
         if (!isLoop)
         {
-            animationResult.AnimationState.Complete += delegate
+            DOVirtual.DelayedCall(3f, () =>
             {
                 animationResult.gameObject.SetActive(false);
-            };
+            });
         }
     }
 
@@ -767,6 +775,51 @@ public class BasePlayerView : MonoBehaviour
     {
         PlayerProfileInGameView playerProfileInGameView = UIManager.Instance.OpenPlayerProfileInGame();
         playerProfileInGameView.SetInfo(user_name, id, sid, (int)vipLevel, avatar_id);
+    }
+
+    public void ShowBubbleChat(string message)
+    {
+        textChat.text = message;
+        bubbleChat.gameObject.SetActive(true);
+
+        // ❌ Kill sequence cũ → reset timer 3s
+        if (bubbleSeq != null && bubbleSeq.IsActive())
+        {
+            bubbleSeq.Kill();
+        }
+
+        // Reset trạng thái
+        Color c = bubbleChat.color;
+        c.a = 0f;
+        bubbleChat.color = c;
+        bubbleChat.transform.localScale = Vector3.zero;
+
+        // ✅ Tạo sequence mới
+        bubbleSeq = DOTween.Sequence();
+
+        bubbleSeq.Append(bubbleChat.DOFade(1f, 0.5f));
+        bubbleSeq.Join(
+            bubbleChat.transform
+                .DOScale(1f, 0.5f)
+                .SetEase(Ease.OutBack)
+        );
+
+        // ⏳ Giữ 3s (reset từ đầu mỗi lần gọi)
+        bubbleSeq.AppendInterval(3f);
+
+        bubbleSeq.Append(bubbleChat.DOFade(0f, 0.5f));
+        bubbleSeq.Join(
+            bubbleChat.transform
+                .DOScale(0.8f, 0.5f)
+                .SetEase(Ease.InBack)
+        );
+
+        bubbleSeq.OnComplete(() =>
+        {
+            bubbleChat.gameObject.SetActive(false);
+        });
+
+        bubbleSeq.SetUpdate(true);
     }
     
 

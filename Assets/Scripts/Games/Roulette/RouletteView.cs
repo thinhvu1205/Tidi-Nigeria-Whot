@@ -771,10 +771,10 @@ public class RouletteView : BaseDiceGameView
             // playSound(SOUND_GAME.LOSE);
         }
         Utility.PlayAnimation(animationWinLose, animationName, false);
-        animationWinLose.AnimationState.Complete += (entry) =>
+        DOVirtual.DelayedCall(1f, () =>
         {
             effectContainer.gameObject.SetActive(false);
-        };
+        });
     }
 
     private void HighlightByCondition(RouletteOptionBet option, Dictionary<Func<RouletteOptionBet, bool>, Image> map)
@@ -822,7 +822,7 @@ public class RouletteView : BaseDiceGameView
         textResult.gameObject.SetActive(true);
         textResult.text = $"{result}";
         Utility.PlayAnimation(animationResult, animationName, false);
-        animationResult.AnimationState.Complete += (entry) =>
+        DOVirtual.DelayedCall(2f, () =>
         {
             buttonHistory.interactable = true;
             // listDataBet.Clear();
@@ -835,7 +835,8 @@ public class RouletteView : BaseDiceGameView
             tableSpin.DOAnchorPosX(-2400, 1f).SetEase(Ease.InOutQuad);
             transformButtonMenu.DOAnchorPosX(60, 0.5f);
             transformTabResult.DOAnchorPosX(-44, 0.75f).SetEase(Ease.InOutQuad);
-        };
+            
+        });
 
         RouletteHistory resultHistory = Instantiate(resultHistoryPrefab, resultHistoryParent);
         RouletteHistory resultHistoryInPopup = Instantiate(resultHistoryPrefab, resultHistoryPopupParent);
