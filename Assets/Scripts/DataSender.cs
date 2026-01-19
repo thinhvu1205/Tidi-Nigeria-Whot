@@ -698,7 +698,7 @@ public class DataSender
     /// <summary>
     /// Get available lottery draws
     /// </summary>
-    public static async UniTask<GetAvailableDrawsResponse> GetAvailableDraws(int limit = 2)
+    public static async UniTask<GetAvailableDrawsResponse> GetAvailableDraws(int limit = 3)
     {
         try
         {

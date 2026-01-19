@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,7 +52,6 @@ public class LuckyNumberView : BaseView
         selectView.Init(this);
         historyView.Init(this);
         InitNumberItems();
-        _ = GetAvailableDraws();
         _ = GetLatestDrawResult();
         UpdateAccountChip();
         buttonConfirmNumber.interactable = false;
@@ -113,6 +113,11 @@ public class LuckyNumberView : BaseView
 
     private void InitDrawItems()
     {
+        foreach (Transform child in drawItemParent)
+        {
+            Destroy(child.gameObject);
+        }
+
         for (int i = 0; i < listLoterryDraw.Count; i++)
         {
             LotteryDraw draw = listLoterryDraw[i];
@@ -232,22 +237,32 @@ public class LuckyNumberView : BaseView
         buttonClear.interactable = false;
     }
 
-    public void OnClickConfirmNumber()
+    public async void OnClickConfirmNumber()
     {
-        if (listSelectedNumbers.Count < 6)
+        try
         {
-            UIManager.Instance.ShowToast("Please select exactly 6 numbers.", 2, transform);
-            return;
-        }
-        selectView.Show();
-        selectedDrawId = 0;
-        buttonConfirmDraw.interactable = false; 
-        foreach (LuckyNumberItemDraw item in listLuckyNumberItemDraw)
-        {
-            if (item.isSelected)
+            if (listSelectedNumbers.Count < 6)
             {
-                item.ToggleSelected();
+                UIManager.Instance.ShowToast("Please select exactly 6 numbers.", 2, transform);
+                return;
             }
+
+            await GetAvailableDraws();
+           
+            selectView.Show();
+            selectedDrawId = 0;
+            buttonConfirmDraw.interactable = false; 
+            foreach (LuckyNumberItemDraw item in listLuckyNumberItemDraw)
+            {
+                if (item.isSelected)
+                {
+                    item.ToggleSelected();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
         }
     }
 
