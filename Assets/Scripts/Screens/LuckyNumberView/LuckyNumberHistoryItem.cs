@@ -30,17 +30,20 @@ public class LuckyNumberHistoryItem : MonoBehaviour
         textReward.text = Utility.FormatNumber(ticket.Reward);
         switch(ticket.MatchedCount)
         {
-            case 3:
+            case 2:
                 imageNote.GetComponent<SpriteRenderer>().sprite = listSpriteNote[0];
                 break;
-            case 4:
+            case 3:
                 imageNote.GetComponent<SpriteRenderer>().sprite = listSpriteNote[1];
                 break;
-            case 5:
+            case 4:
                 imageNote.GetComponent<SpriteRenderer>().sprite = listSpriteNote[2];
                 break;
-            case 6:
+            case 5:
                 imageNote.GetComponent<SpriteRenderer>().sprite = listSpriteNote[3];
+                break;
+            case 6:
+                imageNote.GetComponent<SpriteRenderer>().sprite = listSpriteNote[4];
                 break;
             default:
                 imageNote.SetActive(false);

@@ -635,8 +635,9 @@ public class DataSender
         }
         catch (Exception ex)
         {
-            Debug.LogError("BuyLotteryTicket failed: " + ex.Message);
-            return null;
+            // Debug.LogError("BuyLotteryTicket failed: " + ex.Message);
+            ParseError(ex.Message);
+            throw;
         }
     }
 
@@ -655,33 +656,29 @@ public class DataSender
         }
         catch (Exception ex)
         {
-            Debug.LogError("BuyMultipleLotteryTickets failed: " + ex.Message);
-            UIManager.Instance.ShowAlertDialog("Failed to buy lottery tickets: " + ex.Message, null);
-            return null;
+            // Debug.LogError("BuyMultipleLotteryTickets failed: " + ex.Message);
+            ParseError(ex.Message);
+            throw;
         }
     }
 
     /// <summary>
     /// Get lottery ticket history for current user
     /// </summary>
-    public static async UniTask<GetLotteryHistoryResponse> GetLotteryHistory(int limit = 20, int offset = 0, LotteryTicketStatus? status = null, string userId = null)
+    public static async UniTask<GetLotteryHistoryResponse> GetLotteryHistory(int limit = 20, int offset = 0, LotteryTicketStatus status = LotteryTicketStatus.All  , string userId = null)
     {
         try
         {
             GetLotteryHistoryRequest request = new()
             {
                 Limit = limit,
-                Offset = offset
+                Offset = offset,
+                Status = status
             };
 
             if (!string.IsNullOrEmpty(userId))
             {
                 request.UserId = userId;
-            }
-
-            if (status.HasValue)
-            {
-                request.Status = status.Value;
             }
 
             var response = await NetworkManager.INSTANCE.RPCSend(GET_LOTTERY_HISTORY, request);
@@ -690,8 +687,8 @@ public class DataSender
         catch (Exception ex)
         {
             Debug.LogError("GetLotteryHistory failed: " + ex.Message);
-            UIManager.Instance.ShowAlertDialog("Failed to get lottery history: " + ex.Message, null);
-            return null;
+            ParseError(ex.Message);
+            throw;
         }
     }
 
@@ -713,8 +710,8 @@ public class DataSender
         catch (Exception ex)
         {
             Debug.LogError("GetAvailableDraws failed: " + ex.Message);
-            UIManager.Instance.ShowAlertDialog("Failed to get available draws: " + ex.Message, null);
-            return null;
+            ParseError(ex.Message);
+            throw;
         }
     }
 
@@ -732,9 +729,9 @@ public class DataSender
         }
         catch (Exception ex)
         {
-            Debug.LogError("GetLatestDrawResult failed: " + ex.Message);
-            UIManager.Instance.ShowAlertDialog("Failed to get latest draw result: " + ex.Message, null);
-            return null;
+            // Debug.LogError("GetLatestDrawResult failed: " + ex.Message);
+            ParseError(ex.Message);
+            throw;
         }
     }
 
@@ -755,8 +752,9 @@ public class DataSender
         }
         catch (Exception ex)
         {
-            Debug.LogError("QuickPick failed: " + ex.Message);
-            return null;
+            // Debug.LogError("QuickPick failed: " + ex.Message);
+            ParseError(ex.Message);
+            throw;
         }
     }
 
