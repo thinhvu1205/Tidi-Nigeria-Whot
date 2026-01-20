@@ -27,7 +27,7 @@ public class LuckyNumberPresenter
         }
         catch (Exception)
         {
-            luckyNumberView.OnError("Failed to buy lottery ticket");
+            // luckyNumberView.OnError("Failed to buy lottery ticket");
             return null;
         }
     }
@@ -37,6 +37,7 @@ public class LuckyNumberPresenter
         try
         {
             BuyMultipleLotteryTicketsResponse buyMultipleLotteryTicketsResponse = await DataSender.BuyMultipleLotteryTickets(tickets);
+            await luckyNumberView.OnSuccess("Lottery ticket purchased successfully!", true);
             return buyMultipleLotteryTicketsResponse;
         }
         catch (Exception)
@@ -69,7 +70,7 @@ public class LuckyNumberPresenter
         }
         catch (Exception)
         {
-            luckyNumberView.OnError("Failed to get latest draw result");
+            // luckyNumberView.OnError("Failed to get latest draw result");
             return null;
         }
     }
@@ -85,7 +86,7 @@ public class LuckyNumberPresenter
         }
         catch (Exception)
         {
-            luckyNumberView.OnError("Failed to get lottery history");
+            // luckyNumberView.OnError("Failed to get lottery history");
             return null;
         }
     }
@@ -101,7 +102,7 @@ public class LuckyNumberPresenter
         }
         catch (Exception)
         {
-            luckyNumberView.OnError("Failed to generate quick pick numbers");
+            // luckyNumberView.OnError("Failed to generate quick pick numbers");
             return null;
         }
     }

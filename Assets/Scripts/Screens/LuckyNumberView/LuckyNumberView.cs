@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,7 +52,6 @@ public class LuckyNumberView : BaseView
         selectView.Init(this);
         historyView.Init(this);
         InitNumberItems();
-        _ = GetAvailableDraws();
         _ = GetLatestDrawResult();
         UpdateAccountChip();
         buttonConfirmNumber.interactable = false;
@@ -68,8 +68,11 @@ public class LuckyNumberView : BaseView
     private async UniTask GetAvailableDraws()
     {
         GetAvailableDrawsResponse response = await luckyNumberPresenter.GetAvailableDraws();
-        listLoterryDraw = response.Draws.ToList();
-        InitDrawItems();
+        if (response != null)
+        {
+            listLoterryDraw = response.Draws.ToList();
+            InitDrawItems();
+        }
         // if (listLoterryDraw.Count > 0)
         // {
         //     long nextDrawTime = listLoterryDraw[0].DrawTimeUnix;
@@ -80,20 +83,26 @@ public class LuckyNumberView : BaseView
     private async UniTask GetLatestDrawResult()
     {
         GetLatestDrawResultResponse response = await luckyNumberPresenter.GetLatestDrawResult();
-        int[] winningNumbers = response.Draw.WinningNumbers.ToArray();
-        for (int i = 0; i < listTextWinningNumber.Length; i++)
+        if (response != null)
         {
-            listTextWinningNumber[i].text = winningNumbers[i].ToString();
+            var winningNumbers = response.Draw.WinningNumbers.ToArray();
+            for (int i = 0; i < listTextWinningNumber.Length; i++)
+            {
+                listTextWinningNumber[i].text = winningNumbers[i].ToString();
+            }
+            textUpdateTime.text = "Updated at: " + Utility.ConvertUnixTimeToHHMMDDMMYYYY(response.Draw.DrawTimeUnix);
+            textPrizePool.text = "Prize Pool: " + Utility.FormatNumber(response.Draw.PrizePool);
         }
-        textUpdateTime.text = "Updated at: " + Utility.ConvertUnixTimeToHHMMDDMMYYYY(response.Draw.DrawTimeUnix);
-        textPrizePool.text = "Prize Pool: " + Utility.FormatNumber(response.Draw.PrizePool);
     }
 
     public async UniTask GetLotteryHistory()
     {
         GetLotteryHistoryResponse response = await luckyNumberPresenter.GetLotteryHistory();
-        List<LotteryTicket> listLotteryTicket = response.Tickets.ToList();
-        historyView.InitHistoryItems(listLotteryTicket);
+        if (response != null)
+        {
+            var listLotteryTicket = response.Tickets.ToList();
+            historyView.InitHistoryItems(listLotteryTicket);
+        }
     }
 
     #endregion
@@ -113,6 +122,11 @@ public class LuckyNumberView : BaseView
 
     private void InitDrawItems()
     {
+        foreach (Transform child in drawItemParent)
+        {
+            Destroy(child.gameObject);
+        }
+
         for (int i = 0; i < listLoterryDraw.Count; i++)
         {
             LotteryDraw draw = listLoterryDraw[i];
@@ -203,18 +217,21 @@ public class LuckyNumberView : BaseView
     private async UniTask HandleQuickPickAsync()
     {
         QuickPickResponse quickPickResponse = await luckyNumberPresenter.QuickPick();
-        int[] numbers = quickPickResponse.NumberSets.ToList()[0].Numbers.ToArray();
-        foreach (int number in numbers)
+        if (quickPickResponse != null)
         {
-            LuckyNumberItem item = listLuckyNumberItem[number - 1];
-            if (!item.isSelected)
+            var numbers = quickPickResponse.NumberSets.ToList()[0].Numbers.ToArray();
+            foreach (int number in numbers)
             {
-                listSelectedNumbers.Add(item.number);
-                item.ToggleSelected();
+                LuckyNumberItem item = listLuckyNumberItem[number - 1];
+                if (!item.isSelected)
+                {
+                    listSelectedNumbers.Add(item.number);
+                    item.ToggleSelected();
+                }
             }
+            buttonConfirmNumber.interactable = true;
+            buttonClear.interactable = true;
         }
-        buttonConfirmNumber.interactable = true;
-        buttonClear.interactable = true;
     }
 
     public void OnClickClear()
@@ -232,22 +249,32 @@ public class LuckyNumberView : BaseView
         buttonClear.interactable = false;
     }
 
-    public void OnClickConfirmNumber()
+    public async void OnClickConfirmNumber()
     {
-        if (listSelectedNumbers.Count < 6)
+        try
         {
-            UIManager.Instance.ShowToast("Please select exactly 6 numbers.", 2, transform);
-            return;
-        }
-        selectView.Show();
-        selectedDrawId = 0;
-        buttonConfirmDraw.interactable = false; 
-        foreach (LuckyNumberItemDraw item in listLuckyNumberItemDraw)
-        {
-            if (item.isSelected)
+            if (listSelectedNumbers.Count < 6)
             {
-                item.ToggleSelected();
+                UIManager.Instance.ShowToast("Please select exactly 6 numbers.", 2, transform);
+                return;
             }
+
+            await GetAvailableDraws();
+           
+            selectView.Show();
+            selectedDrawId = 0;
+            buttonConfirmDraw.interactable = false; 
+            foreach (LuckyNumberItemDraw item in listLuckyNumberItemDraw)
+            {
+                if (item.isSelected)
+                {
+                    item.ToggleSelected();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
         }
     }
 
