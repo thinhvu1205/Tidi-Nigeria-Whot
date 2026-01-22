@@ -129,10 +129,17 @@ message GetDrawResultResponse {
 // Request to get latest draw result
 message GetLatestDrawResultRequest {}
 
+// Top winner information
+message TopWinner {
+  SimpleProfile profile = 1; // User profile (avatarid, vip, username)
+  int64 total_reward = 2;    // Total reward won by this user in this draw
+}
+
 // Response with latest draw result
 message GetLatestDrawResultResponse {
   LotteryDraw draw = 1;
   repeated LotteryTicket user_tickets = 2; // User's tickets for this draw (if any)
+  repeated TopWinner top_winners = 3;      
 }
 
 // Request to get quick pick numbers
