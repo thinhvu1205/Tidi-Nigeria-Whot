@@ -17,6 +17,7 @@ public class LuckyNumberView : BaseView
     [SerializeField] private LuckyNumberSelectView selectView;
     [SerializeField] private LuckyNumberItem luckyNumberItemPrefab;
     [SerializeField] private LuckyNumberItemDraw luckyNumberItemDrawPrefab;
+    [SerializeField] private LuckyNumberWinnerItem luckyNumberWinnerItemPrefab;
 
     [Header("Transforms")]
     [SerializeField] private Transform luckyNumberItemParent;
@@ -92,6 +93,26 @@ public class LuckyNumberView : BaseView
             }
             textUpdateTime.text = "Updated at: " + Utility.ConvertUnixTimeToHHMMDDMMYYYY(response.Draw.DrawTimeUnix);
             textPrizePool.text = "Prize Pool: " + Utility.FormatNumber(response.Draw.PrizePool);
+            var sortedTopWinners = response.TopWinners
+                .OrderByDescending(w => w.TotalReward)
+                .ToList();
+            int count = sortedTopWinners.Count;
+            
+            for (int i = 0; i < count; i++)
+            {
+                Debug.Log("gege" + sortedTopWinners[i]);
+                var winner = sortedTopWinners[i];
+
+                var item = Instantiate(luckyNumberWinnerItemPrefab, winnerItemParent);
+                item.SetData(
+                    (i + 1).ToString(),
+                    winner.Profile.UserName,
+                    winner.TotalReward,
+                    winner.Profile.AvatarId,
+                    winner.Profile.VipLevel
+                );
+            }
+
         }
     }
 
