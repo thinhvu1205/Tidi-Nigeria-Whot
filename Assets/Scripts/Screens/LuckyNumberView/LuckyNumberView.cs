@@ -314,6 +314,7 @@ public class LuckyNumberView : BaseView
             return;
         }
         BuyLotteryTicketResponse buyLotteryTicketResponse = await luckyNumberPresenter.BuyLotteryTicket(listSelectedNumbers, selectedDrawId);
+        OnClickClear();
         selectView.OnClickCloseButton();
         OnClickHistory();
     }

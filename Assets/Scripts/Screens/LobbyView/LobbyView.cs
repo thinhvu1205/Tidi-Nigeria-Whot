@@ -291,18 +291,18 @@ public class LobbyView : BaseView
             {
                 itemGame.gameObject.transform.SetParent(bigGameIconParent);
                 itemGame.gameObject.transform.SetAsFirstSibling();
-                itemGame.SetInfo(game.Code, true);
+                itemGame.SetInfo(game.Code, game.LobbyId, true);
             }
             else
             {
                 itemGame.gameObject.transform.SetParent(miniGameIconParent);
-                itemGame.SetInfo(game.Code, false);
+                itemGame.SetInfo(game.Code, game.LobbyId, false);
             }
 
             if (Constants.SLOT_GAMES_ID.Contains(game.Code))
             {
                 ItemGame slotItemGame = Instantiate(gameIconPrefab, slotGameIconParent).GetComponent<ItemGame>();
-                slotItemGame.SetInfo(game.Code, true);
+                slotItemGame.SetInfo(game.Code, game.LobbyId, true);
             }
 
         }

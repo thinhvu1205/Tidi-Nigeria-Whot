@@ -565,7 +565,8 @@ public class SlotSixiangView : BaseSlotSymbolView
             }
         }
         );
-        animationCutScene.AnimationState.Complete += delegate
+        // animationCutScene.AnimationState.Complete += delegate
+        DOVirtual.DelayedCall(3.6f, () => 
         {
             animationAnimal.transform.parent.gameObject.SetActive(false);
             animationAnimal.gameObject.SetActive(false);
@@ -575,7 +576,7 @@ public class SlotSixiangView : BaseSlotSymbolView
             {
                 OnFinishBonusGame();
             }
-        };
+        });
     }
 
     private void ShowChooseBonusGame()
@@ -591,6 +592,7 @@ public class SlotSixiangView : BaseSlotSymbolView
         SetAnimationGameName(DRAGON_PEARL_GAME_NAME);
         SetAnimationBackground(DRAGON_PEARL_GAME_NAME);
         spinType = SpinType.FREE_NORMAL;
+        CanSpin = true;
         UpdateSpinButtonUI();
         GetMatchResult();
         // if (currentGame <= SiXiangGame.Sixangbonus && nextGame > SiXiangGame.Sixangbonus
@@ -898,10 +900,12 @@ public class SlotSixiangView : BaseSlotSymbolView
             autoSpinRemain = lastRemainingAutoSpin;
             UpdateSpinButtonUI();
             SetAutoSpinRemain();
+            GetMatchResult();
         }
 
         if (!winMiniGameFromScatter)
         {
+            GetMatchResult();
             tweenQueue.Enqueue(() =>
             {
                 Debug.Log("SHOW TOTAL WIN AFTER BONUS GAME: " + totalChipWinByGame);

@@ -100,6 +100,21 @@ namespace Globals
             { "noel", "Slot Noel" },
         };
 
+        public static readonly Dictionary<string, string> LobbyIdFromCode = new()
+        {
+            { "whot-game", "1" },
+            { "roulette", "10" },
+            { "fruit", "2" },
+            { "hk-poker", "11" },
+            { "baccarat", "8" },
+            { "sixiang", "5" },
+            { "tarzan", "4" },
+            { "juicygarden", "3" },
+            { "blackjack", "9" },
+            { "inca", "6" },
+            { "noel", "7" },
+        };
+
         public static readonly Dictionary<WhotCardSuit, int> WhotSuitSortOrder = new()
         {
             { WhotCardSuit.WhotSuitCircle, 0 },

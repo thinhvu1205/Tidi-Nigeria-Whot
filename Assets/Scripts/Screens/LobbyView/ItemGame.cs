@@ -12,7 +12,7 @@ public class ItemGame : MonoBehaviour
     [SerializeField] private SkeletonGraphic skeletonGraphic;
     private bool isBigIcon = false;
 
-    public void SetInfo(string gameID, bool isBigIcon)
+    public void SetInfo(string gameID, string lobbyId, bool isBigIcon)
     {
         this.isBigIcon = isBigIcon;
         transform.localScale = Vector2.one;
@@ -34,13 +34,14 @@ public class ItemGame : MonoBehaviour
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(() =>
         {
-            OnClickItemGame(gameID);
+            OnClickItemGame(gameID, lobbyId);
         });
     }
 
-    private void OnClickItemGame(string gameID)
+    private void OnClickItemGame(string gameID, string lobbyId)
     {
         Config.currentGameId = gameID;
+        Config.currentGameLobbyId = lobbyId;
         if (User.userProfile.VipLevel == 0)
         {
             _ = UIManager.Instance.HandleQuickMatch();

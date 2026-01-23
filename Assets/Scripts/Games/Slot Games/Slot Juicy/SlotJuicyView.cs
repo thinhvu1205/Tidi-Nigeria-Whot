@@ -692,7 +692,7 @@ public class SlotJuicyView : BaseSlotView
 
     public override void OnClickMaxBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel || isInFreeSpin)
         {
             return;
         }
@@ -717,7 +717,7 @@ public class SlotJuicyView : BaseSlotView
 
     public override void OnClickMinusBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel || isInFreeSpin)
         {
             return; 
         }
@@ -727,7 +727,7 @@ public class SlotJuicyView : BaseSlotView
 
     public override void OnClickPlusBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel || isInFreeSpin)
         {
             return; 
         }

@@ -863,6 +863,7 @@ MonoBehaviour:
   effectPopup: 0
   effectPopupReverse: 0
   popupBackground: {fileID: 0}
+  WantSwitchTable: 0
   maxBetButton: {fileID: 478369270489528475}
   plusBetButton: {fileID: 478369270004991999}
   minusBetButton: {fileID: 478369270753346134}
@@ -3042,15 +3043,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 766740806829319899}
   BundleLabel: assets--resources--bundlepack--animations--slotspine
   AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/JuicyGarden/EndGame/skeleton_SkeletonData.asset
   AnimName: eng
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &922089903257244114
 GameObject:
   m_ObjectHideFlags: 0
@@ -6075,15 +6071,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 8683948422273006773}
   BundleLabel: assets--resources--bundlepack--animations--slotspine
   AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/JuicyGarden/Shop/skeleton_SkeletonData.asset
   AnimName: eng
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &3497685162734564350
 GameObject:
   m_ObjectHideFlags: 0
@@ -6850,15 +6841,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 5937598733453522959}
   BundleLabel: assets--resources--bundlepack--animations--slotspine
   AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/JuicyGarden/Jackpot/skeleton_SkeletonData.asset
   AnimName: JP_mini
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &3880571352688630764
 GameObject:
   m_ObjectHideFlags: 0
@@ -7667,15 +7653,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 3956561583415061803}
   BundleLabel: assets--resources--bundlepack--animations--slotspine
   AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/JuicyGarden/FreeSpinNum/skeleton_SkeletonData.asset
   AnimName: animation
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &4678761654308660090
 GameObject:
   m_ObjectHideFlags: 0
@@ -7912,6 +7893,7 @@ GameObject:
   - component: {fileID: 3157249285558890793}
   - component: {fileID: 7573326247404658141}
   - component: {fileID: 4611944644121489504}
+  - component: {fileID: 1686397279478849546}
   m_Layer: 0
   m_Name: Animation Popup Result
   m_TagString: Untagged
@@ -7999,6 +7981,23 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &1686397279478849546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4943744097204054017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BundleLoader
+  Type: 1
+  BundleLabel: 
+  AssetName: 
+  AnimName: 
+  SetNativeSize: 0
 --- !u!1 &5159611956681688536
 GameObject:
   m_ObjectHideFlags: 0
@@ -10349,15 +10348,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 4584905681820692178}
   BundleLabel: assets--resources--bundlepack--animations--slotspine
   AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/JuicyGarden/BgFreeSpin/skeleton_SkeletonData.asset
   AnimName: animation
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &6857949519893825852
 GameObject:
   m_ObjectHideFlags: 0
@@ -12303,15 +12297,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 3866135749139871749}
   BundleLabel: assets--resources--bundlepack--animations--slotspine
   AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/JuicyGarden/ButtonSpin/skeleton_SkeletonData.asset
   AnimName: autospin
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &8595569862932360938
 GameObject:
   m_ObjectHideFlags: 0
@@ -12423,15 +12412,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 5452735746341281772}
   BundleLabel: assets--resources--bundlepack--animations--slotspine
   AssetName: Assets/Resources/BundlePack/Animations/SlotSpine/JuicyGarden/AnimBox/skeleton_SkeletonData.asset
   AnimName: thungphai
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &8600865316117283512
 GameObject:
   m_ObjectHideFlags: 0

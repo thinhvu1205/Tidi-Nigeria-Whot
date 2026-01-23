@@ -7210,6 +7210,7 @@ GameObject:
   - component: {fileID: 564019860006855045}
   - component: {fileID: 1773104519189295454}
   - component: {fileID: 7982650015514341616}
+  - component: {fileID: 2228161816675490250}
   m_Layer: 0
   m_Name: Animation Result
   m_TagString: Untagged
@@ -7291,6 +7292,23 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &2228161816675490250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1891923431508957518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BundleLoader
+  Type: 2
+  BundleLabel: assets--resources--bundlepack--animations--roulette
+  AssetName: Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/spine/skeleton_SkeletonData.asset
+  AnimName: black
+  SetNativeSize: 0
 --- !u!1 &1900056269086657116
 GameObject:
   m_ObjectHideFlags: 0
@@ -22075,6 +22093,7 @@ GameObject:
   - component: {fileID: 8838852713795025152}
   - component: {fileID: 4338898281427463377}
   - component: {fileID: 2943316348212828541}
+  - component: {fileID: 9176439156487961475}
   m_Layer: 0
   m_Name: Animation Win Lose
   m_TagString: Untagged
@@ -22157,6 +22176,23 @@ MonoBehaviour:
       calculateTangents: 0
       addNormals: 0
       immutableTriangles: 0
+--- !u!114 &9176439156487961475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5291407454923796753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c22c521faec38a47b8234a4a8483126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BundleLoader
+  Type: 2
+  BundleLabel: assets--resources--bundlepack--animations--roulette
+  AssetName: Assets/Resources/BundlePack/Animations/Roulette/routtle_anim/showso/spin_SkeletonData.asset
+  AnimName: lose
+  SetNativeSize: 0
 --- !u!1 &5400393845454528759
 GameObject:
   m_ObjectHideFlags: 0
@@ -33272,15 +33308,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 8251492777761499891}
   BundleLabel: assets--resources--bundlepack--animations--roulette
   AssetName: Assets/Resources/BundlePack/Animations/Roulette/btn_spin_anim/skeleton_SkeletonData.asset
   AnimName: eng
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &8046130248966790864
 GameObject:
   m_ObjectHideFlags: 0
