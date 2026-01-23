@@ -9,6 +9,7 @@ namespace Globals
 {
     public class Config
     {
+        public static bool isConfigMode = true;
         public const int CODE_JOKER_BLACK = 60;
         public const int CODE_JOKER_RED = 61;
         public static string userName = "";

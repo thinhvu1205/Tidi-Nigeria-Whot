@@ -32,8 +32,10 @@ public class NetworkManager : MonoBehaviour
         SERVER_TEST_PORT = "103.226.250.195",
         SERVER_HUY_PORT = "172.16.56.36",
         SERVER_TOAN_PORT = "172.16.56.104",
-        STORAGE_COLLECTION = "link_global",
-        STORAGE_KEY = "links";
+        LINK_STORAGE_COLLECTION = "link_global",
+        LINK_STORAGE_KEY = "links",
+        KFeatureConfigCollection = "feature_config_global",
+        KFeatureConfigKey = "config_mode";
 
     private IClient _ClientC;
     private ISession _SessionIS;
@@ -692,17 +694,17 @@ public class NetworkManager : MonoBehaviour
         PlayerPrefs.SetInt("serverId", serverId);
     }
 
-    public async UniTask GetConfigFromStorage()
+    public async UniTask GetLinkConfigFromStorage()
     {
         try
         {
             IApiStorageObjects result = await _ClientC.ReadStorageObjectsAsync(_SessionIS, new IApiReadStorageObjectId[] {
                 new StorageObjectId {
-                    Collection = STORAGE_COLLECTION,
-                    Key = STORAGE_KEY
+                    Collection = LINK_STORAGE_COLLECTION,
+                    Key = LINK_STORAGE_KEY
                 }
             });
-            string json = result.Objects.FirstOrDefault().Value.ToString();
+            string json = result.Objects.FirstOrDefault()?.Value.ToString();
             LinkGlobalValue data =
                 JsonUtility.FromJson<LinkGlobalValue>(json);
                 Debug.Log("JSON: " + json);
@@ -713,12 +715,48 @@ public class NetworkManager : MonoBehaviour
             Config.privacyPolicyLink = "";
             
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Debug.LogError(e);
             throw;
         }
+    }
+    
+    [Serializable]
+    public class ConfigModeData
+    {
+        public bool use_config_on;
+    }
+    public async UniTask GetConfigModeFromStorage()
+    {
+        try
+        {
+            IApiStorageObjects result = await _ClientC.ReadStorageObjectsAsync(_SessionIS, new IApiReadStorageObjectId[] {
+                new StorageObjectId {
+                    Collection = KFeatureConfigCollection,
+                    Key = KFeatureConfigKey
+                }
+            });
+            
+            var storageObject = result.Objects.FirstOrDefault();
+            if (storageObject == null)
+            {
+                Debug.LogWarning("Storage object config mode not found");
+                return ;
+            }
 
+            string json = storageObject.Value;
+
+            Debug.Log($"Raw storage json: {json}");
+
+            ConfigModeData data = JsonUtility.FromJson<ConfigModeData>(json);
+            Config.isConfigMode = data.use_config_on;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
+            // throw;
+        }
     }
 
     #endregion

@@ -63,8 +63,7 @@ public class RegisterView : BaseView
         }
         catch (Exception ex)
         {
-            Error error = DataSender.DecodeFromJson<Error>(ex.Message);
-            UIManager.Instance.ShowAlertDialog(error.Error_);
+            UIManager.Instance.ShowAlertDialog(ex.Message);
         }
     }
 }

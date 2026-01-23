@@ -34,6 +34,7 @@ public class DataSender
     public const string WALLET_TRANSACTION = "wallet_transaction";
     public const string LIST_CLAIMABLE_FREECHIPS = "list_claimable_freechip";
     public const string CLAIM_FREECHIP = "claim_freechip";
+    public const string SUBMIT_FEEDBACK = "submit_feedback";
     public const string LIST_DEAL = "list_deal";
     public const string GET_QUICKCHAT = "get_quickchat";
     public const string UPDATE_QUICKCHAT = "update_quickchat";
@@ -409,6 +410,24 @@ public class DataSender
 
     #region PopupView
 
+    public static async UniTask<SubmitFeedbackResponse> SubmitFeedBack(string txtFeedBack)
+    {
+        try
+        {
+            SubmitFeedbackRequest feedbackRequest = new SubmitFeedbackRequest(){
+                FeedbackText = txtFeedBack
+            };
+            var response = await NetworkManager.INSTANCE.RPCSend(SUBMIT_FEEDBACK, feedbackRequest);
+            return DecodeFromJson<SubmitFeedbackResponse>(response.Payload);
+        }
+        catch (Exception e)
+        {
+            ParseError(e.Message);
+            // throw;
+            return null;
+        }
+    }
+    
     public static async UniTask<DealInShop> GetListDeal()
     {
         var response = await NetworkManager.INSTANCE.RPCSend(LIST_DEAL);
