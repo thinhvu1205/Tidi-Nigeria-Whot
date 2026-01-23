@@ -2,6 +2,7 @@ using Globals;
 using Proto;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LuckyNumberHistoryItem : MonoBehaviour
 {
@@ -27,23 +28,23 @@ public class LuckyNumberHistoryItem : MonoBehaviour
             LotteryTicketStatus.Waiting => "Waiting",
             _ => "Unknown"
         };
-        textReward.text = Utility.FormatNumber(ticket.Reward);
+        textReward.text = Utility.FormatMoney(ticket.Reward, true);
         switch(ticket.MatchedCount)
         {
             case 2:
-                imageNote.GetComponent<SpriteRenderer>().sprite = listSpriteNote[0];
+                imageNote.GetComponent<Image>().sprite = listSpriteNote[0];
                 break;
             case 3:
-                imageNote.GetComponent<SpriteRenderer>().sprite = listSpriteNote[1];
+                imageNote.GetComponent<Image>().sprite = listSpriteNote[1];
                 break;
             case 4:
-                imageNote.GetComponent<SpriteRenderer>().sprite = listSpriteNote[2];
+                imageNote.GetComponent<Image>().sprite = listSpriteNote[2];
                 break;
             case 5:
-                imageNote.GetComponent<SpriteRenderer>().sprite = listSpriteNote[3];
+                imageNote.GetComponent<Image>().sprite = listSpriteNote[3];
                 break;
             case 6:
-                imageNote.GetComponent<SpriteRenderer>().sprite = listSpriteNote[4];
+                imageNote.GetComponent<Image>().sprite = listSpriteNote[4];
                 break;
             default:
                 imageNote.SetActive(false);

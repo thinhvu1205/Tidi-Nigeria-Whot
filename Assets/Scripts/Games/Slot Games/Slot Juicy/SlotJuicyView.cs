@@ -692,7 +692,7 @@ public class SlotJuicyView : BaseSlotView
 
     public override void OnClickMaxBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel || isInFreeSpin)
         {
             return;
         }
@@ -717,7 +717,7 @@ public class SlotJuicyView : BaseSlotView
 
     public override void OnClickMinusBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel || isInFreeSpin)
         {
             return; 
         }
@@ -727,7 +727,7 @@ public class SlotJuicyView : BaseSlotView
 
     public override void OnClickPlusBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel || isInFreeSpin)
         {
             return; 
         }
@@ -1017,6 +1017,8 @@ public class SlotJuicyView : BaseSlotView
                 currentChipWin = totalChipWinByGame;
                 SetWinType(currentChipWin);
                 ShowWinAnimation(winType, false);
+                spinType = SpinType.NORMAL;
+                UpdateGameState(SlotGameState.PREPARE);
             });
             tweenQueue.Enqueue(ShowPopupResultPackage);
             foreach (Transform transform in holdPackageContainer)
@@ -1029,8 +1031,6 @@ public class SlotJuicyView : BaseSlotView
             }
             backgroundFreeSpinAnimation.gameObject.SetActive(false);
             totalMoneyPackageAnimation.gameObject.SetActive(false);
-            spinType = SpinType.NORMAL;
-            UpdateGameState(SlotGameState.PREPARE);
             SetLightAllItems();
             NextTween();
         });

@@ -107,7 +107,8 @@ public class SettingsView : BaseView
 
     public void OnClickDeleteAccount()
     {
-        _ = DeleteAccount();
+        UIManager.Instance.ShowConfirmDialog("Are you sure you want to delete your account?", () => _ = DeleteAccount(), null);
+        
     }
 
     private async UniTask DeleteAccount()

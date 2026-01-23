@@ -25,7 +25,7 @@ public class ChatInGameView : BaseView
     [SerializeField] private AudioSource audioSource;
     private List<PoolInfo> listPoolInfo = new();
     private ChatInGamePresenter chatInGamePresenter;
-
+    private bool isSwitching = false;
 
     protected override void Awake()
     {
@@ -156,14 +156,25 @@ public class ChatInGameView : BaseView
 
     public void OnClickMicro()
     {
-        chatContainer.gameObject.SetActive(false);
-        recorderContainer.gameObject.SetActive(true);
+        if (isSwitching) return;
+        StartCoroutine(SwitchUI(true));
     }
 
     public void OnClickSendChatVoice()
     {
-        chatContainer.gameObject.SetActive(true);
-        recorderContainer.gameObject.SetActive(false);
+        if (isSwitching) return;
+        StartCoroutine(SwitchUI(false));
+    }
+
+    IEnumerator SwitchUI(bool recorder)
+    {
+        isSwitching = true;
+
+        chatContainer.gameObject.SetActive(!recorder);
+        recorderContainer.gameObject.SetActive(recorder);
+
+        yield return new WaitForSeconds(0.3f); // thời gian animation
+        isSwitching = false;
     }
 
     public void OnClickSendMessage()

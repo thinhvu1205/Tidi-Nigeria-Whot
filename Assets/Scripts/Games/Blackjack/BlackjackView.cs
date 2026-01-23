@@ -1468,14 +1468,16 @@ public class BlackjackView : BaseDiceGameView
             {
                 AnimateDealACard(cardModel, bankerCardsContainer.position, false, null, bankerBoxBet.SpreadCards);
             }
+            Debug.Log("BANKER CARD ADDED: " + cardModel.GetRank() + " " + cardModel.GetSuit());
             bankerBoxBet.listCardModel.Add(cardModel);
             yield return new WaitForSeconds(0.2f);
         }
-        if (bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.RankA
+        if (bankerBoxBet.listCardModel.Count > 0 && (
+            bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.RankA
             || bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.Rank10
             || bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.RankJ
             || bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.RankQ
-            || bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.RankK
+            || bankerBoxBet.listCardModel[0].GetRank() == (int)CardRank.RankK)
         )
         {
             bankerBoxBet.AnimateHighlightCards();

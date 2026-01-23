@@ -18,7 +18,8 @@ public class SiXiangRapidPayView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI textTotalBonus;
     [SerializeField] private TextNumberControl textWinResult, textWinAmount;
     [SerializeField] private Button buttonCollect;
-
+    private const string RESULT_ANIMATION_PATH = "SiXiang/Spine/BigWinRapid/skeleton_SkeletonData";
+    private const string LIGHT_ANIMATION_PATH = "SiXiang/Spine/RapidLight/skeleton_SkeletonData";
     private SlotSixiangView gameView;
     private RapidPayRow currentRow;
     private AudioSource soundMoney;
@@ -91,7 +92,7 @@ public class SiXiangRapidPayView : MonoBehaviour
         if (indexPick >= 0 && item.Symbol != SiXiangSymbol.RapidpayEnd)
         {
             animationLight.gameObject.SetActive(true);
-            Utility.PlayAnimation(animationLight, GetAnimationLightName(indexPick), false);
+            Utility.PlayAnimationByPath(animationLight, LIGHT_ANIMATION_PATH, GetAnimationLightName(indexPick), false);
             switch (item.Symbol)
             {
                 case SiXiangSymbol.RapidpayX2:
@@ -166,7 +167,8 @@ public class SiXiangRapidPayView : MonoBehaviour
     {
         canSkipAnimation = true;
         animationResult.transform.parent.gameObject.SetActive(true);
-        Utility.PlayAnimation(animationResult, "eng", false); buttonCollect.gameObject.SetActive(false);
+        Utility.PlayAnimationByPath(animationResult, RESULT_ANIMATION_PATH, "eng", false); 
+        buttonCollect.gameObject.SetActive(false);
         soundMoney = SoundManager.Instance.PlayEffectFromPath(SoundSlot.COUNGTING_MONEY_START);
         float timeRun = 2f;
         textWinResult.SetValue(winAmount, true, timeRun, "", () =>

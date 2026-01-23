@@ -945,7 +945,7 @@ public class SlotTarzanView : BaseSlotView
 
     public override void OnClickMaxBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView )
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || isInFreeSpin)
         {
             return;
         }
@@ -967,7 +967,7 @@ public class SlotTarzanView : BaseSlotView
 
     public override void OnClickMinusBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || isInFreeSpin)
         {
             return; 
         }
@@ -977,7 +977,7 @@ public class SlotTarzanView : BaseSlotView
 
     public override void OnClickPlusBetButton()
     {
-        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView)
+        if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || isInFreeSpin)
         {
             return; 
         }

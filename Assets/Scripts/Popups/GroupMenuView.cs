@@ -67,13 +67,14 @@ public class GroupMenuView : BaseView
     public void OnClickRule()
     {
         Hide();
-        string curGameId = Config.currentGameId;
-        string urlRule = Config.currentUrlRule.Replace("%gameid%", curGameId + "");
+        string curGameId = Constants.LobbyIdFromCode[Config.currentGameId];
+        Debug.Log("curGameId: " + curGameId);
+        string urlRule = Config.ruleLink.Replace("%gameid%", curGameId + "");
         //var langLocal = cc.sys.localStorage.getItem("language_client");
         //var language = langLocal == LANGUAGE_TEXT_CONFIG.LANG_EN ? "en" : "thai"
         var language = "thai";
         // urlRule = urlRule.Replace("%language%", language);
-        urlRule = urlRule.Replace("%language%", language);
+        // urlRule = urlRule.Replace("%language%", language);
         // https://conf.topbangkokclub.com/rule/index.html?gameid=%gameid%&language=%language%&list=true
         if (Constants.INGAME_RULES_ID.Contains(curGameId))
         {
@@ -82,7 +83,7 @@ public class GroupMenuView : BaseView
         else
         {
             //require("Util").onCallWebView(urlRule);
-            UIManager.Instance.OpenWebPage("facebook.com");
+            UIManager.Instance.OpenWebPage(urlRule);
 
         }
     }

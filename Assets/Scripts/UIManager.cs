@@ -659,9 +659,10 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenWebPage(string URL)
     {
+        Debug.Log("RULE URL: " + URL);
         Debug.Log("OpenWebPage called, platform = " + Application.platform);
         GpmWebView.ShowUrl(
-            "https://www.google.com/",
+            URL,
             new GpmWebViewRequest.Configuration()
             {
                 style = GpmWebViewStyle.POPUP,
@@ -674,7 +675,7 @@ public class UIManager : Singleton<UIManager>
                 {
                     hasValue = true,
                     left = 0,
-                    top = 200,
+                    top = 0,
                     right = 0,
                     bottom = 0
                 },
