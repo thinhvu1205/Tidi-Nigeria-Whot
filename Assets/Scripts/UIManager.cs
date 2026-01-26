@@ -66,7 +66,8 @@ public class UIManager : Singleton<UIManager>
         if (sceneName == Config.MAIN_SCENE)
         {
             await LoadProfileUser();
-            await NetworkManager.INSTANCE.GetConfigFromStorage();
+            await NetworkManager.INSTANCE.GetConfigModeFromStorage();
+            await NetworkManager.INSTANCE.GetLinkConfigFromStorage();
         }
         await SceneManager.LoadSceneAsync(sceneName);
     }

@@ -98,7 +98,7 @@ public class ChatWorldView : BaseView
         Debug.Log("OnClickSendMessage");
         if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureChatWorld))
         {
-            UIManager.Instance.ShowAlertDialog("Upgrade to VIP 2 to use Chat World.", null, transform);
+            UIManager.Instance.ShowAlertDialog("Chat World is currently unavailable. Please upgrade to VIP 2 or higher, or try again later.", null, transform);
             return;
         }
         if (!string.IsNullOrEmpty(chatInputField.text))

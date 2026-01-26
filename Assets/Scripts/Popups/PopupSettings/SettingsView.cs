@@ -123,7 +123,14 @@ public class SettingsView : BaseView
 
     public void OnClickFeedback()
     {
-        Application.OpenURL(Config.feedBackLink);
+        if (Config.isConfigMode && !string.IsNullOrEmpty(Config.feedBackLink))
+        {
+            Application.OpenURL(Config.feedBackLink);
+        }
+        else
+        {
+            UIManager.Instance.OpenFeedback();
+        }
     }
 
     public void OnClickPrivacyPolicy()
