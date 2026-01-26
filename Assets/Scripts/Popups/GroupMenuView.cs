@@ -76,7 +76,7 @@ public class GroupMenuView : BaseView
         // urlRule = urlRule.Replace("%language%", language);
         // urlRule = urlRule.Replace("%language%", language);
         // https://conf.topbangkokclub.com/rule/index.html?gameid=%gameid%&language=%language%&list=true
-        if (Constants.INGAME_RULES_ID.Contains(curGameId))
+        if (Constants.INGAME_RULES_ID.Contains(Config.currentGameId))
         {
             UIManager.Instance.OpenRule();
         }

@@ -105,15 +105,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 757724651490848126}
   BundleLabel: assets--resources--bundlepack--animations--blackjack
   AssetName: Assets/Resources/BundlePack/Animations/Blackjack/wow/skeleton_SkeletonData.asset
   AnimName: animation
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &383590994026848544
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,15 +214,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 7418979077215628688}
   BundleLabel: assets--resources--bundlepack--animations--blackjack
   AssetName: Assets/Resources/BundlePack/Animations/Blackjack/Push/skeleton_SkeletonData.asset
   AnimName: animation
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &569645538575468681
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,15 +323,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 756040050229124144}
   BundleLabel: assets--resources--bundlepack--animations--blackjack
   AssetName: Assets/Resources/BundlePack/Animations/Blackjack/win/skeleton_SkeletonData.asset
   AnimName: animation
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &981075444117841840
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,15 +508,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 6516670405673779295}
   BundleLabel: assets--resources--bundlepack--animations--blackjack
   AssetName: Assets/Resources/BundlePack/Animations/Blackjack/dot/skeleton_SkeletonData.asset
   AnimName: animation
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1231135778683412798
 GameObject:
   m_ObjectHideFlags: 0
@@ -637,15 +617,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 4733176727978034403}
   BundleLabel: assets--resources--bundlepack--animations--blackjack
   AssetName: Assets/Resources/BundlePack/Animations/Blackjack/Nobobai/skeleton_SkeletonData.asset
   AnimName: animation
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1259506143621752562
 GameObject:
   m_ObjectHideFlags: 0
@@ -1121,7 +1096,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 250, y: 50}
+  m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &943584203731286622
 CanvasRenderer:
@@ -2098,7 +2073,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 250, y: 50}
+  m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4404844733800095368
 CanvasRenderer:
@@ -2752,15 +2727,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 5651516913934130967}
   BundleLabel: assets--resources--bundlepack--animations--blackjack
   AssetName: Assets/Resources/BundlePack/Animations/Blackjack/Lose/skeleton_SkeletonData.asset
   AnimName: lose
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &5003408851805854710
 GameObject:
   m_ObjectHideFlags: 0
@@ -3002,15 +2972,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 4294230727672832351}
   BundleLabel: assets--resources--bundlepack--animations--blackjack
   AssetName: Assets/Resources/BundlePack/Animations/Blackjack/win/skeleton_SkeletonData.asset
   AnimName: animation
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &5705335782116300151
 GameObject:
   m_ObjectHideFlags: 0
@@ -3116,15 +3081,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 8130936513689518594}
   BundleLabel: assets--resources--bundlepack--animations--blackjack
   AssetName: Assets/Resources/BundlePack/Animations/Blackjack/AniBlackJack2/skeleton_SkeletonData.asset
   AnimName: animation
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &5850277524102499157
 GameObject:
   m_ObjectHideFlags: 0
@@ -3230,15 +3190,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 2884306233595732955}
   BundleLabel: assets--resources--bundlepack--animations--blackjack
   AssetName: Assets/Resources/BundlePack/Animations/Blackjack/Lose/skeleton_SkeletonData.asset
   AnimName: lose
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &5922732609334534891
 GameObject:
   m_ObjectHideFlags: 0
@@ -3874,15 +3829,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 6939404354728463077}
   BundleLabel: assets--resources--bundlepack--animations--blackjack
   AssetName: Assets/Resources/BundlePack/Animations/Blackjack/dot/skeleton_SkeletonData.asset
   AnimName: animation
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &6838205680698344332
 GameObject:
   m_ObjectHideFlags: 0
@@ -4063,15 +4013,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 150226244548406606}
   BundleLabel: assets--resources--bundlepack--animations--blackjack
   AssetName: Assets/Resources/BundlePack/Animations/Blackjack/Push/skeleton_SkeletonData.asset
   AnimName: animation
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &7538990699327598319
 GameObject:
   m_ObjectHideFlags: 0
@@ -4177,15 +4122,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 930141290798100269}
   BundleLabel: assets--resources--bundlepack--animations--blackjack
   AssetName: Assets/Resources/BundlePack/Animations/Blackjack/wow/skeleton_SkeletonData.asset
   AnimName: animation
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &8414234297913744490
 GameObject:
   m_ObjectHideFlags: 0
@@ -4366,15 +4306,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 2852147911674215460}
   BundleLabel: assets--resources--bundlepack--animations--blackjack
   AssetName: Assets/Resources/BundlePack/Animations/Blackjack/Nobobai/skeleton_SkeletonData.asset
   AnimName: animation
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &8789698262421486108
 GameObject:
   m_ObjectHideFlags: 0
@@ -4480,15 +4415,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 8983168359537649443}
   BundleLabel: assets--resources--bundlepack--animations--blackjack
   AssetName: Assets/Resources/BundlePack/Animations/Blackjack/AniBlackJack2/skeleton_SkeletonData.asset
   AnimName: animation
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &9099010946009633433
 GameObject:
   m_ObjectHideFlags: 0
