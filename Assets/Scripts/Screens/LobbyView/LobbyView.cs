@@ -333,8 +333,8 @@ public class LobbyView : BaseView
         if (btnProfile != null)
             btnProfile.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureProfile));
         
-        if (btnShop != null)
-            btnShop.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureShop));
+        // if (btnShop != null)
+        //     btnShop.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureShop));
         
         if (btnNews != null)
             btnNews.gameObject.SetActive(FeatureManager.IsFeatureAllowed(FeatureName.FeatureNews));
@@ -453,7 +453,7 @@ public class LobbyView : BaseView
     }
     #endregion
 
-    public void PlayVideoSiXiang(Match labelMatch)
+    public void PlayVideoSiXiang(Action onComplete)
     {
         if (!videoPlayer.isPlaying)
         {
@@ -471,13 +471,16 @@ public class LobbyView : BaseView
             };
             videoPlayer.started += videoStartedListener;
 
-            DOTween.Sequence().AppendInterval(1.5f).AppendCallback(() =>
-            {
-                UIManager.Instance.HandleOpenGame(labelMatch);
-            }).AppendInterval(1.1f).AppendCallback(() =>
+            DOTween.Sequence()
+            //     .AppendInterval(1.5f).AppendCallback(() =>
+            // {
+            //     UIManager.Instance.HandleOpenGame(labelMatch);
+            // })
+            .AppendInterval(2.6f).AppendCallback(() =>
             {
                 videoBackground.SetActive(false);
                 videoPlayer.gameObject.SetActive(false);
+                onComplete?.Invoke();
                 videoPlayer.loopPointReached -= videoEndedListener;
             });
         }

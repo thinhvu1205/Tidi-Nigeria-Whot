@@ -134,18 +134,25 @@ public class UIManager : Singleton<UIManager>
         RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, true, userData : userData);
         if (response == null) return;
         Debug.Log("Find match response: " + response.ToString());
+        
         if (response.Matches.Count > 0)
         {
             var labelMatch = await DataSender.JoinMatch(response.Matches[0].MatchId);
             if (Config.currentGameId == Constants.SIXIANG_GAME_ID)
             {
-                lobbyView.PlayVideoSiXiang(labelMatch);
+                HideProgressing();
+                PlayVideoSixiang(() => HandleOpenGame(labelMatch));
             }
             else
             {
-                HandleOpenGame(labelMatch);
+                HandleOpenGame(labelMatch);       
             }
         }
+    }
+
+    public void PlayVideoSixiang(Action onComplete)
+    {
+        lobbyView.PlayVideoSiXiang(onComplete);
     }
 
     public async UniTask HandleQuickMatch()
@@ -164,14 +171,12 @@ public class UIManager : Singleton<UIManager>
         {
             if (Config.currentGameId == Constants.SIXIANG_GAME_ID)
             {
-                HideProgressing();
-                lobbyView.PlayVideoSiXiang(labelMatch);
+                PlayVideoSixiang(() => HandleOpenGame(labelMatch));
             }
             else
             {
-                HandleOpenGame(labelMatch);
-            }          
-            
+                HandleOpenGame(labelMatch);       
+            }
         }
     }
     
@@ -192,7 +197,7 @@ public class UIManager : Singleton<UIManager>
     public void HandleOpenGame(Match labelMatch)
     {
         HideProgressing();
-        
+
         if (gameView != null)
         {
             if (gameView.WantSwitchTable)
@@ -206,6 +211,7 @@ public class UIManager : Singleton<UIManager>
                 whotView.LoadInfoMatch(labelMatch);
                 return;
             }
+            Debug.Log("DESTROY ?");
             Destroy(gameView.gameObject);
         }
         Debug.Log("CURRENT GAME: " + Config.currentGameId);
@@ -249,6 +255,11 @@ public class UIManager : Singleton<UIManager>
             default:
                 Debug.LogError("Unsupported game ID: " + Config.currentGameId);
                 break;
+        }
+        if (Constants.SLOT_GAMES_ID.Contains(Config.currentGameId) && Config.currentGameId != Constants.SIXIANG_GAME_ID)
+        {
+            ShowProgressing();
+            gameView.gameObject.SetActive(false);
         }
         gameView?.LoadInfoMatch(labelMatch);
     }

@@ -105,7 +105,8 @@ public class SlotJuicyView : BaseSlotView
     {
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
         Debug.Log("Slot : " +data.ToString());
-
+        UIManager.Instance.HideProgressing();
+        gameObject.SetActive(true);
         // Update UI cho các item
         List<SiXiangSymbol> listSymbols = data.Matrix.Lists.ToList();
         int totalCol = data.Matrix.Cols;

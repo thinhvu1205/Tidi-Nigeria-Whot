@@ -161,6 +161,18 @@ public class BlackjackView : BaseDiceGameView
     public override void LoadInfoMatch(Match match)
     {
         base.LoadInfoMatch(match);
+        foreach (Transform child in boxBetContainer)
+        {
+            if (child.TryGetComponent<BlackjackBoxBet>(out var boxbet))
+            {
+                if (boxbet.gameObject.activeSelf)
+                {
+                    Destroy(boxbet.gameObject);
+                }
+            }
+        }
+        ResetGame(true);
+        InitPool();
         SetInfoBet();
         textID.text = "ID: " + match.TableId;
         textMaxBet.text = "Max bet " + Utility.FormatNumber(MarkUnit * 100);
@@ -2135,6 +2147,7 @@ public class BlackjackView : BaseDiceGameView
 
     private void InitPool()
     {
+        Debug.Log("INIT POOL");
         PoolService.Instance.Register(PrefabType.Card, cardContainer, cardPrefab, 20, 50, 30);
         PoolService.Instance.Register(PrefabType.ChipPlayerBlackjack, chipContainer, chipPrefab, 20, 30, 15);
         // cardPool = new UnityEngine.Pool.ObjectPool<CardModel>(

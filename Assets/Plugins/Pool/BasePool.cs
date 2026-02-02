@@ -8,11 +8,11 @@ using UnityEngine.UI;
 public abstract class BasePool : MonoBehaviour
 {
     [SerializeField] private GameObject m_PfCell;
-    [SerializeField] protected Vector2 m_SpacingV2;
-    [SerializeField] protected float m_PaddingTop, m_PaddingBot, m_PaddingLeft, m_PaddingRight;
+    [SerializeField] public Vector2 m_SpacingV2;
+    [SerializeField] public float m_PaddingTop, m_PaddingBot, m_PaddingLeft, m_PaddingRight;
     protected List<PoolInfo> _ControlPIs = new();
     protected List<PoolObj> _DataPOs = new();
-    protected ScrollRect _DataSR;
+    public ScrollRect _DataSR;
     protected ICallFunc.Func4<RectTransform, PoolInfo, int> _OnApplyDataCb = (aRT, dataPI, index) => { };
     protected bool _IsCompleteCalculate, _IsChangeCellDimensionsInApplyDataCb;
     private float _BaseCellWidth, _BaseCellHeight;

@@ -60,6 +60,12 @@ public class CheckInBonusView : BaseView
 
     }
 
+    void OnDisable()
+    {
+        CheckInBonusDailyItem.OnButtonClicked -= OnClickReceiveDailyReward;
+        CheckInBonusWeeklyItem.OnButtonClicked -= OnClickReceiveWeeklyReward;
+    }
+
     protected override void OnDestroy()
     {
         base.OnDestroy();

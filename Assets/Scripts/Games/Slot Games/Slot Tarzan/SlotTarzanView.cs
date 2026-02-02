@@ -220,6 +220,12 @@ public class SlotTarzanView : BaseSlotView
     {
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
         Debug.Log("Slot : " + data.ToString());
+        if (!hasSetupStartView)
+        {
+            UIManager.Instance.HideProgressing();
+            gameObject.SetActive(true);
+            
+        }
         diamondIndexList.Clear();
         spinSymbolList.Clear();
         lastDiamondCollect = diamondCollect;

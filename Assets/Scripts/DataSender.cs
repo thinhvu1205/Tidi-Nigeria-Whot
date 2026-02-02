@@ -329,6 +329,7 @@ public class DataSender
         {
             var match = await NetworkManager.INSTANCE.JoinMatch(matchId, passWord);
             Match data = DecodeFromJson<Match>(match.Label);
+            Debug.Log("JOIN MATCH SUCCESS");
             return data;
         }
         catch (Exception ex)

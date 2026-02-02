@@ -15,6 +15,12 @@ public class ChatWorldView : BaseView
     [SerializeField] private TextMeshProUGUI textAccountChip;
     [SerializeField] private TextMeshProUGUI textChip;
     [SerializeField] private VerticalPool verticalPoolGroup;
+    [SerializeField] private ScrollRect scrollRect;
+    public string nextCursor = "";
+    public string prevCursor = "";
+    private bool isAtTop = true;
+    private bool isAtBottom = true;
+    private bool ignoreScrollEvent;
     private ChatWorldPresenter chatWorldPresenter;
     private List<PoolInfo> listPoolInfo = new();
     private List<IApiChannelMessage> listMessage = new();
@@ -55,6 +61,7 @@ public class ChatWorldView : BaseView
         base.OnEnable();
         UpdateProfileData();
         NetworkManager.INSTANCE.OnMessageWorldReceived += NetworkManager_OnMessageReceived;
+        scrollRect.onValueChanged.AddListener(OnScroll);
     }
 
 
@@ -62,23 +69,153 @@ public class ChatWorldView : BaseView
     {
         base.OnDestroy();
         NetworkManager.INSTANCE.OnMessageWorldReceived -= NetworkManager_OnMessageReceived;
+        scrollRect.onValueChanged.RemoveListener(OnScroll);
     }
 
-    private async UniTask GetHistory()
+    public void OnScroll(Vector2 pos)
     {
-        listMessage = await chatWorldPresenter.GetWorldChatHistory();
-        Debug.Log("HISTORY RESULT: " + listMessage);
-        if (listMessage.Count > 0)
+        if (ignoreScrollEvent) return;
+        // Scroll lên đầu
+        if (scrollRect.verticalNormalizedPosition >= 0.99f)
         {
-            listPoolInfo.Clear(); // Clear list hiện tại
-            foreach(IApiChannelMessage message in listMessage)
+            if (!isAtTop)
             {
-                ChatPayload chatPayload = ConvertToChatPayload(message);
-                listPoolInfo.Add(new PoolInfo { Data = chatPayload });
+                isAtTop = true;
+                OnReachTop();
+                return;
             }
-            verticalPoolGroup.SetControlInfo(listPoolInfo, listPoolInfo.Count - 1);
-            // verticalPoolGroup.ScrollToLast(0);
         }
+        else 
+        {
+            isAtTop = false;
+        }
+
+        if (scrollRect.verticalNormalizedPosition <= 0.01f)
+        {
+            if (!isAtBottom)
+            {
+                isAtBottom = true;
+                OnReachBottom();
+                return;
+            }
+        }
+        else 
+        {
+            isAtBottom = false;
+        }
+    }
+
+    private void OnReachTop()
+    {
+        Debug.Log("REACH TOP");
+        if (!string.IsNullOrEmpty(nextCursor) && nextCursor != prevCursor)
+        {
+            _ = GetHistory(nextCursor);  
+        }
+    }
+    private void OnReachBottom()
+    {
+        Debug.Log("REACH BOTTOM");
+        // if (!string.IsNullOrEmpty(prevCursor) && nextCursor != prevCursor)
+        // {
+        //     _ = GetHistory(prevCursor);  
+        // }
+    }
+
+    // private async UniTask GetHistory(string cursor = "")
+    // {
+    //     ignoreScrollEvent = true;
+    //     isAtTop = true;
+    //     listMessage = await chatWorldPresenter.GetWorldChatHistory(cursor);
+    //     Debug.Log("HISTORY RESULT: " + listMessage);
+    //     if (listMessage.Count > 0)
+    //     {
+    //         // listPoolInfo.Clear(); // Clear list hiện tại
+    //         foreach(IApiChannelMessage message in listMessage)
+    //         {
+    //             ChatPayload chatPayload = ConvertToChatPayload(message);
+    //             listPoolInfo.Insert(0, new PoolInfo { Data = chatPayload });
+    //         }
+    //         verticalPoolGroup.SetControlInfo(listPoolInfo, listPoolInfo.Count - 1);
+    //         // verticalPoolGroup.ScrollToLast(0);
+    //     }
+    //     // scrollRect.verticalNormalizedPosition = 0.1f;
+
+    // // Đợi layout ổn định rồi mới mở lại
+    //     await UniTask.Yield(PlayerLoopTiming.PostLateUpdate);
+    //     ignoreScrollEvent = false;
+    // }
+
+    private async UniTask GetHistory(string cursor = "")
+    {
+        ignoreScrollEvent = true;
+        UIManager.Instance.ShowProgressing();
+        var olderMessages = await chatWorldPresenter.GetWorldChatHistory(cursor);
+        if (olderMessages == null || olderMessages.Count == 0)
+        {
+            ignoreScrollEvent = false;
+            return;
+        }
+
+        Debug.Log($"Loaded {olderMessages.Count} older messages");
+
+        // Ghi lại thông tin trước khi thêm (có thể không cần nữa, nhưng giữ để debug)
+        float contentYBefore = verticalPoolGroup._DataSR.content.localPosition.y;
+        float viewportHeight = verticalPoolGroup._DataSR.viewport.rect.height;
+
+        // Thêm vào ĐẦU danh sách (tin cũ hơn ở trên)
+        int oldCount = listPoolInfo.Count;
+        List<PoolInfo> listPoolTemp = new();
+        foreach (IApiChannelMessage message in olderMessages)
+        {
+            ChatPayload payload = ConvertToChatPayload(message);
+            listPoolTemp.Add(new PoolInfo { Data = payload });
+        }
+        listPoolInfo.InsertRange(0, listPoolTemp);
+
+        // Cập nhật control info
+        verticalPoolGroup.SetControlInfo(listPoolInfo, listPoolInfo.Count - 1);
+
+        // Đợi layout tính height + vị trí LocalY mới
+        await UniTask.Yield(PlayerLoopTiming.PostLateUpdate);
+        await UniTask.Yield(PlayerLoopTiming.PostLateUpdate); // an toàn hơn
+
+        // ───────────────────────────────────────────────
+        // TÍNH VỊ TRÍ ĐỂ BOTTOM CỦA BATCH MỚI NẰM Ở BOTTOM VIEWPORT
+        // ───────────────────────────────────────────────
+
+        // Index của tin nhắn cuối cùng trong batch vừa thêm (sau khi InsertRange(0,...))
+        int lastAddedIndex = olderMessages.Count - 1;
+
+        // Lấy PoolInfo của item đó
+        PoolInfo lastAddedInfo = listPoolInfo[lastAddedIndex];
+
+        // LocalYBot của item cuối batch mới (đây là điểm dưới cùng của item đó)
+        float targetBottomY = lastAddedInfo.LocalYBot;
+        Debug.Log("TARGET BOTTOM Y: " + targetBottomY);
+        // Để item này nằm sát bottom viewport → content phải dịch sao cho:
+        // content.localPosition.y + targetBottomY = -viewportHeight
+        // → content.localPosition.y = -viewportHeight - targetBottomY
+        float targetY = -viewportHeight - targetBottomY;
+
+        // Optional: dịch lên một chút để có khoảng trống đẹp (ví dụ 20-50px)
+        targetY += 240f;  // điều chỉnh theo cảm giác, có thể để 0 hoặc 20-80
+
+        // Clamp để không vượt giới hạn
+        float maxY = 1000f;
+        float contentHeight = verticalPoolGroup._DataSR.content.sizeDelta.y;
+        float minY = -(contentHeight - viewportHeight);
+        Debug.Log("TARGET BOTTOM Y1: " + targetY);
+        // targetY = Mathf.Clamp(targetY, minY, maxY);
+        Debug.Log("TARGET BOTTOM Y2: " + targetY);
+
+        // Áp dụng vị trí
+        verticalPoolGroup._DataSR.content.localPosition = new Vector2(0, targetY);
+
+        // Nếu muốn animate mượt (tùy chọn)
+        // verticalPoolGroup._DataSR.content.DOLocalMoveY(targetY, 0.25f).SetEase(Ease.OutQuad);
+
+        ignoreScrollEvent = false;
     }
 
     private void NetworkManager_OnMessageReceived(IApiChannelMessage message)
@@ -119,7 +256,6 @@ public class ChatWorldView : BaseView
     private ChatPayload ConvertToChatPayload(IApiChannelMessage message)
     {
         ContentData data = JsonUtility.FromJson<ContentData>(message.Content);
-        Debug.Log("SENDER AVATAR:" + data.sender_profile.avt);
         ChatPayload chatPayload = new()
         {
             ID = message.SenderId,

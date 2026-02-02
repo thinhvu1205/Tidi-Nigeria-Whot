@@ -147,6 +147,12 @@ public class BaseSlotView : BaseGameView
     public override void HandleUpdateTable(IMatchState matchState)
     {
         base.HandleUpdateTable(matchState);
+        if (!hasSetupStartView)
+        {
+            UIManager.Instance.HideProgressing();
+            gameObject.SetActive(true);
+            
+        }
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
         winType = data.BigWin switch
         {

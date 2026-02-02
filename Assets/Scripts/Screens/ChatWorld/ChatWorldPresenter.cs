@@ -16,10 +16,13 @@ public class ChatWorldPresenter
         chatWorldView = view;
     }
 
-    public async UniTask<List<IApiChannelMessage>> GetWorldChatHistory()
+    public async UniTask<List<IApiChannelMessage>> GetWorldChatHistory(string nextCursor = "")
     {
-        IApiChannelMessageList result = await NetworkManager.INSTANCE.GetWorldChatHistory();
-        return result.Messages.Reverse().ToList();;
+        IApiChannelMessageList result = await NetworkManager.INSTANCE.GetWorldChatHistory(nextCursor);
+        chatWorldView.nextCursor = result.NextCursor;
+        chatWorldView.prevCursor = result.PrevCursor;
+        UIManager.Instance.HideProgressing();
+        return result.Messages.Reverse().ToList();
     }
 
     public async UniTask SendMessage(string message)

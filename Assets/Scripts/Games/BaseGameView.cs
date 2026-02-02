@@ -131,6 +131,7 @@ public class BaseGameView : BaseView
     {
         if(UIManager.Instance.gameView == null) return;
         var changeTableUpdate = ChangeTableUpdate.Parser.ParseFrom(matchState.State);
+            UIManager.Instance.gameView.WantSwitchTable = changeTableUpdate.Requested;
         if (changeTableUpdate.ShouldChange)
         {
             string userData = $"{{\"last_table_id\": \"{MatchLabel.TableId}\"}}";
@@ -138,7 +139,6 @@ public class BaseGameView : BaseView
         }
         else
         {
-            UIManager.Instance.gameView.WantSwitchTable = changeTableUpdate.Requested;
             UIManager.Instance.ShowAlertDialog(changeTableUpdate.Requested
                 ? "You will change room after this game is finished"
                 : "Your request to change room is canceled");

@@ -539,10 +539,21 @@ namespace Globals
             return dt.ToString("HH:mm");
         }
 
-         public static string ConvertISOToHHMMDDMMYYYY(string time)
+        public static string ConvertISOToHHMMDDMMYYYY(string time, TimeZoneInfo tz = null)
         {
             DateTime dt = DateTime.Parse(time, null, DateTimeStyles.RoundtripKind);
-            return dt.ToString("HH:mm dd/MM/yyyy");
+            DateTime targetTime;
+            
+            if (tz == null)
+            {
+                targetTime = dt.ToLocalTime();
+            }
+            else
+            {
+                DateTime utcTime = dt.ToUniversalTime();
+                targetTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, tz);
+            }
+            return targetTime.ToString("HH:mm dd/MM/yyyy");
         }
 
 

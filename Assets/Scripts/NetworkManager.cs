@@ -287,10 +287,16 @@ public class NetworkManager : MonoBehaviour
         Debug.Log("Message content: " + message.Content);
     }
 
-    public async UniTask<IApiChannelMessageList> GetWorldChatHistory()
+    public async UniTask<IApiChannelMessageList> GetWorldChatHistory(string nextCursor)
     {
-        var result = await _ClientC.ListChannelMessagesAsync(_SessionIS, worldChatChannelId, 100, false);
-        return result; 
+        if (!string.IsNullOrEmpty(nextCursor))
+        {
+            return await _ClientC.ListChannelMessagesAsync(_SessionIS, worldChatChannelId, 20, false, nextCursor);;   
+        }
+        else
+        {
+            return await _ClientC.ListChannelMessagesAsync(_SessionIS, worldChatChannelId, 20, false);
+        }
     }
 
     public async UniTask LeaveWorldChat()
@@ -492,7 +498,6 @@ public class NetworkManager : MonoBehaviour
             if (isPause && state.OpCode != (int)OpCodeUpdate.OpcodeKickOffTheTable && state.OpCode != (int)OpCodeUpdate.ChangeTable) return;
             lock (queueLock)
             {
-                // Debug.Log("add state queue " + state);
                 matchStateQueue.Enqueue(state);
             }
         };
@@ -827,7 +832,6 @@ public class NetworkManager : MonoBehaviour
                     return;
                 }
                 var state = matchStateQueue.Dequeue();
-                // Debug.Log("get state dequeue " + state);
                 if (state.MatchId != Config.currentMatchId) return;
                 GameManager.Instance.HandleMatchState(state);
             }

@@ -84,6 +84,11 @@ public class SlotSixiangView : BaseSlotSymbolView
     {
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
         currentGame = data.CurrentSixiangGame;
+        if (!hasSetupStartView)
+        {
+            UIManager.Instance.HideProgressing();
+            gameObject.SetActive(true);            
+        }
 
         Debug.Log("Slot : " + data.ToString());
         listSpinSymbol = data.Matrix.SpinLists.ToList();

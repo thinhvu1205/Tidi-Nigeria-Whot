@@ -61,7 +61,6 @@ public class ChatItem : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        Debug.Log("SENDER AVATAR ID: " + data.Content);
         bool isMe = data.ID == User.userProfile.UserId;
         bool isAudio = data.IsAudio;
 
