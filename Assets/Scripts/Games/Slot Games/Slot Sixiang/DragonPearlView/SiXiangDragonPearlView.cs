@@ -151,7 +151,6 @@ public class SiXiangDragonPearlView : MonoBehaviour
         // Khi toàn bộ sequence hoàn tất, gọi NextTween
         if (isFinishGame)
         {
-            Debug.Log("IS SHOW GRAND JACKPOT: " + isWinGrandJackpot);
             mainSequence.AppendInterval(2.5f);
             mainSequence.AppendCallback(() =>
             {
@@ -170,7 +169,6 @@ public class SiXiangDragonPearlView : MonoBehaviour
 
     public void StartView6Gold()
     {
-        Debug.Log("START VIEW 6 GOLD");
         Reset();
         List<SpinSymbol> listSpinSymbol = GameView.ListSpinSymbol;
         Sequence sequence = DOTween.Sequence();

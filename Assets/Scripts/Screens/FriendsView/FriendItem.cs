@@ -1,49 +1,49 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Proto;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Avatar = Common.Objects.Avatar;
 
 public class FriendItem : MonoBehaviour
 {
-    public event EventHandler<OnCheckboxClickedEventArgs> OnCheckboxClicked;
+    public event Action<FriendListItem> OnClickChat;
+    [SerializeField] private Avatar avatar;
+    [SerializeField] private TextMeshProUGUI textInfo, textIntimacy, textOnline;
+    [SerializeField] private Image imageIntimacy, imageOnline, imageCheck;
+    [SerializeField] private Button buttonSendChip, buttonSt, buttonSendGift, buttonChat, buttonAccept, buttonDecline, buttonCancel;
+    private bool isSelected;
+    private FriendListItem item;
 
-    public class OnCheckboxClickedEventArgs : EventArgs
+    private void Awake()
     {
-        public bool isChecked;
-    }
-    [SerializeField] private Image checkboxImage, avatarImage;
-    [SerializeField] private TextMeshProUGUI nameText;
-    private bool isChecked = false;
-
-    private void Start()
-    {
-        checkboxImage.gameObject.SetActive(isChecked);
-    }
-
-    public void SetData(string name, string avatar)
-    {
-
-        nameText.text = name;
+        buttonChat.onClick.AddListener(OnChatClicked);
+        buttonAccept.gameObject.SetActive(false);
+        buttonDecline.gameObject.SetActive(false);
+        buttonCancel.gameObject.SetActive(false);
     }
 
-    public void OnClickCheckbox()
+    private void OnChatClicked()
     {
-        isChecked = !isChecked;
-        checkboxImage.gameObject.SetActive(isChecked);
-        OnCheckboxClicked?.Invoke(this, new OnCheckboxClickedEventArgs { isChecked = isChecked });
+        OnClickChat?.Invoke(item);
     }
 
-    public void TickCheckbox()
+    private void OnEnable()
     {
-        isChecked = true;
-        checkboxImage.gameObject.SetActive(isChecked);
+        
     }
 
-    public void UntickCheckbox()
+    private void OnDisable()
     {
-        isChecked = false;
-        checkboxImage.gameObject.SetActive(isChecked);
+        OnClickChat = null;
+        buttonChat.onClick.RemoveListener(OnChatClicked);
     }
+
+    public void SetInfo(FriendListItem item)
+    {
+        this.item = item;
+    }
+
 }

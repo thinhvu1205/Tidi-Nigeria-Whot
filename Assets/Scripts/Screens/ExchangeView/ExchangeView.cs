@@ -57,7 +57,6 @@ public class ExchangeView : BaseView
             UIManager.Instance.HideProgressing();
             listDeal = exchangeDealInShop.Gcashes.ToList();
             UpdateUIListExchangeDeal();
-            Debug.Log("DEAL LIST: " + listDeal.ToString());
         }
         catch (Exception ex)
         {
@@ -152,7 +151,6 @@ public class ExchangeView : BaseView
     {
         string id = idInputField.text;
         string confirmId = confirmIdInputField.text;
-        Debug.Log("HANDLE CONFIRM");
 
         if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(confirmId))
         {

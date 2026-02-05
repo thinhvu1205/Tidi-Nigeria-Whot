@@ -69,7 +69,6 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
             textBet.text = Utility.FormatMoney((int)betValue);
         }
 
-        Debug.Log($"[HK Poker] Slider raw={rawValue}, snapped={snappedValue}, step={step}");
     }
     
     private long CalculateEValue()
@@ -234,7 +233,6 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
     {
         if (slider != null)
         {
-            Debug.Log("Reset min value "+ slider.minValue);
             slider.value = slider.minValue;
             betValue = slider.minValue;
         }
@@ -304,7 +302,6 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
         // Reset slider handle
         if (sliderHandle != null) sliderHandle.fillAmount = 0;
         
-        Debug.Log("[HK Poker] ButtonBetContainer reset");
     }
 
     /// <summary>
@@ -325,7 +322,6 @@ public class HongKongPokerButtonBetContainer : MonoBehaviour
         if (availableActions.QuickBetAmounts != null && availableActions.QuickBetAmounts.Count >= 5)
         {
             quickBetAmounts.AddRange(availableActions.QuickBetAmounts);
-            Debug.Log($"[HK Poker] Quick bet amounts: Base={quickBetAmounts[0]}, 1/8={quickBetAmounts[1]}, 1/4={quickBetAmounts[2]}, 1/2={quickBetAmounts[3]}, All-in={quickBetAmounts[4]}");
         }
         
         // ===== STEP 1: Tắt tất cả buttons trước (clear previous state) =====

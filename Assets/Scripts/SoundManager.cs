@@ -48,8 +48,6 @@ public class SoundManager : Singleton<SoundManager>
         AudioClip audioClip = Resources.Load<AudioClip>("BundlePack/" + pathAudio);
         if (Config.isOpenMusic)
         {
-         Debug.Log("pathAudio: " + pathAudio);
-         Debug.Log("PLAY MUSIC IN GAME: " + audioClip);
             audioMusic.Stop();
             audioMusic.clip = audioClip;
             audioMusic.Play();

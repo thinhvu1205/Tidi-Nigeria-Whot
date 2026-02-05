@@ -90,7 +90,7 @@ public class SlotSixiangView : BaseSlotSymbolView
             gameObject.SetActive(true);            
         }
 
-        Debug.Log("Slot : " + data.ToString());
+        // Debug.Log("Slot : " + data.ToString());
         listSpinSymbol = data.Matrix.SpinLists.ToList();
         listGem = data.SixiangGems.ToList();
         playerChip = data.GameReward.BalanceChipsWalletAfter;
@@ -317,7 +317,6 @@ public class SlotSixiangView : BaseSlotSymbolView
 
     public override void NextTween()
     {
-        Debug.Log("NEXT TWEEN");
         if (tweenQueue.Count > 0)
         {
             TweenCallback nextTween = tweenQueue.Dequeue();
@@ -508,7 +507,6 @@ public class SlotSixiangView : BaseSlotSymbolView
 
     public void ShowAnimationCutScene(bool isEndBonusGame = false, bool isFromScatter = false)
     {
-        Debug.Log("ANIMATION CUT SCENE");
         // Lưu lại thông tin spinType và số lần auto spin còn lại trước khi vào scatter view
         this.isFromScatter = isFromScatter;
         if (!isEndBonusGame && !winChipFromScatter && !winMiniGameFromScatter)
@@ -623,7 +621,6 @@ public class SlotSixiangView : BaseSlotSymbolView
 
     public void AnimateShadowDragonPearlFreeSpinLeft()
     {
-        Debug.Log("ANIMATE SHADOW");
         TextMeshProUGUI shadowText = Instantiate(textInfoSession.gameObject, paylineInfoContainer.transform).GetComponent<TextMeshProUGUI>();
 
         shadowText.transform.localPosition = transform.InverseTransformPoint(textInfoSession.transform.position);
@@ -749,7 +746,6 @@ public class SlotSixiangView : BaseSlotSymbolView
 
     private void ShowAnimationResultMoney(long winAmount)
     {
-        Debug.Log("ANIMATE RESULT MONEY");
         effectContainer.gameObject.SetActive(true);
         DOTween.Kill("autoHideWinJackpot");
         DOTween.Sequence()
@@ -795,7 +791,6 @@ public class SlotSixiangView : BaseSlotSymbolView
     {
         if (animationJackpotWin.gameObject.activeInHierarchy)
         {
-            Debug.Log("HIDE ANIMATION ReSULT MONEY");
             animationJackpotWin.transform.parent.gameObject.SetActive(false);
             animationBackgroundMoney.gameObject.SetActive(false);
             animationJackpotWin.gameObject.SetActive(false);
@@ -877,7 +872,6 @@ public class SlotSixiangView : BaseSlotSymbolView
 
     public void OnFinishBonusGame()
     {
-        Debug.Log("FINISH BONUS GAMEEEEE");
         SetWinType(totalChipWinByGame);
         // GetMatchResult();
         UpdateTotalChipWinValue();
@@ -885,7 +879,6 @@ public class SlotSixiangView : BaseSlotSymbolView
 
         if (winChipFromScatter)
         {
-            Debug.Log("RESET AFTER WIN CHIP FROM SCATTER");
             winChipFromScatter = false;
             spinType = lastSpinType;
             autoSpinRemain = lastRemainingAutoSpin;
@@ -899,7 +892,6 @@ public class SlotSixiangView : BaseSlotSymbolView
 
         if (!isFromScatter && winMiniGameFromScatter)
         {
-            Debug.Log("RESET AFTER WIN MINI GAME NOT FROM SCATTER");
             winMiniGameFromScatter = false;
             spinType = lastSpinType;
             autoSpinRemain = lastRemainingAutoSpin;
@@ -913,7 +905,6 @@ public class SlotSixiangView : BaseSlotSymbolView
             GetMatchResult();
             tweenQueue.Enqueue(() =>
             {
-                Debug.Log("SHOW TOTAL WIN AFTER BONUS GAME: " + totalChipWinByGame);
                 switch (winType)
                 {
                     case WinType.NICE_WIN:
@@ -968,7 +959,6 @@ public class SlotSixiangView : BaseSlotSymbolView
         // tweenQueue.Clear();
         if (autoSpinRemain > 0 && spinType == SpinType.AUTO)
         {
-            Debug.Log("AUTO SPIN REMAIN > 0, CONTINUE AUTO SPIN");
             tweenQueue.Enqueue(() =>
             {
                 HandleSpin();

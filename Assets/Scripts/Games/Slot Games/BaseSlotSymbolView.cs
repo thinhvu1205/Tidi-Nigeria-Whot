@@ -164,7 +164,7 @@ public class BaseSlotSymbolView : BaseGameView
         base.HandleUpdateTable(matchState);
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
 
-        Debug.Log("Slot : " + data.ToString());
+        // Debug.Log("Slot : " + data.ToString());
         listSpinSymbol = data.Matrix.SpinLists.ToList();
         listGem = data.SixiangGems.ToList();
         gemPrice = data.ChipsBuyGem;
@@ -194,7 +194,6 @@ public class BaseSlotSymbolView : BaseGameView
             }
             else
             {
-                Debug.Log("VAO DAY DE");
                 isBetLevelChanged = false;
                 UpdateJackpot(data);
                 UpdateGem();
@@ -207,7 +206,6 @@ public class BaseSlotSymbolView : BaseGameView
 
     protected void HandleSpin()
     {
-        Debug.Log("HANDLE SPIN");
         isClickMaxBet = false;
         if (!hasSetupStartView || IsSpinning) return;
         if (!CheckEnoughBalance())
@@ -239,7 +237,6 @@ public class BaseSlotSymbolView : BaseGameView
 
     protected void GetMatchResult()
     {
-        Debug.Log("GET MATCH RESULT");
         isGetMatchResult = true;
         DataSender.SendMatchState((long)OpCodeRequest.InfoTable, new byte[0]);
     }
@@ -249,7 +246,6 @@ public class BaseSlotSymbolView : BaseGameView
     #region Spin Actions
     protected virtual void OnStartSpin()
     {
-        Debug.Log("START SPIN");
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.SPIN_REEL);
         AnimateHideGemButtons();
         if (!isInFreeSpin)
@@ -340,7 +336,6 @@ public class BaseSlotSymbolView : BaseGameView
 
     public virtual void NextTween()
     {
-        Debug.Log("NEXT TWEEN");
         if (tweenQueue.Count > 0)
         {
             TweenCallback nextTween = tweenQueue.Dequeue();
@@ -399,7 +394,6 @@ public class BaseSlotSymbolView : BaseGameView
 
     public virtual void CheckThirdScatter(int columnIndex)
     {
-        Debug.Log("CheckThirdScatter: " + columnIndex);
         if (columnIndex == 4 || isInFreeSpin) return;
         if (ScatterCount == 2)
         {
@@ -478,10 +472,7 @@ public class BaseSlotSymbolView : BaseGameView
 
     protected void ShowAllWinLines()
     {
-        Debug.Log("ShOW ALL WIN LINES");
         paylineIconContainer.gameObject.SetActive(false);
-
-        Debug.Log("IS AUTO SPIN: " + isCurrentlyAutoSpin);
         if (isCurrentlyAutoSpin)
         {
             UpdateChipWinValue();
@@ -762,7 +753,6 @@ public class BaseSlotSymbolView : BaseGameView
 
     protected void UpdateGem()
     {
-        Debug.Log("UPDATE GEM");
         if (currentGame != SiXiangGame.Normal) return;
 
         foreach (Image image in listGemImage)
@@ -924,7 +914,6 @@ public class BaseSlotSymbolView : BaseGameView
 
     protected void UpdateChipWinValue()
     {
-        Debug.Log("UPDATE CHIP WIN VALUE: " + currentChipWin);
         UpdateStateWinUI(StateWin.WIN);
         textChipWin.SetValue(currentChipWin, true, 0.2f);
     }
@@ -966,7 +955,6 @@ public class BaseSlotSymbolView : BaseGameView
     #region Effects
     protected void AnimateCoinsFly(int totalCoins = 7, float timeInterval = 0.02f)
     {
-        Debug.Log("ANIMATE COINS FLY");
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.CHIP_REWARD);
         Sequence sequence = DOTween.Sequence();
         for (int i = 0; i < totalCoins; i++)
@@ -1225,7 +1213,6 @@ public class BaseSlotSymbolView : BaseGameView
     #region Setups
     protected void Reset()
     {
-        Debug.Log("RESET");
         if (currentGame == SiXiangGame.Normal || nextGame == SiXiangGame.Normal)
         {
             paylineIconContainer.gameObject.SetActive(false);

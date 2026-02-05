@@ -235,7 +235,6 @@ public class DragonPearlItem : MonoBehaviour
                             // .AppendInterval(spine.Skeleton.Data.FindAnimation(jackpotShakeAnimationName).Duration)
                             .AppendCallback(() =>
                             {
-                                Debug.Log("VAO DAY K ???");
                                 textChipValue.gameObject.SetActive(true);
                                 textChipValue.fontMaterial = materialText[1];
                                 textChipValue.text = data.WinJp switch

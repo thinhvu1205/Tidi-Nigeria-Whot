@@ -160,7 +160,7 @@ public class BaseSlotView : BaseGameView
             BigWin.Mega => WinType.MEGA_WIN,
             _ => WinType.NONE,
         };
-        Debug.Log("Slot : " +data.ToString());
+        // Debug.Log("Slot : " +data.ToString());
         if (!hasSetupStartView)
         {
             SetupStartView(data);
@@ -197,7 +197,6 @@ public class BaseSlotView : BaseGameView
     
     protected void HandleSpin()
     {
-        Debug.Log("HANDLE SPIN");
         isClickMaxBet = false;
         if (!hasSetupStartView || IsSpinning) return;
         if (!CheckEnoughBalance())
@@ -216,7 +215,6 @@ public class BaseSlotView : BaseGameView
 
     protected void OnStartSpin()
     {
-        Debug.Log("START SPIN");
         if (!isInFreeSpin)
         {
             // Nếu đang ko Free Spin thì trừ tiền
@@ -345,7 +343,6 @@ public class BaseSlotView : BaseGameView
 
     public virtual void CheckThirdScatter(int columnIndex)
     {
-        Debug.Log("COLUMN INDEX: " + columnIndex);
         if (columnIndex == ThirdScatterIndex || isInFreeSpin) return;
         // int nextColumnIndex = columnIndex + 1;
         if (ScatterCount == 2)
@@ -744,11 +741,9 @@ public class BaseSlotView : BaseGameView
                 // animationEffect.transform.localScale = new Vector2(0.9f, 0.9f);
                 animationEffect.transform.localScale = new Vector2(1f, 1f);
                 // animationEffect.transform.localPosition = new Vector2(0, -70);
-                Debug.Log("Show big win out of mega win");
                 Utility.PlayAnimationByPath(animationEffect, BIG_WIN_ANIMATION_PATH, BIG_WIN_ANIMATION_NAME, false);
                 DOVirtual.DelayedCall(1.2f, () =>
                 {
-                Debug.Log("Show mega win out of mega win");
                     Utility.PlayAnimationByPath(animationEffect, MEGA_WIN_ANIMATION_PATH, MEGA_WIN_ANIMATION_NAME, false);
                     animationEffect.AnimationState.Complete += delegate
                     {
@@ -1101,7 +1096,6 @@ public class BaseSlotView : BaseGameView
 
     protected virtual void ShowBackGroundFreeSpin()
     {
-        Debug.Log("ShowBackGroundFreeSpin ");
         if (backgroundFreeSpinAnimation != null)
         {
             backgroundFreeSpinAnimation.gameObject.SetActive(true);
@@ -1192,7 +1186,6 @@ public class BaseSlotView : BaseGameView
 
     protected void SetCurrentChipValue(long value)
     {
-        Debug.Log("CURRENT CHIP VALUE: " + value);
         Utility.TweenNumberToNumberScale1(currentChipText, value, playerWallet, 0.5f, false);
         playerWallet = value;
     }
@@ -1300,7 +1293,6 @@ public class BaseSlotView : BaseGameView
     #region Effects
     protected virtual void AnimateCoinsFly(int totalCoins = 5, float timeInterval = 0.05f)
     {
-        Debug.Log("AnimateCoinsFly");
         Sequence sequence = DOTween.Sequence().SetLink(gameObject, LinkBehaviour.KillOnDestroy);;
         for (int i = 0; i < totalCoins; i++)
         {
@@ -1413,7 +1405,6 @@ public class BaseSlotView : BaseGameView
 
     protected virtual void NextTween()
     {
-        Debug.Log("Next tween");
         if (tweenQueue.Count > 0)
         {
             TweenCallback nextTween = tweenQueue.Dequeue();
@@ -1476,7 +1467,6 @@ public class BaseSlotView : BaseGameView
 
     protected void SetLightAllItems()
     {
-        Debug.Log("Set light all items");
         spinBackgroundImage.color = Color.white;
         foreach (SlotColumn column in slotColumnList)
         {
@@ -1506,7 +1496,6 @@ public class BaseSlotView : BaseGameView
 
     protected virtual void Reset()
     {
-        Debug.Log("RESET");
         if (spinType == SpinType.NORMAL || spinType == SpinType.FREE_NORMAL)
         {
             UpdateGameState(SlotGameState.PREPARE);

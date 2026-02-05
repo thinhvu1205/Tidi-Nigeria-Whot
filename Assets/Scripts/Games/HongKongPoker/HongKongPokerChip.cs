@@ -51,7 +51,6 @@ public class HongKongPokerChip : ChipBet
 
     public float MoveToPlayer(Vector2 chipPosition, Vector2 playerPosition, int chipValue)
     {
-        Debug.Log("MOVE TO PLAYER");
         gameObject.GetComponent<Image>().enabled = false;
         canvasGroup.alpha = 0;
         container.SetActive(true);

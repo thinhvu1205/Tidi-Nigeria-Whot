@@ -45,7 +45,7 @@ public class UIManager : Singleton<UIManager>
         base.Awake();
         SetUpParentTransforms();
         SceneManager.sceneLoaded += OnSceneLoaded;
-        Application.targetFrameRate = 60;
+        // Application.targetFrameRate = 60;
         Input.multiTouchEnabled = false;
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Config.UpdateConfigSettings();
@@ -133,7 +133,7 @@ public class UIManager : Singleton<UIManager>
         ShowProgressing();
         RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, true, userData : userData);
         if (response == null) return;
-        Debug.Log("Find match response: " + response.ToString());
+        // Debug.Log("Find match response: " + response.ToString());
         
         if (response.Matches.Count > 0)
         {
@@ -164,7 +164,7 @@ public class UIManager : Singleton<UIManager>
             HideProgressing();
             return;
         }
-        Debug.Log("Quick match response: " + response.ToString());
+        // Debug.Log("Quick match response: " + response.ToString());
         var labelMatch = await DataSender.JoinMatch(response.Matches[0].MatchId);
         
         if (labelMatch != null)
@@ -186,7 +186,7 @@ public class UIManager : Singleton<UIManager>
         RpcCreateMatchResponse response = await DataSender.CreateMatch(Config.currentGameId ,passWord, markUnit, customData);
         HideProgressing();
         if (response == null) return;
-        Debug.Log("Create match response: " + response.ToString());
+        // Debug.Log("Create match response: " + response.ToString());
         var labelMatch = await DataSender.JoinMatch(response.MatchId, passWord);
         if (labelMatch != null)
         {
@@ -211,10 +211,8 @@ public class UIManager : Singleton<UIManager>
                 whotView.LoadInfoMatch(labelMatch);
                 return;
             }
-            Debug.Log("DESTROY ?");
             Destroy(gameView.gameObject);
         }
-        Debug.Log("CURRENT GAME: " + Config.currentGameId);
         _ = NetworkManager.INSTANCE.LeaveWorldChat();
         switch (Config.currentGameId)
         {
@@ -522,6 +520,12 @@ public class UIManager : Singleton<UIManager>
         mailView.SetData(notification);
     }
 
+    public void OpenSocialHub()
+    {
+        SocialHubView socialHubView = Instantiate(LoadPrefabLobby("SocialHubView"), parentLobby).GetComponent<SocialHubView>();
+        socialHubView.transform.localScale = Vector3.one;
+    }
+
     public void OpenJackpot()
     {
         JackpotView jackpotView = Instantiate(LoadPrefabPopup("PopupJackpot"), parentPopups).GetComponent<JackpotView>();
@@ -603,7 +607,7 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenFriend()
     {
-        FriendsView friendsView = Instantiate(LoadPrefabLobby("FriendsView"), parentLobby).GetComponent<FriendsView>();
+        FriendsView friendsView = Instantiate(LoadPrefabLobby("FriendView"), parentLobby).GetComponent<FriendsView>();
         friendsView.transform.localScale = Vector3.one;
     }
 
@@ -636,7 +640,6 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenBanner(TypeInAppMessage type, float delay = 0.1f)
     {
-        Debug.Log("OPEN BANNER");
         DOVirtual.DelayedCall(delay, () =>
         {
             bannerView = Instantiate(LoadPrefabPopup("ListBannerView"), parentBanners).GetComponent<ListBannerView>();
@@ -670,8 +673,6 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenWebPage(string URL)
     {
-        Debug.Log("RULE URL: " + URL);
-        Debug.Log("OpenWebPage called, platform = " + Application.platform);
         GpmWebView.ShowUrl(
             URL,
             new GpmWebViewRequest.Configuration()
@@ -707,64 +708,43 @@ public class UIManager : Singleton<UIManager>
     #region Helpers
     private void OnCallback(GpmWebViewCallback.CallbackType callbackType, string data, GpmWebViewError error)
     {
-        Debug.Log("OnCallback: " + callbackType);
         switch (callbackType)
         {
             case GpmWebViewCallback.CallbackType.Open:
-                if (error != null)
-                {
-                    Debug.LogFormat("Fail to open WebView. Error:{0}", error);
-                }
+    
                 break;
             case GpmWebViewCallback.CallbackType.Close:
-                if (error != null)
-                {
-                    Debug.LogFormat("Fail to close WebView. Error:{0}", error);
-                }
+      
                 break;
             case GpmWebViewCallback.CallbackType.PageStarted:
-                if (string.IsNullOrEmpty(data) == false)
-                {
-                    Debug.LogFormat("PageStarted Url : {0}", data);
-                }
+            
                 break;
             case GpmWebViewCallback.CallbackType.PageLoad:
-                if (string.IsNullOrEmpty(data) == false)
-                {
-                    Debug.LogFormat("Loaded Page:{0}", data);
-                }
+             
                 break;
             case GpmWebViewCallback.CallbackType.MultiWindowOpen:
-                Debug.Log("MultiWindowOpen");
                 break;
             case GpmWebViewCallback.CallbackType.MultiWindowClose:
-                Debug.Log("MultiWindowClose");
                 break;
             case GpmWebViewCallback.CallbackType.Scheme:
                 if (error == null)
                 {
                     if (data.Equals("USER_ CUSTOM_SCHEME") == true || data.Contains("CUSTOM_SCHEME") == true)
                     {
-                        Debug.Log(string.Format("scheme:{0}", data));
                     }
                 }
                 else
                 {
-                    Debug.Log(string.Format("Fail to custom scheme. Error:{0}", error));
                 }
                 break;
             case GpmWebViewCallback.CallbackType.GoBack:
-                Debug.Log("GoBack");
                 break;
             case GpmWebViewCallback.CallbackType.GoForward:
-                Debug.Log("GoForward");
                 break;
             case GpmWebViewCallback.CallbackType.ExecuteJavascript:
-                Debug.LogFormat("ExecuteJavascript data : {0}, error : {1}", data, error);
                 break;
 #if UNITY_ANDROID
         case GpmWebViewCallback.CallbackType.BackButtonClose:
-            Debug.Log("BackButtonClose");
             break;
 #endif
         }

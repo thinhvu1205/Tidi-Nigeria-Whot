@@ -141,7 +141,6 @@ public class SettingsView : BaseView
 
     public void OnClickFacebook()
     {
-        Debug.Log("facebookLink: " + Config.facebookLink);
         Application.OpenURL(Config.facebookLink);
     }
 

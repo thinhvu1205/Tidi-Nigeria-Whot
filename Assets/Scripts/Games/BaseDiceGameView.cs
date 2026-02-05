@@ -79,10 +79,7 @@ public class BaseDiceGameView : BaseGameView
     public override void LoadInfoMatch(Match match)
     {
         base.LoadInfoMatch(match);
-        Debug.Log("LOAD INFO MATCH: " + match.ToString());
-        Debug.Log("CURRENT GAME ID: " + Config.currentGameId);
         if (!Constants.SELECT_TABLE_GAMES_ID.Contains(Config.currentGameId)) return;
-        Debug.Log("LOAD INFO TABLE GAME");
         MarkUnit = match.MarkUnit;
         WantSwitchTable = false;
         foreach (var userId in userIdToView.Keys.ToList())
@@ -103,7 +100,7 @@ public class BaseDiceGameView : BaseGameView
 
     protected virtual void UpdatePosUserTable(UpdateTable update, bool isRearrange = false)
     {
-        Debug.Log("UpdatePosUserTable: " + update.ToString());
+        // Debug.Log("UpdatePosUserTable: " + update.ToString());
         var localUserId = User.userProfile.UserId;
         if (listPosView == null || listPosView.Count == 0 || playerViewPrefab == null || localUserId == "") return;
 
@@ -111,7 +108,7 @@ public class BaseDiceGameView : BaseGameView
         if (update.PlayingPlayers.ToList().Count != 0)
         {
             playingPlayers = update.PlayingPlayers.ToList();
-            Debug.Log($"Playing players updated: {string.Join(", ", playingPlayers.Select(p => p.UserName))}");
+            // Debug.Log($"Playing players updated: {string.Join(", ", playingPlayers.Select(p => p.UserName))}");
         }
 
         // 2) Cập nhật danh sách players
@@ -120,7 +117,6 @@ public class BaseDiceGameView : BaseGameView
         // Sắp xếp lại sao cho local player luôn ở vị trí đầu tiên
         if (isRearrange)
         {
-            Debug.Log("REARRANGE PLAYER");
             Player currentPlayer = players.Find((player) => player.Id == localUserId);
             int startIndex = players.IndexOf(currentPlayer);
 
@@ -146,7 +142,7 @@ public class BaseDiceGameView : BaseGameView
         // 3) Xử lý players leave
         foreach (var lp in update.LeavePlayers)
         {
-            Debug.Log($"Player {lp.UserName} left the table");
+            // Debug.Log($"Player {lp.UserName} left the table");
             if (userIdToView.TryGetValue(lp.Id, out var view))
             {
                 SoundManager.Instance.PlayEffectFromPath(Sound.REMOVE);
@@ -159,7 +155,7 @@ public class BaseDiceGameView : BaseGameView
         // 4) Xử lý players join
         foreach (var jp in update.JoinPlayers)
         {
-            Debug.Log($"Player {jp.UserName} joined the table");
+            // Debug.Log($"Player {jp.UserName} joined the table");
         }
         
         // 5) Tạo/update player views theo danh sách players mới
@@ -258,9 +254,7 @@ public class BaseDiceGameView : BaseGameView
                 }
                 else
                 {
-                    player.ShowBubbleChat(chatPayload.Content);
-                Debug.Log("MESSAGE: " + chatPayload.Content);    
-                    
+                    player.ShowBubbleChat(chatPayload.Content);                    
                 }
             }
         }
@@ -271,7 +265,6 @@ public class BaseDiceGameView : BaseGameView
             && string.IsNullOrEmpty(emojiData.receiverId)
         )
         {
-            Debug.Log("TU GUI ");
             if (userIdToView.TryGetValue(emojiData.senderId, out BasePlayerView senderView) 
             )
             {
@@ -288,7 +281,6 @@ public class BaseDiceGameView : BaseGameView
             && !string.IsNullOrEmpty(emojiData.receiverId)
         )
         {
-            Debug.Log("GUI CHO NGUOI KHAC");
             if (emojiData.senderId == emojiData.receiverId)
             {
                 if (userIdToView.TryGetValue(emojiData.senderId, out BasePlayerView senderView))
@@ -318,18 +310,6 @@ public class BaseDiceGameView : BaseGameView
     protected EmojiData ConvertEmojiData(IApiChannelMessage message)
     {
         EmojiData data = JsonUtility.FromJson<EmojiData>(message.Content);
-        // EmojiPayload chatPayload = new()
-        // {
-        //     ID = message.SenderId,
-        //     Name = message.Username,
-        //     Time = Utility.ConvertISOToHHMM(message.CreateTime),
-        //     Content = data.content,
-        //     Avatar = data.sender_profile.avt,
-        //     Vip = data.sender_profile.vip_level
-        // };
-        Debug.Log("SENDER ID: " + data.senderId);
-        Debug.Log("RECEIVER ID: " + data.receiverId);
-        Debug.Log("EMOJI ID: " + data.emojiId);
         return data;
     }
 
@@ -394,7 +374,6 @@ public class BaseDiceGameView : BaseGameView
         }
         catch (Exception e)
         {
-            Debug.LogError($"Error parsing chat message: {e.Message}\nContent: {message.Content}");
             // Fallback to basic info
             chatPayload.Content = message.Content ?? "";
             chatPayload.IsAudio = false;

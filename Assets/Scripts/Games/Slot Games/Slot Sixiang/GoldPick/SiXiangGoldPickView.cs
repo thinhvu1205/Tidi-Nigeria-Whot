@@ -93,7 +93,6 @@ public class SiXiangGoldPickView : MonoBehaviour
     
     private void AutoPlay()
     {
-        Debug.Log("onAutoPlay");
         GameObject itemAuto = listItem.Find((item) =>
         {
             return item.transform.localPosition.y > 0 && item.transform.localPosition.y < 250 && item.activeSelf && item.transform.localPosition.x > -350 && item.transform.localPosition.x < 350;

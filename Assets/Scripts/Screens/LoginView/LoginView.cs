@@ -59,13 +59,11 @@ namespace Screens.LoginView
             bool isFirstLogin = PlayerPrefs.GetInt(FIRST_LOGIN_KEY, 0) == 0;
             if (isFirstLogin)
             {
-                Debug.Log("First login");
                 PlayerPrefs.SetInt(FIRST_LOGIN_KEY, 1);
                 PlayerPrefs.Save();
             }
             else
             {
-                Debug.Log("Not first login, Try AutoLogin ...");
                 // NetworkManager.INSTANCE.res
                 OnAutoLogin();
             }
@@ -78,7 +76,6 @@ namespace Screens.LoginView
         
             LoginType loginType = (LoginType)PlayerPrefs.GetInt(Config.TYPE_LOGIN_KEY, (int)LoginType.NONE);
             Config.loginType = loginType;
-            Debug.Log($"AutoLogin with login type: {Config.loginType}");
             try
             {
                 switch (Config.loginType)
@@ -89,7 +86,6 @@ namespace Screens.LoginView
                     case LoginType.NORMAL:
                         string userName = PlayerPrefs.GetString("UserName", string.Empty);
                         string password = PlayerPrefs.GetString("PassWord", string.Empty);
-                        Debug.Log($"AutoLogin with ID: {userName}, Password: {password}");
                         if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
                         {
                             return;
@@ -98,13 +94,11 @@ namespace Screens.LoginView
                         _ = loginPresenter.OnLoginWithId(userName, password);
                         break;
                     default:
-                        Debug.LogWarning("Unknown login type, defaulting to guest login.");
                         break;
                 }
             }
             catch (Exception)
             {
-                Debug.LogError($"Error during reconnect with login type: {Config.loginType}");
             }
         }
     
@@ -130,7 +124,6 @@ namespace Screens.LoginView
             }
             catch (Exception e)
             {
-                Debug.LogError(e.Message);
                 // UIManager.Instance.ShowAlertDialog("Error: " + e.Message);
             }
         }
@@ -167,7 +160,6 @@ namespace Screens.LoginView
             }
             catch (Exception e)
             {
-                Debug.LogError($"Error during guest login: {e.Message}");
                 throw;
             }
         }

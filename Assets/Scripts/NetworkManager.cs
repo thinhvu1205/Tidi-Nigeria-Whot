@@ -48,6 +48,7 @@ public class NetworkManager : MonoBehaviour
     private readonly object messageQueueLock = new object();
     private bool connected, isKickOff = false, isPause = false;
     public string CurrentRoomChatChannelId { get; private set; }
+    public string CurrentDirectChatChannelId { get; private set; }
     #endregion
 
     #region RPC
@@ -72,38 +73,6 @@ public class NetworkManager : MonoBehaviour
     #endregion
 
     #region Match
-    
-    // public async void MakingMatch(string gameCode)
-    // {
-    //     try
-    //     {
-    //         var stringProps = new Dictionary<string, string>
-    //         {
-    //             { "mode", "quick-match" },
-    //             { "game", gameCode },
-    //             { "name", "assassin" },
-    //             { "password", "" }
-    //         };
-    //         var numericProps = new Dictionary<string, double>()
-    //         {
-    //             { "bet", 25 }
-    //         };
-    //         var matchTicket = await _SocketIS.AddMatchmakerAsync(
-    //             query: $"+properties.game:{gameCode} +properties.bet:25",
-    //             minCount: 2,
-    //             maxCount: 4,
-    //             stringProperties: stringProps,
-    //             numericProperties: numericProps
-    //         );
-
-    //         Debug.Log("Đã gửi yêu cầu ghép trận. Ticket: " + matchTicket.Ticket);
-    //     }
-    //     catch (System.Exception ex)
-    //     {
-    //         Debug.LogError("Lỗi khi tìm trận: " + ex.Message);
-    //     }
-    // }
-
     public async UniTask<IMatch> JoinMatch(string matchId, string passWord = "")
     {
         try
@@ -124,7 +93,6 @@ public class NetworkManager : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.Log("Err when join match : " + ex);
             UIManager.Instance.HideProgressing();
             DataSender.ParseError(ex.Message);
             Config.currentMatchId = string.Empty;
@@ -162,7 +130,6 @@ public class NetworkManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"Login guest error: {e.Message}");
             throw;
         }
     }
@@ -174,7 +141,6 @@ public class NetworkManager : MonoBehaviour
             var email = $"{username}@fake.local";
             Dictionary<string, string> vars = new Dictionary<string, string> { { "device_id", Config.deviceId } };
             var session = await _ClientC.AuthenticateEmailAsync(email, password, username, create: true,vars: vars);
-            Debug.Log($"Authenticated successfully. User ID: {session.UserId}");
             OnAuthenSuccess(session);
         }
         catch (Exception e)
@@ -190,7 +156,6 @@ public class NetworkManager : MonoBehaviour
         {
             // var email = $"{username}@fake.local";
             var session = await _ClientC.AuthenticateEmailAsync("", password, username, create: false);
-            Debug.Log($"Authenticated successfully. User ID: {session.UserId}");
             OnAuthenSuccess(session);
         }
         catch (Exception e)
@@ -205,7 +170,6 @@ public class NetworkManager : MonoBehaviour
         try
         {
             ISession session = await _ClientC.AuthenticateFacebookAsync(accessToken, create: true, username: "", import: true);
-            Debug.Log($"Authenticated Facebook successfully. User ID: {session.UserId}");
             OnAuthenSuccess(session);
         }
         catch (Exception e)
@@ -225,7 +189,6 @@ public class NetworkManager : MonoBehaviour
     public void StoreSession(ISession session) {
         PlayerPrefs.SetString(AUTH_TOKEN_KEY, session.AuthToken);
         PlayerPrefs.SetString(REFRESH_TOKEN_KEY, session.RefreshToken);
-        Debug.Log("Session stored." + session);
     }
 
     public async UniTask LogoutAsync()
@@ -264,15 +227,12 @@ public class NetworkManager : MonoBehaviour
         }
         IChannel channel = await _SocketIS.JoinChatAsync(WORLD_CHAT_ROOM_NAME, ChannelType.Room, persistence, hidden);
         worldChatChannelId = channel.Id;
-        Debug.Log("Now connected to channel id: " + worldChatChannelId);
     }
 
     public async UniTask SendMessageWorldChat(string content)
     {
         var data = new Dictionary<string, string> {{"content", content}}.ToJson();
-        Debug.Log("MESSAGE: " + content.ToString());
         var sendAck = await _SocketIS.WriteChatMessageAsync(worldChatChannelId, data);
-        Debug.Log("SEND MESSAGE TO WORLD CHAT: " + sendAck.ToString());
     }
     
     private void OnMessageReceived(IApiChannelMessage message)
@@ -283,8 +243,6 @@ public class NetworkManager : MonoBehaviour
             // if (isPause) return;
             messageQueue.Enqueue(message);
         }
-        Debug.Log("Received: " + message);
-        Debug.Log("Message content: " + message.Content);
     }
 
     public async UniTask<IApiChannelMessageList> GetWorldChatHistory(string nextCursor)
@@ -306,13 +264,42 @@ public class NetworkManager : MonoBehaviour
     }
     #endregion
 
+    #region Direct Chat
+    public async UniTask JoinDirectChat(string userId)
+    {
+        var persistence = true;
+        var hidden = false;
+        IChannel channel = await _SocketIS.JoinChatAsync(userId, ChannelType.DirectMessage, persistence, hidden);
+        CurrentDirectChatChannelId = channel.Id;
+    }
+
+    public async UniTask SendMessageDirectChat(string content)
+    {
+        if (string.IsNullOrEmpty(CurrentDirectChatChannelId)) return;
+        var data = new Dictionary<string, string> {{"text", content}}.ToJson();
+        var sendAck = await _SocketIS.WriteChatMessageAsync(CurrentDirectChatChannelId, data);
+    }
+
+    public async UniTask LeaveDirectChat()
+    {
+        if (string.IsNullOrEmpty(CurrentDirectChatChannelId)) return;
+        await _SocketIS.LeaveChatAsync(CurrentDirectChatChannelId);
+        CurrentDirectChatChannelId = "";
+    }
+
+    public async UniTask<IApiChannelMessageList> GetDirectChatHistory()
+    {
+        var result = await _ClientC.ListChannelMessagesAsync(_SessionIS, CurrentDirectChatChannelId, 100, false);
+        return result; 
+    }
+    #endregion
+
     #region Ingame Chat
     public async UniTask JoinRoomChat(string roomName)
     {
         bool persistence = false;
         bool hidden = false;
         IChannel channel = await _SocketIS.JoinChatAsync(roomName, ChannelType.Room, persistence, hidden);
-        Debug.Log("Now connected to room channel id: " + channel.Id);
         CurrentRoomChatChannelId = channel.Id;
     }
 
@@ -320,7 +307,6 @@ public class NetworkManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(CurrentRoomChatChannelId)) return;
         var data = new Dictionary<string, string> {{"text", content}}.ToJson();
-        Debug.Log("MESSAGE: " + content.ToString());
         var sendAck = await _SocketIS.WriteChatMessageAsync(CurrentRoomChatChannelId, data);
     }
 
@@ -360,7 +346,6 @@ public class NetworkManager : MonoBehaviour
     public async UniTask LeaveRoomChat()
     {
         if (string.IsNullOrEmpty(CurrentRoomChatChannelId)) return;
-        Debug.Log("CurrentRoomChatChannelId: " + CurrentRoomChatChannelId);
         await _SocketIS.LeaveChatAsync(CurrentRoomChatChannelId);
         CurrentRoomChatChannelId = "";
     }
@@ -420,7 +405,6 @@ public class NetworkManager : MonoBehaviour
                 cursor: null
             );
 
-            Debug.Log("Receive leaderboard record "+ leaderboardRecordList.ToString());
             return leaderboardRecordList;
         }
         catch (Exception e)
@@ -441,7 +425,6 @@ public class NetworkManager : MonoBehaviour
         {
             await _SocketIS.ConnectAsync(session);
             connected = true;
-            Debug.Log("Socket connected");
             RegisterEventSocket();
             
             // await JoinWorldChat();
@@ -453,7 +436,6 @@ public class NetworkManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"connect failed: {e}");
             // Global.IsFreeChipLoaded = false;
             await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
         }
@@ -469,7 +451,6 @@ public class NetworkManager : MonoBehaviour
             {
                 await UniTask.SwitchToMainThread();
                 UIManager.Instance.ShowProgressing();
-                Debug.Log("ondisconnect");
 
                 await UniTask.Delay(TimeSpan.FromSeconds(1));
 
@@ -485,7 +466,6 @@ public class NetworkManager : MonoBehaviour
             }
             catch (Exception e)
             {
-                Debug.LogError($"Closed socker callback failed: {e}");
             }
         };
         
@@ -505,7 +485,6 @@ public class NetworkManager : MonoBehaviour
         _SocketIS.ReceivedStreamState += async state =>
         {
             await UniTask.SwitchToMainThread();
-            Debug.Log($"Received Stream State: {state}");
             if (!string.IsNullOrEmpty(state.State))
             {
                 try
@@ -528,7 +507,6 @@ public class NetworkManager : MonoBehaviour
                                 try
                                 {
                                     var msg = JsonUtility.FromJson<HotNewsMessage>(state.State);
-                                    Debug.Log($"Hot News received: {msg}");
             
                                     // Check VIP range để quyết định có hiển thị không
                                     var userVipLevel = User.userProfile.VipLevel; // Implement method này
@@ -553,13 +531,11 @@ public class NetworkManager : MonoBehaviour
                                 }
                                 catch (Exception e)
                                 {
-                                    Debug.LogError($"Failed to parse hot news: {e}");
                                 }
                             }else if (state.Stream.Label == "announcement_ticker")
                             {
                                 // Nhận event từ server → refresh announcement ticker list luôn
                                 // Không cần parse vì chỉ cần biết có update là refresh
-                                Debug.Log("Announcement Ticker event received, refreshing list...");
                                 OnAnnouncementTickerUpdated?.Invoke();
                             }
                             break;
@@ -568,7 +544,6 @@ public class NetworkManager : MonoBehaviour
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"Failed to parse stream data: {e}");
                 }
             }
 
@@ -577,7 +552,6 @@ public class NetworkManager : MonoBehaviour
         _SocketIS.ReceivedNotification += async notification =>
         {
             await UniTask.SwitchToMainThread();
-            Debug.Log($"Received Notification: {notification}");
 
             switch (notification.Code)
             {
@@ -671,7 +645,6 @@ public class NetworkManager : MonoBehaviour
             // if (deviceId == SystemInfo.unsupportedIdentifier) deviceId = Guid.NewGuid().ToString();
             PlayerPrefs.SetString(DEVICE_ID, deviceId);
         }
-        Debug.Log("DEVICE ID: " + deviceId);
         Config.deviceId = deviceId;
         // _SocketIS = _ClientC.NewSocket();
     }
@@ -712,7 +685,6 @@ public class NetworkManager : MonoBehaviour
             string json = result.Objects.FirstOrDefault()?.Value.ToString();
             LinkGlobalValue data =
                 JsonUtility.FromJson<LinkGlobalValue>(json);
-                Debug.Log("JSON: " + json);
             Config.ruleLink = data.rule_link;
             Config.groupLink = data.group_link;
             Config.facebookLink = data.facebook_link;
@@ -746,14 +718,10 @@ public class NetworkManager : MonoBehaviour
             var storageObject = result.Objects.FirstOrDefault();
             if (storageObject == null)
             {
-                Debug.LogWarning("Storage object config mode not found");
                 return ;
             }
 
             string json = storageObject.Value;
-
-            Debug.Log($"Raw storage json: {json}");
-
             ConfigModeData data = JsonUtility.FromJson<ConfigModeData>(json);
             Config.isConfigMode = data.use_config_on;
         }
@@ -880,7 +848,6 @@ public class NetworkManager : MonoBehaviour
             {
                 await _SocketIS.CloseAsync();
                 _SocketIS = null;
-                Debug.Log("Socket closed safely.");
             }
         }
         catch (Exception e)

@@ -284,7 +284,6 @@ public class CheckInBonusView : BaseView
 
     private IEnumerator AnimateFill(float amount)
     {
-        Debug.Log("Amount: " + amount);
         float elapsed = 0f;
 
         while (elapsed < 0.5f)

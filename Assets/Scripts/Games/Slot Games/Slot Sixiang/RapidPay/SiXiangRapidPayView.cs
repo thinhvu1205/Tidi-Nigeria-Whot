@@ -48,7 +48,6 @@ public class SiXiangRapidPayView : MonoBehaviour
         animationBackgroundRow.transform
             .DOLocalMoveY(animationBackgroundRow.transform.localPosition.y + 123 * indexRow - indexRow * 3.5f, 0.3f)
             .SetEase(Ease.InSine);
-            Debug.Log("IS BUNOS RAPID PAY: " + (gameView.GetCurrentGame() == SiXiangGame.SixangbonusRapidpay));
         if (gameView.GetCurrentGame() == SiXiangGame.SixangbonusRapidpay)
         {
             textWinAmount.SetValue(gameView.GetCurrentBetLevel() * 2, true, 0.5f);
@@ -83,7 +82,6 @@ public class SiXiangRapidPayView : MonoBehaviour
             return;
         }
         SpinSymbol item = data.SpinSymbols[0];
-        Debug.Log("CURRENT ROW: " + indexRow);
         currentRow.SetResult(data);
         winAmount = data.GameReward.TotalChipsWinByGame;
         int indexPick = item.Index;
@@ -125,7 +123,6 @@ public class SiXiangRapidPayView : MonoBehaviour
 
     private string GetAnimationLightName(int index)
     {
-        Debug.Log("ANIMATION LIGHT INDEX: " + index);
         string name = "";
         name = index switch
         {
@@ -154,7 +151,6 @@ public class SiXiangRapidPayView : MonoBehaviour
 
     private void NextRow()
     {
-        Debug.Log("NEXT ROW");
         animationBackgroundRow.transform
             .DOLocalMoveY(animationBackgroundRow.transform.localPosition.y + 123 - indexRow * 3.5f, 0.3f)
             .SetEase(Ease.InSine);

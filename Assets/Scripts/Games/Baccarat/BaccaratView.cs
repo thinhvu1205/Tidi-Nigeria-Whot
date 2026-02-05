@@ -166,7 +166,6 @@ public class BaccaratView : BaseDiceGameView
     protected override void RequestSyncStateTable()
     {
         base.RequestSyncStateTable();
-        Debug.Log("Sync state Baccarat");
         ResetDefaultUI();
         DataSender.SendMatchState((long)OpCodeRequest.UserInTable, Array.Empty<byte>());
         DataSender.SendMatchState((long)OpCodeRequest.SyncTable, Array.Empty<byte>());
@@ -176,7 +175,7 @@ public class BaccaratView : BaseDiceGameView
     {
         base.HandleUpdateTable(matchState);
         var data  = BaccaratUpdateDesk.Parser.ParseFrom(matchState.State);
-        Debug.Log("HandleUpdateTable " + data);
+        // Debug.Log("HandleUpdateTable " + data);
 
         if (data.Error != null && data.Error.ErrorType != ErrorType.Unspecified)
         {
@@ -221,7 +220,6 @@ public class BaccaratView : BaseDiceGameView
             // 🎯 NEW: Render ALL user bets (for late-join / reconnect)
             if (data.AllUserBets is { Count: > 0 })
             {
-                Debug.Log($"[AllUserBets] Rendering {data.AllUserBets.Count} user bets for sync");
                 
                 foreach (var userBet in data.AllUserBets)
                 {
@@ -332,7 +330,7 @@ public class BaccaratView : BaseDiceGameView
     {
         base.HandleUpdateUserInTable(matchState);
         var updateTable = UpdateTable.Parser.ParseFrom(matchState.State);
-        Debug.Log("HandleUpdateUserInTable " + updateTable);
+        // Debug.Log("HandleUpdateUserInTable " + updateTable);
         UpdatePosUserTable(updateTable);
     }
 
@@ -340,7 +338,7 @@ public class BaccaratView : BaseDiceGameView
     {
         base.HandleUpdateDeal(matchState);
         var baccaratUpdateDeal = BaccaratUpdateDeal.Parser.ParseFrom(matchState.State);
-        Debug.Log("HandleUpdateDeal " + baccaratUpdateDeal);
+        // Debug.Log("HandleUpdateDeal " + baccaratUpdateDeal);
 
         // 🎯 Detect sync mode for late-join during REWARD
         // Normal mode: Cards has exactly 1 card (real-time dealing)
@@ -350,9 +348,7 @@ public class BaccaratView : BaseDiceGameView
                           (baccaratUpdateDeal.Hands.Player.Cards.Count > 0 || baccaratUpdateDeal.Hands.Banker.Cards.Count > 0);
         
         if (isSyncMode)
-        {
-            Debug.Log("[Sync Mode] Displaying all dealt cards without animation");
-            
+        {            
             // Disable betting UI
             clock.SetActive(false);
             buttonBetBaccarat.SetActive(false);
@@ -524,18 +520,18 @@ public class BaccaratView : BaseDiceGameView
         switch (updateGameState.State)
         {
             case GameState.Idle:
-                Debug.Log("HandleUpdateGameState Idle "+updateGameState.ToString());
+                // Debug.Log("HandleUpdateGameState Idle "+updateGameState.ToString());
                 break;
             case GameState.Matching:
-                Debug.Log("HandleUpdateGameState Matching "+ updateGameState.ToString());
+                // Debug.Log("HandleUpdateGameState Matching "+ updateGameState.ToString());
                 break;
             case GameState.Preparing:
                 isNewGame = true;
                 SetLoopLbWaiting();
-                Debug.Log("HandleUpdateGameState Preparing " + updateGameState.ToString());
+                // Debug.Log("HandleUpdateGameState Preparing " + updateGameState.ToString());
                 break;
             case GameState.Play:
-                Debug.Log("HandleUpdateGameState Play " + updateGameState.ToString());
+                // Debug.Log("HandleUpdateGameState Play " + updateGameState.ToString());
                 if (isNewGame)
                 {
                     isNewGame = false;
@@ -573,14 +569,14 @@ public class BaccaratView : BaseDiceGameView
                 SetTextTime((int) updateGameState.CountDown);
                 break;
             case GameState.Reward:
-                Debug.Log("HandleUpdateGameState Reward " + updateGameState.ToString());
+                // Debug.Log("HandleUpdateGameState Reward " + updateGameState.ToString());
                 foreach (var btnGate in listPot)
                 {
                     btnGate.GetComponent<Button>().interactable = false;
                 }
                 break;
             case GameState.Finish:
-                Debug.Log("HandleUpdateGameState Finish " + updateGameState.ToString());
+                // Debug.Log("HandleUpdateGameState Finish " + updateGameState.ToString());
                 break;
             
         }
@@ -593,7 +589,7 @@ public class BaccaratView : BaseDiceGameView
     {
         base.HandleUpdateWallet(matchState);
         var balanceResult = BalanceResult.Parser.ParseFrom(matchState.State);
-        Debug.Log("BaccaratUpdateWallet " + balanceResult);
+        // Debug.Log("BaccaratUpdateWallet " + balanceResult);
         
         // Store balance updates for later use
         balanceUpdates.Clear();
@@ -603,17 +599,11 @@ public class BaccaratView : BaseDiceGameView
         }
     }
 
-    // public override void HandleUpdateKickOffTheTable(IMatchState matchState)
-    // {
-    //     base.HandleUpdateKickOffTheTable(matchState);
-    //     Debug.Log("HandleUpdateKickOffTheTable for baccarat "+ matchState.State.ToString());
-    // }
-
     public override void HandleFinish(IMatchState matchState)
     {
         base.HandleFinish(matchState);
         var baccaratGameFinish = BaccaratGameFinish.Parser.ParseFrom(matchState.State);
-        Debug.Log("BaccaratGameFinish " + baccaratGameFinish);
+        // Debug.Log("BaccaratGameFinish " + baccaratGameFinish);
         
         // Clear previous win results
         listWinResult.Clear();
@@ -675,7 +665,6 @@ public class BaccaratView : BaseDiceGameView
                 
                 if (userIdToView.TryGetValue(idPl, out var playerObj) && loseAmount < 0){
                     playerObj.AnimateFlyMoney(loseAmount, 40);
-                    Debug.Log($"Player {idPl} lose amount: {loseAmount}");
                 }
             }
             
@@ -691,9 +680,6 @@ public class BaccaratView : BaseDiceGameView
             {
                 string playerId = kvp.Key;
                 BalanceUpdate balanceUpdate = kvp.Value;
-
-                Debug.Log($"Player ID: {playerId}, Balance Delta: {balanceUpdate.AmountChipAdd}");
-
                 if (!userIdToView.TryGetValue(playerId, out var playerObj) || balanceUpdate.AmountChipAdd <= 0) continue;
                 playerObj.AnimateFlyMoney(balanceUpdate.AmountChipAdd, 40);
                 playerObj.SetCurrentChip(balanceUpdate.AmountChipCurrent);
@@ -852,7 +838,6 @@ public class BaccaratView : BaseDiceGameView
         {
             btnrebet = false;
         }
-        Debug.Log("setStatusButtonsBet:" + btndouble);
         btnRebet.interactable = btnrebet;
         btnDoubleBet.interactable = btndouble;
     }
@@ -958,8 +943,6 @@ public class BaccaratView : BaseDiceGameView
         // Update UI
         checkBeted = true;
         UpdateStatePot();
-        
-        Debug.Log($"Placed bet: {betValue} on area {betArea}");
     }
     
     private void UpdateStatePot(){
@@ -1213,7 +1196,6 @@ public class BaccaratView : BaseDiceGameView
         // Reset UI
         UpdateStatePot();
         AnimateReturnCards();
-        Debug.Log("Game reset completed");
     }
 
     private void ResetDefaultUI()

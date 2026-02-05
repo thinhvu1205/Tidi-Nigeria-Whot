@@ -175,7 +175,6 @@ public class SlotNoelView : BaseSlotView
             effectContainer.gameObject.SetActive(false);
             if (new WinType[] { WinType.BIG_WIN, WinType.HUGE_WIN, WinType.MEGA_WIN }.Contains(winType))
             {
-                Debug.Log("Win type: " + winType);
                 bigWinText.transform.parent.gameObject.SetActive(false);
                 AnimateCoinsFly();
             }

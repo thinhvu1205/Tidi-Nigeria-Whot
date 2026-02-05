@@ -1,125 +1,148 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Cysharp.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using Proto;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class FriendsView : BaseView
 {
-    [SerializeField] private GameObject friendItemPrefab;
-    [SerializeField] private Transform friendItemParent;
-    [SerializeField] private Image checkAllTickImage;
-    private List<JObject> listMailData = new();
-    private List<FriendItem> listFriendSelected = new();
-    private List<FriendItem> listFriend = new();
-    private JArray mockArray = new();
-    private bool isCheckAll = false;
+    [SerializeField] private int pageIndex = 0;
 
-    protected override void Start()
+    [SerializeField] private ToggleGroup toggleGroup;
+    [SerializeField] private List<Toggle> tabs = new();
+    [SerializeField] private List<CanvasGroup> pages = new();
+    [SerializeField] private FriendNotificationView friendNotificationView;
+    [SerializeField] private FriendMissionView friendMissionView;
+    [SerializeField] private FriendChatView friendChatView;
+
+    [SerializeField] private FriendItem friendItemPrefab;
+    [SerializeField] private Transform friendParent, bestFriendParent, closeFriendParent, soulmateParent;
+    private FriendPresenter friendPresenter;
+    private List<FriendListItem> listFriendItem;
+
+    public UnityEvent<int> OnPageIndexChanged;
+
+    private void OnValidate()
     {
-        base.Start();
-        MockData();
-        LoadListFriend();
+        OpenPage(pageIndex);
+        tabs[pageIndex].SetIsOnWithoutNotify(true);
     }
 
-    #region Data
-    private void LoadListFriend()
+    protected override void Awake()
     {
-        foreach (var friendItem in listFriend)
+        base.Awake();
+        friendPresenter = new();
+        friendPresenter.Init(this);
+
+        foreach(Toggle toggle in tabs)
         {
-            Destroy(friendItem.gameObject);
+            toggle.onValueChanged.AddListener(CheckForTab);
+            toggle.group = toggleGroup;
         }
-        foreach (var mailData in mockArray)
-        {
-            string avatar = mailData["avatar"].ToString();
-            string name = mailData["name"].ToString();
-            GameObject friendItemObj = Instantiate(friendItemPrefab, friendItemParent);
-            FriendItem friendItem = friendItemObj.GetComponent<FriendItem>();
-            friendItem.SetData(name, avatar);
-            friendItem.OnCheckboxClicked += FriendItem_OnCheckboxClicked;
-            listFriend.Add(friendItem);
-        }
+
+        _ = GetListFriends();
     }
 
-    private void MockData()
+    protected override void OnDestroy()
     {
-
-        for (int i = 0; i < 5; i++)
+        base.OnDestroy();
+        foreach(Toggle toggle in tabs)
         {
-            JObject friendItem = new()
-            {
-                ["avatar"] = "",
-                ["name"] = "Minh Quan",
-            };
-
-            mockArray.Add(friendItem);
-        }
-
-        Debug.Log(mockArray.ToString());
-    }
-    #endregion
-
-    #region Button
-    public void OnClickCheckAll()
-    {
-        isCheckAll = !isCheckAll;
-        checkAllTickImage.gameObject.SetActive(isCheckAll);
-        foreach (var friendItem in listFriend)
-        {
-            if (isCheckAll)
-            {
-                friendItem.TickCheckbox();
-                listFriendSelected.Add(friendItem);
-            }
-            else
-            {
-                friendItem.UntickCheckbox();
-                listFriendSelected.Remove(friendItem);
-            }
+            toggle.onValueChanged.RemoveListener(CheckForTab);
         }
     }
 
-    public void OnClickAdd()
+    #region API
+    private async UniTask GetListFriends()
     {
-        // Handle add button click
-        Debug.Log("Add button clicked");
+        FriendListResponse friendListResponse = await friendPresenter.GetListFriend();
+        listFriendItem = friendListResponse.Friends.ToList();
+
+        foreach(FriendListItem friendListItem in listFriendItem)
+        {
+            FriendItem friendItem = Instantiate(friendItemPrefab, friendParent);
+            friendItem.OnClickChat += FriendItem_OnClickChat;
+        }
     }
 
-    public void OnClickDelete()
+
+    #region Events
+    private void FriendItem_OnClickChat(FriendListItem item)
     {
-        foreach (var friendItem in listFriendSelected)
-        {
-            Destroy(friendItem.gameObject);
-            listFriend.Remove(friendItem);
-        }
-        listFriendSelected.Clear();
-        isCheckAll = false;
-        checkAllTickImage.gameObject.SetActive(false);
+        friendChatView.Show();
+        friendChatView.Setup(item);
     }
     #endregion
 
-    #region Event    
-    private void FriendItem_OnCheckboxClicked(object sender, FriendItem.OnCheckboxClickedEventArgs e)
+    #endregion
+
+    #region Buttons
+    public void OnClickNotification()
     {
-        bool isChecked = e.isChecked;
-        FriendItem friendItem = sender as FriendItem;
-        if (isChecked)
+        friendNotificationView.Show();
+    }
+
+    public void OnClickMission()
+    {
+        friendMissionView.Show();
+    }
+
+    public void OnClickFortuneGift()
+    {
+        
+    }
+
+    #endregion
+
+    #region Tabs
+
+    private void CheckForTab(bool value)
+    {
+        for (int i = 0; i < tabs.Count; i++)
         {
-            listFriendSelected.Add(friendItem);
+            if (!tabs[i].isOn) continue;
+            pageIndex = i;
         }
-        else
+        OpenPage(pageIndex);
+    }
+
+    private void OpenPage(int index)
+    {
+        EnsureIndexIsInRange(index);
+
+        for (int i = 0; i < pages.Count; i++)
         {
-            listFriendSelected.Remove(friendItem);
+            bool isActivePage = i == pageIndex;
+            pages[i].alpha = isActivePage ? 1.0f : 0f;
+            pages[i].interactable = isActivePage;
+            pages[i].blocksRaycasts = isActivePage;
         }
-        if (listFriendSelected.Count == listFriend.Count)
+
+        if (Application.isPlaying)
         {
-            isCheckAll = true;
-            checkAllTickImage.gameObject.SetActive(true);
-        }
-        else
-        {
-            checkAllTickImage.gameObject.SetActive(false);
+            OnPageIndexChanged?.Invoke(pageIndex);
         }
     }
+
+    private void EnsureIndexIsInRange(int index)
+    {
+        if (tabs.Count == 0 || pages.Count == 0)
+        {
+            return;
+        }
+        pageIndex = Mathf.Clamp(index, 0, pages.Count - 1);
+    }
+
+    public void JumpToPage(int index)
+    {
+        EnsureIndexIsInRange(index);
+        tabs[pageIndex].isOn = true;
+    }
     #endregion
+
 }

@@ -28,7 +28,6 @@ namespace Common.Pool
                 },
                 actionOnDestroy: (item) =>
                 {
-                    Debug.Log("Pool destroyed item name :" + item.gameObject.name);
                     Object.Destroy(item.gameObject);
                 },
                 collectionCheck: false,

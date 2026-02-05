@@ -73,7 +73,6 @@ public class SiXiangScatterView : MonoBehaviour
         if (data.SpinSymbols.Count == 0) return;
         spinResult = data.SpinSymbols[0];
         winAmount = data.GameReward.TotalChipsWinByGame;
-        Debug.Log("SpinResult Symbol: " + spinResult.Symbol);
         switch (spinResult.Symbol)
         {
             case SiXiangSymbol.BonusDragonball:
@@ -173,8 +172,6 @@ public class SiXiangScatterView : MonoBehaviour
 
     private void ShowResultAnim()
     {
-        Debug.Log("TypeResult: " + typeResult + " | WinAmount: " + winAmount);
-        Debug.Log("SpinResult Symbol: " + spinResult.Symbol);
         resultContainer.gameObject.SetActive(true);
         buttonCollect.gameObject.SetActive(false);
         string animationPath = "";

@@ -93,7 +93,6 @@ public class VipFarmView : BaseView
         if (nextLevel - 2 < 0) return;
         string animationPath = TREE_ANIMATION_PATH.Replace("%name", listTreeNameAnimation[nextLevel - 2]);
         string animationName = $"V{nextLevel}_{suffix}";
-        Debug.Log("animationName: " + animationName);
         Utility.PlayAnimationByPath(animationTree1, animationPath, animationName, true);
         Utility.PlayAnimationByPath(animationTree2, animationPath, animationName, true);
         Utility.PlayAnimationByPath(animationTree3, animationPath, animationName, true);
@@ -117,7 +116,6 @@ public class VipFarmView : BaseView
         await DOVirtual.DelayedCall(4f, async () =>
         {
      
-            Debug.Log("DIEN XONG R DAY");
             receiveInfo.SetActive(false);
             await GetVipFarmProgress();
             OnClaimed?.Invoke();

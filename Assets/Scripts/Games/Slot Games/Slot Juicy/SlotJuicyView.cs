@@ -104,7 +104,7 @@ public class SlotJuicyView : BaseSlotView
     public override void HandleUpdateTable(IMatchState matchState)
     {
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
-        Debug.Log("Slot : " +data.ToString());
+        // Debug.Log("Slot : " +data.ToString());
         UIManager.Instance.HideProgressing();
         gameObject.SetActive(true);
         // Update UI cho các item
@@ -253,9 +253,7 @@ public class SlotJuicyView : BaseSlotView
         {
             UpdateJackpot();
             betLevelList = data.BetLevels.ToList();
-            Debug.Log("data.ChipsMcb:  " + data.ChipsMcb);
             currentBetLevel = data.ChipsMcb;
-            Debug.Log("currentBetlevel:  " + currentBetLevel);
             SetInfoSessionText("Press SPIN to play");
             SetCurrentBetText(currentBetLevel);
             SetCurrentChipValue(data.GameReward.BalanceChipsWalletAfter);
@@ -455,7 +453,6 @@ public class SlotJuicyView : BaseSlotView
     
     protected override void ShowWinAnimation(WinType winType, bool isCoinFlyAfterwards = true)
     {
-        Debug.Log("winType: " + winType);
         if(winType == WinType.NONE) return;
         _currentWinType = winType;
         _currentIsCoinFlyAfterwards = isCoinFlyAfterwards;
@@ -487,7 +484,6 @@ public class SlotJuicyView : BaseSlotView
                 sequence.AppendInterval(0.8f)
                     .AppendCallback(() =>
                     {
-                        Debug.Log("SAO K SETACTIVE ?");
                         bigWinText.gameObject.SetActive(true);
                         Utility.TweenNumberToNumber(bigWinText, currentChipWin, 0, 4.7f);
                     })
@@ -641,9 +637,8 @@ public class SlotJuicyView : BaseSlotView
     }
 
 
-    private void SetupFruitRainGame(bool isKeep6FirstBasket = true)
+    private void SetupFruitRainGame()
     {
-        Debug.Log("SetupFruitRainGame");
         isSetUpFruitRainGame = true;
         isStartFruitRain = false;
         SetDarkAllItems(isBackgroundDark: false);
@@ -685,7 +680,6 @@ public class SlotJuicyView : BaseSlotView
 
     private void SetPackageValue(SlotColumn column, long[] packageValues)
     {
-        Debug.Log("PACKAGE VALUES: " + string.Join(", ", packageValues));
         column.SetPackageValue(packageValues);
     }
 
@@ -703,10 +697,7 @@ public class SlotJuicyView : BaseSlotView
         currentBetLevel = betLevelList[^1];
         if (lastBetLevel == currentBetLevel)
         {
-            Debug.Log("SPIN CHO TOAOOOO");
-            // isBetLevelChanged = false;
             HandleSpin();
-            // HandleSpin();
         }
         else
         {
@@ -748,7 +739,6 @@ public class SlotJuicyView : BaseSlotView
     
     private void OnBetLevelChanged()
     {
-        Debug.Log("OnBetLevelChanged");
         if (gameState == SlotGameState.SPINNING || gameState == SlotGameState.SHOWING_RESULT || !hasSetupStartView || !canChangeBetLevel)
         {
             return;
@@ -809,7 +799,6 @@ public class SlotJuicyView : BaseSlotView
 
     private void ShowPopupChooseABucket()
     {
-        Debug.Log("ShowPopupChooseABucket");
         SoundManager.Instance.PlayEffectFromPath(SoundSlot.FREESPIN);
         effectContainer.gameObject.SetActive(true);
         popupChooseABucketAnimation.gameObject.SetActive(true);
@@ -845,7 +834,6 @@ public class SlotJuicyView : BaseSlotView
     {
         bucketLeft.interactable = true;
         bucketRight.interactable = true;
-        Debug.Log("Choose " + type + " bucket");
         InfoBet infoBet = new()
         {
             Id = type,
@@ -896,7 +884,7 @@ public class SlotJuicyView : BaseSlotView
             if (isChooseFruitRain)
             {
                 isChooseFruitRainBasket = true;
-                SetupFruitRainGame(false);
+                SetupFruitRainGame();
             }
             else if (isChooseFreeGame)
             {
@@ -971,7 +959,6 @@ public class SlotJuicyView : BaseSlotView
 
     private void ShowEffectPackageWithIndex(int index, long value)
     {
-        Debug.Log("PACKAGE VALUE: " + value);
         totalPackageValue += value;
         Utility.TweenNumberToNumber(totalPackageValueText, totalPackageValue, totalPackageValue - value);
         effectPackageAnimation.gameObject.SetActive(true);
@@ -1039,7 +1026,6 @@ public class SlotJuicyView : BaseSlotView
 
     private void ShowJackpotAnimation()
     {
-        Debug.Log("jackpotHistory.Grand.ChipsAccum: " + jackpotHistory.Grand.ChipsAccum);
         effectContainer.gameObject.SetActive(true);
         jackpotAnimation.gameObject.SetActive(true);
         jackpotText.gameObject.SetActive(true);
@@ -1135,30 +1121,16 @@ public class SlotJuicyView : BaseSlotView
 
         if (!isInFruitRain && !isStartFruitRain)
         {
-            Debug.Log("SET LAI ON AI TAM");
             SetLightAllItems();
         }
 
         SetInfoSessionText("Press SPIN to play");
         ScatterCount = 0;
         paylineInfoContainer.gameObject.SetActive(false);
-
-        // if (isInFreeSpin)
-        // {
-        //     Debug.Log("SET ACTIVE BACJKGROUND FREE SPIN");
-        //     backgroundFreeSpinAnimation.gameObject.SetActive(true);
-        //     ShowBackGroundFreeSpin();
-        // }
-        // else
-        // {
-        //     backgroundFreeSpinAnimation.gameObject.SetActive(false);
-        //     backgroundFreeSpinLeftAnimation.gameObject.SetActive(false);
-        // }
     }
 
     public void UpdateJackpot()
     {
-        Debug.Log("INIT JACKPOT");
         if (jackpotHistory != null)
         {
             jpGrandPlayer = jackpotHistory.Grand.ChipsAccum;

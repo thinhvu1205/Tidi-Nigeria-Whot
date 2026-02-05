@@ -78,7 +78,6 @@ public class MailView : BaseView
     public void OnClickAdd()
     {
         // Handle add button click
-        Debug.Log("Add button clicked");
     }
 
     public void OnClickDelete()
@@ -125,7 +124,6 @@ public class MailView : BaseView
             ListNotification dataListNotification = await mailPresenter.GetListNotification();
             listNotification = dataListNotification.Notifications.ToList();
             checkAllButton.gameObject.SetActive(listNotification.Count > 0);
-            Debug.Log("GAME LIST: " + dataListNotification.ToString());
             foreach (Notification notification in listNotification)
             {
                 MailItem mailItem = Instantiate(mailItemPrefab, mailItemParent).GetComponent<MailItem>();
@@ -136,7 +134,6 @@ public class MailView : BaseView
         }
         catch (Exception ex)
         {
-            Debug.Log("err load list noti : " + ex.Message);
         }
     }
     #endregion

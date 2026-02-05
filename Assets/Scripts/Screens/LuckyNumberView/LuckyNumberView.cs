@@ -100,7 +100,6 @@ public class LuckyNumberView : BaseView
             
             for (int i = 0; i < count; i++)
             {
-                Debug.Log("gege" + sortedTopWinners[i]);
                 var winner = sortedTopWinners[i];
 
                 var item = Instantiate(luckyNumberWinnerItemPrefab, winnerItemParent);
@@ -198,18 +197,15 @@ public class LuckyNumberView : BaseView
 
     public void OnChooseDraw(LuckyNumberItemDraw item)
     {
-        Debug.Log("OnChooseDraw");
         if (!item.isInteractable) return;
         if (item.isSelected)
         {
-            Debug.Log("CHON ITEM CU");
             selectedDrawId = 0;
             buttonConfirmDraw.interactable = false;
             ResetDraw();
         }
         else
         {
-            Debug.Log("CHON ITEM MOI");
             selectedDrawId = item.id;
             buttonConfirmDraw.interactable = true;
             foreach(LuckyNumberItemDraw otherItem in listLuckyNumberItemDraw)

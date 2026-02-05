@@ -111,7 +111,6 @@ public class BaseGameView : BaseView
 
     public virtual async UniTask HandleUpdateKickOffTheTable(IMatchState matchState)
     {
-        Debug.Log("kick off the table base view " );
         if (UIManager.Instance.gameView == null) return;
         Destroy(UIManager.Instance.gameView.gameObject);
         UIManager.Instance.gameView = null;

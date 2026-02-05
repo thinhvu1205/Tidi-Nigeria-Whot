@@ -33,14 +33,6 @@ public class BannerView : BaseView
         if (!gameObject.activeInHierarchy) return;
         bool isClose = data.Data.Params["isClose"] == "true" ? true : false;
         List<ButtonData> listButton = JsonConvert.DeserializeObject<List<ButtonData>>(data.Data.Params["listButton"]);
-        if (listButton.Count > 0)
-        {
-            Debug.Log("Count: " + listButton.Count); // 1
-            Debug.Log("urlButton: " + listButton[0].urlButton);
-            Debug.Log("x: " + listButton[0].pos.x);
-            Debug.Log("y: " + listButton[0].pos.y);
-
-        }
         // Image
         imageBanner.sprite = sprite;
         imageBanner.SetNativeSize();

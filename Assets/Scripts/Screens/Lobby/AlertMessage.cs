@@ -100,7 +100,7 @@ public class AlertMessage : Singleton<AlertMessage>, IPointerClickHandler
     {
         if (textAlert == null || rectTfParent == null)
         {
-            Debug.LogWarning("AlertMessage: textAlert or rectTfParent is null");
+            // Debug.LogWarning("AlertMessage: textAlert or rectTfParent is null");
             return;
         }
 
@@ -139,7 +139,7 @@ public class AlertMessage : Singleton<AlertMessage>, IPointerClickHandler
             });
         });
 
-        Debug.Log($"Announcement Ticker displayed with animation: {content}");
+        // Debug.Log($"Announcement Ticker displayed with animation: {content}");
     }
 
     /// <summary>
@@ -166,11 +166,11 @@ public class AlertMessage : Singleton<AlertMessage>, IPointerClickHandler
         try
         {
             ListInAppMessage listInAppMessage = await lobbyPresenter.GetAnnouncementTicker();
-            Debug.Log("GetAnnouncementTicker " + listInAppMessage);
+            // Debug.Log("GetAnnouncementTicker " + listInAppMessage);
             
             if (User.userProfile == null)
             {
-                Debug.LogWarning("User profile is null, cannot filter announcement ticker");
+                // Debug.LogWarning("User profile is null, cannot filter announcement ticker");
                 return;
             }
 
@@ -179,7 +179,7 @@ public class AlertMessage : Singleton<AlertMessage>, IPointerClickHandler
             
             if (validAnnouncements.Count > 0)
             {
-                Debug.Log($"Found {validAnnouncements.Count} valid announcement tickers (server already sorted by priority)");
+                // Debug.Log($"Found {validAnnouncements.Count} valid announcement tickers (server already sorted by priority)");
                 
                 // Clear queue và thêm tất cả valid announcements
                 announcementTickerQueue.Clear();
@@ -222,7 +222,7 @@ public class AlertMessage : Singleton<AlertMessage>, IPointerClickHandler
                 {
                     if (userVipLevel < vipMin)
                     {
-                        Debug.Log($"Announcement {inAppMessage.Id} VIP too low (required: {vipMin}, user: {userVipLevel})");
+                        // Debug.Log($"Announcement {inAppMessage.Id} VIP too low (required: {vipMin}, user: {userVipLevel})");
                         isVipValid = false;
                     }
                 }
@@ -232,7 +232,7 @@ public class AlertMessage : Singleton<AlertMessage>, IPointerClickHandler
                 {
                     if (userVipLevel > vipMax)
                     {
-                        Debug.Log($"Announcement {inAppMessage.Id} VIP too high (required: {vipMax}, user: {userVipLevel})");
+                        // Debug.Log($"Announcement {inAppMessage.Id} VIP too high (required: {vipMax}, user: {userVipLevel})");
                         isVipValid = false;
                     }
                 }
@@ -241,7 +241,7 @@ public class AlertMessage : Singleton<AlertMessage>, IPointerClickHandler
             if (isVipValid)
             {
                 validAnnouncements.Add(inAppMessage);
-                Debug.Log($"Valid Announcement Ticker: ID={inAppMessage.Id}, Content={inAppMessage.Data?.Params?.GetValueOrDefault("content", "N/A")}");
+                // Debug.Log($"Valid Announcement Ticker: ID={inAppMessage.Id}, Content={inAppMessage.Data?.Params?.GetValueOrDefault("content", "N/A")}");
             }
         }
         

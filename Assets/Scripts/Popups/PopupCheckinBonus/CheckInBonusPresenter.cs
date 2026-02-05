@@ -19,7 +19,6 @@ public class CheckInBonusPresenter
         try
         {
             DailyRewardTemplate dailyReward = await DataSender.GetDailyRewardTemplate();
-            Debug.Log("DAILY ƯREWARD: " + dailyReward);
             return dailyReward;
         }
         catch (Exception e)
@@ -36,7 +35,6 @@ public class CheckInBonusPresenter
         try
         {
             Reward reward = await DataSender.GetClaimableDailyReward();
-            Debug.Log("reward " + reward);
             if (reward.CanClaim && reward.DeviceAllowed)
             {
                 return reward;
@@ -53,7 +51,6 @@ public class CheckInBonusPresenter
 
     public async UniTask<Reward> ClaimDailyReward()
     {
-        Debug.Log("SEND CLAIM DAILY REWARD");
         UIManager.Instance.ShowProgressing();
         try
         {
@@ -90,7 +87,6 @@ public class CheckInBonusPresenter
         try
         {
             Reward reward = await DataSender.GetClaimableWeeklyReward();
-            Debug.Log("reward " + reward);
             // if (reward.CanClaim && reward.DeviceAllowed)
             // {
             //     return reward;
@@ -107,7 +103,6 @@ public class CheckInBonusPresenter
 
     public async UniTask<Reward> ClaimWeeklyReward()
     {
-        Debug.Log("SEND CLAIM DAILY REWARD");
         UIManager.Instance.ShowProgressing();
         try
         {

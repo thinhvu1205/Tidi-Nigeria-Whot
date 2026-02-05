@@ -49,7 +49,6 @@ public class LuckyDrawItem : MonoBehaviour
                 break;
         }
         string animationName = animationNormal + typeAnim;
-        Debug.Log("ANIMATION NAME: " + animationName);
         Utility.PlayAnimation(spine, animationName, true);
 
         if (typeItem == (int)SiXiangLuckyDrawView.JackpotType.NORMAL && item.WinAmount > 0)
@@ -133,7 +132,6 @@ public class LuckyDrawItem : MonoBehaviour
             {
                 animationName = animationNormal + typeAnim;
             }
-            Debug.Log("ANIMATION NAME FINISH: " + animationName);
 
             DOTween.Sequence()
                 .AppendInterval(timeDelayAnim / 2)

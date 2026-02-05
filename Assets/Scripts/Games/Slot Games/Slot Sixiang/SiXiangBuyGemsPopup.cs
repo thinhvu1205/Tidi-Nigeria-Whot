@@ -37,7 +37,6 @@ public class SiXiangBuyGemsPopup : BaseView
             {
                 Id = GemIndexDictionary[typeGameBonus],
             };
-            Debug.Log("TYPEGAMEBONUS: " + typeGameBonus);
             DataSender.SendMatchState((long)OpCodeRequest.BuySixiangGem, infoBet.ToByteArray());
             
 

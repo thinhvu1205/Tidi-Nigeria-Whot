@@ -52,11 +52,6 @@ public class TextNumberControl : MonoBehaviour
     {
         callback = cb;
         long startNumber = number;
-        if (msg != "")
-        {
-            Debug.Log(msg + value);
-            Debug.Log(msg + "StartNUmber:" + startNumber);
-        }
         if (value == number)
         {
             isRun = false;

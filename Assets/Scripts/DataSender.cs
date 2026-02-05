@@ -67,6 +67,9 @@ public class DataSender
     public const string TRIGGER_DRAW = "trigger_draw";
     public const string VIP_FARM_PROGRESS = "vip-farm-progress";
     public const string VIP_FARM_CLAIM = "vip-farm-claim";
+    public const string LIST_FRIEND = "friend_list";
+    public const string ADD_FRIEND = "friend_add";
+    public const string DELETE_FRIEND = "friend_delete";
     #endregion
     
     #region ConvertProtobuf
@@ -392,19 +395,10 @@ public class DataSender
 
     #region Friends
     
-    public static void GetListFriends(int state = 0, int limit = 100, string cursor = "", Action<IApiFriendList> handleCB = null)
+    public static async UniTask<FriendListResponse> GetListFriends()
     {
-        NetworkManager.INSTANCE.GetListFriends(state, limit, cursor, handleCB);
-    }
-    
-    public static void FindFriendsWithIds(List<string> ids = null, List<string> names = null, Action<IApiUsers> handleCb = null)
-    {
-        NetworkManager.INSTANCE.GetUsersWithIds(ids, names, handleCb);
-    }
-    
-    public static void SendFriendRequestToId(string userId, Action handleCb = null)
-    {
-        NetworkManager.INSTANCE.AddFriend(userId, handleCb);
+        var response = await NetworkManager.INSTANCE.RPCSend(LIST_FRIEND);
+        return DecodeFromJson<FriendListResponse>(response.Payload);
     }
     
     #endregion

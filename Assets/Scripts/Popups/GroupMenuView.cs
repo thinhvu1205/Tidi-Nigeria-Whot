@@ -68,7 +68,6 @@ public class GroupMenuView : BaseView
     {
         Hide();
         string curGameId = Constants.LobbyIdFromCode[Config.currentGameId];
-        Debug.Log("curGameId: " + curGameId);
         string urlRule = Config.ruleLink.Replace("%gameid%", curGameId + "");
         //var langLocal = cc.sys.localStorage.getItem("language_client");
         //var language = langLocal == LANGUAGE_TEXT_CONFIG.LANG_EN ? "en" : "thai"

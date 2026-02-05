@@ -62,7 +62,6 @@ public class SelectTableView : BaseView
         Bets bets = await selectTablePresenter.GetListBet(Config.currentGameId);
         UIManager.Instance.HideProgressing();
         betItemList = bets.Bets_.ToList();
-        Debug.Log("List bet game : " + bets.ToString());
         LoadListBetItem();
     }
 
@@ -77,7 +76,6 @@ public class SelectTableView : BaseView
             return;
         }
 
-        Debug.Log("Find match response: " + response.ToString());
         matchList = response.Matches.ToList();
         LoadListTableItem();
     }
@@ -93,7 +91,6 @@ public class SelectTableView : BaseView
             return;
         }
 
-        Debug.Log("Find match response: " + response.ToString());
         matchList = response.Matches.ToList();
         LoadListTableItem();
     }
@@ -133,7 +130,6 @@ public class SelectTableView : BaseView
         }
         for (int i = 0; i < betItemList.Count; i++)
         {
-            Debug.Log("Bet item: " + betItemList[i].ToString());
             int index = i;
             // Instantiate bet item
             if (betItemList[i].BetDisableType == BetDisableType.AboveMaxVip || betItemList[i].BetDisableType == BetDisableType.BelowMinVip
@@ -149,7 +145,6 @@ public class SelectTableView : BaseView
 
     private void LoadListTableTab()
     {
-        Debug.Log("YOO");
         foreach (Transform transform in tabItemParent)
         {
             Destroy(transform.gameObject);

@@ -23,7 +23,6 @@ public class ChatWorldView : BaseView
     private bool ignoreScrollEvent;
     private ChatWorldPresenter chatWorldPresenter;
     private List<PoolInfo> listPoolInfo = new();
-    private List<IApiChannelMessage> listMessage = new();
 
     protected override void Awake()
     {
@@ -107,7 +106,6 @@ public class ChatWorldView : BaseView
 
     private void OnReachTop()
     {
-        Debug.Log("REACH TOP");
         if (!string.IsNullOrEmpty(nextCursor) && nextCursor != prevCursor)
         {
             _ = GetHistory(nextCursor);  
@@ -115,7 +113,6 @@ public class ChatWorldView : BaseView
     }
     private void OnReachBottom()
     {
-        Debug.Log("REACH BOTTOM");
         // if (!string.IsNullOrEmpty(prevCursor) && nextCursor != prevCursor)
         // {
         //     _ = GetHistory(prevCursor);  
@@ -127,7 +124,6 @@ public class ChatWorldView : BaseView
     //     ignoreScrollEvent = true;
     //     isAtTop = true;
     //     listMessage = await chatWorldPresenter.GetWorldChatHistory(cursor);
-    //     Debug.Log("HISTORY RESULT: " + listMessage);
     //     if (listMessage.Count > 0)
     //     {
     //         // listPoolInfo.Clear(); // Clear list hiện tại
@@ -156,8 +152,6 @@ public class ChatWorldView : BaseView
             ignoreScrollEvent = false;
             return;
         }
-
-        Debug.Log($"Loaded {olderMessages.Count} older messages");
 
         // Ghi lại thông tin trước khi thêm (có thể không cần nữa, nhưng giữ để debug)
         float contentYBefore = verticalPoolGroup._DataSR.content.localPosition.y;
@@ -192,7 +186,6 @@ public class ChatWorldView : BaseView
 
         // LocalYBot của item cuối batch mới (đây là điểm dưới cùng của item đó)
         float targetBottomY = lastAddedInfo.LocalYBot;
-        Debug.Log("TARGET BOTTOM Y: " + targetBottomY);
         // Để item này nằm sát bottom viewport → content phải dịch sao cho:
         // content.localPosition.y + targetBottomY = -viewportHeight
         // → content.localPosition.y = -viewportHeight - targetBottomY
@@ -205,9 +198,7 @@ public class ChatWorldView : BaseView
         float maxY = 1000f;
         float contentHeight = verticalPoolGroup._DataSR.content.sizeDelta.y;
         float minY = -(contentHeight - viewportHeight);
-        Debug.Log("TARGET BOTTOM Y1: " + targetY);
         // targetY = Mathf.Clamp(targetY, minY, maxY);
-        Debug.Log("TARGET BOTTOM Y2: " + targetY);
 
         // Áp dụng vị trí
         verticalPoolGroup._DataSR.content.localPosition = new Vector2(0, targetY);
@@ -232,7 +223,6 @@ public class ChatWorldView : BaseView
 
     public void OnClickSendMessage()
     {
-        Debug.Log("OnClickSendMessage");
         if (!FeatureManager.IsFeatureAllowed(FeatureName.FeatureChatWorld))
         {
             UIManager.Instance.ShowAlertDialog("Chat World is currently unavailable. Please upgrade to VIP 2 or higher, or try again later.", null, transform);

@@ -118,7 +118,7 @@ public class LobbyView : BaseView
     {
         if (User.userProfile.PlayingMatch.MatchId != "")
         {
-            Debug.Log($"Joining match with ID: {User.userProfile.PlayingMatch.MatchId}");
+            // Debug.Log($"Joining match with ID: {User.userProfile.PlayingMatch.MatchId}");
             var labelMatch = await DataSender.JoinMatch(User.userProfile.PlayingMatch.MatchId);
             if (labelMatch != null)
             {
@@ -209,11 +209,9 @@ public class LobbyView : BaseView
             UIManager.Instance.HideProgressing();
             gameList = gameListResponse.Games.ToList();
             DOVirtual.DelayedCall(0f, () => UpdateUIListGame());
-            Debug.Log("GAME LIST: " + gameListResponse.ToString());
         }
         catch (Exception ex)
         {
-            Debug.Log("err load list game : " + ex.Message);
             // throw;
         }
     }
@@ -440,6 +438,7 @@ public class LobbyView : BaseView
     public void OnClickSendGift() => UIManager.Instance.OpenSendGift();
     public void OnClickSupport() => UIManager.Instance.OpenSupport();
     public void OnClickVipFarm() => UIManager.Instance.OpenVipFarm();
+    public void OnClickSocialHub() => UIManager.Instance.OpenSocialHub();
     public void OnClickTimeScale()
     {
         if (Time.timeScale == 1)
@@ -490,7 +489,6 @@ public class LobbyView : BaseView
     private ChatPayload ConvertToChatPayload(IApiChannelMessage message)
     {
         ContentData data = JsonUtility.FromJson<ContentData>(message.Content);
-        Debug.Log("SENDER AVATAR:" + data.sender_profile.avt);
         ChatPayload chatPayload = new()
         {
             ID = message.SenderId,

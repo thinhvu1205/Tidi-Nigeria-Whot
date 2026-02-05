@@ -205,7 +205,6 @@ public class WhotPlayerHand : MonoBehaviour
     #region Events
     public void WhotGame_OnNextTurn(WhotView.OnNextTurnEventArg e)
     {
-        Debug.Log("IS SECOND TURNL: " + e.isSecondTurn);
         if (e.playerTurn == whotGame.GetCurrentPlayer().Id)
         {
             List<WhotCardModel> listCard;

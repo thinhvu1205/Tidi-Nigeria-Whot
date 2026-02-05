@@ -32,27 +32,21 @@ public class WhotSuitPicker : MonoBehaviour
         switch (cardSuit)
         {
             case WhotCardSuit.WhotSuitCircle:
-                Debug.Log("Picked Circle Suit");
                 circleLightImage.gameObject.SetActive(true);
                 break;
             case WhotCardSuit.WhotSuitTriangle:
-                Debug.Log("Picked Triangle Suit");
                 triangleLightImage.gameObject.SetActive(true);
                 break;
             case WhotCardSuit.WhotSuitCross:
-                Debug.Log("Picked Cross Suit");
                 crossLightImage.gameObject.SetActive(true);
                 break;
             case WhotCardSuit.WhotSuitStar:
-                Debug.Log("Picked Star Suit");
                 starLightImage.gameObject.SetActive(true);
                 break;
             case WhotCardSuit.WhotSuitSquare:
-                Debug.Log("Picked Square Suit");
                 squareLightImage.gameObject.SetActive(true);
                 break;
             default:
-                Debug.Log("Picked Unspecified Suit (Whot)");
                 break;
         }
         transform.DOScale(Vector3.zero, HIDE_ANIMATION_TIME).SetEase(Ease.InBack).OnComplete(() =>

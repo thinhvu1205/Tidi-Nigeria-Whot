@@ -68,7 +68,6 @@ public class TableItem : MonoBehaviour
 
     private async UniTask JoinMatch(string matchId, string passWord = "")
     {
-        Debug.Log("TRY JOIN MATCH: " + matchId);
         var labelMatch = await DataSender.JoinMatch(matchId, passWord);
         if (labelMatch != null)
         {

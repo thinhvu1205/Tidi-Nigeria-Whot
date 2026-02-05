@@ -163,7 +163,6 @@ public class ChatItem : MonoBehaviour
     }
     public async void HandleClickPlayAudio()
     {
-        Debug.Log("OnClickPlayAudio");
    
         // Dừng thằng đang phát nếu khác mình
         if (currentlyPlayingItem != null && currentlyPlayingItem != this)
@@ -219,7 +218,6 @@ public class ChatItem : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError("DoClickAudio error: " + ex.Message);
             // an toàn: reset trạng thái
             StopPlaybackAndReset();
         }
@@ -237,7 +235,6 @@ public class ChatItem : MonoBehaviour
 
         if (unityWebRequest.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError($"Voice download failed: {unityWebRequest.error}");
             return null;
         }
 
@@ -245,10 +242,8 @@ public class ChatItem : MonoBehaviour
         int totalSamples = voiceBytes.Length / 4;
         if (totalSamples <= 0) return null;
         float[] samples = new float[totalSamples];
-        Debug.Log("xem lúc mới trả về" + samples.Length / 48000);
         Buffer.BlockCopy(voiceBytes, 0, samples, 0, voiceBytes.Length);
         AudioClip aAC = AudioClip.Create("AudioClip", samples.Length, 1, 16000, false);
-        Debug.Log("xem lúc mới trả về sau này" + AudioSettings.outputSampleRate);
         aAC.SetData(samples, 0);
         CreateAudioVisual(samples);
         return aAC;

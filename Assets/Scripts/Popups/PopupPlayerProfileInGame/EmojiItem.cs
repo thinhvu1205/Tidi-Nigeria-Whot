@@ -37,7 +37,6 @@ public class EmojiItem : MonoBehaviour
                     skeletonGraphic.transform.localScale = Vector3.one * 0.35f;
                 }
                 string animPath = EMOJI_PATH.Replace("%id", "e" + emojiId);
-                Debug.Log("ANIM PATH: " + animPath);
                 Utility.PlayAnimationByPath(skeletonGraphic, animPath, "animation", true);
             })
             .AppendInterval(3f)
@@ -57,7 +56,6 @@ public class EmojiItem : MonoBehaviour
         {
             image.gameObject.SetActive(false);
             string animPath = CHAT_ACTION_PATH.Replace("%name", listAnimationName[emojiId]);
-                Debug.Log("ANIM PATH: " + animPath);
             Utility.PlayAnimationByPath(skeletonGraphic, animPath, "animation", true);
             // skeletonGraphic.gameObject.SetActive(true);
             // skeletonGraphic.skeletonDataAsset = listAnimation[emojiId];

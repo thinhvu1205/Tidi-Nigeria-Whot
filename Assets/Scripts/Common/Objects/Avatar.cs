@@ -134,7 +134,6 @@ namespace Common.Objects
                     avtLink = avtLink.Replace("%token%", Globals.User.AccessToken);
                 }
 
-                Debug.Log("loadAvatarAsync avtLink  " + avtLink);
                 if (this != null && imageAvatar != null)
                 {
                     imageAvatar.sprite = await Globals.Config.GetRemoteSprite(avtLink);
@@ -211,7 +210,6 @@ namespace Common.Objects
 
         public async UniTask setSpriteWithID2(int idAva)
         {
-            Debug.Log("-=-= before yield");
             await UniTask.Yield(); // Chờ 1 frame hoặc move sang async context
             SetSpriteFrame(UIManager.Instance.avatarAtlas.GetSprite("avatar_" + idAva));
             avatarIndex = idAva;

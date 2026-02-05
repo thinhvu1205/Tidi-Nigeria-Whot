@@ -49,7 +49,6 @@ public class SlotTarzanMiniGameView : BaseView
     {
         if (PickLeft > 0 && CanClick)
         {
-            Debug.Log("CLICK ITEM");
             if (!item.IsOpen)
             {
                 PickLeft--;
@@ -98,7 +97,6 @@ public class SlotTarzanMiniGameView : BaseView
             {
                 if (!item.IsOpen)
                 {
-                    Debug.Log("OPEN ITEM INDEX: " + i);
                     item.ShowResult(spinSymbol.Symbol, spinSymbol.WinAmount);
                 }
 

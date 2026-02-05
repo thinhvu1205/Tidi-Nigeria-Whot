@@ -1,0 +1,74 @@
+syntax = "proto3";
+package proto;
+
+option go_package = "github.com/nk-nigeria/cgp-common/proto";
+
+// ----- Friend RPC -----
+
+// friend_add request
+message FriendAddRequest {
+  repeated string ids = 1;       // user_id cần thêm bạn
+  repeated string usernames = 2;
+}
+
+// friend_add / friend_delete / friend_set_level response
+message FriendOkResponse {
+  bool ok = 1;
+}
+
+// friend_delete request
+message FriendDeleteRequest {
+  repeated string ids = 1;
+  repeated string usernames = 2;
+}
+
+// Trạng thái quan hệ bạn (Nakama Friend state). Giá trị số trùng với API.
+enum FriendState {
+  FRIEND_STATE_FRIEND = 0;           // đã là bạn 2 chiều
+  FRIEND_STATE_INVITE_SENT = 1;      // mình đã gửi lời mời
+  FRIEND_STATE_INVITE_RECEIVED = 2;  // bên kia gửi lời mời
+  FRIEND_STATE_BLOCKED = 3;
+}
+
+// Cấp độ bạn (Total / Close / Best / Soulmate). Giá trị số trùng với API.
+enum FriendLevel {
+  FRIEND_LEVEL_TOTAL = 0;     // Total Friend
+  FRIEND_LEVEL_CLOSE = 1;     // Close Friend
+  FRIEND_LEVEL_BEST = 2;      // Best Friend
+  FRIEND_LEVEL_SOULMATE = 3;  // Soulmate
+}
+
+// Một item trong danh sách bạn (friend_list response)
+message FriendListItem {
+  string user_id = 1;
+  string username = 2;
+  int32 state = 3;       // FriendState: 0=FRIEND, 1=INVITE_SENT, 2=INVITE_RECEIVED, 3=BLOCKED
+  int32 level = 4;       // FriendLevel: 0=Total, 1=Close, 2=Best, 3=Soulmate
+  int64 update_time = 5;
+}
+
+// friend_list request
+message FriendListRequest {
+  int32 limit = 1;
+  optional int32 state = 2;  // filter theo state (0/1/2/3), không gửi = lấy tất cả
+}
+
+// friend_list response
+message FriendListResponse {
+  repeated FriendListItem friends = 1;
+}
+
+// get_friend_config response
+message FriendConfig {
+  int32 max_friends = 1;
+  int32 rate_limit_per_min = 2;
+  int32 max_ids_per_request = 3;
+  int32 default_friend_list_limit = 4;
+  int32 max_friend_list_limit = 5;
+}
+
+// friend_set_level request
+message FriendSetLevelRequest {
+  string friend_id = 1;
+  int32 level = 2;  // 0=Total, 1=Close, 2=Best, 3=Soulmate
+}

@@ -93,7 +93,6 @@ public class ChatInGameView : BaseView
             try
             {
                 byte[] voiceBytes = microphoneRecorder.GetBytes();
-                Debug.Log($"Voice byte length: {voiceBytes.Length}");
 
                 long timeNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 string fileName = $"voice_{User.userProfile.UserName}_{timeNow}.mp3";
@@ -137,15 +136,8 @@ public class ChatInGameView : BaseView
     private void NetworkManager_OnMessageTableReceived(IApiChannelMessage message)
     {
         ChatPayload chatPayload = ConvertToChatPayload(message);
-        Debug.Log("chatPayload.Content: " + chatPayload.Content);
-        Debug.Log("chatPayload.IsAudio: " + chatPayload.IsAudio);
-        Debug.Log("chatPayload.Name: " + chatPayload.Name);
-        Debug.Log("chatPayload.Time: " + chatPayload.Time);
-        Debug.Log("chatPayload.Avatar: " + chatPayload.Avatar);
-        Debug.Log("chatPayload.Vip: " + chatPayload.Vip);
         if (!string.IsNullOrEmpty(chatPayload.Content))
         {
-        Debug.Log("NHAN DUOC TIN NHAN");
             listPoolInfo.Add(new PoolInfo { Data = chatPayload });
             verticalPoolGroup.SetControlInfo(listPoolInfo, listPoolInfo.Count - 1);
 
@@ -273,7 +265,6 @@ public class ChatInGameView : BaseView
         }
 
         byte[] voiceBytes = unityWebRequest.downloadHandler.data;
-        Debug.Log($"Downloaded voice bytes: {voiceBytes.Length}"); 
     }
 
 

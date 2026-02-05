@@ -54,7 +54,6 @@ public class RapidPayRow : MonoBehaviour
         {
             btn.interactable = false;
         });
-        Debug.Log("SEND BUTTON INDEX: " + (listButtonItem.Count - 1 - listButtonItem.IndexOf(btn)));
         InfoBet infoBet = new()
         {
             ReqSpecGame = (int)SiXiangGame.Rapidpay,
@@ -70,7 +69,6 @@ public class RapidPayRow : MonoBehaviour
         int[] listIndexThisRow = listResultIndex[indexRow];
         foreach(int index in listIndexThisRow)
         {
-            Debug.Log("Index: " + index);
             if (matrix[index] == SiXiangSymbol.RapidpayLuckybox || matrix[index] == SiXiangSymbol.Unspecified) return;
             listButtonItem.ForEach((btn) =>
             {
@@ -80,7 +78,6 @@ public class RapidPayRow : MonoBehaviour
 
         for (int i = 0; i < listButtonItem.Count; i++)
         {
-            Debug.Log("YO VAO ĐÂY ĐI");
             SkeletonGraphic spineItemCurrent = listButtonItem[i].GetComponentInChildren<SkeletonGraphic>();
             spineItemCurrent.color = Color.gray;
             SiXiangSymbol symbol = matrix[listIndexThisRow[i]];
@@ -107,7 +104,6 @@ public class RapidPayRow : MonoBehaviour
         {
             return;
         }
-        Debug.Log("SET RESULT");
         SpinSymbol item = data.SpinSymbols[0];
         List<SiXiangSymbol> matrix = data.Matrix.Lists.ToList();
         // int indexAnimOpen = 0;

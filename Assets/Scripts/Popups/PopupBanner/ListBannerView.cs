@@ -65,7 +65,6 @@ public class ListBannerView : BaseView
 
     public async UniTask GetBannerData(TypeInAppMessage type)
     {
-        Debug.Log("TYPE: " + type);
         ListInAppMessage response = await bannerPresenter.GetBanner(typeInAppMessage: type);
         List<InAppMessage> listData = response.InAppMessages.ToList();
         Sprite firstSprite = null, lastSprite = null;
@@ -96,7 +95,6 @@ public class ListBannerView : BaseView
             // )
             {
                 string urlImg = data.Data.Params["images"];
-                Debug.Log("URL IMG: " + urlImg);
                 Sprite sprite = await Config.GetRemoteSprite(urlImg);
                 if (sprite == null) return;
                 RectTransform gameObject = Instantiate(transformBanner, scrollRect.content);
@@ -106,7 +104,6 @@ public class ListBannerView : BaseView
                 nodeBanner.transform.localScale = Vector3.one;
                 await nodeBanner.SetInfo(data, sprite);
                 listBannerView.Add(nodeBanner);
-                Debug.Log("CO VAO DAY K NHI");
                 if (firstSprite == null && firstBannerData == null)
                 {
                     firstSprite = sprite;
@@ -118,7 +115,6 @@ public class ListBannerView : BaseView
                 dot.SetActive(true);
             }
         }
-        Debug.Log("BANNER DATA: " + listData.ToString());
 
         if (listBannerView.Count <= 0) return;
         if (listBannerView.Count > 1)
@@ -131,8 +127,6 @@ public class ListBannerView : BaseView
             cloneLastTf.localScale = Vector3.one;
             BannerView cloneFirstBV = cloneFirstTf.GetChild(0).GetComponent<BannerView>();
             cloneFirstBV.transform.localScale = Vector3.one;
-            Debug.Log("FIRST SPRITE: " + firstSprite);
-            Debug.Log("LAST SPRITE: " + lastSprite);
             await cloneFirstBV.SetInfo(firstBannerData, firstSprite);
             cloneFirstTf.SetAsLastSibling();
             BannerView cloneLastBV = cloneLastTf.GetChild(0).GetComponent<BannerView>();
@@ -271,7 +265,6 @@ public class ListBannerView : BaseView
 
     private Vector2 FindNearestBannerLocalPosition()
     {
-        Debug.Log("ALOOOOO");
         RectTransform contentRT = scrollRect.content, viewportRT = scrollRect.viewport;
         Vector2 returnedV2 = new();
         float minDistance = float.MaxValue;

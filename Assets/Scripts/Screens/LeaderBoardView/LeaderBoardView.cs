@@ -82,7 +82,6 @@ public class LeaderBoardView : BaseView
         try
         {
             GameListResponse gameListResponse = await leaderboardPresenter.LoadGameList();
-            Debug.Log("Game List : " + gameListResponse.ToString());
             gameList = gameListResponse.Games.ToList();
             UpdateUIListGame();
         }
@@ -95,8 +94,6 @@ public class LeaderBoardView : BaseView
 
     private async UniTask LoadListLeaderBoard()
     {
-        Debug.Log("get list record game "+ currentTabGameCode);
-
         IApiLeaderboardRecordList apiLeaderboardRecordList = await leaderboardPresenter.LoadList(currentTabGameCode, User.userProfile.UserId);
         
         currentUserRecord = apiLeaderboardRecordList.OwnerRecords.FirstOrDefault();
@@ -180,8 +177,6 @@ public class LeaderBoardView : BaseView
                 avatarId = User.userProfile.AvatarId;
             }
             long vipLevel = json["vip_level"]?.Value<long>() ?? 0;
-            Debug.Log("avatarID " + avatarId + ", viplevel: " + vipLevel);
-            Debug.Log("Rank " + record.Rank + ", name: " + record.Username + ", score: " + record.Score);
             LeaderBoardItem leaderBoardItem = Instantiate(leaderBoardItemPrefab, leaderBoardItemParent).GetComponent<LeaderBoardItem>();
             leaderBoardItem.SetData(record.Rank, record.Username, record.Score, avatarId, vipLevel);
             listLeaderboardItem.Add(leaderBoardItem);
@@ -193,7 +188,6 @@ public class LeaderBoardView : BaseView
 
     private void LeaderBoardTab_OnTabClicked(object sender, OnTabClickedEventArgs e)
     {
-                Debug.Log("OnClickTab: " + e.gameCode, this);
         selectedTab = sender as LeaderBoardTab;
         if (currentTabGameCode == e.gameCode)
         {

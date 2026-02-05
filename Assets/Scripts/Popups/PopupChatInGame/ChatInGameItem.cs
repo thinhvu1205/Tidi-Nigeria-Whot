@@ -43,7 +43,6 @@ public class ChatInGameItem : MonoBehaviour
                 rectTransformOtherPlayer.sizeDelta = new Vector2(MAX_WIDTH, rectTransformOtherPlayer.sizeDelta.y);
                 // imageNarrow.position = new Vector2(imageNarrow.position.x, imageNarrow.position.y - 30f);
             }
-            Debug.Log("TEXT HEIGHT:" + textHeight);
             // else if (textWidth + 30 < 300)
             // {
             //     rectTransform.sizeDelta = new Vector2(textWidth + 30, rectTransform.sizeDelta.y);

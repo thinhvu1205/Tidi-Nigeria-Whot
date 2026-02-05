@@ -61,7 +61,6 @@ public class HistoryBaccarat_BigEye : MonoBehaviour
 
             }
         }
-        Debug.Log("historyArray size=" + historyArray.Length);
         //vt smallroad
         //historySmallRoad = new Array(6);
         //for (let i = 0; i < historySmallRoad.length; i++)
@@ -347,7 +346,6 @@ public class HistoryBaccarat_BigEye : MonoBehaviour
             HISTORY_LAST_RESULT_ROW = 0;
             HISTORY_LAST_RESULT_COL = 0;
             HISTORY_LAST_VALUE = result;
-            Debug.Log("historyArray size=" + historyArray.Length);
             historyArray[HISTORY_LAST_RESULT_ROW][HISTORY_LAST_RESULT_COL] = 1;
 
         }

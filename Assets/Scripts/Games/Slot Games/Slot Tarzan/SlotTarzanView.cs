@@ -219,7 +219,7 @@ public class SlotTarzanView : BaseSlotView
     public override void HandleUpdateTable(IMatchState matchState)
     {
         SlotDesk data = SlotDesk.Parser.ParseFrom(matchState.State);
-        Debug.Log("Slot : " + data.ToString());
+        // Debug.Log("Slot : " + data.ToString());
         if (!hasSetupStartView)
         {
             UIManager.Instance.HideProgressing();
@@ -405,7 +405,6 @@ public class SlotTarzanView : BaseSlotView
             // Lần đầu setup Mini game Jungle
             if (data.CurrentSixiangGame == SiXiangGame.TarzanJungleTreasure)
             {
-                Debug.Log("VAO DAY K?");
                 foreach (SlotColumn column in slotColumnList)
                 {
                     column.SetRandomFinishView();
@@ -485,7 +484,6 @@ public class SlotTarzanView : BaseSlotView
         // ///------------------CHECK SHOW FREESPIN--------------------//
         if (hasGotFreeSpin && !isStartMiniGame)
         {
-            Debug.Log("GET FREE SPIN");
             tweenQueue.Enqueue(() =>
             {
                 ShowPopupGetFreeSpin();
@@ -495,7 +493,6 @@ public class SlotTarzanView : BaseSlotView
         ///------------------CHECK SHOW FIVE OF A KIND--------------------///
         if (CheckFiveOfAKind())
         {
-            Debug.Log("FIVE OF A KIND");
             tweenQueue.Enqueue(() => ShowWinAnimation(WinType.FIVE_OF_A_KIND));
         }
 
@@ -549,7 +546,6 @@ public class SlotTarzanView : BaseSlotView
         ///------------------CHECK WIN MINIGAME--------------------//
         if (isStartMiniGame)
         {
-            Debug.Log("START MINIgAME");
             hasGotFreeSpin = false;
             tweenQueue.Enqueue(() => ShowPopupMinigame());
         }
@@ -575,7 +571,6 @@ public class SlotTarzanView : BaseSlotView
             }
             if (hasGotFreeSpin)
             {
-                Debug.Log("RESET HAS GOT FREE SPIN");
                 if (spinType == SpinType.NORMAL || spinType == SpinType.AUTO)
                 {
                     spinType = SpinType.FREE_NORMAL;
@@ -883,7 +878,6 @@ public class SlotTarzanView : BaseSlotView
 
     protected override void AnimateCoinsFly(int totalCoins = 5, float timeInterval = 0.05f)
     {
-        Debug.Log("AnimateCoinsFly");
         Sequence sequence = DOTween.Sequence().SetLink(gameObject, LinkBehaviour.KillOnDestroy);;
         for (int i = 0; i < totalCoins; i++)
         {
@@ -1094,7 +1088,6 @@ public class SlotTarzanView : BaseSlotView
     }
     private void ShowAnimationTarzan()
     {
-        Debug.Log("SHOW ANIM TARZAN");
         SetDarkAllItems();
         // tarzanAnimation.Skeleton.SetToSetupPose(); // Reset pose
         // tarzanAnimation.AnimationState.ClearTracks(); // Clear animation cũ

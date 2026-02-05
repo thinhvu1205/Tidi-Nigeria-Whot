@@ -267,7 +267,6 @@ public class WhotPlayer : MonoBehaviour
 
     public void HideCardsLeft()
     {
-        Debug.Log("HIDE CARDS LEFT");
         cardsDisplay.SetActive(false);
     }
 

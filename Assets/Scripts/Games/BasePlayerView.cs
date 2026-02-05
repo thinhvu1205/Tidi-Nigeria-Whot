@@ -283,10 +283,8 @@ public class BasePlayerView : MonoBehaviour
     /// <param name="idItem">VIP item ID from server</param>
     public void updateItemVipFromSV(int idItem)
     {
-        Debug.Log("idItem  " + idItem);
         var itemIdVip = idItem / 10;
         if (itemIdVip > 10) itemIdVip = 10;
-        Debug.Log("itemIdVip  " + itemIdVip);
 
         if (itemVip != null && itemIdVip >= 5)
         {
@@ -422,7 +420,6 @@ public class BasePlayerView : MonoBehaviour
         btnCom.onClick.RemoveAllListeners();
         btnCom.onClick.AddListener(() =>
         {
-            Debug.Log("Click avatar");
             callback();
         });
     }

@@ -209,7 +209,6 @@ public class BlackjackBoxBet : MonoBehaviour
     {
         effectContainer.gameObject.SetActive(true);
         imageState.gameObject.SetActive(false);
-        Debug.Log("WIN TYPE: " + winType);
         if (winType > 0)
         {
             Utility.PlayAnimation(animationWin, "animation", false);
@@ -274,7 +273,6 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void SetWinChipVisual(int index, long value)
     {
-        Debug.Log("CHIP WIN VALUE: " + value);
         imageChipWin.gameObject.SetActive(true);
         imageChipWin.sprite = listImageChip[index];
         textChipWinValue.gameObject.SetActive(true);
@@ -595,7 +593,6 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void ShowSecondBox()
     {
-        Debug.Log("SHOW SECOND BOX");
         secondBoxBet.gameObject.SetActive(true);
         switch (index)
         {

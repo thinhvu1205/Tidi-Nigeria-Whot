@@ -132,7 +132,6 @@ public class HongKongPokerToggleBetContainer : MonoBehaviour
     {
         if (isOn)
         {
-            Debug.Log("[HK Poker] OFF TURN - Toggle CHECK selected");
             // Uncheck other toggles
             if (toggleCheckFoldComponent != null) toggleCheckFoldComponent.isOn = false;
             if (toggleCallAnyComponent != null) toggleCallAnyComponent.isOn = false;
@@ -144,7 +143,6 @@ public class HongKongPokerToggleBetContainer : MonoBehaviour
     {
         if (isOn)
         {
-            Debug.Log("[HK Poker] OFF TURN - Toggle CHECK/FOLD selected");
             // Uncheck other toggles
             if (toggleCheckComponent != null) toggleCheckComponent.isOn = false;
             if (toggleCallAnyComponent != null) toggleCallAnyComponent.isOn = false;
@@ -156,7 +154,6 @@ public class HongKongPokerToggleBetContainer : MonoBehaviour
     {
         if (isOn)
         {
-            Debug.Log("[HK Poker] OFF TURN - Toggle CALL ANY selected");
             // Uncheck other toggles
             if (toggleCheckComponent != null) toggleCheckComponent.isOn = false;
             if (toggleCheckFoldComponent != null) toggleCheckFoldComponent.isOn = false;
@@ -168,7 +165,6 @@ public class HongKongPokerToggleBetContainer : MonoBehaviour
     {
         if (isOn)
         {
-            Debug.Log("[HK Poker] OFF TURN - Toggle CALL selected");
             UncheckOtherToggles(null, toggleCall);
         }
     }
@@ -177,7 +173,6 @@ public class HongKongPokerToggleBetContainer : MonoBehaviour
     {
         if (isOn)
         {
-            Debug.Log("[HK Poker] OFF TURN - Toggle FOLD selected");
             UncheckOtherToggles(null, null, toggleFold);
         }
     }
@@ -186,7 +181,6 @@ public class HongKongPokerToggleBetContainer : MonoBehaviour
     {
         if (isOn)
         {
-            Debug.Log("[HK Poker] OFF TURN - Toggle ALL-IN selected");
             UncheckOtherToggles(null, null, null, toggleAllIn);
         }
     }
@@ -394,7 +388,6 @@ public class HongKongPokerToggleBetContainer : MonoBehaviour
         // Reset text
         if (textToggleCall != null) textToggleCall.text = "";
         
-        Debug.Log("[HK Poker] ToggleBetContainer reset (new round)");
     }
 }
 

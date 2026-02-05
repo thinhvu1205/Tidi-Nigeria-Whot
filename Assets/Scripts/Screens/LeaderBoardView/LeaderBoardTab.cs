@@ -37,7 +37,6 @@ public class LeaderBoardTab : MonoBehaviour
 
     public void SelectTab(bool isSelected)
     {
-        Debug.Log("SelectTab: " + isSelected);
         selectedBackgroundImage.gameObject.SetActive(isSelected);
         unselectedBackgroundImage.gameObject.SetActive(!isSelected);
         nameText.color = isSelected ? Color.white : Color.gray;

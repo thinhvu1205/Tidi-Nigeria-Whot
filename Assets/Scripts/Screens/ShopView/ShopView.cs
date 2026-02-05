@@ -45,7 +45,6 @@ public class ShopView : BaseView
             DealInShop listDeal = await DataSender.GetListDeal();
             this.bestDeal = listDeal.Best;
             this.listDeal = listDeal.Gcashes.ToList();
-            Debug.Log("CHIP ONLINE LIST: " + listDeal.ToString());
             ShopItem bestDealInstance = Instantiate(shopItemPrefab, listDealContainer).GetComponent<ShopItem>();
             bestDealInstance.SetInfo(bestDeal, 0, true);
 
@@ -58,7 +57,6 @@ public class ShopView : BaseView
         }
         catch (Exception ex)
         {
-            Debug.Log("err load list noti : " + ex.Message);
         }
     }
 

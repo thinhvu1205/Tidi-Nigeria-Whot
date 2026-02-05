@@ -27,7 +27,6 @@ public class FeedbackView : BaseView
             string feedbackStr = Regex.Replace(feedbackText.text, @"\p{C}+", "").Trim();
             if (!string.IsNullOrEmpty(feedbackStr))
             {
-                Debug.Log("Sending feedback");
                 UIManager.Instance.ShowProgressing();
                 SubmitFeedbackResponse feedbackResponse = await DataSender.SubmitFeedBack(feedbackStr);
                 UIManager.Instance.HideProgressing();
@@ -44,7 +43,6 @@ public class FeedbackView : BaseView
         }
         catch (Exception e)
         {
-            Debug.LogError(e.Message);
         }
         
     }

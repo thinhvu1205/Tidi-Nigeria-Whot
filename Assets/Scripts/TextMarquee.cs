@@ -27,8 +27,6 @@ public class TextMarquee : MonoBehaviour
         float textWidth = text.preferredWidth + 20f;
 
         // Nếu text không dài hơn mask thì không animate
-        Debug.Log("textWidth: " + textWidth);
-        Debug.Log("maskWidth: " + maskWidth);
         if (textWidth - 20f <= maskWidth)
         {
             textRT.anchoredPosition = Vector2.zero;
