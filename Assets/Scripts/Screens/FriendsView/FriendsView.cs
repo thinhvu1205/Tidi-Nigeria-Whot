@@ -19,11 +19,13 @@ public class FriendsView : BaseView
     [SerializeField] private FriendNotificationView friendNotificationView;
     [SerializeField] private FriendMissionView friendMissionView;
     [SerializeField] private FriendChatView friendChatView;
+    [SerializeField] private FriendSortBox friendSortBox;
 
     [SerializeField] private FriendItem friendItemPrefab;
     [SerializeField] private Transform friendParent, bestFriendParent, closeFriendParent, soulmateParent;
     private FriendPresenter friendPresenter;
     private List<FriendListItem> listFriendItem;
+    private bool isShowingSortBox;
 
     public UnityEvent<int> OnPageIndexChanged;
 
@@ -82,6 +84,26 @@ public class FriendsView : BaseView
     #endregion
 
     #region Buttons
+    public void OnClickSortButton()
+    {
+        if (isShowingSortBox)
+            friendSortBox.Hide();
+        else
+            friendSortBox.Show();
+
+        isShowingSortBox = !isShowingSortBox;
+    }
+
+    public void OnClickDeleteButton()
+    {
+        
+    }
+
+    public void OnClickAddMoreButton()
+    {
+        
+    }
+
     public void OnClickNotification()
     {
         friendNotificationView.Show();

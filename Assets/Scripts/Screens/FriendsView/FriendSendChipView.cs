@@ -1,0 +1,4 @@
+public class FriendSendChipView : BaseView
+{
+    
+}
