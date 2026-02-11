@@ -7,15 +7,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using Avatar = Common.Objects.Avatar;
 
-public class FriendItem : MonoBehaviour
+public class FriendItemView : MonoBehaviour
 {
-    public event Action<FriendListItem> OnClickChat;
+    public event Action<FriendItem> OnClickChat;
     [SerializeField] private Avatar avatar;
     [SerializeField] private TextMeshProUGUI textInfo, textIntimacy, textOnline;
     [SerializeField] private Image imageIntimacy, imageOnline, imageCheck;
     [SerializeField] private Button buttonSendChip, buttonSt, buttonSendGift, buttonChat, buttonAccept, buttonDecline, buttonCancel;
     private bool isSelected;
-    private FriendListItem item;
+    private FriendItem itemView;
 
     private void Awake()
     {
@@ -27,7 +27,7 @@ public class FriendItem : MonoBehaviour
 
     private void OnChatClicked()
     {
-        OnClickChat?.Invoke(item);
+        OnClickChat?.Invoke(itemView);
     }
 
     private void OnEnable()
@@ -41,9 +41,9 @@ public class FriendItem : MonoBehaviour
         buttonChat.onClick.RemoveListener(OnChatClicked);
     }
 
-    public void SetInfo(FriendListItem item)
+    public void SetInfo(FriendItem itemView)
     {
-        this.item = item;
+        this.itemView = itemView;
     }
 
 }

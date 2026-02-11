@@ -16,11 +16,23 @@ public class FriendPresenter
         friendView = view;
     }
 
-    public async UniTask<FriendListResponse> GetListFriend()
+    /// <summary>
+    /// Load friend list theo tab và cursor (phân trang). Tab = FRIEND/CLOSE/BEST/SOULMATE/INVITE_SENT/INVITE_RECEIVED.
+    /// </summary>
+    public async UniTask<FriendListResponse> GetListFriend(FriendTab tab, string cursor = "")
     {
-        FriendListResponse friendListResponse = await DataSender.GetListFriends();
-        Debug.Log("friendListResponse:" + friendListResponse);
+        FriendListResponse friendListResponse = await DataSender.GetListFriends(tab, cursor);
+        if (friendListResponse != null)
+            Debug.Log($"GetListFriend tab={tab} cursor={cursor?.Length ?? 0} count={friendListResponse.Friends?.Count ?? 0} nextCursor={!string.IsNullOrEmpty(friendListResponse.NextCursor)}");
         return friendListResponse;
+    }
+
+    /// <summary>
+    /// Chỉ lấy tab counts (gọi khi vào UI Friends).
+    /// </summary>
+    public async UniTask<FriendListResponse> GetFriendTabCounts()
+    {
+        return await DataSender.GetFriendTabCounts();
     }
 
     public async UniTask SendMessage(string message)

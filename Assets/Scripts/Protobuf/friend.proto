@@ -1,74 +1,182 @@
 syntax = "proto3";
+
 package proto;
 
 option go_package = "github.com/nk-nigeria/cgp-common/proto";
 
-// ----- Friend RPC -----
-
-// friend_add request
-message FriendAddRequest {
-  repeated string ids = 1;       // user_id cần thêm bạn
-  repeated string usernames = 2;
-}
-
-// friend_add / friend_delete / friend_set_level response
-message FriendOkResponse {
-  bool ok = 1;
-}
-
-// friend_delete request
-message FriendDeleteRequest {
-  repeated string ids = 1;
-  repeated string usernames = 2;
-}
-
-// Trạng thái quan hệ bạn (Nakama Friend state). Giá trị số trùng với API.
 enum FriendState {
-  FRIEND_STATE_FRIEND = 0;           // đã là bạn 2 chiều
-  FRIEND_STATE_INVITE_SENT = 1;      // mình đã gửi lời mời
-  FRIEND_STATE_INVITE_RECEIVED = 2;  // bên kia gửi lời mời
+  FRIEND_STATE_FRIEND = 0;
+  FRIEND_STATE_INVITE_SENT = 1;
+  FRIEND_STATE_INVITE_RECEIVED = 2;
   FRIEND_STATE_BLOCKED = 3;
 }
 
-// Cấp độ bạn (Total / Close / Best / Soulmate). Giá trị số trùng với API.
-enum FriendLevel {
-  FRIEND_LEVEL_TOTAL = 0;     // Total Friend
-  FRIEND_LEVEL_CLOSE = 1;     // Close Friend
-  FRIEND_LEVEL_BEST = 2;      // Best Friend
-  FRIEND_LEVEL_SOULMATE = 3;  // Soulmate
+enum FriendTier {
+  FRIEND_TIER_NORMAL = 0;
+  FRIEND_TIER_CLOSE = 1;
+  FRIEND_TIER_BEST = 2;
+  FRIEND_TIER_SOULMATE = 3;
 }
 
-// Một item trong danh sách bạn (friend_list response)
-message FriendListItem {
+enum IntimacyStatus {
+  INTIMACY_STATUS_NORMAL = 0;
+  INTIMACY_STATUS_FROZEN = 1;
+}
+
+message FriendIntimacy {
+  string user_id_1 = 1;
+  string user_id_2 = 2;
+
+  int64 intimacy_point = 3;
+  int32 friend_level = 4;
+  IntimacyStatus status = 5;
+
+  int64 updated_at_unix = 6;
+  int64 frozen_until_unix = 7;
+  int64 last_played_at_unix = 8;
+}
+
+message FriendItem {
+  // --- identity ---
   string user_id = 1;
-  string username = 2;
-  int32 state = 3;       // FriendState: 0=FRIEND, 1=INVITE_SENT, 2=INVITE_RECEIVED, 3=BLOCKED
-  int32 level = 4;       // FriendLevel: 0=Total, 1=Close, 2=Best, 3=Soulmate
-  int64 update_time = 5;
+  int64 sid = 2;
+  string username = 3;
+  string display_name = 4;
+
+  // --- profile ---
+  int32 vip_level = 5;
+  string avatar_id = 6;
+  bool is_online = 7;
+  int64 last_online_time = 8;
+
+  // --- relationship (Nakama) ---
+  FriendState state = 9;
+
+  // --- intimacy system ---
+  int64 intimacy_point = 10;
+  int32 friend_level = 11;
+  FriendTier tier = 12;
+  IntimacyStatus intimacy_status = 13;
 }
 
-// friend_list request
+message FriendInviteRequest {
+  repeated string user_ids = 1;
+}
+
+message FriendAcceptRequest {
+  repeated string user_ids = 1;
+}
+
+message FriendRejectRequest {
+  repeated string user_ids = 1;
+}
+
 message FriendListRequest {
-  int32 limit = 1;
-  optional int32 state = 2;  // filter theo state (0/1/2/3), không gửi = lấy tất cả
+  FriendTab tab = 1;
+  string cursor = 2;
+  int32 limit = 3;
 }
 
-// friend_list response
+enum FriendTab {
+  FRIEND_TAB_UNSPECIFIED = 0;
+  FRIEND_TAB_FRIEND = 1;
+  FRIEND_TAB_CLOSE = 2;
+  FRIEND_TAB_BEST = 3;
+  FRIEND_TAB_SOULMATE = 4;
+  FRIEND_TAB_INVITE_SENT = 5;
+  FRIEND_TAB_INVITE_RECEIVED = 6;
+}
+
+message FriendTabCount {
+  int32 count = 1;
+  int32 max = 2;
+}
+
 message FriendListResponse {
-  repeated FriendListItem friends = 1;
+  repeated FriendItem friends = 1;
+  string next_cursor = 2;
+  string prev_cursor = 3;
+  map<int32, FriendTabCount> tab_counts = 4;  // Counts của tất cả tab (luôn đi kèm)
 }
 
-// get_friend_config response
-message FriendConfig {
-  int32 max_friends = 1;
-  int32 rate_limit_per_min = 2;
-  int32 max_ids_per_request = 3;
-  int32 default_friend_list_limit = 4;
-  int32 max_friend_list_limit = 5;
+message FriendIntimacyRequest {
+  string friend_user_id = 1;
 }
 
-// friend_set_level request
-message FriendSetLevelRequest {
-  string friend_id = 1;
-  int32 level = 2;  // 0=Total, 1=Close, 2=Best, 3=Soulmate
+message FriendSendGiftRequest {
+  string friend_user_id = 1;
+  string gift_type = 2;
+  int64 amount_or_item_id = 3;
+}
+
+// ----- Friend Config (DB, admin CRUD, 1 region) -----
+
+message FriendTierConfig {
+  FriendTier tier = 1;
+  int64 ip_required = 2;
+  double bonus_win_percent = 3;
+  int64 max_gift_chip_per_time = 4;
+  int32 max_gift_times_per_day = 5;
+}
+
+message FriendTierFeature {
+  FriendTier tier = 1;
+  bool can_chat_inbox = 2;
+  bool can_ping = 3;
+  bool can_send_transfer = 4;
+  bool can_send_fortune_gift = 5;
+  bool can_send_low_item = 6;
+  int32 play_together_ip = 7;
+  bool win_notification = 8;
+  double deposit_bonus_percent = 9;
+  bool soulmate_jackpot = 10;
+}
+
+message FriendVipLimit {
+  int32 vip_level = 1;
+  int32 total_friend_max = 2;
+  int32 close_max = 3;
+  int32 best_max = 4;
+  int32 soulmate_max = 5;
+  int64 daily_chip_friend = 6;
+  int64 daily_chip_close = 7;
+  int64 daily_chip_best = 8;
+  int64 daily_chip_soulmate = 9;
+}
+
+message FriendGiftItem {
+  int32 item_id = 1;
+  string name_key = 2;
+  int64 chip_price = 3;
+  int32 ip_gain = 4;
+  int32 vip_unlock = 5;
+}
+
+message FriendFullConfig {
+  repeated FriendTierConfig tiers = 1;
+  repeated FriendTierFeature tier_features = 2;
+  repeated FriendVipLimit vip_limits = 3;
+  repeated FriendGiftItem gift_items = 4;
+}
+
+message AdminFriendConfigGetRequest {}
+
+message AdminFriendConfigGetResponse {
+  FriendFullConfig config = 1;
+}
+
+message AdminFriendConfigUpdateRequest {
+  FriendFullConfig config = 1;
+}
+
+message AdminFriendConfigUpdateResponse {
+  bool ok = 1;
+}
+
+message AdminFriendGiftUpdateRequest {
+  repeated FriendGiftItem items = 1;
+}
+
+message AdminFriendVipUpdateRequest {
+  repeated FriendVipLimit limits = 1;
 }
