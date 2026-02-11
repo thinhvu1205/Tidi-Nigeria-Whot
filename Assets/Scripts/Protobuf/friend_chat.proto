@@ -9,14 +9,15 @@ message ListRecentConversationsRequest {
   int32 limit = 1;  // Số lượng tối đa để phân trang danh sách người chat
 }
 
-// Một mục trong danh sách lịch sử chat
+// Một mục trong danh sách lịch sử chat (user đã từng nhắn, thông tin hiển thị)
 message ConversationEntry {
-  string user_id = 1;           // ID người kia
-  string username = 2;          // Tên hiển thị
-  string avatar_id = 3;        // Ảnh đại diện
-  string last_message = 4;      // Nội dung tin nhắn cuối cùng để hiện preview
-  int64 last_message_time = 5;  // Timestamp để sắp xếp người mới nhất lên đầu
-  int32 unread_count = 6;       // Số tin nhắn chưa đọc
+  string user_id = 1;
+  string username = 2;
+  string avatar_id = 3;
+  int64 sid = 4;
+  int32 vip_level = 5;
+  string last_message = 6;       // Nội dung tin nhắn gần nhất (preview, optional)
+  int64 last_message_time = 7;   // Timestamp để sắp xếp
 }
 
 // Response danh sách lịch sử chat
