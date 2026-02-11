@@ -68,8 +68,13 @@ public class DataSender
     public const string VIP_FARM_PROGRESS = "vip-farm-progress";
     public const string VIP_FARM_CLAIM = "vip-farm-claim";
     public const string LIST_FRIEND = "friend_list";
-    public const string ADD_FRIEND = "friend_add";
-    public const string DELETE_FRIEND = "friend_delete";
+    public const string FRIEND_TAB_COUNTS = "friend_tab_counts";
+    public const string SEND_GIFT_FRIEND = "friend_send_gift";
+    public const string INVITE_FRIEND = "friend_invite";
+    public const string ACCEPT_FRIEND = "friend_accept";
+    public const string REJECT_FRIEND = "friend_reject";
+    public const string GET_FRIEND_CHAT_CHANNEL = "get_friend_chat_channel";
+    public const string LIST_RECENT_CONVERSATIONS = "list_recent_conversations";
     #endregion
     
     #region ConvertProtobuf
@@ -395,10 +400,143 @@ public class DataSender
 
     #region Friends
     
-    public static async UniTask<FriendListResponse> GetListFriends()
+    public static async UniTask<FriendListResponse> GetListFriends(FriendTab currentTab = FriendTab.Friend, string nextCursor = "")
     {
-        var response = await NetworkManager.INSTANCE.RPCSend(LIST_FRIEND);
-        return DecodeFromJson<FriendListResponse>(response.Payload);
+        try
+        {
+            var friendListRequest = new FriendListRequest()
+            {
+                Tab = currentTab,
+                Limit = 10,
+                Cursor = nextCursor
+            };
+            var response = await NetworkManager.INSTANCE.RPCSend(LIST_FRIEND, friendListRequest);
+            return DecodeFromJson<FriendListResponse>(response.Payload);
+        }
+        catch (Exception ex)
+        {
+            ParseError(ex.Message);
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Chỉ lấy tab counts (count/max từng tab). Gọi khi vào UI Friends.
+    /// </summary>
+    public static async UniTask<FriendListResponse> GetFriendTabCounts()
+    {
+        try
+        {
+            var response = await NetworkManager.INSTANCE.RPCSend(FRIEND_TAB_COUNTS);
+            return DecodeFromJson<FriendListResponse>(response.Payload);
+        }
+        catch (Exception ex)
+        {
+            ParseError(ex.Message);
+            return null;
+        }
+    }
+    
+    public static async UniTask SendGiftFriend()
+    {
+        try
+        {
+            var friendSendGiftRequest = new FriendSendGiftRequest()
+            {
+                FriendUserId = "",
+                AmountOrItemId = 0,
+                GiftType = ""
+            };
+            var response = await NetworkManager.INSTANCE.RPCSend(SEND_GIFT_FRIEND, friendSendGiftRequest);
+        }
+        catch (Exception e) 
+        {
+            ParseError(e.Message);
+        }
+    }
+    
+    public static async UniTask SendFriendRequest()
+    {
+        try
+        {
+            var friendInviteRequest = new FriendInviteRequest()
+            {
+                UserIds = { }
+            };
+            var response = await NetworkManager.INSTANCE.RPCSend(INVITE_FRIEND, friendInviteRequest);
+        }
+        catch (Exception e)
+        {
+            ParseError(e.Message);
+        }
+    }
+
+    public static async UniTask AcceptFriendRequest()
+    {
+        try
+        {
+            var friendAcceptRequest = new FriendAcceptRequest()
+            {
+                UserIds = {  }
+            };
+            var response = await NetworkManager.INSTANCE.RPCSend(ACCEPT_FRIEND, friendAcceptRequest);
+        }
+        catch (Exception e)
+        {
+            ParseError(e.Message);
+        }
+    }
+    
+    public static async UniTask RejectFriendRequest()
+    {
+        try
+        {
+            var friendRejectRequest = new FriendRejectRequest()
+            {
+                UserIds = {  }
+            };
+            var response = await NetworkManager.INSTANCE.RPCSend(REJECT_FRIEND, friendRejectRequest);
+        }
+        catch (Exception e)
+        {
+            ParseError(e.Message);
+        }
+    }
+
+    // public static async UniTask<GetFriendChatChannelResponse> GetFriendChatChannel(string friendId = "")
+    // {
+    //     try
+    //     {
+    //         var request = new GetFriendChatChannelRequest()
+    //         {
+    //             FriendUserId = friendId
+    //         };
+    //         var response = await NetworkManager.INSTANCE.RPCSend(GET_FRIEND_CHAT_CHANNEL, request);
+    //         return DecodeFromJson<GetFriendChatChannelResponse>(response.Payload);
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         ParseError(e.Message);
+    //         return null;
+    //     }
+    // }
+
+    public static async UniTask<ListRecentConversationsResponse> GetListRecentConversations()
+    {
+        try
+        {
+            var listRecent = new ListRecentConversationsRequest()
+            {
+                Limit = 10
+            };
+            var response = await NetworkManager.INSTANCE.RPCSend(LIST_RECENT_CONVERSATIONS, listRecent);
+            return DecodeFromJson<ListRecentConversationsResponse>(response.Payload);
+        }
+        catch (Exception e)
+        {
+            ParseError(e.Message);
+            return null;
+        }
     }
     
     #endregion

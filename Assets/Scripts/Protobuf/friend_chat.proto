@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/nk-nigeria/cgp-common/proto";
+
+// Request lấy danh sách tất cả những người đã từng chat (Messenger style)
+message ListRecentConversationsRequest {
+  int32 limit = 1;  // Số lượng tối đa để phân trang danh sách người chat
+}
+
+// Một mục trong danh sách lịch sử chat
+message ConversationEntry {
+  string user_id = 1;           // ID người kia
+  string username = 2;          // Tên hiển thị
+  string avatar_id = 3;        // Ảnh đại diện
+  string last_message = 4;      // Nội dung tin nhắn cuối cùng để hiện preview
+  int64 last_message_time = 5;  // Timestamp để sắp xếp người mới nhất lên đầu
+  int32 unread_count = 6;       // Số tin nhắn chưa đọc
+}
+
+// Response danh sách lịch sử chat
+message ListRecentConversationsResponse {
+  repeated ConversationEntry conversations = 1;
+}

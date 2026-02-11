@@ -30,7 +30,7 @@ public class NetworkManager : MonoBehaviour
         USER_NAME_KEY = "UserName",
         WORLD_CHAT_ROOM_NAME = "world_chat",
         SERVER_TEST_PORT = "103.226.250.195",
-        SERVER_HUY_PORT = "172.16.56.36",
+        SERVER_HUY_PORT = "172.16.56.30",
         SERVER_TOAN_PORT = "172.16.56.104",
         LINK_STORAGE_COLLECTION = "link_global",
         LINK_STORAGE_KEY = "links",
@@ -290,6 +290,7 @@ public class NetworkManager : MonoBehaviour
     public async UniTask<IApiChannelMessageList> GetDirectChatHistory()
     {
         var result = await _ClientC.ListChannelMessagesAsync(_SessionIS, CurrentDirectChatChannelId, 100, false);
+        Debug.Log("GetDirectChatHistory "+result.ToString());
         return result; 
     }
     #endregion
