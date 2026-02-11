@@ -35,6 +35,21 @@ public class FriendPresenter
         return await DataSender.GetFriendTabCounts();
     }
 
+    public async UniTask<ListRecentConversationsResponse> GetListRecentConversations()
+    {
+        return await DataSender.GetListRecentConversations();
+    }
+
+    public async UniTask JoinDirectChat(string userId)
+    {
+        await NetworkManager.INSTANCE.JoinDirectChat(userId);
+
+    }
+    public async UniTask<IApiChannelMessageList> GetDirectChatHistory()
+    {
+        return await NetworkManager.INSTANCE.GetDirectChatHistory();
+    }
+
     public async UniTask SendMessage(string message)
     {
         await NetworkManager.INSTANCE.SendMessageWorldChat(message);

@@ -36,6 +36,7 @@ public class FriendsView : BaseView
     private bool isShowingSortBox;
 
     public UnityEvent<int> OnPageIndexChanged;
+    public FriendPresenter FriendPresenter => friendPresenter;
 
     private void OnValidate()
     {
@@ -167,12 +168,10 @@ public class FriendsView : BaseView
 
     private async UniTask FriendItem_OnClickChat(FriendItem itemView)
     {
-        await DataSender.GetListRecentConversations();
+        
         // var aChatChannelResponse =  await DataSender.GetFriendChatChannel(itemView.UserId);
-        await NetworkManager.INSTANCE.JoinDirectChat(itemView.UserId);
-        await NetworkManager.INSTANCE.GetDirectChatHistory();
         friendChatView.Show();
-        friendChatView.Setup(itemView);
+        friendChatView.Setup(this, itemView);
     }
 
     /// <summary>
@@ -193,7 +192,7 @@ public class FriendsView : BaseView
             if (tabBadgeLabels[i] == null) continue;
             int key = i + 1;
             if (tabCounts.TryGetValue(key, out var tc))
-                tabBadgeLabels[i].text = tc.Count.ToString();
+                tabBadgeLabels[i].text = $"({tc.Count}/{tc.Max})";
             else
                 tabBadgeLabels[i].text = "";
         }
