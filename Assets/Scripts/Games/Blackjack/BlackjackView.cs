@@ -209,7 +209,7 @@ public class BlackjackView : BaseDiceGameView
     {
         base.HandleUpdateTable(matchState);
         BlackjackUpdateDesk data = BlackjackUpdateDesk.Parser.ParseFrom(matchState.State);
-        // Debug.Log("Update table: " + data.ToString());
+        Debug.Log("Update table: " + data.ToString());
         string playerId = data.Bet?.UserId;
         string currentPlayerId = User.userProfile.UserId;
         // Khi có người chơi đặt cược thì tiến hành trừ tiền của người chơi đó
@@ -504,7 +504,7 @@ public class BlackjackView : BaseDiceGameView
         base.HandleUpdateDeal(matchState);
         
         var data = BlackjackUpdateDeal.Parser.ParseFrom(matchState.State);
-        // Debug.Log("Update deal: " + data.ToString());
+        Debug.Log("Update deal: " + data.ToString());
 
         if (data.IsBanker)
         {
@@ -2031,7 +2031,7 @@ public class BlackjackView : BaseDiceGameView
 
     private void SetInfoBet()
     {
-        listValueChipBets = new List<long> { MarkUnit, MarkUnit * 5, MarkUnit * 10, MarkUnit * 50, MarkUnit * 100 };
+        listValueChipBets = new List<long> { MarkUnit, MarkUnit * 2, MarkUnit * 5, MarkUnit * 10, MarkUnit * 50 };
         for (int i = 0; i < 5; i++)
         {
             listChipBet[i].textValue.text = Utility.FormatMoney(listValueChipBets[i], true);

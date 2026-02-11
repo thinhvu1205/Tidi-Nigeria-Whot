@@ -2554,7 +2554,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -4741,15 +4741,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 571872180067805691}
   BundleLabel: assets--resources--bundlepack--animations--hongkongpoker
   AssetName: Assets/Resources/BundlePack/Animations/HongKongPoker/dealer/skeleton_SkeletonData.asset
   AnimName: normal
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &3774355235465837961
 GameObject:
   m_ObjectHideFlags: 0
@@ -6966,6 +6961,7 @@ MonoBehaviour:
   effectPopup: 0
   effectPopupReverse: 0
   popupBackground: {fileID: 0}
+  WantSwitchTable: 0
   textMatchInfo: {fileID: 4290260548248428029}
   textGameName: {fileID: 0}
   listPosView:
@@ -8606,15 +8602,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  ThisImg: {fileID: 0}
-  ThisSG: {fileID: 1307261718360868855}
   BundleLabel: assets--resources--bundlepack--animations--hongkongpoker
   AssetName: Assets/Resources/BundlePack/Animations/HongKongPoker/StartGame/skeleton_SkeletonData.asset
   AnimName: startgame
   SetNativeSize: 0
-  m_OnEnableUE:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &6297592779677416748
 GameObject:
   m_ObjectHideFlags: 0

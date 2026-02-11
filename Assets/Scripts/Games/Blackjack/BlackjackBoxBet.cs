@@ -241,6 +241,7 @@ public class BlackjackBoxBet : MonoBehaviour
 
     public void SetBetValue(int index, long value, long totalValue, bool isWaiting = false)
     {
+        Debug.Log("SET BET VALUE: " + value);
         TotalBet = totalValue;
         chipIndex = index;
         if (index < 0 || totalValue <= 0)

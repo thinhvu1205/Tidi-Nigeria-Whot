@@ -641,6 +641,15 @@ public class WhotView : BaseDiceGameView
                         // UpdateCardsCount(data.DeckCount, playerCardsCount);
                     }
                 }
+                else
+                {
+                    if (data.PickPenalty > 0)
+                    {
+                        // Khi người chơi khác rút bài do bị phạt +2, +3
+                        GetCurrentPlayer().AnimatePlusText(data.PickPenalty);
+                        // AnimateDrawMultipleCards(player, data.PickPenalty, data.TopCard);
+                    }
+                }
                 break;
             default:
                 // Khi vào bàn đang dang chơi dở hoặc vào ván mới
