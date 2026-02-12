@@ -35,6 +35,11 @@ public class FriendPresenter
         return await DataSender.GetFriendTabCounts();
     }
 
+    public async UniTask<AdminFriendConfigGetResponse> GetFriendConfig()
+    {
+        return await DataSender.GetFriendConfig();
+    }
+
     public async UniTask<ListRecentConversationsResponse> GetListRecentConversations()
     {
         return await DataSender.GetListRecentConversations();

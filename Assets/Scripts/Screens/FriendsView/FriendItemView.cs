@@ -11,6 +11,8 @@ public class FriendItemView : MonoBehaviour
 {
     public event Action<FriendItem> OnClickCheck;
     public event Action<FriendItem> OnClickChat;
+    public event Action<FriendItem> OnClickSendGift;
+    public event Action<FriendItem> OnClickSendChip;
     [SerializeField] private Avatar avatar;
     [SerializeField] private TextMeshProUGUI textInfo, textIntimacy, textOnline;
     [SerializeField] private Image imageIntimacy, imageOnline, imageOffline, imageCheck;
@@ -25,6 +27,8 @@ public class FriendItemView : MonoBehaviour
     {
         buttonCheck.onClick.AddListener(OnCheckClicked);
         buttonChat.onClick.AddListener(OnChatClicked);
+        buttonSendChip.onClick.AddListener(OnSendChipClicked);
+        buttonSendGift.onClick.AddListener(OnSendGiftClicked);
         buttonAccept.onClick.AddListener(() => OnClickAccept());
         buttonDecline.onClick.AddListener(() => OnClickDecline());
         buttonCancel.onClick.AddListener(() => OnClickCancel());
@@ -41,9 +45,14 @@ public class FriendItemView : MonoBehaviour
         OnClickChat?.Invoke(itemView);
     }
 
-    private void OnEnable()
+    private void OnSendGiftClicked()
     {
-        
+        OnClickSendGift?.Invoke(itemView);
+    }
+
+    private void OnSendChipClicked()
+    {
+        OnClickSendChip?.Invoke(itemView);
     }
 
     private void OnDisable()
@@ -90,22 +99,22 @@ public class FriendItemView : MonoBehaviour
         
     }
 
-    public void OnClickAccept()
+    public async void OnClickAccept()
     {
-        _ = friendsView.FriendPresenter.AcceptFriendRequest(userIds);
-        friendsView.RefreshCurrentTab();
+        await friendsView.FriendPresenter.AcceptFriendRequest(userIds);
+        await friendsView.RefreshCurrentTab();
     }
 
-    public void OnClickDecline()
+    public async void OnClickDecline()
     {
-        _ = friendsView.FriendPresenter.RejectFriendRequest(userIds);
-        friendsView.RefreshCurrentTab();
+        await friendsView.FriendPresenter.RejectFriendRequest(userIds);
+        await friendsView.RefreshCurrentTab();
     }
 
-    public void OnClickCancel()
+    public async void OnClickCancel()
     {
-        _ = friendsView.FriendPresenter.RejectFriendRequest(userIds);   
-        friendsView.RefreshCurrentTab(); 
+        await friendsView.FriendPresenter.RejectFriendRequest(userIds);   
+        await friendsView.RefreshCurrentTab(); 
     }
 
 }

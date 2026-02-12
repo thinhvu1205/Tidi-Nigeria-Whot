@@ -69,6 +69,7 @@ public class LobbyView : BaseView
         _ =  NetworkManager.INSTANCE.JoinWorldChat();
         _ = GetClaimableReward();
         _ = GetFreeChip();
+        _ = GetListFriend();
         
         // Initialize Announcement Ticker
         if (AlertMessage.Instance != null)
@@ -253,6 +254,12 @@ public class LobbyView : BaseView
         bool hasFreeChip = await lobbyPresenter.GetFreeChipList();
         redDotFreeChip.SetActive(hasFreeChip);
         Utility.AnimateRedDot(redDotFreeChip);
+    }
+
+    private async UniTask GetListFriend()
+    {
+        IApiFriendList friendList = await lobbyPresenter.GetListFriends();
+        FriendManager.Instance.SetFriendList(friendList);
     }
 
 

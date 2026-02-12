@@ -75,6 +75,7 @@ public class DataSender
     public const string REJECT_FRIEND = "friend_reject";
     public const string GET_FRIEND_CHAT_CHANNEL = "get_friend_chat_channel";
     public const string LIST_RECENT_CONVERSATIONS = "list_recent_conversations";
+    public const string FRIEND_CONFIG = "friend_config_get";
     #endregion
     
     #region ConvertProtobuf
@@ -399,6 +400,22 @@ public class DataSender
     #endregion
 
     #region Friends
+    public static async UniTask<IApiFriendList> GetListFriends()
+    {
+        try
+        {
+            var friendListRequest = new FriendListRequest()
+            {
+            };
+            IApiFriendList response = await NetworkManager.INSTANCE.GetListFriends(0, 1000, "", null);
+            return response;
+        }
+        catch (Exception ex)
+        {
+            ParseError(ex.Message);
+            return null;
+        }
+    }
     
     public static async UniTask<FriendListResponse> GetListFriends(FriendTab currentTab = FriendTab.Friend, string nextCursor = "")
     {
@@ -525,6 +542,20 @@ public class DataSender
             };
             var response = await NetworkManager.INSTANCE.RPCSend(LIST_RECENT_CONVERSATIONS, listRecent);
             return DecodeFromJson<ListRecentConversationsResponse>(response.Payload);
+        }
+        catch (Exception e)
+        {
+            ParseError(e.Message);
+            return null;
+        }
+    }
+
+    public static async UniTask<AdminFriendConfigGetResponse> GetFriendConfig()
+    {
+        try
+        {
+            var response = await NetworkManager.INSTANCE.RPCSend(FRIEND_CONFIG);
+            return DecodeFromJson<AdminFriendConfigGetResponse>(response.Payload);
         }
         catch (Exception e)
         {

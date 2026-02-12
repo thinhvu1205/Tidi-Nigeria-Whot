@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Globals;
+using Nakama;
 using Proto;
 using UnityEngine;
 
@@ -47,6 +48,22 @@ public class LobbyPresenter
         }
     }
 
+    public async UniTask<IApiFriendList> GetListFriends()
+    {
+        UIManager.Instance.ShowProgressing();
+        try
+        {
+            IApiFriendList listFreeChip = await DataSender.GetListFriends();
+            await lobbyView.OnSuccess();
+            return listFreeChip;
+        }
+        catch (Exception)
+        {
+            lobbyView.OnError("Fail to get list friend!");
+            return null;
+        }
+    }
+    
     public async UniTask<bool> GetFreeChipList()
     {
         UIManager.Instance.ShowProgressing();

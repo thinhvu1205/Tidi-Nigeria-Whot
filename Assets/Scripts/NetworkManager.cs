@@ -367,11 +367,12 @@ public class NetworkManager : MonoBehaviour
 
     #region Friends
 
-    public async void GetListFriends(int state, int limit, string cursor, Action<IApiFriendList> handleCb = null)
+    public async UniTask<IApiFriendList> GetListFriends(int state, int limit, string cursor, Action<IApiFriendList> handleCb = null)
     {
         IApiFriendList iafl = await _ClientC.ListFriendsAsync(_SessionIS, state, limit, cursor);
-        if (iafl == null || iafl.Friends.Count() <= 0) return;
-        _DataHandlerAs.Add(() => { handleCb?.Invoke(iafl); });
+        if (iafl == null || iafl.Friends.Count() <= 0) return null;
+        return iafl;
+        // _DataHandlerAs.Add(() => { handleCb?.Invoke(iafl); });
     }
 
     public async void GetUsersWithIds(List<string> userIds = null, List<string> usernames = null,
