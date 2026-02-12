@@ -16,9 +16,11 @@ using Avatar = Common.Objects.Avatar;
 public class FriendChatItem : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI textTimeLeft;
+    [SerializeField] private TextMeshProUGUI textMessageLeft;
     [SerializeField] private GameObject contentLeft;
     [SerializeField] private GameObject chatContainerLeft;
     [SerializeField] private TextMeshProUGUI textTimeRight;
+    [SerializeField] private TextMeshProUGUI textMessageRight;
     [SerializeField] private GameObject contentRight;
     [SerializeField] private GameObject chatContainerRight;
     private RectTransform rectTransform;
@@ -35,9 +37,26 @@ public class FriendChatItem : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
     }
 
-    public void SetInfo()
+    public void SetInfo(ChatPayload data, Action<float, float> onSizeCalculated = null)
     {
-        
+        Debug.Log("SET INFO: ");
+        bool isMe = data.ID == User.userProfile.UserId;
+        contentLeft.SetActive(!isMe);
+        contentRight.SetActive(isMe);
+        if (!isMe)
+        {
+            textTimeLeft.text = data.Time;
+
+            textMessageLeft.text = data.Content;
+            AdjustFrameContent(chatContainerLeft, textMessageLeft);
+        }
+        else
+        {
+            textTimeRight.text = data.Time;
+            textMessageRight.text = data.Content;
+            AdjustFrameContent(chatContainerRight, textMessageRight);
+        }
+        onSizeCalculated?.Invoke(width, height);
     }
     
     private void AdjustFrameContent(GameObject frameContent, TextMeshProUGUI messageText)

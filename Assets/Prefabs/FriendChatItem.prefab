@@ -2345,7 +2345,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -23, y: 108.99896}
+  m_AnchoredPosition: {x: 0, y: 108.99896}
   m_SizeDelta: {x: 786, y: 118.5216}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6809379004179700669
@@ -2361,9 +2361,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FriendChatItem
   textTimeLeft: {fileID: 4294050595698010944}
+  textMessageLeft: {fileID: 4328725394975062103}
   contentLeft: {fileID: 1300232038514989058}
   chatContainerLeft: {fileID: 8796921867224214487}
   textTimeRight: {fileID: 5084429530117402712}
+  textMessageRight: {fileID: 7859677980398431171}
   contentRight: {fileID: 4513686811973795431}
   chatContainerRight: {fileID: 4142223635646866855}
 --- !u!1 &5995091082668897177

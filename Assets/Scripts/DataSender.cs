@@ -455,14 +455,12 @@ public class DataSender
         }
     }
     
-    public static async UniTask SendFriendRequest()
+    public static async UniTask SendFriendRequest(List<string> listUserId)
     {
         try
         {
-            var friendInviteRequest = new FriendInviteRequest()
-            {
-                UserIds = { }
-            };
+            var friendInviteRequest = new FriendInviteRequest();
+            friendInviteRequest.UserIds.AddRange(listUserId);
             var response = await NetworkManager.INSTANCE.RPCSend(INVITE_FRIEND, friendInviteRequest);
         }
         catch (Exception e)
@@ -471,14 +469,12 @@ public class DataSender
         }
     }
 
-    public static async UniTask AcceptFriendRequest()
+    public static async UniTask AcceptFriendRequest(List<string> listUserId)
     {
         try
         {
-            var friendAcceptRequest = new FriendAcceptRequest()
-            {
-                UserIds = {  }
-            };
+            var friendAcceptRequest = new FriendAcceptRequest();
+            friendAcceptRequest.UserIds.AddRange(listUserId);
             var response = await NetworkManager.INSTANCE.RPCSend(ACCEPT_FRIEND, friendAcceptRequest);
         }
         catch (Exception e)
@@ -487,14 +483,12 @@ public class DataSender
         }
     }
     
-    public static async UniTask RejectFriendRequest()
+    public static async UniTask RejectFriendRequest(List<string> listUserId)
     {
         try
         {
-            var friendRejectRequest = new FriendRejectRequest()
-            {
-                UserIds = {  }
-            };
+            var friendRejectRequest = new FriendRejectRequest();
+            friendRejectRequest.UserIds.AddRange(listUserId);
             var response = await NetworkManager.INSTANCE.RPCSend(REJECT_FRIEND, friendRejectRequest);
         }
         catch (Exception e)

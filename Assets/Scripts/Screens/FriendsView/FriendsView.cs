@@ -12,6 +12,12 @@ using UnityEngine.UI;
 
 public class FriendsView : BaseView
 {
+    public enum SortMode
+    {
+        INTIMACY_POINT,
+        VIP_LEVEL,
+        ONLINE_STATUS
+    }
     private const int PageSize = 20;
 
     [SerializeField] private int pageIndex = 0;
@@ -22,16 +28,23 @@ public class FriendsView : BaseView
     [SerializeField] private FriendMissionView friendMissionView;
     [SerializeField] private FriendChatView friendChatView;
     [SerializeField] private FriendSortBox friendSortBox;
+    [SerializeField] private FriendDeleteConfirmation friendDeleteConfirmation;
+    [SerializeField] private FriendInviteView friendInviteView;
+    [SerializeField] private FriendFortuneGiftView friendFortuneGiftView;
     [SerializeField] private FriendItemView friendItemViewPrefab;
     [SerializeField] private GameObject loadMoreButton;
     [SerializeField] private GameObject loadingIndicator;
     [SerializeField] private List<Transform> parents;
     [SerializeField] private List<ScrollRect> scrollRects;
     [SerializeField] private List<TextMeshProUGUI> tabBadgeLabels;
+    [SerializeField] private Button buttonDelete, buttonAddMore;
 
     private FriendPresenter friendPresenter;
+    private SortMode sortMode;
     private readonly Dictionary<int, List<FriendItem>> _tabItems = new();
     private readonly Dictionary<int, string> _tabNextCursor = new();
+    private List<FriendItem> listUserToDelete = new();
+    private List<string> listUserIdToDelete = new();
     private bool _isLoading;
     private bool isShowingSortBox;
 
@@ -50,6 +63,11 @@ public class FriendsView : BaseView
         base.Awake();
         friendPresenter = new FriendPresenter();
         friendPresenter.Init(this);
+        friendSortBox.Setup(this);
+        friendDeleteConfirmation.Setup(this);
+        buttonDelete.gameObject.SetActive(false);
+        friendSortBox.gameObject.SetActive(false);
+
 
         foreach (Toggle toggle in tabs)
         {
@@ -102,9 +120,16 @@ public class FriendsView : BaseView
         };
     }
 
+    public async void RefreshCurrentTab()
+    {
+        await LoadFriendTabCountsAsync();
+        await LoadFriendsForTab(pageIndex, false);
+    }
+
     /// <summary>
     /// Load friend list theo tab: append=false là load trang đầu (cursor rỗng), append=true là load thêm (dùng nextCursor).
     /// </summary>
+    
     private async UniTask LoadFriendsForTab(int tabIndex, bool append)
     {
         if (_isLoading) return;
@@ -137,6 +162,7 @@ public class FriendsView : BaseView
 
     private void RefreshTabContent(int tabIndex)
     {
+        Debug.Log("REFRESH TAB CONTENT");
         Transform parent = GetParentForTab(tabIndex);
         if (parent == null) return;
 
@@ -148,10 +174,50 @@ public class FriendsView : BaseView
         }
 
         if (!_tabItems.TryGetValue(tabIndex, out var list) || list == null) return;
-        foreach (FriendItem friendItem in list)
+
+        List<FriendItem> sortedList = list.ToList(); 
+        switch(sortMode)
+        {
+            case SortMode.INTIMACY_POINT:
+                sortedList = sortedList
+                    .OrderByDescending(x => x.IntimacyPoint)
+                    .ToList();
+                break;
+
+            case SortMode.VIP_LEVEL:
+                sortedList = sortedList
+                    .OrderBy(x => x.VipLevel)
+                    .ToList();
+                break;
+
+            case SortMode.ONLINE_STATUS:
+                sortedList = sortedList
+                    .OrderByDescending(x => x.IsOnline) // true lên trước
+                    .ThenByDescending(x => x.IntimacyPoint) // optional tie-break
+                    .ToList();
+                break;
+
+            default:
+                break;
+        }
+        foreach (FriendItem friendItem in sortedList)
         {
             FriendItemView view = Instantiate(friendItemViewPrefab, parent);
-            view.SetInfo(friendItem);
+            view.SetInfo(this, friendItem, tabIndex);
+            view.OnClickCheck += (item) =>
+            {
+                if (listUserIdToDelete.Contains(item.UserId))
+                {
+                    listUserToDelete.Remove(item);
+                    listUserIdToDelete.Remove(item.UserId);
+                }
+                else
+                {
+                    listUserToDelete.Add(item);
+                    listUserIdToDelete.Add(item.UserId);
+                }
+                buttonDelete.gameObject.SetActive(listUserIdToDelete.Count > 0);
+            };
             view.OnClickChat += (item)=>
             {
                 FriendItem_OnClickChat(item).Forget();
@@ -171,7 +237,7 @@ public class FriendsView : BaseView
         
         // var aChatChannelResponse =  await DataSender.GetFriendChatChannel(itemView.UserId);
         friendChatView.Show();
-        friendChatView.Setup(this, itemView);
+        await friendChatView.Setup(this, itemView);
     }
 
     /// <summary>
@@ -230,12 +296,20 @@ public class FriendsView : BaseView
 
     public void OnClickDeleteButton()
     {
-        
+        friendDeleteConfirmation.Show();
+        friendDeleteConfirmation.SetText(listUserToDelete);
+    }
+
+    public async void ConfirmDelete()
+    {
+        await friendPresenter.RejectFriendRequest(listUserIdToDelete);
+        RefreshCurrentTab();
     }
 
     public void OnClickAddMoreButton()
     {
-        _ = LoadFriendsForTab(pageIndex, append: true);
+        friendInviteView.Show();
+        // _ = LoadFriendsForTab(pageIndex, append: true);
     }
 
     public void OnClickNotification()
@@ -250,7 +324,13 @@ public class FriendsView : BaseView
 
     public void OnClickFortuneGift()
     {
-        
+        friendFortuneGiftView.Show();
+    }
+
+    public void ChangeSortMode(SortMode sortMode)
+    {
+        this.sortMode = sortMode;
+        RefreshTabContent(pageIndex);
     }
 
     #endregion

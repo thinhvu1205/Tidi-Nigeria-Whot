@@ -45,16 +45,27 @@ public class FriendPresenter
         await NetworkManager.INSTANCE.JoinDirectChat(userId);
 
     }
-    public async UniTask<IApiChannelMessageList> GetDirectChatHistory()
+    public async UniTask<List<IApiChannelMessage>> GetDirectChatHistory(string nextCursor = "")
     {
-        return await NetworkManager.INSTANCE.GetDirectChatHistory();
+        IApiChannelMessageList result = await NetworkManager.INSTANCE.GetDirectChatHistory(nextCursor);
+        // chatWorldView.nextCursor = result.NextCursor;
+        // chatWorldView.prevCursor = result.PrevCursor;
+        return result.Messages.Reverse().ToList();
     }
 
     public async UniTask SendMessage(string message)
     {
-        await NetworkManager.INSTANCE.SendMessageWorldChat(message);
+        await NetworkManager.INSTANCE.SendMessageDirectChat(message);
     }
 
-    
+    public async UniTask AcceptFriendRequest(List<string> userIds)
+    {
+        await DataSender.AcceptFriendRequest(userIds);
+    }
+
+    public async UniTask RejectFriendRequest(List<string> userIds)
+    {
+        await DataSender.RejectFriendRequest(userIds);
+    }
 }
 

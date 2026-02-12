@@ -20,10 +20,12 @@ public class FriendChatTabItem : MonoBehaviour
     [SerializeField] private Image imageBackground;
     [SerializeField] private Sprite[] listTabOnImage; // 0: first tab, 1, other
 
-    public void Setup(ConversationEntry item)
+    public void Setup(ConversationEntry item, bool isFirstItem, bool isSelected)
     {
         avatar.LoadAvatar(item.AvatarId);
-        // textInfo = $"{item.Username} \nID:{item.}";
+        textInfo.text = $"{item.Username} \nID:{item.Sid}";
+        imageBackground.sprite = isFirstItem ? listTabOnImage[0] : listTabOnImage[1];
+        imageBackground.enabled = isSelected;
     }
 }
 

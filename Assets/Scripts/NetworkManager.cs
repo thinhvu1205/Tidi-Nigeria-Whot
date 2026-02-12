@@ -20,6 +20,7 @@ public class NetworkManager : MonoBehaviour
     public static NetworkManager INSTANCE { get; private set; }
     public Action<IApiChannelMessage> OnMessageWorldReceived;
     public Action<IApiChannelMessage> OnMessageTableReceived;
+    public Action<IApiChannelMessage> OnMessageDirectReceived;
     public Action OnAnnouncementTickerUpdated; // Event khi announcement ticker được update
 
     public const string SESSION = "session",
@@ -276,7 +277,7 @@ public class NetworkManager : MonoBehaviour
     public async UniTask SendMessageDirectChat(string content)
     {
         if (string.IsNullOrEmpty(CurrentDirectChatChannelId)) return;
-        var data = new Dictionary<string, string> {{"text", content}}.ToJson();
+        var data = new Dictionary<string, string> {{"content", content}}.ToJson();
         var sendAck = await _SocketIS.WriteChatMessageAsync(CurrentDirectChatChannelId, data);
     }
 
@@ -287,11 +288,16 @@ public class NetworkManager : MonoBehaviour
         CurrentDirectChatChannelId = "";
     }
 
-    public async UniTask<IApiChannelMessageList> GetDirectChatHistory()
+    public async UniTask<IApiChannelMessageList> GetDirectChatHistory(string nextCursor)
     {
-        var result = await _ClientC.ListChannelMessagesAsync(_SessionIS, CurrentDirectChatChannelId, 100, false);
-        Debug.Log("GetDirectChatHistory "+result.ToString());
-        return result; 
+        if (!string.IsNullOrEmpty(nextCursor))
+        {
+            return await _ClientC.ListChannelMessagesAsync(_SessionIS, CurrentDirectChatChannelId, 20, false, nextCursor);;   
+        }
+        else
+        {
+            return await _ClientC.ListChannelMessagesAsync(_SessionIS, CurrentDirectChatChannelId, 20, false);
+        }       
     }
     #endregion
 
@@ -814,9 +820,13 @@ public class NetworkManager : MonoBehaviour
                 {
                     OnMessageWorldReceived?.Invoke(message);
                 }
-                else
+                else if (message.ChannelId == CurrentRoomChatChannelId)
                 {
                     OnMessageTableReceived?.Invoke(message);
+                }
+                else if (message.ChannelId == CurrentDirectChatChannelId)
+                {
+                    OnMessageDirectReceived?.Invoke(message);
                 }
             }
         }

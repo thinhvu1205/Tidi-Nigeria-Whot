@@ -63,7 +63,7 @@ MonoBehaviour:
   textOnline: {fileID: 185564057402931053}
   imageIntimacy: {fileID: 5406257045174888016}
   imageOnline: {fileID: 5479395433206714232}
-  imageOffline: {fileID: 5479395433206714232}
+  imageOffline: {fileID: 2090206073422385357}
   imageCheck: {fileID: 1959183380698265906}
   buttonSendChip: {fileID: 8088765150351252111}
   buttonSt: {fileID: 8662089039551591148}
@@ -72,6 +72,7 @@ MonoBehaviour:
   buttonAccept: {fileID: 3003558911307274921}
   buttonDecline: {fileID: 4481796467773113579}
   buttonCancel: {fileID: 515650021374468401}
+  buttonCheck: {fileID: 4497103855852624002}
   listIntimacyImage:
   - {fileID: 8377326608514935283, guid: 58022c99346e146e3963cea74f7e981c, type: 3}
   - {fileID: -7779711464402683812, guid: c3139869d924146f8a2616f40ba6e05c, type: 3}
@@ -391,19 +392,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9065555236409665890}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5965343821922689673}
-        m_TargetAssemblyTypeName: FriendItem, Assembly-CSharp
-        m_MethodName: OnClickCheckbox
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &650318476932113574
 GameObject:
   m_ObjectHideFlags: 0
