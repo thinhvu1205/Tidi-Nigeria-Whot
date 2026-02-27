@@ -248,15 +248,16 @@ public class FriendsView : BaseView
     {
         AdminFriendConfigGetResponse response = await friendPresenter.GetFriendConfig();
         listFriendGift = response.Config.GiftItems.ToList();
-        friendSendGiftView.Setup(listFriendGift);
+        friendSendGiftView.Setup(this, listFriendGift);
     }
 
     private async UniTask FriendItem_OnClickChat(FriendItem itemView)
     {
         
         // var aChatChannelResponse =  await DataSender.GetFriendChatChannel(itemView.UserId);
-        friendChatView.Show();
-        await friendChatView.Setup(this, itemView);
+        FriendChatView friendChatViewPref = Instantiate(friendChatView, transform);
+        friendChatViewPref.gameObject.SetActive(true);
+        await friendChatViewPref.Setup(this, itemView);
     }
 
     private async UniTask FriendItem_OnClickSendGift(FriendItem itemView)
@@ -269,7 +270,8 @@ public class FriendsView : BaseView
     }
     private async UniTask FriendItem_OnClickSendChip(FriendItem itemView)
     {
-    
+        friendSendChipView.Show();
+        friendSendChipView.Setup(this, itemView);
     }
 
     /// <summary>
@@ -351,6 +353,20 @@ public class FriendsView : BaseView
         // _ = LoadFriendsForTab(pageIndex, append: true);
     }
 
+    public async void ConfirmSendGift(string userId, long itemId)
+    {
+        try
+        {
+            await friendPresenter.SendGift(userId, itemId);
+            UIManager.Instance.ShowAlertDialog("Gift sent successfully!");
+        }
+        catch (Exception)
+        {  
+            UIManager.Instance.ShowAlertDialog("Error sending gift!");
+            throw;
+        }
+    }
+
     public void OnClickNotification()
     {
         friendNotificationView.Show();
@@ -370,6 +386,11 @@ public class FriendsView : BaseView
     {
         this.sortMode = sortMode;
         RefreshTabContent(pageIndex);
+    }
+
+    public void OnClickGiftItem()
+    {
+        // TODO
     }
 
     #endregion

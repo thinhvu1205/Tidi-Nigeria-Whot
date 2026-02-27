@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
@@ -65,11 +66,14 @@ public class VerticalPool : BasePool
         }
         _DataSR.content.sizeDelta = new(_DataSR.viewport.rect.width, Mathf.Abs(localYTop + m_SpacingV2.y - m_PaddingBot));
         _IsCompleteCalculate = true;
+        _HandleOnScroll();
     }
     protected override void _HandleOnScroll()
     {
         base._HandleOnScroll();
+        Debug.Log("HANDLE ON SCROLL 1");
         if (!_IsCompleteCalculate) return;
+        Debug.Log("HANDLE ON SCROLL 2");
         float topViewportY = -_DataSR.content.localPosition.y, bottomViewportY = topViewportY - _DataSR.viewport.rect.height;
         foreach (PoolObj aPO in _DataPOs)
         {
