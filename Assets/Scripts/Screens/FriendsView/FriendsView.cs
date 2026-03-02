@@ -84,6 +84,7 @@ public class FriendsView : BaseView
     protected override void OnEnable()
     {
         base.OnEnable();
+
         _ = LoadFriendTabCountsAsync();
     }
 
@@ -308,8 +309,8 @@ public class FriendsView : BaseView
 
     public void OnClickAddMoreButton()
     {
+        friendInviteView.CurrentTab = pageIndex;
         friendInviteView.Show();
-        // _ = LoadFriendsForTab(pageIndex, append: true);
     }
 
     public void OnClickNotification()
@@ -351,6 +352,7 @@ public class FriendsView : BaseView
 
     private void OpenPage(int index)
     {
+        buttonAddMore.gameObject.SetActive(index is 1 or 2 or 3);
         EnsureIndexIsInRange(index);
 
         for (int i = 0; i < pages.Count; i++)

@@ -75,6 +75,9 @@ public class FriendItemView : MonoBehaviour
             case IntimacyStatus.Frozen:
                 imageIntimacy.sprite = listIntimacyImage[1];
                 break;
+            case IntimacyStatus.Reduced:
+                imageIntimacy.sprite = listIntimacyImage[2];
+                break;
             default:
                 imageIntimacy.sprite = listIntimacyImage[0];
                 break;

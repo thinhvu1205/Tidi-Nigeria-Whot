@@ -73,8 +73,12 @@ public class DataSender
     public const string INVITE_FRIEND = "friend_invite";
     public const string ACCEPT_FRIEND = "friend_accept";
     public const string REJECT_FRIEND = "friend_reject";
-    public const string GET_FRIEND_CHAT_CHANNEL = "get_friend_chat_channel";
     public const string LIST_RECENT_CONVERSATIONS = "list_recent_conversations";
+    public const string FRIEND_LIST_UPGRADE_CANDIDATES = "friend_list_upgrade_candidates";
+    public const string FRIEND_REQUEST_TIER_UPGRADE = "friend_request_tier_upgrade";
+    public const string FRIEND_ACCEPT_TIER_UPGRADE = "friend_accept_tier_upgrade";
+    public const string FRIEND_REFUSE_TIER_UPGRADE = "friend_refuse_tier_upgrade";
+    public const string FRIEND_DOWNGRADE = "friend_downgrade";
     #endregion
     
     #region ConvertProtobuf
@@ -497,24 +501,99 @@ public class DataSender
         }
     }
 
-    // public static async UniTask<GetFriendChatChannelResponse> GetFriendChatChannel(string friendId = "")
-    // {
-    //     try
-    //     {
-    //         var request = new GetFriendChatChannelRequest()
-    //         {
-    //             FriendUserId = friendId
-    //         };
-    //         var response = await NetworkManager.INSTANCE.RPCSend(GET_FRIEND_CHAT_CHANNEL, request);
-    //         return DecodeFromJson<GetFriendChatChannelResponse>(response.Payload);
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         ParseError(e.Message);
-    //         return null;
-    //     }
-    // }
+    public static async UniTask<FriendListUpgradeCandidatesResponse> GetFriendUpgradeCandidates(int targetTier = 0 , string nextCursor = "")
+    {
+        try
+        {
+            var request = new FriendListUpgradeCandidatesRequest()
+            {
+                TargetTier = targetTier,
+                Limit = 10,
+                Cursor = nextCursor
+            };
+            var response = await NetworkManager.INSTANCE.RPCSend(FRIEND_LIST_UPGRADE_CANDIDATES, request);
+            return DecodeFromJson<FriendListUpgradeCandidatesResponse>(response.Payload);
+        }
+        catch (Exception e)
+        {
+            ParseError(e.Message);
+            return null;
+        }
+    }
 
+    public static async UniTask<FriendRequestTierUpgradeResponse> SendRequestTierUpgrade(int targetTier = 1, string friendID = "")
+    {
+        try
+        {
+            var request = new FriendRequestTierUpgradeRequest()
+            {
+                TargetTier = targetTier,
+                FriendUserId = friendID
+            };
+            var response = await NetworkManager.INSTANCE.RPCSend(FRIEND_REQUEST_TIER_UPGRADE, request);
+            return DecodeFromJson<FriendRequestTierUpgradeResponse>(response.Payload);
+        }
+        catch (Exception e)
+        {
+            ParseError(e.Message);
+            return null;
+        }
+    }
+    
+    public static async UniTask<FriendAcceptTierUpgradeResponse> SendAcceptTierUpgrade(string friendID = "")
+    {
+        try
+        {
+            var request = new FriendAcceptTierUpgradeRequest()
+            {
+                FriendUserId = friendID,
+            };
+            var response = await NetworkManager.INSTANCE.RPCSend(FRIEND_ACCEPT_TIER_UPGRADE, request);
+            return DecodeFromJson<FriendAcceptTierUpgradeResponse>(response.Payload);
+        }
+        catch (Exception e)
+        {
+            ParseError(e.Message);
+            return null;
+        }
+    }
+    
+    public static async UniTask<FriendRefuseTierUpgradeResponse> SendRefuseTierUpgrade(string friendID = "")
+    {
+        try
+        {
+            var request = new FriendRefuseTierUpgradeRequest()
+            {
+               FriendUserId = friendID
+            };
+            var response = await NetworkManager.INSTANCE.RPCSend(FRIEND_REFUSE_TIER_UPGRADE, request);
+            return DecodeFromJson<FriendRefuseTierUpgradeResponse>(response.Payload);
+        }
+        catch (Exception e)
+        {
+            ParseError(e.Message);
+            return null;
+        }
+    }
+    
+    public static async UniTask<FriendDowngradeResponse> SendDownTierUpgrade(string friendID = "")
+    {
+        try
+        {
+            var request = new FriendDowngradeRequest()
+            {
+              FriendUserId = friendID
+            };
+            var response = await NetworkManager.INSTANCE.RPCSend(FRIEND_DOWNGRADE, request);
+            return DecodeFromJson<FriendDowngradeResponse>(response.Payload);
+        }
+        catch (Exception e)
+        {
+            ParseError(e.Message);
+            return null;
+        }
+    }
+    
     public static async UniTask<ListRecentConversationsResponse> GetListRecentConversations()
     {
         try

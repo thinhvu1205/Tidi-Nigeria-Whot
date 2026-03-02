@@ -21,6 +21,7 @@ enum FriendTier {
 enum IntimacyStatus {
   INTIMACY_STATUS_NORMAL = 0;
   INTIMACY_STATUS_FROZEN = 1;
+  INTIMACY_STATUS_REDUCED = 2;  // Tim đỏ: IP đã bị giảm sau 90 ngày không tương tác
 }
 
 message FriendIntimacy {
@@ -34,6 +35,9 @@ message FriendIntimacy {
   int64 updated_at_unix = 6;
   int64 frozen_until_unix = 7;
   int64 last_played_at_unix = 8;
+
+  // Tier đã đồng thuận 2 bên (0=Friend, 1=Close, 2=Best, 3=Soulmate). Tab/slot tính theo agreed_tier.
+  int32 agreed_tier = 9;
 }
 
 message FriendItem {
@@ -179,4 +183,53 @@ message AdminFriendGiftUpdateRequest {
 
 message AdminFriendVipUpdateRequest {
   repeated FriendVipLimit limits = 1;
+}
+
+// ----- Đồng thuận 2 bên lên CF/BF/Soulmate -----
+
+message FriendRequestTierUpgradeRequest {
+  string friend_user_id = 1;
+  int32 target_tier = 2;  // 1=Close, 2=Best, 3=Soulmate
+}
+
+message FriendRequestTierUpgradeResponse {
+  bool ok = 1;
+  string message = 2;
+}
+
+message FriendAcceptTierUpgradeRequest {
+  string friend_user_id = 1;
+}
+
+message FriendAcceptTierUpgradeResponse {
+  bool ok = 1;
+  string message = 2;
+}
+
+message FriendRefuseTierUpgradeRequest {
+  string friend_user_id = 1;
+}
+
+message FriendRefuseTierUpgradeResponse {
+  bool ok = 1;
+}
+
+message FriendDowngradeRequest {
+  string friend_user_id = 1;
+}
+
+message FriendDowngradeResponse {
+  bool ok = 1;
+}
+
+// Danh sách bạn đủ IP để request nâng cấp lên target_tier (Add more).
+message FriendListUpgradeCandidatesRequest {
+  int32 target_tier = 1;  // 1=Close, 2=Best, 3=Soulmate
+  int32 limit = 2;
+  string cursor = 3;
+}
+
+message FriendListUpgradeCandidatesResponse {
+  repeated FriendItem friends = 1;
+  string next_cursor = 2;
 }
