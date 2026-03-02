@@ -632,7 +632,7 @@ public class DataSender
     {
         try
         {
-            var response = await NetworkManager.INSTANCE.RPCSend(FRIEND_CONFIG);
+            var response = await NetworkManager.INSTANCE.RPCSend(FRIEND_TAB_COUNTS);
             return DecodeFromJson<AdminFriendConfigGetResponse>(response.Payload);
         }
         catch (Exception e)

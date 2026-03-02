@@ -75,7 +75,7 @@ public class FriendPresenter
 
     public async UniTask SendGift(string userId, long itemId)
     {
-        await DataSender.SendGiftFriend(userId, itemId);
+        await DataSender.SendGiftFriend();
     }
 }
 
