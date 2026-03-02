@@ -27,7 +27,7 @@ public class FriendChatItem : MonoBehaviour
     private ChatPayload chatContentData;
     private static ChatItem currentlyPlayingItem;
     private const float PADDING = 12f;
-    private const float MIN_WIDTH = 50f;
+    private const float MIN_WIDTH = 30f;
     private const float DEFAULT_MAX_WIDTH = 350f;
     private const float LOBBY_MAX_WIDTH = 500f;
     private float width, height;
@@ -39,14 +39,12 @@ public class FriendChatItem : MonoBehaviour
 
     public void SetInfo(ChatPayload data, Action<float, float> onSizeCalculated = null)
     {
-        Debug.Log("SET INFO: ");
         bool isMe = data.ID == User.userProfile.UserId;
-        contentLeft.SetActive(!isMe);
-        contentRight.SetActive(isMe);
+        chatContainerLeft.SetActive(!isMe);
+        chatContainerRight.SetActive(isMe);
         if (!isMe)
         {
             textTimeLeft.text = data.Time;
-
             textMessageLeft.text = data.Content;
             AdjustFrameContent(chatContainerLeft, textMessageLeft);
         }

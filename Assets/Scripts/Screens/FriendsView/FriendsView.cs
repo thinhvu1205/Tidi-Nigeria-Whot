@@ -27,6 +27,8 @@ public class FriendsView : BaseView
     [SerializeField] private FriendNotificationView friendNotificationView;
     [SerializeField] private FriendMissionView friendMissionView;
     [SerializeField] private FriendChatView friendChatView;
+    [SerializeField] private FriendSendChipView friendSendChipView;
+    [SerializeField] private FriendSendGiftView friendSendGiftView;
     [SerializeField] private FriendSortBox friendSortBox;
     [SerializeField] private FriendDeleteConfirmation friendDeleteConfirmation;
     [SerializeField] private FriendInviteView friendInviteView;
@@ -44,6 +46,7 @@ public class FriendsView : BaseView
     private readonly Dictionary<int, List<FriendItem>> _tabItems = new();
     private readonly Dictionary<int, string> _tabNextCursor = new();
     private List<FriendItem> listUserToDelete = new();
+    private List<FriendGiftItem> listFriendGift = new();
     private List<string> listUserIdToDelete = new();
     private bool _isLoading;
     private bool isShowingSortBox;
@@ -79,6 +82,7 @@ public class FriendsView : BaseView
             scrollRects[0].onValueChanged.AddListener(OnScrollChanged);
 
         _ = LoadFriendsForTab(pageIndex, append: false);
+        _ = GetFriendConfig();
     }
 
     protected override void OnEnable()
@@ -121,7 +125,7 @@ public class FriendsView : BaseView
         };
     }
 
-    public async void RefreshCurrentTab()
+    public async UniTask RefreshCurrentTab()
     {
         await LoadFriendTabCountsAsync();
         await LoadFriendsForTab(pageIndex, false);
@@ -223,6 +227,14 @@ public class FriendsView : BaseView
             {
                 FriendItem_OnClickChat(item).Forget();
             };
+            view.OnClickSendChip += (item)=>
+            {
+                FriendItem_OnClickSendChip(item).Forget();
+            };
+            view.OnClickSendGift += (item)=>
+            {
+                FriendItem_OnClickSendGift(item).Forget();
+            };
         }
     }
 
@@ -233,12 +245,34 @@ public class FriendsView : BaseView
         loadMoreButton.SetActive(hasMore);
     }
 
+    private async UniTask GetFriendConfig()
+    {
+        AdminFriendConfigGetResponse response = await friendPresenter.GetFriendConfig();
+        listFriendGift = response.Config.GiftItems.ToList();
+        friendSendGiftView.Setup(this, listFriendGift);
+    }
+
     private async UniTask FriendItem_OnClickChat(FriendItem itemView)
     {
         
         // var aChatChannelResponse =  await DataSender.GetFriendChatChannel(itemView.UserId);
-        friendChatView.Show();
-        await friendChatView.Setup(this, itemView);
+        FriendChatView friendChatViewPref = Instantiate(friendChatView, transform);
+        friendChatViewPref.gameObject.SetActive(true);
+        await friendChatViewPref.Setup(this, itemView);
+    }
+
+    private async UniTask FriendItem_OnClickSendGift(FriendItem itemView)
+    {
+        
+        // var aChatChannelResponse =  await DataSender.GetFriendChatChannel(itemView.UserId);
+        friendSendGiftView.Show();
+        friendSendGiftView.SetTextRecipientInfo(itemView);
+        // await friendSendGiftView.Setup(this, itemView);
+    }
+    private async UniTask FriendItem_OnClickSendChip(FriendItem itemView)
+    {
+        friendSendChipView.Show();
+        friendSendChipView.Setup(this, itemView);
     }
 
     /// <summary>
@@ -259,7 +293,14 @@ public class FriendsView : BaseView
             if (tabBadgeLabels[i] == null) continue;
             int key = i + 1;
             if (tabCounts.TryGetValue(key, out var tc))
-                tabBadgeLabels[i].text = $"({tc.Count}/{tc.Max})";
+                if (i < 4)
+                {
+                    tabBadgeLabels[i].text = $"({tc.Count}/{tc.Max})";
+                }
+                else
+                {
+                    tabBadgeLabels[i].text = $"{tc.Count}";
+                }
             else
                 tabBadgeLabels[i].text = "";
         }
@@ -304,13 +345,27 @@ public class FriendsView : BaseView
     public async void ConfirmDelete()
     {
         await friendPresenter.RejectFriendRequest(listUserIdToDelete);
-        RefreshCurrentTab();
+        await RefreshCurrentTab();
     }
 
     public void OnClickAddMoreButton()
     {
         friendInviteView.CurrentTab = pageIndex;
         friendInviteView.Show();
+    }
+
+    public async void ConfirmSendGift(string userId, long itemId)
+    {
+        try
+        {
+            await friendPresenter.SendGift(userId, itemId);
+            UIManager.Instance.ShowAlertDialog("Gift sent successfully!");
+        }
+        catch (Exception)
+        {  
+            UIManager.Instance.ShowAlertDialog("Error sending gift!");
+            throw;
+        }
     }
 
     public void OnClickNotification()
@@ -332,6 +387,11 @@ public class FriendsView : BaseView
     {
         this.sortMode = sortMode;
         RefreshTabContent(pageIndex);
+    }
+
+    public void OnClickGiftItem()
+    {
+        // TODO
     }
 
     #endregion

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Globals;
 using TMPro;
 using UnityEngine;
@@ -10,6 +12,7 @@ public class PlayerProfileInGameView : BaseView
     [SerializeField] private Image[] listImageStar;
     [SerializeField] private Sprite[] listSpriteStar; // 0: Full, 1: Half, 2: Empty
     [SerializeField] private Avatar avatar;
+    [SerializeField] private Button buttonAddFriend;
     private PlayerProfileInGamePresenter playerProfileInGamePresenter;
     private string playerId;
 
@@ -18,6 +21,7 @@ public class PlayerProfileInGameView : BaseView
         base.Awake();
         playerProfileInGamePresenter = new PlayerProfileInGamePresenter();
         playerProfileInGamePresenter.Init(this);
+        buttonAddFriend.onClick.AddListener(async () => await OnClickSendFriendRequest());
     }
 
     public void SetInfo(string name, string id, string sId, int vipLevel, string avatarId)
@@ -27,6 +31,9 @@ public class PlayerProfileInGameView : BaseView
         idText.text = "ID: " + sId;
         avatar.LoadAvatar(avatarId, vipLevel);
         SetVipStars(vipLevel);
+
+        bool isMe = playerId == User.userProfile.UserId;
+        buttonAddFriend.gameObject.SetActive(!isMe && !FriendManager.Instance.IsFriend(playerId));
     }
 
     private void SetVipStars(int vip)
@@ -52,6 +59,16 @@ public class PlayerProfileInGameView : BaseView
                 listImageStar[i].sprite = listSpriteStar[2];
             }
         }
+    }
+
+    public async Task OnClickSendFriendRequest()
+    {
+        List<string> userId = new()
+        {
+            playerId  
+        };
+        await playerProfileInGamePresenter.SendFriendRequest(userId);
+        buttonAddFriend.gameObject.SetActive(false);
     }
 
     public void OnClickButtonEmoji(int emojiId)

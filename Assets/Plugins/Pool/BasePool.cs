@@ -17,7 +17,7 @@ public abstract class BasePool : MonoBehaviour
     protected bool _IsCompleteCalculate, _IsChangeCellDimensionsInApplyDataCb;
     private float _BaseCellWidth, _BaseCellHeight;
 
-    public void SetControlInfo(List<PoolInfo> _infoPIs, int _startFocusIndex = 0, float _startFocusDuration = 0)
+    public virtual void SetControlInfo(List<PoolInfo> _infoPIs, int _startFocusIndex = 0, float _startFocusDuration = 0)
     {   // _startFocusIndex<0: content remains position
         if (_infoPIs == null || _infoPIs.Count <= 0) return;
         _CheckInitialize();

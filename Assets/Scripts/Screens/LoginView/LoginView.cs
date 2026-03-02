@@ -59,6 +59,7 @@ namespace Screens.LoginView
             bool isFirstLogin = PlayerPrefs.GetInt(FIRST_LOGIN_KEY, 0) == 0;
             if (isFirstLogin)
             {
+                OnClickButtonPlayGuest();
                 PlayerPrefs.SetInt(FIRST_LOGIN_KEY, 1);
                 PlayerPrefs.Save();
             }

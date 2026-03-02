@@ -15,10 +15,17 @@ using Avatar = Common.Objects.Avatar;
 
 public class FriendChatTabItem : MonoBehaviour
 {
+    public event Action<FriendItem> OnClick;
     [SerializeField] private Avatar avatar;
     [SerializeField] private TextMeshProUGUI textInfo;
     [SerializeField] private Image imageBackground;
     [SerializeField] private Sprite[] listTabOnImage; // 0: first tab, 1, other
+    [SerializeField] private Button button;
+
+    void Awake()
+    {
+        // button.onClick.AddListener(() => OnClick.Invoke();)
+    }
 
     public void Setup(ConversationEntry item, bool isFirstItem, bool isSelected)
     {

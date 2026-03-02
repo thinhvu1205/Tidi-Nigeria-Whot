@@ -2036,6 +2036,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b6a073c544d2549d89cf8e5aacf43b65, type: 3}
   - {fileID: 21300000, guid: 64c2297da62844865bb8f6b09a665ed1, type: 3}
   avatar: {fileID: 2824555761705967502}
+  buttonAddFriend: {fileID: 33538609010377812}
 --- !u!1 &4993440334569204753
 GameObject:
   m_ObjectHideFlags: 0
@@ -3299,6 +3300,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7808b6048b404f75b77fff68b906c62, type: 3}
+--- !u!114 &33538609010377812 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7927014839158597479, guid: b7808b6048b404f75b77fff68b906c62, type: 3}
+  m_PrefabInstance: {fileID: 7959354574611899187}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &3131836687626067541 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4973040580954406246, guid: b7808b6048b404f75b77fff68b906c62, type: 3}

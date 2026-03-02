@@ -25,12 +25,31 @@ public class FriendChatView : BaseView
     {
         base.Start();
         Debug.Log("START");
+        messageTMP.text = "";
+        messageTMP.characterLimit = 200;
   
         btnSendMessage.onClick.AddListener(()=>
         {
             Debug.Log("Sending message");
             _ = NetworkManager.INSTANCE.SendMessageDirectChat(messageTMP.text);
+            messageTMP.text = "";
         });
+
+        verticalPoolGroup.SetApplyDataCb((go, data, index) =>
+        {
+            FriendChatItem chatItem = go.GetComponent<FriendChatItem>();
+            chatItem.SetInfo((ChatPayload)data.Data, (cellW, cellH) =>
+            {
+                data.SetCellWidth(verticalPoolGroup.GetComponent<RectTransform>().rect.width);
+                data.SetCellHeight(cellH - 20);
+            });
+            // chatItem.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, containerWidth); 
+            RectTransform childRect = chatItem.GetComponent<RectTransform>();
+            childRect.anchorMin = new Vector2(0, childRect.anchorMin.y);
+            childRect.anchorMax = new Vector2(1, childRect.anchorMax.y);
+            childRect.offsetMin = new Vector2(0, childRect.offsetMin.y);
+            childRect.offsetMax = new Vector2(0, childRect.offsetMax.y);
+        }, true);
     }
 
     protected override void OnEnable()
@@ -47,10 +66,15 @@ public class FriendChatView : BaseView
         btnSendMessage.onClick.RemoveAllListeners();
     }
     
-    public override void Hide(bool isDestroy = true, Action onCompleteCallback = null, bool notDeactive = false)
-    {
-        base.Hide(false, onCompleteCallback, notDeactive);
-    }
+    // public override void Hide(bool isDestroy = true, Action onCompleteCallback = null, bool notDeactive = false)
+    // {
+    //     base.Hide(false, onCompleteCallback, notDeactive);
+    //     foreach(Transform child in friendChatContainer)
+    //     {
+    //         Destroy(child.gameObject);
+    //     }
+    //     listPoolInfo.Clear();
+    // }
 
     private void NetworkManager_OnMessageReceived(IApiChannelMessage message)
     {
@@ -71,22 +95,8 @@ public class FriendChatView : BaseView
         selectedTabId = itemView.Sid.ToString();
         await SetupListRecentConversation();
         await SetupListMessage();
-
-        verticalPoolGroup.SetApplyDataCb((go, data, index) =>
-        {
-            FriendChatItem chatItem = go.GetComponent<FriendChatItem>();
-            chatItem.SetInfo((ChatPayload)data.Data, (cellW, cellH) =>
-            {
-                data.SetCellWidth(verticalPoolGroup.GetComponent<RectTransform>().rect.width);
-                data.SetCellHeight(cellH + 40);
-            });
-            // chatItem.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, containerWidth); 
-            RectTransform childRect = chatItem.GetComponent<RectTransform>();
-            childRect.anchorMin = new Vector2(0, childRect.anchorMin.y);
-            childRect.anchorMax = new Vector2(1, childRect.anchorMax.y);
-            childRect.offsetMin = new Vector2(0, childRect.offsetMin.y);
-            childRect.offsetMax = new Vector2(0, childRect.offsetMax.y);
-        }, true);
+ 
+ 
     }
 
     private async Task SetupListRecentConversation()
@@ -122,6 +132,7 @@ public class FriendChatView : BaseView
         listPoolInfo.InsertRange(0, listPoolTemp);
         Debug.Log("LIST POOL INFO: " + listPoolInfo.Count);
         verticalPoolGroup.SetControlInfo(listPoolInfo, listPoolInfo.Count - 1);
+        verticalPoolGroup._DataSR.verticalNormalizedPosition = 1f;
 
     }
 

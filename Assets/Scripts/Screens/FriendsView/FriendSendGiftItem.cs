@@ -1,18 +1,28 @@
 using System;
+using Globals;
+using Proto;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using Color = UnityEngine.Color;
 
-public class FriendSendGiftItem : BaseView
+public class FriendSendGiftItem : MonoBehaviour
 {
-    [SerializeField] private FriendNotificationItem friendNotificationPrefab;
-    [SerializeField] private Transform friendNotificationParent;
+    public event Action<FriendGiftItem> OnClick;
+    [SerializeField] private TextMeshProUGUI textPrice, textIntimacyPoint;
+    [SerializeField] private Image imageGift, imageBackground;
+    [SerializeField] private Sprite[] listSpriteGift;
+    [SerializeField] private Button button;
 
-    public override void Hide(bool isDestroy = true, Action onCompleteCallback = null, bool notDeactive = false)
+    public void SetInfo(FriendGiftItem item)
     {
-        base.Hide(false, onCompleteCallback, notDeactive);
-    }
-
-    public void OnClickMarkAllAsRead()
-    {
-        
+        button.onClick.AddListener(() => OnClick?.Invoke(item)); 
+        textPrice.text = Utility.FormatNumber(item.ChipPrice);
+        textIntimacyPoint.text = $"IP +{item.IpGain}";
+        imageGift.sprite = listSpriteGift[item.ItemId - 1];
+        imageGift.preserveAspect = true;
+        imageBackground.color = item.VipUnlock <= User.userProfile.VipLevel ? Color.white : Color.gray;
+        imageGift.color = item.VipUnlock <= User.userProfile.VipLevel ? Color.white : Color.gray;
+        textPrice.color = item.VipUnlock <= User.userProfile.VipLevel ? Color.white : Color.gray;
     }
 }

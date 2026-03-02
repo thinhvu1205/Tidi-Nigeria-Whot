@@ -403,6 +403,22 @@ public class DataSender
     #endregion
 
     #region Friends
+    public static async UniTask<IApiFriendList> GetListFriends()
+    {
+        try
+        {
+            var friendListRequest = new FriendListRequest()
+            {
+            };
+            IApiFriendList response = await NetworkManager.INSTANCE.GetListFriends(0, 1000, "", null);
+            return response;
+        }
+        catch (Exception ex)
+        {
+            ParseError(ex.Message);
+            return null;
+        }
+    }
     
     public static async UniTask<FriendListResponse> GetListFriends(FriendTab currentTab = FriendTab.Friend, string nextCursor = "")
     {
@@ -604,6 +620,20 @@ public class DataSender
             };
             var response = await NetworkManager.INSTANCE.RPCSend(LIST_RECENT_CONVERSATIONS, listRecent);
             return DecodeFromJson<ListRecentConversationsResponse>(response.Payload);
+        }
+        catch (Exception e)
+        {
+            ParseError(e.Message);
+            return null;
+        }
+    }
+
+    public static async UniTask<AdminFriendConfigGetResponse> GetFriendConfig()
+    {
+        try
+        {
+            var response = await NetworkManager.INSTANCE.RPCSend(FRIEND_CONFIG);
+            return DecodeFromJson<AdminFriendConfigGetResponse>(response.Payload);
         }
         catch (Exception e)
         {

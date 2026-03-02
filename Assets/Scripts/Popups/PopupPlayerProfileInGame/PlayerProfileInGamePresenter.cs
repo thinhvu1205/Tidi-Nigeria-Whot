@@ -16,6 +16,19 @@ public class PlayerProfileInGamePresenter
         playerProfileInGameView = view;
     }
 
+    public async UniTask SendFriendRequest(List<string> userId)
+    {
+        try
+        {
+            await DataSender.SendFriendRequest(userId);
+            UIManager.Instance.ShowAlertDialog("Friend request sent successfully!");
+        }
+        catch (Exception e)
+        {
+            
+        }
+    }
+
     public async UniTask SendEmoji(string senderId, string receiverId, string emojiId)
     {
         await NetworkManager.INSTANCE.SendEmojiToPlayerRoomChat(senderId, receiverId, emojiId);
