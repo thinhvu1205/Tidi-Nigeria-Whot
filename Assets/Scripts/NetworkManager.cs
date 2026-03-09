@@ -30,13 +30,15 @@ public class NetworkManager : MonoBehaviour
         LOGIN_TYPE_KEY = "loginType",
         USER_NAME_KEY = "UserName",
         WORLD_CHAT_ROOM_NAME = "world_chat",
-        SERVER_TEST_PORT = "103.226.250.195",
-        SERVER_HUY_PORT = "172.16.56.30",
-        SERVER_TOAN_PORT = "172.16.56.104",
+        IP_SERVER_TEST = "103.226.250.195",
+        IP_SERVER_HUY = "172.16.56.121",
+        IP_SERVER_TOAN = "172.16.56.104",
         LINK_STORAGE_COLLECTION = "link_global",
         LINK_STORAGE_KEY = "links",
         KFeatureConfigCollection = "feature_config_global",
         KFeatureConfigKey = "config_mode";
+    public const int SERVER_DEFAULT_PORT = 7350;
+
 
     private IClient _ClientC;
     private ISession _SessionIS;
@@ -121,11 +123,32 @@ public class NetworkManager : MonoBehaviour
 
     #region Authen
 
+    /// <summary>Build metadata gửi kèm khi auth — key phải khớp identity hook server: bundle_id, version (bắt buộc), package, model.</summary>
+    public static Dictionary<string, string> GetBuildMetadata()
+    {
+        // Server beforeAuthenticate bắt buộc: bundle_id (tra platform), version (có mặt).
+        // Server afterAuthenticate dùng: package (last_login_package / creation), model (device model).
+        string bundleId = Application.identifier;
+        if (string.IsNullOrEmpty(bundleId))
+            bundleId = Application.productName ?? "com.unknown";
+        string packageName = Application.identifier;
+        if (string.IsNullOrEmpty(packageName))
+            packageName = Application.productName ?? "";
+        var meta = new Dictionary<string, string>
+        {
+            { "bundle_id", bundleId },
+            { "version", Application.version },
+            { "package", packageName },
+            { "model", SystemInfo.deviceModel ?? Application.platform.ToString() }
+        };
+        return meta;
+    }
+
     public async UniTask LoginGuest(string deviceId)
     {
         try
         {
-            var session = await _ClientC.AuthenticateDeviceAsync(deviceId);
+            var session = await _ClientC.AuthenticateDeviceAsync(deviceId, null, true, GetBuildMetadata());
             OnAuthenSuccess(session);
             
         }
@@ -140,8 +163,9 @@ public class NetworkManager : MonoBehaviour
         try
         {
             var email = $"{username}@fake.local";
-            Dictionary<string, string> vars = new Dictionary<string, string> { { "device_id", Config.deviceId } };
-            var session = await _ClientC.AuthenticateEmailAsync(email, password, username, create: true,vars: vars);
+            var vars = GetBuildMetadata();
+            vars["device_id"] = Config.deviceId ?? "";
+            var session = await _ClientC.AuthenticateEmailAsync(email, password, username, create: true, vars: vars);
             OnAuthenSuccess(session);
         }
         catch (Exception e)
@@ -155,8 +179,7 @@ public class NetworkManager : MonoBehaviour
     {
         try
         {
-            // var email = $"{username}@fake.local";
-            var session = await _ClientC.AuthenticateEmailAsync("", password, username, create: false);
+            var session = await _ClientC.AuthenticateEmailAsync("", password, username, create: false, vars: GetBuildMetadata());
             OnAuthenSuccess(session);
         }
         catch (Exception e)
@@ -170,7 +193,7 @@ public class NetworkManager : MonoBehaviour
     {
         try
         {
-            ISession session = await _ClientC.AuthenticateFacebookAsync(accessToken, create: true, username: "", import: true);
+            ISession session = await _ClientC.AuthenticateFacebookAsync(accessToken, create: true, username: "", import: true, vars: GetBuildMetadata());
             OnAuthenSuccess(session);
         }
         catch (Exception e)
@@ -637,12 +660,12 @@ public class NetworkManager : MonoBehaviour
 
     public void PreConnect()
     {
-        string ipServer = PlayerPrefs.GetString("IpServer", SERVER_TEST_PORT);
+        string ipServer = PlayerPrefs.GetString("IpServer", IP_SERVER_HUY);
         // _ClientC = new Client("http", "172.23.112.1", 57350, "defaultkey");
         // _ClientC = new Client("http", "172.16.56.36", 57350, "defaultkey"); // Máy Huy
         // _ClientC = new Client("http", "103.226.250.195", 57350, "defaultkey"); // Server chung
         // _ClientC = new Client("http", "172.16.56.104", 57350, "defaultkey"); // Máy Toàn
-        _ClientC = new Client("http", ipServer, 57350, "defaultkey");
+        _ClientC = new Client("http", ipServer, SERVER_DEFAULT_PORT, "defaultkey");
         RestoreSession();
         string deviceId;
         if (PlayerPrefs.HasKey(DEVICE_ID)) deviceId = PlayerPrefs.GetString(DEVICE_ID);
@@ -662,18 +685,18 @@ public class NetworkManager : MonoBehaviour
         switch(serverId)
         {
             case 0:
-                PlayerPrefs.SetString("IpServer", SERVER_TEST_PORT);
-                _ClientC = new Client("http", SERVER_TEST_PORT, 57350, "defaultkey");
+                PlayerPrefs.SetString("IpServer", IP_SERVER_TEST);
+                _ClientC = new Client("http", IP_SERVER_TEST, SERVER_DEFAULT_PORT, "defaultkey");
                 UIManager.Instance.ShowToast("Connect to Test Server", 2, transform);
                 break;
             case 1:
-                PlayerPrefs.SetString("IpServer", SERVER_HUY_PORT);
-                _ClientC = new Client("http", SERVER_HUY_PORT, 57350, "defaultkey");
+                PlayerPrefs.SetString("IpServer", IP_SERVER_HUY);
+                _ClientC = new Client("http", IP_SERVER_HUY, SERVER_DEFAULT_PORT, "defaultkey");
                 UIManager.Instance.ShowToast("Connect to Huy Server", 2, transform);
                 break;
             case 2:
-                PlayerPrefs.SetString("IpServer", SERVER_TOAN_PORT);
-                _ClientC = new Client("http", SERVER_TOAN_PORT, 57350, "defaultkey");
+                PlayerPrefs.SetString("IpServer", IP_SERVER_TOAN);
+                _ClientC = new Client("http", IP_SERVER_TOAN, SERVER_DEFAULT_PORT, "defaultkey");
                 UIManager.Instance.ShowToast("Connect to Toan Server", 2, transform);
                 break;
         }

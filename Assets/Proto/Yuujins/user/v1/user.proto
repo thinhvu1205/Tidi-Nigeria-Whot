@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package user.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message User {
+  message Request {
+    message ChangePassword {
+      string password = 1;
+      string new_password = 2;
+    }
+
+    message Register {
+      string user_name = 1;
+      string password = 2;
+      string device_id = 3;
+    }
+
+    message GetAccount {}
+  }
+
+  message Response {
+    message ChangePassword {}
+    message Register {}
+    message GetAccount {
+      UserAccount account = 1;
+    }
+  }
+}
+
+message Profile {
+  string user_id = 1;
+  string username = 2;
+  optional string display_name = 3;
+  optional string avatar_url = 4;
+  string lang_tag = 5;
+  optional string location = 6;
+  optional string timezone = 7;
+  int32 edge_count = 8;
+  optional string facebook_id = 9;
+  optional string google_id = 10;
+  optional string apple_id = 11;
+  google.protobuf.Timestamp create_time = 12;
+  google.protobuf.Timestamp update_time = 13;
+  bool online = 14;
+  google.protobuf.Timestamp last_login = 15;
+  google.protobuf.Timestamp last_online = 16;
+  int64 balance = 17;
+  int64 bank_balance = 18;
+  int32 avatar_id = 19;
+  int32 vip = 20;
+  bool official = 21;
+  optional int64 cid = 22;
+  Match match = 23;
+  string app_config = 24;
+
+  message Match {
+    string game_code = 1;
+    string match_id = 2;
+    google.protobuf.Timestamp leave_time = 4;
+  }
+}
+
+message UserAccount {
+  Profile profile = 1;
+  string status = 2;
+  optional google.protobuf.Timestamp last_vip_update = 3;
+  optional google.protobuf.Timestamp official_at = 4;
+  optional int64 agent_id = 5;
+  bool withdraw_blacklist = 6;
+  bool internal_account = 7;
+  string creation_ip_address = 8;
+  string creation_device = 9;
+  string creation_device_id = 10;
+  string creation_package = 11;
+  string last_login_ip_address = 12;
+  string last_login_device = 13;
+  string last_login_package = 14;
+  google.protobuf.Timestamp disable_time = 15;
+  bytes password = 16;
+  int64 seq_id = 17;
+}

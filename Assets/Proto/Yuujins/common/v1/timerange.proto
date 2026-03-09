@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package common.v1;
+
+message TimeOfDay {
+  int32 hours = 1;
+  int32 minutes = 2;
+}
+
+message TimeRange {
+  TimeOfDay start_time = 1;
+  TimeOfDay end_time = 2;
+}

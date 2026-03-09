@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package match.v1;
+
+import "cfg/game/v1/game.proto";
+import "cfg/bet/v1/bet.proto";
+
+message ListGamesRequest {
+  cfg.game.v1.Game.Type type = 1;
+}
+
+message ListGamesResponse {
+  repeated cfg.game.v1.Game games = 1;
+}
+
+message ListBetLevelsRequest {
+  uint32 game_id = 1;
+}
+
+message ListBetLevelsResponse {
+  repeated cfg.bet.v1.Bet items = 1;
+}
+
+message JoinGameRequest {
+  uint32 game_id = 1;
+  int64 mark_unit = 2;
+}
+
+message JoinGameResponse {
+  string match_id = 1;
+  string token = 2;
+}
+
+message CreatePrivateTableRequest {
+  uint32 game_id = 1;
+  int64 mark_unit = 2;
+  string password = 3;
+}
+
+message CreatePrivateTableResponse {
+  string match_id = 1;
+  string invite_code = 2;
+}
+
+message EnterSlotRequest {
+  uint32 game_id = 1;
+}
+
+message EnterSlotResponse {
+  string match_id = 1;
+  string token = 2;
+}
+
+message JoinPrivateTableRequest {
+  string invite_code = 1;
+  string password = 2;
+}
+
+message JoinPrivateTableResponse {
+  string match_id = 1;
+  string token = 2;
+}
+
+message MatchInfo {
+  string match_id = 1;
+  int32 size = 2;
+  int32 max_size = 3;
+  bool open = 4;
+  uint32 game_id = 5;
+  int64 mark_unit = 6;
+}
+
+message FindMatchRequest {
+  uint32 game_id = 1;
+  int64 mark_unit = 2;
+  bool create_if_empty = 3;
+  string exclude_match_id = 4;
+}
+
+message FindMatchResponse {
+  repeated MatchInfo items = 1;
+}
+
+message GetMatchInfoRequest {
+  string match_id = 1;
+}
+
+message GetMatchInfoResponse {
+  MatchInfo match = 1;
+}

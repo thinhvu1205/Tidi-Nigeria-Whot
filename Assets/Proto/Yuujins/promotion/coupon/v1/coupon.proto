@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package promotion.coupon.v1;
+
+import "common/v1/pagination.proto";
+import "google/protobuf/timestamp.proto";
+
+message Coupon {
+  int64 id = 1;
+  string issued_by = 2;
+  string user_id = 3;
+  int64 min_deposit_cent = 4;
+  int64 max_deposit_cent = 5;
+  int64 bonus_amount_bps = 6;
+  int64 bonus_amount_flat = 7;
+  int64 max_bonus_amount = 8;
+  google.protobuf.Timestamp issued_at = 9;
+  google.protobuf.Timestamp expired_at = 10;
+  bool is_redeemed = 11;
+  google.protobuf.Timestamp redeemed_at = 12;
+
+  message Request {
+    message List {
+      optional string issued_by = 1;
+      optional string user_id = 2;
+      optional int64 deposit_cent = 5;
+      optional bool is_redeemed = 6;
+      int32 limit = 7;
+      int32 offset = 8;
+    }
+
+    message Create {
+      string user_id = 1;
+      int64 min_deposit_cent = 2;
+      int64 max_deposit_cent = 3;
+      int64 bonus_amount_bps = 4;
+      int64 bonus_amount_flat = 5;
+      int64 max_bonus_amount = 6;
+      int32 expired_in_hours = 7;
+    }
+
+    message Delete {
+      int64 id = 1;
+    }
+
+    message DeleteMany {
+      repeated int64 ids = 1;
+    }
+  }
+
+  message Response {
+    message List {
+      repeated Coupon coupons = 1;
+      common.v1.Pagination pagination = 2;
+    }
+  }
+}

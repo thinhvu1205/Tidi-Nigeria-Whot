@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package common.v1;
+
+message AssetUploadRequest {
+  string name = 1;
+}
+
+message AssetUploadResponse {
+  string upload_url = 1;
+  string display_url = 2;
+}

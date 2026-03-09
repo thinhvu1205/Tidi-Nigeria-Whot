@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package rewards.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message CheckinSlot {
+  int32 slot_index = 1;
+  int32 online_sec = 2;
+}
+
+message GetCheckinConfigRequest {
+  string region = 1;
+}
+
+message GetCheckinConfigResponse {
+  repeated CheckinSlot slots = 1;
+}
+
+message GetCheckinStateRequest {
+  string region = 1;
+}
+
+message GetCheckinStateResponse {
+  int32 num_claim_today = 1;
+  int32 total_slots = 2;
+  bool can_claim = 3;
+  int64 next_claim_sec = 4;
+  google.protobuf.Timestamp next_claim_at = 5;
+}
+
+message ClaimCheckinRequest {
+  string region = 1;
+}
+
+message ClaimCheckinResponse {
+  int64 chip_earned = 1;
+  int64 new_balance = 2;
+}

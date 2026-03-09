@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package cfg.bet.v1;
+
+message Bet {
+  int64 mark_unit = 1;
+  int64 ag_join = 2;
+  int64 ag_play_now = 3;
+  int64 ag_leave = 4;
+  int32 min_vip = 5;
+  int32 max_vip = 6;
+}
+
+message Template {
+  uint32 game_id = 1;
+  repeated Bet bets = 2;
+
+  message Request {
+    message Create {
+      uint32 game_id = 1;
+      repeated Bet bets = 2;
+    }
+    message Read {
+      uint32 game_id = 1;
+    }
+    message Update {
+      uint32 game_id = 1;
+      repeated Bet bets = 2;
+    }
+    message Delete {
+      uint32 game_id = 1;
+    }
+  }
+}
+
+message Entry {
+  Bet bet = 1;
+  bool joinable = 2;
+  int32 playing_count = 3;
+
+  message Request {
+    message List {
+      uint32 game_id = 1;
+    }
+  }
+
+  message Response {
+    message List {
+      uint32 game_id = 1;
+      repeated Entry entries = 2;
+    }
+  }
+}

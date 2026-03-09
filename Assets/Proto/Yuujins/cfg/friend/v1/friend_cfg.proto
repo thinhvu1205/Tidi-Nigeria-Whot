@@ -1,0 +1,221 @@
+syntax = "proto3";
+
+package cfg.friend.v1;
+
+message FriendLevelConfig {
+  int64 id = 1;
+  string region = 2;
+  int32 level = 3;
+  string level_key = 4;
+  int64 ip_required = 5;
+  bool has_inbox = 6;
+  bool has_ping = 7;
+  double friend_bonus_win_pct = 8;
+  bool has_chip_transfer = 9;
+  bool has_fortune_gift = 10;
+  bool has_gift_item = 11;
+  int64 limit_chip_per_transaction = 12;
+  int32 limit_transfer_count_per_day = 13;
+  bool has_quest = 14;
+  int32 ip_gain_per_match = 15;
+  bool has_big_win_notification = 16;
+  optional double bonus_topup_pct = 17;
+  bool has_soulmate_jackpot = 18;
+  string icon_id = 19;
+  int32 sort_order = 20;
+
+  message Request {
+    message List {
+      string region = 1;
+    }
+    message Create {
+      string region = 1;
+      int32 level = 2;
+      string level_key = 3;
+      int64 ip_required = 4;
+      bool has_inbox = 5;
+      bool has_ping = 6;
+      double friend_bonus_win_pct = 7;
+      bool has_chip_transfer = 8;
+      bool has_fortune_gift = 9;
+      bool has_gift_item = 10;
+      int64 limit_chip_per_transaction = 11;
+      int32 limit_transfer_count_per_day = 12;
+      bool has_quest = 13;
+      int32 ip_gain_per_match = 14;
+      bool has_big_win_notification = 15;
+      optional double bonus_topup_pct = 16;
+      bool has_soulmate_jackpot = 17;
+      string icon_id = 18;
+      int32 sort_order = 19;
+    }
+    message Update {
+      int64 id = 1;
+      string region = 2;
+      int32 level = 3;
+      string level_key = 4;
+      int64 ip_required = 5;
+      bool has_inbox = 6;
+      bool has_ping = 7;
+      double friend_bonus_win_pct = 8;
+      bool has_chip_transfer = 9;
+      bool has_fortune_gift = 10;
+      bool has_gift_item = 11;
+      int64 limit_chip_per_transaction = 12;
+      int32 limit_transfer_count_per_day = 13;
+      bool has_quest = 14;
+      int32 ip_gain_per_match = 15;
+      bool has_big_win_notification = 16;
+      optional double bonus_topup_pct = 17;
+      bool has_soulmate_jackpot = 18;
+      string icon_id = 19;
+      int32 sort_order = 20;
+    }
+    message Delete {
+      int64 id = 1;
+    }
+    message Read {
+      int64 id = 1;
+    }
+  }
+  message Response {
+    message List {
+      repeated FriendLevelConfig items = 1;
+    }
+  }
+}
+
+message FriendVipSlotConfig {
+  int64 id = 1;
+  string region = 2;
+  int32 vip_level = 3;
+  int32 max_total_friend = 4;
+  int32 max_close_friend = 5;
+  int32 max_best_friend = 6;
+  int32 max_soulmate = 7;
+
+  message Request {
+    message List {
+      string region = 1;
+    }
+    message Create {
+      string region = 1;
+      int32 vip_level = 2;
+      int32 max_total_friend = 3;
+      int32 max_close_friend = 4;
+      int32 max_best_friend = 5;
+      int32 max_soulmate = 6;
+    }
+    message Update {
+      int64 id = 1;
+      string region = 2;
+      int32 vip_level = 3;
+      int32 max_total_friend = 4;
+      int32 max_close_friend = 5;
+      int32 max_best_friend = 6;
+      int32 max_soulmate = 7;
+    }
+    message Delete {
+      int64 id = 1;
+    }
+    message Read {
+      int64 id = 1;
+    }
+  }
+  message Response {
+    message List {
+      repeated FriendVipSlotConfig items = 1;
+    }
+  }
+}
+
+message FriendVipDailyChipConfig {
+  int64 id = 1;
+  string region = 2;
+  int32 vip_level = 3;
+  int64 max_chip_to_friend = 4;
+  int64 max_chip_to_close_friend = 5;
+  int64 max_chip_to_best_friend = 6;
+  int64 max_chip_to_soulmate = 7;
+
+  message Request {
+    message List {
+      string region = 1;
+    }
+    message Create {
+      string region = 1;
+      int32 vip_level = 2;
+      int64 max_chip_to_friend = 3;
+      int64 max_chip_to_close_friend = 4;
+      int64 max_chip_to_best_friend = 5;
+      int64 max_chip_to_soulmate = 6;
+    }
+    message Update {
+      int64 id = 1;
+      string region = 2;
+      int32 vip_level = 3;
+      int64 max_chip_to_friend = 4;
+      int64 max_chip_to_close_friend = 5;
+      int64 max_chip_to_best_friend = 6;
+      int64 max_chip_to_soulmate = 7;
+    }
+    message Delete {
+      int64 id = 1;
+    }
+    message Read {
+      int64 id = 1;
+    }
+  }
+  message Response {
+    message List {
+      repeated FriendVipDailyChipConfig items = 1;
+    }
+  }
+}
+
+message FriendGiftItem {
+  int64 id = 1;
+  string region = 2;
+  string item_id = 3;
+  string name_key = 4;
+  int64 chip_price = 5;
+  int32 ip_gain = 6;
+  int32 vip_unlock = 7;
+  int32 sort_order = 8;
+
+  message Request {
+    message List {
+      string region = 1;
+    }
+    message Create {
+      string region = 1;
+      string item_id = 2;
+      string name_key = 3;
+      int64 chip_price = 4;
+      int32 ip_gain = 5;
+      int32 vip_unlock = 6;
+      int32 sort_order = 7;
+    }
+    message Update {
+      int64 id = 1;
+      string region = 2;
+      string item_id = 3;
+      string name_key = 4;
+      int64 chip_price = 5;
+      int32 ip_gain = 6;
+      int32 vip_unlock = 7;
+      int32 sort_order = 8;
+    }
+    message Delete {
+      int64 id = 1;
+    }
+    message Read {
+      int64 id = 1;
+    }
+  }
+  message Response {
+    message List {
+      repeated FriendGiftItem items = 1;
+    }
+  }
+}

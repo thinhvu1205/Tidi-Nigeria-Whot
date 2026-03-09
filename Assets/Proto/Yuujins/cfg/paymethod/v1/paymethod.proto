@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package cfg.paymethod.v1;
+
+message Method {
+  enum Type {
+    TYPE_UNSPECIFIED = 0;
+    TYPE_SMS = 1;
+    TYPE_VI = 2;
+    TYPE_IAP = 3;
+  }
+
+  int32 id = 1;
+  Type type = 2;
+  string name = 3;
+  string remark = 4;
+  int64 min_fm = 5;
+  int64 max_fm = 6;
+  bool enabled = 7;
+
+  message Request {
+    message Delete {
+      int32 id = 1;
+    }
+    message Toggle {
+      int32 id = 1;
+      bool enabled = 2;
+    }
+    message Create {
+      Method.Type type = 1;
+      string name = 2;
+      string remark = 3;
+      int64 min_fm = 4;
+      int64 max_fm = 5;
+    }
+
+    message Update {
+      int32 id = 1;
+      Method.Type type = 2;
+      string name = 3;
+      string remark = 4;
+      int64 min_fm = 5;
+      int64 max_fm = 6;
+    }
+  }
+}
+
+message Config {
+  repeated Method methods = 1;
+  int64 in_rate = 2;
+  int64 out_rate = 3;
+
+  message Request {
+    message UpdateRate {
+      int64 in_rate = 2;
+      int64 out_rate = 3;
+    }
+  }
+}

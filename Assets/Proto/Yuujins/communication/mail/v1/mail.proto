@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package communication.mail.v1;
+
+import "common/v1/pagination.proto";
+import "google/protobuf/timestamp.proto";
+
+message Mail {
+  int64 id = 1;
+  string from_uid = 2;
+  string to_uid = 3;
+  string subject = 4;
+  string body = 5;
+  bool is_read = 6;
+  bool is_deleted = 7;
+  bool is_redeemed = 8;
+  int64 chip_amount = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
+
+  message Request {
+    message Create {
+      string to_uid = 1;
+      string subject = 2;
+      string body = 3;
+      int64 chip_amount = 4;
+    }
+
+    message Delete {
+      int64 id = 1;
+    }
+
+    message MarkAsRead {
+      int64 id = 1;
+    }
+
+    message MarkAsDeleted {
+      int64 id = 1;
+    }
+
+    message Redeem {
+      int64 id = 1;
+    }
+
+    message List {
+      optional string from_uid = 1;
+      optional string to_uid = 2;
+      optional bool is_read = 3;
+      optional bool is_deleted = 4;
+      optional bool is_redeemed = 5;
+      int32 limit = 6;
+      int32 offset = 7;
+    }
+  }
+
+  message Response {
+    message List {
+      repeated Mail mails = 1;
+      common.v1.Pagination pagination = 2;
+    }
+  }
+}

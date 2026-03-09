@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package cfg.banner.v1;
+
+import "common/v1/pagination.proto";
+import "common/v1/position.proto";
+
+message Action {
+  Type type = 1;
+  oneof metadata {
+    string target_name = 2;
+    int32 game_id = 3;
+    string url = 4;
+  }
+  enum Type {
+    TYPE_UNSPECIFIED = 0;
+    TYPE_LOBBY = 1;
+    TYPE_GAME = 2;
+    TYPE_WEBVIEW = 3;
+    TYPE_OPENURL = 4;
+  }
+}
+
+message Button {
+  Action action = 1;
+  string image_url = 2;
+  common.v1.Position pos = 3;
+}
+
+message Banner {
+  int64 id = 1;
+  string name = 2;
+  string image_url = 3;
+  Action action = 4;
+  repeated Button buttons = 5;
+
+  message Request {
+    message Create {
+      string name = 1;
+      string image_url = 2;
+      Action action = 3;
+      repeated Button buttons = 4;
+    }
+
+    message Delete {
+      int64 id = 1;
+    }
+
+    message Read {
+      int64 id = 1;
+    }
+
+    message List {
+      int32 offset = 1;
+      int32 limit = 2;
+    }
+  }
+
+  message Response {
+    message List {
+      repeated Banner banners = 1;
+      common.v1.Pagination pagination = 2;
+    }
+  }
+}

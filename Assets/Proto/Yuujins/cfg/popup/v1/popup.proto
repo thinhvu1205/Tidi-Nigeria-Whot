@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+package cfg.popup.v1;
+
+import "cfg/game/v1/game.proto";
+import "common/v1/pagination.proto";
+import "common/v1/range.proto";
+import "common/v1/timerange.proto";
+import "google/protobuf/timestamp.proto";
+
+enum TriggerPoint {
+  TRIGGER_POINT_UNSPECIFIED = 0;
+  TRIGGER_POINT_LOGIN_LOBBY = 1;
+  TRIGGER_POINT_TABLE_KICK_INSUFFICIENT_FUNDS = 2;
+  TRIGGER_POINT_GAME_TO_LOBBY = 3;
+  TRIGGER_POINT_LOBBY_ENTER_GAME = 4;
+  TRIGGER_POINT_LOBBY_TO_SHOP = 5;
+  TRIGGER_POINT_SHOP_TO_LOBBY = 6;
+}
+
+enum LimitType {
+  LIMIT_TYPE_UNSPECIFIED = 0;
+  LIMIT_TYPE_DAILY = 1;
+  LIMIT_TYPE_SESSION = 2;
+  LIMIT_TYPE_LIFETIME = 3;
+}
+
+enum Os {
+  OS_UNSPECIFIED = 0;
+  OS_ANDROID = 1;
+  OS_IOS = 2;
+}
+
+message Condition {
+  string bundle_id = 1;
+  string app_version = 2;
+  Os os = 3;
+  common.v1.Range lq = 4;
+  common.v1.Range lq_sms = 5;
+  common.v1.Range lq_vi = 6;
+  common.v1.Range lq_iap = 7;
+  common.v1.Range blq1 = 8;
+  common.v1.Range blq3 = 9;
+  common.v1.Range blq5 = 10;
+  common.v1.Range blq7 = 11;
+  common.v1.Range co = 12;
+  common.v1.Range avg_trans7 = 13;
+  repeated int64 cids = 14;
+  common.v1.Range account_created_days_ago = 15;
+  common.v1.Range vip = 16;
+  common.v1.Range ag = 17;
+  common.v1.Range agb = 18;
+  repeated cfg.game.v1.Game.Type st1_gametypes = 19;
+  common.v1.Range st1_stake = 20;
+  common.v1.Range loginth = 21;
+}
+
+message Popup {
+  int64 id = 1;
+  string name = 2;
+
+  int64 banner_id = 3;
+  TriggerPoint trigger_point = 4;
+  optional google.protobuf.Timestamp start_at = 5;
+  optional google.protobuf.Timestamp end_at = 6;
+
+  int32 priority = 7;
+
+  repeated common.v1.TimeRange schedule = 8;
+  LimitType limit_type = 9;
+  int32 limit = 10;
+  Condition criteria = 11;
+  bool enabled = 12;
+
+  message Request {
+    message List {
+      TriggerPoint trigger_point = 1;
+      cfg.game.v1.Game.Type gametype = 2;
+      int64 stake = 3;
+      optional bool enabled = 4;
+      int32 offset = 5;
+      int32 limit = 6;
+      int64 banner_id = 7;
+    }
+
+    message Create {
+      string name = 1;
+      int64 banner_id = 2;
+      TriggerPoint trigger_point = 3;
+      optional google.protobuf.Timestamp start_at = 4;
+      optional google.protobuf.Timestamp end_at = 5;
+      int32 priority = 6;
+      repeated common.v1.TimeRange schedule = 7;
+      LimitType limit_type = 8;
+      int32 limit = 9;
+      Condition criteria = 10;
+      bool enabled = 11;
+    }
+
+    message Update {
+      int64 id = 1;
+      string name = 2;
+      int64 banner_id = 3;
+      TriggerPoint trigger_point = 4;
+      optional google.protobuf.Timestamp start_at = 5;
+      optional google.protobuf.Timestamp end_at = 6;
+      int32 priority = 7;
+      repeated common.v1.TimeRange schedule = 8;
+      LimitType limit_type = 9;
+      int32 limit = 10;
+      Condition criteria = 11;
+      bool enabled = 12;
+    }
+
+    message Delete {
+      int64 id = 1;
+    }
+
+    message Toggle {
+      int64 id = 1;
+      bool enabled = 2;
+    }
+  }
+
+  message Response {
+    message List {
+      repeated Popup popups = 1;
+      common.v1.Pagination pagination = 2;
+    }
+  }
+}
+
+message Config {
+  repeated Popup popups = 1;
+}

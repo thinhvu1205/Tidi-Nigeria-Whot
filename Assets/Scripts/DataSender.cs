@@ -8,14 +8,36 @@ using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Nakama;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UIElements;
+// Server Yuujins (namespace Yuujins.* — không trùng Proto)
+using Yuujins.User.V1;
+using Yuujins.Match.V1;
+using Yuujins.Cfg.Game.V1;
+using Yuujins.Cfg.Banner.V1;
+using Yuujins.Cfg.Bet.V1;
+using Yuujins.Rank.V1;
+using Yuujins.Rewards.V1;
+using Yuujins.Friend.V1;
+using Yuujins.Common.V1;
+using Yuujins.Communication.Mail.V1;
+using Yuujins.Economy.Wallet.V1;
+using Yuujins.Promotion.Coupon.V1;
+using Config = Globals.Config;
+using Game = Yuujins.Cfg.Game.V1.Game;
+using Profile = Proto.Profile;
+using User = Yuujins.User.V1.User;
 
+/// <summary>
+/// API layer: các region dùng ApiNames (LIST_GAME, GET_PROFILE, …) = server <b>Nigeria cũ</b> (nakama-nigeria).
+/// Các region <b>Yuujins</b> (Identity*, Match*, Cfg*, Rank*, Rewards*, Social*, Mail*, Bank*, Coupon*) = server <b>yuujins</b>. Chọn API theo backend đang kết nối.
+/// </summary>
 public class DataSender
 {
-    #region ApiNames
+    #region ApiNames (server Nigeria cũ – giữ nguyên)
     public const string LIST_GAME = "list_game";
     public const string LIST_BET = "list_bet";
     public const string CREATE_MATCH = "create_match";
@@ -80,6 +102,52 @@ public class DataSender
     public const string FRIEND_REFUSE_TIER_UPGRADE = "friend_refuse_tier_upgrade";
     public const string FRIEND_DOWNGRADE = "friend_downgrade";
     #endregion
+
+    #region RPC IDs – Yuujins (server yuujins)
+    public const string IDENTITY_USER_REGISTER = "identity_user_register";
+    public const string IDENTITY_USER_LOGIN = "identity_user_login";
+    public const string IDENTITY_USER_CHANGE_PASSWORD = "identity_user_change_password";
+    public const string IDENTITY_USER_GET_ACCOUNT = "identity_user_get_account";
+    public const string CFG_BANNER_LIST = "cfg_banner_list";
+    public const string CFG_BET_READ = "cfg_bet_read";
+    public const string CFG_GAME_LIST = "cfg_game_list";
+    public const string MATCH_LIST_GAMES = "match_list_games";
+    public const string MATCH_LIST_BET_LEVELS = "match_list_bet_levels";
+    public const string MATCH_JOIN_GAME = "match_join_game";
+    public const string MATCH_GET_MATCH_INFO = "match_get_match_info";
+    public const string MATCH_FIND_MATCH = "match_find_match";
+    public const string MATCH_ENTER_SLOT = "match_enter_slot";
+    public const string MATCH_CREATE_PRIVATE_TABLE = "match_create_private_table";
+    public const string MATCH_JOIN_PRIVATE_TABLE = "match_join_private_table";
+    public const string MAIL_LIST = "mail_list";
+    public const string MAIL_MARK_AS_READ = "mail_mark_as_read";
+    public const string MAIL_MARK_AS_DELETED = "mail_mark_as_deleted";
+    public const string MAIL_REDEEM = "mail_redeem";
+    public const string BANK_DEPOSIT = "bank_deposit";
+    public const string BANK_WITHDRAW = "bank_withdraw";
+    public const string COUPON_LIST = "coupon_list";
+    public const string RANK_RANK_LIST_TOP_BY_GAME = "rank_rank_list_top_by_game";
+    public const string REWARDS_CHECKIN_GET_CHECKIN_CONFIG = "rewards_checkin_get_checkin_config";
+    public const string REWARDS_CHECKIN_GET_CHECKIN_STATE = "rewards_checkin_get_checkin_state";
+    public const string REWARDS_CHECKIN_CLAIM_CHECKIN = "rewards_checkin_claim_checkin";
+    public const string SOCIAL_FRIEND_LIST = "social_friend_list";
+    public const string SOCIAL_FRIEND_LIST_FRIEND_REQUESTS_RECEIVED = "social_friend_list_friend_requests_received";
+    public const string SOCIAL_FRIEND_LIST_FRIEND_REQUESTS_SENT = "social_friend_list_friend_requests_sent";
+    public const string SOCIAL_FRIEND_LIST_UPGRADE_INVITES_RECEIVED = "social_friend_list_upgrade_invites_received";
+    public const string SOCIAL_FRIEND_LIST_UPGRADE_INVITES_SENT = "social_friend_list_upgrade_invites_sent";
+    public const string SOCIAL_FRIEND_SEND_FRIEND_REQUEST = "social_friend_send_friend_request";
+    public const string SOCIAL_FRIEND_ACCEPT_FRIEND_REQUEST = "social_friend_accept_friend_request";
+    public const string SOCIAL_FRIEND_DECLINE_FRIEND_REQUEST = "social_friend_decline_friend_request";
+    public const string SOCIAL_FRIEND_SEND_UPGRADE_INVITE = "social_friend_send_upgrade_invite";
+    public const string SOCIAL_FRIEND_ACCEPT_UPGRADE_INVITE = "social_friend_accept_upgrade_invite";
+    public const string SOCIAL_FRIEND_DECLINE_UPGRADE_INVITE = "social_friend_decline_upgrade_invite";
+    public const string SOCIAL_FRIEND_REMOVE_FRIEND = "social_friend_remove_friend";
+    public const string SOCIAL_FRIEND_BLOCK_FRIEND = "social_friend_block_friend";
+    public const string SOCIAL_FRIEND_GET_INTIMACY = "social_friend_get_intimacy";
+    public const string SOCIAL_FRIEND_SEND_GIFT = "social_friend_send_gift";
+    public const string SOCIAL_FRIEND_GET_LEVEL_CONFIG = "social_friend_get_level_config";
+    public const string SOCIAL_FRIEND_GET_GIFT_ITEMS = "social_friend_get_gift_items";
+    #endregion
     
     #region ConvertProtobuf
     private static T DecodeFromBase64<T>(string base64) where T : IMessage<T>, new()
@@ -95,27 +163,71 @@ public class DataSender
         return parser.Parse<T>(json);
     }
 
+    // Server Yuujins: lỗi trả qua RPC exception — exception.Message là chuỗi từ errs.ToPresenterSafe/Context (mapper.go safeMessages hoặc err.Error()). Không dùng Proto.Error.
+    // Server Nigeria cũ: có thể trả JSON Proto.Error trong exception message → decode và xử lý ErrorType (ChipNotEnough v.v.).
     public static void ParseError(string message)
+    {
+        if (string.IsNullOrEmpty(message)) return;
+        try
+        {
+            Error error = DecodeFromJson<Error>(message);
+            if (error != null && !string.IsNullOrEmpty(error.Error_))
+            {
+                if (error.ErrorType == ErrorType.ChipNotEnough)
+                    UIManager.Instance.ShowConfirmDialog(error.Error_, () => UIManager.Instance.OpenShop(), null, "Get More Chips");
+                else
+                    UIManager.Instance.ShowAlertDialog(error.Error_);
+                return;
+            }
+        }
+        catch (Exception) { /* message không phải Proto.Error (Yuujins hoặc plain text) */ }
+        UIManager.Instance.ShowAlertDialog(message);
+    }
+
+    private static async UniTask<IApiRpc> RpcSendProto(string apiName, IMessage protoRequest)
+    {
+        if (NetworkManager.INSTANCE == null) throw new InvalidOperationException("NetworkManager not ready");
+        return await NetworkManager.INSTANCE.RPCSend(apiName, protoRequest);
+    }
+
+    /// <summary>Decode JSON payload to protobuf; trả default khi payload rỗng hoặc parse lỗi (log warning). Dùng khi không cần throw.</summary>
+    private static T DecodePayload<T>(string payload) where T : IMessage<T>, new()
+    {
+        if (string.IsNullOrWhiteSpace(payload)) return default;
+        try { return DecodeFromJson<T>(payload); }
+        catch (Exception e) { Debug.LogWarning("DecodePayload<" + typeof(T).Name + ">: " + e.Message); return default; }
+    }
+
+    /// <summary>Gọi RPC Yuujins: khi server trả lỗi (exception), show popup qua ParseError(exception.Message); khi success decode payload. Rỗng → default.</summary>
+    private static async UniTask<T> RpcDecodeOrShowError<T>(string apiName, IMessage request) where T : IMessage<T>, new()
     {
         try
         {
-            if (string.IsNullOrEmpty(message)) return;
-            Error error = DecodeFromJson<Error>(message);
-            if (error == null) return;
-            if (error.ErrorType == ErrorType.ChipNotEnough)
-            {
-                UIManager.Instance.ShowConfirmDialog(error.Error_, () => UIManager.Instance.OpenShop(), null, "Get More Chips");
-            }
-            else
-            {
-                UIManager.Instance.ShowAlertDialog(error.Error_);
-            }
+            var rpc = await RpcSendProto(apiName, request);
+            var payload = rpc?.Payload ?? "";
+            if (string.IsNullOrWhiteSpace(payload)) return default;
+            return DecodeFromJson<T>(payload);
         }
         catch (Exception e)
         {
-            Debug.LogError("Parse Error Fail " + e);
+            ParseError(e.Message);
+            return default;
         }
-        
+    }
+
+    /// <summary>Gọi RPC trả payload string (Identity v.v.): lỗi → ParseError + return null.</summary>
+    private static async UniTask<string> RpcSendAndGetPayloadOrShowError(string apiName, IMessage request)
+    {
+        try
+        {
+            var rpc = await RpcSendProto(apiName, request);
+            return rpc?.Payload ?? "";
+        }
+        catch (Exception e)
+        {
+            ParseError(e.Message);
+            return null;
+        }
     }
 
     #endregion
@@ -1088,5 +1200,238 @@ public class DataSender
         }
     }
 
+    #endregion
+
+    #region Yuujins – Identity (User.V1)
+    public static async UniTask<string> IdentityUserRegister(string userName, string password, string deviceId)
+    {
+        var req = new User.Types.Request.Types.Register { UserName = userName ?? "", Password = password ?? "", DeviceId = deviceId ?? Config.deviceId ?? "" };
+        return await RpcSendAndGetPayloadOrShowError(IDENTITY_USER_REGISTER, req) ?? "";
+    }
+    public static async UniTask<string> IdentityUserLogin(string userName, string password)
+    {
+        var req = new User.Types.Request.Types.Register { UserName = userName ?? "", Password = password ?? "" };
+        return await RpcSendAndGetPayloadOrShowError(IDENTITY_USER_LOGIN, req) ?? "";
+    }
+    public static async UniTask<string> IdentityUserChangePassword(string oldPassword, string newPassword)
+    {
+        var req = new User.Types.Request.Types.ChangePassword { Password = oldPassword ?? "", NewPassword = newPassword ?? "" };
+        return await RpcSendAndGetPayloadOrShowError(IDENTITY_USER_CHANGE_PASSWORD, req) ?? "";
+    }
+    public static async UniTask<string> IdentityUserGetAccount()
+    {
+        return await RpcSendAndGetPayloadOrShowError(IDENTITY_USER_GET_ACCOUNT, new User.Types.Request.Types.GetAccount()) ?? "";
+    }
+    public static async UniTask<User.Types.Response.Types.GetAccount> IdentityUserGetAccountTyped()
+    {
+        var payload = await IdentityUserGetAccount();
+        if (string.IsNullOrWhiteSpace(payload)) return null;
+        try { return DecodeFromJson<User.Types.Response.Types.GetAccount>(payload); }
+        catch (Exception e) { Debug.LogWarning("IdentityUserGetAccountTyped: " + e.Message); return null; }
+    }
+    public static bool TryParseGetAccountResponse(string payload, out UserAccount account)
+    {
+        account = null;
+        if (string.IsNullOrWhiteSpace(payload)) return false;
+        try { var resp = DecodeFromJson<User.Types.Response.Types.GetAccount>(payload); account = resp?.Account; return account != null; }
+        catch (Exception e) { Debug.LogWarning("TryParseGetAccountResponse: " + e.Message); return false; }
+    }
+    #endregion
+    
+    #region Yuujins – Match (Match.V1)
+    public static async UniTask<ListGamesResponse> MatchListGamesAsync(Yuujins.Cfg.Game.V1.Game.Types.Type type = Yuujins.Cfg.Game.V1.Game.Types.Type.Unspecified)
+    {
+        return await RpcDecodeOrShowError<ListGamesResponse>(MATCH_LIST_GAMES, new ListGamesRequest { Type = type });
+    }
+    public static async UniTask<ListBetLevelsResponse> MatchListBetLevelsAsync(uint gameId)
+    {
+        return await RpcDecodeOrShowError<ListBetLevelsResponse>(MATCH_LIST_BET_LEVELS, new ListBetLevelsRequest { GameId = gameId });
+    }
+    public static async UniTask<GetMatchInfoResponse> MatchGetMatchInfoAsync(string matchId)
+    {
+        return await RpcDecodeOrShowError<GetMatchInfoResponse>(MATCH_GET_MATCH_INFO, new GetMatchInfoRequest { MatchId = matchId ?? "" });
+    }
+    public static async UniTask<JoinGameResponse> MatchJoinGameAsync(uint gameId, long markUnit)
+    {
+        return await RpcDecodeOrShowError<JoinGameResponse>(MATCH_JOIN_GAME, new JoinGameRequest { GameId = gameId, MarkUnit = markUnit });
+    }
+    public static async UniTask<EnterSlotResponse> MatchEnterSlotAsync(uint gameId)
+    {
+        return await RpcDecodeOrShowError<EnterSlotResponse>(MATCH_ENTER_SLOT, new EnterSlotRequest { GameId = gameId });
+    }
+    public static async UniTask<FindMatchResponse> MatchFindMatchAsync(uint gameId, long markUnit, bool createIfEmpty = false, string excludeMatchId = null)
+    {
+        return await RpcDecodeOrShowError<FindMatchResponse>(MATCH_FIND_MATCH, new FindMatchRequest { GameId = gameId, MarkUnit = markUnit, CreateIfEmpty = createIfEmpty, ExcludeMatchId = excludeMatchId ?? "" });
+    }
+    public static async UniTask<CreatePrivateTableResponse> MatchCreatePrivateTableAsync(uint gameId, long markUnit, string password)
+    {
+        return await RpcDecodeOrShowError<CreatePrivateTableResponse>(MATCH_CREATE_PRIVATE_TABLE, new CreatePrivateTableRequest { GameId = gameId, MarkUnit = markUnit, Password = password ?? "" });
+    }
+    public static async UniTask<JoinPrivateTableResponse> MatchJoinPrivateTableAsync(string inviteCode, string password)
+    {
+        return await RpcDecodeOrShowError<JoinPrivateTableResponse>(MATCH_JOIN_PRIVATE_TABLE, new JoinPrivateTableRequest { InviteCode = inviteCode ?? "", Password = password ?? "" });
+    }
+    #endregion
+    
+    #region Yuujins – Config (Cfg)
+    public static async UniTask<Game.Types.Response.Types.List> CfgGameListAsync(Yuujins.Cfg.Game.V1.Game.Types.Type type = Yuujins.Cfg.Game.V1.Game.Types.Type.Unspecified)
+    {
+        return await RpcDecodeOrShowError<Game.Types.Response.Types.List>(CFG_GAME_LIST, new Game.Types.Request.Types.List { Type = type });
+    }
+    public static async UniTask<Yuujins.Cfg.Banner.V1.Banner.Types.Response.Types.List> CfgBannerListAsync(int offset = 0, int limit = 50)
+    {
+        return await RpcDecodeOrShowError<Yuujins.Cfg.Banner.V1.Banner.Types.Response.Types.List>(CFG_BANNER_LIST, new Yuujins.Cfg.Banner.V1.Banner.Types.Request.Types.List { Offset = offset, Limit = limit });
+    }
+    public static async UniTask<Yuujins.Cfg.Bet.V1.Template> CfgBetReadAsync(uint gameId)
+    {
+        return await RpcDecodeOrShowError<Yuujins.Cfg.Bet.V1.Template>(CFG_BET_READ, new Yuujins.Cfg.Bet.V1.Template.Types.Request.Types.Read { GameId = gameId });
+    }
+    #endregion
+    
+    #region Yuujins – Rank, Rewards
+    public static async UniTask<ListTopByGameResponse> RankListTopByGameAsync(uint gameId)
+    {
+        return await RpcDecodeOrShowError<ListTopByGameResponse>(RANK_RANK_LIST_TOP_BY_GAME, new ListTopByGameRequest { GameId = gameId });
+    }
+    public static async UniTask<GetCheckinConfigResponse> RewardsCheckinGetConfigAsync(string region)
+    {
+        return await RpcDecodeOrShowError<GetCheckinConfigResponse>(REWARDS_CHECKIN_GET_CHECKIN_CONFIG, new GetCheckinConfigRequest { Region = region ?? "" });
+    }
+    public static async UniTask<GetCheckinStateResponse> RewardsCheckinGetStateAsync(string region)
+    {
+        return await RpcDecodeOrShowError<GetCheckinStateResponse>(REWARDS_CHECKIN_GET_CHECKIN_STATE, new GetCheckinStateRequest { Region = region ?? "" });
+    }
+    public static async UniTask<ClaimCheckinResponse> RewardsCheckinClaimAsync(string region)
+    {
+        return await RpcDecodeOrShowError<ClaimCheckinResponse>(REWARDS_CHECKIN_CLAIM_CHECKIN, new ClaimCheckinRequest { Region = region ?? "" });
+    }
+    #endregion
+
+    #region Yuujins – Social Friend (Friend.V1)
+    public static async UniTask<ListResponse> SocialFriendListAsync(int filterLevel = 0, int limit = 50, string cursor = null)
+    {
+        return await RpcDecodeOrShowError<ListResponse>(SOCIAL_FRIEND_LIST, new ListRequest { FilterLevel = filterLevel, Limit = limit, Cursor = cursor ?? "" });
+    }
+    public static async UniTask<ListFriendRequestsReceivedResponse> SocialFriendListFriendRequestsReceivedAsync(int limit = 50, string cursor = null)
+    {
+        return await RpcDecodeOrShowError<ListFriendRequestsReceivedResponse>(SOCIAL_FRIEND_LIST_FRIEND_REQUESTS_RECEIVED, new ListFriendRequestsReceivedRequest { Limit = limit, Cursor = cursor ?? "" });
+    }
+    public static async UniTask<ListFriendRequestsSentResponse> SocialFriendListFriendRequestsSentAsync(int limit = 50, string cursor = null)
+    {
+        return await RpcDecodeOrShowError<ListFriendRequestsSentResponse>(SOCIAL_FRIEND_LIST_FRIEND_REQUESTS_SENT, new ListFriendRequestsSentRequest { Limit = limit, Cursor = cursor ?? "" });
+    }
+    public static async UniTask<ListUpgradeInvitesReceivedResponse> SocialFriendListUpgradeInvitesReceivedAsync(int limit = 50, int offset = 0)
+    {
+        return await RpcDecodeOrShowError<ListUpgradeInvitesReceivedResponse>(SOCIAL_FRIEND_LIST_UPGRADE_INVITES_RECEIVED, new ListUpgradeInvitesReceivedRequest { Limit = limit, Offset = offset });
+    }
+    public static async UniTask<ListUpgradeInvitesSentResponse> SocialFriendListUpgradeInvitesSentAsync(int limit = 50, int offset = 0)
+    {
+        return await RpcDecodeOrShowError<ListUpgradeInvitesSentResponse>(SOCIAL_FRIEND_LIST_UPGRADE_INVITES_SENT, new ListUpgradeInvitesSentRequest { Limit = limit, Offset = offset });
+    }
+    public static async UniTask<SendFriendRequestResponse> SocialFriendSendFriendRequestAsync(string userId, string username)
+    {
+        return await RpcDecodeOrShowError<SendFriendRequestResponse>(SOCIAL_FRIEND_SEND_FRIEND_REQUEST, new SendFriendRequestRequest { UserId = userId ?? "", Username = username ?? "" });
+    }
+    public static async UniTask<AcceptFriendRequestResponse> SocialFriendAcceptFriendRequestAsync(string userId)
+    {
+        return await RpcDecodeOrShowError<AcceptFriendRequestResponse>(SOCIAL_FRIEND_ACCEPT_FRIEND_REQUEST, new AcceptFriendRequestRequest { UserId = userId ?? "" });
+    }
+    public static async UniTask<DeclineFriendRequestResponse> SocialFriendDeclineFriendRequestAsync(string userId)
+    {
+        return await RpcDecodeOrShowError<DeclineFriendRequestResponse>(SOCIAL_FRIEND_DECLINE_FRIEND_REQUEST, new DeclineFriendRequestRequest { UserId = userId ?? "" });
+    }
+    public static async UniTask<SendUpgradeInviteResponse> SocialFriendSendUpgradeInviteAsync(string friendUserId, int toLevel)
+    {
+        return await RpcDecodeOrShowError<SendUpgradeInviteResponse>(SOCIAL_FRIEND_SEND_UPGRADE_INVITE, new SendUpgradeInviteRequest { FriendUserId = friendUserId ?? "", ToLevel = toLevel });
+    }
+    public static async UniTask<AcceptUpgradeInviteResponse> SocialFriendAcceptUpgradeInviteAsync(long inviteId)
+    {
+        return await RpcDecodeOrShowError<AcceptUpgradeInviteResponse>(SOCIAL_FRIEND_ACCEPT_UPGRADE_INVITE, new AcceptUpgradeInviteRequest { InviteId = inviteId });
+    }
+    public static async UniTask<DeclineUpgradeInviteResponse> SocialFriendDeclineUpgradeInviteAsync(long inviteId)
+    {
+        return await RpcDecodeOrShowError<DeclineUpgradeInviteResponse>(SOCIAL_FRIEND_DECLINE_UPGRADE_INVITE, new DeclineUpgradeInviteRequest { InviteId = inviteId });
+    }
+    public static async UniTask<RemoveFriendResponse> SocialFriendRemoveFriendAsync(string userId)
+    {
+        return await RpcDecodeOrShowError<RemoveFriendResponse>(SOCIAL_FRIEND_REMOVE_FRIEND, new RemoveFriendRequest { UserId = userId ?? "" });
+    }
+    public static async UniTask<BlockFriendResponse> SocialFriendBlockFriendAsync(string userId)
+    {
+        return await RpcDecodeOrShowError<BlockFriendResponse>(SOCIAL_FRIEND_BLOCK_FRIEND, new BlockFriendRequest { UserId = userId ?? "" });
+    }
+    public static async UniTask<GetIntimacyResponse> SocialFriendGetIntimacyAsync(string friendUserId)
+    {
+        return await RpcDecodeOrShowError<GetIntimacyResponse>(SOCIAL_FRIEND_GET_INTIMACY, new GetIntimacyRequest { FriendUserId = friendUserId ?? "" });
+    }
+    public static async UniTask<SendGiftResponse> SocialFriendSendGiftAsync(string friendUserId, GiftType giftType, long amount = 0, string itemId = null)
+    {
+        return await RpcDecodeOrShowError<SendGiftResponse>(SOCIAL_FRIEND_SEND_GIFT, new SendGiftRequest { FriendUserId = friendUserId ?? "", GiftType = giftType, Amount = amount, ItemId = itemId ?? "" });
+    }
+    public static async UniTask<GetLevelConfigResponse> SocialFriendGetLevelConfigAsync(string region)
+    {
+        return await RpcDecodeOrShowError<GetLevelConfigResponse>(SOCIAL_FRIEND_GET_LEVEL_CONFIG, new GetLevelConfigRequest { Region = region ?? "" });
+    }
+    public static async UniTask<GetGiftItemsResponse> SocialFriendGetGiftItemsAsync(string region)
+    {
+        return await RpcDecodeOrShowError<GetGiftItemsResponse>(SOCIAL_FRIEND_GET_GIFT_ITEMS, new GetGiftItemsRequest { Region = region ?? "" });
+    }
+    #endregion
+
+    #region Yuujins – Mail (proto Communication.Mail.V1)
+    /// <summary>Danh sách mail – request/response typed.</summary>
+    public static async UniTask<Mail.Types.Response.Types.List> MailListAsync(
+        string fromUid = null, string toUid = null, bool? isRead = null, bool? isDeleted = null, bool? isRedeemed = null, int limit = 50, int offset = 0)
+    {
+        var req = new Mail.Types.Request.Types.List { Limit = limit, Offset = offset };
+        if (!string.IsNullOrEmpty(fromUid)) req.FromUid = fromUid;
+        if (!string.IsNullOrEmpty(toUid)) req.ToUid = toUid;
+        if (isRead.HasValue) req.IsRead = isRead.Value;
+        if (isDeleted.HasValue) req.IsDeleted = isDeleted.Value;
+        if (isRedeemed.HasValue) req.IsRedeemed = isRedeemed.Value;
+        return await RpcDecodeOrShowError<Mail.Types.Response.Types.List>(MAIL_LIST, req);
+    }
+    /// <summary>Đánh dấu đã đọc – trả về Mail (updated).</summary>
+    public static async UniTask<Mail> MailMarkAsReadAsync(long mailId)
+    {
+        return await RpcDecodeOrShowError<Mail>(MAIL_MARK_AS_READ, new Mail.Types.Request.Types.MarkAsRead { Id = mailId });
+    }
+    /// <summary>Đánh dấu đã xóa – trả về Mail (updated).</summary>
+    public static async UniTask<Mail> MailMarkAsDeletedAsync(long mailId)
+    {
+        return await RpcDecodeOrShowError<Mail>(MAIL_MARK_AS_DELETED, new Mail.Types.Request.Types.MarkAsDeleted { Id = mailId });
+    }
+    /// <summary>Đổi thưởng mail – response Empty.</summary>
+    public static async UniTask<EmptyResponse> MailRedeemAsync(long mailId)
+    {
+        return await RpcDecodeOrShowError<EmptyResponse>(MAIL_REDEEM, new Mail.Types.Request.Types.Redeem { Id = mailId });
+    }
+    #endregion
+
+    #region Yuujins – Bank (proto Economy.Wallet.V1)
+    /// <summary>Nạp vào bank – request typed, response Empty.</summary>
+    public static async UniTask<EmptyResponse> BankDepositAsync(long amount)
+    {
+        return await RpcDecodeOrShowError<EmptyResponse>(BANK_DEPOSIT, new Wallet.Types.Request.Types.DepositBank { Amount = amount });
+    }
+    /// <summary>Rút từ bank – request typed, response Empty.</summary>
+    public static async UniTask<EmptyResponse> BankWithdrawAsync(long amount)
+    {
+        return await RpcDecodeOrShowError<EmptyResponse>(BANK_WITHDRAW, new Wallet.Types.Request.Types.WithdrawBank { Amount = amount });
+    }
+    #endregion
+
+    #region Yuujins – Coupon (proto Promotion.Coupon.V1)
+    /// <summary>Danh sách coupon – request/response typed.</summary>
+    public static async UniTask<Coupon.Types.Response.Types.List> CouponListAsync(
+        string issuedBy = null, string userId = null, long? depositCent = null, bool? isRedeemed = null, int limit = 50, int offset = 0)
+    {
+        var req = new Coupon.Types.Request.Types.List { Limit = limit, Offset = offset };
+        if (!string.IsNullOrEmpty(issuedBy)) req.IssuedBy = issuedBy;
+        if (!string.IsNullOrEmpty(userId)) req.UserId = userId;
+        if (depositCent.HasValue) req.DepositCent = depositCent.Value;
+        if (isRedeemed.HasValue) req.IsRedeemed = isRedeemed.Value;
+        return await RpcDecodeOrShowError<Coupon.Types.Response.Types.List>(COUPON_LIST, req);
+    }
     #endregion
 }

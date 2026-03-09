@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package cfg.game.v1;
+
+message Game {
+  uint32 id = 1;
+  string name = 2;
+  enum Type {
+    TYPE_UNSPECIFIED = 0;
+    TYPE_SLOT = 1;
+    TYPE_PVP = 2;
+    TYPE_BET = 3;
+  }
+  Type type = 3;
+  int32 win_conv_milli = 4;
+  int32 lose_conv_milli = 5;
+  repeated string labels = 6;
+
+  message Request {
+    message Create {
+      uint32 id = 1;
+      string name = 2;
+      Game.Type type = 3;
+      int32 win_conv_milli = 4;
+      int32 lose_conv_milli = 5;
+      repeated string labels = 6;
+    }
+    message Update {
+      uint32 id = 1;
+      string name = 2;
+      Game.Type type = 3;
+      int32 win_conv_milli = 4;
+      int32 lose_conv_milli = 5;
+      repeated string labels = 6;
+    }
+    message Read {
+      uint32 id = 1;
+    }
+    message Delete {
+      uint32 id = 1;
+    }
+    message List {
+      Game.Type type = 1;
+    }
+  }
+
+  message Response {
+    message List {
+      repeated Game games = 1;
+    }
+  }
+}
+
+message Config {
+  map<uint32, Game> games = 1;
+}

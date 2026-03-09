@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package analytic.v1;
+
+message PopupEvent {
+  string display_id = 1;
+  int64 popup_id = 2;
+  string user_id = 3;
+  int32 action = 4;
+}

@@ -1,0 +1,201 @@
+syntax = "proto3";
+
+package friend.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message ListRequest {
+  int32 filter_level = 1;
+  int32 limit = 2;
+  string cursor = 3;
+}
+
+message ListResponse {
+  repeated FriendItem items = 1;
+  string next_cursor = 2;
+}
+
+message FriendItem {
+  string user_id = 1;
+  string username = 2;
+  int32 level = 3;
+  string level_key = 4;
+  int64 intimacy_point = 5;
+  string avatar_id = 6;
+}
+
+message ListFriendRequestsReceivedRequest {
+  int32 limit = 1;
+  string cursor = 2;
+}
+
+message ListFriendRequestsReceivedResponse {
+  repeated FriendRequestItem items = 1;
+  string next_cursor = 2;
+}
+
+message ListFriendRequestsSentRequest {
+  int32 limit = 1;
+  string cursor = 2;
+}
+
+message ListFriendRequestsSentResponse {
+  repeated FriendRequestItem items = 1;
+  string next_cursor = 2;
+}
+
+message FriendRequestItem {
+  string user_id = 1;
+  string username = 2;
+  google.protobuf.Timestamp created_at = 3;
+  string avatar_id = 4;
+}
+
+message SendFriendRequestRequest {
+  string user_id = 1;
+  string username = 2;
+}
+
+message SendFriendRequestResponse {}
+
+message AcceptFriendRequestRequest {
+  string user_id = 1;
+}
+
+message AcceptFriendRequestResponse {}
+
+message DeclineFriendRequestRequest {
+  string user_id = 1;
+}
+
+message DeclineFriendRequestResponse {}
+
+message ListUpgradeInvitesReceivedRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+}
+
+message ListUpgradeInvitesReceivedResponse {
+  repeated UpgradeInviteItem items = 1;
+  int64 total = 2;
+}
+
+message ListUpgradeInvitesSentRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+}
+
+message ListUpgradeInvitesSentResponse {
+  repeated UpgradeInviteItem items = 1;
+  int64 total = 2;
+}
+
+message UpgradeInviteItem {
+  int64 id = 1;
+  string sender_id = 2;
+  string sender_username = 3;
+  int32 from_level = 4;
+  int32 to_level = 5;
+  google.protobuf.Timestamp created_at = 6;
+  string sender_avatar_id = 7;
+}
+
+message SendUpgradeInviteRequest {
+  string friend_user_id = 1;
+  int32 to_level = 2;
+}
+
+message SendUpgradeInviteResponse {
+  int64 invite_id = 1;
+}
+
+message AcceptUpgradeInviteRequest {
+  int64 invite_id = 1;
+}
+
+message AcceptUpgradeInviteResponse {}
+
+message DeclineUpgradeInviteRequest {
+  int64 invite_id = 1;
+}
+
+message DeclineUpgradeInviteResponse {}
+
+message RemoveFriendRequest {
+  string user_id = 1;
+}
+
+message RemoveFriendResponse {}
+
+message BlockFriendRequest {
+  string user_id = 1;
+}
+
+message BlockFriendResponse {}
+
+message GetIntimacyRequest {
+  string friend_user_id = 1;
+}
+
+message GetIntimacyResponse {
+  int32 level = 1;
+  string level_key = 2;
+  int64 intimacy_point = 3;
+  string ip_status = 4;
+}
+
+enum GiftType {
+  GIFT_TYPE_UNSPECIFIED = 0;
+  GIFT_TYPE_CHIP_TRANSFER = 1;
+  GIFT_TYPE_FORTUNE_GIFT = 2;
+  GIFT_TYPE_ITEM = 3;
+}
+
+message SendGiftRequest {
+  string friend_user_id = 1;
+  GiftType gift_type = 2;
+  int64 amount = 3;
+  string item_id = 4;
+}
+
+message SendGiftResponse {
+  int64 new_intimacy_point = 1;
+}
+
+message GetLevelConfigRequest {
+  string region = 1;
+}
+
+message GetLevelConfigResponse {
+  repeated LevelConfigItem items = 1;
+}
+
+message LevelConfigItem {
+  int32 level = 1;
+  string level_key = 2;
+  int64 ip_required = 3;
+  double friend_bonus_win_pct = 4;
+  int64 limit_chip_per_transaction = 5;
+  int32 limit_transfer_count_per_day = 6;
+  int32 ip_gain_per_match = 7;
+  optional double bonus_topup_pct = 8;
+  string icon_id = 9;
+}
+
+message GetGiftItemsRequest {
+  string region = 1;
+}
+
+message GetGiftItemsResponse {
+  repeated GiftItem items = 1;
+}
+
+message GiftItem {
+  int64 id = 1;
+  string item_id = 2;
+  string name_key = 3;
+  int64 chip_price = 4;
+  int32 ip_gain = 5;
+  int32 vip_unlock = 6;
+  int32 sort_order = 7;
+}

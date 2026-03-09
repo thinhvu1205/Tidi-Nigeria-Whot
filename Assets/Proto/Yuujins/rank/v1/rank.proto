@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package rank.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message RankItem {
+  int32 rank = 1;
+  string user_id = 2;
+  string username = 3;
+  string avatar_id = 4;
+  int32 vip_level = 5;
+  int64 win_amt_this_week = 6;
+}
+
+message ListTopByGameRequest {
+  uint32 game_id = 1;
+}
+
+message ListTopByGameResponse {
+  repeated RankItem items = 1;
+  google.protobuf.Timestamp reset_at = 2;
+}

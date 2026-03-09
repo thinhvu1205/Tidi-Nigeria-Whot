@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package cfg.platform.v1;
+
+message Platform {
+  string bundle_id = 1;
+  bool enabled = 2;
+
+  message Request {
+    message Create {
+      string bundle_id = 1;
+    }
+
+    message Delete {
+      string bundle_id = 1;
+    }
+
+    message Toggle {
+      string bundle_id = 1;
+      bool enabled = 2;
+    }
+  }
+}
+
+message PlatformMap {
+  map<string, Platform> items = 1;
+}
+
+message PlatformList {
+  repeated Platform items = 1;
+}

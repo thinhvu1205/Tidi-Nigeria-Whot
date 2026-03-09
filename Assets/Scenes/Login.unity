@@ -733,7 +733,7 @@ MonoBehaviour:
   m_Placeholder: {fileID: 0}
   m_ItemText: {fileID: 334226155}
   m_ItemImage: {fileID: 0}
-  m_Value: 0
+  m_Value: 1
   m_MultiSelect: 0
   m_Options:
     m_Options:
@@ -822,7 +822,10 @@ MonoBehaviour:
   avtDefault: {fileID: 0}
   spriteToast: {fileID: 21300000, guid: 0ac2ba5b8d30247dd95425e72fcd5567, type: 3}
   fontLabelToast: {fileID: 11400000, guid: c9c3488bd10a442e98305628e8e985cf, type: 2}
+  canvasGame: {fileID: 0}
+  alertMessage: {fileID: 0}
   selectTableView: {fileID: 0}
+  bannerView: {fileID: 0}
   lobbyView: {fileID: 0}
   isShowingGlobalDialog: 0
   gameView: {fileID: 0}
@@ -1140,7 +1143,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Server Test
+  m_text: Server Huy
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3201,10 +3204,6 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_Dropdown/DropdownItem
-  m_Text: {fileID: 334226155}
-  m_Image: {fileID: 0}
-  m_RectTransform: {fileID: 2103684568}
-  m_Toggle: {fileID: 2103684570}
 --- !u!114 &2103684570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4295,6 +4294,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a66ad77fe032943c89755a8472bd44f5, type: 3}
   id: 0
   isSelected: 0
+  isInteractable: 1
 --- !u!1 &2039055138427654082
 GameObject:
   m_ObjectHideFlags: 0
@@ -5953,6 +5953,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a66ad77fe032943c89755a8472bd44f5, type: 3}
   id: 0
   isSelected: 0
+  isInteractable: 1
 --- !u!114 &7850429474352508314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5979,6 +5980,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a66ad77fe032943c89755a8472bd44f5, type: 3}
   id: 0
   isSelected: 0
+  isInteractable: 1
 --- !u!1 &7973638677054089582
 GameObject:
   m_ObjectHideFlags: 0
