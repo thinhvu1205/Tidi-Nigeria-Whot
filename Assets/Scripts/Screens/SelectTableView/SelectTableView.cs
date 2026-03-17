@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
-using Proto;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Globals;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Yuujins.Match.V1;
+using Bet = Yuujins.Cfg.Bet.V1.Bet;
 
 public class SelectTableView : BaseView
 {
@@ -23,8 +24,8 @@ public class SelectTableView : BaseView
     [SerializeField] private TextMeshProUGUI titleText, accountChip;
     [SerializeField] private TMP_InputField findTableInputField;
     [SerializeField] private List<Sprite> buttonSpriteList;
-    private List<Bet> betItemList = new();
-    private List<Match> matchList = new();
+    private List<Yuujins.Cfg.Bet.V1.Bet> betItemList = new();
+    private List<Yuujins.Match.V1.MatchInfo> matchList = new();
     private int currentMarkUnitTab = 0;
     private SelectTableTab currentSelectTableTab;
     private SelectTablePresenter selectTablePresenter;
@@ -59,49 +60,47 @@ public class SelectTableView : BaseView
     #region API Handlers
     public async UniTask GetListBet()
     {
-        Bets bets = await selectTablePresenter.GetListBet(Config.currentGameId);
+        ListBetLevelsResponse bets = await selectTablePresenter.GetListBet(Config.currentGameId);
         UIManager.Instance.HideProgressing();
-        betItemList = bets.Bets_.ToList();
+        betItemList = bets.Items.ToList();
         LoadListBetItem();
     }
 
     private async UniTask GetListTableByMarkUnit(int markUnit)
     {
         matchList.Clear();
-        RpcFindMatchResponse response = await selectTablePresenter.GetListTableByMarkUnit(Config.currentGameId, markUnit);
+        var response = await selectTablePresenter.GetListTableByMarkUnit(Config.currentGameId, markUnit);
         UIManager.Instance.HideProgressing();
-        if (response == null)
+        if (response?.Items == null)
         {
             LoadListTableItem();
             return;
         }
-
-        matchList = response.Matches.ToList();
+        matchList = response.Items.ToList();
         LoadListTableItem();
     }
 
     private async UniTask FindTable(string tableId)
     {
         matchList.Clear();
-        RpcFindMatchResponse response = await selectTablePresenter.FindTable(Config.currentGameId, tableId);
+        var response = await selectTablePresenter.FindTable(Config.currentGameId, tableId);
         UIManager.Instance.HideProgressing();
-        if (response == null)
+        if (response?.Items == null)
         {
             LoadListTableItem();
             return;
         }
-
-        matchList = response.Matches.ToList();
+        matchList = response.Items.ToList();
         LoadListTableItem();
     }
     #endregion
     private void UpdateVisuals()
     {
-        accountChip.text = Utility.FormatNumber(User.userProfile.AccountChip);
+        accountChip.text = Utility.FormatNumber(User.UserAccount.Profile.Balance);
     }
     private void UpdateTitle()
     {
-        switch (Config.currentGameId)
+        switch (Config.currentGameName)
         {
             case Constants.WHOT_GAME_ID:
                 titleText.text = "Whot";
@@ -119,7 +118,7 @@ public class SelectTableView : BaseView
                 // titleText.text = "Select Table";
                 break;
         }
-        jackpot.SetActive(Constants.JACKPOT_GAMES_ID.Contains(Config.currentGameId));
+        jackpot.SetActive(Constants.JACKPOT_GAMES_ID.Contains(Config.currentGameName));
     }
     private void LoadListBetItem()
     {
@@ -132,11 +131,11 @@ public class SelectTableView : BaseView
         {
             int index = i;
             // Instantiate bet item
-            if (betItemList[i].BetDisableType == BetDisableType.AboveMaxVip || betItemList[i].BetDisableType == BetDisableType.BelowMinVip
-            )
-            {
-                continue;
-            }
+            // if (betItemList[i].BetDisableType == BetDisableType.AboveMaxVip || betItemList[i].BetDisableType == BetDisableType.BelowMinVip
+            // )
+            // {
+            //     continue;
+            // }
             BetItem betItem = Instantiate(betItemPrefab, betItemParent).GetComponent<BetItem>();
             betItem.SetData(betItemList[index], index);
         }
@@ -153,8 +152,8 @@ public class SelectTableView : BaseView
 
         foreach (Bet bet in betItemList)
         {
-            // Instantiate table tab item
-            if (bet.CountPlaying == 0) continue;
+            // Instantiate table tab item (cfg bet không có CountPlaying → vẫn hiển thị tab)
+            // if (bet.CountPlaying == 0) continue;
             TableTabItem tableTabItem = Instantiate(tabItemPrefab, tabItemParent).GetComponent<TableTabItem>();
             tableTabItem.SetData(bet.MarkUnit, true);
             tableTabItem.GetComponent<Button>().onClick.AddListener(async () =>
@@ -168,7 +167,8 @@ public class SelectTableView : BaseView
                 await GetListTableByMarkUnit(currentMarkUnitTab);
             });
  
-            if (!isTableTabSelected && bet.Enable)
+            bool betEnable = User.UserAccount.Profile.Vip >= bet.MinVip && User.UserAccount.Profile.Vip <= bet.MaxVip;
+            if (!isTableTabSelected && betEnable)
             {
                 currentMarkUnitTab = (int)bet.MarkUnit;
                 tableTabItem.SetSelected();
@@ -191,11 +191,9 @@ public class SelectTableView : BaseView
         }
         for (int i = 0; i < matchList.Count; i++)
         {
-            Match match = matchList[i];
-            // Instantiate table item
+            var matchItem = matchList[i];
             TableItem tableItem = Instantiate(tableItemPrefab, tableItemParent).GetComponent<TableItem>();
-            // tableItem.SetData(this, match.Size, match.MaxSize, match.MarkUnit, match.Name, match.TableId, match.Open, match.MatchId);
-            tableItem.SetData(match);
+            tableItem.SetData(matchItem);
         }
     }
 
@@ -237,7 +235,7 @@ public class SelectTableView : BaseView
 
     public void OnClickCreateTable()
     {
-        if (!betItemList.Any((bet) => bet.Enable))
+        if (!betItemList.Any((bet) => User.UserAccount.Profile.Vip >= bet.MinVip && User.UserAccount.Profile.Vip <= bet.MaxVip))
         {
             UIManager.Instance.ShowConfirmDialog("You do not have enough chips to create table!", () => UIManager.Instance.OpenShop(), null, "Get More Chips");
             return;

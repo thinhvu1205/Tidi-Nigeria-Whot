@@ -36,7 +36,7 @@ public class CheckInBonusView : BaseView
     private Reward nextReward;
     private CheckInBonusDailyItem nextClaimableDailyItem;
     private Tween claimRewardTween;
-    private int VipLevel => (int)User.userProfile.VipLevel;
+    private int VipLevel => User.UserAccount.Profile.Vip;
     private int dailyStreak = 0;
     private int weeklyStreak = 0;
     private bool canClaimDailyReward = false, canClaimWeeklyReward = false;

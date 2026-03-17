@@ -8,17 +8,18 @@ namespace Globals
     {
         public static bool IsFeatureAllowed(FeatureName featureName)
         {
-            if (User.userProfile == null)
-            {
-                return false;
-            }
-
-            if (User.userProfile.AllowedFeatures == null || User.userProfile.AllowedFeatures.Count == 0)
-            {
-                return false;
-            }
-
-            return User.userProfile.AllowedFeatures.Contains(featureName);
+            // if (User.UserAccount == null)
+            // {
+            //     return false;
+            // }
+            //
+            // if (User.UserAccount.AllowedFeatures == null || User.UserAccount.AllowedFeatures.Count == 0)
+            // {
+            //     return false;
+            // }
+            //
+            // return User.UserAccount.AllowedFeatures.Contains(featureName);
+            return true;
         }
         
         public static bool IsFeatureAllowed(int featureValue)
@@ -27,25 +28,25 @@ namespace Globals
         }
         
         
-        public static List<FeatureName> GetAllowedFeatures()
-        {
-            if (User.userProfile == null || User.userProfile.AllowedFeatures == null)
-            {
-                return new List<FeatureName>();
-            }
-
-            return new List<FeatureName>(User.userProfile.AllowedFeatures);
-        }
-        
-        public static bool HasAnyAllowedFeature()
-        {
-            if (User.userProfile == null || User.userProfile.AllowedFeatures == null)
-            {
-                return false;
-            }
-
-            return User.userProfile.AllowedFeatures.Count > 0;
-        }
+        // public static List<FeatureName> GetAllowedFeatures()
+        // {
+        //     if (User.UserAccount == null || User.UserAccount.AllowedFeatures == null)
+        //     {
+        //         return new List<FeatureName>();
+        //     }
+        //
+        //     return new List<FeatureName>(User.UserAccount.AllowedFeatures);
+        // }
+        //
+        // public static bool HasAnyAllowedFeature()
+        // {
+        //     if (User.UserAccount == null || User.UserAccount.AllowedFeatures == null)
+        //     {
+        //         return false;
+        //     }
+        //
+        //     return User.UserAccount.AllowedFeatures.Count > 0;
+        // }
     }
 }
 

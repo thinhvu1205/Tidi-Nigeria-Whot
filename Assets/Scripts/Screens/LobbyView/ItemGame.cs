@@ -1,20 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Globals;
 using Spine.Unity;
 using UnityEngine;
 using UnityEngine.UI;
+using Yuujins.Cfg.Game.V1;
+using Config = Globals.Config;
 
 public class ItemGame : MonoBehaviour
 {
     [SerializeField] private SkeletonGraphic skeletonGraphic;
     private bool isBigIcon = false;
+    private uint gameID;
+    private string gameName;
 
-    public void SetInfo(string gameID, string lobbyId, bool isBigIcon)
+    public void SetInfo(string gameName, int gameId,  bool isBigIcon)
     {
         this.isBigIcon = isBigIcon;
+        this.gameName = gameName;
+        gameID = (uint) gameId;
         transform.localScale = Vector2.one;
         if (isBigIcon)
         {
@@ -24,42 +31,33 @@ public class ItemGame : MonoBehaviour
             rectTransform.sizeDelta = size;
         }
         string animationName = "animation";
-        if (gameID == Constants.BACCARAT_GAME_ID || gameID == Constants.HK_POKER_GAME_ID)
+        if (gameName == Constants.BACCARAT_GAME_ID || gameName == Constants.HK_POKER_GAME_ID)
         {
             animationName = "eng";
         }
-        Utility.PlayAnimationByPath(skeletonGraphic, GetAnimationPath(gameID), animationName, true);
+        Utility.PlayAnimationByPath(skeletonGraphic, GetAnimationPath(gameName), animationName);
 
         Button button = GetComponent<Button>();
         button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(() =>
-        {
-            OnClickItemGame(gameID, lobbyId);
-        });
+        button.onClick.AddListener(() => _ = OnClickItemGameAsync());
     }
 
-    private void OnClickItemGame(string gameID, string lobbyId)
+    /// <summary>Bấm item game: gọi cfg_bet_read; nếu có list bet (PVP/bet) thì mở SelectTableView chọn mức cược, không thì quick match.</summary>
+    private async UniTaskVoid OnClickItemGameAsync()
     {
+        Config.currentGameName = gameName;
         Config.currentGameId = gameID;
-        Config.currentGameLobbyId = lobbyId;
-        if (User.userProfile.VipLevel == 0)
+        if (ServerConfig.GameMap.TryGetValue(gameID, out var game) && game is { Type: Game.Types.Type.Slot })
         {
-            _ = UIManager.Instance.HandleQuickMatch();
-            return;
-        }
-        if (Constants.SELECT_TABLE_GAMES_ID.Contains(gameID))
-        {
-            UIManager.Instance.OpenSelectTableView();
-            UIManager.Instance.OpenBanner(Proto.TypeInAppMessage.Banner);
+            _ = UIManager.Instance.HandleFindAndJoinMatch(0);
         }
         else
         {
-            _ = UIManager.Instance.HandleFindAndJoinMatch(0);
-            // UIManager.Instance.HandleOpenGame();
+            UIManager.Instance.OpenSelectTableView();
+            // UIManager.Instance.OpenBanner(Proto.TypeInAppMessage.Banner);
         }
-        // UIManager.getInstance().setBannerType(Constants.BANNER_SHOW_TYPE.CHOOSE_GAME, true);
     }
-
+    
     private string GetAnimationPath(string gameID)
     {
         string animationPath;

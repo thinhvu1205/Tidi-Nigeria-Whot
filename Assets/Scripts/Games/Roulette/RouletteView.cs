@@ -92,7 +92,7 @@ public class RouletteView : BaseDiceGameView
     {
         base.Awake();
         InitPool();
-        playerWallet = User.userProfile.AccountChip;
+        playerWallet = User.UserAccount.Profile.Balance;
     }
 
     protected override void Start()
@@ -356,7 +356,7 @@ public class RouletteView : BaseDiceGameView
 
         RoulettePlayerBet roulettePlayerBet = new RoulettePlayerBet
         {
-            UserId = User.userProfile.UserId,
+            UserId = User.UserAccount.Profile.UserId,
         };
         roulettePlayerBet.Bets.AddRange(listBet);
     

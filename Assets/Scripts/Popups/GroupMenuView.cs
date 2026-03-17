@@ -67,7 +67,7 @@ public class GroupMenuView : BaseView
     public void OnClickRule()
     {
         Hide();
-        string curGameId = Constants.LobbyIdFromCode[Config.currentGameId];
+        string curGameId = Constants.LobbyIdFromCode[Config.currentGameName];
         string urlRule = Config.ruleLink.Replace("%gameid%", curGameId + "");
         //var langLocal = cc.sys.localStorage.getItem("language_client");
         //var language = langLocal == LANGUAGE_TEXT_CONFIG.LANG_EN ? "en" : "thai"
@@ -75,7 +75,7 @@ public class GroupMenuView : BaseView
         // urlRule = urlRule.Replace("%language%", language);
         // urlRule = urlRule.Replace("%language%", language);
         // https://conf.topbangkokclub.com/rule/index.html?gameid=%gameid%&language=%language%&list=true
-        if (Constants.INGAME_RULES_ID.Contains(Config.currentGameId))
+        if (Constants.INGAME_RULES_ID.Contains(Config.currentGameName))
         {
             UIManager.Instance.OpenRule();
         }
@@ -91,7 +91,7 @@ public class GroupMenuView : BaseView
     {
         musicButton.gameObject.SetActive(false);
         soundButton.gameObject.SetActive(false);
-        string currentGameId = Config.currentGameId;
+        string currentGameId = Config.currentGameName;
         if (Constants.SLOT_GAMES_ID.Contains(currentGameId) || currentGameId == Constants.ROULETTE_GAME_ID)
         {
             switchTableButton.gameObject.SetActive(false);

@@ -21,8 +21,8 @@ public class FriendSendGiftItem : MonoBehaviour
         textIntimacyPoint.text = $"IP +{item.IpGain}";
         imageGift.sprite = listSpriteGift[item.ItemId - 1];
         imageGift.preserveAspect = true;
-        imageBackground.color = item.VipUnlock <= User.userProfile.VipLevel ? Color.white : Color.gray;
-        imageGift.color = item.VipUnlock <= User.userProfile.VipLevel ? Color.white : Color.gray;
-        textPrice.color = item.VipUnlock <= User.userProfile.VipLevel ? Color.white : Color.gray;
+        imageBackground.color = item.VipUnlock <= User.UserAccount.Profile.Vip ? Color.white : Color.gray;
+        imageGift.color = item.VipUnlock <= User.UserAccount.Profile.Vip ? Color.white : Color.gray;
+        textPrice.color = item.VipUnlock <= User.UserAccount.Profile.Vip ? Color.white : Color.gray;
     }
 }

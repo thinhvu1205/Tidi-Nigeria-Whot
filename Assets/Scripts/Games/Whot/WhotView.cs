@@ -174,7 +174,7 @@ public class WhotView : BaseDiceGameView
     
     private async UniTask CalculateHigherBet()
     {
-        Bets bets = await DataSender.GetListBet(Config.currentGameId);
+        Bets bets = await DataSender.GetListBet(Config.currentGameName);
         List<Bet> betItemList = bets.Bets_.ToList();
 
         Bet higherBet = betItemList
@@ -239,7 +239,7 @@ public class WhotView : BaseDiceGameView
         playingPlayers = data.PlayingPlayers.ToList();
         List<Player> joinPlayers = data.JoinPlayers.ToList();
         List<Player> leavePlayers = data.LeavePlayers.ToList();
-        string currentPlayerId = User.userProfile.UserId;
+        string currentPlayerId = User.UserAccount.Profile.UserId;
         Player currentPlayer = players.Find((player) => player.Id == currentPlayerId);
         int startIndex = players.IndexOf(currentPlayer);
 
@@ -1654,7 +1654,7 @@ public class WhotView : BaseDiceGameView
         {
             whotPlayer.gameObject.SetActive(false);
         }
-        string currentPlayerId = User.userProfile.UserId;
+        string currentPlayerId = User.UserAccount.Profile.UserId;
         for (int i = 0; i < rearrangedPlayersList.Count; i++)
         {
             Player player = rearrangedPlayersList[i];

@@ -31,7 +31,7 @@ public class NetworkManager : MonoBehaviour
         USER_NAME_KEY = "UserName",
         WORLD_CHAT_ROOM_NAME = "world_chat",
         IP_SERVER_TEST = "103.226.250.195",
-        IP_SERVER_HUY = "172.16.56.121",
+        IP_SERVER_HUY = "172.16.56.87",
         IP_SERVER_TOAN = "172.16.56.104",
         LINK_STORAGE_COLLECTION = "link_global",
         LINK_STORAGE_KEY = "links",
@@ -215,17 +215,25 @@ public class NetworkManager : MonoBehaviour
         PlayerPrefs.SetString(REFRESH_TOKEN_KEY, session.RefreshToken);
     }
 
+    /// <returns>true nếu logout thành công (socket sẽ đóng, Closed load scene); false nếu lỗi để caller revert state.</returns>
     public async UniTask LogoutAsync()
     {
-        try
+        // clear local trước
+        worldChatChannelId = "";
+        Config.loginType = LoginType.NONE;
+
+        PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
+        PlayerPrefs.DeleteKey("UserName");
+        PlayerPrefs.DeleteKey("PassWord");
+        PlayerPrefs.Save();
+
+        _SessionIS = null;
+
+        var closed = await SafeClose();
+
+        if (!closed)
         {
-            worldChatChannelId = "";
-            await _ClientC.SessionLogoutAsync(_SessionIS.AuthToken, _SessionIS.RefreshToken);
-            _SessionIS = null;
-        }
-        catch (Exception e)
-        {
-            UIManager.Instance.ShowConfirmDialog(e.Message);
+            await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
         }
     }
 
@@ -497,6 +505,7 @@ public class NetworkManager : MonoBehaviour
             }
             catch (Exception e)
             {
+                Debug.LogError("err "+ e.Message);
             }
         };
         
@@ -540,7 +549,7 @@ public class NetworkManager : MonoBehaviour
                                     var msg = JsonUtility.FromJson<HotNewsMessage>(state.State);
             
                                     // Check VIP range để quyết định có hiển thị không
-                                    var userVipLevel = User.userProfile.VipLevel; // Implement method này
+                                    var userVipLevel = User.UserAccount.Profile.Vip; // Implement method này
                                     // bool shouldShow = false;
             
                                     if (msg.vip_ranges is { Length: > 0 })
@@ -671,11 +680,12 @@ public class NetworkManager : MonoBehaviour
         if (PlayerPrefs.HasKey(DEVICE_ID)) deviceId = PlayerPrefs.GetString(DEVICE_ID);
         else
         {
-            deviceId = Guid.NewGuid().ToString();
-            // deviceId = SystemInfo.deviceUniqueIdentifier;
-            // if (deviceId == SystemInfo.unsupportedIdentifier) deviceId = Guid.NewGuid().ToString();
+            // deviceId = Guid.NewGuid().ToString();
+            deviceId = SystemInfo.deviceUniqueIdentifier;
+            if (deviceId == SystemInfo.unsupportedIdentifier) deviceId = Guid.NewGuid().ToString();
             PlayerPrefs.SetString(DEVICE_ID, deviceId);
         }
+        Debug.Log("deviceID "+ deviceId);
         Config.deviceId = deviceId;
         // _SocketIS = _ClientC.NewSocket();
     }
@@ -875,20 +885,29 @@ public class NetworkManager : MonoBehaviour
         await SafeClose();
     }
 
-    private async UniTask SafeClose()
+    private async UniTask<bool> SafeClose()
     {
+        if (_SocketIS == null)
+            return false;
+
         try
         {
-            if (_SocketIS != null)
+            if (_SocketIS.IsConnected)
             {
                 await _SocketIS.CloseAsync();
-                _SocketIS = null;
+                return true;
             }
         }
         catch (Exception e)
         {
-            Debug.Log("Error closing socket: " + e);
+            Debug.LogWarning("Socket close error: " + e);
         }
+        finally
+        {
+            _SocketIS = null;
+        }
+
+        return false;
     }
 }
 

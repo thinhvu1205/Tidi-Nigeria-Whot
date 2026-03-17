@@ -430,7 +430,7 @@ public class BasePlayerView : MonoBehaviour
     public void SetPositionInfoThisPlayer()
     {
 
-        if (Config.currentGameId == Constants.HK_POKER_GAME_ID)
+        if (Config.currentGameName == Constants.HK_POKER_GAME_ID)
         {
             return;
         }
@@ -696,7 +696,7 @@ public class BasePlayerView : MonoBehaviour
         //     lbChipWinLose.transform.localPosition = new Vector2(0, -30);
         //     height = 50;
         // }
-        if (Config.currentGameId == Constants.BACCARAT_GAME_ID)
+        if (Config.currentGameName == Constants.BACCARAT_GAME_ID)
         {
             height = 60;
         }

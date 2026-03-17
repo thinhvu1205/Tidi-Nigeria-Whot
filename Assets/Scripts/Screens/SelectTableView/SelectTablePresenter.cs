@@ -5,6 +5,8 @@ using Cysharp.Threading.Tasks;
 using Globals;
 using Proto;
 using UnityEngine;
+using Yuujins.Cfg.Game.V1;
+using Yuujins.Match.V1;
 
 public class SelectTablePresenter
 {
@@ -16,13 +18,14 @@ public class SelectTablePresenter
         selectTableView = view;
     }
 
-    public async UniTask<Bets> GetListBet(string currentGameId)
+    /// <summary>Gọi match_list_bet_levels (lobby) lấy danh sách mức cược PVP/bet theo game_id. Không dùng prefix cfg.</summary>
+    public async UniTask<ListBetLevelsResponse> GetListBet(uint gameId)
     {
         UIManager.Instance.ShowProgressing();
         try
         {
-            Bets bets = await DataSender.GetListBet(currentGameId);
-            return bets;
+            var bets = await DataSender.MatchListBetLevelsAsync(gameId);
+            return bets ?? new ListBetLevelsResponse();
         }
         catch (Exception)
         {
@@ -31,13 +34,12 @@ public class SelectTablePresenter
         }
     }
 
-    public async UniTask<RpcFindMatchResponse> GetListTableByMarkUnit(string currentGameId, int markUnit)
+    public async UniTask<FindMatchResponse> GetListTableByMarkUnit(uint currentGameId, int markUnit)
     {
         UIManager.Instance.ShowProgressing();
         try
         {
-            RpcFindMatchResponse response = await DataSender.FindMatch(currentGameId, markUnit, false, true);
-            return response;
+            return await DataSender.MatchFindMatchAsync(currentGameId, markUnit, false);
         }
         catch (Exception)
         {
@@ -46,13 +48,12 @@ public class SelectTablePresenter
         }
     }
 
-    public async UniTask<RpcFindMatchResponse> FindTable(string currentGameId, string tableId)
+    public async UniTask<FindMatchResponse> FindTable(uint currentGameId, string tableId)
     {
         UIManager.Instance.ShowProgressing();
         try
         {
-            RpcFindMatchResponse response = await DataSender.FindMatch(currentGameId, 0, false, true, tableId);
-            return response;
+            return await DataSender.MatchFindMatchAsync(currentGameId, 0, false, excludeMatchId: tableId);
         }
         catch (Exception)
         {

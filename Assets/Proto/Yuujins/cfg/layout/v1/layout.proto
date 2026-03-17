@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package cfg.layout.v1;
+
+option csharp_namespace = "Yuujins.Cfg.Layout.V1";
+
+// Tile — một ô game trong tab (game_id + cờ hiển thị: large, hot, new, ...).
+message Tile {
+  int32 game_id = 1;
+  bool large = 2;
+  bool hot = 3;
+  bool new = 4;
+  bool finger = 5;
+  bool comming_soon = 6;
+  bool maintenance = 7;
+}
+
+// Tab — một tab trong layout (tên + danh sách tile).
+message Tab {
+  string name = 2;
+  repeated Tile tiles = 1;
+}
+
+// Layout — layout cho client (bundle_id + danh sách tab). Dùng cho API trả list game về client.
+message Layout {
+  string bundle_id = 1;
+  repeated Tab tabs = 2;
+
+  message Request {
+    message Read {
+      string bundle_id = 1;
+    }
+  }
+  message Response {
+    message Read {
+      Layout layout = 1;
+    }
+  }
+}

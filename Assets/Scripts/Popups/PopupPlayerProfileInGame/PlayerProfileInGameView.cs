@@ -32,7 +32,7 @@ public class PlayerProfileInGameView : BaseView
         avatar.LoadAvatar(avatarId, vipLevel);
         SetVipStars(vipLevel);
 
-        bool isMe = playerId == User.userProfile.UserId;
+        bool isMe = playerId == User.UserAccount.Profile.UserId;
         buttonAddFriend.gameObject.SetActive(!isMe && !FriendManager.Instance.IsFriend(playerId));
     }
 
@@ -73,7 +73,7 @@ public class PlayerProfileInGameView : BaseView
 
     public void OnClickButtonEmoji(int emojiId)
     {
-        _ = playerProfileInGamePresenter.SendEmoji(User.userProfile.UserId, playerId, emojiId.ToString());
+        _ = playerProfileInGamePresenter.SendEmoji(User.UserAccount.Profile.UserId, playerId, emojiId.ToString());
         Hide();
     }
 }

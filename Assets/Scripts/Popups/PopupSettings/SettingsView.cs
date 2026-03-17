@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
@@ -45,11 +46,11 @@ public class SettingsView : BaseView
 
     private void UpdateVisuals()
     {
-        if (User.userProfile != null)
+        if (User.UserAccount != null)
         {
-            displayNameText.text = User.userProfile.DisplayName;
-            userIdText.text = "ID: " + User.userProfile.UserSid;
-            avatar.LoadAvatar(User.userProfile.AvatarId, User.userProfile.VipLevel);
+            displayNameText.text = User.UserAccount.Profile.DisplayName;
+            userIdText.text = "ID: " + User.UserAccount.Profile.UserId;
+            avatar.LoadAvatar(User.UserAccount.Profile.AvatarId.ToString(), User.UserAccount.Profile.Vip);
 
         }
         toggleSoundImage.gameObject.SetActive(Config.isOpenSound);
@@ -68,17 +69,15 @@ public class SettingsView : BaseView
 
     private async UniTask HandleLogOut()
     {
-        // Global.ChatView.clearPrivateChat();
-        // Global.BannerData.IsShow[Constants.BANNER_SHOW_TYPE.HOME_PAGE] = false;
-        // this.onClose();
-        await NetworkManager.INSTANCE.LogoutAsync();
-        Config.loginType = LoginType.NONE;
-        PlayerPrefs.SetInt(Config.AUTO_LOGIN, 0);
-        PlayerPrefs.DeleteKey("UserName");
-        PlayerPrefs.DeleteKey("PassWord");
-// #if UNITY_EDITOR
-//         await UIManager.Instance.LoadScene(Config.LOGIN_SCENE);
-// #endif
+        try
+        {
+            await NetworkManager.INSTANCE.LogoutAsync();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("Logout fail but local cleared: " + e);
+        }
+
     }
 
     public void OnClickQuitGame()

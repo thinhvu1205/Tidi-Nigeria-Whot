@@ -49,7 +49,7 @@ namespace Yuujins.User.V1 {
             "ZBgCIAEoCRIuCgpsZWF2ZV90aW1lGAQgASgLMhouZ29vZ2xlLnByb3RvYnVm",
             "LlRpbWVzdGFtcEIPCg1fZGlzcGxheV9uYW1lQg0KC19hdmF0YXJfdXJsQgsK",
             "CV9sb2NhdGlvbkILCglfdGltZXpvbmVCDgoMX2ZhY2Vib29rX2lkQgwKCl9n",
-            "b29nbGVfaWRCCwoJX2FwcGxlX2lkQgYKBF9jaWQixAQKC1VzZXJBY2NvdW50",
+            "b29nbGVfaWRCCwoJX2FwcGxlX2lkQgYKBF9jaWQi1gQKC1VzZXJBY2NvdW50",
             "EiEKB3Byb2ZpbGUYASABKAsyEC51c2VyLnYxLlByb2ZpbGUSDgoGc3RhdHVz",
             "GAIgASgJEjgKD2xhc3RfdmlwX3VwZGF0ZRgDIAEoCzIaLmdvb2dsZS5wcm90",
             "b2J1Zi5UaW1lc3RhbXBIAIgBARI0CgtvZmZpY2lhbF9hdBgEIAEoCzIaLmdv",
@@ -61,8 +61,9 @@ namespace Yuujins.User.V1 {
             "aW5faXBfYWRkcmVzcxgMIAEoCRIZChFsYXN0X2xvZ2luX2RldmljZRgNIAEo",
             "CRIaChJsYXN0X2xvZ2luX3BhY2thZ2UYDiABKAkSMAoMZGlzYWJsZV90aW1l",
             "GA8gASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIQCghwYXNzd29y",
-            "ZBgQIAEoDBIOCgZzZXFfaWQYESABKANCEgoQX2xhc3RfdmlwX3VwZGF0ZUIO",
-            "Cgxfb2ZmaWNpYWxfYXRCCwoJX2FnZW50X2lkYgZwcm90bzM="));
+            "ZBgQIAEoDBIOCgZzZXFfaWQYESABKAMSEAoIaXNfZ3Vlc3QYEiABKAhCEgoQ",
+            "X2xhc3RfdmlwX3VwZGF0ZUIOCgxfb2ZmaWNpYWxfYXRCCwoJX2FnZW50X2lk",
+            "YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -73,13 +74,14 @@ namespace Yuujins.User.V1 {
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.User.V1.User.Types.Response.Types.Register), global::Yuujins.User.V1.User.Types.Response.Types.Register.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.User.V1.User.Types.Response.Types.GetAccount), global::Yuujins.User.V1.User.Types.Response.Types.GetAccount.Parser, new[]{ "Account" }, null, null, null, null)})}),
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.User.V1.Profile), global::Yuujins.User.V1.Profile.Parser, new[]{ "UserId", "Username", "DisplayName", "AvatarUrl", "LangTag", "Location", "Timezone", "EdgeCount", "FacebookId", "GoogleId", "AppleId", "CreateTime", "UpdateTime", "Online", "LastLogin", "LastOnline", "Balance", "BankBalance", "AvatarId", "Vip", "Official", "Cid", "Match", "AppConfig" }, new[]{ "DisplayName", "AvatarUrl", "Location", "Timezone", "FacebookId", "GoogleId", "AppleId", "Cid" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.User.V1.Profile.Types.Match), global::Yuujins.User.V1.Profile.Types.Match.Parser, new[]{ "GameCode", "MatchId", "LeaveTime" }, null, null, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.User.V1.UserAccount), global::Yuujins.User.V1.UserAccount.Parser, new[]{ "Profile", "Status", "LastVipUpdate", "OfficialAt", "AgentId", "WithdrawBlacklist", "InternalAccount", "CreationIpAddress", "CreationDevice", "CreationDeviceId", "CreationPackage", "LastLoginIpAddress", "LastLoginDevice", "LastLoginPackage", "DisableTime", "Password", "SeqId" }, new[]{ "LastVipUpdate", "OfficialAt", "AgentId" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.User.V1.UserAccount), global::Yuujins.User.V1.UserAccount.Parser, new[]{ "Profile", "Status", "LastVipUpdate", "OfficialAt", "AgentId", "WithdrawBlacklist", "InternalAccount", "CreationIpAddress", "CreationDevice", "CreationDeviceId", "CreationPackage", "LastLoginIpAddress", "LastLoginDevice", "LastLoginPackage", "DisableTime", "Password", "SeqId", "IsGuest" }, new[]{ "LastVipUpdate", "OfficialAt", "AgentId" }, null, null, null)
           }));
     }
     #endregion
 
   }
   #region Messages
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class User : pb::IMessage<User>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -206,7 +208,11 @@ namespace Yuujins.User.V1 {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -221,7 +227,11 @@ namespace Yuujins.User.V1 {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -235,6 +245,7 @@ namespace Yuujins.User.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static partial class Types {
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       public sealed partial class Request : pb::IMessage<Request>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           , pb::IBufferMessage
@@ -361,7 +372,11 @@ namespace Yuujins.User.V1 {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -376,7 +391,11 @@ namespace Yuujins.User.V1 {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -390,6 +409,7 @@ namespace Yuujins.User.V1 {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static partial class Types {
+          [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
           public sealed partial class ChangePassword : pb::IMessage<ChangePassword>
           #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
               , pb::IBufferMessage
@@ -574,7 +594,11 @@ namespace Yuujins.User.V1 {
             #else
               uint tag;
               while ((tag = input.ReadTag()) != 0) {
-                switch(tag) {
+              if ((tag & 7) == 4) {
+                // Abort on any end group tag.
+                return;
+              }
+              switch(tag) {
                   default:
                     _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                     break;
@@ -597,7 +621,11 @@ namespace Yuujins.User.V1 {
             void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
               uint tag;
               while ((tag = input.ReadTag()) != 0) {
-                switch(tag) {
+              if ((tag & 7) == 4) {
+                // Abort on any end group tag.
+                return;
+              }
+              switch(tag) {
                   default:
                     _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                     break;
@@ -616,6 +644,7 @@ namespace Yuujins.User.V1 {
 
           }
 
+          [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
           public sealed partial class Register : pb::IMessage<Register>
           #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
               , pb::IBufferMessage
@@ -829,7 +858,11 @@ namespace Yuujins.User.V1 {
             #else
               uint tag;
               while ((tag = input.ReadTag()) != 0) {
-                switch(tag) {
+              if ((tag & 7) == 4) {
+                // Abort on any end group tag.
+                return;
+              }
+              switch(tag) {
                   default:
                     _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                     break;
@@ -856,7 +889,11 @@ namespace Yuujins.User.V1 {
             void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
               uint tag;
               while ((tag = input.ReadTag()) != 0) {
-                switch(tag) {
+              if ((tag & 7) == 4) {
+                // Abort on any end group tag.
+                return;
+              }
+              switch(tag) {
                   default:
                     _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                     break;
@@ -879,6 +916,7 @@ namespace Yuujins.User.V1 {
 
           }
 
+          [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
           public sealed partial class GetAccount : pb::IMessage<GetAccount>
           #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
               , pb::IBufferMessage
@@ -1005,7 +1043,11 @@ namespace Yuujins.User.V1 {
             #else
               uint tag;
               while ((tag = input.ReadTag()) != 0) {
-                switch(tag) {
+              if ((tag & 7) == 4) {
+                // Abort on any end group tag.
+                return;
+              }
+              switch(tag) {
                   default:
                     _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                     break;
@@ -1020,7 +1062,11 @@ namespace Yuujins.User.V1 {
             void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
               uint tag;
               while ((tag = input.ReadTag()) != 0) {
-                switch(tag) {
+              if ((tag & 7) == 4) {
+                // Abort on any end group tag.
+                return;
+              }
+              switch(tag) {
                   default:
                     _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                     break;
@@ -1036,6 +1082,7 @@ namespace Yuujins.User.V1 {
 
       }
 
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       public sealed partial class Response : pb::IMessage<Response>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           , pb::IBufferMessage
@@ -1162,7 +1209,11 @@ namespace Yuujins.User.V1 {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -1177,7 +1228,11 @@ namespace Yuujins.User.V1 {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -1191,6 +1246,7 @@ namespace Yuujins.User.V1 {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static partial class Types {
+          [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
           public sealed partial class ChangePassword : pb::IMessage<ChangePassword>
           #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
               , pb::IBufferMessage
@@ -1317,7 +1373,11 @@ namespace Yuujins.User.V1 {
             #else
               uint tag;
               while ((tag = input.ReadTag()) != 0) {
-                switch(tag) {
+              if ((tag & 7) == 4) {
+                // Abort on any end group tag.
+                return;
+              }
+              switch(tag) {
                   default:
                     _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                     break;
@@ -1332,7 +1392,11 @@ namespace Yuujins.User.V1 {
             void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
               uint tag;
               while ((tag = input.ReadTag()) != 0) {
-                switch(tag) {
+              if ((tag & 7) == 4) {
+                // Abort on any end group tag.
+                return;
+              }
+              switch(tag) {
                   default:
                     _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                     break;
@@ -1343,6 +1407,7 @@ namespace Yuujins.User.V1 {
 
           }
 
+          [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
           public sealed partial class Register : pb::IMessage<Register>
           #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
               , pb::IBufferMessage
@@ -1469,7 +1534,11 @@ namespace Yuujins.User.V1 {
             #else
               uint tag;
               while ((tag = input.ReadTag()) != 0) {
-                switch(tag) {
+              if ((tag & 7) == 4) {
+                // Abort on any end group tag.
+                return;
+              }
+              switch(tag) {
                   default:
                     _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                     break;
@@ -1484,7 +1553,11 @@ namespace Yuujins.User.V1 {
             void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
               uint tag;
               while ((tag = input.ReadTag()) != 0) {
-                switch(tag) {
+              if ((tag & 7) == 4) {
+                // Abort on any end group tag.
+                return;
+              }
+              switch(tag) {
                   default:
                     _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                     break;
@@ -1495,6 +1568,7 @@ namespace Yuujins.User.V1 {
 
           }
 
+          [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
           public sealed partial class GetAccount : pb::IMessage<GetAccount>
           #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
               , pb::IBufferMessage
@@ -1653,7 +1727,11 @@ namespace Yuujins.User.V1 {
             #else
               uint tag;
               while ((tag = input.ReadTag()) != 0) {
-                switch(tag) {
+              if ((tag & 7) == 4) {
+                // Abort on any end group tag.
+                return;
+              }
+              switch(tag) {
                   default:
                     _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                     break;
@@ -1675,7 +1753,11 @@ namespace Yuujins.User.V1 {
             void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
               uint tag;
               while ((tag = input.ReadTag()) != 0) {
-                switch(tag) {
+              if ((tag & 7) == 4) {
+                // Abort on any end group tag.
+                return;
+              }
+              switch(tag) {
                   default:
                     _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                     break;
@@ -1703,6 +1785,7 @@ namespace Yuujins.User.V1 {
 
   }
 
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class Profile : pb::IMessage<Profile>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -1798,11 +1881,13 @@ namespace Yuujins.User.V1 {
 
     /// <summary>Field number for the "display_name" field.</summary>
     public const int DisplayNameFieldNumber = 3;
+    private readonly static string DisplayNameDefaultValue = "";
+
     private string displayName_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string DisplayName {
-      get { return displayName_ ?? ""; }
+      get { return displayName_ ?? DisplayNameDefaultValue; }
       set {
         displayName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
@@ -1822,11 +1907,13 @@ namespace Yuujins.User.V1 {
 
     /// <summary>Field number for the "avatar_url" field.</summary>
     public const int AvatarUrlFieldNumber = 4;
+    private readonly static string AvatarUrlDefaultValue = "";
+
     private string avatarUrl_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string AvatarUrl {
-      get { return avatarUrl_ ?? ""; }
+      get { return avatarUrl_ ?? AvatarUrlDefaultValue; }
       set {
         avatarUrl_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
@@ -1858,11 +1945,13 @@ namespace Yuujins.User.V1 {
 
     /// <summary>Field number for the "location" field.</summary>
     public const int LocationFieldNumber = 6;
+    private readonly static string LocationDefaultValue = "";
+
     private string location_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string Location {
-      get { return location_ ?? ""; }
+      get { return location_ ?? LocationDefaultValue; }
       set {
         location_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
@@ -1882,11 +1971,13 @@ namespace Yuujins.User.V1 {
 
     /// <summary>Field number for the "timezone" field.</summary>
     public const int TimezoneFieldNumber = 7;
+    private readonly static string TimezoneDefaultValue = "";
+
     private string timezone_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string Timezone {
-      get { return timezone_ ?? ""; }
+      get { return timezone_ ?? TimezoneDefaultValue; }
       set {
         timezone_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
@@ -1918,11 +2009,13 @@ namespace Yuujins.User.V1 {
 
     /// <summary>Field number for the "facebook_id" field.</summary>
     public const int FacebookIdFieldNumber = 9;
+    private readonly static string FacebookIdDefaultValue = "";
+
     private string facebookId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string FacebookId {
-      get { return facebookId_ ?? ""; }
+      get { return facebookId_ ?? FacebookIdDefaultValue; }
       set {
         facebookId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
@@ -1942,11 +2035,13 @@ namespace Yuujins.User.V1 {
 
     /// <summary>Field number for the "google_id" field.</summary>
     public const int GoogleIdFieldNumber = 10;
+    private readonly static string GoogleIdDefaultValue = "";
+
     private string googleId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string GoogleId {
-      get { return googleId_ ?? ""; }
+      get { return googleId_ ?? GoogleIdDefaultValue; }
       set {
         googleId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
@@ -1966,11 +2061,13 @@ namespace Yuujins.User.V1 {
 
     /// <summary>Field number for the "apple_id" field.</summary>
     public const int AppleIdFieldNumber = 11;
+    private readonly static string AppleIdDefaultValue = "";
+
     private string appleId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string AppleId {
-      get { return appleId_ ?? ""; }
+      get { return appleId_ ?? AppleIdDefaultValue; }
       set {
         appleId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
@@ -2110,11 +2207,13 @@ namespace Yuujins.User.V1 {
 
     /// <summary>Field number for the "cid" field.</summary>
     public const int CidFieldNumber = 22;
+    private readonly static long CidDefaultValue = 0L;
+
     private long cid_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public long Cid {
-      get { if ((_hasBits0 & 1) != 0) { return cid_; } else { return 0L; } }
+      get { if ((_hasBits0 & 1) != 0) { return cid_; } else { return CidDefaultValue; } }
       set {
         _hasBits0 |= 1;
         cid_ = value;
@@ -2639,7 +2738,11 @@ namespace Yuujins.User.V1 {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -2765,7 +2868,11 @@ namespace Yuujins.User.V1 {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -2890,6 +2997,7 @@ namespace Yuujins.User.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static partial class Types {
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       public sealed partial class Match : pb::IMessage<Match>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           , pb::IBufferMessage
@@ -3106,7 +3214,11 @@ namespace Yuujins.User.V1 {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -3136,7 +3248,11 @@ namespace Yuujins.User.V1 {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
+          if ((tag & 7) == 4) {
+            // Abort on any end group tag.
+            return;
+          }
+          switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -3167,6 +3283,7 @@ namespace Yuujins.User.V1 {
 
   }
 
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class UserAccount : pb::IMessage<UserAccount>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -3220,6 +3337,7 @@ namespace Yuujins.User.V1 {
       disableTime_ = other.disableTime_ != null ? other.disableTime_.Clone() : null;
       password_ = other.password_;
       seqId_ = other.seqId_;
+      isGuest_ = other.isGuest_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3279,11 +3397,13 @@ namespace Yuujins.User.V1 {
 
     /// <summary>Field number for the "agent_id" field.</summary>
     public const int AgentIdFieldNumber = 5;
+    private readonly static long AgentIdDefaultValue = 0L;
+
     private long agentId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public long AgentId {
-      get { if ((_hasBits0 & 1) != 0) { return agentId_; } else { return 0L; } }
+      get { if ((_hasBits0 & 1) != 0) { return agentId_; } else { return AgentIdDefaultValue; } }
       set {
         _hasBits0 |= 1;
         agentId_ = value;
@@ -3446,6 +3566,21 @@ namespace Yuujins.User.V1 {
       }
     }
 
+    /// <summary>Field number for the "is_guest" field.</summary>
+    public const int IsGuestFieldNumber = 18;
+    private bool isGuest_;
+    /// <summary>
+    /// true = tài khoản khách (Chơi ngay), client dùng để hiển thị mời tạo tài khoản đầy đủ.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool IsGuest {
+      get { return isGuest_; }
+      set {
+        isGuest_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -3478,6 +3613,7 @@ namespace Yuujins.User.V1 {
       if (!object.Equals(DisableTime, other.DisableTime)) return false;
       if (Password != other.Password) return false;
       if (SeqId != other.SeqId) return false;
+      if (IsGuest != other.IsGuest) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3502,6 +3638,7 @@ namespace Yuujins.User.V1 {
       if (disableTime_ != null) hash ^= DisableTime.GetHashCode();
       if (Password.Length != 0) hash ^= Password.GetHashCode();
       if (SeqId != 0L) hash ^= SeqId.GetHashCode();
+      if (IsGuest != false) hash ^= IsGuest.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3588,6 +3725,10 @@ namespace Yuujins.User.V1 {
         output.WriteRawTag(136, 1);
         output.WriteInt64(SeqId);
       }
+      if (IsGuest != false) {
+        output.WriteRawTag(144, 1);
+        output.WriteBool(IsGuest);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -3666,6 +3807,10 @@ namespace Yuujins.User.V1 {
         output.WriteRawTag(136, 1);
         output.WriteInt64(SeqId);
       }
+      if (IsGuest != false) {
+        output.WriteRawTag(144, 1);
+        output.WriteBool(IsGuest);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -3726,6 +3871,9 @@ namespace Yuujins.User.V1 {
       }
       if (SeqId != 0L) {
         size += 2 + pb::CodedOutputStream.ComputeInt64Size(SeqId);
+      }
+      if (IsGuest != false) {
+        size += 2 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3802,6 +3950,9 @@ namespace Yuujins.User.V1 {
       if (other.SeqId != 0L) {
         SeqId = other.SeqId;
       }
+      if (other.IsGuest != false) {
+        IsGuest = other.IsGuest;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -3813,7 +3964,11 @@ namespace Yuujins.User.V1 {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -3897,6 +4052,10 @@ namespace Yuujins.User.V1 {
             SeqId = input.ReadInt64();
             break;
           }
+          case 144: {
+            IsGuest = input.ReadBool();
+            break;
+          }
         }
       }
     #endif
@@ -3908,7 +4067,11 @@ namespace Yuujins.User.V1 {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -3990,6 +4153,10 @@ namespace Yuujins.User.V1 {
           }
           case 136: {
             SeqId = input.ReadInt64();
+            break;
+          }
+          case 144: {
+            IsGuest = input.ReadBool();
             break;
           }
         }

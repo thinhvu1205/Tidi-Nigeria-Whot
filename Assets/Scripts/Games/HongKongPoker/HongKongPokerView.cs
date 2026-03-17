@@ -248,7 +248,7 @@ public class HongKongPokerView : BaseDiceGameView
         UpdateBettingStateUI(data, shouldAnimateBet: false);
         
         // Show/hide UI containers based on turn
-        string myUserId = User.userProfile.UserId;
+        string myUserId = User.UserAccount.Profile.UserId;
         bool isMyTurn = !string.IsNullOrEmpty(data.CurrentPlayer) && data.CurrentPlayer == myUserId;
         
         if (isMyTurn)
@@ -359,7 +359,7 @@ public class HongKongPokerView : BaseDiceGameView
         base.HandleUpdateNewRound(matchState);
         var data = HKUpdateNewRound.Parser.ParseFrom(matchState.State);
         
-        string myUserId = User.userProfile.UserId;
+        string myUserId = User.UserAccount.Profile.UserId;
         bool isSync = data.IsSync;
         
         // Clear previous round UI (only if not sync)
@@ -746,7 +746,7 @@ public class HongKongPokerView : BaseDiceGameView
         int playerIndex = GetPlayerIndex(data.UserId);
         if (playerIndex < 0) return;
         
-        string myUserId = User.userProfile.UserId;
+        string myUserId = User.UserAccount.Profile.UserId;
         bool isMe = data.UserId == myUserId;
         List<CardModel> cardPlayer = listPlayerCards[playerIndex];
         
@@ -1091,7 +1091,7 @@ public class HongKongPokerView : BaseDiceGameView
             // BasePlayerView playerView = userIdToView.GetValueOrDefault(playerState.UserId);
             int playerIndex = GetPlayerIndex(playerState.UserId);
             if (playerIndex < 0) continue;
-            bool isMe = playerState.UserId == User.userProfile.UserId;
+            bool isMe = playerState.UserId == User.UserAccount.Profile.UserId;
             
             // Update stack display
             long stack = playerState.Stack;
@@ -1111,7 +1111,7 @@ public class HongKongPokerView : BaseDiceGameView
             }
         }
         
-        bool isMyTurn = !string.IsNullOrEmpty(bettingState.CurrentPlayer) && bettingState.CurrentPlayer == User.userProfile.UserId;
+        bool isMyTurn = !string.IsNullOrEmpty(bettingState.CurrentPlayer) && bettingState.CurrentPlayer == User.UserAccount.Profile.UserId;
 
         // Update button container for ON TURN players
         if (isMyTurn)

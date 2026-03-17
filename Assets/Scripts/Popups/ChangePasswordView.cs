@@ -32,7 +32,7 @@ public class ChangePasswordView : BaseView
         try
         {
             UIManager.Instance.ShowProgressing();
-            await DataSender.ChangePassword(oldPassword: currentPassword, password: newPassword);
+            await DataSender.IdentityUserChangePassword(oldPassword: currentPassword, newPassword: newPassword);
             UIManager.Instance.HideProgressing();
             UIManager.Instance.ShowAlertDialog("Change password successful!", () => Hide());
         }

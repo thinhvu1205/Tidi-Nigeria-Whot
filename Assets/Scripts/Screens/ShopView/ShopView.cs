@@ -62,9 +62,9 @@ public class ShopView : BaseView
 
     public void UpdateProfileData()
     {
-        if (User.userProfile != null)
+        if (User.UserAccount != null)
         {
-            textAccountChip.text = Utility.FormatNumber(User.userProfile.AccountChip);
+            textAccountChip.text = Utility.FormatNumber(User.UserAccount.Profile.Balance);
         }
     }
 }

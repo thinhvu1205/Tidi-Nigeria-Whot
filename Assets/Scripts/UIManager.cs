@@ -19,6 +19,9 @@ using TMPro;
 using Color = UnityEngine.Color;
 using Newtonsoft.Json;
 using Gpm.WebView;
+using Yuujins.Match.V1;
+using Yuujins.User.V1;
+using User = Globals.User;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -53,8 +56,8 @@ public class UIManager : Singleton<UIManager>
 
     public async UniTask LoadProfileUser()
     {
-        Profile profile = await DataSender.GetProfile();
-        User.userProfile = profile;
+        Yuujins.User.V1.User.Types.Response.Types.GetAccount getAccount = await DataSender.IdentityUserGetAccount();
+        User.UserAccount = getAccount.Account;
         User.UpdateProfile();
         User.UpdateConfig();
     }
@@ -66,8 +69,8 @@ public class UIManager : Singleton<UIManager>
         if (sceneName == Config.MAIN_SCENE)
         {
             await LoadProfileUser();
-            await NetworkManager.INSTANCE.GetConfigModeFromStorage();
-            await NetworkManager.INSTANCE.GetLinkConfigFromStorage();
+            // await NetworkManager.INSTANCE.GetConfigModeFromStorage();
+            // await NetworkManager.INSTANCE.GetLinkConfigFromStorage();
         }
         await SceneManager.LoadSceneAsync(sceneName);
     }
@@ -130,24 +133,33 @@ public class UIManager : Singleton<UIManager>
 
     public async UniTask HandleFindAndJoinMatch(int markUnit, string userData = "")
     {
-        ShowProgressing();
-        RpcFindMatchResponse response = await DataSender.FindMatch(Config.currentGameId, markUnit, true, userData : userData);
-        if (response == null) return;
-        // Debug.Log("Find match response: " + response.ToString());
-        
-        if (response.Matches.Count > 0)
+        try
         {
-            var labelMatch = await DataSender.JoinMatch(response.Matches[0].MatchId);
-            if (Config.currentGameId == Constants.SIXIANG_GAME_ID)
+            ShowProgressing();
+            var response = await DataSender.MatchFindMatchAsync(Config.currentGameId, markUnit, true);
+            if (response == null) return;
+            Debug.Log("Find match response: " + response.ToString());
+        
+            if (response.Items.Count > 0)
             {
-                HideProgressing();
-                PlayVideoSixiang(() => HandleOpenGame(labelMatch));
-            }
-            else
-            {
-                HandleOpenGame(labelMatch);       
+                var labelMatch = await DataSender.JoinMatch(response.Items[0].MatchId);
+                if (Config.currentGameName == Constants.SIXIANG_GAME_ID)
+                {
+                    HideProgressing();
+                    PlayVideoSixiang(() => HandleOpenGame(labelMatch));
+                }
+                else
+                {
+                    HandleOpenGame(labelMatch);       
+                }
             }
         }
+        catch (Exception e)
+        {
+            Debug.Log("Err" + e.Message);
+            throw;
+        }
+        
     }
 
     public void PlayVideoSixiang(Action onComplete)
@@ -158,7 +170,7 @@ public class UIManager : Singleton<UIManager>
     public async UniTask HandleQuickMatch()
     {
         ShowProgressing();
-        RpcFindMatchResponse response = await DataSender.QuickMatch(Config.currentGameId);
+        RpcFindMatchResponse response = await DataSender.QuickMatch(Config.currentGameName);
         if (response == null)
         {
             HideProgressing();
@@ -169,7 +181,7 @@ public class UIManager : Singleton<UIManager>
         
         if (labelMatch != null)
         {
-            if (Config.currentGameId == Constants.SIXIANG_GAME_ID)
+            if (Config.currentGameName == Constants.SIXIANG_GAME_ID)
             {
                 PlayVideoSixiang(() => HandleOpenGame(labelMatch));
             }
@@ -183,7 +195,7 @@ public class UIManager : Singleton<UIManager>
     public async UniTask HandleCreateMatch(string passWord, int markUnit, string customData)
     {
         ShowProgressing();
-        RpcCreateMatchResponse response = await DataSender.CreateMatch(Config.currentGameId ,passWord, markUnit, customData);
+        RpcCreateMatchResponse response = await DataSender.CreateMatch(Config.currentGameName ,passWord, markUnit, customData);
         HideProgressing();
         if (response == null) return;
         // Debug.Log("Create match response: " + response.ToString());
@@ -214,7 +226,7 @@ public class UIManager : Singleton<UIManager>
             Destroy(gameView.gameObject);
         }
         _ = NetworkManager.INSTANCE.LeaveWorldChat();
-        switch (Config.currentGameId)
+        switch (Config.currentGameName)
         {
             case Constants.WHOT_GAME_ID:
                 gameView = Instantiate(LoadPrefabGame("WhotView"), parentGames).GetComponent<WhotView>();
@@ -251,10 +263,10 @@ public class UIManager : Singleton<UIManager>
                 gameView = Instantiate(LoadPrefabGame("SlotJuicyGardenView"), parentGames).GetComponent<SlotJuicyView>();
                 break;
             default:
-                Debug.LogError("Unsupported game ID: " + Config.currentGameId);
+                Debug.LogError("Unsupported game ID: " + Config.currentGameName);
                 break;
         }
-        if (Constants.SLOT_GAMES_ID.Contains(Config.currentGameId) && Config.currentGameId != Constants.SIXIANG_GAME_ID)
+        if (Constants.SLOT_GAMES_ID.Contains(Config.currentGameName) && Config.currentGameName != Constants.SIXIANG_GAME_ID)
         {
             ShowProgressing();
             gameView.gameObject.SetActive(false);
@@ -266,7 +278,7 @@ public class UIManager : Singleton<UIManager>
     {
         if (gameView != null)
         {
-            if (Constants.SLOT_GAMES_ID.Contains(Config.currentGameId))
+            if (Constants.SLOT_GAMES_ID.Contains(Config.currentGameName))
             {
                 if (!gameView.CanLeaveTable)
                 {
@@ -380,7 +392,7 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenCreateTableView()
     {
-        if (User.userProfile.VipLevel >= 2)
+        if (User.UserAccount.Profile.Vip >= 2)
         {
             CreateTableView createTableView = Instantiate(LoadPrefabPopup("PopupCreateTable"), parentPopups).GetComponent<CreateTableView>();
             createTableView.transform.localScale = Vector3.one;

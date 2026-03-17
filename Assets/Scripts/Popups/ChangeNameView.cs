@@ -40,7 +40,7 @@ public class ChangeNameView : BaseView
         try
         {
             UIManager.Instance.ShowProgressing();
-            await DataSender.LinkUsername(username: userName, password: password);
+            await DataSender.IdentityUserRegister(userName: userName, password: password, Config.deviceId);
             UIManager.Instance.ShowAlertDialog("Change name successful!", () => Hide());
             await UIManager.Instance.LoadProfileUser();
             UIManager.Instance.HideProgressing();

@@ -160,7 +160,7 @@ public class LuckyNumberView : BaseView
 
     private void UpdateAccountChip()
     {
-        textAccountChip.text = Utility.FormatNumber(User.userProfile.AccountChip);
+        textAccountChip.text = Utility.FormatNumber(User.UserAccount.Profile.Balance);
     }
 
     #endregion
@@ -322,7 +322,7 @@ public class LuckyNumberView : BaseView
             UIManager.Instance.ShowToast("Please select a draw.", 2, transform);
             return;
         }
-        if (User.userProfile.AccountChip < price)
+        if (User.UserAccount.Profile.Balance < price)
         {
             UIManager.Instance.ShowConfirmDialog("You do not have enough chips!", () => UIManager.Instance.OpenShop(), null, "Get More Chips");
             selectedDrawId = 0;

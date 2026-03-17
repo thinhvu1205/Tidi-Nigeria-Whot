@@ -5,10 +5,11 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using Globals;
 using Newtonsoft.Json.Linq;
-using Proto;
 using TMPro;
+using Yuujins.Match.V1;
 using UnityEngine;
 using UnityEngine.UI;
+using MatchInfo = Yuujins.Match.V1.MatchInfo;
 
 public class TableItem : MonoBehaviour
 {
@@ -18,39 +19,22 @@ public class TableItem : MonoBehaviour
     [SerializeField] Button joinButton;
     [SerializeField] GameObject fullObject, imageDoubleDeck, imageLock;
 
-    public void SetData(Match match)
+    public void SetData(MatchInfo match)
     {
         for (var i = 0; i < playerSlotImageList.Count; i++)
         {
-            playerSlotImageList[i].sprite = i <= match.Size - 1 ? slotIconList[1] : slotIconList[0];
-            playerSlotImageList[i].gameObject.SetActive(!(i >= match.MaxSize));
+            playerSlotImageList[i].sprite = slotIconList[0];
+            playerSlotImageList[i].gameObject.SetActive(true);
             playerSlotImageList[i].SetNativeSize();
         }
-
-        // fullObject.SetActive(!isOpen);
-        joinButton.gameObject.SetActive(match.Open);
         joinButton.gameObject.SetActive(true);
-        markUnitText.text = Utility.FormatMoney((int)match.MarkUnit, true);
-        string listName = "";
-        foreach (SimpleProfile simpleProfile in match.Profiles)
-        {
-            name = simpleProfile.UserName;
-            // if (name.Length > 10)
-            // {
-            //     name = name.Substring(0, 7) + "...";
-            // }
-            if (simpleProfile != match.Profiles.ToList().Last())
-            {
-                name += ", "; 
-            }
-            listName += name;
-        }
-        tableNameText.text = listName;
-        tableIDText.text = match.TableId;
-        imageLock.SetActive(!string.IsNullOrEmpty(match.Password));
+        markUnitText.text = match.MatchId;
+        tableNameText.text = "";
+        tableIDText.text = match.MatchId;
+        imageLock.SetActive(false);
         imageDoubleDeck.SetActive(false);
         joinButton.onClick.RemoveAllListeners();
-        joinButton.onClick.AddListener(() => _ = OnClickButtonJoin(match.MatchId, match.Open));
+        joinButton.onClick.AddListener(() => _ = OnClickButtonJoin(match.MatchId, true));
     }
 
     private async UniTask OnClickButtonJoin(string matchId, bool isOpen)
@@ -71,7 +55,7 @@ public class TableItem : MonoBehaviour
         var labelMatch = await DataSender.JoinMatch(matchId, passWord);
         if (labelMatch != null)
         {
-            Config.currentGameId = labelMatch.Name;
+            Config.currentGameName = labelMatch.Name ?? labelMatch.MatchId;
             UIManager.Instance.HandleOpenGame(labelMatch);
         }
     }

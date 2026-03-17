@@ -53,13 +53,13 @@ public class ProfileView : BaseView
 
     private void UpdateProfileVisuals()
     {
-        if (User.userProfile != null)
+        if (User.UserAccount != null)
         {
-            int vipLevel = (int)User.userProfile.VipLevel;
-            nameText.text = User.userProfile.DisplayName;
-            idText.text = "ID: " + User.userProfile.UserSid;
-            chipText.text = Utility.FormatNumber(User.userProfile.AccountChip);
-            if (IsDefaultName(User.userProfile.DisplayName))
+            int vipLevel = (int)User.UserAccount.Profile.Vip;
+            nameText.text = User.UserAccount.Profile.DisplayName;
+            idText.text = "ID: " + User.UserAccount.Profile.UserId;
+            chipText.text = Utility.FormatNumber(User.UserAccount.Profile.Balance);
+            if (User.UserAccount.IsGuest)
             {
                 changeNameButton.gameObject.SetActive(true);
                 changePasswordButton.gameObject.SetActive(false);
@@ -69,7 +69,7 @@ public class ProfileView : BaseView
                 changeNameButton.gameObject.SetActive(false);
                 changePasswordButton.gameObject.SetActive(true);
             }
-            avatar.LoadAvatar(User.userProfile.AvatarId, User.userProfile.VipLevel);
+            avatar.LoadAvatar(User.UserAccount.Profile.AvatarId.ToString(), User.UserAccount.Profile.Vip);
             SetVipStars(vipLevel);
         }
     }

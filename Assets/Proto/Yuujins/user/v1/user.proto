@@ -80,4 +80,6 @@ message UserAccount {
   google.protobuf.Timestamp disable_time = 15;
   bytes password = 16;
   int64 seq_id = 17;
+// true = tài khoản khách (Chơi ngay), client dùng để hiển thị mời tạo tài khoản đầy đủ.
+  bool is_guest = 18;
 }

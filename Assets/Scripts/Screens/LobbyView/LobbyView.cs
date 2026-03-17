@@ -13,6 +13,9 @@ using Avatar = Common.Objects.Avatar;
 using System.Collections;
 using UnityEngine.Pool;
 using Nakama;
+using Yuujins.Cfg.Layout.V1;
+using Game = Yuujins.Cfg.Game.V1.Game;
+using Layout = Yuujins.Cfg.Layout.V1.Layout;
 
 public class LobbyView : BaseView
 {
@@ -43,7 +46,8 @@ public class LobbyView : BaseView
     [SerializeField] private Button btnQuickPlay;
     [SerializeField] private Button btnVipFarm;
 
-    private List<Game> gameList = new();
+    private List<Tab> gameTabs = new List<Tab>();
+    private int currentIdTab = 0;
     private List<TextMeshProUGUI> listTextPreviewChatWorld = new();
     private LobbyPresenter lobbyPresenter;
     private int timeLeftToClaimReward;
@@ -65,25 +69,25 @@ public class LobbyView : BaseView
         _ = LoadGames();
         OnClickAllGamesTab();
         UIManager.Instance.lobbyView = this;
-        _ = CheckUserInGame();
-        _ =  NetworkManager.INSTANCE.JoinWorldChat();
-        _ = GetClaimableReward();
-        _ = GetFreeChip();
-        _ = GetListFriend();
-        
-        // Initialize Announcement Ticker
-        if (AlertMessage.Instance != null)
-        {
-            _ = AlertMessage.Instance.InitializeAnnouncementTicker();
-        }
+        // _ = CheckUserInGame();
+        // _ =  NetworkManager.INSTANCE.JoinWorldChat();
+        // _ = GetClaimableReward();
+        // _ = GetFreeChip();
+        // _ = GetListFriend();
+        //
+        // // Initialize Announcement Ticker
+        // if (AlertMessage.Instance != null)
+        // {
+        //     _ = AlertMessage.Instance.InitializeAnnouncementTicker();
+        // }
     }
 
     void OnApplicationPause(bool pause)
     {
         if (!pause && UIManager.Instance.gameView == null)
         {
-            _ = GetClaimableReward();
-            _ =  NetworkManager.INSTANCE.JoinWorldChat();
+            // _ = GetClaimableReward();
+            // _ =  NetworkManager.INSTANCE.JoinWorldChat();
         }
     }
 
@@ -117,13 +121,13 @@ public class LobbyView : BaseView
 
     private async UniTask CheckUserInGame()
     {
-        if (User.userProfile.PlayingMatch.MatchId != "")
+        string matchId = User.UserAccount.Profile.Match.MatchId;
+        if (!string.IsNullOrEmpty(matchId))
         {
-            // Debug.Log($"Joining match with ID: {User.userProfile.PlayingMatch.MatchId}");
-            var labelMatch = await DataSender.JoinMatch(User.userProfile.PlayingMatch.MatchId);
+            var labelMatch = await DataSender.JoinMatch(matchId);
             if (labelMatch != null)
             {
-                Config.currentGameId = labelMatch.Name;
+                Config.currentGameName = labelMatch.Name ?? labelMatch.MatchId;
                 UIManager.Instance.HandleOpenGame(labelMatch);
             }
         }
@@ -206,10 +210,16 @@ public class LobbyView : BaseView
     {
         try
         {
-            GameListResponse gameListResponse = await lobbyPresenter.GetListGame();
-            UIManager.Instance.HideProgressing();
-            gameList = gameListResponse.Games.ToList();
-            DOVirtual.DelayedCall(0f, () => UpdateUIListGame());
+                UIManager.Instance.ShowProgressing();
+                // Gọi cả list game (lấy tên) và get layout (thứ tự/tab). Lưu ServerConfig; build gameList từ layout + GameList.
+                await ServerConfig.LoadInfoLayoutGame();
+                UIManager.Instance.HideProgressing();
+                gameTabs = ServerConfig.Layout.Tabs.ToList();
+                if (gameTabs.Count > 0)
+                {
+                    currentIdTab = 0;
+                    DOVirtual.DelayedCall(0f, UpdateUIListGame);
+                }
         }
         catch (Exception ex)
         {
@@ -217,9 +227,12 @@ public class LobbyView : BaseView
         }
     }
 
+    /// <summary>Dựng danh sách game từ ServerConfig.Layout (tabs/tiles) + ServerConfig.GameList (tên theo game_id).</summary>
+
+
     private async UniTask GetClaimableReward()
     {
-        (Reward reward, bool canClaim, bool isDeviceAllowed, bool hasReachedMaxStreak) = await lobbyPresenter.GetClaimableReward();
+        var (reward, canClaim, isDeviceAllowed, hasReachedMaxStreak) = await lobbyPresenter.GetClaimableReward();
         UIManager.Instance.HideProgressing();
         if (reward == null) return;
         timeLeftToClaimReward = (int)reward.NextClaimSec;
@@ -265,7 +278,7 @@ public class LobbyView : BaseView
 
     private async UniTask GetVipFarmProgress()
     {
-        if (User.userProfile.VipLevel < 2)
+        if (User.UserAccount.Profile.Vip < 2)
         {
             vipFarm.SetActive(false);
             return;
@@ -289,41 +302,68 @@ public class LobbyView : BaseView
         // {
         //     Destroy(child.gameObject);
         // }
-        foreach (Game game in gameList)
+        
+        foreach (var gameTiles in gameTabs[0].Tiles)
         {
-            ItemGame itemGame = Instantiate(gameIconPrefab).GetComponent<ItemGame>();
-            if (game.Code == Constants.WHOT_GAME_ID)
+            var itemGame = Instantiate(gameIconPrefab).GetComponent<ItemGame>();
+            if (gameTiles.Large)
             {
                 itemGame.gameObject.transform.SetParent(bigGameIconParent);
                 itemGame.gameObject.transform.SetAsFirstSibling();
-                itemGame.SetInfo(game.Code, game.LobbyId, true);
+                if (ServerConfig.GameMap.TryGetValue((uint)gameTiles.GameId, out var game))
+                {
+                    itemGame.SetInfo(game.Name, gameTiles.GameId, true);
+                }
+                
             }
             else
             {
                 itemGame.gameObject.transform.SetParent(miniGameIconParent);
-                itemGame.SetInfo(game.Code, game.LobbyId, false);
+                itemGame.gameObject.transform.SetAsFirstSibling();
+                if (ServerConfig.GameMap.TryGetValue((uint)gameTiles.GameId, out var game))
+                {
+                    itemGame.SetInfo(game.Name, gameTiles.GameId,true);
+                } 
             }
-
-            if (Constants.SLOT_GAMES_ID.Contains(game.Code))
-            {
-                ItemGame slotItemGame = Instantiate(gameIconPrefab, slotGameIconParent).GetComponent<ItemGame>();
-                slotItemGame.SetInfo(game.Code, game.LobbyId, true);
-            }
-
         }
+        
+        if(gameTabs[0].Tiles.Count == 1) return;
+        
+        foreach (var gameTiles in gameTabs[1].Tiles)
+        {
+            var itemGame = Instantiate(gameIconPrefab).GetComponent<ItemGame>();
+            if (gameTiles.Large)
+            {
+                itemGame.gameObject.transform.SetParent(slotGameIconParent);
+                itemGame.gameObject.transform.SetAsFirstSibling();
+                if (ServerConfig.GameMap.TryGetValue((uint)gameTiles.GameId, out var game))
+                {
+                    itemGame.SetInfo(game.Name, gameTiles.GameId,true);
+                }
+                
+            }
+            else
+            {
+                itemGame.gameObject.transform.SetParent(slotGameIconParent);
+                itemGame.gameObject.transform.SetAsFirstSibling();
+                if (ServerConfig.GameMap.TryGetValue((uint)gameTiles.GameId, out var game))
+                {
+                    itemGame.SetInfo(game.Name, gameTiles.GameId,true);
+                } 
+            }
+        }
+        
     }
 
     public void UpdateProfileData()
     {
-        if (User.userProfile != null)
-        {
-            displayNameText.text = User.userProfile.DisplayName;
-            userIdText.text = "ID: " + User.userProfile.UserSid;
-            accountChip.text = Utility.FormatNumber(User.userProfile.AccountChip);
-            avatar.LoadAvatar(User.userProfile.AvatarId, User.userProfile.VipLevel);
-        }
-        UpdateFeatureButtons();
-        _ = GetVipFarmProgress();
+
+        displayNameText.text = User.UserAccount.Profile.DisplayName;
+        userIdText.text = "ID: " + User.UserAccount.Profile.UserId;
+        accountChip.text = Utility.FormatNumber(User.UserAccount.Profile.Balance);
+        avatar.LoadAvatar(User.UserAccount.Profile.AvatarId.ToString(), (int)User.UserAccount.Profile.Vip);
+        // UpdateFeatureButtons();
+        // _ = GetVipFarmProgress();
     }
 
     /// <summary>
@@ -413,6 +453,7 @@ public class LobbyView : BaseView
     #region Buttons
     public void OnClickAllGamesTab()
     {
+        currentIdTab = 0;
         allGamesImage.gameObject.SetActive(true);
         allSlotGamesImage.gameObject.SetActive(false);
         allGamesParent.gameObject.SetActive(true);
@@ -421,6 +462,7 @@ public class LobbyView : BaseView
 
     public void OnClickAllSlotsTab()
     {
+        currentIdTab = 1;
         allGamesImage.gameObject.SetActive(false);
         allSlotGamesImage.gameObject.SetActive(true);
         allGamesParent.gameObject.SetActive(false);

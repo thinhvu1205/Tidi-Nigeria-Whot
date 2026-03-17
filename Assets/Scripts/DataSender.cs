@@ -1,24 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Proto;
 using Cysharp.Threading.Tasks;
 using Globals;
 using Google.Protobuf;
-using Google.Protobuf.WellKnownTypes;
 using Nakama;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using SimpleJSON;
 using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.UIElements;
 // Server Yuujins (namespace Yuujins.* — không trùng Proto)
-using Yuujins.User.V1;
 using Yuujins.Match.V1;
-using Yuujins.Cfg.Game.V1;
-using Yuujins.Cfg.Banner.V1;
-using Yuujins.Cfg.Bet.V1;
 using Yuujins.Rank.V1;
 using Yuujins.Rewards.V1;
 using Yuujins.Friend.V1;
@@ -28,6 +18,7 @@ using Yuujins.Economy.Wallet.V1;
 using Yuujins.Promotion.Coupon.V1;
 using Config = Globals.Config;
 using Game = Yuujins.Cfg.Game.V1.Game;
+using Layout = Yuujins.Cfg.Layout.V1.Layout;
 using Profile = Proto.Profile;
 using User = Yuujins.User.V1.User;
 
@@ -37,7 +28,8 @@ using User = Yuujins.User.V1.User;
 /// </summary>
 public class DataSender
 {
-    #region ApiNames (server Nigeria cũ – giữ nguyên)
+    // ----- NIGERIA: toàn bộ region này sẽ xóa khi bỏ server cũ. Khi đó chỉ giữ RPC Yuujins (IDENTITY_*, CFG_*, MATCH_*, ...). -----
+    #region ApiNames (server Nigeria cũ – sẽ xóa)
     public const string LIST_GAME = "list_game";
     public const string LIST_BET = "list_bet";
     public const string CREATE_MATCH = "create_match";
@@ -103,7 +95,8 @@ public class DataSender
     public const string FRIEND_DOWNGRADE = "friend_downgrade";
     #endregion
 
-    #region RPC IDs – Yuujins (server yuujins)
+    // ----- YUUJINS: config/server mới. Sau xóa Nigeria có thể đổi tên region thành RPC IDs (bỏ "Yuujins"). -----
+    #region RPC IDs – Yuujins (server mới; data trả về lưu toàn cục Config.Server / ServerConfig)
     public const string IDENTITY_USER_REGISTER = "identity_user_register";
     public const string IDENTITY_USER_LOGIN = "identity_user_login";
     public const string IDENTITY_USER_CHANGE_PASSWORD = "identity_user_change_password";
@@ -116,6 +109,8 @@ public class DataSender
     public const string MATCH_JOIN_GAME = "match_join_game";
     public const string MATCH_GET_MATCH_INFO = "match_get_match_info";
     public const string MATCH_FIND_MATCH = "match_find_match";
+    public const string MATCH_GET_LAYOUT = "match_get_layout";
+    public const string CFG_LAYOUT_READ = "cfg_layout_read";
     public const string MATCH_ENTER_SLOT = "match_enter_slot";
     public const string MATCH_CREATE_PRIVATE_TABLE = "match_create_private_table";
     public const string MATCH_JOIN_PRIVATE_TABLE = "match_join_private_table";
@@ -453,7 +448,7 @@ public class DataSender
         {
             var match = await NetworkManager.INSTANCE.JoinMatch(matchId, passWord);
             Match data = DecodeFromJson<Match>(match.Label);
-            Debug.Log("JOIN MATCH SUCCESS");
+            Debug.Log("JOIN MATCH SUCCESS " + match);
             return data;
         }
         catch (Exception ex)
@@ -1208,34 +1203,21 @@ public class DataSender
         var req = new User.Types.Request.Types.Register { UserName = userName ?? "", Password = password ?? "", DeviceId = deviceId ?? Config.deviceId ?? "" };
         return await RpcSendAndGetPayloadOrShowError(IDENTITY_USER_REGISTER, req) ?? "";
     }
-    public static async UniTask<string> IdentityUserLogin(string userName, string password)
-    {
-        var req = new User.Types.Request.Types.Register { UserName = userName ?? "", Password = password ?? "" };
-        return await RpcSendAndGetPayloadOrShowError(IDENTITY_USER_LOGIN, req) ?? "";
-    }
+    
     public static async UniTask<string> IdentityUserChangePassword(string oldPassword, string newPassword)
     {
         var req = new User.Types.Request.Types.ChangePassword { Password = oldPassword ?? "", NewPassword = newPassword ?? "" };
         return await RpcSendAndGetPayloadOrShowError(IDENTITY_USER_CHANGE_PASSWORD, req) ?? "";
     }
-    public static async UniTask<string> IdentityUserGetAccount()
+    
+    public static async UniTask<User.Types.Response.Types.GetAccount> IdentityUserGetAccount()
     {
-        return await RpcSendAndGetPayloadOrShowError(IDENTITY_USER_GET_ACCOUNT, new User.Types.Request.Types.GetAccount()) ?? "";
-    }
-    public static async UniTask<User.Types.Response.Types.GetAccount> IdentityUserGetAccountTyped()
-    {
-        var payload = await IdentityUserGetAccount();
+        var payload = await RpcSendAndGetPayloadOrShowError(IDENTITY_USER_GET_ACCOUNT, new User.Types.Request.Types.GetAccount()) ?? "";;
         if (string.IsNullOrWhiteSpace(payload)) return null;
         try { return DecodeFromJson<User.Types.Response.Types.GetAccount>(payload); }
         catch (Exception e) { Debug.LogWarning("IdentityUserGetAccountTyped: " + e.Message); return null; }
     }
-    public static bool TryParseGetAccountResponse(string payload, out UserAccount account)
-    {
-        account = null;
-        if (string.IsNullOrWhiteSpace(payload)) return false;
-        try { var resp = DecodeFromJson<User.Types.Response.Types.GetAccount>(payload); account = resp?.Account; return account != null; }
-        catch (Exception e) { Debug.LogWarning("TryParseGetAccountResponse: " + e.Message); return false; }
-    }
+
     #endregion
     
     #region Yuujins – Match (Match.V1)
@@ -1263,6 +1245,12 @@ public class DataSender
     {
         return await RpcDecodeOrShowError<FindMatchResponse>(MATCH_FIND_MATCH, new FindMatchRequest { GameId = gameId, MarkUnit = markUnit, CreateIfEmpty = createIfEmpty, ExcludeMatchId = excludeMatchId ?? "" });
     }
+    /// <summary>Yuujins: GetLayout (tabs + tiles) qua match_get_layout. Client gọi kèm list game để có tên game, lưu local và dựa vào layout hiển thị UI.</summary>
+    public static async UniTask<Layout.Types.Response.Types.Read> MatchGetLayoutAsync(string bundleId = "default")
+    {
+        return await RpcDecodeOrShowError<Layout.Types.Response.Types.Read>(MATCH_GET_LAYOUT, new Layout.Types.Request.Types.Read { BundleId = bundleId ?? "default" });
+    }
+
     public static async UniTask<CreatePrivateTableResponse> MatchCreatePrivateTableAsync(uint gameId, long markUnit, string password)
     {
         return await RpcDecodeOrShowError<CreatePrivateTableResponse>(MATCH_CREATE_PRIVATE_TABLE, new CreatePrivateTableRequest { GameId = gameId, MarkUnit = markUnit, Password = password ?? "" });

@@ -23,8 +23,8 @@ namespace Globals
         public static bool isLoginSuccessful = false;
 
         public static string currentServerIp = "";
-        public static string currentGameId = "";
-        public static string currentGameLobbyId = "";
+        public static string  currentGameName = "";
+        public static uint currentGameId = 0;
         public static string currentMatchId = "";
         public static string deviceId = SystemInfo.deviceUniqueIdentifier;
         public static string versionGame = Application.version;

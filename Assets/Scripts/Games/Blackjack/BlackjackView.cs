@@ -190,11 +190,11 @@ public class BlackjackView : BaseDiceGameView
         var updateTable = UpdateTable.Parser.ParseFrom(matchState.State);
         // Debug.Log("HandleUpdateUserInTable " + updateTable);
         UpdatePosUserTable(updateTable, true);
-        Player currentPlayer = players.Find((player) => player.Id == User.userProfile.UserId);
-        isPlaying = playingPlayers.Exists((player) => player.Id == User.userProfile.UserId);
+        Player currentPlayer = players.Find((player) => player.Id == User.UserAccount.Profile.UserId);
+        isPlaying = playingPlayers.Exists((player) => player.Id == User.UserAccount.Profile.UserId);
         playerWallet = long.Parse(currentPlayer.Wallet);
         UpdateChipBetInteractivity();
-        currentPlayerIndex = playingPlayers.FindIndex(p => p.Id == User.userProfile.UserId);
+        currentPlayerIndex = playingPlayers.FindIndex(p => p.Id == User.UserAccount.Profile.UserId);
         // if (rearrangedPlayers.Count >= 2)
         // {
         //     Player secondPlayer = rearrangedPlayers[2];
@@ -211,7 +211,7 @@ public class BlackjackView : BaseDiceGameView
         BlackjackUpdateDesk data = BlackjackUpdateDesk.Parser.ParseFrom(matchState.State);
         Debug.Log("Update table: " + data.ToString());
         string playerId = data.Bet?.UserId;
-        string currentPlayerId = User.userProfile.UserId;
+        string currentPlayerId = User.UserAccount.Profile.UserId;
         // Khi có người chơi đặt cược thì tiến hành trừ tiền của người chơi đó
         if (data.Bet?.Balance?.AmountChipAdd != 0)
         {
@@ -223,7 +223,7 @@ public class BlackjackView : BaseDiceGameView
                 hasBet = true;
 
                 // Rebet
-                if (isRebet && data.Bet?.Balance.AmoutChipBet > 0 && data.Bet.UserId == User.userProfile.UserId)
+                if (isRebet && data.Bet?.Balance.AmoutChipBet > 0 && data.Bet.UserId == User.UserAccount.Profile.UserId)
                 {
                     hasBet = true;
                     totalBetValue = data.Bet.Balance.AmoutChipBet;
@@ -302,7 +302,7 @@ public class BlackjackView : BaseDiceGameView
                 }
             }
             // Debug.Log("IsNewTurn - isCurrentPlayerFinished: " + isCurrentPlayerFinished);
-            isCurrentPlayerTurn = data.InTurn == User.userProfile.UserId;
+            isCurrentPlayerTurn = data.InTurn == User.UserAccount.Profile.UserId;
 
             if (!isCurrentPlayerTurnPassed)
             {
@@ -356,7 +356,7 @@ public class BlackjackView : BaseDiceGameView
                 }
 
                 // Turn của người chơi khác
-                if (data.InTurn != User.userProfile.UserId)
+                if (data.InTurn != User.UserAccount.Profile.UserId)
                 {
                     buttonDouble.button.interactable = true;
                     buttonSplit.button.interactable = currentPlayerBoxBet.IsSplittableBox();
@@ -411,7 +411,7 @@ public class BlackjackView : BaseDiceGameView
                 }
             }
 
-            if (data.PlayerAction.Code == BlackjackActionCode.BlackjackActionDouble && data.PlayerAction.UserId == User.userProfile.UserId)
+            if (data.PlayerAction.Code == BlackjackActionCode.BlackjackActionDouble && data.PlayerAction.UserId == User.UserAccount.Profile.UserId)
             {
                 if (blackjackHandN0 == BlackjackHandN0.BlackjackHand1St)
                 {
@@ -429,7 +429,7 @@ public class BlackjackView : BaseDiceGameView
             }
         }
 
-        bool isCurrentPlayerPayInsurance = data.PlayersBet.Count > 0 && data.PlayersBet.FirstOrDefault((bet) => bet.UserId == User.userProfile.UserId)?.Insurance > 0;
+        bool isCurrentPlayerPayInsurance = data.PlayersBet.Count > 0 && data.PlayersBet.FirstOrDefault((bet) => bet.UserId == User.UserAccount.Profile.UserId)?.Insurance > 0;
         if (data.IsInsuranceTurnEnter && isPlaying  && !isCurrentPlayerPayInsurance)
         {
             insurance.Show();
@@ -623,7 +623,7 @@ public class BlackjackView : BaseDiceGameView
                     }
                 }
 
-                if (data.UserId == User.userProfile.UserId &&
+                if (data.UserId == User.UserAccount.Profile.UserId &&
                     (data.Hand.First.Type == BlackjackHandType.Blackjack ||
                     data.Hand.Second.Type == BlackjackHandType.Blackjack))
                 {
@@ -701,7 +701,7 @@ public class BlackjackView : BaseDiceGameView
                     .AppendCallback(() =>
                     {
                         // Nếu thisPlayer ăn được Blackjack thì hiện animation Blackjack
-                        if (data.UserId == User.userProfile.UserId &&
+                        if (data.UserId == User.UserAccount.Profile.UserId &&
                             (data.Hand.First.Type == BlackjackHandType.Blackjack ||
                             data.Hand.Second.Type == BlackjackHandType.Blackjack))
                         {
@@ -779,7 +779,7 @@ public class BlackjackView : BaseDiceGameView
                     BlackjackBoxBet boxBet = userIdToBoxBetView.GetValueOrDefault(playerHand.UserId);
                     if (playerHand.First.Cards.Count > 0)
                     {
-                        if (playerHand.UserId == User.userProfile.UserId)
+                        if (playerHand.UserId == User.UserAccount.Profile.UserId)
                         {
                             isPlaying = true;
                             
@@ -921,7 +921,7 @@ public class BlackjackView : BaseDiceGameView
             // if (playerView == null) continue;
             // playerView.AnimateFlyMoney(update.AmountChipAdd);
             // playerView.SetCurrentChip(update.AmountChipCurrent);
-            if (update.UserId == User.userProfile.UserId)
+            if (update.UserId == User.UserAccount.Profile.UserId)
             {
                 playerWallet = update.AmountChipCurrent;
             }
@@ -1944,7 +1944,7 @@ public class BlackjackView : BaseDiceGameView
         };
         bool isFirstHandFinal = finalHandTypes.Contains(data.Hand.First.Type);
         bool isSecondHandOk = data.Hand.Second.Type == BlackjackHandType.Unspecified || finalHandTypes.Contains(data.Hand.Second.Type);
-        if (data.UserId == User.userProfile.UserId && isFirstHandFinal && isSecondHandOk)
+        if (data.UserId == User.UserAccount.Profile.UserId && isFirstHandFinal && isSecondHandOk)
         {
             isCurrentPlayerFinished = true;
             buttonDouble.gameObject.SetActive(false);
@@ -1977,7 +1977,7 @@ public class BlackjackView : BaseDiceGameView
     protected override void CreatePlayerView(Player player, Vector2 anchoredPos)
     {
         base.CreatePlayerView(player, anchoredPos);
-        string localUserId = User.userProfile.UserId;
+        string localUserId = User.UserAccount.Profile.UserId;
         if (GameState == GameState.Play)
         {
             int playerIndex = rearrangedPlayers.IndexOf(player);

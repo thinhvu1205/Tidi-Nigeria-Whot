@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Proto;
+using Yuujins.User.V1;
 
 namespace Globals
 {
@@ -9,7 +9,7 @@ namespace Globals
     {
         public static Action OnProfileUpdated;
         public User() { }
-        public static Profile userProfile;
+        public static UserAccount UserAccount;
         public static string AccessToken = "";
         public static string FacebookID;
 
@@ -20,7 +20,7 @@ namespace Globals
 
         public static void UpdateConfig()
         {
-            string appConfig = userProfile.AppConfig;
+            string appConfig = UserAccount.Profile.AppConfig;
             if (string.IsNullOrEmpty(appConfig)) return;
             string fixedJson = "{" + appConfig + "}";
 

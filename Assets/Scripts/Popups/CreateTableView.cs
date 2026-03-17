@@ -25,7 +25,7 @@ public class CreateTableView : BaseView
     {
         base.Awake();
         _ = GetListBet();
-        doubleDecking.SetActive(Config.currentGameId == Constants.WHOT_GAME_ID);
+        doubleDecking.SetActive(Config.currentGameName == Constants.WHOT_GAME_ID);
     }
 
     public void OnClickCheckboxDoubleDecking()
@@ -59,7 +59,7 @@ public class CreateTableView : BaseView
             Bet betItem = betItemList[i];
             if (slider.value >= (float)(i + 1.0f) / l)
             {
-                if (User.userProfile.AccountChip >= (int)betItem.MarkUnit)
+                if (User.UserAccount.Profile.Balance >= (int)betItem.MarkUnit)
                 {
                     createButton.interactable = true;
                 }
@@ -89,7 +89,7 @@ public class CreateTableView : BaseView
     private async UniTask GetListBet()
     {
         UIManager.Instance.ShowProgressing();
-        Bets bets = await DataSender.GetListBet(Config.currentGameId);
+        Bets bets = await DataSender.GetListBet(Config.currentGameName);
         UIManager.Instance.HideProgressing();
         betItemList = bets.Bets_ .Where(bet => bet.Enable) .ToList();
         if (betItemList.Count > 0)

@@ -58,9 +58,9 @@ namespace Globals
         public static string GetCurrentSceneName()
         {
             string sceneName;
-            if (currentView == Config.currentGameId.ToString())
+            if (currentView == Config.currentGameName.ToString())
             {
-                sceneName = "GAMEVIEW_" + Config.currentGameId;
+                sceneName = "GAMEVIEW_" + Config.currentGameName;
             }
             else
             {

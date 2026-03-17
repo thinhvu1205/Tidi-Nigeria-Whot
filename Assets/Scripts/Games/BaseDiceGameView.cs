@@ -79,7 +79,7 @@ public class BaseDiceGameView : BaseGameView
     public override void LoadInfoMatch(Match match)
     {
         base.LoadInfoMatch(match);
-        if (!Constants.SELECT_TABLE_GAMES_ID.Contains(Config.currentGameId)) return;
+        if (!Constants.SELECT_TABLE_GAMES_ID.Contains(Config.currentGameName)) return;
         MarkUnit = match.MarkUnit;
         WantSwitchTable = false;
         foreach (var userId in userIdToView.Keys.ToList())
@@ -101,7 +101,7 @@ public class BaseDiceGameView : BaseGameView
     protected virtual void UpdatePosUserTable(UpdateTable update, bool isRearrange = false)
     {
         // Debug.Log("UpdatePosUserTable: " + update.ToString());
-        var localUserId = User.userProfile.UserId;
+        var localUserId = User.UserAccount.Profile.UserId;
         if (listPosView == null || listPosView.Count == 0 || playerViewPrefab == null || localUserId == "") return;
 
         // 1) Cập nhật danh sách playing players

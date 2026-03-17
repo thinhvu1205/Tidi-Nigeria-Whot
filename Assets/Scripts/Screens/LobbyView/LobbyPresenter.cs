@@ -4,6 +4,7 @@ using Globals;
 using Nakama;
 using Proto;
 using UnityEngine;
+using Yuujins.Match.V1;
 
 public class LobbyPresenter
 {
@@ -14,12 +15,12 @@ public class LobbyPresenter
         lobbyView = view;
     }
 
-    public async UniTask<GameListResponse> GetListGame()
+    public async UniTask<ListGamesResponse> GetListGame()
     {
         UIManager.Instance.ShowProgressing();
         try
         {
-            GameListResponse gameListResponse = await DataSender.GetListGame();
+            ListGamesResponse gameListResponse = await DataSender.MatchListGamesAsync();
             return gameListResponse;
         }
         catch (Exception e)

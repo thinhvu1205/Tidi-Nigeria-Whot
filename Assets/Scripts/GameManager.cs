@@ -31,6 +31,20 @@ public class GameManager : Singleton<GameManager>
     {
         if (UIManager.Instance.gameView != null)
         {
+            // Yuujins Baccarat opcodes: 1=GameState, 2=Table, 3=Deal, 4=Finish, 5=Reject
+            if (UIManager.Instance.gameView is BaccaratView)
+            {
+                switch (matchState.OpCode)
+                {
+                    case 1: UIManager.Instance.gameView.HandleUpdateGameState(matchState); break;
+                    case 2: UIManager.Instance.gameView.HandleUpdateTable(matchState); break;
+                    case 3: UIManager.Instance.gameView.HandleUpdateDeal(matchState); break;
+                    case 4: UIManager.Instance.gameView.HandleFinish(matchState); break;
+                    case 5: (UIManager.Instance.gameView as BaccaratView)?.HandleBaccaratReject(matchState); break;
+                    default: break;
+                }
+                return;
+            }
             switch (matchState.OpCode)
             {
                 case (long)OpCodeUpdate.Table:

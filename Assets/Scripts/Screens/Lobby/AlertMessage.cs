@@ -168,13 +168,13 @@ public class AlertMessage : Singleton<AlertMessage>, IPointerClickHandler
             ListInAppMessage listInAppMessage = await lobbyPresenter.GetAnnouncementTicker();
             // Debug.Log("GetAnnouncementTicker " + listInAppMessage);
             
-            if (User.userProfile == null)
+            if (User.UserAccount == null)
             {
                 // Debug.LogWarning("User profile is null, cannot filter announcement ticker");
                 return;
             }
 
-            var userVipLevel = User.userProfile.VipLevel;
+            var userVipLevel = User.UserAccount.Profile.Vip;
             var validAnnouncements = FilterValidAnnouncements(listInAppMessage, userVipLevel);
             
             if (validAnnouncements.Count > 0)

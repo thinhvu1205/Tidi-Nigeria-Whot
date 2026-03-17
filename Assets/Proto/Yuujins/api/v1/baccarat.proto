@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+package api.v1;
+
+option csharp_namespace = "Yuujins.Api.V1";
+
+import "api/v1/card.proto";
+
+// ---------------------------------------------------------------------------
+// OpCode Request: client -> server (match message)
+// ---------------------------------------------------------------------------
+enum BaccaratOpCodeRequest {
+  BACCARAT_OP_CODE_REQUEST_UNSPECIFIED = 0;
+  BACCARAT_REQUEST_BET         = 1;  // payload: BaccaratBetRequest
+  BACCARAT_REQUEST_REBET        = 2;  // no payload
+  BACCARAT_REQUEST_DOUBLE_BET   = 3;  // no payload
+}
+
+// ---------------------------------------------------------------------------
+// OpCode Update: server -> client (broadcast)
+// ---------------------------------------------------------------------------
+enum BaccaratOpCodeUpdate {
+  BACCARAT_OP_CODE_UPDATE_UNSPECIFIED = 0;
+  BACCARAT_UPDATE_GAME_STATE = 1;  // payload: BaccaratGameStateUpdate
+  BACCARAT_UPDATE_TABLE      = 2;  // payload: BaccaratTableUpdate
+  BACCARAT_UPDATE_DEAL      = 3;  // payload: BaccaratDealUpdate
+  BACCARAT_UPDATE_FINISH    = 4;  // payload: BaccaratFinishUpdate
+  BACCARAT_UPDATE_REJECT    = 5;  // payload: BaccaratReject
+}
+
+// ---------------------------------------------------------------------------
+// Bet cell (where to bet)
+// ---------------------------------------------------------------------------
+enum BaccaratBetCell {
+  BACCARAT_BET_CELL_UNSPECIFIED = 0;
+  BACCARAT_BET_CELL_PLAYER      = 1;
+  BACCARAT_BET_CELL_BANKER      = 2;
+  BACCARAT_BET_CELL_TIE         = 3;
+  BACCARAT_BET_CELL_PLAYER_PAIR = 4;
+  BACCARAT_BET_CELL_BANKER_PAIR = 5;
+}
+
+// ---------------------------------------------------------------------------
+// Request payloads (client -> server)
+// ---------------------------------------------------------------------------
+message BaccaratBetRequest {
+  repeated BaccaratBet bets = 1;
+}
+
+message BaccaratBet {
+  int64 chips = 1;
+  BaccaratBetCell cell = 2;
+}
+
+// ---------------------------------------------------------------------------
+// Update payloads (server -> client)
+// ---------------------------------------------------------------------------
+message BaccaratGameStateUpdate {
+  string state        = 1;  // e.g. "play", "reward", "idle"
+  string phase        = 2;
+  int32 round         = 3;
+  int64 countdown_sec = 4;
+}
+
+message BaccaratBetCellInfo {
+  BaccaratBetCell cell     = 1;
+  int64 total_chips        = 2;
+  int32 n_users_bet        = 3;
+}
+
+message BaccaratPlayerBet {
+  string user_id = 1;
+  repeated BaccaratBet bets = 2;
+}
+
+message BaccaratTableUpdate {
+  int32 round                    = 1;
+  string phase                    = 2;
+  repeated BaccaratPlayerBet user_bets = 3;   // all users' bets (for chip display)
+  repeated BaccaratBetCellInfo desk_cells = 4; // per-cell totals
+  BaccaratSimpleHistory history  = 5;          // optional road/history
+}
+
+message BaccaratSimpleHistory {
+  int32 banker_win  = 1;
+  int32 player_win  = 2;
+  int32 tie         = 3;
+  int32 banker_pair = 4;
+  int32 player_pair = 5;
+}
+
+message BaccaratDealUpdate {
+  bool is_player = 1;
+  Card card     = 2;
+  BaccaratHands hands = 3;  // optional snapshot after this card
+}
+
+message BaccaratHand {
+  repeated Card cards = 1;
+  int32 point   = 2;
+  bool is_pair  = 3;
+}
+
+message BaccaratHands {
+  BaccaratHand player = 1;
+  BaccaratHand banker = 2;
+}
+
+message BaccaratBetResult {
+  BaccaratBet bet   = 1;
+  bool is_win       = 2;
+}
+
+message BaccaratPlayerBetResult {
+  string user_id = 1;
+  repeated BaccaratBetResult lists = 2;
+}
+
+message BaccaratFinishUpdate {
+  BaccaratHands hand              = 1;
+  repeated BaccaratBetCell win_cells = 2;
+  repeated BaccaratPlayerBetResult list_bet_results = 3;
+}
+
+enum BaccaratRejectReason {
+  BACCARAT_REJECT_UNSPECIFIED           = 0;
+  BACCARAT_REJECT_BALANCE_NOT_ENOUGH    = 1;
+  BACCARAT_REJECT_PREVIOUS_BET_NOT_EXIST = 2;
+  BACCARAT_REJECT_ALREADY_BET           = 3;
+  BACCARAT_REJECT_EXCEED_MAX_BET        = 4;
+}
+
+message BaccaratReject {
+  BaccaratRejectReason reason = 1;
+}
