@@ -53,23 +53,24 @@ public class ProfileView : BaseView
 
     private void UpdateProfileVisuals()
     {
-        if (User.UserAccount != null)
+        if (User.Profile != null)
         {
-            int vipLevel = (int)User.UserAccount.Profile.Vip;
-            nameText.text = User.UserAccount.Profile.DisplayName;
-            idText.text = "ID: " + User.UserAccount.Profile.UserId;
-            chipText.text = Utility.FormatNumber(User.UserAccount.Profile.Balance);
-            if (User.UserAccount.IsGuest)
-            {
-                changeNameButton.gameObject.SetActive(true);
-                changePasswordButton.gameObject.SetActive(false);
-            }
-            else
+            int vipLevel = (int)User.Profile.Vip;
+            nameText.text = User.Profile.DisplayName;
+            idText.text = "ID: " + User.Profile.Cid;
+            chipText.text = Utility.FormatNumber(User.Profile.Chips);
+            if (User.Profile.Official)
             {
                 changeNameButton.gameObject.SetActive(false);
                 changePasswordButton.gameObject.SetActive(true);
             }
-            avatar.LoadAvatar(User.UserAccount.Profile.AvatarId.ToString(), User.UserAccount.Profile.Vip);
+            else
+            {
+                changeNameButton.gameObject.SetActive(true);
+                changePasswordButton.gameObject.SetActive(false);
+                
+            }
+            avatar.LoadAvatar(User.Profile.AvatarId.ToString(), User.Profile.Vip);
             SetVipStars(vipLevel);
         }
     }
@@ -85,7 +86,7 @@ public class ProfileView : BaseView
             avatar.AddComponent<Button>();
             avatar.GetComponent<Button>().onClick.AddListener(() =>
             {
-                _ = OnUpdateAvatar(index.ToString());
+                _ = OnUpdateAvatar(index);
             });
 
         }
@@ -116,10 +117,10 @@ public class ProfileView : BaseView
         }
     }
 
-    private async UniTask OnUpdateAvatar(string name)
+    private async UniTask OnUpdateAvatar(int id)
     {
         // await ShowToast(name);
-        await profilePresenter.OnUpdateAvatar(name);
+        await profilePresenter.OnUpdateAvatar(id);
     }
 
     private bool IsDefaultName(string name)

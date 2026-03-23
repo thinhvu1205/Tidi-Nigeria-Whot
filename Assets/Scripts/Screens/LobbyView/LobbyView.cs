@@ -95,7 +95,7 @@ public class LobbyView : BaseView
     {
         base.Start();
         UpdateProfileData();
-        // User.OnProfileUpdated += UpdateProfileData;
+        User.OnProfileUpdated += UpdateProfileData;
     }
 
     protected override void OnEnable()
@@ -121,7 +121,7 @@ public class LobbyView : BaseView
 
     private async UniTask CheckUserInGame()
     {
-        string matchId = User.UserAccount.Profile.Match.MatchId;
+        string matchId = User.Profile.Match.MatchId;
         if (!string.IsNullOrEmpty(matchId))
         {
             var labelMatch = await DataSender.JoinMatch(matchId);
@@ -278,7 +278,7 @@ public class LobbyView : BaseView
 
     private async UniTask GetVipFarmProgress()
     {
-        if (User.UserAccount.Profile.Vip < 2)
+        if (User.Profile.Vip < 2)
         {
             vipFarm.SetActive(false);
             return;
@@ -322,7 +322,7 @@ public class LobbyView : BaseView
                 itemGame.gameObject.transform.SetAsFirstSibling();
                 if (ServerConfig.GameMap.TryGetValue((uint)gameTiles.GameId, out var game))
                 {
-                    itemGame.SetInfo(game.Name, gameTiles.GameId,true);
+                    itemGame.SetInfo(game.Name, gameTiles.GameId,false);
                 } 
             }
         }
@@ -348,7 +348,7 @@ public class LobbyView : BaseView
                 itemGame.gameObject.transform.SetAsFirstSibling();
                 if (ServerConfig.GameMap.TryGetValue((uint)gameTiles.GameId, out var game))
                 {
-                    itemGame.SetInfo(game.Name, gameTiles.GameId,true);
+                    itemGame.SetInfo(game.Name, gameTiles.GameId,false);
                 } 
             }
         }
@@ -358,10 +358,10 @@ public class LobbyView : BaseView
     public void UpdateProfileData()
     {
 
-        displayNameText.text = User.UserAccount.Profile.DisplayName;
-        userIdText.text = "ID: " + User.UserAccount.Profile.UserId;
-        accountChip.text = Utility.FormatNumber(User.UserAccount.Profile.Balance);
-        avatar.LoadAvatar(User.UserAccount.Profile.AvatarId.ToString(), (int)User.UserAccount.Profile.Vip);
+        displayNameText.text = User.Profile.DisplayName;
+        userIdText.text = "ID: " + User.Profile.Cid;
+        accountChip.text = Utility.FormatNumber(User.Profile.Chips);
+        avatar.LoadAvatar(User.Profile.AvatarId.ToString(), (int)User.Profile.Vip);
         // UpdateFeatureButtons();
         // _ = GetVipFarmProgress();
     }

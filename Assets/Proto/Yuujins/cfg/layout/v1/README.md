@@ -1,13 +1,15 @@
 # Layout proto (client)
 
-Biên dịch từ thư mục gốc project (chứa `Assets`):
+Message: `Tile`, `Tab`, `Layout`, `Layout.Request.Read`, `Layout.Response.Read` — dùng cho API get layout (tabs + tiles) và lưu local để hiển thị UI theo layout.
+
+## Biên dịch (tự chạy trên máy)
+
+Từ thư mục gốc project Unity (chứa `Assets`):
 
 ```bash
-# Ví dụ với protoc (C# out):
-protoc --csharp_out=Assets/YuujinsGenerated --proto_path=Assets/Proto/Yuujins layout.proto
-# Hoặc nếu dùng path đầy đủ:
-# protoc --csharp_out=Assets/YuujinsGenerated -I Assets/Proto/Yuujins Assets/Proto/Yuujins/cfg/layout/v1/layout.proto
+# C# output vào Assets/YuujinsGenerated (cùng thư mục Baccarat.cs, Card.cs)
+protoc --csharp_out=Assets/YuujinsGenerated -I Assets/Proto/Yuujins Assets/Proto/Yuujins/cfg/layout/v1/layout.proto
 ```
 
-Sau khi sinh code, kiểm tra namespace trong file `.cs` là `Yuujins.Cfg.Layout.V1` (đã set trong proto bằng `option csharp_namespace`).
-Nếu thư mục `cfg/layout/v1` nằm trong `Assets/Proto/Yuujins`, có thể cần thêm `-I Assets/Proto/Yuujins` và đường dẫn đầy đủ tới `cfg/layout/v1/layout.proto`.
+- Namespace trong file `.cs` phải là `Yuujins.Cfg.Layout.V1` (đã set trong proto bằng `option csharp_namespace`).
+- Nếu assembly `YuujinsGenerated.asmdef` có sẵn, thêm file `Layout.cs` (hoặc tên file protoc sinh ra) vào assembly đó.

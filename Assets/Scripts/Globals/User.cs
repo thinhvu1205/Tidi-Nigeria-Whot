@@ -9,7 +9,7 @@ namespace Globals
     {
         public static Action OnProfileUpdated;
         public User() { }
-        public static UserAccount UserAccount;
+        public static Profile Profile;
         public static string AccessToken = "";
         public static string FacebookID;
 
@@ -20,7 +20,7 @@ namespace Globals
 
         public static void UpdateConfig()
         {
-            string appConfig = UserAccount.Profile.AppConfig;
+            string appConfig = Profile.AppConfig;
             if (string.IsNullOrEmpty(appConfig)) return;
             string fixedJson = "{" + appConfig + "}";
 

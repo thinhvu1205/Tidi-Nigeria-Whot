@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Proto;
 using DG.Tweening;
 using Games.Card;
 using Globals;
@@ -10,6 +9,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Avatar = Common.Objects.Avatar;
 using Color = UnityEngine.Color;
+using Player = Yuujins.Api.V1.Player;
 
 public class BasePlayerView : MonoBehaviour
 {
@@ -102,11 +102,11 @@ public class BasePlayerView : MonoBehaviour
         set => _vipLevel = value;
     }
 
-    private string _sid;
-    public string sid
+    private string _cid;
+    public string cid
     {
-        get => _sid;
-        set => _sid = value;
+        get => _cid;
+        set => _cid = value;
     }
     
     private Coroutine countdownCoroutine;
@@ -118,7 +118,7 @@ public class BasePlayerView : MonoBehaviour
         wallet = playerData.Wallet;
         avatar_id = playerData.AvatarId;
         vipLevel = playerData.VipLevel;
-        sid = playerData.Sid.ToString();
+        cid = playerData.Cid.ToString();
         SetCurrentChip(long.Parse(wallet));
         avatar.LoadAvatar(avatar_id, vipLevel);
         // if (string.IsNullOrEmpty(avatar_id))
@@ -771,7 +771,7 @@ public class BasePlayerView : MonoBehaviour
     public void OnClickAvatar()
     {
         PlayerProfileInGameView playerProfileInGameView = UIManager.Instance.OpenPlayerProfileInGame();
-        playerProfileInGameView.SetInfo(user_name, id, sid, (int)vipLevel, avatar_id);
+        playerProfileInGameView.SetInfo(user_name, id, cid, (int)vipLevel, avatar_id);
     }
 
     public void ShowBubbleChat(string message)

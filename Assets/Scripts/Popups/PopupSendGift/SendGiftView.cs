@@ -28,7 +28,7 @@ public class SendGiftView : BaseView
         base.OnEnable();
         sendGiftBtn.onClick.AddListener(() => _ = OnClickSendGift());
         OnClickSendGiftTab();
-        currentChipTxt.text = Utility.FormatNumber(User.UserAccount.Profile.Balance);
+        currentChipTxt.text = Utility.FormatNumber(User.Profile.Chips);
         amountChipInputField.onValueChanged.AddListener(OnAmountChanged);
     }
     
@@ -102,7 +102,7 @@ public class SendGiftView : BaseView
             return;
         }
 
-        if (User.UserAccount.Profile.Balance < amount * 103 / 100)
+        if (User.Profile.Chips < amount * 103 / 100)
         {
             UIManager.Instance.ShowAlertDialog("You do not have enough chips.");
             canSend = true;
@@ -116,7 +116,7 @@ public class SendGiftView : BaseView
             Debug.Log("Send Chip Successfully : " + freeChip);
             idInputField.text = "";
             amountChipInputField.text = "";
-            currentChipTxt.text = Utility.FormatNumber(User.UserAccount.Profile.Balance);
+            currentChipTxt.text = Utility.FormatNumber(User.Profile.Chips);
 
             await OnSuccess("Send gift successfully!", true);
             

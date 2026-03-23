@@ -1,5 +1,29 @@
 namespace Globals
 {
+    /// <summary>Tongits/Phil compat - use same paths as Sound.</summary>
+    public static class SOUND_GAME
+    {
+        public const string CARD_FLIP_1 = "Sounds/Common/card_flip_1";
+        public const string START_GAME = "Sounds/Common/start_game";
+        public const string IN_GAME_COMMON = "Sounds/Common/casbg_audio";
+    }
+
+    public static class SOUND_HILO
+    {
+        public const string WIN = "Sounds/Common/win";
+        public const string LOSE = "Sounds/Common/lose";
+    }
+
+    public static class SOUND_TONGITS
+    {
+        public const string TgEatcardMusic = "Sounds/Tongits/TgEatcardMusic";
+        public const string TgFoldMusic = "Sounds/Tongits/TgFoldMusic";
+        public const string TgBurnedMusic = "Sounds/Tongits/TgBurnedMusic";
+        public const string TgChallengetMusic = "Sounds/Tongits/TgChallengetMusic";
+        public const string TgFightMusic = "Sounds/Tongits/TgFightMusic";
+        public const string TgTongitsMusic = "Sounds/Tongits/TgTongitsMusic";
+    }
+
     public class Sound
     {
         public const string CARD_FLIP_1 = "Sounds/Common/card_flip_1";

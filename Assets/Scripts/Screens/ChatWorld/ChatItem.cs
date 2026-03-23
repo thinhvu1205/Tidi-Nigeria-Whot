@@ -61,7 +61,7 @@ public class ChatItem : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        bool isMe = data.ID == User.UserAccount.Profile.UserId;
+        bool isMe = data.ID == User.Profile.UserId;
         bool isAudio = data.IsAudio;
 
         contentLeft.SetActive(!isMe);

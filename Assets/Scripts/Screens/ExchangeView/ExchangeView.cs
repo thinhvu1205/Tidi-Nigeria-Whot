@@ -140,10 +140,10 @@ public class ExchangeView : BaseView
 
     public void UpdateProfileData()
     {
-        if (User.UserAccount != null)
+        if (User.Profile != null)
         {
-            textYourChip.text = "Your chips: " + Utility.FormatNumber(User.UserAccount.Profile.Balance);
-            textAccountChip.text = Utility.FormatNumber(User.UserAccount.Profile.Balance);
+            textYourChip.text = "Your chips: " + Utility.FormatNumber(User.Profile.Chips);
+            textAccountChip.text = Utility.FormatNumber(User.Profile.Chips);
         }
     }
 

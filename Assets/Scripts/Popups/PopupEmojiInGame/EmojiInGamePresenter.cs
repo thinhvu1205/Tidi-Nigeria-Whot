@@ -18,7 +18,7 @@ public class EmojiInGamePresenter
 
     public async UniTask SendEmoji(string emojiId)
     {
-        await NetworkManager.INSTANCE.SendEmoji(emojiId, User.UserAccount.Profile.UserId);
+        await NetworkManager.INSTANCE.SendEmoji(emojiId, User.Profile.UserId);
     }
 
     

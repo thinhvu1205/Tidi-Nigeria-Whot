@@ -30,7 +30,7 @@ public class SiXiangBuyGemsPopup : BaseView
     public void OnClickConfirm()
     {
         // SoundManager.instance.playEffectFromPath(SOUND_SLOT_BASE.CLICK);
-        long playerBalance = User.UserAccount.Profile.Balance;
+        long playerBalance = User.Profile.Chips;
         if (playerBalance >= price)
         {
             InfoBet infoBet = new()

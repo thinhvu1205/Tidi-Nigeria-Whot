@@ -13,7 +13,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Color = UnityEngine.Color;
 
-public class RouletteView : BaseDiceGameView
+public class RouletteView : BaseTableView
 {
     [SerializeField] private RouletteOptionBet[] listBetOptions;
     [SerializeField] private RouletteButtonBet[] listBetButtons;
@@ -92,7 +92,7 @@ public class RouletteView : BaseDiceGameView
     {
         base.Awake();
         InitPool();
-        playerWallet = User.UserAccount.Profile.Balance;
+        playerWallet = User.Profile.Chips;
     }
 
     protected override void Start()
@@ -111,7 +111,7 @@ public class RouletteView : BaseDiceGameView
         base.HandleUpdateUserInTable(matchState);
         var updateTable = UpdateTable.Parser.ParseFrom(matchState.State);
         // Debug.Log("HandleUpdateUserInTable " + updateTable);
-        player.SetData(updateTable.Players[0]);
+        // player.SetData(updateTable.Players[0]);
         playerWallet = long.Parse(updateTable.Players[0].Wallet);
         // UpdateListPlayer(updateTable.Players.ToList());
     }
@@ -356,7 +356,7 @@ public class RouletteView : BaseDiceGameView
 
         RoulettePlayerBet roulettePlayerBet = new RoulettePlayerBet
         {
-            UserId = User.UserAccount.Profile.UserId,
+            UserId = User.Profile.UserId,
         };
         roulettePlayerBet.Bets.AddRange(listBet);
     

@@ -1,0 +1,167 @@
+{
+"skeleton": {
+	"hash": "JSZpKzqTFTo3DG0T4mr97bt/3nM",
+	"spine": "3.8.99",
+	"x": -457.79,
+	"y": -430.53,
+	"width": 913.55,
+	"height": 830.5,
+	"images": "./images/",
+	"audio": ""
+},
+"bones": [
+	{ "name": "root" },
+	{ "name": "GLOW", "parent": "root", "y": -58.19 },
+	{ "name": "LAA", "parent": "root", "y": 27.82, "scaleX": 1.3, "scaleY": 1.3 },
+	{ "name": "TAM", "parent": "root" },
+	{ "name": "TAM2", "parent": "TAM", "y": 130.46 },
+	{ "name": "TAM3", "parent": "TAM", "y": -148.3 },
+	{ "name": "rib", "parent": "TAM", "y": -217.43 },
+	{ "name": "txt", "parent": "TAM", "y": 146.78 }
+],
+"slots": [
+	{ "name": "glow", "bone": "GLOW", "attachment": "glow" },
+	{ "name": "day", "bone": "TAM", "attachment": "day" },
+	{ "name": "rib", "bone": "rib", "attachment": "rib" },
+	{ "name": "Lose", "bone": "txt", "attachment": "Lose" },
+	{ "name": "anim_lost_leaf_01", "bone": "LAA", "attachment": "anim_lost_leaf_20" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"Lose": {
+				"Lose": { "x": 0.48, "y": -1.39, "width": 184, "height": 81 }
+			},
+			"anim_lost_leaf_01": {
+				"anim_lost_leaf_01": { "width": 500, "height": 163 },
+				"anim_lost_leaf_02": { "width": 500, "height": 163 },
+				"anim_lost_leaf_03": { "width": 500, "height": 163 },
+				"anim_lost_leaf_04": { "width": 500, "height": 163 },
+				"anim_lost_leaf_05": { "width": 500, "height": 163 },
+				"anim_lost_leaf_06": { "width": 500, "height": 163 },
+				"anim_lost_leaf_07": { "width": 500, "height": 163 },
+				"anim_lost_leaf_08": { "width": 500, "height": 163 },
+				"anim_lost_leaf_09": { "width": 500, "height": 163 },
+				"anim_lost_leaf_10": { "width": 500, "height": 163 },
+				"anim_lost_leaf_11": { "width": 500, "height": 163 },
+				"anim_lost_leaf_12": { "width": 500, "height": 163 },
+				"anim_lost_leaf_13": { "width": 500, "height": 163 },
+				"anim_lost_leaf_14": { "width": 500, "height": 163 },
+				"anim_lost_leaf_15": { "width": 500, "height": 163 },
+				"anim_lost_leaf_16": { "width": 500, "height": 163 },
+				"anim_lost_leaf_17": { "width": 500, "height": 163 },
+				"anim_lost_leaf_18": { "width": 500, "height": 163 },
+				"anim_lost_leaf_19": { "width": 500, "height": 163 },
+				"anim_lost_leaf_20": { "width": 500, "height": 163 }
+			},
+			"day": {
+				"day": {
+					"type": "mesh",
+					"uvs": [ 1, 0.14843, 1, 0.18142, 0.91064, 0.36105, 1, 0.62865, 1, 1, 0, 1, 0, 0.62298, 0.09754, 0.36045, 0, 0.18181, 0, 0.14843, 0, 0, 1, 0 ],
+					"triangles": [ 5, 6, 3, 5, 3, 4, 6, 7, 3, 9, 11, 0, 9, 10, 11, 7, 8, 9, 7, 9, 0, 1, 2, 0, 7, 0, 2, 7, 2, 3 ],
+					"vertices": [ 1, 4, 238.98, -17.89, 1, 1, 4, 238.98, -29.93, 1, 1, 3, 196.27, 34.97, 1, 1, 5, 238.98, 85.6, 1, 1, 5, 238.98, -49.94, 1, 1, 5, -239.02, -49.94, 1, 1, 5, -239.02, 87.67, 1, 1, 3, -192.39, 35.19, 1, 1, 4, -239.02, -30.07, 1, 1, 4, -239.02, -17.89, 1, 1, 4, -239.02, 36.29, 1, 1, 4, 238.98, 36.29, 1 ],
+					"hull": 12,
+					"edges": [ 8, 10, 20, 22, 16, 14, 10, 12, 14, 12, 4, 2, 16, 18, 18, 20, 2, 0, 0, 22, 18, 0, 6, 8, 4, 6, 6, 12, 14, 4 ],
+					"width": 478,
+					"height": 365
+				}
+			},
+			"glow": {
+				"glow": { "x": -1.02, "y": 42.91, "scaleX": 9.2278, "scaleY": 9.2278, "width": 99, "height": 90 }
+			},
+			"rib": {
+				"rib": { "y": -0.97, "width": 499, "height": 106 }
+			}
+		}
+	}
+],
+"animations": {
+	"animation": {
+		"slots": {
+			"anim_lost_leaf_01": {
+				"attachment": [
+					{ "name": null },
+					{ "time": 0.3667, "name": "anim_lost_leaf_01" },
+					{ "time": 0.4, "name": "anim_lost_leaf_02" },
+					{ "time": 0.4333, "name": "anim_lost_leaf_03" },
+					{ "time": 0.4667, "name": "anim_lost_leaf_04" },
+					{ "time": 0.5, "name": "anim_lost_leaf_05" },
+					{ "time": 0.5333, "name": "anim_lost_leaf_06" },
+					{ "time": 0.5667, "name": "anim_lost_leaf_07" },
+					{ "time": 0.6, "name": "anim_lost_leaf_08" },
+					{ "time": 0.6333, "name": "anim_lost_leaf_09" },
+					{ "time": 0.6667, "name": "anim_lost_leaf_10" },
+					{ "time": 0.7, "name": "anim_lost_leaf_11" },
+					{ "time": 0.7333, "name": "anim_lost_leaf_12" },
+					{ "time": 0.7667, "name": "anim_lost_leaf_13" },
+					{ "time": 0.8, "name": "anim_lost_leaf_14" },
+					{ "time": 0.8333, "name": "anim_lost_leaf_15" },
+					{ "time": 0.8667, "name": "anim_lost_leaf_16" },
+					{ "time": 0.9, "name": "anim_lost_leaf_17" },
+					{ "time": 0.9333, "name": "anim_lost_leaf_18" },
+					{ "time": 0.9667, "name": "anim_lost_leaf_19" },
+					{ "time": 1, "name": "anim_lost_leaf_20" },
+					{ "time": 1.0333, "name": null }
+				]
+			},
+			"glow": {
+				"color": [
+					{ "color": "ffffff00" },
+					{ "time": 0.1333, "color": "ffffffff" }
+				]
+			},
+			"rib": {
+				"color": [
+					{ "color": "ffffff00", "curve": "stepped" },
+					{ "time": 0.1, "color": "ffffff00" },
+					{ "time": 0.2667, "color": "ffffffff" }
+				]
+			}
+		},
+		"bones": {
+			"txt": {
+				"scale": [
+					{ "time": 0.3333 },
+					{ "time": 0.4, "x": 1.114, "y": 1.114 },
+					{ "time": 0.5 }
+				]
+			},
+			"TAM": {
+				"translate": [
+					{ "y": -52.36, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.3333, "y": 31.04, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.4333 }
+				],
+				"scale": [
+					{ "x": 0.789, "y": 0.789, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.3333, "x": 1.145, "y": 1.145, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.4333 }
+				]
+			},
+			"TAM3": {
+				"translate": [
+					{ "y": 99.81 },
+					{ "time": 0.2333 }
+				]
+			},
+			"TAM2": {
+				"translate": [
+					{ "y": -73.61 },
+					{ "time": 0.2333 }
+				]
+			},
+			"rib": {
+				"translate": [
+					{ "time": 0.1, "y": 29.73 },
+					{ "time": 0.2667 }
+				],
+				"scale": [
+					{ "time": 0.1, "x": 0.608, "y": 0.608 },
+					{ "time": 0.2667 }
+				]
+			}
+		}
+	}
+}
+}

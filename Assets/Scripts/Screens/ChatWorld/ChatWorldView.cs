@@ -237,9 +237,9 @@ public class ChatWorldView : BaseView
 
     public void UpdateProfileData()
     {
-        if (User.UserAccount != null)
+        if (User.Profile != null)
         {
-            textChip.text = Utility.FormatNumber(User.UserAccount.Profile.Balance);
+            textChip.text = Utility.FormatNumber(User.Profile.Chips);
         }
     }
 

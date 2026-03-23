@@ -59,7 +59,7 @@ public class CreateTableView : BaseView
             Bet betItem = betItemList[i];
             if (slider.value >= (float)(i + 1.0f) / l)
             {
-                if (User.UserAccount.Profile.Balance >= (int)betItem.MarkUnit)
+                if (User.Profile.Chips >= (int)betItem.MarkUnit)
                 {
                     createButton.interactable = true;
                 }

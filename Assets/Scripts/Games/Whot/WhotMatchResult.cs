@@ -23,7 +23,7 @@ public class WhotMatchResult : MonoBehaviour
 
     private void OnEnable()
     {
-        if (User.UserAccount.Profile.Vip == 0)
+        if (User.Profile.Vip == 0)
         {
             winMoreButton.gameObject.SetActive(false);
             return;

@@ -1,0 +1,143 @@
+syntax = "proto3";
+
+package api.v1;
+
+option csharp_namespace = "Yuujins.Api.V1";
+
+import "api/v1/game_common.proto";
+
+
+
+// ---------------------------------------------------------------------------
+// OpCode Request: client -> server (match message)
+// ---------------------------------------------------------------------------
+enum TongitsOpCodeRequest {
+  TONGITS_OP_CODE_REQUEST_UNSPECIFIED = 0;
+  TONGITS_REQUEST_DRAW_CARD    = 1;   // no payload
+  TONGITS_REQUEST_DISCARD      = 2;   // payload: TongitsDiscardRequest
+  TONGITS_REQUEST_SEND_CARD   = 3;   // payload: TongitsSendCardRequest
+  TONGITS_REQUEST_HA_PHOM      = 4;   // payload: TongitsHaPhomRequest
+  TONGITS_REQUEST_FIGHT       = 5;   // no payload
+  TONGITS_REQUEST_ACCEPT_FIGHT = 6;  // no payload
+  TONGITS_REQUEST_DECLARE     = 7;   // payload: TongitsDeclareRequest
+}
+
+// ---------------------------------------------------------------------------
+// OpCode Update: server -> client (broadcast)
+// ---------------------------------------------------------------------------
+enum TongitsOpCodeUpdate {
+  TONGITS_OP_CODE_UPDATE_UNSPECIFIED = 0;
+  TONGITS_UPDATE_GAME_STATE  = 1;   // payload: TongitsGameStateUpdate
+  TONGITS_UPDATE_DEAL        = 2;   // payload: TongitsDealUpdate
+  TONGITS_UPDATE_TURN_ACTION = 3;   // payload: TongitsTurnActionUpdate
+  TONGITS_UPDATE_FIGHT_STATE = 4;   // payload: TongitsFightUpdate
+  TONGITS_UPDATE_FINISH     = 5;   // payload: TongitsFinishUpdate
+  TONGITS_UPDATE_REJECT     = 6;   // payload: TongitsReject
+}
+
+// GroupCard: one meld (same number or flush straight).
+message TongitsGroupCard {
+  repeated Card cards = 1;
+  bool is_same_number = 2;   // true = same rank, false = flush straight
+}
+
+// ---------------------------------------------------------------------------
+// Request payloads (client -> server)
+// ---------------------------------------------------------------------------
+message TongitsDiscardRequest {
+  Card card = 1;   // card to discard (rank 1-13, suit 0-3)
+}
+
+message TongitsSendCardRequest {
+  repeated Card cards = 1;   // cards to send
+  int32 target_player_index   = 2;   // which player's meld (seat index)
+  int32 target_meld_index     = 3;   // which meld in that player (0-based)
+}
+
+message TongitsHaPhomRequest {
+  Card discard_card = 1;   // the discarded card we take
+  repeated Card meld_cards = 2;   // our hand cards to form meld with discard
+}
+
+message TongitsDeclareRequest {
+  repeated TongitsDeclareGroup groups = 1;   // our arranged groups + remaining hand
+}
+
+message TongitsDeclareGroup {
+  repeated Card cards = 1;
+}
+
+// ---------------------------------------------------------------------------
+// Update payloads (server -> client)
+// ---------------------------------------------------------------------------
+message TongitsGameStateUpdate {
+  string phase         = 1;   // "deal" | "play" | "fight" | "finish" | "idle"
+  int32 round          = 2;
+  string current_user_id = 3;
+  int64 countdown_sec  = 4;
+  bool can_draw        = 5;
+  bool can_discard     = 6;
+  bool can_send_card   = 7;
+  bool can_ha_phom     = 8;
+  bool can_fight       = 9;
+  bool can_accept_fight = 10;
+  bool can_declare     = 11;
+  int32 draw_pile_count = 12;
+}
+
+message TongitsPlayerSnapshot {
+  string user_id       = 1;
+  int32 seat_index     = 2;
+  repeated Card hand_cards = 3;   // empty for other players (hidden), full for self
+  repeated TongitsGroupCard melds  = 4;
+  bool can_draw        = 5;
+  bool can_discard     = 6;
+  bool can_send_card   = 7;
+  bool can_ha_phom     = 8;
+  bool can_fight       = 9;
+  bool is_burned       = 10;
+  int32 fight_status   = 11;   // 0=none, 2=accept, 4=refuse
+  int32 score          = 12;   // at finish
+}
+
+message TongitsDealUpdate {
+  repeated TongitsPlayerSnapshot players = 1;
+  Card boc_card = 2;   // the face-up card (first of draw pile or separate)
+  int32 draw_pile_count = 3;
+  string first_turn_user_id = 4;
+}
+
+message TongitsTurnActionUpdate {
+  string action_user_id = 1;   // who did the action
+  string action_type    = 2;   // "draw" | "discard" | "send_card" | "ha_phom"
+  Card discard_card = 3;   // if discard
+  repeated TongitsPlayerSnapshot players = 4;   // updated state
+  int32 draw_pile_count = 5;
+  string next_turn_user_id = 6;
+}
+
+message TongitsFightUpdate {
+  string declarer_user_id = 1;
+  repeated string accept_user_ids = 2;
+  repeated string refuse_user_ids = 3;
+  bool fight_resolved = 4;
+}
+
+message TongitsFinishUpdate {
+  repeated TongitsPlayerSnapshot players = 1;   // with score
+  map<string, int64> balance_delta = 2;   // user_id -> chip delta
+  int64 hit_pot = 3;
+}
+
+enum TongitsRejectReason {
+  TONGITS_REJECT_UNSPECIFIED    = 0;
+  TONGITS_REJECT_NOT_YOUR_TURN  = 1;
+  TONGITS_REJECT_INVALID_CARD   = 2;
+  TONGITS_REJECT_INVALID_MELD   = 3;
+  TONGITS_REJECT_INVALID_ACTION = 4;
+}
+
+message TongitsReject {
+  TongitsRejectReason reason = 1;
+  string message = 2;
+}

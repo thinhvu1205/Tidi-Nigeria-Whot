@@ -65,6 +65,8 @@ public class ItemGame : MonoBehaviour
         {
             animationPath = gameID switch
             {
+                Constants.TONGITS_ID => "anim_iconGames/tongits/skeleton_SkeletonData",
+                Constants.PUSOY_ID => "anim_iconGames/pusoy/skeleton_SkeletonData",
                 Constants.WHOT_GAME_ID => "anim_iconGames/whot/skeleton_SkeletonData",
                 Constants.FRUIT_SLOT_GAME_ID => "anim_iconGames/fruit_big/skeleton_SkeletonData",
                 Constants.JUICY_GARDEN_GAME_ID => "anim_iconGames/juicy_big/skeleton_SkeletonData",

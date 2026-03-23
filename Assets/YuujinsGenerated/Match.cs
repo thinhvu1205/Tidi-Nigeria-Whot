@@ -41,15 +41,16 @@ namespace Yuujins.Match.V1 {
             "b2tlbhgCIAEoCSJAChdKb2luUHJpdmF0ZVRhYmxlUmVxdWVzdBITCgtpbnZp",
             "dGVfY29kZRgBIAEoCRIQCghwYXNzd29yZBgCIAEoCSI7ChhKb2luUHJpdmF0",
             "ZVRhYmxlUmVzcG9uc2USEAoIbWF0Y2hfaWQYASABKAkSDQoFdG9rZW4YAiAB",
-            "KAkibwoJTWF0Y2hJbmZvEhAKCG1hdGNoX2lkGAEgASgJEgwKBHNpemUYAiAB",
-            "KAUSEAoIbWF4X3NpemUYAyABKAUSDAoEb3BlbhgEIAEoCBIPCgdnYW1lX2lk",
-            "GAUgASgNEhEKCW1hcmtfdW5pdBgGIAEoAyJpChBGaW5kTWF0Y2hSZXF1ZXN0",
-            "Eg8KB2dhbWVfaWQYASABKA0SEQoJbWFya191bml0GAIgASgDEhcKD2NyZWF0",
-            "ZV9pZl9lbXB0eRgDIAEoCBIYChBleGNsdWRlX21hdGNoX2lkGAQgASgJIjcK",
-            "EUZpbmRNYXRjaFJlc3BvbnNlEiIKBWl0ZW1zGAEgAygLMhMubWF0Y2gudjEu",
-            "TWF0Y2hJbmZvIicKE0dldE1hdGNoSW5mb1JlcXVlc3QSEAoIbWF0Y2hfaWQY",
-            "ASABKAkiOgoUR2V0TWF0Y2hJbmZvUmVzcG9uc2USIgoFbWF0Y2gYASABKAsy",
-            "Ey5tYXRjaC52MS5NYXRjaEluZm9iBnByb3RvMw=="));
+            "KAkijwEKCU1hdGNoSW5mbxIQCghtYXRjaF9pZBgBIAEoCRIMCgRzaXplGAIg",
+            "ASgFEhAKCG1heF9zaXplGAMgASgFEgwKBG9wZW4YBCABKAgSDwoHZ2FtZV9p",
+            "ZBgFIAEoDRIRCgltYXJrX3VuaXQYBiABKAMSDAoEbmFtZRgHIAEoCRIQCgh0",
+            "YWJsZV9pZBgIIAEoCSJpChBGaW5kTWF0Y2hSZXF1ZXN0Eg8KB2dhbWVfaWQY",
+            "ASABKA0SEQoJbWFya191bml0GAIgASgDEhcKD2NyZWF0ZV9pZl9lbXB0eRgD",
+            "IAEoCBIYChBleGNsdWRlX21hdGNoX2lkGAQgASgJIjcKEUZpbmRNYXRjaFJl",
+            "c3BvbnNlEiIKBWl0ZW1zGAEgAygLMhMubWF0Y2gudjEuTWF0Y2hJbmZvIicK",
+            "E0dldE1hdGNoSW5mb1JlcXVlc3QSEAoIbWF0Y2hfaWQYASABKAkiOgoUR2V0",
+            "TWF0Y2hJbmZvUmVzcG9uc2USIgoFbWF0Y2gYASABKAsyEy5tYXRjaC52MS5N",
+            "YXRjaEluZm9iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Yuujins.Cfg.Game.V1.GameReflection.Descriptor, global::Yuujins.Cfg.Bet.V1.BetReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -65,7 +66,7 @@ namespace Yuujins.Match.V1 {
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Match.V1.EnterSlotResponse), global::Yuujins.Match.V1.EnterSlotResponse.Parser, new[]{ "MatchId", "Token" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Match.V1.JoinPrivateTableRequest), global::Yuujins.Match.V1.JoinPrivateTableRequest.Parser, new[]{ "InviteCode", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Match.V1.JoinPrivateTableResponse), global::Yuujins.Match.V1.JoinPrivateTableResponse.Parser, new[]{ "MatchId", "Token" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Match.V1.MatchInfo), global::Yuujins.Match.V1.MatchInfo.Parser, new[]{ "MatchId", "Size", "MaxSize", "Open", "GameId", "MarkUnit" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Match.V1.MatchInfo), global::Yuujins.Match.V1.MatchInfo.Parser, new[]{ "MatchId", "Size", "MaxSize", "Open", "GameId", "MarkUnit", "Name", "TableId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Match.V1.FindMatchRequest), global::Yuujins.Match.V1.FindMatchRequest.Parser, new[]{ "GameId", "MarkUnit", "CreateIfEmpty", "ExcludeMatchId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Match.V1.FindMatchResponse), global::Yuujins.Match.V1.FindMatchResponse.Parser, new[]{ "Items" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Match.V1.GetMatchInfoRequest), global::Yuujins.Match.V1.GetMatchInfoRequest.Parser, new[]{ "MatchId" }, null, null, null, null),
@@ -2726,6 +2727,9 @@ namespace Yuujins.Match.V1 {
 
   }
 
+  /// <summary>
+  /// MatchInfo — thông tin bàn (từ Nakama MatchList/MatchGet). Khớp server lobby.match.v1.
+  /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class MatchInfo : pb::IMessage<MatchInfo>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
@@ -2767,6 +2771,8 @@ namespace Yuujins.Match.V1 {
       open_ = other.open_;
       gameId_ = other.gameId_;
       markUnit_ = other.markUnit_;
+      name_ = other.name_;
+      tableId_ = other.tableId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2848,6 +2854,36 @@ namespace Yuujins.Match.V1 {
       }
     }
 
+    /// <summary>Field number for the "name" field.</summary>
+    public const int NameFieldNumber = 7;
+    private string name_ = "";
+    /// <summary>
+    /// game code (e.g. "baccarat", "tongits")
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Name {
+      get { return name_; }
+      set {
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "table_id" field.</summary>
+    public const int TableIdFieldNumber = 8;
+    private string tableId_ = "";
+    /// <summary>
+    /// id bàn (để exclude khi find lại)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string TableId {
+      get { return tableId_; }
+      set {
+        tableId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -2869,6 +2905,8 @@ namespace Yuujins.Match.V1 {
       if (Open != other.Open) return false;
       if (GameId != other.GameId) return false;
       if (MarkUnit != other.MarkUnit) return false;
+      if (Name != other.Name) return false;
+      if (TableId != other.TableId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2882,6 +2920,8 @@ namespace Yuujins.Match.V1 {
       if (Open != false) hash ^= Open.GetHashCode();
       if (GameId != 0) hash ^= GameId.GetHashCode();
       if (MarkUnit != 0L) hash ^= MarkUnit.GetHashCode();
+      if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (TableId.Length != 0) hash ^= TableId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2924,6 +2964,14 @@ namespace Yuujins.Match.V1 {
         output.WriteRawTag(48);
         output.WriteInt64(MarkUnit);
       }
+      if (Name.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(Name);
+      }
+      if (TableId.Length != 0) {
+        output.WriteRawTag(66);
+        output.WriteString(TableId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2958,6 +3006,14 @@ namespace Yuujins.Match.V1 {
         output.WriteRawTag(48);
         output.WriteInt64(MarkUnit);
       }
+      if (Name.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(Name);
+      }
+      if (TableId.Length != 0) {
+        output.WriteRawTag(66);
+        output.WriteString(TableId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -2985,6 +3041,12 @@ namespace Yuujins.Match.V1 {
       }
       if (MarkUnit != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(MarkUnit);
+      }
+      if (Name.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      }
+      if (TableId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(TableId);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3015,6 +3077,12 @@ namespace Yuujins.Match.V1 {
       }
       if (other.MarkUnit != 0L) {
         MarkUnit = other.MarkUnit;
+      }
+      if (other.Name.Length != 0) {
+        Name = other.Name;
+      }
+      if (other.TableId.Length != 0) {
+        TableId = other.TableId;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -3059,6 +3127,14 @@ namespace Yuujins.Match.V1 {
             MarkUnit = input.ReadInt64();
             break;
           }
+          case 58: {
+            Name = input.ReadString();
+            break;
+          }
+          case 66: {
+            TableId = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -3100,6 +3176,14 @@ namespace Yuujins.Match.V1 {
           }
           case 48: {
             MarkUnit = input.ReadInt64();
+            break;
+          }
+          case 58: {
+            Name = input.ReadString();
+            break;
+          }
+          case 66: {
+            TableId = input.ReadString();
             break;
           }
         }

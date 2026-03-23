@@ -95,7 +95,7 @@ public class ChatInGameView : BaseView
                 byte[] voiceBytes = microphoneRecorder.GetBytes();
 
                 long timeNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                string fileName = $"voice_{User.UserAccount.Profile.Username}_{timeNow}.mp3";
+                string fileName = $"voice_{User.Profile.Username}_{timeNow}.mp3";
 
                 // 1️⃣ Get PUT URL
                 PreSignPutResponse putResponse =
@@ -116,7 +116,7 @@ public class ChatInGameView : BaseView
                     throw new Exception("Get URL is null");
                 // 4️⃣ Send chat
                 await chatInGamePresenter.SendChatVoice(
-                    User.UserAccount.Profile.Username,
+                    User.Profile.Username,
                     putResponse.GetUrl
                 );
             }

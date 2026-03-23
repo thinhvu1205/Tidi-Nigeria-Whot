@@ -18,8 +18,9 @@ using Color = UnityEngine.Color;
 using GameState = Proto.GameState;
 using Utility = Globals.Utility;
 using Yuujins.Api.V1;
+using Yuujins.Match.V1;
 
-public class BaccaratView : BaseDiceGameView
+public class BaccaratView : BaseTableView
 {
     // ================== Prefabs & Containers ==================
     [Header("Prefabs & Containers")] [SerializeField]
@@ -142,7 +143,7 @@ public class BaccaratView : BaseDiceGameView
     }
     
 
-    public override void LoadInfoMatch(Match match)
+    public override void LoadInfoMatch(MatchInfo match)
     {
         if (WantSwitchTable)
         {
@@ -155,11 +156,11 @@ public class BaccaratView : BaseDiceGameView
 
     private void LoadProfile()
     {
-        currentPlayerView.id = User.UserAccount.Profile.UserId;
-        currentPlayerView.wallet = User.UserAccount.Profile.Balance.ToString();
-        currentPlayerView.avatar_id = User.UserAccount.Profile.AvatarId.ToString();
-        currentPlayerView.vipLevel = User.UserAccount.Profile.Vip;
-        currentPlayerView.user_name = User.UserAccount.Profile.DisplayName;
+        currentPlayerView.id = User.Profile.UserId;
+        currentPlayerView.wallet = User.Profile.Chips.ToString();
+        currentPlayerView.avatar_id = User.Profile.AvatarId.ToString();
+        currentPlayerView.vipLevel = User.Profile.Vip;
+        currentPlayerView.user_name = User.Profile.DisplayName;
     }
 
     #region Hander Api
@@ -217,7 +218,7 @@ public class BaccaratView : BaseDiceGameView
             foreach (var userBet in data.UserBets)
             {
                 if (string.IsNullOrEmpty(userBet.UserId) || !userIdToView.TryGetValue(userBet.UserId, out var playerView)) continue;
-                if (userBet.UserId == User.UserAccount.Profile.UserId)
+                if (userBet.UserId == User.Profile.UserId)
                 {
                     foreach (var b in userBet.Bets) { int i = (int)b.Cell - 1; if (i >= 0 && i < 5) listMyBet[i] += b.Chips; }
                 }
@@ -1048,3 +1049,4 @@ public class BaccaratView : BaseDiceGameView
     }
     
 }
+

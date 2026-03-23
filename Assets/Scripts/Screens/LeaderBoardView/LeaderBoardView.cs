@@ -72,7 +72,7 @@ public class LeaderBoardView : BaseView
 
     private void UpdateVisuals()
     {
-        accountChip.text = Utility.FormatNumber(User.UserAccount.Profile.Balance);
+        accountChip.text = Utility.FormatNumber(User.Profile.Chips);
     }
     
     #region Data
@@ -94,7 +94,7 @@ public class LeaderBoardView : BaseView
 
     private async UniTask LoadListLeaderBoard()
     {
-        IApiLeaderboardRecordList apiLeaderboardRecordList = await leaderboardPresenter.LoadList(currentTabGameCode, User.UserAccount.Profile.UserId);
+        IApiLeaderboardRecordList apiLeaderboardRecordList = await leaderboardPresenter.LoadList(currentTabGameCode, User.Profile.UserId);
         
         currentUserRecord = apiLeaderboardRecordList.OwnerRecords.FirstOrDefault();
         if (currentUserRecord != null)
@@ -107,7 +107,7 @@ public class LeaderBoardView : BaseView
         }
         else
         {
-            UpdateUserLeaderboardUI("1000", "0", User.UserAccount.Profile.AvatarId.ToString(), User.UserAccount.Profile.Vip);
+            UpdateUserLeaderboardUI("1000", "0", User.Profile.AvatarId.ToString(), User.Profile.Vip);
         }
 
         recordList = apiLeaderboardRecordList.Records.ToList();
@@ -145,9 +145,9 @@ public class LeaderBoardView : BaseView
             topImage.sprite = topSprites[rank1 - 1];
         }
 
-        currentUserNameText.text = User.UserAccount.Profile.Username;
+        currentUserNameText.text = User.Profile.Username;
         currentUserChipValueText.text = Utility.FormatNumber(int.Parse(score));
-        currentUserAvatarImage.LoadAvatar(User.UserAccount.Profile.AvatarId.ToString(), vipLevel);
+        currentUserAvatarImage.LoadAvatar(User.Profile.AvatarId.ToString(), vipLevel);
     }
 
     private void UpdateUIListGame()
@@ -170,11 +170,11 @@ public class LeaderBoardView : BaseView
         foreach (IApiLeaderboardRecord record in recordList)
         {
             var json = JObject.Parse(record.Metadata);
-            bool isMe = record.OwnerId == User.UserAccount.Profile.UserId;
+            bool isMe = record.OwnerId == User.Profile.UserId;
             string avatarId = json["avatar_id"]?.ToString() ?? "";
             if (isMe)
             {
-                avatarId = User.UserAccount.Profile.AvatarId.ToString();
+                avatarId = User.Profile.AvatarId.ToString();
             }
             long vipLevel = json["vip_level"]?.Value<long>() ?? 0;
             LeaderBoardItem leaderBoardItem = Instantiate(leaderBoardItemPrefab, leaderBoardItemParent).GetComponent<LeaderBoardItem>();

@@ -96,7 +96,7 @@ public class SelectTableView : BaseView
     #endregion
     private void UpdateVisuals()
     {
-        accountChip.text = Utility.FormatNumber(User.UserAccount.Profile.Balance);
+        accountChip.text = Utility.FormatNumber(User.Profile.Chips);
     }
     private void UpdateTitle()
     {
@@ -167,7 +167,7 @@ public class SelectTableView : BaseView
                 await GetListTableByMarkUnit(currentMarkUnitTab);
             });
  
-            bool betEnable = User.UserAccount.Profile.Vip >= bet.MinVip && User.UserAccount.Profile.Vip <= bet.MaxVip;
+            bool betEnable = User.Profile.Vip >= bet.MinVip && User.Profile.Vip <= bet.MaxVip;
             if (!isTableTabSelected && betEnable)
             {
                 currentMarkUnitTab = (int)bet.MarkUnit;
@@ -235,7 +235,7 @@ public class SelectTableView : BaseView
 
     public void OnClickCreateTable()
     {
-        if (!betItemList.Any((bet) => User.UserAccount.Profile.Vip >= bet.MinVip && User.UserAccount.Profile.Vip <= bet.MaxVip))
+        if (!betItemList.Any((bet) => User.Profile.Vip >= bet.MinVip && User.Profile.Vip <= bet.MaxVip))
         {
             UIManager.Instance.ShowConfirmDialog("You do not have enough chips to create table!", () => UIManager.Instance.OpenShop(), null, "Get More Chips");
             return;

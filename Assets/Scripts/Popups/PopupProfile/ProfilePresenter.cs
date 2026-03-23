@@ -15,11 +15,11 @@ public class ProfilePresenter
         profileView = view;
     }
 
-    public async UniTask OnUpdateAvatar(string avatarName)
+    public async UniTask OnUpdateAvatar(int id)
     {
         try
         {
-            await DataSender.UpdateAvatar(avatarName);
+            await DataSender.IdentityUserUpdateProfile(avatarId: id);
             await profileView.ShowToast("Update avatar successfully!", true);
         }
         catch (Exception)

@@ -27,7 +27,7 @@ public class BetItem : MonoBehaviour
         playerCountText.text = "0";
         betTitleText.text = Utility.FormatNumber(dataItem.AgJoin);
         // Cfg Bet không có Enable → tính theo VIP: user trong khoảng [MinVip, MaxVip] thì enable
-        int userVip = (int)User.UserAccount.Profile.Vip;
+        int userVip = (int)User.Profile.Vip;
         bool enable = userVip >= dataItem.MinVip && userVip <= dataItem.MaxVip;
         if (enable)
         {

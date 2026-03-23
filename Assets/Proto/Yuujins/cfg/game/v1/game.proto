@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package cfg.game.v1;
 
+// Khớp server cfg.game.v1 (TYPE_CASINO, không labels).
 message Game {
   uint32 id = 1;
   string name = 2;
@@ -9,12 +10,11 @@ message Game {
     TYPE_UNSPECIFIED = 0;
     TYPE_SLOT = 1;
     TYPE_PVP = 2;
-    TYPE_BET = 3;
+    TYPE_CASINO = 3;
   }
   Type type = 3;
   int32 win_conv_milli = 4;
   int32 lose_conv_milli = 5;
-  repeated string labels = 6;
 
   message Request {
     message Create {
@@ -23,7 +23,6 @@ message Game {
       Game.Type type = 3;
       int32 win_conv_milli = 4;
       int32 lose_conv_milli = 5;
-      repeated string labels = 6;
     }
     message Update {
       uint32 id = 1;
@@ -31,7 +30,6 @@ message Game {
       Game.Type type = 3;
       int32 win_conv_milli = 4;
       int32 lose_conv_milli = 5;
-      repeated string labels = 6;
     }
     message Read {
       uint32 id = 1;

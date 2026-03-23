@@ -32,7 +32,7 @@ public class NetworkManager : MonoBehaviour
         WORLD_CHAT_ROOM_NAME = "world_chat",
         IP_SERVER_TEST = "103.226.250.195",
         IP_SERVER_HUY = "172.16.56.87",
-        IP_SERVER_TOAN = "172.16.56.104",
+        IP_SERVER_TOAN = "172.16.56.113",
         LINK_STORAGE_COLLECTION = "link_global",
         LINK_STORAGE_KEY = "links",
         KFeatureConfigCollection = "feature_config_global",
@@ -549,7 +549,7 @@ public class NetworkManager : MonoBehaviour
                                     var msg = JsonUtility.FromJson<HotNewsMessage>(state.State);
             
                                     // Check VIP range để quyết định có hiển thị không
-                                    var userVipLevel = User.UserAccount.Profile.Vip; // Implement method này
+                                    var userVipLevel = User.Profile.Vip; // Implement method này
                                     // bool shouldShow = false;
             
                                     if (msg.vip_ranges is { Length: > 0 })
@@ -641,6 +641,10 @@ public class NetworkManager : MonoBehaviour
                 default:
                     break;
             }
+        };
+        _SocketIS.ReceivedMatchPresence += state =>
+        {
+
         };
 
     }

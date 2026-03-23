@@ -10,7 +10,9 @@ namespace Globals
 {
     public enum GameID
     {
-
+        TONGITS = 8090,
+        TONGITS_JOKER = 8088,
+        TONGITS_OLD = 8091,
     }
 
     public enum ConnectionStatus
@@ -22,6 +24,14 @@ namespace Globals
     }
 
     public enum GameState
+    {
+        WAITING = 0,
+        PLAYING = 1,
+        VIEWING = 2
+    }
+
+    /// <summary>Tongits/Phil compat alias for game state.</summary>
+    public enum STATE_GAME
     {
         WAITING = 0,
         PLAYING = 1,

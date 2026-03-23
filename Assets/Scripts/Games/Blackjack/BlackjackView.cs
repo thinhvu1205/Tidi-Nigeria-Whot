@@ -16,8 +16,9 @@ using UnityEngine.UI;
 using GameState = Proto.GameState;
 using Color = UnityEngine.Color;
 using Newtonsoft.Json.Linq;
+using Yuujins.Match.V1;
 
-public class BlackjackView : BaseDiceGameView
+public class BlackjackView : BaseTableView
 {
     [Header(" Transforms ")]
     [SerializeField] private Transform boxBetContainer;
@@ -157,7 +158,7 @@ public class BlackjackView : BaseDiceGameView
         DataSender.SendMatchState((long)OpCodeRequest.SyncTable, new byte[0]);
     }
 
-    public override void LoadInfoMatch(Match match)
+    public override void LoadInfoMatch(MatchInfo match)
     {
         base.LoadInfoMatch(match);
         foreach (Transform child in boxBetContainer)
@@ -190,11 +191,11 @@ public class BlackjackView : BaseDiceGameView
         var updateTable = UpdateTable.Parser.ParseFrom(matchState.State);
         // Debug.Log("HandleUpdateUserInTable " + updateTable);
         UpdatePosUserTable(updateTable, true);
-        Player currentPlayer = players.Find((player) => player.Id == User.UserAccount.Profile.UserId);
-        isPlaying = playingPlayers.Exists((player) => player.Id == User.UserAccount.Profile.UserId);
+        Yuujins.Api.V1.Player currentPlayer = players.Find((player) => player.Id == User.Profile.UserId);
+        isPlaying = playingPlayers.Exists((player) => player.Id == User.Profile.UserId);
         playerWallet = long.Parse(currentPlayer.Wallet);
         UpdateChipBetInteractivity();
-        currentPlayerIndex = playingPlayers.FindIndex(p => p.Id == User.UserAccount.Profile.UserId);
+        currentPlayerIndex = playingPlayers.FindIndex(p => p.Id == User.Profile.UserId);
         // if (rearrangedPlayers.Count >= 2)
         // {
         //     Player secondPlayer = rearrangedPlayers[2];
@@ -211,7 +212,7 @@ public class BlackjackView : BaseDiceGameView
         BlackjackUpdateDesk data = BlackjackUpdateDesk.Parser.ParseFrom(matchState.State);
         Debug.Log("Update table: " + data.ToString());
         string playerId = data.Bet?.UserId;
-        string currentPlayerId = User.UserAccount.Profile.UserId;
+        string currentPlayerId = User.Profile.UserId;
         // Khi có người chơi đặt cược thì tiến hành trừ tiền của người chơi đó
         if (data.Bet?.Balance?.AmountChipAdd != 0)
         {
@@ -223,7 +224,7 @@ public class BlackjackView : BaseDiceGameView
                 hasBet = true;
 
                 // Rebet
-                if (isRebet && data.Bet?.Balance.AmoutChipBet > 0 && data.Bet.UserId == User.UserAccount.Profile.UserId)
+                if (isRebet && data.Bet?.Balance.AmoutChipBet > 0 && data.Bet.UserId == User.Profile.UserId)
                 {
                     hasBet = true;
                     totalBetValue = data.Bet.Balance.AmoutChipBet;
@@ -302,7 +303,7 @@ public class BlackjackView : BaseDiceGameView
                 }
             }
             // Debug.Log("IsNewTurn - isCurrentPlayerFinished: " + isCurrentPlayerFinished);
-            isCurrentPlayerTurn = data.InTurn == User.UserAccount.Profile.UserId;
+            isCurrentPlayerTurn = data.InTurn == User.Profile.UserId;
 
             if (!isCurrentPlayerTurnPassed)
             {
@@ -356,7 +357,7 @@ public class BlackjackView : BaseDiceGameView
                 }
 
                 // Turn của người chơi khác
-                if (data.InTurn != User.UserAccount.Profile.UserId)
+                if (data.InTurn != User.Profile.UserId)
                 {
                     buttonDouble.button.interactable = true;
                     buttonSplit.button.interactable = currentPlayerBoxBet.IsSplittableBox();
@@ -411,7 +412,7 @@ public class BlackjackView : BaseDiceGameView
                 }
             }
 
-            if (data.PlayerAction.Code == BlackjackActionCode.BlackjackActionDouble && data.PlayerAction.UserId == User.UserAccount.Profile.UserId)
+            if (data.PlayerAction.Code == BlackjackActionCode.BlackjackActionDouble && data.PlayerAction.UserId == User.Profile.UserId)
             {
                 if (blackjackHandN0 == BlackjackHandN0.BlackjackHand1St)
                 {
@@ -429,7 +430,7 @@ public class BlackjackView : BaseDiceGameView
             }
         }
 
-        bool isCurrentPlayerPayInsurance = data.PlayersBet.Count > 0 && data.PlayersBet.FirstOrDefault((bet) => bet.UserId == User.UserAccount.Profile.UserId)?.Insurance > 0;
+        bool isCurrentPlayerPayInsurance = data.PlayersBet.Count > 0 && data.PlayersBet.FirstOrDefault((bet) => bet.UserId == User.Profile.UserId)?.Insurance > 0;
         if (data.IsInsuranceTurnEnter && isPlaying  && !isCurrentPlayerPayInsurance)
         {
             insurance.Show();
@@ -449,7 +450,7 @@ public class BlackjackView : BaseDiceGameView
         // Đặt cược bảo hiểm
         if (data.Bet != null && data.Bet.Insurance > 0)
         {
-            Player player = playingPlayers.Find(p => p.Id == data.Bet.UserId);
+            Yuujins.Api.V1.Player player = playingPlayers.Find(p => p.Id == data.Bet.UserId);
             BasePlayerView playerView = userIdToView.GetValueOrDefault(data.Bet.UserId);
             BlackjackChip chip = PoolService.Instance.Get<BlackjackChip>(PrefabType.ChipPlayerBlackjack);
             // TO F
@@ -623,7 +624,7 @@ public class BlackjackView : BaseDiceGameView
                     }
                 }
 
-                if (data.UserId == User.UserAccount.Profile.UserId &&
+                if (data.UserId == User.Profile.UserId &&
                     (data.Hand.First.Type == BlackjackHandType.Blackjack ||
                     data.Hand.Second.Type == BlackjackHandType.Blackjack))
                 {
@@ -701,7 +702,7 @@ public class BlackjackView : BaseDiceGameView
                     .AppendCallback(() =>
                     {
                         // Nếu thisPlayer ăn được Blackjack thì hiện animation Blackjack
-                        if (data.UserId == User.UserAccount.Profile.UserId &&
+                        if (data.UserId == User.Profile.UserId &&
                             (data.Hand.First.Type == BlackjackHandType.Blackjack ||
                             data.Hand.Second.Type == BlackjackHandType.Blackjack))
                         {
@@ -779,7 +780,7 @@ public class BlackjackView : BaseDiceGameView
                     BlackjackBoxBet boxBet = userIdToBoxBetView.GetValueOrDefault(playerHand.UserId);
                     if (playerHand.First.Cards.Count > 0)
                     {
-                        if (playerHand.UserId == User.UserAccount.Profile.UserId)
+                        if (playerHand.UserId == User.Profile.UserId)
                         {
                             isPlaying = true;
                             
@@ -921,7 +922,7 @@ public class BlackjackView : BaseDiceGameView
             // if (playerView == null) continue;
             // playerView.AnimateFlyMoney(update.AmountChipAdd);
             // playerView.SetCurrentChip(update.AmountChipCurrent);
-            if (update.UserId == User.UserAccount.Profile.UserId)
+            if (update.UserId == User.Profile.UserId)
             {
                 playerWallet = update.AmountChipCurrent;
             }
@@ -1363,7 +1364,7 @@ public class BlackjackView : BaseDiceGameView
 
             int indexInRound = i % length;
             int round = i / length; // vòng chia thứ mấy
-            Player player = rearrangedPlayers[indexInRound];
+            Yuujins.Api.V1.Player player = rearrangedPlayers[indexInRound];
             BlackjackBoxBet boxCard = userIdToBoxBetView.GetValueOrDefault(player.Id);
             if (boxCard.listCardModel.Count == 0) continue;
             CardModel cardModel = boxCard.listCardModel[round];
@@ -1466,7 +1467,7 @@ public class BlackjackView : BaseDiceGameView
 
         // Gom cả player và banker vào chung một list để xử lý
         List<BlackjackBoxBet> allBoxBets = new List<BlackjackBoxBet>();
-        foreach (Player player in rearrangedPlayers)
+        foreach (Yuujins.Api.V1.Player player in rearrangedPlayers)
         {
             allBoxBets.Add(userIdToBoxBetView.GetValueOrDefault(player.Id));
             allBoxBets.Add(userIdToBoxBetView.GetValueOrDefault(player.Id).SecondBoxBet);
@@ -1840,7 +1841,7 @@ public class BlackjackView : BaseDiceGameView
 
     private void ShowAllPlayersLoading()
     {
-        foreach (Player player in rearrangedPlayers)
+        foreach (Yuujins.Api.V1.Player player in rearrangedPlayers)
         {
             if (player.Id == currentPlayerView.id) continue;
             if (userIdToBoxBetView.TryGetValue(player.Id, out var boxBet))
@@ -1854,7 +1855,7 @@ public class BlackjackView : BaseDiceGameView
     }
     private void HideAllPlayersLoading()
     {
-        foreach (Player player in rearrangedPlayers)
+        foreach (var player in rearrangedPlayers)
         {
             if (player.Id == currentPlayerView.id) continue;
             if (userIdToBoxBetView.TryGetValue(player.Id, out var boxBet))
@@ -1944,7 +1945,7 @@ public class BlackjackView : BaseDiceGameView
         };
         bool isFirstHandFinal = finalHandTypes.Contains(data.Hand.First.Type);
         bool isSecondHandOk = data.Hand.Second.Type == BlackjackHandType.Unspecified || finalHandTypes.Contains(data.Hand.Second.Type);
-        if (data.UserId == User.UserAccount.Profile.UserId && isFirstHandFinal && isSecondHandOk)
+        if (data.UserId == User.Profile.UserId && isFirstHandFinal && isSecondHandOk)
         {
             isCurrentPlayerFinished = true;
             buttonDouble.gameObject.SetActive(false);
@@ -1974,10 +1975,10 @@ public class BlackjackView : BaseDiceGameView
 
     #region Setups
 
-    protected override void CreatePlayerView(Player player, Vector2 anchoredPos)
+    protected void CreatePlayerView(Yuujins.Api.V1.Player player, Vector2 anchoredPos)
     {
-        base.CreatePlayerView(player, anchoredPos);
-        string localUserId = User.UserAccount.Profile.UserId;
+        // base.CreatePlayerView(player, anchoredPos);
+        string localUserId = User.Profile.UserId;
         if (GameState == GameState.Play)
         {
             int playerIndex = rearrangedPlayers.IndexOf(player);
@@ -2077,7 +2078,7 @@ public class BlackjackView : BaseDiceGameView
         SetEnableRebetButton(lastBetValue > 0 && playerWallet > lastBetValue);
 
         bankerBoxBet.Reset();
-        foreach (Player player in rearrangedPlayers)
+        foreach (var player in rearrangedPlayers)
         {
             if (userIdToBoxBetView.TryGetValue(player.Id, out var boxBet))
             {

@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package api.v1;
+
+option csharp_namespace = "Yuujins.Api.V1";
+
+// Card represents one playing card. Rank 1-13 (A=1, 2-10, J=11, Q=12, K=13).
+message Card {
+  int32 rank = 1;  // 1-13
+  int32 suit = 2;  // 0-3
+}
+
+enum MatchOpCodeUpdate {
+  MATCH_OP_CODE_UPDATE_UNSPECIFIED = 0;
+  // Payload: MatchRosterUpdate — danh sách người trong bàn (join/leave/revision).
+  MATCH_UPDATE_ROSTER = 100;
+  // Client → server: payload rỗng; server broadcast lại MATCH_UPDATE_ROSTER (full snapshot + revision).
+  MATCH_REQUEST_ROSTER_SNAPSHOT = 101;
+}
+
+message Player {
+  string id = 1;
+  string user_name = 2;
+  string wallet = 3;
+  bool is_playing = 4;
+  optional string display_name = 5;
+  int64 vip_level = 6;
+  string avatar_id = 7;
+  int64 cid = 8;
+  int32 seat_index = 9;
+  bool is_bot = 10;
+  int64 chips = 11;
+}
+
+message MatchRosterUpdate {
+  string match_id = 1;
+  string game_code = 2;
+  repeated Player players = 3;
+  repeated Player joined_players = 4;
+  repeated Player left_players = 5;
+  int64 revision = 6;
+  bool is_snapshot = 7;
+}

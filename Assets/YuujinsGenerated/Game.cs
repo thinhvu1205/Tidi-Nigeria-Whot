@@ -24,30 +24,28 @@ namespace Yuujins.Cfg.Game.V1 {
     static GameReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChZjZmcvZ2FtZS92MS9nYW1lLnByb3RvEgtjZmcuZ2FtZS52MSKCBQoER2Ft",
+            "ChZjZmcvZ2FtZS92MS9nYW1lLnByb3RvEgtjZmcuZ2FtZS52MSLTBAoER2Ft",
             "ZRIKCgJpZBgBIAEoDRIMCgRuYW1lGAIgASgJEiQKBHR5cGUYAyABKA4yFi5j",
             "ZmcuZ2FtZS52MS5HYW1lLlR5cGUSFgoOd2luX2NvbnZfbWlsbGkYBCABKAUS",
-            "FwoPbG9zZV9jb252X21pbGxpGAUgASgFEg4KBmxhYmVscxgGIAMoCRr5AgoH",
-            "UmVxdWVzdBqJAQoGQ3JlYXRlEgoKAmlkGAEgASgNEgwKBG5hbWUYAiABKAkS",
-            "JAoEdHlwZRgDIAEoDjIWLmNmZy5nYW1lLnYxLkdhbWUuVHlwZRIWCg53aW5f",
-            "Y29udl9taWxsaRgEIAEoBRIXCg9sb3NlX2NvbnZfbWlsbGkYBSABKAUSDgoG",
-            "bGFiZWxzGAYgAygJGokBCgZVcGRhdGUSCgoCaWQYASABKA0SDAoEbmFtZRgC",
-            "IAEoCRIkCgR0eXBlGAMgASgOMhYuY2ZnLmdhbWUudjEuR2FtZS5UeXBlEhYK",
-            "Dndpbl9jb252X21pbGxpGAQgASgFEhcKD2xvc2VfY29udl9taWxsaRgFIAEo",
-            "BRIOCgZsYWJlbHMYBiADKAkaEgoEUmVhZBIKCgJpZBgBIAEoDRoUCgZEZWxl",
-            "dGUSCgoCaWQYASABKA0aLAoETGlzdBIkCgR0eXBlGAEgASgOMhYuY2ZnLmdh",
-            "bWUudjEuR2FtZS5UeXBlGjQKCFJlc3BvbnNlGigKBExpc3QSIAoFZ2FtZXMY",
-            "ASADKAsyES5jZmcuZ2FtZS52MS5HYW1lIkcKBFR5cGUSFAoQVFlQRV9VTlNQ",
-            "RUNJRklFRBAAEg0KCVRZUEVfU0xPVBABEgwKCFRZUEVfUFZQEAISDAoIVFlQ",
-            "RV9CRVQQAyJ4CgZDb25maWcSLQoFZ2FtZXMYASADKAsyHi5jZmcuZ2FtZS52",
-            "MS5Db25maWcuR2FtZXNFbnRyeRo/CgpHYW1lc0VudHJ5EgsKA2tleRgBIAEo",
-            "DRIgCgV2YWx1ZRgCIAEoCzIRLmNmZy5nYW1lLnYxLkdhbWU6AjgBYgZwcm90",
-            "bzM="));
+            "FwoPbG9zZV9jb252X21pbGxpGAUgASgFGtcCCgdSZXF1ZXN0GnkKBkNyZWF0",
+            "ZRIKCgJpZBgBIAEoDRIMCgRuYW1lGAIgASgJEiQKBHR5cGUYAyABKA4yFi5j",
+            "ZmcuZ2FtZS52MS5HYW1lLlR5cGUSFgoOd2luX2NvbnZfbWlsbGkYBCABKAUS",
+            "FwoPbG9zZV9jb252X21pbGxpGAUgASgFGnkKBlVwZGF0ZRIKCgJpZBgBIAEo",
+            "DRIMCgRuYW1lGAIgASgJEiQKBHR5cGUYAyABKA4yFi5jZmcuZ2FtZS52MS5H",
+            "YW1lLlR5cGUSFgoOd2luX2NvbnZfbWlsbGkYBCABKAUSFwoPbG9zZV9jb252",
+            "X21pbGxpGAUgASgFGhIKBFJlYWQSCgoCaWQYASABKA0aFAoGRGVsZXRlEgoK",
+            "AmlkGAEgASgNGiwKBExpc3QSJAoEdHlwZRgBIAEoDjIWLmNmZy5nYW1lLnYx",
+            "LkdhbWUuVHlwZRo0CghSZXNwb25zZRooCgRMaXN0EiAKBWdhbWVzGAEgAygL",
+            "MhEuY2ZnLmdhbWUudjEuR2FtZSJKCgRUeXBlEhQKEFRZUEVfVU5TUEVDSUZJ",
+            "RUQQABINCglUWVBFX1NMT1QQARIMCghUWVBFX1BWUBACEg8KC1RZUEVfQ0FT",
+            "SU5PEAMieAoGQ29uZmlnEi0KBWdhbWVzGAEgAygLMh4uY2ZnLmdhbWUudjEu",
+            "Q29uZmlnLkdhbWVzRW50cnkaPwoKR2FtZXNFbnRyeRILCgNrZXkYASABKA0S",
+            "IAoFdmFsdWUYAiABKAsyES5jZmcuZ2FtZS52MS5HYW1lOgI4AWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Cfg.Game.V1.Game), global::Yuujins.Cfg.Game.V1.Game.Parser, new[]{ "Id", "Name", "Type", "WinConvMilli", "LoseConvMilli", "Labels" }, null, new[]{ typeof(global::Yuujins.Cfg.Game.V1.Game.Types.Type) }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Cfg.Game.V1.Game.Types.Request), global::Yuujins.Cfg.Game.V1.Game.Types.Request.Parser, null, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Cfg.Game.V1.Game.Types.Request.Types.Create), global::Yuujins.Cfg.Game.V1.Game.Types.Request.Types.Create.Parser, new[]{ "Id", "Name", "Type", "WinConvMilli", "LoseConvMilli", "Labels" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Cfg.Game.V1.Game.Types.Request.Types.Update), global::Yuujins.Cfg.Game.V1.Game.Types.Request.Types.Update.Parser, new[]{ "Id", "Name", "Type", "WinConvMilli", "LoseConvMilli", "Labels" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Cfg.Game.V1.Game), global::Yuujins.Cfg.Game.V1.Game.Parser, new[]{ "Id", "Name", "Type", "WinConvMilli", "LoseConvMilli" }, null, new[]{ typeof(global::Yuujins.Cfg.Game.V1.Game.Types.Type) }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Cfg.Game.V1.Game.Types.Request), global::Yuujins.Cfg.Game.V1.Game.Types.Request.Parser, null, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Cfg.Game.V1.Game.Types.Request.Types.Create), global::Yuujins.Cfg.Game.V1.Game.Types.Request.Types.Create.Parser, new[]{ "Id", "Name", "Type", "WinConvMilli", "LoseConvMilli" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Cfg.Game.V1.Game.Types.Request.Types.Update), global::Yuujins.Cfg.Game.V1.Game.Types.Request.Types.Update.Parser, new[]{ "Id", "Name", "Type", "WinConvMilli", "LoseConvMilli" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Cfg.Game.V1.Game.Types.Request.Types.Read), global::Yuujins.Cfg.Game.V1.Game.Types.Request.Types.Read.Parser, new[]{ "Id" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Cfg.Game.V1.Game.Types.Request.Types.Delete), global::Yuujins.Cfg.Game.V1.Game.Types.Request.Types.Delete.Parser, new[]{ "Id" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Cfg.Game.V1.Game.Types.Request.Types.List), global::Yuujins.Cfg.Game.V1.Game.Types.Request.Types.List.Parser, new[]{ "Type" }, null, null, null, null)}),
@@ -59,6 +57,9 @@ namespace Yuujins.Cfg.Game.V1 {
 
   }
   #region Messages
+  /// <summary>
+  /// Khớp server cfg.game.v1 (TYPE_CASINO, không labels).
+  /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class Game : pb::IMessage<Game>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
@@ -99,7 +100,6 @@ namespace Yuujins.Cfg.Game.V1 {
       type_ = other.type_;
       winConvMilli_ = other.winConvMilli_;
       loseConvMilli_ = other.loseConvMilli_;
-      labels_ = other.labels_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -169,17 +169,6 @@ namespace Yuujins.Cfg.Game.V1 {
       }
     }
 
-    /// <summary>Field number for the "labels" field.</summary>
-    public const int LabelsFieldNumber = 6;
-    private static readonly pb::FieldCodec<string> _repeated_labels_codec
-        = pb::FieldCodec.ForString(50);
-    private readonly pbc::RepeatedField<string> labels_ = new pbc::RepeatedField<string>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<string> Labels {
-      get { return labels_; }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -200,7 +189,6 @@ namespace Yuujins.Cfg.Game.V1 {
       if (Type != other.Type) return false;
       if (WinConvMilli != other.WinConvMilli) return false;
       if (LoseConvMilli != other.LoseConvMilli) return false;
-      if(!labels_.Equals(other.labels_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -213,7 +201,6 @@ namespace Yuujins.Cfg.Game.V1 {
       if (Type != global::Yuujins.Cfg.Game.V1.Game.Types.Type.Unspecified) hash ^= Type.GetHashCode();
       if (WinConvMilli != 0) hash ^= WinConvMilli.GetHashCode();
       if (LoseConvMilli != 0) hash ^= LoseConvMilli.GetHashCode();
-      hash ^= labels_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -252,7 +239,6 @@ namespace Yuujins.Cfg.Game.V1 {
         output.WriteRawTag(40);
         output.WriteInt32(LoseConvMilli);
       }
-      labels_.WriteTo(output, _repeated_labels_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -283,7 +269,6 @@ namespace Yuujins.Cfg.Game.V1 {
         output.WriteRawTag(40);
         output.WriteInt32(LoseConvMilli);
       }
-      labels_.WriteTo(ref output, _repeated_labels_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -309,7 +294,6 @@ namespace Yuujins.Cfg.Game.V1 {
       if (LoseConvMilli != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(LoseConvMilli);
       }
-      size += labels_.CalculateSize(_repeated_labels_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -337,7 +321,6 @@ namespace Yuujins.Cfg.Game.V1 {
       if (other.LoseConvMilli != 0) {
         LoseConvMilli = other.LoseConvMilli;
       }
-      labels_.Add(other.labels_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -375,10 +358,6 @@ namespace Yuujins.Cfg.Game.V1 {
           }
           case 40: {
             LoseConvMilli = input.ReadInt32();
-            break;
-          }
-          case 50: {
-            labels_.AddEntriesFrom(input, _repeated_labels_codec);
             break;
           }
         }
@@ -420,10 +399,6 @@ namespace Yuujins.Cfg.Game.V1 {
             LoseConvMilli = input.ReadInt32();
             break;
           }
-          case 50: {
-            labels_.AddEntriesFrom(ref input, _repeated_labels_codec);
-            break;
-          }
         }
       }
     }
@@ -438,7 +413,7 @@ namespace Yuujins.Cfg.Game.V1 {
         [pbr::OriginalName("TYPE_UNSPECIFIED")] Unspecified = 0,
         [pbr::OriginalName("TYPE_SLOT")] Slot = 1,
         [pbr::OriginalName("TYPE_PVP")] Pvp = 2,
-        [pbr::OriginalName("TYPE_BET")] Bet = 3,
+        [pbr::OriginalName("TYPE_CASINO")] Casino = 3,
       }
 
       [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
@@ -645,7 +620,6 @@ namespace Yuujins.Cfg.Game.V1 {
               type_ = other.type_;
               winConvMilli_ = other.winConvMilli_;
               loseConvMilli_ = other.loseConvMilli_;
-              labels_ = other.labels_.Clone();
               _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
             }
 
@@ -715,17 +689,6 @@ namespace Yuujins.Cfg.Game.V1 {
               }
             }
 
-            /// <summary>Field number for the "labels" field.</summary>
-            public const int LabelsFieldNumber = 6;
-            private static readonly pb::FieldCodec<string> _repeated_labels_codec
-                = pb::FieldCodec.ForString(50);
-            private readonly pbc::RepeatedField<string> labels_ = new pbc::RepeatedField<string>();
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-            public pbc::RepeatedField<string> Labels {
-              get { return labels_; }
-            }
-
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
             [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public override bool Equals(object other) {
@@ -746,7 +709,6 @@ namespace Yuujins.Cfg.Game.V1 {
               if (Type != other.Type) return false;
               if (WinConvMilli != other.WinConvMilli) return false;
               if (LoseConvMilli != other.LoseConvMilli) return false;
-              if(!labels_.Equals(other.labels_)) return false;
               return Equals(_unknownFields, other._unknownFields);
             }
 
@@ -759,7 +721,6 @@ namespace Yuujins.Cfg.Game.V1 {
               if (Type != global::Yuujins.Cfg.Game.V1.Game.Types.Type.Unspecified) hash ^= Type.GetHashCode();
               if (WinConvMilli != 0) hash ^= WinConvMilli.GetHashCode();
               if (LoseConvMilli != 0) hash ^= LoseConvMilli.GetHashCode();
-              hash ^= labels_.GetHashCode();
               if (_unknownFields != null) {
                 hash ^= _unknownFields.GetHashCode();
               }
@@ -798,7 +759,6 @@ namespace Yuujins.Cfg.Game.V1 {
                 output.WriteRawTag(40);
                 output.WriteInt32(LoseConvMilli);
               }
-              labels_.WriteTo(output, _repeated_labels_codec);
               if (_unknownFields != null) {
                 _unknownFields.WriteTo(output);
               }
@@ -829,7 +789,6 @@ namespace Yuujins.Cfg.Game.V1 {
                 output.WriteRawTag(40);
                 output.WriteInt32(LoseConvMilli);
               }
-              labels_.WriteTo(ref output, _repeated_labels_codec);
               if (_unknownFields != null) {
                 _unknownFields.WriteTo(ref output);
               }
@@ -855,7 +814,6 @@ namespace Yuujins.Cfg.Game.V1 {
               if (LoseConvMilli != 0) {
                 size += 1 + pb::CodedOutputStream.ComputeInt32Size(LoseConvMilli);
               }
-              size += labels_.CalculateSize(_repeated_labels_codec);
               if (_unknownFields != null) {
                 size += _unknownFields.CalculateSize();
               }
@@ -883,7 +841,6 @@ namespace Yuujins.Cfg.Game.V1 {
               if (other.LoseConvMilli != 0) {
                 LoseConvMilli = other.LoseConvMilli;
               }
-              labels_.Add(other.labels_);
               _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
             }
 
@@ -923,10 +880,6 @@ namespace Yuujins.Cfg.Game.V1 {
                     LoseConvMilli = input.ReadInt32();
                     break;
                   }
-                  case 50: {
-                    labels_.AddEntriesFrom(input, _repeated_labels_codec);
-                    break;
-                  }
                 }
               }
             #endif
@@ -964,10 +917,6 @@ namespace Yuujins.Cfg.Game.V1 {
                   }
                   case 40: {
                     LoseConvMilli = input.ReadInt32();
-                    break;
-                  }
-                  case 50: {
-                    labels_.AddEntriesFrom(ref input, _repeated_labels_codec);
                     break;
                   }
                 }
@@ -1017,7 +966,6 @@ namespace Yuujins.Cfg.Game.V1 {
               type_ = other.type_;
               winConvMilli_ = other.winConvMilli_;
               loseConvMilli_ = other.loseConvMilli_;
-              labels_ = other.labels_.Clone();
               _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
             }
 
@@ -1087,17 +1035,6 @@ namespace Yuujins.Cfg.Game.V1 {
               }
             }
 
-            /// <summary>Field number for the "labels" field.</summary>
-            public const int LabelsFieldNumber = 6;
-            private static readonly pb::FieldCodec<string> _repeated_labels_codec
-                = pb::FieldCodec.ForString(50);
-            private readonly pbc::RepeatedField<string> labels_ = new pbc::RepeatedField<string>();
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-            public pbc::RepeatedField<string> Labels {
-              get { return labels_; }
-            }
-
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
             [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public override bool Equals(object other) {
@@ -1118,7 +1055,6 @@ namespace Yuujins.Cfg.Game.V1 {
               if (Type != other.Type) return false;
               if (WinConvMilli != other.WinConvMilli) return false;
               if (LoseConvMilli != other.LoseConvMilli) return false;
-              if(!labels_.Equals(other.labels_)) return false;
               return Equals(_unknownFields, other._unknownFields);
             }
 
@@ -1131,7 +1067,6 @@ namespace Yuujins.Cfg.Game.V1 {
               if (Type != global::Yuujins.Cfg.Game.V1.Game.Types.Type.Unspecified) hash ^= Type.GetHashCode();
               if (WinConvMilli != 0) hash ^= WinConvMilli.GetHashCode();
               if (LoseConvMilli != 0) hash ^= LoseConvMilli.GetHashCode();
-              hash ^= labels_.GetHashCode();
               if (_unknownFields != null) {
                 hash ^= _unknownFields.GetHashCode();
               }
@@ -1170,7 +1105,6 @@ namespace Yuujins.Cfg.Game.V1 {
                 output.WriteRawTag(40);
                 output.WriteInt32(LoseConvMilli);
               }
-              labels_.WriteTo(output, _repeated_labels_codec);
               if (_unknownFields != null) {
                 _unknownFields.WriteTo(output);
               }
@@ -1201,7 +1135,6 @@ namespace Yuujins.Cfg.Game.V1 {
                 output.WriteRawTag(40);
                 output.WriteInt32(LoseConvMilli);
               }
-              labels_.WriteTo(ref output, _repeated_labels_codec);
               if (_unknownFields != null) {
                 _unknownFields.WriteTo(ref output);
               }
@@ -1227,7 +1160,6 @@ namespace Yuujins.Cfg.Game.V1 {
               if (LoseConvMilli != 0) {
                 size += 1 + pb::CodedOutputStream.ComputeInt32Size(LoseConvMilli);
               }
-              size += labels_.CalculateSize(_repeated_labels_codec);
               if (_unknownFields != null) {
                 size += _unknownFields.CalculateSize();
               }
@@ -1255,7 +1187,6 @@ namespace Yuujins.Cfg.Game.V1 {
               if (other.LoseConvMilli != 0) {
                 LoseConvMilli = other.LoseConvMilli;
               }
-              labels_.Add(other.labels_);
               _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
             }
 
@@ -1295,10 +1226,6 @@ namespace Yuujins.Cfg.Game.V1 {
                     LoseConvMilli = input.ReadInt32();
                     break;
                   }
-                  case 50: {
-                    labels_.AddEntriesFrom(input, _repeated_labels_codec);
-                    break;
-                  }
                 }
               }
             #endif
@@ -1336,10 +1263,6 @@ namespace Yuujins.Cfg.Game.V1 {
                   }
                   case 40: {
                     LoseConvMilli = input.ReadInt32();
-                    break;
-                  }
-                  case 50: {
-                    labels_.AddEntriesFrom(ref input, _repeated_labels_codec);
                     break;
                   }
                 }

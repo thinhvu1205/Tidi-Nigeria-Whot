@@ -1,0 +1,102 @@
+{
+    "skeleton": {
+      "hash": "Wg87mgT45qNbLiTQd884bcDz5DA",
+      "spine": "3.8.99",
+      "x": -244,
+      "y": -256.79,
+      "width": 460.69,
+      "height": 475.13,
+      "images": "./images/",
+      "audio": "C:/Users/Ngoc/Downloads/Telegram Desktop/ThreePoker/animation/point"
+    },
+    "bones": [
+      {
+        "name": "root"
+      },
+      {
+        "name": "lucky9",
+        "parent": "root"
+      },
+      {
+        "name": "light tron",
+        "parent": "lucky9",
+        "x": -1.59,
+        "y": -2.16,
+        "scaleX": 0.814,
+        "scaleY": 0.814
+      }
+    ],
+    "slots": [
+      {
+        "name": "light tron",
+        "bone": "light tron",
+        "attachment": "light tron"
+      }
+    ],
+    "skins": [
+      {
+        "name": "default",
+        "attachments": {
+          "light tron": {
+            "light tron": {
+              "x": 1.59,
+              "y": 2.16,
+              "width": 294,
+              "height": 290
+            }
+          }
+        }
+      }
+    ],
+    "animations": {
+      "point": {
+        "slots": {
+          "light tron": {
+            "color": [
+              {
+                "color": "ffffff00",
+                "curve": 1,
+                "c3": 0.75
+              },
+              {
+                "time": 0.1667,
+                "color": "ffffffff",
+                "curve": "stepped"
+              },
+              {
+                "time": 0.7667,
+                "color": "ffffffff",
+                "curve": 0.407,
+                "c2": 0.01,
+                "c3": 0.75
+              },
+              {
+                "time": 1.1667,
+                "color": "ffffff00"
+              }
+            ]
+          }
+        },
+        "bones": {
+          "light tron": {
+            "scale": [
+              {
+                "x": 0,
+                "y": 0,
+                "curve": 0,
+                "c2": 0.36,
+                "c3": 0.476,
+                "c4": 0.75
+              },
+              {
+                "time": 1.3333,
+                "x": 0.597,
+                "y": 0.597
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+  

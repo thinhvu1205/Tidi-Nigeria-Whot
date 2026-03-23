@@ -25,7 +25,13 @@ namespace Globals
         public static string currentServerIp = "";
         public static string  currentGameName = "";
         public static uint currentGameId = 0;
+        /// <summary>Alias for Tongits/Phil compatibility.</summary>
+        public static uint curGameId { get => currentGameId; set => currentGameId = value; }
         public static string currentMatchId = "";
+        public static int tableMark;
+        public static bool isBackGame;
+        public static uint lastGameIDSave;
+        public static string language = "EN";
         public static string deviceId = SystemInfo.deviceUniqueIdentifier;
         public static string versionGame = Application.version;
         public static RuntimePlatform os = Application.platform;
@@ -193,6 +199,21 @@ namespace Globals
             PlayerPrefs.SetInt(MUSIC_KEY, isOpenMusic ? 1 : 0);
             PlayerPrefs.Save();
         }
+
+        /// <summary>Tongits/Phil compat: get localized text by key (stub returns key if no table).</summary>
+        public static string getTextConfig(string key) => key;
+        public static string FormatMoney(long money, bool isK = false) => Utility.FormatMoney2(money, isK, false);
+        public static string FormatNumber(long n) => Utility.FormatNumber(n);
+        public static bool isShowTableWithGameId(uint gameId) => Constants.SELECT_TABLE_GAMES_ID != null && gameId != 0;
+    }
+}
+
+namespace Globals
+{
+    public class ChatWorldLobbyData { public string Name, Content, Avatar, Time; public int Vip; public bool IsAudio; }
+    public static class COMMON_DATA
+    {
+        public static System.Collections.Generic.List<ChatWorldLobbyData> ListDataChatInGame = new System.Collections.Generic.List<ChatWorldLobbyData>();
     }
 }
 

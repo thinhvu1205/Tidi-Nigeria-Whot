@@ -12,6 +12,7 @@ using GameState = Proto.GameState;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using System;
+using Yuujins.Match.V1;
 
 public class BaseGameView : BaseView
 {
@@ -22,7 +23,7 @@ public class BaseGameView : BaseView
     public virtual bool CanLeaveTable => true;
     protected bool hasBet = false;
     public bool WantSwitchTable = false;
-    public Match MatchLabel;
+    public MatchInfo MatchLabel;
     
 
     protected override void OnDestroy()
@@ -35,7 +36,7 @@ public class BaseGameView : BaseView
            
     }
 
-    public virtual void LoadInfoMatch(Match match)
+    public virtual void LoadInfoMatch(MatchInfo match)
     {
         MatchLabel = match;
     }

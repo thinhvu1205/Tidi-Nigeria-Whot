@@ -19,8 +19,9 @@ using UnityEngine.UI;
 using GameState = Proto.GameState;
 using PrefabType = Globals.PrefabType;
 using Cysharp.Threading.Tasks;
+using Yuujins.Match.V1;
 
-public class WhotView : BaseDiceGameView
+public class WhotView : BaseTableView
 {
     public event Action<OnNextTurnEventArg> OnNextTurn;
     public class OnNextTurnEventArg : EventArgs
@@ -201,7 +202,7 @@ public class WhotView : BaseDiceGameView
     }
 
     #region API Handlers
-    public override void LoadInfoMatch(Match match)
+    public override void LoadInfoMatch(MatchInfo match)
     {
         if (TypeWinMore || WantSwitchTable)
         {
@@ -211,19 +212,19 @@ public class WhotView : BaseDiceGameView
         playersParent.gameObject.SetActive(true);
         // string labelJson = match.Label;
         // Match data = JsonConvert.DeserializeObject<Match>(labelJson);
-        CurrentMarkUnit = match.Bet.MarkUnit;
+        CurrentMarkUnit = match.MarkUnit;
         betText.text = "Bet: " + Utility.FormatNumber(CurrentMarkUnit);
         idText.text = "ID: " + match.TableId;
-        if (string.IsNullOrEmpty(match.UserData))
-        {
-            doubleDeckImage.gameObject.SetActive(false);  
-        }
-        else
-        {
-            UserData userData = JsonUtility.FromJson<UserData>(match.UserData);
-            isDoubleDecking = userData.is_double_decking;
-            doubleDeckImage.gameObject.SetActive(isDoubleDecking);  
-        }
+        // if (string.IsNullOrEmpty(match.UserData))
+        // {
+        //     doubleDeckImage.gameObject.SetActive(false);  
+        // }
+        // else
+        // {
+        //     UserData userData = JsonUtility.FromJson<UserData>(match.UserData);
+        //     isDoubleDecking = userData.is_double_decking;
+        //     doubleDeckImage.gameObject.SetActive(isDoubleDecking);  
+        // }
         _ = NetworkManager.INSTANCE.JoinRoomChat(CHAT_ROOM_NAME + "-" + match.TableId);
 
     }
@@ -236,10 +237,10 @@ public class WhotView : BaseDiceGameView
         playersParent.gameObject.SetActive(true);
         gameState = data.GameState;
         List<Player> players = data.Players.ToList();
-        playingPlayers = data.PlayingPlayers.ToList();
+        // playingPlayers = data.PlayingPlayers.ToList();
         List<Player> joinPlayers = data.JoinPlayers.ToList();
         List<Player> leavePlayers = data.LeavePlayers.ToList();
-        string currentPlayerId = User.UserAccount.Profile.UserId;
+        string currentPlayerId = User.Profile.UserId;
         Player currentPlayer = players.Find((player) => player.Id == currentPlayerId);
         int startIndex = players.IndexOf(currentPlayer);
 
@@ -1654,7 +1655,7 @@ public class WhotView : BaseDiceGameView
         {
             whotPlayer.gameObject.SetActive(false);
         }
-        string currentPlayerId = User.UserAccount.Profile.UserId;
+        string currentPlayerId = User.Profile.UserId;
         for (int i = 0; i < rearrangedPlayersList.Count; i++)
         {
             Player player = rearrangedPlayersList[i];

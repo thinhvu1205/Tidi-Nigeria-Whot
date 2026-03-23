@@ -100,7 +100,8 @@ public class DataSender
     public const string IDENTITY_USER_REGISTER = "identity_user_register";
     public const string IDENTITY_USER_LOGIN = "identity_user_login";
     public const string IDENTITY_USER_CHANGE_PASSWORD = "identity_user_change_password";
-    public const string IDENTITY_USER_GET_ACCOUNT = "identity_user_get_account";
+    public const string IDENTITY_USER_GET_PROFILE = "identity_user_get_my_profile";
+    public const string IDENTITY_USER_UPDATE_PROFILE = "identity_user_update_profile";
     public const string CFG_BANNER_LIST = "cfg_banner_list";
     public const string CFG_BET_READ = "cfg_bet_read";
     public const string CFG_GAME_LIST = "cfg_game_list";
@@ -442,12 +443,12 @@ public class DataSender
         }
     }
 
-    public static async UniTask<Match> JoinMatch(string matchId, string passWord = "")
+    public static async UniTask<MatchInfo> JoinMatch(string matchId, string passWord = "")
     {
         try
         {
             var match = await NetworkManager.INSTANCE.JoinMatch(matchId, passWord);
-            Match data = DecodeFromJson<Match>(match.Label);
+            var data = DecodeFromJson<MatchInfo>(match.Label);
             Debug.Log("JOIN MATCH SUCCESS " + match);
             return data;
         }
@@ -1210,11 +1211,29 @@ public class DataSender
         return await RpcSendAndGetPayloadOrShowError(IDENTITY_USER_CHANGE_PASSWORD, req) ?? "";
     }
     
-    public static async UniTask<User.Types.Response.Types.GetAccount> IdentityUserGetAccount()
+    public static async UniTask<User.Types.Response.Types.GetMyProfile> IdentityUserGetProfile()
     {
-        var payload = await RpcSendAndGetPayloadOrShowError(IDENTITY_USER_GET_ACCOUNT, new User.Types.Request.Types.GetAccount()) ?? "";;
+        var payload = await RpcSendAndGetPayloadOrShowError(IDENTITY_USER_GET_PROFILE, new User.Types.Request.Types.GetMyProfile()) ?? "";;
         if (string.IsNullOrWhiteSpace(payload)) return null;
-        try { return DecodeFromJson<User.Types.Response.Types.GetAccount>(payload); }
+        try { return DecodeFromJson<User.Types.Response.Types.GetMyProfile>(payload); }
+        catch (Exception e) { Debug.LogWarning("IdentityUserGetAccountTyped: " + e.Message); return null; }
+    }
+    
+    public static async UniTask<User.Types.Response.Types.UpdateProfile> IdentityUserUpdateProfile(int? avatarId = null, string displayName = null, string appConfig = null )
+    {
+        var req = new User.Types.Request.Types.UpdateProfile();
+        if (avatarId.HasValue)
+            req.AvatarId = avatarId.Value;
+        if (displayName != null)
+        {
+            req.DisplayName = displayName;
+        }
+        if (appConfig != null)
+            req.AppConfig = appConfig;
+        
+        var payload = await RpcSendAndGetPayloadOrShowError(IDENTITY_USER_UPDATE_PROFILE, req) ?? "";;
+        if (string.IsNullOrWhiteSpace(payload)) return null;
+        try { return DecodeFromJson<User.Types.Response.Types.UpdateProfile>(payload); }
         catch (Exception e) { Debug.LogWarning("IdentityUserGetAccountTyped: " + e.Message); return null; }
     }
 

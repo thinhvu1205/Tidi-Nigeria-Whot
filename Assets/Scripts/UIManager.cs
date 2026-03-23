@@ -42,6 +42,9 @@ public class UIManager : Singleton<UIManager>
     private const string BANNER_PARENT_TAG = "Parent Banner";
     private const string LOBBY_PARENT_TAG = "Parent Lobby";
     private const string LOADING_PARENT_TAG = "Parent Loading";
+
+    /// <summary>True = load UI prefabs từ Phil (Resources/Popups, GameView). False = UI Nige (Prefabs/Popups, Prefabs/LobbyViews, Prefabs/Games). Bật true sau khi copy đủ script/prefab Phil.</summary>
+    public static bool UsePhilUI = false;
     
     protected override void Awake()
     {
@@ -56,8 +59,8 @@ public class UIManager : Singleton<UIManager>
 
     public async UniTask LoadProfileUser()
     {
-        Yuujins.User.V1.User.Types.Response.Types.GetAccount getAccount = await DataSender.IdentityUserGetAccount();
-        User.UserAccount = getAccount.Account;
+        Yuujins.User.V1.User.Types.Response.Types.GetMyProfile myProfile = await DataSender.IdentityUserGetProfile();
+        User.Profile = myProfile.Profile;
         User.UpdateProfile();
         User.UpdateConfig();
     }
@@ -206,7 +209,7 @@ public class UIManager : Singleton<UIManager>
         }
     }
     
-    public void HandleOpenGame(Match labelMatch)
+    public void HandleOpenGame(MatchInfo labelMatch)
     {
         HideProgressing();
 
@@ -261,6 +264,9 @@ public class UIManager : Singleton<UIManager>
                 break;
             case Constants.JUICY_GARDEN_GAME_ID:
                 gameView = Instantiate(LoadPrefabGame("SlotJuicyGardenView"), parentGames).GetComponent<SlotJuicyView>();
+                break;
+            case Constants.TONGITS_ID:
+                gameView = Instantiate(LoadPrefabGame("TongitsView"), parentGames).GetComponent<TongitsView>();
                 break;
             default:
                 Debug.LogError("Unsupported game ID: " + Config.currentGameName);
@@ -392,7 +398,7 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenCreateTableView()
     {
-        if (User.UserAccount.Profile.Vip >= 2)
+        if (User.Profile.Vip >= 2)
         {
             CreateTableView createTableView = Instantiate(LoadPrefabPopup("PopupCreateTable"), parentPopups).GetComponent<CreateTableView>();
             createTableView.transform.localScale = Vector3.one;
@@ -769,16 +775,44 @@ public class UIManager : Singleton<UIManager>
 
     public GameObject LoadPrefabPopup(string name)
     {
+        if (UsePhilUI)
+        {
+            // Phil tên khác: FreeChip, FeedBack, InputPass. (PopupSettings→PopupSetting cần Phil script SettingView nên chưa đổi.)
+            if (name == "PopupFreechips") name = "PopupFreeChip";
+            if (name == "PopupFeedback") name = "PopupFeedBack";
+            if (name == "PopupEnterPassword") name = "PopupInputPass";
+            return LoadPrefab("Popups/" + name);
+        }
         return LoadPrefab("Prefabs/Popups/" + name);
     }
 
     public GameObject LoadPrefabLobby(string name)
     {
+        if (UsePhilUI)
+        {
+            // Phil: Shop/Exchange/... là popup; SelectTableView giữ Prefabs/LobbyViews cho tới khi dùng script Phil TableView
+            if (name == "ShopView") return LoadPrefab("Popups/PopupShop");
+            if (name == "ExchangeView") return LoadPrefab("Popups/PopupExchange");
+            if (name == "LeaderboardView") return LoadPrefab("Popups/PopupLeaderBoard");
+            if (name == "LuckyNumberView") return LoadPrefab("Popups/PopupLuckyNumber");
+            if (name == "ChatWorldView") return LoadPrefab("Popups/PopupChatWorld");
+            if (name == "VipFarmView") return LoadPrefab("Popups/PopupVipFarm");
+            if (name == "FriendView") return LoadPrefab("Popups/PopupFriendInfo");
+        }
         return LoadPrefab("Prefabs/LobbyViews/" + name);
     }
 
     public GameObject LoadPrefabGame(string name)
     {
+        if (UsePhilUI)
+        {
+            // Phil tên khác: SiXiangView, RouLetteView (file SlotIncaView giống Whot)
+            if (name == "SlotSixiangView") name = "SiXiangView";
+            if (name == "RouletteView") name = "RouLetteView";
+            return LoadPrefab("GameView/" + name);
+        }
+        // Tongits prefab copied to Resources/GameView/
+        if (name == "TongitsView") return LoadPrefab("GameView/" + name);
         return LoadPrefab("Prefabs/Games/" + name);
     }
 

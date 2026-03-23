@@ -17,14 +17,22 @@ message User {
       string device_id = 3;
     }
 
-    message GetAccount {}
+    message GetMyProfile {}
+    message UpdateProfile {
+      optional string display_name = 1;
+      optional int32 avatar_id = 2;
+      optional string app_config = 3;
+    }
   }
 
   message Response {
     message ChangePassword {}
     message Register {}
-    message GetAccount {
-      UserAccount account = 1;
+    message GetMyProfile {
+      Profile profile = 1;
+    }
+    message UpdateProfile {
+      Profile profile = 1;
     }
   }
 }
@@ -46,8 +54,10 @@ message Profile {
   bool online = 14;
   google.protobuf.Timestamp last_login = 15;
   google.protobuf.Timestamp last_online = 16;
-  int64 balance = 17;
-  int64 bank_balance = 18;
+
+  int64 chips = 17;
+  int64 bank_chips = 18;
+
   int32 avatar_id = 19;
   int32 vip = 20;
   bool official = 21;
@@ -62,24 +72,3 @@ message Profile {
   }
 }
 
-message UserAccount {
-  Profile profile = 1;
-  string status = 2;
-  optional google.protobuf.Timestamp last_vip_update = 3;
-  optional google.protobuf.Timestamp official_at = 4;
-  optional int64 agent_id = 5;
-  bool withdraw_blacklist = 6;
-  bool internal_account = 7;
-  string creation_ip_address = 8;
-  string creation_device = 9;
-  string creation_device_id = 10;
-  string creation_package = 11;
-  string last_login_ip_address = 12;
-  string last_login_device = 13;
-  string last_login_package = 14;
-  google.protobuf.Timestamp disable_time = 15;
-  bytes password = 16;
-  int64 seq_id = 17;
-// true = tài khoản khách (Chơi ngay), client dùng để hiển thị mời tạo tài khoản đầy đủ.
-  bool is_guest = 18;
-}

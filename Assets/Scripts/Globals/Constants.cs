@@ -6,6 +6,8 @@ namespace Globals
 {
     public class Constants
     {
+        public const string TONGITS_ID = "tongits";
+        public const string PUSOY_ID = "pusoy";
         public const string WHOT_GAME_ID = "whot-game";
         // public const string COLOR_GAME_ID = "color-game";
         public const string ROULETTE_GAME_ID = "roulette";
@@ -74,7 +76,8 @@ namespace Globals
             WHOT_GAME_ID,
             BACCARAT_GAME_ID,
             HK_POKER_GAME_ID,
-            BLACKJACK_GAME_ID
+            BLACKJACK_GAME_ID,
+            TONGITS_ID,
         };
 
         public static readonly string[] JACKPOT_GAMES_ID = new string[]
@@ -98,6 +101,7 @@ namespace Globals
             { "blackjack", "Blackjack" },
             { "inca", "Slot Inca" },
             { "noel", "Slot Noel" },
+            { "tongits", "Tongits" },
         };
 
         public static readonly Dictionary<string, string> LobbyIdFromCode = new()
@@ -113,6 +117,7 @@ namespace Globals
             { "blackjack", "9" },
             { "inca", "6" },
             { "noel", "7" },
+            { "tongits", "12" },
         };
 
         public static readonly Dictionary<WhotCardSuit, int> WhotSuitSortOrder = new()

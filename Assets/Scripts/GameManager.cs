@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Proto;
 using Nakama;
 using UnityEngine;
+using Yuujins.Api.V1;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -29,8 +30,22 @@ public class GameManager : Singleton<GameManager>
     
     public void HandleMatchState(IMatchState matchState)
     {
+        Debug.Log("match state "+ matchState.ToString());
         if (UIManager.Instance.gameView != null)
         {
+            // Match layer (e.g. opcode 100 roster) — mọi game view
+            if (MatchRosterService.DispatchMatchState(matchState))
+                return;
+            // Client → server only; nếu có echo 101 thì bỏ qua (không có payload roster).
+            if (matchState.OpCode == (long)MatchOpCodeUpdate.MatchRequestRosterSnapshot)
+                return;
+
+            // Tongits (Nakama): opcode 1–6 = protobuf Yuujins.Api.V1 (TongitsOpCodeUpdate)
+            if (UIManager.Instance.gameView is TongitsView &&
+                TongitsService.DispatchMatchState(matchState))
+            {
+                return;
+            }
             // Yuujins Baccarat opcodes: 1=GameState, 2=Table, 3=Deal, 4=Finish, 5=Reject
             if (UIManager.Instance.gameView is BaccaratView)
             {

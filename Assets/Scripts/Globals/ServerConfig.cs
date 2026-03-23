@@ -15,7 +15,7 @@ namespace Globals
     public static class ServerConfig
     {
         /// <summary>Account từ identity_user_get_account.</summary>
-        public static UserAccount Account { get; set; }
+        public static Profile Profile { get; set; }
 
         /// <summary>Layout từ lobby_match_get_layout / cfg_layout_read (tabs + tiles). Dùng để hiển thị thứ tự / tab game.</summary>
         public static Layout Layout { get; set; }

@@ -46,11 +46,11 @@ public class SettingsView : BaseView
 
     private void UpdateVisuals()
     {
-        if (User.UserAccount != null)
+        if (User.Profile != null)
         {
-            displayNameText.text = User.UserAccount.Profile.DisplayName;
-            userIdText.text = "ID: " + User.UserAccount.Profile.UserId;
-            avatar.LoadAvatar(User.UserAccount.Profile.AvatarId.ToString(), User.UserAccount.Profile.Vip);
+            displayNameText.text = User.Profile.DisplayName;
+            userIdText.text = "ID: " + User.Profile.Cid;
+            avatar.LoadAvatar(User.Profile.AvatarId.ToString(), User.Profile.Vip);
 
         }
         toggleSoundImage.gameObject.SetActive(Config.isOpenSound);

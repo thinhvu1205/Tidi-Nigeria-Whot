@@ -19,8 +19,8 @@ public class SettingPresenter
     {
         try
         {
-            string config = $"\"sound\": \"{isOpenSound}\",\"music\": \"{isOpenMusic}\",\"vibration\": \"{isVibration}\"";
-            await DataSender.UpdateConfig(config);
+            var config = $"\"sound\": \"{isOpenSound}\",\"music\": \"{isOpenMusic}\",\"vibration\": \"{isVibration}\"";
+            await DataSender.IdentityUserUpdateProfile( appConfig: config);
             // await settingView.ShowToast("Update avatar successfully!", true);
         }
         catch (Exception)

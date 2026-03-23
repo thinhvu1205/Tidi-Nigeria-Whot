@@ -39,7 +39,7 @@ public class FriendChatItem : MonoBehaviour
 
     public void SetInfo(ChatPayload data, Action<float, float> onSizeCalculated = null)
     {
-        bool isMe = data.ID == User.UserAccount.Profile.UserId;
+        bool isMe = data.ID == User.Profile.UserId;
         chatContainerLeft.SetActive(!isMe);
         chatContainerRight.SetActive(isMe);
         if (!isMe)
