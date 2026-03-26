@@ -60,8 +60,6 @@ public static class TongitsService
             OnDispatchError?.Invoke(op, new InvalidOperationException("Tongits match state payload is empty."));
             return true;
         }
-        
-        Debug.Log("Tongits match state "+ matchState);
 
         try
         {

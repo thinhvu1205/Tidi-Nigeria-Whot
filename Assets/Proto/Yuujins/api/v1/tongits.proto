@@ -83,6 +83,7 @@ message TongitsGameStateUpdate {
   bool can_accept_fight = 10;
   bool can_declare     = 11;
   int32 draw_pile_count = 12;
+  int64 hit_pot        = 13;
 }
 
 message TongitsPlayerSnapshot {
@@ -98,6 +99,7 @@ message TongitsPlayerSnapshot {
   bool is_burned       = 10;
   int32 fight_status   = 11;   // 0=none, 2=accept, 4=refuse
   int32 score          = 12;   // at finish
+  int32 hidden_hand_count = 13;
 }
 
 message TongitsDealUpdate {

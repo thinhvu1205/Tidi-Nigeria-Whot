@@ -35,53 +35,54 @@ namespace Yuujins.Api.V1 {
             "ZF9jYXJkcxgCIAMoCzIMLmFwaS52MS5DYXJkIkQKFVRvbmdpdHNEZWNsYXJl",
             "UmVxdWVzdBIrCgZncm91cHMYASADKAsyGy5hcGkudjEuVG9uZ2l0c0RlY2xh",
             "cmVHcm91cCIyChNUb25naXRzRGVjbGFyZUdyb3VwEhsKBWNhcmRzGAEgAygL",
-            "MgwuYXBpLnYxLkNhcmQilAIKFlRvbmdpdHNHYW1lU3RhdGVVcGRhdGUSDQoF",
+            "MgwuYXBpLnYxLkNhcmQipQIKFlRvbmdpdHNHYW1lU3RhdGVVcGRhdGUSDQoF",
             "cGhhc2UYASABKAkSDQoFcm91bmQYAiABKAUSFwoPY3VycmVudF91c2VyX2lk",
             "GAMgASgJEhUKDWNvdW50ZG93bl9zZWMYBCABKAMSEAoIY2FuX2RyYXcYBSAB",
             "KAgSEwoLY2FuX2Rpc2NhcmQYBiABKAgSFQoNY2FuX3NlbmRfY2FyZBgHIAEo",
             "CBITCgtjYW5faGFfcGhvbRgIIAEoCBIRCgljYW5fZmlnaHQYCSABKAgSGAoQ",
             "Y2FuX2FjY2VwdF9maWdodBgKIAEoCBITCgtjYW5fZGVjbGFyZRgLIAEoCBIX",
-            "Cg9kcmF3X3BpbGVfY291bnQYDCABKAUipQIKFVRvbmdpdHNQbGF5ZXJTbmFw",
-            "c2hvdBIPCgd1c2VyX2lkGAEgASgJEhIKCnNlYXRfaW5kZXgYAiABKAUSIAoK",
-            "aGFuZF9jYXJkcxgDIAMoCzIMLmFwaS52MS5DYXJkEicKBW1lbGRzGAQgAygL",
-            "MhguYXBpLnYxLlRvbmdpdHNHcm91cENhcmQSEAoIY2FuX2RyYXcYBSABKAgS",
-            "EwoLY2FuX2Rpc2NhcmQYBiABKAgSFQoNY2FuX3NlbmRfY2FyZBgHIAEoCBIT",
-            "CgtjYW5faGFfcGhvbRgIIAEoCBIRCgljYW5fZmlnaHQYCSABKAgSEQoJaXNf",
-            "YnVybmVkGAogASgIEhQKDGZpZ2h0X3N0YXR1cxgLIAEoBRINCgVzY29yZRgM",
-            "IAEoBSKYAQoRVG9uZ2l0c0RlYWxVcGRhdGUSLgoHcGxheWVycxgBIAMoCzId",
-            "LmFwaS52MS5Ub25naXRzUGxheWVyU25hcHNob3QSHgoIYm9jX2NhcmQYAiAB",
-            "KAsyDC5hcGkudjEuQ2FyZBIXCg9kcmF3X3BpbGVfY291bnQYAyABKAUSGgoS",
-            "Zmlyc3RfdHVybl91c2VyX2lkGAQgASgJIs4BChdUb25naXRzVHVybkFjdGlv",
-            "blVwZGF0ZRIWCg5hY3Rpb25fdXNlcl9pZBgBIAEoCRITCgthY3Rpb25fdHlw",
-            "ZRgCIAEoCRIiCgxkaXNjYXJkX2NhcmQYAyABKAsyDC5hcGkudjEuQ2FyZBIu",
-            "CgdwbGF5ZXJzGAQgAygLMh0uYXBpLnYxLlRvbmdpdHNQbGF5ZXJTbmFwc2hv",
-            "dBIXCg9kcmF3X3BpbGVfY291bnQYBSABKAUSGQoRbmV4dF90dXJuX3VzZXJf",
-            "aWQYBiABKAkieAoSVG9uZ2l0c0ZpZ2h0VXBkYXRlEhgKEGRlY2xhcmVyX3Vz",
-            "ZXJfaWQYASABKAkSFwoPYWNjZXB0X3VzZXJfaWRzGAIgAygJEhcKD3JlZnVz",
-            "ZV91c2VyX2lkcxgDIAMoCRIWCg5maWdodF9yZXNvbHZlZBgEIAEoCCLRAQoT",
-            "VG9uZ2l0c0ZpbmlzaFVwZGF0ZRIuCgdwbGF5ZXJzGAEgAygLMh0uYXBpLnYx",
-            "LlRvbmdpdHNQbGF5ZXJTbmFwc2hvdBJECg1iYWxhbmNlX2RlbHRhGAIgAygL",
-            "Mi0uYXBpLnYxLlRvbmdpdHNGaW5pc2hVcGRhdGUuQmFsYW5jZURlbHRhRW50",
-            "cnkSDwoHaGl0X3BvdBgDIAEoAxozChFCYWxhbmNlRGVsdGFFbnRyeRILCgNr",
-            "ZXkYASABKAkSDQoFdmFsdWUYAiABKAM6AjgBIk0KDVRvbmdpdHNSZWplY3QS",
-            "KwoGcmVhc29uGAEgASgOMhsuYXBpLnYxLlRvbmdpdHNSZWplY3RSZWFzb24S",
-            "DwoHbWVzc2FnZRgCIAEoCSqRAgoUVG9uZ2l0c09wQ29kZVJlcXVlc3QSJwoj",
-            "VE9OR0lUU19PUF9DT0RFX1JFUVVFU1RfVU5TUEVDSUZJRUQQABIdChlUT05H",
-            "SVRTX1JFUVVFU1RfRFJBV19DQVJEEAESGwoXVE9OR0lUU19SRVFVRVNUX0RJ",
-            "U0NBUkQQAhIdChlUT05HSVRTX1JFUVVFU1RfU0VORF9DQVJEEAMSGwoXVE9O",
-            "R0lUU19SRVFVRVNUX0hBX1BIT00QBBIZChVUT05HSVRTX1JFUVVFU1RfRklH",
-            "SFQQBRIgChxUT05HSVRTX1JFUVVFU1RfQUNDRVBUX0ZJR0hUEAYSGwoXVE9O",
-            "R0lUU19SRVFVRVNUX0RFQ0xBUkUQByrrAQoTVG9uZ2l0c09wQ29kZVVwZGF0",
-            "ZRImCiJUT05HSVRTX09QX0NPREVfVVBEQVRFX1VOU1BFQ0lGSUVEEAASHQoZ",
-            "VE9OR0lUU19VUERBVEVfR0FNRV9TVEFURRABEhcKE1RPTkdJVFNfVVBEQVRF",
-            "X0RFQUwQAhIeChpUT05HSVRTX1VQREFURV9UVVJOX0FDVElPThADEh4KGlRP",
-            "TkdJVFNfVVBEQVRFX0ZJR0hUX1NUQVRFEAQSGQoVVE9OR0lUU19VUERBVEVf",
-            "RklOSVNIEAUSGQoVVE9OR0lUU19VUERBVEVfUkVKRUNUEAYqvAEKE1Rvbmdp",
-            "dHNSZWplY3RSZWFzb24SHgoaVE9OR0lUU19SRUpFQ1RfVU5TUEVDSUZJRUQQ",
-            "ABIgChxUT05HSVRTX1JFSkVDVF9OT1RfWU9VUl9UVVJOEAESHwobVE9OR0lU",
-            "U19SRUpFQ1RfSU5WQUxJRF9DQVJEEAISHwobVE9OR0lUU19SRUpFQ1RfSU5W",
-            "QUxJRF9NRUxEEAMSIQodVE9OR0lUU19SRUpFQ1RfSU5WQUxJRF9BQ1RJT04Q",
-            "BEIRqgIOWXV1amlucy5BcGkuVjFiBnByb3RvMw=="));
+            "Cg9kcmF3X3BpbGVfY291bnQYDCABKAUSDwoHaGl0X3BvdBgNIAEoAyLAAgoV",
+            "VG9uZ2l0c1BsYXllclNuYXBzaG90Eg8KB3VzZXJfaWQYASABKAkSEgoKc2Vh",
+            "dF9pbmRleBgCIAEoBRIgCgpoYW5kX2NhcmRzGAMgAygLMgwuYXBpLnYxLkNh",
+            "cmQSJwoFbWVsZHMYBCADKAsyGC5hcGkudjEuVG9uZ2l0c0dyb3VwQ2FyZBIQ",
+            "CghjYW5fZHJhdxgFIAEoCBITCgtjYW5fZGlzY2FyZBgGIAEoCBIVCg1jYW5f",
+            "c2VuZF9jYXJkGAcgASgIEhMKC2Nhbl9oYV9waG9tGAggASgIEhEKCWNhbl9m",
+            "aWdodBgJIAEoCBIRCglpc19idXJuZWQYCiABKAgSFAoMZmlnaHRfc3RhdHVz",
+            "GAsgASgFEg0KBXNjb3JlGAwgASgFEhkKEWhpZGRlbl9oYW5kX2NvdW50GA0g",
+            "ASgFIpgBChFUb25naXRzRGVhbFVwZGF0ZRIuCgdwbGF5ZXJzGAEgAygLMh0u",
+            "YXBpLnYxLlRvbmdpdHNQbGF5ZXJTbmFwc2hvdBIeCghib2NfY2FyZBgCIAEo",
+            "CzIMLmFwaS52MS5DYXJkEhcKD2RyYXdfcGlsZV9jb3VudBgDIAEoBRIaChJm",
+            "aXJzdF90dXJuX3VzZXJfaWQYBCABKAkizgEKF1RvbmdpdHNUdXJuQWN0aW9u",
+            "VXBkYXRlEhYKDmFjdGlvbl91c2VyX2lkGAEgASgJEhMKC2FjdGlvbl90eXBl",
+            "GAIgASgJEiIKDGRpc2NhcmRfY2FyZBgDIAEoCzIMLmFwaS52MS5DYXJkEi4K",
+            "B3BsYXllcnMYBCADKAsyHS5hcGkudjEuVG9uZ2l0c1BsYXllclNuYXBzaG90",
+            "EhcKD2RyYXdfcGlsZV9jb3VudBgFIAEoBRIZChFuZXh0X3R1cm5fdXNlcl9p",
+            "ZBgGIAEoCSJ4ChJUb25naXRzRmlnaHRVcGRhdGUSGAoQZGVjbGFyZXJfdXNl",
+            "cl9pZBgBIAEoCRIXCg9hY2NlcHRfdXNlcl9pZHMYAiADKAkSFwoPcmVmdXNl",
+            "X3VzZXJfaWRzGAMgAygJEhYKDmZpZ2h0X3Jlc29sdmVkGAQgASgIItEBChNU",
+            "b25naXRzRmluaXNoVXBkYXRlEi4KB3BsYXllcnMYASADKAsyHS5hcGkudjEu",
+            "VG9uZ2l0c1BsYXllclNuYXBzaG90EkQKDWJhbGFuY2VfZGVsdGEYAiADKAsy",
+            "LS5hcGkudjEuVG9uZ2l0c0ZpbmlzaFVwZGF0ZS5CYWxhbmNlRGVsdGFFbnRy",
+            "eRIPCgdoaXRfcG90GAMgASgDGjMKEUJhbGFuY2VEZWx0YUVudHJ5EgsKA2tl",
+            "eRgBIAEoCRINCgV2YWx1ZRgCIAEoAzoCOAEiTQoNVG9uZ2l0c1JlamVjdBIr",
+            "CgZyZWFzb24YASABKA4yGy5hcGkudjEuVG9uZ2l0c1JlamVjdFJlYXNvbhIP",
+            "CgdtZXNzYWdlGAIgASgJKpECChRUb25naXRzT3BDb2RlUmVxdWVzdBInCiNU",
+            "T05HSVRTX09QX0NPREVfUkVRVUVTVF9VTlNQRUNJRklFRBAAEh0KGVRPTkdJ",
+            "VFNfUkVRVUVTVF9EUkFXX0NBUkQQARIbChdUT05HSVRTX1JFUVVFU1RfRElT",
+            "Q0FSRBACEh0KGVRPTkdJVFNfUkVRVUVTVF9TRU5EX0NBUkQQAxIbChdUT05H",
+            "SVRTX1JFUVVFU1RfSEFfUEhPTRAEEhkKFVRPTkdJVFNfUkVRVUVTVF9GSUdI",
+            "VBAFEiAKHFRPTkdJVFNfUkVRVUVTVF9BQ0NFUFRfRklHSFQQBhIbChdUT05H",
+            "SVRTX1JFUVVFU1RfREVDTEFSRRAHKusBChNUb25naXRzT3BDb2RlVXBkYXRl",
+            "EiYKIlRPTkdJVFNfT1BfQ09ERV9VUERBVEVfVU5TUEVDSUZJRUQQABIdChlU",
+            "T05HSVRTX1VQREFURV9HQU1FX1NUQVRFEAESFwoTVE9OR0lUU19VUERBVEVf",
+            "REVBTBACEh4KGlRPTkdJVFNfVVBEQVRFX1RVUk5fQUNUSU9OEAMSHgoaVE9O",
+            "R0lUU19VUERBVEVfRklHSFRfU1RBVEUQBBIZChVUT05HSVRTX1VQREFURV9G",
+            "SU5JU0gQBRIZChVUT05HSVRTX1VQREFURV9SRUpFQ1QQBiq8AQoTVG9uZ2l0",
+            "c1JlamVjdFJlYXNvbhIeChpUT05HSVRTX1JFSkVDVF9VTlNQRUNJRklFRBAA",
+            "EiAKHFRPTkdJVFNfUkVKRUNUX05PVF9ZT1VSX1RVUk4QARIfChtUT05HSVRT",
+            "X1JFSkVDVF9JTlZBTElEX0NBUkQQAhIfChtUT05HSVRTX1JFSkVDVF9JTlZB",
+            "TElEX01FTEQQAxIhCh1UT05HSVRTX1JFSkVDVF9JTlZBTElEX0FDVElPThAE",
+            "QhGqAg5ZdXVqaW5zLkFwaS5WMWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Yuujins.Api.V1.GameCommonReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Yuujins.Api.V1.TongitsOpCodeRequest), typeof(global::Yuujins.Api.V1.TongitsOpCodeUpdate), typeof(global::Yuujins.Api.V1.TongitsRejectReason), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -91,8 +92,8 @@ namespace Yuujins.Api.V1 {
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Api.V1.TongitsHaPhomRequest), global::Yuujins.Api.V1.TongitsHaPhomRequest.Parser, new[]{ "DiscardCard", "MeldCards" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Api.V1.TongitsDeclareRequest), global::Yuujins.Api.V1.TongitsDeclareRequest.Parser, new[]{ "Groups" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Api.V1.TongitsDeclareGroup), global::Yuujins.Api.V1.TongitsDeclareGroup.Parser, new[]{ "Cards" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Api.V1.TongitsGameStateUpdate), global::Yuujins.Api.V1.TongitsGameStateUpdate.Parser, new[]{ "Phase", "Round", "CurrentUserId", "CountdownSec", "CanDraw", "CanDiscard", "CanSendCard", "CanHaPhom", "CanFight", "CanAcceptFight", "CanDeclare", "DrawPileCount" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Api.V1.TongitsPlayerSnapshot), global::Yuujins.Api.V1.TongitsPlayerSnapshot.Parser, new[]{ "UserId", "SeatIndex", "HandCards", "Melds", "CanDraw", "CanDiscard", "CanSendCard", "CanHaPhom", "CanFight", "IsBurned", "FightStatus", "Score" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Api.V1.TongitsGameStateUpdate), global::Yuujins.Api.V1.TongitsGameStateUpdate.Parser, new[]{ "Phase", "Round", "CurrentUserId", "CountdownSec", "CanDraw", "CanDiscard", "CanSendCard", "CanHaPhom", "CanFight", "CanAcceptFight", "CanDeclare", "DrawPileCount", "HitPot" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Api.V1.TongitsPlayerSnapshot), global::Yuujins.Api.V1.TongitsPlayerSnapshot.Parser, new[]{ "UserId", "SeatIndex", "HandCards", "Melds", "CanDraw", "CanDiscard", "CanSendCard", "CanHaPhom", "CanFight", "IsBurned", "FightStatus", "Score", "HiddenHandCount" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Api.V1.TongitsDealUpdate), global::Yuujins.Api.V1.TongitsDealUpdate.Parser, new[]{ "Players", "BocCard", "DrawPileCount", "FirstTurnUserId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Api.V1.TongitsTurnActionUpdate), global::Yuujins.Api.V1.TongitsTurnActionUpdate.Parser, new[]{ "ActionUserId", "ActionType", "DiscardCard", "Players", "DrawPileCount", "NextTurnUserId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Yuujins.Api.V1.TongitsFightUpdate), global::Yuujins.Api.V1.TongitsFightUpdate.Parser, new[]{ "DeclarerUserId", "AcceptUserIds", "RefuseUserIds", "FightResolved" }, null, null, null, null),
@@ -1568,6 +1569,7 @@ namespace Yuujins.Api.V1 {
       canAcceptFight_ = other.canAcceptFight_;
       canDeclare_ = other.canDeclare_;
       drawPileCount_ = other.drawPileCount_;
+      hitPot_ = other.hitPot_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1724,6 +1726,18 @@ namespace Yuujins.Api.V1 {
       }
     }
 
+    /// <summary>Field number for the "hit_pot" field.</summary>
+    public const int HitPotFieldNumber = 13;
+    private long hitPot_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long HitPot {
+      get { return hitPot_; }
+      set {
+        hitPot_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -1751,6 +1765,7 @@ namespace Yuujins.Api.V1 {
       if (CanAcceptFight != other.CanAcceptFight) return false;
       if (CanDeclare != other.CanDeclare) return false;
       if (DrawPileCount != other.DrawPileCount) return false;
+      if (HitPot != other.HitPot) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1770,6 +1785,7 @@ namespace Yuujins.Api.V1 {
       if (CanAcceptFight != false) hash ^= CanAcceptFight.GetHashCode();
       if (CanDeclare != false) hash ^= CanDeclare.GetHashCode();
       if (DrawPileCount != 0) hash ^= DrawPileCount.GetHashCode();
+      if (HitPot != 0L) hash ^= HitPot.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1836,6 +1852,10 @@ namespace Yuujins.Api.V1 {
         output.WriteRawTag(96);
         output.WriteInt32(DrawPileCount);
       }
+      if (HitPot != 0L) {
+        output.WriteRawTag(104);
+        output.WriteInt64(HitPot);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1894,6 +1914,10 @@ namespace Yuujins.Api.V1 {
         output.WriteRawTag(96);
         output.WriteInt32(DrawPileCount);
       }
+      if (HitPot != 0L) {
+        output.WriteRawTag(104);
+        output.WriteInt64(HitPot);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -1939,6 +1963,9 @@ namespace Yuujins.Api.V1 {
       }
       if (DrawPileCount != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(DrawPileCount);
+      }
+      if (HitPot != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(HitPot);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1987,6 +2014,9 @@ namespace Yuujins.Api.V1 {
       }
       if (other.DrawPileCount != 0) {
         DrawPileCount = other.DrawPileCount;
+      }
+      if (other.HitPot != 0L) {
+        HitPot = other.HitPot;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -2053,6 +2083,10 @@ namespace Yuujins.Api.V1 {
           }
           case 96: {
             DrawPileCount = input.ReadInt32();
+            break;
+          }
+          case 104: {
+            HitPot = input.ReadInt64();
             break;
           }
         }
@@ -2122,6 +2156,10 @@ namespace Yuujins.Api.V1 {
             DrawPileCount = input.ReadInt32();
             break;
           }
+          case 104: {
+            HitPot = input.ReadInt64();
+            break;
+          }
         }
       }
     }
@@ -2176,6 +2214,7 @@ namespace Yuujins.Api.V1 {
       isBurned_ = other.isBurned_;
       fightStatus_ = other.fightStatus_;
       score_ = other.score_;
+      hiddenHandCount_ = other.hiddenHandCount_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2336,6 +2375,18 @@ namespace Yuujins.Api.V1 {
       }
     }
 
+    /// <summary>Field number for the "hidden_hand_count" field.</summary>
+    public const int HiddenHandCountFieldNumber = 13;
+    private int hiddenHandCount_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int HiddenHandCount {
+      get { return hiddenHandCount_; }
+      set {
+        hiddenHandCount_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -2363,6 +2414,7 @@ namespace Yuujins.Api.V1 {
       if (IsBurned != other.IsBurned) return false;
       if (FightStatus != other.FightStatus) return false;
       if (Score != other.Score) return false;
+      if (HiddenHandCount != other.HiddenHandCount) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2382,6 +2434,7 @@ namespace Yuujins.Api.V1 {
       if (IsBurned != false) hash ^= IsBurned.GetHashCode();
       if (FightStatus != 0) hash ^= FightStatus.GetHashCode();
       if (Score != 0) hash ^= Score.GetHashCode();
+      if (HiddenHandCount != 0) hash ^= HiddenHandCount.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2442,6 +2495,10 @@ namespace Yuujins.Api.V1 {
         output.WriteRawTag(96);
         output.WriteInt32(Score);
       }
+      if (HiddenHandCount != 0) {
+        output.WriteRawTag(104);
+        output.WriteInt32(HiddenHandCount);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2494,6 +2551,10 @@ namespace Yuujins.Api.V1 {
         output.WriteRawTag(96);
         output.WriteInt32(Score);
       }
+      if (HiddenHandCount != 0) {
+        output.WriteRawTag(104);
+        output.WriteInt32(HiddenHandCount);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -2535,6 +2596,9 @@ namespace Yuujins.Api.V1 {
       }
       if (Score != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Score);
+      }
+      if (HiddenHandCount != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(HiddenHandCount);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2579,6 +2643,9 @@ namespace Yuujins.Api.V1 {
       }
       if (other.Score != 0) {
         Score = other.Score;
+      }
+      if (other.HiddenHandCount != 0) {
+        HiddenHandCount = other.HiddenHandCount;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -2647,6 +2714,10 @@ namespace Yuujins.Api.V1 {
             Score = input.ReadInt32();
             break;
           }
+          case 104: {
+            HiddenHandCount = input.ReadInt32();
+            break;
+          }
         }
       }
     #endif
@@ -2712,6 +2783,10 @@ namespace Yuujins.Api.V1 {
           }
           case 96: {
             Score = input.ReadInt32();
+            break;
+          }
+          case 104: {
+            HiddenHandCount = input.ReadInt32();
             break;
           }
         }
