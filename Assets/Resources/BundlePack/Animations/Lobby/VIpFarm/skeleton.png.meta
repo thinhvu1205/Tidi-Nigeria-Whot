@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 235123513f0f0454793b4c8384572c38
+guid: e944aca8c267b4d718a17fd1cac432b4
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -14,29 +14,8 @@ TextureImporter:
   - first:
       213: -1861396428348373837
     second: skeleton_3
-  - first:
-      213: 770891633333027474
-    second: skeleton_4
-  - first:
-      213: -8664327905045170009
-    second: skeleton_5
-  - first:
-      213: -7423335518844729702
-    second: skeleton_6
-  - first:
-      213: 7269522917121967659
-    second: skeleton_7
-  - first:
-      213: 7901955918156383551
-    second: skeleton_8
-  - first:
-      213: -1242360182464875364
-    second: skeleton_9
-  - first:
-      213: 3372163455729612445
-    second: skeleton_10
   externalObjects: {}
-  serializedVersion: 13
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -100,20 +79,19 @@ TextureImporter:
   swizzle: 50462976
   cookieLightType: 0
   platformSettings:
-  - serializedVersion: 4
+  - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
+    textureCompression: 1
+    compressionQuality: 100
+    crunchedCompression: 1
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
+  - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -123,10 +101,9 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
+  - serializedVersion: 3
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -136,11 +113,10 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
+  - serializedVersion: 3
+    buildTarget: iPhone
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -149,7 +125,18 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -161,12 +148,11 @@ TextureImporter:
         serializedVersion: 2
         x: 1
         y: 1
-        width: 146
-        height: 146
+        width: 77
+        height: 71
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -181,14 +167,13 @@ TextureImporter:
       name: skeleton_1
       rect:
         serializedVersion: 2
-        x: 148
-        y: 1
-        width: 61
-        height: 67
+        x: 78
+        y: 51
+        width: 22
+        height: 21
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -203,14 +188,13 @@ TextureImporter:
       name: skeleton_2
       rect:
         serializedVersion: 2
-        x: 193
-        y: 51
-        width: 29
-        height: 94
+        x: 78
+        y: 1
+        width: 60
+        height: 50
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -225,14 +209,13 @@ TextureImporter:
       name: skeleton_3
       rect:
         serializedVersion: 2
-        x: 1
+        x: 138
         y: 1
-        width: 12
-        height: 10
+        width: 36
+        height: 60
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -243,162 +226,7 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: skeleton_4
-      rect:
-        serializedVersion: 2
-        x: 9
-        y: 1
-        width: 26
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 292c22d2bd1c2ba00800000000000000
-      internalID: 770891633333027474
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: skeleton_5
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 1
-        width: 12
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7a8374a0daf12c780800000000000000
-      internalID: -8664327905045170009
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: skeleton_6
-      rect:
-        serializedVersion: 2
-        x: 42
-        y: 1
-        width: 14
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a9648b61da30bf890800000000000000
-      internalID: -7423335518844729702
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: skeleton_7
-      rect:
-        serializedVersion: 2
-        x: 56
-        y: 1
-        width: 19
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b26cd99d39882e460800000000000000
-      internalID: 7269522917121967659
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: skeleton_8
-      rect:
-        serializedVersion: 2
-        x: 94
-        y: 1
-        width: 8
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f35c18c8a0369ad60800000000000000
-      internalID: 7901955918156383551
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: skeleton_9
-      rect:
-        serializedVersion: 2
-        x: 99
-        y: 1
-        width: 29
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c9477111fff32cee0800000000000000
-      internalID: -1242360182464875364
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: skeleton_10
-      rect:
-        serializedVersion: 2
-        x: 122
-        y: 1
-        width: 25
-        height: 20
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d963157ebc45cce20800000000000000
-      internalID: 3372163455729612445
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
-    customData: 
     physicsShape: []
     bones: []
     spriteID: 
@@ -408,20 +236,11 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    spriteCustomMetadata:
-      entries: []
     nameFileIdTable:
       skeleton_0: -964824239653993824
       skeleton_1: -3264722998049715623
-      skeleton_10: 3372163455729612445
       skeleton_2: 1664357772287024801
       skeleton_3: -1861396428348373837
-      skeleton_4: 770891633333027474
-      skeleton_5: -8664327905045170009
-      skeleton_6: -7423335518844729702
-      skeleton_7: 7269522917121967659
-      skeleton_8: 7901955918156383551
-      skeleton_9: -1242360182464875364
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
